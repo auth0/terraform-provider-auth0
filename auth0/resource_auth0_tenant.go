@@ -6,10 +6,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-
 	"gopkg.in/auth0.v5/management"
 
-	v "github.com/alexkappa/terraform-provider-auth0/auth0/internal/validation"
+	v "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
 )
 
 func newTenant() *schema.Resource {

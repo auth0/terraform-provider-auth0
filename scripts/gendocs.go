@@ -12,7 +12,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/alexkappa/terraform-provider-auth0/auth0"
+	"github.com/auth0/terraform-provider-auth0/auth0"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 

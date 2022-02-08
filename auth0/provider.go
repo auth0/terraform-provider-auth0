@@ -9,7 +9,7 @@ import (
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/management"
 
-	"github.com/alexkappa/terraform-provider-auth0/version"
+	"github.com/auth0/terraform-provider-auth0/version"
 )
 
 // Provider returns a *schema.Provider.

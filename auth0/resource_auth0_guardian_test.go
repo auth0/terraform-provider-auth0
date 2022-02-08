@@ -1,9 +1,10 @@
 package auth0
 
 import (
+	"testing"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"testing"
 )
 
 func TestAccGuardian(t *testing.T) {

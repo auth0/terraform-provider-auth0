@@ -123,7 +123,7 @@ func updateGuardian(d *schema.ResourceData, m interface{}) (err error) {
 	if d.HasChange("policy") {
 		p := d.Get("policy").(string)
 		if p == "never" {
-			//Passing empty array to set it to the "never" policy.
+			// Passing empty array to set it to the "never" policy.
 			err = api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{})
 		} else {
 			err = api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{p})

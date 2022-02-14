@@ -267,25 +267,25 @@ func TestAccClientInitiateLoginUri(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config:      random.Template(testAccClientConfigInitiateLoginUriHttp, rand),
+				Config:      random.Template(testAccClientConfigInitiateLoginURIHTTP, rand),
 				ExpectError: regexp.MustCompile("to have a url with schema"),
 			},
 			{
-				Config:      random.Template(testAccClientConfigInitiateLoginUriFragment, rand),
+				Config:      random.Template(testAccClientConfigInitiateLoginURIFragment, rand),
 				ExpectError: regexp.MustCompile("to have a url with an empty fragment"),
 			},
 		},
 	})
 }
 
-const testAccClientConfigInitiateLoginUriHttp = `
+const testAccClientConfigInitiateLoginURIHTTP = `
 resource "auth0_client" "my_client" {
   name = "Acceptance Test - Initiate Login URI - {{.random}}"
   initiate_login_uri = "http://example.com/login"
 }
 `
 
-const testAccClientConfigInitiateLoginUriFragment = `
+const testAccClientConfigInitiateLoginURIFragment = `
 resource "auth0_client" "my_client" {
   name = "Acceptance Test - Initiate Login URI - {{.random}}"
   initiate_login_uri = "https://example.com/login#fragment"

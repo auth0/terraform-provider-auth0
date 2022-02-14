@@ -8,7 +8,6 @@ import (
 // IsURLWithNoFragment is a SchemaValidateFunc which tests if the provided value
 // is of type string and a valid URL with no fragment.
 func IsURLWithNoFragment(i interface{}, k string) (warnings []string, errors []error) {
-
 	v, ok := i.(string)
 	if !ok {
 		errors = append(errors, fmt.Errorf("expected type of %q to be string", k))

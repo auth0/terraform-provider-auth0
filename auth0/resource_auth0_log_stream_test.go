@@ -221,11 +221,12 @@ resource "auth0_log_stream" "my_log_stream" {
 }
 `
 
-// This test fails it subscription key is not valid, or Eventgrid Resource Provider is not registered in the subscription
+// This test fails it subscription key is not valid, or EventGrid
+// Resource Provider is not registered in the subscription.
 func TestAccLogStreamEventGrid(t *testing.T) {
-	rand := random.String(6)
-
 	t.Skip("this test requires an active subscription")
+
+	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{

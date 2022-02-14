@@ -190,13 +190,10 @@ func updateAction(d *schema.ResourceData, m interface{}) error {
 }
 
 func deployAction(d *schema.ResourceData, m interface{}) error {
-
 	if d.Get("deploy").(bool) == true {
-
 		api := m.(*management.Management)
 
 		err := resource.Retry(d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-
 			a, err := api.Action.Read(d.Id())
 			if err != nil {
 				return resource.NonRetryableError(err)
@@ -239,7 +236,6 @@ func deleteAction(d *schema.ResourceData, m interface{}) error {
 }
 
 func expandAction(d *schema.ResourceData) *management.Action {
-
 	a := &management.Action{
 		Name:    String(d, "name"),
 		Code:    String(d, "code"),

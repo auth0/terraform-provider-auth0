@@ -36,7 +36,6 @@ func TestMapData(t *testing.T) {
 			}
 		}
 	})
-
 }
 
 func TestJSON(t *testing.T) {
@@ -52,7 +51,6 @@ func TestJSON(t *testing.T) {
 }
 
 func TestIsNil(t *testing.T) {
-
 	for _, v := range []interface{}{
 		nil,
 		(*bool)(nil),

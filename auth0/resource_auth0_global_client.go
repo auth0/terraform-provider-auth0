@@ -3,8 +3,8 @@ package auth0
 import (
 	"errors"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"gopkg.in/auth0.v5/management"
 )
 
 func newGlobalClient() *schema.Resource {
@@ -49,7 +49,7 @@ func createGlobalClient(d *schema.ResourceData, m interface{}) error {
 
 func readGlobalClientId(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.WithFields("client_id"))
+	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.IncludeFields("client_id"))
 	if err != nil {
 		return err
 	}

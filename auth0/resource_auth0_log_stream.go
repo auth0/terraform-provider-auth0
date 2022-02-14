@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"gopkg.in/auth0.v5/management"
 )
 
 func newLogStream() *schema.Resource {

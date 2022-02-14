@@ -3,8 +3,8 @@ package auth0
 import (
 	"log"
 
-	"gopkg.in/auth0.v5"
-	"gopkg.in/auth0.v5/management"
+	"github.com/auth0/go-auth0"
+	"github.com/auth0/go-auth0/management"
 )
 
 func flattenConnectionOptions(d ResourceData, options interface{}) []interface{} {
@@ -191,7 +191,7 @@ func flattenConnectionOptionsSMS(o *management.ConnectionOptionsSMS) interface{}
 			"length":    o.OTP.GetLength(),
 		},
 		"provider":    o.GetProvider(),
-		"gateway_url": o.GetGatewayUrl(),
+		"gateway_url": o.GetGatewayURL(),
 		"gateway_authentication": map[string]interface{}{
 			"method":                o.GatewayAuthentication.GetMethod(),
 			"subject":               o.GatewayAuthentication.GetSubject(),
@@ -585,7 +585,7 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 		TwilioToken:          String(d, "twilio_token"),
 		MessagingServiceSID:  String(d, "messaging_service_sid"),
 		Provider:             String(d, "provider"),
-		GatewayUrl:           String(d, "gateway_url"),
+		GatewayURL:           String(d, "gateway_url"),
 		ForwardRequestInfo:   Bool(d, "forward_request_info"),
 		DisableSignup:        Bool(d, "disable_signup"),
 		BruteForceProtection: Bool(d, "brute_force_protection"),

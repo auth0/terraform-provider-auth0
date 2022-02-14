@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"gopkg.in/auth0.v5/management"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
 )

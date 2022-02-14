@@ -1,6 +1,6 @@
 package auth0
 
-import "gopkg.in/auth0.v5/management"
+import "github.com/auth0/go-auth0/management"
 
 func flattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
 	m := make(map[string]interface{})
@@ -33,7 +33,6 @@ func flattenTenantErrorPage(errorPage *management.TenantErrorPage) []interface{}
 func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m := make(map[string]interface{})
 	if flags != nil {
-		m["change_pwd_flow_v1"] = flags.ChangePasswordFlowV1
 		m["enable_client_connections"] = flags.EnableClientConnections
 		m["enable_apis_section"] = flags.EnableAPIsSection
 		m["enable_pipeline2"] = flags.EnablePipeline2
@@ -95,7 +94,6 @@ func expandTenantErrorPage(d ResourceData) (errorPage *management.TenantErrorPag
 func expandTenantFlags(d ResourceData) (flags *management.TenantFlags) {
 	List(d, "flags").Elem(func(d ResourceData) {
 		flags = &management.TenantFlags{
-			ChangePasswordFlowV1:              Bool(d, "change_pwd_flow_v1"),
 			EnableClientConnections:           Bool(d, "enable_client_connections"),
 			EnableAPIsSection:                 Bool(d, "enable_apis_section"),
 			EnablePipeline2:                   Bool(d, "enable_pipeline2"),

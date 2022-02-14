@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/auth0/go-auth0"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
-	"gopkg.in/auth0.v5"
 )
 
 // ResourceData generalises schema.ResourceData so that we can reuse the

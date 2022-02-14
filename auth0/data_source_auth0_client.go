@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"gopkg.in/auth0.v5"
-	"gopkg.in/auth0.v5/management"
 )
 
 func newDataClient() *schema.Resource {
@@ -31,7 +31,7 @@ func readDataClient(d *schema.ResourceData, m interface{}) error {
 		return readClient(d, m)
 	}
 
-	//If not provided ID, perform looking of client by name
+	// If not provided ID, perform looking of client by name
 	name := auth0.StringValue(String(d, "name"))
 	if name == "" {
 		return errors.New("no 'client_id' or 'name' was specified")

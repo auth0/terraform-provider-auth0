@@ -12,7 +12,7 @@ func newDataGlobalClient() *schema.Resource {
 }
 
 func readDataGlobalClient(d *schema.ResourceData, m interface{}) error {
-	if err := readGlobalClientId(d, m); err != nil {
+	if err := readGlobalClientID(d, m); err != nil {
 		return err
 	}
 	return readClient(d, m)

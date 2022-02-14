@@ -2,8 +2,8 @@
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/auth0/terraform-provider-auth0.svg)](https://pkg.go.dev/github.com/auth0/terraform-provider-auth0)
 [![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
-[![Tests](https://github.com/auth0/terraform-provider-auth0/workflows/Build/badge.svg)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
 [![Release](https://img.shields.io/github/v/release/auth0/terraform-provider-auth0?include_prereleases&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/releases)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fauth0%2Fterraform-provider-auth0%2Fbadge%3Fref%3Dmain&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
 
 ---
 

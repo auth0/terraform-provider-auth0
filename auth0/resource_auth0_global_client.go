@@ -41,13 +41,13 @@ func in(needle string, haystack []string) bool {
 }
 
 func createGlobalClient(d *schema.ResourceData, m interface{}) error {
-	if err := readGlobalClientId(d, m); err != nil {
+	if err := readGlobalClientID(d, m); err != nil {
 		return err
 	}
 	return updateClient(d, m)
 }
 
-func readGlobalClientId(d *schema.ResourceData, m interface{}) error {
+func readGlobalClientID(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
 	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.IncludeFields("client_id"))
 	if err != nil {

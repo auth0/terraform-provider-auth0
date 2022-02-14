@@ -12,7 +12,6 @@ import (
 // ResourceData generalises schema.ResourceData so that we can reuse the
 // accessor methods defined below.
 type ResourceData interface {
-
 	// IsNewResource reports whether or not the resource is seen for the first
 	// time. If so, checks for change won't be carried out.
 	IsNewResource() bool
@@ -61,30 +60,40 @@ func newResourceDataAtIndex(i int, d ResourceData) ResourceData {
 	return &resourceData{d, strconv.Itoa(i)}
 }
 
+// IsNewResource reports whether the resource is seen for the first time.
 func (d *resourceData) IsNewResource() bool {
 	return d.ResourceData.IsNewResource()
 }
 
+// HasChange reports whether the given key has been changed.
 func (d *resourceData) HasChange(key string) bool {
 	return d.ResourceData.HasChange(d.prefix + "." + key)
 }
 
+// GetChange returns the old and new value for a given key.
 func (d *resourceData) GetChange(key string) (interface{}, interface{}) {
 	return d.ResourceData.GetChange(d.prefix + "." + key)
 }
 
+// Get returns the data for the given key, or nil
+// if the key doesn't exist in the schema.
 func (d *resourceData) Get(key string) interface{} {
 	return d.ResourceData.Get(d.prefix + "." + key)
 }
 
+// GetOk returns the data for the given key and whether the
+// key has been set to a non-zero value at some point.
 func (d *resourceData) GetOk(key string) (interface{}, bool) {
 	return d.ResourceData.GetOk(d.prefix + "." + key)
 }
 
+// GetOkExists can check if TypeBool attributes that are
+// Optional with no Default value have been set.
 func (d *resourceData) GetOkExists(key string) (interface{}, bool) {
 	return d.ResourceData.GetOkExists(d.prefix + "." + key)
 }
 
+// Set sets the value for the given key.
 func (d *resourceData) Set(key string, value interface{}) error {
 	return d.ResourceData.Set(d.prefix+"."+key, value)
 }
@@ -93,33 +102,43 @@ func (d *resourceData) Set(key string, value interface{}) error {
 // accessor methods defined below.
 type MapData map[string]interface{}
 
+// IsNewResource reports whether the resource is seen for the first time.
 func (md MapData) IsNewResource() bool {
 	return false
 }
 
+// HasChange reports whether the given key has been changed.
 func (md MapData) HasChange(key string) bool {
 	_, ok := md[key]
 	return ok
 }
 
+// GetChange returns the old and new value for a given key.
 func (md MapData) GetChange(key string) (interface{}, interface{}) {
 	return md[key], md[key]
 }
 
+// Get returns the data for the given key, or nil
+// if the key doesn't exist in the schema.
 func (md MapData) Get(key string) interface{} {
 	return md[key]
 }
 
+// GetOk returns the data for the given key and whether the
+// key has been set to a non-zero value at some point.
 func (md MapData) GetOk(key string) (interface{}, bool) {
 	v, ok := md[key]
 	return v, ok && !isNil(v) && !isZero(v)
 }
 
+// GetOkExists can check if TypeBool attributes that are
+// Optional with no Default value have been set.
 func (md MapData) GetOkExists(key string) (interface{}, bool) {
 	v, ok := md[key]
 	return v, ok && !isNil(v)
 }
 
+// Set sets the value for the given key.
 func (md MapData) Set(key string, value interface{}) error {
 	if !isNil(value) {
 		md[key] = value
@@ -305,16 +324,19 @@ type list struct {
 	v []interface{}
 }
 
+// Elem will loop through each element of the list and apply fn().
 func (l *list) Elem(fn func(ResourceData)) {
 	for idx := range l.v {
 		fn(newResourceDataAtIndex(idx, l.d))
 	}
 }
 
+// List will return the values as list.
 func (l *list) List() []interface{} {
 	return l.v
 }
 
+// Len returns the length of the list values.
 func (l *list) Len() int {
 	return len(l.v)
 }
@@ -332,22 +354,25 @@ func (s *set) hash(item interface{}) string {
 	return strconv.Itoa(code)
 }
 
+// Elem will loop through each element of the set and apply fn().
 func (s *set) Elem(fn func(ResourceData)) {
 	for _, v := range s.s.List() {
 		fn(newResourceDataAtKey(s.hash(v), s.d))
 	}
 }
 
+// List will return the values of the set as a list.
 func (s *set) List() []interface{} {
 	return s.s.List()
 }
 
+// Len returns the length of the set values.
 func (s *set) Len() int {
 	return s.s.Len()
 }
 
 // Diff accesses the value held by key and type asserts it to a set. It then
-// compares it's changes if any and returns what needs to be added and what
+// compares its changes if any and returns what needs to be added and what
 // needs to be removed.
 func Diff(d ResourceData, key string) (add Iterator, rm Iterator) {
 	// Zero the add and rm sets. These may be modified if the diff observed any

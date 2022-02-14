@@ -3,7 +3,6 @@ package hash
 import "testing"
 
 func TestStringKey(t *testing.T) {
-
 	v := map[string]interface{}{
 		"Foo": "Foo",
 		"Bar": "Bar",

@@ -911,16 +911,16 @@ func flattenClientJwtConfiguration(jwt *management.ClientJWTConfiguration) []int
 	return []interface{}{m}
 }
 
-func flattenClientRefreshTokenConfiguration(refresh_token *management.ClientRefreshToken) []interface{} {
+func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefreshToken) []interface{} {
 	m := make(map[string]interface{})
-	if refresh_token != nil {
-		m["rotation_type"] = refresh_token.RotationType
-		m["expiration_type"] = refresh_token.ExpirationType
-		m["leeway"] = refresh_token.Leeway
-		m["token_lifetime"] = refresh_token.TokenLifetime
-		m["infinite_token_lifetime"] = refresh_token.InfiniteTokenLifetime
-		m["infinite_idle_token_lifetime"] = refresh_token.InfiniteIdleTokenLifetime
-		m["idle_token_lifetime"] = refresh_token.IdleTokenLifetime
+	if refreshToken != nil {
+		m["rotation_type"] = refreshToken.RotationType
+		m["expiration_type"] = refreshToken.ExpirationType
+		m["leeway"] = refreshToken.Leeway
+		m["token_lifetime"] = refreshToken.TokenLifetime
+		m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
+		m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
+		m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
 	}
 	return []interface{}{m}
 }

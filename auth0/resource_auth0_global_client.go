@@ -3,8 +3,8 @@ package auth0
 import (
 	"errors"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"gopkg.in/auth0.v5/management"
 )
 
 func newGlobalClient() *schema.Resource {

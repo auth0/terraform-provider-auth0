@@ -1,10 +1,10 @@
 package auth0
 
 import (
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"gopkg.in/auth0.v5/management"
 )
 
 func newGuardian() *schema.Resource {

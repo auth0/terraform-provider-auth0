@@ -49,7 +49,7 @@ func createGlobalClient(d *schema.ResourceData, m interface{}) error {
 
 func readGlobalClientId(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.WithFields("client_id"))
+	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.IncludeFields("client_id"))
 	if err != nil {
 		return err
 	}

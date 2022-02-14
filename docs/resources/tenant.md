@@ -96,7 +96,6 @@ Arguments accepted by this resource include:
 
 `flags` supports the following arguments:
 
-* `change_pwd_flow_v1` - (Optional) Boolean. Indicates whether or not to use the older v1 change password flow. Not recommended except for backward compatibility.
 * `enable_client_connections` - (Optional) Boolean. Indicates whether or not all current connections should be enabled when a new client is created.
 * `enable_apis_section` - (Optional) Boolean. Indicates whether or not the APIs section is enabled for the tenant.
 * `enable_pipeline2` - (Optional) Boolean. Indicates whether or not advanced API Authorization scenarios are enabled.

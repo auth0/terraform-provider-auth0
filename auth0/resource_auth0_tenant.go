@@ -147,11 +147,6 @@ func newTenant() *schema.Resource {
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"change_pwd_flow_v1": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Computed: true,
-						},
 						"enable_client_connections": {
 							Type:     schema.TypeBool,
 							Optional: true,

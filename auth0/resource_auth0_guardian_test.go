@@ -103,6 +103,22 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "email", "false"),
 				),
 			},
+
+			{
+				Config: testAccConfigureOTP,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "otp", "true"),
+				),
+			},
+
+			{
+				Config: testAccConfigureOTPUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "otp", "false"),
+				),
+			},
 		},
 	})
 }
@@ -192,5 +208,21 @@ const testAccConfigureEmailUpdate = `
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   email  = false
+}
+`
+
+const testAccConfigureOTP = `
+
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	otp  = true
+}
+`
+
+const testAccConfigureOTPUpdate = `
+
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	otp  = false
 }
 `

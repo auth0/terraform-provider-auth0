@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -582,6 +583,27 @@ func newClient() *schema.Resource {
 					},
 				},
 			},
+			"signing_keys": {
+				Type:     schema.TypeList,
+				Computed: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"cert": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"pkcs7": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"subject": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -642,6 +664,7 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 	d.Set("client_metadata", c.ClientMetadata)
 	d.Set("mobile", c.Mobile)
 	d.Set("initiate_login_uri", c.InitiateLoginURI)
+	d.Set("signing_keys", c.SigningKeys)
 
 	return nil
 }
@@ -826,6 +849,20 @@ func expandClient(d *schema.ResourceData) *management.Client {
 			c.Mobile["ios"] = m
 		})
 	})
+
+	if l := List(d, "signing_keys", IsNewResource(), HasChange()); l != nil {
+		c.SigningKeys = []map[string]string{}
+		for _, v := range l.List() {
+			mapString := make(map[string]string)
+
+			for key, value := range v.(map[string]interface{}) {
+				strKey := fmt.Sprintf("%v", key)
+				strValue := fmt.Sprintf("%v", value)
+				mapString[strKey] = strValue
+			}
+			c.SigningKeys = append(c.SigningKeys, mapString)
+		}
+	}
 
 	return c
 }

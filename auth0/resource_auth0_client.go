@@ -596,10 +596,6 @@ func newClient() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"subject": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
 					},
 				},
 			},

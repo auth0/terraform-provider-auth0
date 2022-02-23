@@ -260,6 +260,7 @@ Attributes exported by this resource include:
 * `grant_types` - List(String). Types of grants that this client is authorized to use.
 * `custom_login_page_on` - Boolean. Indicates whether or not a custom login page is to be used.
 * `token_endpoint_auth_method` - String. Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
+* `signing_keys` - List(Map). List containing a map of the public cert of the signing key and the public cert of the signing key in pkcs7.
 
 ### Client keys
 

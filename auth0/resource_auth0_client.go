@@ -582,6 +582,11 @@ func newClient() *schema.Resource {
 					},
 				},
 			},
+			"signing_keys": {
+				Type:     schema.TypeList,
+				Elem:     &schema.Schema{Type: schema.TypeMap},
+				Computed: true,
+			},
 		},
 	}
 }
@@ -642,6 +647,7 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 	d.Set("client_metadata", c.ClientMetadata)
 	d.Set("mobile", c.Mobile)
 	d.Set("initiate_login_uri", c.InitiateLoginURI)
+	d.Set("signing_keys", c.SigningKeys)
 
 	return nil
 }

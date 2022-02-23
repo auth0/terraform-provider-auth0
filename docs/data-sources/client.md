@@ -29,4 +29,6 @@ At least one of the following arguments required:
 
 ## Attribute Reference
 
-The client data source possesses the same attributes as the `auth0_client` resource, with the exception of `client_secret_rotation_trigger`. Refer to the [auth0_client resource documentation](../resources/client.md) for a list of returned attributes.
+The client data source possesses the same attributes as the `auth0_client` resource, except for
+`client_secret_rotation_trigger`. Refer to the [auth0_client resource documentation](../resources/client.md) for a list
+of returned attributes.

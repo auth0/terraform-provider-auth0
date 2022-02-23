@@ -83,6 +83,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", "https://example.com/login"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
 				),
 			},
 		},

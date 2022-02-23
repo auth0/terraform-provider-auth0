@@ -83,6 +83,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", "https://example.com/login"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
 				),
 			},
 		},
@@ -481,44 +482,5 @@ resource "auth0_client" "my_client" {
       # nothing specified, should throw validation error
     }
   }
-}
-`
-
-func TestAccClientSigningKeys(t *testing.T) {
-	rand := random.String(6)
-
-	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
-			"auth0": Provider(),
-		},
-		Steps: []resource.TestStep{
-			{
-				Config: random.Template(testAccClientSigningKeysCreate, rand),
-				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - Signing Keys - {{.random}}", rand),
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "signing_keys.0.cert"),
-				),
-			},
-			{
-				Config: random.Template(testAccClientSigningKeysUpdate, rand),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "signing_keys.0.cert"),
-				),
-			},
-		},
-	})
-}
-
-const testAccClientSigningKeysCreate = `
-resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Signing Keys - {{.random}}"
-  is_first_party = false
-}
-`
-
-const testAccClientSigningKeysUpdate = `
-resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Signing Keys - {{.random}}"
-  is_first_party = true
 }
 `

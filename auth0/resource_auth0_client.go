@@ -584,20 +584,8 @@ func newClient() *schema.Resource {
 			},
 			"signing_keys": {
 				Type:     schema.TypeList,
+				Elem:     &schema.Schema{Type: schema.TypeMap},
 				Computed: true,
-				MaxItems: 1,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"cert": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"pkcs7": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-					},
-				},
 			},
 		},
 	}

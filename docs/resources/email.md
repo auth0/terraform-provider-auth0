@@ -2,12 +2,15 @@
 layout: "auth0"
 page_title: "Auth0: auth0_email"
 description: |-
-  With this resource, you can configure email providers so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
+  With this resource, you can configure email providers so, you can route all emails that are part of Auth0's
+  authentication workflows through the supported high-volume email service of your choice.
 ---
 
 # auth0_email
 
-With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email providers so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
+With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right
+into Auth0. This resource allows you to configure email providers, so you can route all emails that are part of Auth0's
+authentication workflows through the supported high-volume email service of your choice.
 
 ## Example Usage
 
@@ -46,3 +49,16 @@ Arguments accepted by this resource include:
 * `smtp_port` - (Optional) Integer. Port used by your SMTP server. Please avoid using port 25 if possible because many providers have limitations on this port. Used only for SMTP.
 * `smtp_user` - (Optional) String. SMTP username. Used only for SMTP.
 * `smtp_pass` - (Optional) String, Case-sensitive. SMTP password. Used only for SMTP.
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
+## Import
+
+As this is not a resource identifiable by an ID within the Auth0 Management API, email can be imported using a random
+string. We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4) e.g.
+
+```shell
+$ terraform import auth0_email.my_email_provider b4213dc2-2eed-42c3-9516-c6131a9ce0b0
+```

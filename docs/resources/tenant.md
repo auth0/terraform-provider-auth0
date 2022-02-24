@@ -2,16 +2,20 @@
 layout: "auth0"
 page_title: "Auth0: auth0_tenant"
 description: |-
-  With this resource, you can manage Auth0 tenants, including setting logos and support contact information, setting error pages, and configuring default tenant behaviors.
+  With this resource, you can manage Auth0 tenants, including setting logos and support contact information, 
+  setting error pages, and configuring default tenant behaviors.
 ---
 
 # auth0_tenant
 
-With this resource, you can manage Auth0 tenants, including setting logos and support contact information, setting error pages, and configuring default tenant behaviors.
+With this resource, you can manage Auth0 tenants, including setting logos and support contact information, setting error
+pages, and configuring default tenant behaviors.
 
-~> Auth0 does not currently support creating tenants through the Management API. Therefore this resource can only manage an existing tenant created through the Auth0 dashboard. 
+~> Auth0 does not currently support creating tenants through the Management API. Therefore, this resource can only 
+manage an existing tenant created through the Auth0 dashboard. 
 
-Auth0 does not currently support adding/removing extensions on tenants through their API. The Auth0 dashboard must be used to add/remove extensions. 
+Auth0 does not currently support adding/removing extensions on tenants through their API. The Auth0 dashboard must be 
+used to add/remove extensions. 
 
 ## Example Usage
 
@@ -19,19 +23,19 @@ Auth0 does not currently support adding/removing extensions on tenants through t
 resource "auth0_tenant" "tenant" {
   change_password {
     enabled = true
-    html    = "${file("./password_reset.html")}"
+    html    = file("./password_reset.html")
   }
 
   guardian_mfa_page {
     enabled = true
-    html    = "${file("./guardian_multifactor.html")}"
+    html    = file("./guardian_multifactor.html")
   }
 
   default_audience  = "<client_id>"
   default_directory = "Connection-Name"
 
   error_page {
-    html          = "${file("./error.html")}"
+    html          = file("./error.html")
     show_log_link = true
     url           = "http://mysite/errors"
   }
@@ -74,14 +78,14 @@ Arguments accepted by this resource include:
 
 `change_password_page` supports the following arguments:
 
-* `enabled` - (Required) Boolean. Indicates whether or not to use the custom change password page.
+* `enabled` - (Required) Boolean. Indicates whether to use the custom change password page.
 * `html` - (Required) String, HTML format with supported Liquid syntax. Customized content of the change password page.
 
 ### Guardian MFA Page
 
 `guardian_mfa_page` supports the following arguments:
 
-* `enabled` - (Required) Boolean. Indicates whether or not to use the custom Guardian page.
+* `enabled` - (Required) Boolean. Indicates whether to use the custom Guardian page.
 * `html` - (Required) String, HTML format with supported Liquid syntax. Customized content of the Guardian page.
 
 ### Error Page
@@ -89,22 +93,22 @@ Arguments accepted by this resource include:
 `error_page` supports the following arguments:
 
 * `html` - (Required) String, HTML format with supported Liquid syntax. Customized content of the error page.
-* `show_log_link` - (Required) Boolean. Indicates whether or not to show the link to logs as part of the default error page.
+* `show_log_link` - (Required) Boolean. Indicates whether to show the link to logs as part of the default error page.
 * `url` - (Required) String. URL to redirect to when an error occurs rather than showing the default error page.
 
 ### Flags
 
 `flags` supports the following arguments:
 
-* `enable_client_connections` - (Optional) Boolean. Indicates whether or not all current connections should be enabled when a new client is created.
-* `enable_apis_section` - (Optional) Boolean. Indicates whether or not the APIs section is enabled for the tenant.
-* `enable_pipeline2` - (Optional) Boolean. Indicates whether or not advanced API Authorization scenarios are enabled.
-* `enable_dynamic_client_registration` - (Optional) Boolean. Indicates whether or not the tenant allows dynamic client registration.
-* `enable_custom_domain_in_emails` - (Optional) Boolean. Indicates whether or not the tenant allows custom domains in emails.
-* `universal_login` - (Optional) Boolean. Indicates whether or not the tenant uses universal login.
-* `enable_legacy_logs_search_v2` - (Optional) Boolean. Indicates whether or not to use the older v2 legacy logs search.
-* `disable_clickjack_protection_headers` - (Optional) Boolean. Indicated whether or not classic Universal Login prompts include additional security headers to prevent clickjacking.
-* `enable_public_signup_user_exists_error` - (Optional) Boolean. Indicates whether or not the public sign up process shows a user_exists error if the user already exists.
+* `enable_client_connections` - (Optional) Boolean. Indicates whether all current connections should be enabled when a new client is created.
+* `enable_apis_section` - (Optional) Boolean. Indicates whether the APIs section is enabled for the tenant.
+* `enable_pipeline2` - (Optional) Boolean. Indicates whether advanced API Authorization scenarios are enabled.
+* `enable_dynamic_client_registration` - (Optional) Boolean. Indicates whether the tenant allows dynamic client registration.
+* `enable_custom_domain_in_emails` - (Optional) Boolean. Indicates whether the tenant allows custom domains in emails.
+* `universal_login` - (Optional) Boolean. Indicates whether the tenant uses universal login.
+* `enable_legacy_logs_search_v2` - (Optional) Boolean. Indicates whether to use the older v2 legacy logs search.
+* `disable_clickjack_protection_headers` - (Optional) Boolean. Indicated whether classic Universal Login prompts include additional security headers to prevent clickjacking.
+* `enable_public_signup_user_exists_error` - (Optional) Boolean. Indicates whether the public sign up process shows a user_exists error if the user already exists.
 
 ### Universal Login
 
@@ -124,3 +128,12 @@ Arguments accepted by this resource include:
 Attributes exported by this resource include:
 
 * `sandbox_version` - String. Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
+
+## Import
+
+As this is not a resource identifiable by an ID within the Auth0 Management API, tenant can be imported using a random
+string. We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4) e.g.
+
+```shell
+$ terraform import auth0_tenant.tenant 82f4f21b-017a-319d-92e7-2291c1ca36c4
+```

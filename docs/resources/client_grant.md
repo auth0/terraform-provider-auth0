@@ -7,7 +7,9 @@ description: |-
 
 # auth0_client_grant
 
-Auth0 uses various grant types, or methods by which you grant limited access to your resources to another entity without exposing credentials. The OAuth 2.0 protocol supports several types of grants, which allow different types of access. This resource allows you to create and manage client grants used with configured Auth0 clients.
+Auth0 uses various grant types, or methods by which you grant limited access to your resources to another entity without
+exposing credentials. The OAuth 2.0 protocol supports several types of grants, which allow different types of access.
+This resource allows you to create and manage client grants used with configured Auth0 clients.
 
 ## Example Usage
 
@@ -32,8 +34,8 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 
 resource "auth0_client_grant" "my_client_grant" {
-  client_id = "${auth0_client.my_client.id}"
-  audience  = "${auth0_resource_server.my_resource_server.identifier}"
+  client_id = auth0_client.my_client.id
+  audience  = auth0_resource_server.my_resource_server.identifier
   scope     = ["create:foo"]
 }
 ```
@@ -46,10 +48,14 @@ Arguments accepted by this resource include:
 * `audience` - (Required) String. Audience or API Identifier for this grant.
 * `scope` - (Required) List(String). Permissions (scopes) included in this grant.
 
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
 ## Import
 
 Client grants can be imported using the grant ID (Application -> APIs -> Expand the required API)
 
-```
-$ terraform import auth0_client_grant.example cgr_XXXXXXXXXXXXXXXX
+```shell
+$ terraform import auth0_client_grant.my_client_grant cgr_XXXXXXXXXXXXXXXX
 ```

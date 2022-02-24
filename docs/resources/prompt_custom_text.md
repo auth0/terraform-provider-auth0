@@ -52,11 +52,14 @@ The following arguments are supported:
 * `language` - (Required) Language of the custom text. Options include `ar`, `bg`, `bs`, `cs`, `da`, `de`, `el`, `en`, `es`, `et`, `fi`, `fr`, `fr-CA`, `fr-FR`, `he`, `hi`, `hr`, `hu`, `id`, `is`, `it`, `ja`, `ko`, `lt`, `lv`, `nb`, `nl`, `pl`, `pt`, `pt-BR`, `pt-PT`, `ro`, `ru`, `sk`, `sl`, `sr`, `sv`, `th`, `tr`, `uk`, `vi`, `zh-CN`, `zh-TW`
 * `body` - (Required) JSON containing the custom texts. You can check the options for each prompt [here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts#prompt-values)
 
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
 ## Import
 
-auth0_prompt_custom_text can be imported using the import command and specifying the prompt and language separated
-by *:* , e.g.
+This resource can be imported using the import command and specifying the prompt and language separated by *:* , e.g.
 
-```terminal
-terraform import auth0_prompt_custom_text.example login:en
+```shell
+$ terraform import auth0_prompt_custom_text.example login:en
 ```

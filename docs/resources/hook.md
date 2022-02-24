@@ -2,14 +2,16 @@
 layout: "auth0"
 page_title: "Auth0: auth0_hook"
 description: |-
-  Hooks are secure, self-contained functions that allow you to customize the behavior of Auth0 when executed for selected extensibility points of the Auth0 platform. Auth0 invokes Hooks during runtime to execute your custom Node.js code.
-
+  Hooks are secure, self-contained functions that allow you to customize the behavior of Auth0 when executed for 
+  selected extensibility points of the Auth0 platform. Auth0 invokes Hooks during runtime to execute your custom Node.js
+  code.
   Depending on the extensibility point, you can use Hooks with Database Connections and/or Passwordless Connections.
 ---
 
 # auth0_hook
 
-Hooks are secure, self-contained functions that allow you to customize the behavior of Auth0 when executed for selected extensibility points of the Auth0 platform. Auth0 invokes Hooks during runtime to execute your custom Node.js code.
+Hooks are secure, self-contained functions that allow you to customize the behavior of Auth0 when executed for selected
+extensibility points of the Auth0 platform. Auth0 invokes Hooks during runtime to execute your custom Node.js code.
 
 Depending on the extensibility point, you can use Hooks with Database Connections and/or Passwordless Connections.
 
@@ -40,9 +42,22 @@ EOF
 
 The following arguments are supported:
 
-* `enabled` - (Optional) Whether the hook is enabled, or disabled
-* `name` - (Required) Name of this hook
-* `script` - (Required) Code to be executed when this hook runs
-* `trigger_id` - (Required) Execution stage of this rule. Can be credentials-exchange, pre-user-registration, post-user-registration, post-change-password, or send-phone-message
-* `dependencies` - (Optional) Dependencies of this hook used by webtask server
-* `secrets` - (Optional) Map(String), sets the hook secrets associated with this hook. If specified, any secrets not listed here will be removed from the hook.
+* `enabled` - (Optional) Whether the hook is enabled, or disabled.
+* `name` - (Required) Name of this hook.
+* `script` - (Required) Code to be executed when this hook runs.
+* `trigger_id` - (Required) Execution stage of this rule. Can be `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, or `send-phone-message`.
+* `dependencies` - (Optional) Dependencies of this hook used by the WebTask server.
+* `secrets` - (Optional) Map(String), sets the hook secrets associated with this hook. 
+If specified, any secrets not listed here will be removed from the hook.
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
+## Import
+
+A hook can be imported using the hook's ID, e.g.
+
+```shell
+$ terraform import auth0_hook.my_hook 00001
+```

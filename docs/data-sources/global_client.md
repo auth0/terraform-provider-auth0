@@ -7,7 +7,7 @@ Retrieves a tenant's global Auth0 Application client
 
 # Data Source: auth0_global_client
 
-Retrieves a tenant's global Auth0 Application client
+Retrieves a tenant's global Auth0 Application client.
 
 ## Example Usage
 

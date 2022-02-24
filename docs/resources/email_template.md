@@ -2,12 +2,15 @@
 layout: "auth0"
 page_title: "Auth0: auth0_email_template"
 description: |-
-  With this resource, you can configure email templates to customize the look, feel, and sender identities of emails sent by Auth0 using configured email providers.
+  With this resource, you can configure email templates to customize the look, feel, and sender identities of emails
+  sent by Auth0 using configured email providers.
 ---
 
 # auth0_email_template
 
-With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email templates to customize the look, feel, and sender identities of emails sent by Auth0. Used in conjunction with configured email providers.
+With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right
+into Auth0. This resource allows you to configure email templates to customize the look, feel, and sender identities of
+emails sent by Auth0. Used in conjunction with configured email providers.
 
 ## Example Usage
 
@@ -48,4 +51,16 @@ Arguments accepted by this resource include:
 * `subject` - (Required) String. Subject line of the email. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
 * `syntax` - (Required) String. Syntax of the template body. You can use either text or HTML + Liquid syntax.
 * `url_lifetime_in_seconds` - (Optional) Integer. Number of seconds during which the link within the email will be valid.
-* `enabled` - (Required) Boolean. Indicates whether or not the template is enabled.
+* `enabled` - (Required) Boolean. Indicates whether the template is enabled.
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
+## Import
+
+This resource can be imported using the template name, e.g.
+
+```shell
+$ terraform import auth0_email_template.my_email_template welcome_email
+```

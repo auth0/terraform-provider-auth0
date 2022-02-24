@@ -2,12 +2,15 @@
 layout: "auth0"
 page_title: "Auth0: auth0_rule"
 description: |-
-  With this resource, you can create and manage rules, which are custom Javascript snippets that run in a secure, isolate sandbox as part of your authentication pipeline.
+  With this resource, you can create and manage rules, which are custom Javascript snippets that run in a secure,
+  isolate sandbox as part of your authentication pipeline.
 ---
 
 # auth0_rule
 
-With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox as part of your authentication pipeline, which are otherwise known as rules. This resource allows you to create and manage rules. You can create global variable for use with rules by using the auth0_rule_config resource.
+With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox as part of your
+authentication pipeline, which are otherwise known as rules. This resource allows you to create and manage rules.
+You can create global variable for use with rules by using the auth0_rule_config resource.
 
 ## Example Usage
 
@@ -42,3 +45,11 @@ Arguments accepted by this resource include:
 Attributes exported by this resource include:
 
 * `order` - Integer. Order in which the rule executes relative to other rules. Lower-valued rules execute first.
+
+## Import
+
+Existing rules can be imported using their id, e.g.
+
+```shell
+$ terraform import auth0_rule.my_rule rul_XXXXXXXXXXXXX
+```

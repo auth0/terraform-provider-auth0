@@ -23,4 +23,18 @@ resource "auth0_prompt" "example" {
 The following arguments are supported:
 
 - `universal_login_experience` - (Optional) Which login experience to use. Options include `classic` and `new`.
-- `identifier_first` - (Optional) Boolean. Indicates whether or not identifier first is used when using the new universal login experience.
+- `identifier_first` - (Optional) Boolean. Indicates whether the identifier first is used when using the new universal 
+login experience.
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
+## Import
+
+As this is not a resource identifiable by an ID within the Auth0 Management API, prompt can be imported using a random
+string. We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4) e.g.
+
+```shell
+$ terraform import auth0_prompt.example 22f4f21b-017a-319d-92e7-2291c1ca36c4
+```

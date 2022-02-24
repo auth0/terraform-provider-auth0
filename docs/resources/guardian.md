@@ -2,13 +2,13 @@
 layout: "auth0"
 page_title: "Auth0: auth0_guardian"
 description: |-
-  With this resource, you can configure some of the MFA options
+  With this resource, you can configure MFA options.
 ---
 
 # auth0_guardian
 
-Multi-factor Authentication works by requiring additional factors during the login process to prevent unauthorized access. With this resource you can configure some of
-the options available for MFA.
+Multi-Factor Authentication works by requiring additional factors during the login process to prevent unauthorized
+access. With this resource you can configure some options available for MFA.
 
 ## Example Usage
 
@@ -32,10 +32,11 @@ resource "auth0_guardian" "default" {
 
 Arguments accepted by this resource include:
 
-* `policy` - (Required) String. Policy to use. Available options are `never`, `all-applications` and `confidence-score`. The option `confidence-score` means the trigger of MFA will be adaptive. See [Auth0 docs](https://auth0.com/docs/mfa/adaptive-mfa)
+* `policy` - (Required) String. Policy to use. Available options are `never`, `all-applications` and `confidence-score`.
+The option `confidence-score` means the trigger of MFA will be adaptive. See [Auth0 docs](https://auth0.com/docs/mfa/adaptive-mfa).
 * `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. For details, see [Phone](#phone).
-* `email` - (Optional) Boolean. Indicates whether or not email MFA is enabled.
-* `OTP` - (Optional) Boolean. Indicates whether or not one time password MFA is enabled.
+* `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
+* `OTP` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
 
 ### Phone
 
@@ -61,4 +62,19 @@ Arguments accepted by this resource include:
 * `messaging_service_sid`(Optional) String.
 
 ### Phone message hook
-Options has to be empty. Custom code has to be written in a phone message hook. See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/send-phone-message).
+
+Options have to be empty. Custom code has to be written in a phone message hook.
+See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/send-phone-message).
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
+## Import
+
+As this is not a resource identifiable by an ID within the Auth0 Management API, guardian can be imported using a random
+string. We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4) e.g.
+
+```shell
+$ terraform import auth0_guardian.default 24940d4b-4bd4-44e7-894e-f92e4de36a40
+```

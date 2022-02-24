@@ -2,12 +2,15 @@
 layout: "auth0"
 page_title: "Auth0: auth0_connection"
 description: |-
-  With this resource, you can configure and manage sources of users, which may include identity providers, databases, or passwordless authentication methods.
+  With this resource, you can configure and manage sources of users, which may include identity providers, databases, or
+  passwordless authentication methods.
 ---
 
 # auth0_connection
 
-With Auth0, you can define sources of users, otherwise known as connections, which may include identity providers (such as Google or LinkedIn), databases, or passwordless authentication methods. This resource allows you to configure and manage connections to be used with your clients and users.
+With Auth0, you can define sources of users, otherwise known as connections, which may include identity providers
+(such as Google or LinkedIn), databases, or passwordless authentication methods. This resource allows you to configure
+and manage connections to be used with your clients and users.
 
 ## Example Usage
 
@@ -39,14 +42,15 @@ EOF
 }
 ```
 
-~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allowes the creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
+~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allows the
+creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
 
 ## Argument Reference
 
 Arguments accepted by this resource include:
 
 * `name` - (Required) Name of the connection.
-* `is_domain_connection` - (Optional) Indicates whether or not the connection is domain level.
+* `is_domain_connection` - (Optional) Indicates whether the connection is domain level.
 * `strategy` - (Required) Type of the connection, which indicates the identity provider. Options include `ad`, `adfs`, `amazon`, `aol`, `apple`, `auth0`, `auth0-adldap`, `auth0-oidc`, `baidu`, `bitbucket`, `bitly`, `box`, `custom`, `daccount`, `dropbox`, `dwolla`, `email`, `evernote`, `evernote-sandbox`, `exact`, `facebook`, `fitbit`, `flickr`, `github`, `google-apps`, `google-oauth2`, `guardian`, `instagram`, `ip`, `line`, `linkedin`, `miicard`, `oauth1`, `oauth2`, `office365`, `oidc`, `paypal`, `paypal-sandbox`, `pingfederate`, `planningcenter`, `renren`, `salesforce`, `salesforce-community`, `salesforce-sandbox` `samlp`, `sharepoint`, `shopify`, `sms`, `soundcloud`, `thecity`, `thecity-sandbox`, `thirtysevensignals`, `twitter`, `untappd`, `vkontakte`, `waad`, `weibo`, `windowslive`, `wordpress`, `yahoo`, `yammer`, `yandex`.
 * `options` - (Optional) Configuration settings for connection options. For details, see [Options](#options).
 * `enabled_clients` - (Optional) IDs of the clients for which the connection is enabled. If not specified, no clients are enabled.
@@ -385,7 +389,6 @@ resource "auth0_connection" "sms" {
 		forward_request_info = true
 	}
 }
-
 ```
 
 #### TOTP
@@ -501,7 +504,7 @@ resource "auth0_connection" "windowslive" {
 
 Attributes exported by this resource include:
 
-* `is_domain_connection` - Boolean. Indicates whether or not the connection is domain level.
+* `is_domain_connection` - Boolean. Indicates whether the connection is domain level.
 * `options` - List(Resource). Configuration settings for connection options. For details, see [Options Attributes](#options-attributes).
 * `realms` - List(String). Defines the realms for which the connection will be used (i.e., email domains). If the array is empty or the property is not specified, the connection name is added as the realm.
 
@@ -518,10 +521,10 @@ Attributes exported by this resource include:
 * `enable` - Boolean. Indicates whether password history is enabled for the connection. When enabled, any existing users in this connection will be unaffected; the system will maintain their password history going forward.
 * `size` - Integer. Indicates the number of passwords to keep in history.
 
-### Import
+## Import
 
 Connections can be imported using their id, e.g.
 
-```
+```shell
 $ terraform import auth0_connection.google con_a17f21fdb24d48a0
 ```

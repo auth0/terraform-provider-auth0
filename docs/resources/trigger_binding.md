@@ -19,7 +19,7 @@ appropriate flow.
 ## Example Usage
 
 ```hcl
-resource auth0_action action_foo {
+resource "auth0_action" "action_foo" {
 	name = "Test Trigger Binding Foo {{.random}}"
 	supported_triggers {
 		id = "post-login"
@@ -33,7 +33,7 @@ resource auth0_action action_foo {
 	deploy = true
 }
 
-resource auth0_action action_bar {
+resource "auth0_action" "action_bar" {
 	name = "Test Trigger Binding Bar {{.random}}"
 	supported_triggers {
 		id = "post-login"
@@ -47,7 +47,7 @@ resource auth0_action action_bar {
 	deploy = true
 }
 
-resource auth0_trigger_binding login_flow {
+resource "auth0_trigger_binding" "login_flow" {
 	trigger = "post-login"
 	actions {
 		id = auth0_action.action_foo.id
@@ -72,6 +72,10 @@ The following arguments are supported:
 
 * `id` - (Required) Trigger ID.
 * `display_name` - (Required) The name of an action.
+
+## Attributes Reference
+
+No additional attributes are exported by this resource.
 
 ## Import
 

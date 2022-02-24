@@ -42,13 +42,13 @@ Arguments accepted by this resource include:
 * `scopes` - (Optional) Set(Resource).  List of permissions (scopes) used by this resource server. For details, see [Scopes](#scopes).
 * `signing_alg` - (Optional) String. Algorithm used to sign JWTs. Options include `HS256` and `RS256`.
 * `signing_secret` - (Optional) String. Secret used to sign tokens when using symmetric algorithms (HS256).
-* `allow_offline_access` - (Optional) Boolean. Indicates whether or not refresh tokens can be issued for this resource server.
+* `allow_offline_access` - (Optional) Boolean. Indicates whether refresh tokens can be issued for this resource server.
 * `token_lifetime` - (Optional) Integer. Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
 * `token_lifetime_for_web` - (Optional) Integer. Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
-* `skip_consent_for_verifiable_first_party_clients` - (Optional) Boolean. Indicates whether or not to skip user consent for applications flagged as first party.
+* `skip_consent_for_verifiable_first_party_clients` - (Optional) Boolean. Indicates whether to skip user consent for applications flagged as first party.
 * `verification_location` - (Optional) String
 * `options` - (Optional) Map(String). Used to store additional metadata
-* `enforce_policies` - (Optional) Boolean. Indicates whether or not authorization polices are enforced.
+* `enforce_policies` - (Optional) Boolean. Indicates whether authorization polices are enforced.
 * `token_dialect` - (Optional) String. Dialect of access tokens that should be issued for this resource server. Options include `access_token` or `access_token_authz` (includes permissions).
 
 ### Scopes
@@ -66,3 +66,11 @@ Attributes exported by this resource include:
 * `signing_secret` - String. Secret used to sign tokens when using symmetric algorithms (HS256).
 * `token_lifetime` - Integer. Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
 * `token_lifetime_for_web` - Integer. Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
+
+## Import
+
+Existing resource servers can be imported using their id, e.g.
+
+```
+$ terraform import auth0_resource_server.my_resource_server XXXXXXXXXXXXXXXXXXXXXXX
+```

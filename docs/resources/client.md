@@ -248,20 +248,30 @@ Arguments accepted by this resource include:
 `facebook` supports the following arguments:
 
 * `enabled` Boolean
+
 ## Attribute Reference
 
 Attributes exported by this resource include:
 
 * `client_id` - String. ID of the client.
 * `client_secret`<sup>[1](#client-keys)</sup> - String. Secret for the client; keep this private.
-* `is_first_party` - Boolean. Indicates whether or not this client is a first-party client.
+* `is_first_party` - Boolean. Indicates whether this client is a first-party client.
 * `is_token_endpoint_ip_header_trusted` - Boolean
-* `oidc_conformant` - Boolean. Indicates whether or not this client will conform to strict OIDC specifications.
+* `oidc_conformant` - Boolean. Indicates whether this client will conform to strict OIDC specifications.
 * `grant_types` - List(String). Types of grants that this client is authorized to use.
-* `custom_login_page_on` - Boolean. Indicates whether or not a custom login page is to be used.
+* `custom_login_page_on` - Boolean. Indicates whether a custom login page is to be used.
 * `token_endpoint_auth_method` - String. Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
 * `signing_keys` - List(Map). List containing a map of the public cert of the signing key and the public cert of the signing key in pkcs7.
 
 ### Client keys
 
-To access the `client_secret` attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+To access the `client_secret` attribute you need to add the `read:client_keys` scope to the Terraform client.
+Otherwise, the attribute will contain an empty string.
+
+## Import
+
+A client can be imported using the client's ID, e.g.
+
+```
+$ terraform import auth0_client.my_client AaiyAPdpYdesoKnqjj8HJqRn4T5titww
+```

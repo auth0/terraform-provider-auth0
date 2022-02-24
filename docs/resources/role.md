@@ -2,12 +2,15 @@
 layout: "auth0"
 page_title: "Auth0: auth0_role"
 description: |-
-  With this resource, you can create and manage collections of permissions that can be assigned to users, which are otherwise known as roles.
+  With this resource, you can create and manage collections of permissions that can be assigned to users, which are 
+  otherwise known as roles.
 ---
 
 # auth0_role
 
-With this resource, you can create and manage collections of permissions that can be assigned to users, which are otherwise known as roles. Permissions (scopes) are created on auth0_resource_server, then associated with roles and optionally, users using this resource.
+With this resource, you can create and manage collections of permissions that can be assigned to users, which are
+otherwise known as roles. Permissions (scopes) are created on auth0_resource_server, then associated with roles and
+optionally, users using this resource.
 
 ## Example Usage
 
@@ -41,7 +44,7 @@ resource "auth0_role" "my_role" {
   description = "Role Description..."
 
   permissions {
-    resource_server_identifier = "${auth0_resource_server.my_resource_server.identifier}"
+    resource_server_identifier = auth0_resource_server.my_resource_server.identifier
     name = "read:something"
   }
 }
@@ -54,7 +57,8 @@ Arguments accepted by this resource include:
 * `name` - (Required) String. Name for this role.
 * `description` - (Optional) String. Description of the role.
 * `user_ids` - (Optional) List(String). IDs of the users to which the role is assigned.
-* `permissions` - (Optional) Set(Resource). Configuration settings for permissions (scopes) attached to the role. For details, see [Permissions](#permissions).
+* `permissions` - (Optional) Set(Resource). Configuration settings for permissions (scopes) attached to the role.
+For details, see [Permissions](#permissions).
 
 ### Permissions
 
@@ -68,3 +72,11 @@ Arguments accepted by this resource include:
 Attributes exported by this resource include:
 
 * `id` - String. ID for the role.
+
+## Import
+
+Existing roles can be imported using their id, e.g.
+
+```
+$ terraform import auth0_role.my_role XXXXXXXXXXXXXXXXXXXXXXX
+```

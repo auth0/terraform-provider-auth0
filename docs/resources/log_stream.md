@@ -66,13 +66,14 @@ For "splunk" the following arguments are supported:
 For "sumo" the following arguments are supported:
 - `sumo_source_address` - (Required) Generated URL for your defined HTTP source in Sumo Logic for collecting streaming data from Auth0
 
+## Attributes Reference
+
+No additional attributes are exported by this resource.
+
 ## Import
 
-Existing log stream can be imported using log stream id
+Existing log stream can be imported using log stream id, e.g.
 
-
-```hcl
-
+```
 $ terraform import auth0_log_stream.example lst_XXXXXXXXXXXXXXXX
-
 ```

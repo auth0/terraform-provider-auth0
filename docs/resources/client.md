@@ -272,6 +272,6 @@ Otherwise, the attribute will contain an empty string.
 
 A client can be imported using the client's ID, e.g.
 
-```
+```shell
 $ terraform import auth0_client.my_client AaiyAPdpYdesoKnqjj8HJqRn4T5titww
 ```

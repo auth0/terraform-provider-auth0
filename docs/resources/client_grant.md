@@ -56,6 +56,6 @@ No additional attributes are exported by this resource.
 
 Client grants can be imported using the grant ID (Application -> APIs -> Expand the required API)
 
-```
+```shell
 $ terraform import auth0_client_grant.my_client_grant cgr_XXXXXXXXXXXXXXXX
 ```

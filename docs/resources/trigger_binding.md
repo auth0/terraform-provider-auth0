@@ -81,6 +81,6 @@ No additional attributes are exported by this resource.
 
 auth0_trigger_binding can be imported using the bindings trigger ID, e.g.
 
-```
+```shell
 $ terraform import auth0_trigger_binding.example "post-login"
 ```

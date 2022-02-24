@@ -85,6 +85,6 @@ exported:
 
 Existing organizations can be imported using organization id, e.g.
 
-```
+```shell
 $ terraform import auth0_organization.acme org_XXXXXXXXXXXXXX
 ```

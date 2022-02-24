@@ -77,6 +77,6 @@ Attributes exported by this resource include:
 
 Existing roles can be imported using their id, e.g.
 
-```
+```shell
 $ terraform import auth0_role.my_role XXXXXXXXXXXXXXXXXXXXXXX
 ```

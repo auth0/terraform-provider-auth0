@@ -60,6 +60,6 @@ No additional attributes are exported by this resource.
 
 auth0_user can be imported using the user ID, e.g.
 
-```
+```shell
 $ terraform import auth0_user.user auth0|111111111111111111111111
 ```

@@ -71,6 +71,6 @@ Attributes exported by this resource include:
 
 Existing resource servers can be imported using their id, e.g.
 
-```
+```shell
 $ terraform import auth0_resource_server.my_resource_server XXXXXXXXXXXXXXXXXXXXXXX
 ```

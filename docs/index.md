@@ -60,7 +60,7 @@ provider "auth0" {}
 
 Usage:
 
-```bash
+```shell
 $ export AUTH0_DOMAIN="<domain>"
 $ export AUTH0_CLIENT_ID="<client-id>"
 $ export AUTH0_CLIENT_SECRET="<client_secret>"

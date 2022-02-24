@@ -58,6 +58,6 @@ No additional attributes are exported by this resource.
 
 A hook can be imported using the hook's ID, e.g.
 
-```
+```shell
 $ terraform import auth0_hook.my_hook 00001
 ```

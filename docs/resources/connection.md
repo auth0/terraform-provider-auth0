@@ -525,6 +525,6 @@ Attributes exported by this resource include:
 
 Connections can be imported using their id, e.g.
 
-```
+```shell
 $ terraform import auth0_connection.google con_a17f21fdb24d48a0
 ```

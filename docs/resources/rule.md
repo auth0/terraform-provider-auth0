@@ -50,6 +50,6 @@ Attributes exported by this resource include:
 
 Existing rules can be imported using their id, e.g.
 
-```
+```shell
 $ terraform import auth0_rule.my_rule rul_XXXXXXXXXXXXX
 ```

@@ -47,6 +47,6 @@ Attributes exported by this resource include:
 
 Custom Domains can be imported using the id, e.g.
 
-```
+```shell
 $ terraform import auth0_custom_domain.my_custom_domain cd_XXXXXXXXXXXXXXXX
 ```

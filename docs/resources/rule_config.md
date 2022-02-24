@@ -46,6 +46,6 @@ No additional attributes are exported by this resource.
 
 Existing rule configs can be imported using their key name, e.g.
 
-```
+```shell
 $ terraform import auth0_rule_config.my_rule_config foo
 ```

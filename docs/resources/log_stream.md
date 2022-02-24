@@ -74,6 +74,6 @@ No additional attributes are exported by this resource.
 
 Existing log stream can be imported using log stream id, e.g.
 
-```
+```shell
 $ terraform import auth0_log_stream.example lst_XXXXXXXXXXXXXXXX
 ```

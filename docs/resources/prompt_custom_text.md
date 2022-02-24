@@ -60,6 +60,6 @@ No additional attributes are exported by this resource.
 
 This resource can be imported using the import command and specifying the prompt and language separated by *:* , e.g.
 
-```terminal
+```shell
 $ terraform import auth0_prompt_custom_text.example login:en
 ```

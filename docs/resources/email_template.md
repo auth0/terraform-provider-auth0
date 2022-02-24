@@ -61,6 +61,6 @@ No additional attributes are exported by this resource.
 
 This resource can be imported using the template name, e.g.
 
-```
+```shell
 $ terraform import auth0_email_template.my_email_template welcome_email
 ```

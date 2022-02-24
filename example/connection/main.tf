@@ -1,15 +1,15 @@
 provider "auth0" {
-   version = ">= 0.16.1"
+  version = ">= 0.16.1"
 }
 
 resource "auth0_connection" "my_connection" {
-  name = "Example-Connection"
+  name     = "Example-Connection"
   strategy = "auth0"
   options {
     password_policy = "excellent"
     password_history {
       enable = true
-      size = 3
+      size   = 3
     }
     validation {
       username {
@@ -17,7 +17,7 @@ resource "auth0_connection" "my_connection" {
         max = 20
       }
     }
-    brute_force_protection = true
+    brute_force_protection         = true
     enabled_database_customization = true
     custom_scripts = {
       get_user = <<EOF

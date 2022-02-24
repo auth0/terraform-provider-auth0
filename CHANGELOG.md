@@ -1,3 +1,11 @@
+## 0.27.1
+
+ENHANCEMENTS:
+
+* Added Signing Keys to client resources ([#66](https://github.com/auth0/terraform-provider-auth0/pull/66))
+* Update documentation to include missing resources and show how to import each resource ([#67](https://github.com/auth0/terraform-provider-auth0/pull/67))
+
+
 ## 0.27.0
 
 ENHANCEMENTS:

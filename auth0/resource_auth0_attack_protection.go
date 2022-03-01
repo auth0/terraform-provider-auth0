@@ -20,7 +20,7 @@ func newAttackProtection() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
-			"breached_password_protection": {
+			"breached_password_detection": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
@@ -215,6 +215,7 @@ func newAttackProtection() *schema.Resource {
 
 func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
+
 	ipThrottling, err := api.AttackProtection.GetSuspiciousIPThrottling()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -226,7 +227,9 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling))
+	if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
+		return err
+	}
 
 	bruteForce, err := api.AttackProtection.GetBruteForceProtection()
 	if err != nil {
@@ -239,7 +242,9 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce))
+	if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
+		return err
+	}
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
 	if err != nil {
@@ -252,7 +257,9 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords))
+	if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -261,10 +268,20 @@ func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []int
 	m := make(map[string]interface{})
 	if ipt != nil {
 		m["enabled"] = ipt.Enabled
-		m["allow_list"] = ipt.AllowList
+		m["allowlist"] = ipt.AllowList
 		m["shields"] = ipt.Shields
-		m["pre_login"] = ipt.Stage.PreLogin
-		m["pre_user_registration"] = ipt.Stage.PreUserRegistration
+		m["pre_login"] = []interface{}{
+			map[string]int{
+				"max_attempts": ipt.Stage.PreLogin.GetMaxAttempts(),
+				"rate":         ipt.Stage.PreLogin.GetRate(),
+			},
+		}
+		m["pre_user_registration"] = []interface{}{
+			map[string]int{
+				"max_attempts": ipt.Stage.PreUserRegistration.GetMaxAttempts(),
+				"rate":         ipt.Stage.PreUserRegistration.GetRate(),
+			},
+		}
 	}
 	return []interface{}{m}
 }
@@ -275,7 +292,7 @@ func flattenBruteForceProtection(bfp *management.BruteForceProtection) []interfa
 		m["enabled"] = bfp.Enabled
 		m["max_attempts"] = bfp.MaxAttempts
 		m["mode"] = bfp.Mode
-		m["allow_list"] = bfp.AllowList
+		m["allowlist"] = bfp.AllowList
 		m["shields"] = bfp.Shields
 	}
 	return []interface{}{m}
@@ -307,25 +324,35 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 	ipt := &management.SuspiciousIPThrottling{}
 
 	List(d, "suspicious_ip_throttling", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
+		var shields []string
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		// allowlist := []string{}
-		// for _, a := range d.Get("shields").([]interface{}) {
-		// 	allowlist = append(shields, fmt.Sprintf("%s", a))
-		// }
+		var allowlist []string
+		for _, a := range d.Get("allowlist").([]interface{}) {
+			allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		}
 
 		ipt = &management.SuspiciousIPThrottling{
-			Enabled: Bool(d, "enabled"),
-			Shields: &shields,
-			//AllowList: &allowlist,
+			Enabled:   Bool(d, "enabled"),
+			Shields:   &shields,
+			AllowList: &allowlist,
 			Stage: &management.Stage{
-				PreLogin:            nil,
-				PreUserRegistration: nil,
+				PreUserRegistration: &management.PreUserRegistration{},
+				PreLogin:            &management.PreLogin{},
 			},
 		}
+
+		List(d, "pre_login").Elem(func(d ResourceData) {
+			ipt.Stage.PreLogin.MaxAttempts = Int(d, "max_attempts")
+			ipt.Stage.PreLogin.Rate = Int(d, "rate")
+		})
+
+		List(d, "pre_user_registration").Elem(func(d ResourceData) {
+			ipt.Stage.PreUserRegistration.MaxAttempts = Int(d, "max_attempts")
+			ipt.Stage.PreUserRegistration.Rate = Int(d, "rate")
+		})
 	})
 
 	return ipt

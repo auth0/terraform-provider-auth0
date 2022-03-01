@@ -313,9 +313,22 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 }
 
 func updateAttackProtection(d *schema.ResourceData, m interface{}) error {
-	ipt := expandSuspiciousIPThrottling(d)
 	api := m.(*management.Management)
+
+	ipt := expandSuspiciousIPThrottling(d)
 	err := api.AttackProtection.UpdateSuspiciousIPThrottling(ipt)
+	if err != nil {
+		return err
+	}
+
+	bfp := expandBruteForceProtection(d)
+	err = api.AttackProtection.UpdateBruteForceProtection(bfp)
+	if err != nil {
+		return err
+	}
+
+	bpd := expandBreachedPasswordDetection(d)
+	err = api.AttackProtection.UpdateBreachedPasswordDetection(bpd)
 	if err != nil {
 		return err
 	}
@@ -359,6 +372,57 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 	})
 
 	return ipt
+}
+
+func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForceProtection {
+	bfp := &management.BruteForceProtection{}
+
+	List(d, "brute_force_protection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+		var shields []string
+		for _, s := range d.Get("shields").([]interface{}) {
+			shields = append(shields, fmt.Sprintf("%s", s))
+		}
+
+		var allowlist []string
+		for _, a := range d.Get("allowlist").([]interface{}) {
+			allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		}
+
+		bfp = &management.BruteForceProtection{
+			Enabled:     Bool(d, "enabled"),
+			Shields:     &shields,
+			AllowList:   &allowlist,
+			Mode:        String(d, "mode"),
+			MaxAttempts: Int(d, "max_attempts"),
+		}
+	})
+
+	return bfp
+}
+
+func expandBreachedPasswordDetection(d *schema.ResourceData) *management.BreachedPasswordDetection {
+	bpd := &management.BreachedPasswordDetection{}
+
+	List(d, "breached_password_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+		var shields []string
+		for _, s := range d.Get("shields").([]interface{}) {
+			shields = append(shields, fmt.Sprintf("%s", s))
+		}
+
+		var notificationFreq []string
+		for _, a := range d.Get("admin_notification_frequency").([]interface{}) {
+			notificationFreq = append(notificationFreq, fmt.Sprintf("%s", a))
+		}
+
+		bpd = &management.BreachedPasswordDetection{
+			Enabled:                    Bool(d, "enabled"),
+			Shields:                    &shields,
+			Method:                     String(d, "method"),
+			AdminNotificationFrequency: &notificationFreq,
+		}
+	})
+
+	return bpd
 }
 
 func createAttackProtection(d *schema.ResourceData, m interface{}) error {

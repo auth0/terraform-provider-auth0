@@ -41,29 +41,28 @@ The following arguments are supported:
 
 The following arguments are supported for `brute_force_protection`:
 
-* `enabled` - (Optional) Boolean if feature enabled
-* `shields` - (Optional)
-* `allowlist` - (Optional) 
-* `mode` - (Optional)
-* `max_attempts` - (Optional) Number of 
+* `enabled` - (Optional) Whether or not brute force attack protections are active.
+* `shields` - (Optional) Action to take when a brute force protection threshold is violated. Possible values: `block`, `user_notification`.
+* `allowlist` - (Optional) List of trusted IP addresses that will not have attack protection enforced against them.
+* `mode` - (Optional) Determines whether or not IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.
+* `max_attempts` - (Optional) Maximum number of unsuccessful attempts.
 
 ### suspicious_ip_throttling
 
 The following arguments are supported for `suspicious_ip_throttling`:
 
-* `enabled` - (Optional) Boolean if feature enabled
-* `shields` - (Optional)
-* `allowlist` - (Optional) 
-* `pre_login` - (Optional)
-* `pre_user_registration` - (Optional) 
+* `enabled` - (Optional) Whether or not suspicious IP throttling attack protections are active.
+* `shields` - (Optional) Action to take when a suspicious IP throttling threshold is violated. Possible values: `block`, `admin_notification`.
+* `allowlist` - (Optional) List of trusted IP addresses that will not have attack protection enforced against them. 
+* `pre_login` - (Optional) Configuration options that apply before every login attempt.
+* `pre_user_registration` - (Optional) Configuration options that apply before every user registration attempt.
 
-### brute_force_protection
+### breached_password_protection
 
-* `enabled` - (Optional) Boolean if feature enabled
-* `shields` - (Optional)
-* `allowlist` - (Optional)
-* `mode` - (Optional)
-* `max_attempts` - (Optional)
+* `enabled` - (Optional) Whether or not breached password detection is active.
+* `shields` - (Optional) Action to take when a breached password is detected. Possible values: `block`, `user_notification`, `admin_notification`.
+* `admin_notification_frequency` - (Optional) When "admin_notification" is enabled, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
+* `method` - (Optional) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
 
 
 ## Import

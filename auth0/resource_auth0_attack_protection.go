@@ -230,8 +230,10 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
-		return err
+	if changed := d.HasChange("suspicious_ip_throttling"); changed {
+		if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
+			return err
+		}
 	}
 
 	bruteForce, err := api.AttackProtection.GetBruteForceProtection()
@@ -245,8 +247,10 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
-		return err
+	if changed := d.HasChange("brute_force_protection"); changed {
+		if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
+			return err
+		}
 	}
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
@@ -260,8 +264,10 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
-		return err
+	if changed := d.HasChange("breached_password_detection"); changed {
+		if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
+			return err
+		}
 	}
 
 	return nil

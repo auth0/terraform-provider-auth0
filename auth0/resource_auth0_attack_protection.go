@@ -21,10 +21,11 @@ func newAttackProtection() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"breached_password_protection": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				MinItems:    1,
+				Description: "Breached password detection protects your applications from bad actors logging in with stolen credentials.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -74,10 +75,11 @@ func newAttackProtection() *schema.Resource {
 				},
 			},
 			"brute_force_protection": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				MinItems:    1,
+				Description: "Brute-force protection safeguards against a single IP address attacking a single user account.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -126,10 +128,11 @@ func newAttackProtection() *schema.Resource {
 				},
 			},
 			"suspicious_ip_throttling": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				MinItems:    1,
+				Description: "Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {

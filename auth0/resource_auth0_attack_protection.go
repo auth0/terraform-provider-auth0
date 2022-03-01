@@ -340,20 +340,20 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 	ipt := &management.SuspiciousIPThrottling{}
 
 	List(d, "suspicious_ip_throttling", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		var shields []string
+		shields := []string{}
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		var allowlist []string
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
-		}
+		// var allowlist []string
+		// for _, a := range d.Get("allowlist").([]interface{}) {
+		// 	allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		// }
 
 		ipt = &management.SuspiciousIPThrottling{
-			Enabled:   Bool(d, "enabled"),
-			Shields:   &shields,
-			AllowList: &allowlist,
+			Enabled: Bool(d, "enabled"),
+			Shields: &shields,
+			//AllowList: &allowlist,
 			Stage: &management.Stage{
 				PreUserRegistration: &management.PreUserRegistration{},
 				PreLogin:            &management.PreLogin{},
@@ -378,20 +378,20 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 	bfp := &management.BruteForceProtection{}
 
 	List(d, "brute_force_protection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		var shields []string
+		shields := []string{}
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		var allowlist []string
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
-		}
+		// var allowlist []string
+		// for _, a := range d.Get("allowlist").([]interface{}) {
+		// 	allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		// }
 
 		bfp = &management.BruteForceProtection{
-			Enabled:     Bool(d, "enabled"),
-			Shields:     &shields,
-			AllowList:   &allowlist,
+			Enabled: Bool(d, "enabled"),
+			Shields: &shields,
+			//AllowList:   &allowlist,
 			Mode:        String(d, "mode"),
 			MaxAttempts: Int(d, "max_attempts"),
 		}
@@ -404,12 +404,12 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 	bpd := &management.BreachedPasswordDetection{}
 
 	List(d, "breached_password_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		var shields []string
+		shields := []string{}
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		var notificationFreq []string
+		notificationFreq := []string{}
 		for _, a := range d.Get("admin_notification_frequency").([]interface{}) {
 			notificationFreq = append(notificationFreq, fmt.Sprintf("%s", a))
 		}

@@ -24,7 +24,7 @@ func newAttackProtection() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
-				MinItems:    1,
+				Computed:    true,
 				Description: "Breached password detection protects your applications from bad actors logging in with stolen credentials.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -45,7 +45,6 @@ func newAttackProtection() *schema.Resource {
 								}, false),
 							},
 							Optional:    true,
-							MinItems:    0,
 							Description: "Action to take when a breached password is detected.",
 						},
 						"admin_notification_frequency": {
@@ -60,7 +59,6 @@ func newAttackProtection() *schema.Resource {
 								}, false),
 							},
 							Optional:    true,
-							MinItems:    0,
 							Description: "When \"admin_notification\" is enabled, determines how often email notifications are sent.",
 						},
 						"method": {
@@ -78,7 +76,7 @@ func newAttackProtection() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
-				MinItems:    1,
+				Computed:    true,
 				Description: "Brute-force protection safeguards against a single IP address attacking a single user account.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -98,7 +96,6 @@ func newAttackProtection() *schema.Resource {
 								}, false),
 							},
 							Optional:    true,
-							MinItems:    0,
 							Description: "Action to take when a brute force protection threshold is violated.",
 						},
 						"allowlist": {
@@ -107,7 +104,6 @@ func newAttackProtection() *schema.Resource {
 								Type: schema.TypeString,
 							},
 							Optional:    true,
-							MinItems:    0,
 							Description: "List of trusted IP addresses that will not have attack protection enforced against them.",
 						},
 						"mode": {
@@ -130,8 +126,8 @@ func newAttackProtection() *schema.Resource {
 			"suspicious_ip_throttling": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
-				MinItems:    1,
 				Description: "Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -144,7 +140,6 @@ func newAttackProtection() *schema.Resource {
 						"shields": {
 							Type:     schema.TypeList,
 							Optional: true,
-							MinItems: 0,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 								ValidateFunc: validation.StringInSlice([]string{
@@ -160,14 +155,12 @@ func newAttackProtection() *schema.Resource {
 								Type: schema.TypeString,
 							},
 							Optional:    true,
-							MinItems:    0,
 							Description: "List of trusted IP addresses that will not have attack protection enforced against them.",
 						},
 						"pre_login": {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							MinItems:    1,
 							Description: "Configuration options that apply before every login attempt.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -190,7 +183,6 @@ func newAttackProtection() *schema.Resource {
 							Type:        schema.TypeList,
 							Optional:    true,
 							MaxItems:    1,
-							MinItems:    1,
 							Description: "Configuration options that apply before every user registration attempt.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -230,10 +222,8 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if changed := d.HasChange("suspicious_ip_throttling"); changed {
-		if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
-			return err
-		}
+	if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
+		return err
 	}
 
 	bruteForce, err := api.AttackProtection.GetBruteForceProtection()
@@ -247,10 +237,8 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if changed := d.HasChange("brute_force_protection"); changed {
-		if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
-			return err
-		}
+	if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
+		return err
 	}
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
@@ -264,10 +252,8 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if changed := d.HasChange("breached_password_detection"); changed {
-		if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
-			return err
-		}
+	if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
+		return err
 	}
 
 	return nil
@@ -346,12 +332,12 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 	ipt := &management.SuspiciousIPThrottling{}
 
 	List(d, "suspicious_ip_throttling", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
+		var shields []string
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		allowlist := []string{}
+		var allowlist []string
 		for _, a := range d.Get("allowlist").([]interface{}) {
 			allowlist = append(allowlist, fmt.Sprintf("%s", a))
 		}
@@ -361,8 +347,8 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 			Shields:   &shields,
 			AllowList: &allowlist,
 			Stage: &management.Stage{
-				PreUserRegistration: &management.PreUserRegistration{},
 				PreLogin:            &management.PreLogin{},
+				PreUserRegistration: &management.PreUserRegistration{},
 			},
 		}
 
@@ -384,12 +370,12 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 	bfp := &management.BruteForceProtection{}
 
 	List(d, "brute_force_protection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
+		var shields []string
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		allowlist := []string{}
+		var allowlist []string
 		for _, a := range d.Get("allowlist").([]interface{}) {
 			allowlist = append(allowlist, fmt.Sprintf("%s", a))
 		}
@@ -410,12 +396,12 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 	bpd := &management.BreachedPasswordDetection{}
 
 	List(d, "breached_password_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
+		var shields []string
 		for _, s := range d.Get("shields").([]interface{}) {
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		notificationFreq := []string{}
+		var notificationFreq []string
 		for _, a := range d.Get("admin_notification_frequency").([]interface{}) {
 			notificationFreq = append(notificationFreq, fmt.Sprintf("%s", a))
 		}

@@ -583,9 +583,10 @@ func newClient() *schema.Resource {
 				},
 			},
 			"signing_keys": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeMap},
-				Computed: true,
+				Type:      schema.TypeList,
+				Elem:      &schema.Schema{Type: schema.TypeMap},
+				Computed:  true,
+				Sensitive: true,
 			},
 		},
 	}

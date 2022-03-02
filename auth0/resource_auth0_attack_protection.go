@@ -351,15 +351,15 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		allowlist := []string{}
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
-		}
+		// allowlist := []string{}
+		// for _, a := range d.Get("allowlist").([]interface{}) {
+		// 	allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		// }
 
 		ipt = &management.SuspiciousIPThrottling{
-			Enabled:   Bool(d, "enabled"),
-			Shields:   &shields,
-			AllowList: &allowlist,
+			Enabled: Bool(d, "enabled"),
+			Shields: &shields,
+			//AllowList: &allowlist,
 			Stage: &management.Stage{
 				PreUserRegistration: &management.PreUserRegistration{},
 				PreLogin:            &management.PreLogin{},
@@ -389,15 +389,15 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 			shields = append(shields, fmt.Sprintf("%s", s))
 		}
 
-		allowlist := []string{}
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
-		}
+		// allowlist := []string{}
+		// for _, a := range d.Get("allowlist").([]interface{}) {
+		// 	allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		// }
 
 		bfp = &management.BruteForceProtection{
-			Enabled:     Bool(d, "enabled"),
-			Shields:     &shields,
-			AllowList:   &allowlist,
+			Enabled: Bool(d, "enabled"),
+			Shields: &shields,
+			//AllowList:   &allowlist,
 			Mode:        String(d, "mode"),
 			MaxAttempts: Int(d, "max_attempts"),
 		}

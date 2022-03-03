@@ -343,9 +343,9 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 		}
 
 		ipt = &management.SuspiciousIPThrottling{
-			Enabled: Bool(d, "enabled"),
-			Shields: &shields,
-			//AllowList: &allowlist,
+			Enabled:   Bool(d, "enabled"),
+			Shields:   &shields,
+			AllowList: &allowlist,
 			Stage: &management.Stage{
 				PreLogin:            &management.PreLogin{},
 				PreUserRegistration: &management.PreUserRegistration{},
@@ -381,9 +381,9 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 		}
 
 		bfp = &management.BruteForceProtection{
-			Enabled: Bool(d, "enabled"),
-			Shields: &shields,
-			//AllowList:   &allowlist,
+			Enabled:     Bool(d, "enabled"),
+			Shields:     &shields,
+			AllowList:   &allowlist,
 			Mode:        String(d, "mode"),
 			MaxAttempts: Int(d, "max_attempts"),
 		}

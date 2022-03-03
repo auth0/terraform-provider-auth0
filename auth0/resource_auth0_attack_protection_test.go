@@ -19,8 +19,7 @@ func TestAccAttackProtection(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "breached_password_detection.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "breached_password_detection.0.method", "standard"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.method", "true"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.max_attempts", "10"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.max_attempts", "10"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.mode", "count_per_identifier_and_ip"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection_tests", "brute_force_protection.0.shields.#", "2"),
@@ -55,7 +54,7 @@ resource "auth0_attack_protection" "my_protection_tests" {
   }
   suspicious_ip_throttling {
     enabled   = true
-    shields   = ["block", "admin_notification"]
+    shields   = ["block","admin_notification"]
     allowlist = ["127.0.0.1"]
     pre_login {
       max_attempts = 100

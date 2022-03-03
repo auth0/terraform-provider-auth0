@@ -77,6 +77,7 @@ func Provider() *schema.Provider {
 			"auth0_organization":               newOrganization(),
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),
+			"auth0_attack_protection":          newAttackProtection(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_client":        newDataClient(),

@@ -265,6 +265,7 @@ func readTenant(d *schema.ResourceData, m interface{}) error {
 
 	d.Set("default_audience", t.DefaultAudience)
 	d.Set("default_directory", t.DefaultDirectory)
+	d.Set("default_redirection_uri", t.DefaultRedirectionURI)
 
 	d.Set("friendly_name", t.FriendlyName)
 	d.Set("picture_url", t.PictureURL)
@@ -300,22 +301,23 @@ func deleteTenant(d *schema.ResourceData, m interface{}) error {
 
 func buildTenant(d *schema.ResourceData) *management.Tenant {
 	t := &management.Tenant{
-		DefaultAudience:     String(d, "default_audience"),
-		DefaultDirectory:    String(d, "default_directory"),
-		FriendlyName:        String(d, "friendly_name"),
-		PictureURL:          String(d, "picture_url"),
-		SupportEmail:        String(d, "support_email"),
-		SupportURL:          String(d, "support_url"),
-		AllowedLogoutURLs:   Slice(d, "allowed_logout_urls"),
-		SessionLifetime:     Float64(d, "session_lifetime"),
-		SandboxVersion:      String(d, "sandbox_version"),
-		IdleSessionLifetime: Float64(d, "idle_session_lifetime", IsNewResource(), HasChange()),
-		EnabledLocales:      List(d, "enabled_locales").List(),
-		ChangePassword:      expandTenantChangePassword(d),
-		GuardianMFAPage:     expandTenantGuardianMFAPage(d),
-		ErrorPage:           expandTenantErrorPage(d),
-		Flags:               expandTenantFlags(d),
-		UniversalLogin:      expandTenantUniversalLogin(d),
+		DefaultAudience:       String(d, "default_audience"),
+		DefaultDirectory:      String(d, "default_directory"),
+		DefaultRedirectionURI: String(d, "default_redirection_uri"),
+		FriendlyName:          String(d, "friendly_name"),
+		PictureURL:            String(d, "picture_url"),
+		SupportEmail:          String(d, "support_email"),
+		SupportURL:            String(d, "support_url"),
+		AllowedLogoutURLs:     Slice(d, "allowed_logout_urls"),
+		SessionLifetime:       Float64(d, "session_lifetime"),
+		SandboxVersion:        String(d, "sandbox_version"),
+		IdleSessionLifetime:   Float64(d, "idle_session_lifetime", IsNewResource(), HasChange()),
+		EnabledLocales:        List(d, "enabled_locales").List(),
+		ChangePassword:        expandTenantChangePassword(d),
+		GuardianMFAPage:       expandTenantGuardianMFAPage(d),
+		ErrorPage:             expandTenantErrorPage(d),
+		Flags:                 expandTenantFlags(d),
+		UniversalLogin:        expandTenantUniversalLogin(d),
 	}
 
 	return t

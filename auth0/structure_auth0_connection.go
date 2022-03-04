@@ -318,7 +318,6 @@ func flattenConnectionOptionsSAML(o *management.ConnectionOptionsSAML) interface
 }
 
 func expandConnection(d ResourceData) *management.Connection {
-
 	c := &management.Connection{
 		Name:               String(d, "name", IsNewResource()),
 		DisplayName:        String(d, "display_name"),
@@ -326,13 +325,21 @@ func expandConnection(d ResourceData) *management.Connection {
 		IsDomainConnection: Bool(d, "is_domain_connection"),
 		EnabledClients:     Set(d, "enabled_clients").List(),
 		Realms:             Slice(d, "realms", IsNewResource(), HasChange()),
-		ShowAsButton:       Bool(d, "show_as_button"),
 	}
 
-	s := d.Get("strategy").(string)
+	strategy := d.Get("strategy").(string)
+	switch strategy {
+	case management.ConnectionStrategyGoogleApps,
+		management.ConnectionStrategyOIDC,
+		management.ConnectionStrategyAD,
+		management.ConnectionStrategyAzureAD,
+		management.ConnectionStrategySAML,
+		management.ConnectionStrategyADFS:
+		c.ShowAsButton = Bool(d, "show_as_button")
+	}
 
 	List(d, "options").Elem(func(d ResourceData) {
-		switch s {
+		switch strategy {
 		case management.ConnectionStrategyAuth0:
 			c.Options = expandConnectionOptionsAuth0(d)
 		case management.ConnectionStrategyGoogleOAuth2:
@@ -370,7 +377,7 @@ func expandConnection(d ResourceData) *management.Connection {
 		case management.ConnectionStrategyADFS:
 			c.Options = expandConnectionOptionsADFS(d)
 		default:
-			log.Printf("[WARN]: Unsupported connection strategy %s", s)
+			log.Printf("[WARN]: Unsupported connection strategy %s", strategy)
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
 			log.Printf("[WARN]: 	https://github.com/auth0/terraform-provider-auth0/issues/new")
 		}

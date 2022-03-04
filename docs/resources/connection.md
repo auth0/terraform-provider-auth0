@@ -55,7 +55,6 @@ Arguments accepted by this resource include:
 * `options` - (Optional) Configuration settings for connection options. For details, see [Options](#options).
 * `enabled_clients` - (Optional) IDs of the clients for which the connection is enabled. If not specified, no clients are enabled.
 * `realms` - (Optional) Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm.
-* `show_as_button` - (Optional) Display connection as a button.
 
 ### Options
 
@@ -280,6 +279,8 @@ resource "auth0_connection" "salesforce" {
 
 ### OIDC
 
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+
 With the `oidc` connection strategy, `options` supports the following arguments:
 
 * `client_id` - (Optional) OIDC provider client ID.
@@ -329,6 +330,8 @@ EOF
 ```
 
 ### Azure AD
+
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `waad` connection strategy, `options` supports the following arguments:
 
@@ -425,11 +428,15 @@ resource "auth0_connection" "sms" {
 
 ### ADFS
 
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+
 With the `adfs` connection strategy, `options` supports the following arguments:
 
 * `adfs_server` - (Optional) ADFS Metadata source.
 
 ### SAML
+
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `samlp` connection strategy, `options` supports the following arguments:
 

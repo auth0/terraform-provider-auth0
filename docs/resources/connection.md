@@ -279,6 +279,8 @@ resource "auth0_connection" "salesforce" {
 
 ### OIDC
 
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+
 With the `oidc` connection strategy, `options` supports the following arguments:
 
 * `client_id` - (Optional) OIDC provider client ID.
@@ -328,6 +330,8 @@ EOF
 ```
 
 ### Azure AD
+
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `waad` connection strategy, `options` supports the following arguments:
 
@@ -424,11 +428,15 @@ resource "auth0_connection" "sms" {
 
 ### ADFS
 
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+
 With the `adfs` connection strategy, `options` supports the following arguments:
 
 * `adfs_server` - (Optional) ADFS Metadata source.
 
 ### SAML
+
+* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `samlp` connection strategy, `options` supports the following arguments:
 

@@ -54,7 +54,6 @@ func init() {
 }
 
 func TestAccConnection(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -68,6 +67,7 @@ func TestAccConnection(t *testing.T) {
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_dictionary.0.enable", "true"),
@@ -99,7 +99,6 @@ func TestAccConnection(t *testing.T) {
 }
 
 const testAccConnectionConfig = `
-
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
@@ -147,7 +146,6 @@ resource "auth0_connection" "my_connection" {
 `
 
 const testAccConnectionConfigUpdate = `
-
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
@@ -182,7 +180,6 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestAccConnectionAD(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -195,6 +192,7 @@ func TestAccConnectionAD(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.ad", "name", "Acceptance-Test-AD-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "strategy", "ad"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.tenant_domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.use_kerberos", "false"),
@@ -216,6 +214,7 @@ const testAccConnectionADConfig = `
 resource "auth0_connection" "ad" {
 	name = "Acceptance-Test-AD-{{.random}}"
 	strategy = "ad"
+	show_as_button = true
 	options {
 		tenant_domain = "example.com"
 		domain_aliases = [
@@ -230,7 +229,6 @@ resource "auth0_connection" "ad" {
 `
 
 func TestAccConnectionAzureAD(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -243,6 +241,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.azure_ad", "name", "Acceptance-Test-Azure-AD-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "strategy", "waad"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
@@ -267,6 +266,7 @@ const testAccConnectionAzureADConfig = `
 resource "auth0_connection" "azure_ad" {
 	name     = "Acceptance-Test-Azure-AD-{{.random}}"
 	strategy = "waad"
+	show_as_button = true
 	options {
 		client_id     = "123456"
 		client_secret = "123456"
@@ -292,7 +292,6 @@ resource "auth0_connection" "azure_ad" {
 `
 
 func TestAccConnectionOIDC(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -305,6 +304,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.oidc", "name", "Acceptance-Test-OIDC-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "2"),
@@ -329,6 +329,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 			{
 				Config: random.Template(testAccConnectionOIDCConfigUpdate, rand),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "1"),
@@ -351,11 +352,11 @@ func TestAccConnectionOIDC(t *testing.T) {
 }
 
 const testAccConnectionOIDCConfig = `
-
 resource "auth0_connection" "oidc" {
 	name     = "Acceptance-Test-OIDC-{{.random}}"
 	display_name     = "Acceptance-Test-OIDC-{{.random}}"
 	strategy = "oidc"
+	show_as_button = true
 	options {
 		client_id     = "123456"
 		client_secret = "123456"
@@ -378,11 +379,11 @@ resource "auth0_connection" "oidc" {
 `
 
 const testAccConnectionOIDCConfigUpdate = `
-
 resource "auth0_connection" "oidc" {
 	name     = "Acceptance-Test-OIDC-{{.random}}"
 	display_name     = "Acceptance-Test-OIDC-{{.random}}"
 	strategy = "oidc"
+	show_as_button = false
 	options {
 		client_id     = "1234567"
 		client_secret = "1234567"
@@ -403,7 +404,6 @@ resource "auth0_connection" "oidc" {
 `
 
 func TestAccConnectionOAuth2(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -447,7 +447,6 @@ func TestAccConnectionOAuth2(t *testing.T) {
 }
 
 const testAccConnectionOAuth2Config = `
-
 resource "auth0_connection" "oauth2" {
 	name     = "Acceptance-Test-OAuth2-{{.random}}"
 	strategy = "oauth2"
@@ -467,7 +466,6 @@ resource "auth0_connection" "oauth2" {
 `
 
 const testAccConnectionOAuth2ConfigUpdate = `
-
 resource "auth0_connection" "oauth2" {
 	name     = "Acceptance-Test-OAuth2-{{.random}}"
 	strategy = "oauth2"
@@ -486,8 +484,7 @@ resource "auth0_connection" "oauth2" {
 }
 `
 
-func TestAccConnectionWithEnbledClients(t *testing.T) {
-
+func TestAccConnectionWithEnabledClients(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -507,7 +504,6 @@ func TestAccConnectionWithEnbledClients(t *testing.T) {
 }
 
 const testAccConnectionWithEnabledClientsConfig = `
-
 resource "auth0_client" "my_client_1" {
 	name = "Application - Acceptance Test - 1 - {{.random}}"
 	description = "Test Applications Long Description"
@@ -546,7 +542,6 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestAccConnectionSMS(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -571,7 +566,6 @@ func TestAccConnectionSMS(t *testing.T) {
 }
 
 const testAccConnectionSMSConfig = `
-
 resource "auth0_connection" "sms" {
 	name = "Acceptance-Test-SMS-{{.random}}"
 	is_domain_connection = false
@@ -597,7 +591,6 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionCustomSMS(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -626,7 +619,6 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 }
 
 const testAccConnectionCustomSMSConfig = `
-
 resource "auth0_connection" "sms" {
 	name = "Acceptance-Test-Custom-SMS-{{.random}}"
 	is_domain_connection = false
@@ -657,7 +649,6 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionEmail(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -690,12 +681,10 @@ func TestAccConnectionEmail(t *testing.T) {
 }
 
 const testAccConnectionEmailConfig = `
-
 resource "auth0_connection" "email" {
 	name = "Acceptance-Test-Email-{{.random}}"
 	is_domain_connection = false
 	strategy = "email"
-
 	options {
 		disable_signup = false
 		name = "Email OTP"
@@ -703,9 +692,7 @@ resource "auth0_connection" "email" {
 		subject = "Sign in!"
 		syntax = "liquid"
 		template = "<html><body><h1>Here's your password!</h1></body></html>"
-
 		brute_force_protection = true
-
 		totp {
 			time_step = 300
 			length = 6
@@ -716,12 +703,10 @@ resource "auth0_connection" "email" {
 `
 
 const testAccConnectionEmailConfigUpdate = `
-
 resource "auth0_connection" "email" {
 	name = "Acceptance-Test-Email-{{.random}}"
 	is_domain_connection = false
 	strategy = "email"
-
 	options {
 		disable_signup = false
 		name = "Email OTP"
@@ -729,9 +714,7 @@ resource "auth0_connection" "email" {
 		subject = "Sign in!"
 		syntax = "liquid"
 		template = "<html><body><h1>Here's your password!</h1></body></html>"
-
 		brute_force_protection = true
-
 		totp {
 			time_step = 360
 			length = 4
@@ -741,7 +724,6 @@ resource "auth0_connection" "email" {
 `
 
 func TestAccConnectionSalesforce(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -762,7 +744,6 @@ func TestAccConnectionSalesforce(t *testing.T) {
 }
 
 const testAccConnectionSalesforceConfig = `
-
 resource "auth0_connection" "salesforce_community" {
 	name = "Acceptance-Test-Salesforce-Connection-{{.random}}"
 	is_domain_connection = false
@@ -777,7 +758,6 @@ resource "auth0_connection" "salesforce_community" {
 `
 
 func TestAccConnectionGoogleOAuth2(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -806,7 +786,6 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 }
 
 const testAccConnectionGoogleOAuth2Config = `
-
 resource "auth0_connection" "google_oauth2" {
 	name = "Acceptance-Test-Google-OAuth2-{{.random}}"
 	is_domain_connection = false
@@ -822,7 +801,6 @@ resource "auth0_connection" "google_oauth2" {
 `
 
 func TestAccConnectionGoogleApps(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -835,6 +813,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.google_apps", "name", "Acceptance-Test-Google-Apps-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "strategy", "google-apps"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.client_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.client_secret", ""),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain", "example.com"),
@@ -853,11 +832,11 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 }
 
 const testAccConnectionGoogleApps = `
-
 resource "auth0_connection" "google_apps" {
 	name = "Acceptance-Test-Google-Apps-{{.random}}"
 	is_domain_connection = false
 	strategy = "google-apps"
+	show_as_button = false
 	options {
 		client_id = ""
 		client_secret = ""
@@ -871,7 +850,6 @@ resource "auth0_connection" "google_apps" {
 `
 
 func TestAccConnectionFacebook(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -908,7 +886,6 @@ func TestAccConnectionFacebook(t *testing.T) {
 }
 
 const testAccConnectionFacebookConfig = `
-
 resource "auth0_connection" "facebook" {
 	name = "Acceptance-Test-Facebook-{{.random}}"
 	is_domain_connection = false
@@ -922,7 +899,6 @@ resource "auth0_connection" "facebook" {
 `
 
 const testAccConnectionFacebookConfigUpdate = `
-
 resource "auth0_connection" "facebook" {
 	name = "Acceptance-Test-Facebook-{{.random}}"
 	is_domain_connection = false
@@ -973,7 +949,6 @@ func TestAccConnectionApple(t *testing.T) {
 }
 
 const testAccConnectionAppleConfig = `
-
 resource "auth0_connection" "apple" {
 	name = "Acceptance-Test-Apple-{{.random}}"
 	is_domain_connection = false
@@ -990,7 +965,6 @@ resource "auth0_connection" "apple" {
 `
 
 const testAccConnectionAppleConfigUpdate = `
-
 resource "auth0_connection" "apple" {
 	name = "Acceptance-Test-Apple-{{.random}}"
 	is_domain_connection = false
@@ -1007,7 +981,6 @@ resource "auth0_connection" "apple" {
 `
 
 func TestAccConnectionLinkedin(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -1042,7 +1015,6 @@ func TestAccConnectionLinkedin(t *testing.T) {
 }
 
 const testAccConnectionLinkedinConfig = `
-
 resource "auth0_connection" "linkedin" {
 	name = "Acceptance-Test-Linkedin-{{.random}}"
 	is_domain_connection = false
@@ -1057,7 +1029,6 @@ resource "auth0_connection" "linkedin" {
 `
 
 const testAccConnectionLinkedinConfigUpdate = `
-
 resource "auth0_connection" "linkedin" {
 	name = "Acceptance-Test-Linkedin-{{.random}}"
 	is_domain_connection = false
@@ -1072,7 +1043,6 @@ resource "auth0_connection" "linkedin" {
 `
 
 func TestAccConnectionGitHub(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -1115,7 +1085,6 @@ func TestAccConnectionGitHub(t *testing.T) {
 }
 
 const testAccConnectionGitHubConfig = `
-
 resource "auth0_connection" "github" {
 	name = "Acceptance-Test-GitHub-{{.random}}"
 	strategy = "github"
@@ -1131,7 +1100,6 @@ resource "auth0_connection" "github" {
 `
 
 func TestAccConnectionWindowslive(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -1169,7 +1137,6 @@ func TestAccConnectionWindowslive(t *testing.T) {
 }
 
 const testAccConnectionWindowsliveConfig = `
-
 resource "auth0_connection" "windowslive" {
 	name = "Acceptance-Test-Windowslive-{{.random}}"
 	is_domain_connection = false
@@ -1184,7 +1151,6 @@ resource "auth0_connection" "windowslive" {
 `
 
 const testAccConnectionWindowsliveConfigUpdate = `
-
 resource "auth0_connection" "windowslive" {
 	name = "Acceptance-Test-Windowslive-{{.random}}"
 	is_domain_connection = false
@@ -1199,7 +1165,6 @@ resource "auth0_connection" "windowslive" {
 `
 
 func TestAccConnectionConfiguration(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -1229,7 +1194,6 @@ func TestAccConnectionConfiguration(t *testing.T) {
 }
 
 const testAccConnectionConfigurationCreate = `
-
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
@@ -1244,7 +1208,6 @@ resource "auth0_connection" "my_connection" {
 `
 
 const testAccConnectionConfigurationUpdate = `
-
 resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
@@ -1260,7 +1223,6 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
-
 	for _, tt := range []struct {
 		name            string
 		version         interface{}
@@ -1288,7 +1250,6 @@ func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-
 			state := map[string]interface{}{
 				"options": []interface{}{
 					map[string]interface{}{"strategy_version": tt.version},
@@ -1314,7 +1275,6 @@ func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
 }
 
 func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
-
 	for _, tt := range []struct {
 		name               string
 		validation         map[string]string
@@ -1392,12 +1352,14 @@ func TestAccConnectionSAML(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-SAML-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", "Acceptance-Test-SAML-{{.random}}", rand),
 				),
 			},
 			{
 				Config: random.Template(testConnectionSAMLConfigUpdate, rand),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),
@@ -1412,6 +1374,7 @@ resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-SAML-{{.random}}"
 	display_name = "Acceptance-Test-SAML-{{.random}}"
 	strategy = "samlp"
+	show_as_button = false
 	options {
 		signing_cert = <<EOF
 -----BEGIN CERTIFICATE-----
@@ -1466,6 +1429,7 @@ resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-SAML-{{.random}}"
 	display_name = "Acceptance-Test-SAML-{{.random}}"
 	strategy = "samlp"
+	show_as_button = true
 	options {
 		signing_cert = <<EOF
 -----BEGIN CERTIFICATE-----

@@ -13,7 +13,6 @@ import (
 
 func newConnection() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createConnection,
 		Read:   readConnection,
 		Update: updateConnection,
@@ -665,6 +664,11 @@ var connectionSchema = map[string]*schema.Schema{
 		Computed:    true,
 		Description: "Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm",
 	},
+	"show_as_button": {
+		Type:        schema.TypeBool,
+		Optional:    true,
+		Description: "Display connection as a button. Only available on enterprise connections.",
+	},
 }
 
 func connectionSchemaV0() *schema.Resource {
@@ -788,6 +792,17 @@ func readConnection(d *schema.ResourceData, m interface{}) error {
 	d.Set("options", flattenConnectionOptions(d, c.Options))
 	d.Set("enabled_clients", c.EnabledClients)
 	d.Set("realms", c.Realms)
+
+	switch *c.Strategy {
+	case management.ConnectionStrategyGoogleApps,
+		management.ConnectionStrategyOIDC,
+		management.ConnectionStrategyAD,
+		management.ConnectionStrategyAzureAD,
+		management.ConnectionStrategySAML,
+		management.ConnectionStrategyADFS:
+		d.Set("show_as_button", c.ShowAsButton)
+	}
+
 	return nil
 }
 

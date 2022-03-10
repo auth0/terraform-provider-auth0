@@ -82,6 +82,7 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_client":        newDataClient(),
 			"auth0_global_client": newDataGlobalClient(),
+			"auth0_tenant":        newDataTenant(),
 		},
 	}
 

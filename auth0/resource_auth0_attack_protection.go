@@ -1,7 +1,6 @@
 package auth0
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -208,6 +207,11 @@ func newAttackProtection() *schema.Resource {
 	}
 }
 
+func createAttackProtection(d *schema.ResourceData, m interface{}) error {
+	d.SetId(resource.UniqueId())
+	return updateAttackProtection(d, m)
+}
+
 func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
 
@@ -259,24 +263,61 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
+func updateAttackProtection(d *schema.ResourceData, m interface{}) error {
+	api := m.(*management.Management)
+
+	if ipt := expandSuspiciousIPThrottling(d); ipt != nil {
+		if err := api.AttackProtection.UpdateSuspiciousIPThrottling(ipt); err != nil {
+			return err
+		}
+	}
+
+	if bfp := expandBruteForceProtection(d); bfp != nil {
+		if err := api.AttackProtection.UpdateBruteForceProtection(bfp); err != nil {
+			return err
+		}
+	}
+
+	if bpd := expandBreachedPasswordDetection(d); bpd != nil {
+		if err := api.AttackProtection.UpdateBreachedPasswordDetection(bpd); err != nil {
+			return err
+		}
+	}
+
+	return readAttackProtection(d, m)
+}
+
+func deleteAttackProtection(d *schema.ResourceData, m interface{}) error {
+	d.SetId("")
+	return nil
+}
+
 func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []interface{} {
 	m := make(map[string]interface{})
 	if ipt != nil {
 		m["enabled"] = ipt.Enabled
 		m["allowlist"] = ipt.AllowList
 		m["shields"] = ipt.Shields
-		m["pre_login"] = []interface{}{
-			map[string]int{
-				"max_attempts": ipt.Stage.PreLogin.GetMaxAttempts(),
-				"rate":         ipt.Stage.PreLogin.GetRate(),
-			},
+
+		if ipt.Stage != nil {
+			if ipt.Stage.PreLogin != nil {
+				m["pre_login"] = []interface{}{
+					map[string]int{
+						"max_attempts": ipt.Stage.PreLogin.GetMaxAttempts(),
+						"rate":         ipt.Stage.PreLogin.GetRate(),
+					},
+				}
+			}
+			if ipt.Stage.PreUserRegistration != nil {
+				m["pre_user_registration"] = []interface{}{
+					map[string]int{
+						"max_attempts": ipt.Stage.PreUserRegistration.GetMaxAttempts(),
+						"rate":         ipt.Stage.PreUserRegistration.GetRate(),
+					},
+				}
+			}
 		}
-		m["pre_user_registration"] = []interface{}{
-			map[string]int{
-				"max_attempts": ipt.Stage.PreUserRegistration.GetMaxAttempts(),
-				"rate":         ipt.Stage.PreUserRegistration.GetRate(),
-			},
-		}
+
 	}
 	return []interface{}{m}
 }
@@ -304,125 +345,103 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 	return []interface{}{m}
 }
 
-func updateAttackProtection(d *schema.ResourceData, m interface{}) error {
-	api := m.(*management.Management)
-
-	ipt := expandSuspiciousIPThrottling(d)
-	err := api.AttackProtection.UpdateSuspiciousIPThrottling(ipt)
-	if err != nil {
-		return err
-	}
-
-	bfp := expandBruteForceProtection(d)
-	err = api.AttackProtection.UpdateBruteForceProtection(bfp)
-	if err != nil {
-		return err
-	}
-
-	bpd := expandBreachedPasswordDetection(d)
-	err = api.AttackProtection.UpdateBreachedPasswordDetection(bpd)
-	if err != nil {
-		return err
-	}
-
-	return readAttackProtection(d, m)
-}
-
 func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.SuspiciousIPThrottling {
-	ipt := &management.SuspiciousIPThrottling{}
+	var ipt management.SuspiciousIPThrottling
 
 	List(d, "suspicious_ip_throttling", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
-		for _, s := range d.Get("shields").([]interface{}) {
-			shields = append(shields, fmt.Sprintf("%s", s))
-		}
+		ipt.Enabled = Bool(d, "enabled")
 
-		allowlist := []string{}
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		stateShields := d.Get("shields").([]interface{})
+		shields := make([]string, len(stateShields))
+		for index, value := range stateShields {
+			shields[index] = value.(string)
 		}
+		ipt.Shields = &shields
 
-		ipt = &management.SuspiciousIPThrottling{
-			Enabled:   Bool(d, "enabled"),
-			Shields:   &shields,
-			AllowList: &allowlist,
-			Stage: &management.Stage{
-				PreLogin:            &management.PreLogin{},
-				PreUserRegistration: &management.PreUserRegistration{},
-			},
+		stateAllowList := d.Get("allowlist").([]interface{})
+		allowlist := make([]string, len(stateAllowList))
+		for index, value := range stateAllowList {
+			allowlist[index] = value.(string)
 		}
+		ipt.AllowList = &allowlist
 
-		List(d, "pre_login").Elem(func(d ResourceData) {
-			ipt.Stage.PreLogin.MaxAttempts = Int(d, "max_attempts")
-			ipt.Stage.PreLogin.Rate = Int(d, "rate")
+		List(d, "pre_login", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+			ipt.Stage = &management.Stage{
+				PreLogin: &management.PreLogin{
+					MaxAttempts: Int(d, "max_attempts"),
+					Rate:        Int(d, "rate"),
+				},
+			}
 		})
 
-		List(d, "pre_user_registration").Elem(func(d ResourceData) {
-			ipt.Stage.PreUserRegistration.MaxAttempts = Int(d, "max_attempts")
-			ipt.Stage.PreUserRegistration.Rate = Int(d, "rate")
+		List(d, "pre_user_registration", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+			preUserRegistration := &management.PreUserRegistration{
+				MaxAttempts: Int(d, "max_attempts"),
+				Rate:        Int(d, "rate"),
+			}
+
+			if ipt.Stage != nil {
+				ipt.Stage.PreUserRegistration = preUserRegistration
+			} else {
+				ipt.Stage = &management.Stage{
+					PreUserRegistration: preUserRegistration,
+				}
+			}
 		})
 	})
 
-	return ipt
+	return &ipt
 }
 
 func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForceProtection {
-	bfp := &management.BruteForceProtection{}
+	var bfp management.BruteForceProtection
 
 	List(d, "brute_force_protection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
-		for _, s := range d.Get("shields").([]interface{}) {
-			shields = append(shields, fmt.Sprintf("%s", s))
-		}
+		bfp.Enabled = Bool(d, "enabled")
 
-		allowlist := []string{}
-		for _, a := range d.Get("allowlist").([]interface{}) {
-			allowlist = append(allowlist, fmt.Sprintf("%s", a))
+		stateShields := d.Get("shields").([]interface{})
+		shields := make([]string, len(stateShields))
+		for index, value := range stateShields {
+			shields[index] = value.(string)
 		}
+		bfp.Shields = &shields
 
-		bfp = &management.BruteForceProtection{
-			Enabled:     Bool(d, "enabled"),
-			Shields:     &shields,
-			AllowList:   &allowlist,
-			Mode:        String(d, "mode"),
-			MaxAttempts: Int(d, "max_attempts"),
+		stateAllowList := d.Get("allowlist").([]interface{})
+		allowlist := make([]string, len(stateAllowList))
+		for index, value := range stateAllowList {
+			allowlist[index] = value.(string)
 		}
+		bfp.AllowList = &allowlist
+
+		bfp.Mode = String(d, "mode")
+		bfp.MaxAttempts = Int(d, "max_attempts")
 	})
 
-	return bfp
+	return &bfp
 }
 
 func expandBreachedPasswordDetection(d *schema.ResourceData) *management.BreachedPasswordDetection {
-	bpd := &management.BreachedPasswordDetection{}
+	var bpd management.BreachedPasswordDetection
 
 	List(d, "breached_password_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		shields := []string{}
-		for _, s := range d.Get("shields").([]interface{}) {
-			shields = append(shields, fmt.Sprintf("%s", s))
-		}
+		bpd.Enabled = Bool(d, "enabled")
 
-		notificationFreq := []string{}
-		for _, a := range d.Get("admin_notification_frequency").([]interface{}) {
-			notificationFreq = append(notificationFreq, fmt.Sprintf("%s", a))
+		stateShields := d.Get("shields").([]interface{})
+		shields := make([]string, len(stateShields))
+		for index, value := range stateShields {
+			shields[index] = value.(string)
 		}
+		bpd.Shields = &shields
 
-		bpd = &management.BreachedPasswordDetection{
-			Enabled:                    Bool(d, "enabled"),
-			Shields:                    &shields,
-			Method:                     String(d, "method"),
-			AdminNotificationFrequency: &notificationFreq,
+		stateAdminNotificationFrequency := d.Get("admin_notification_frequency").([]interface{})
+		adminNotificationFrequency := make([]string, len(stateAdminNotificationFrequency))
+		for index, value := range stateAdminNotificationFrequency {
+			adminNotificationFrequency[index] = value.(string)
 		}
+		bpd.AdminNotificationFrequency = &adminNotificationFrequency
+
+		bpd.Method = String(d, "method")
 	})
 
-	return bpd
-}
-
-func createAttackProtection(d *schema.ResourceData, m interface{}) error {
-	d.SetId(resource.UniqueId())
-	return updateAttackProtection(d, m)
-}
-
-func deleteAttackProtection(d *schema.ResourceData, m interface{}) error {
-	d.SetId("")
-	return nil
+	return &bpd
 }

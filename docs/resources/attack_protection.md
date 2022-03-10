@@ -58,7 +58,7 @@ The following arguments are supported for `brute_force_protection`:
 * `shields` - (Optional) Action to take when a brute force protection threshold is violated. Possible values: `block`, `user_notification`.
 * `allowlist` - (Optional) List of trusted IP addresses that will not have attack protection enforced against them.
 * `mode` - (Optional) Determines whether or not IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.
-* `max_attempts` - (Optional) Maximum number of unsuccessful attempts.
+* `max_attempts` - (Optional) Maximum number of unsuccessful attempts. Only available on public tenants.
 
 ### suspicious_ip_throttling
 
@@ -67,8 +67,8 @@ The following arguments are supported for `suspicious_ip_throttling`:
 * `enabled` - (Optional) Whether or not suspicious IP throttling attack protections are active.
 * `shields` - (Optional) Action to take when a suspicious IP throttling threshold is violated. Possible values: `block`, `admin_notification`.
 * `allowlist` - (Optional) List of trusted IP addresses that will not have attack protection enforced against them. 
-* `pre_login` - (Optional) Configuration options that apply before every login attempt.
-* `pre_user_registration` - (Optional) Configuration options that apply before every user registration attempt.
+* `pre_login` - (Optional) Configuration options that apply before every login attempt. Only available on public tenants.
+* `pre_user_registration` - (Optional) Configuration options that apply before every user registration attempt. Only available on public tenants.
 
 ### breached_password_protection
 

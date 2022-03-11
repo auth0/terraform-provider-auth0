@@ -1,14 +1,15 @@
 package auth0
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newConnection() *schema.Resource {
@@ -691,8 +692,11 @@ func connectionSchemaV1() *schema.Resource {
 	return &schema.Resource{Schema: s}
 }
 
-func connectionSchemaUpgradeV0(state map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-
+func connectionSchemaUpgradeV0(
+	ctx context.Context,
+	state map[string]interface{},
+	meta interface{},
+) (map[string]interface{}, error) {
 	o, ok := state["options"]
 	if !ok {
 		return state, nil
@@ -728,8 +732,11 @@ func connectionSchemaUpgradeV0(state map[string]interface{}, meta interface{}) (
 	return state, nil
 }
 
-func connectionSchemaUpgradeV1(state map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-
+func connectionSchemaUpgradeV1(
+	ctx context.Context,
+	state map[string]interface{},
+	meta interface{},
+) (map[string]interface{}, error) {
 	o, ok := state["options"]
 	if !ok {
 		return state, nil

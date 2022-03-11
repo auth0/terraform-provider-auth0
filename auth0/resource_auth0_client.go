@@ -878,7 +878,6 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 		}
 		d.Set("client_secret", c.ClientSecret)
 	}
-	d.SetPartial("client_secret_rotation_trigger")
 	return nil
 }
 

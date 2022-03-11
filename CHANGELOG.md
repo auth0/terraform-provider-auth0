@@ -1,3 +1,10 @@
+## 0.28.1
+
+BUG FIXES:
+
+* `resource/auth0_attack_protection`: Fix attack protection resource for PSaaS Tenants ([#86](https://github.com/auth0/terraform-provider-auth0/pull/86))
+
+
 ## 0.28.0
 
 FEATURES:

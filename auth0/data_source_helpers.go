@@ -1,7 +1,7 @@
 package auth0
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // datasourceSchemaFromResourceSchema is a recursive func that

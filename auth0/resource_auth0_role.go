@@ -5,12 +5,11 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newRole() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createRole,
 		Update: updateRole,
 		Read:   readRole,
@@ -58,7 +57,7 @@ func createRole(d *schema.ResourceData, m interface{}) error {
 	d.SetId(auth0.StringValue(c.ID))
 
 	// Enable partial state mode. Sub-resources can potentially cause partial
-	// state. Therefore we must explicitly tell Terraform what is safe to
+	// state. Therefore, we must explicitly tell Terraform what is safe to
 	// persist and what is not.
 	//
 	// See: https://www.terraform.io/docs/extend/writing-custom-providers.html
@@ -149,7 +148,6 @@ func expandRole(d *schema.ResourceData) *management.Role {
 }
 
 func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
-
 	add, rm := Diff(d, "permissions")
 
 	var addPermissions []*management.Permission

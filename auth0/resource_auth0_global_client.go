@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newGlobalClient() *schema.Resource {

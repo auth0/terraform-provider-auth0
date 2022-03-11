@@ -186,7 +186,6 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	d.SetPartial("permissions")
 	return nil
 }
 

@@ -28,13 +28,6 @@ func newRole() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"user_ids": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
-				ForceNew: true,
-				Removed:  `This field has been removed. Use "auth0_user.roles" instead`,
-			},
 			"permissions": {
 				Type:     schema.TypeSet,
 				Optional: true,

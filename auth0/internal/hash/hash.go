@@ -1,8 +1,9 @@
 package hash
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"hash/crc32"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // StringKey returns a schema.SchemaSetFunc able to hash a string value
@@ -14,8 +15,21 @@ func StringKey(k string) schema.SchemaSetFunc {
 			return 0
 		}
 		if v, ok := m[k].(string); ok {
-			return hashcode.String(v)
+			return String(v)
 		}
 		return 0
 	}
+}
+
+// String hashes a string to a unique hashcode.
+func String(s string) int {
+	v := int(crc32.ChecksumIEEE([]byte(s)))
+	if v >= 0 {
+		return v
+	}
+	if -v >= 0 {
+		return -v
+	}
+	// v == MinInt
+	return 0
 }

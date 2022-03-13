@@ -355,8 +355,9 @@ func newClient() *schema.Resource {
 										Default:  true,
 									},
 									"logout": {
-										Type:     schema.TypeMap,
+										Type:     schema.TypeList,
 										Optional: true,
+										MaxItems: 1,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"callback": {

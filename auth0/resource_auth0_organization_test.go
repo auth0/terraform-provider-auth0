@@ -8,7 +8,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -55,7 +55,7 @@ func TestAccOrganization(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -110,7 +110,7 @@ const testAccOrganizationCreate = testAccOrganizationAux + `
 resource auth0_organization acme {
 	name = "test-{{.random}}"
 	display_name = "Acme Inc. {{.random}}"
-	
+
 	connections {
 		connection_id = auth0_connection.acme.id
 	}

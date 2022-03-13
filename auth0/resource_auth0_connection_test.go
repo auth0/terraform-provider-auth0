@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"context"
 	"log"
 	"reflect"
 	"strings"
@@ -9,7 +10,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -57,7 +58,7 @@ func TestAccConnection(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -183,7 +184,7 @@ func TestAccConnectionAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -232,7 +233,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -295,7 +296,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -407,7 +408,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -488,7 +489,7 @@ func TestAccConnectionWithEnabledClients(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -545,7 +546,7 @@ func TestAccConnectionSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -594,7 +595,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -652,7 +653,7 @@ func TestAccConnectionEmail(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -727,7 +728,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -761,7 +762,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -804,7 +805,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -853,7 +854,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -915,7 +916,7 @@ func TestAccConnectionApple(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -984,7 +985,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1046,7 +1047,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1103,7 +1104,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1168,7 +1169,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1256,7 +1257,7 @@ func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV0(state, nil)
+			actual, err := connectionSchemaUpgradeV0(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}
@@ -1321,7 +1322,7 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV1(state, nil)
+			actual, err := connectionSchemaUpgradeV1(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}
@@ -1343,7 +1344,7 @@ func TestAccConnectionSAML(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{

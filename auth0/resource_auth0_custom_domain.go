@@ -51,6 +51,7 @@ func newCustomDomain() *schema.Resource {
 			},
 			"verification": {
 				Type:     schema.TypeList,
+				Optional: true,
 				Computed: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{

@@ -2,7 +2,6 @@ package auth0
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -47,12 +46,10 @@ func newClient() *schema.Resource {
 			"app_type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"native", "spa", "regular_web", "non_interactive", "rms",
-					"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
-					"egnyte", "newrelic", "office365", "salesforce", "sentry",
-					"sharepoint", "slack", "springcm", "zendesk", "zoom",
-				}, false),
+				ValidateFunc: validation.StringInSlice(
+					[]string{"native", "spa", "regular_web", "non_interactive"},
+					false,
+				),
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,
@@ -189,82 +186,6 @@ func newClient() *schema.Resource {
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"aws": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_blob": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_sb": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"rms": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"mscrm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"slack": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sentry": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"box": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"cloudbees": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"concur": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"dropbox": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"echosign": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"egnyte": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"firebase": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"newrelic": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"office365": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_sandbox_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
 						"samlp": {
 							Type:     schema.TypeList,
 							MaxItems: 1,
@@ -379,35 +300,7 @@ func newClient() *schema.Resource {
 								},
 							},
 						},
-						"layer": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sap_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sharepoint": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"springcm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"wams": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
 						"wsfed": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"zendesk": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"zoom": {
 							Type:     schema.TypeMap,
 							Optional: true,
 						},
@@ -742,19 +635,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	List(d, "addons").Elem(func(d ResourceData) {
 		c.Addons = make(map[string]interface{})
 
-		for _, name := range []string{
-			"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-			"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-			"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-			"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-			"springcm", "wams", "wsfed", "zendesk", "zoom",
-		} {
-			_, ok := d.GetOk(name)
-			if ok {
-				c.Addons[name] = buildClientAddon(Map(d, name))
-			}
-		}
-
 		List(d, "samlp").Elem(func(d ResourceData) {
 			m := make(MapData)
 
@@ -829,33 +709,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	})
 
 	return c
-}
-
-func buildClientAddon(d map[string]interface{}) map[string]interface{} {
-	addon := make(map[string]interface{})
-
-	for key, value := range d {
-		switch v := value.(type) {
-		case string:
-			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
-				addon[key] = i
-			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
-				addon[key] = f
-			} else if b, err := strconv.ParseBool(v); err == nil {
-				addon[key] = b
-			} else {
-				addon[key] = v
-			}
-		case map[string]interface{}:
-			addon[key] = buildClientAddon(v)
-		case []interface{}:
-			addon[key] = v
-		default:
-			addon[key] = v
-		}
-	}
-
-	return addon
 }
 
 func rotateClientSecret(d *schema.ResourceData, m interface{}) error {

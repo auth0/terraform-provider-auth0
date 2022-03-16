@@ -74,8 +74,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "3600"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.client_email", "john.doe@example.com"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.lifetime_in_seconds", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://example.com/saml"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "false"),
@@ -120,12 +118,6 @@ resource "auth0_client" "my_client" {
     foo = "zoo"
   }
   addons {
-    firebase = {
-      client_email = "john.doe@example.com"
-      lifetime_in_seconds = 1
-      private_key = "wer"
-      private_key_id = "qwreerwerwe"
-    }
     samlp {
       audience = "https://example.com/saml"
       mappings = {

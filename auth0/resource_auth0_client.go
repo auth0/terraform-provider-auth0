@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
@@ -508,42 +509,42 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("client_id", client.ClientID)
-	d.Set("client_secret", client.ClientSecret)
-	d.Set("name", client.Name)
-	d.Set("description", client.Description)
-	d.Set("app_type", client.AppType)
-	d.Set("logo_uri", client.LogoURI)
-	d.Set("is_first_party", client.IsFirstParty)
-	d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted)
-	d.Set("oidc_conformant", client.OIDCConformant)
-	d.Set("callbacks", client.Callbacks)
-	d.Set("allowed_logout_urls", client.AllowedLogoutURLs)
-	d.Set("allowed_origins", client.AllowedOrigins)
-	d.Set("allowed_clients", client.AllowedClients)
-	d.Set("grant_types", client.GrantTypes)
-	d.Set("organization_usage", client.OrganizationUsage)
-	d.Set("organization_require_behavior", client.OrganizationRequireBehavior)
-	d.Set("web_origins", client.WebOrigins)
-	d.Set("sso", client.SSO)
-	d.Set("sso_disabled", client.SSODisabled)
-	d.Set("cross_origin_auth", client.CrossOriginAuth)
-	d.Set("cross_origin_loc", client.CrossOriginLocation)
-	d.Set("custom_login_page_on", client.CustomLoginPageOn)
-	d.Set("custom_login_page", client.CustomLoginPage)
-	d.Set("form_template", client.FormTemplate)
-	d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod)
-	d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin))
-	d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration))
-	d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken))
-	d.Set("encryption_key", client.EncryptionKey)
-	d.Set("addons", flattenClientAddons(client.Addons))
-	d.Set("client_metadata", client.ClientMetadata)
-	d.Set("mobile", flattenClientMobile(client.Mobile))
-	d.Set("initiate_login_uri", client.InitiateLoginURI)
-	d.Set("signing_keys", client.SigningKeys)
+	err = d.Set("client_id", client.ClientID)
+	err = multierror.Append(err, d.Set("client_secret", client.ClientSecret))
+	err = multierror.Append(err, d.Set("name", client.Name))
+	err = multierror.Append(err, d.Set("description", client.Description))
+	err = multierror.Append(err, d.Set("app_type", client.AppType))
+	err = multierror.Append(err, d.Set("logo_uri", client.LogoURI))
+	err = multierror.Append(err, d.Set("is_first_party", client.IsFirstParty))
+	err = multierror.Append(err, d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted))
+	err = multierror.Append(err, d.Set("oidc_conformant", client.OIDCConformant))
+	err = multierror.Append(err, d.Set("callbacks", client.Callbacks))
+	err = multierror.Append(err, d.Set("allowed_logout_urls", client.AllowedLogoutURLs))
+	err = multierror.Append(err, d.Set("allowed_origins", client.AllowedOrigins))
+	err = multierror.Append(err, d.Set("allowed_clients", client.AllowedClients))
+	err = multierror.Append(err, d.Set("grant_types", client.GrantTypes))
+	err = multierror.Append(err, d.Set("organization_usage", client.OrganizationUsage))
+	err = multierror.Append(err, d.Set("organization_require_behavior", client.OrganizationRequireBehavior))
+	err = multierror.Append(err, d.Set("web_origins", client.WebOrigins))
+	err = multierror.Append(err, d.Set("sso", client.SSO))
+	err = multierror.Append(err, d.Set("sso_disabled", client.SSODisabled))
+	err = multierror.Append(err, d.Set("cross_origin_auth", client.CrossOriginAuth))
+	err = multierror.Append(err, d.Set("cross_origin_loc", client.CrossOriginLocation))
+	err = multierror.Append(err, d.Set("custom_login_page_on", client.CustomLoginPageOn))
+	err = multierror.Append(err, d.Set("custom_login_page", client.CustomLoginPage))
+	err = multierror.Append(err, d.Set("form_template", client.FormTemplate))
+	err = multierror.Append(err, d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod))
+	err = multierror.Append(err, d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin)))
+	err = multierror.Append(err, d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration)))
+	err = multierror.Append(err, d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken)))
+	err = multierror.Append(err, d.Set("encryption_key", client.EncryptionKey))
+	err = multierror.Append(err, d.Set("addons", flattenClientAddons(client.Addons)))
+	err = multierror.Append(err, d.Set("client_metadata", client.ClientMetadata))
+	err = multierror.Append(err, d.Set("mobile", flattenClientMobile(client.Mobile)))
+	err = multierror.Append(err, d.Set("initiate_login_uri", client.InitiateLoginURI))
+	err = multierror.Append(err, d.Set("signing_keys", client.SigningKeys))
 
-	return nil
+	return err
 }
 
 func updateClient(d *schema.ResourceData, m interface{}) error {

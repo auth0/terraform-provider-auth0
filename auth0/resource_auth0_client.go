@@ -190,6 +190,7 @@ func newClient() *schema.Resource {
 							Type:     schema.TypeList,
 							MaxItems: 1,
 							Optional: true,
+							Computed: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"audience": {
@@ -324,6 +325,7 @@ func newClient() *schema.Resource {
 			},
 			"mobile": {
 				Type:     schema.TypeList,
+				Computed: true,
 				Optional: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -535,9 +537,9 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 	d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration))
 	d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken))
 	d.Set("encryption_key", client.EncryptionKey)
-	d.Set("addons", client.Addons)
+	d.Set("addons", flattenClientAddons(client.Addons))
 	d.Set("client_metadata", client.ClientMetadata)
-	d.Set("mobile", client.Mobile)
+	d.Set("mobile", flattenClientMobile(client.Mobile))
 	d.Set("initiate_login_uri", client.InitiateLoginURI)
 	d.Set("signing_keys", client.SigningKeys)
 
@@ -577,7 +579,7 @@ func deleteClient(d *schema.ResourceData, m interface{}) error {
 }
 
 func expandClient(d *schema.ResourceData) *management.Client {
-	c := &management.Client{
+	client := &management.Client{
 		Name:                           String(d, "name"),
 		Description:                    String(d, "description"),
 		AppType:                        String(d, "app_type"),
@@ -605,7 +607,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	}
 
 	List(d, "refresh_token", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		c.RefreshToken = &management.ClientRefreshToken{
+		client.RefreshToken = &management.ClientRefreshToken{
 			RotationType:              String(d, "rotation_type"),
 			ExpirationType:            String(d, "expiration_type"),
 			Leeway:                    Int(d, "leeway"),
@@ -617,7 +619,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	})
 
 	List(d, "jwt_configuration").Elem(func(d ResourceData) {
-		c.JWTConfiguration = &management.ClientJWTConfiguration{
+		client.JWTConfiguration = &management.ClientJWTConfiguration{
 			LifetimeInSeconds: Int(d, "lifetime_in_seconds"),
 			SecretEncoded:     Bool(d, "secret_encoded", IsNewResource()),
 			Algorithm:         String(d, "alg"),
@@ -626,89 +628,91 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	})
 
 	if m := Map(d, "encryption_key"); m != nil {
-		c.EncryptionKey = map[string]string{}
+		client.EncryptionKey = map[string]string{}
 		for k, v := range m {
-			c.EncryptionKey[k] = v.(string)
+			client.EncryptionKey[k] = v.(string)
 		}
 	}
 
 	List(d, "addons").Elem(func(d ResourceData) {
-		c.Addons = make(map[string]interface{})
+		client.Addons = &management.ClientAddons{}
 
 		List(d, "samlp").Elem(func(d ResourceData) {
-			m := make(MapData)
+			client.Addons.SAML = &management.ClientAddonSAML{
+				Audience:                       String(d, "audience"),
+				Recipient:                      String(d, "recipient"),
+				Mappings:                       Map(d, "mappings"),
+				CreateUpnClaim:                 Bool(d, "create_upn_claim"),
+				PassThroughClaimsWithNoMapping: Bool(d, "passthrough_claims_with_no_mapping"),
+				MapUnknownClaimsAsIs:           Bool(d, "map_unknown_claims_as_is"),
+				MapIdentities:                  Bool(d, "map_identities"),
+				SignatureAlgorithm:             String(d, "signature_algorithm"),
+				DigestAlgorithm:                String(d, "digest_algorithm"),
+				Destination:                    String(d, "destination"),
+				LifetimeInSeconds:              Int(d, "lifetime_in_seconds"),
+				SignResponse:                   Bool(d, "sign_response"),
+				NameIdentifierFormat:           String(d, "name_identifier_format"),
+				NameIdentifierProbes:           StringSlice(d, "name_identifier_probes"),
+				AuthnContextClassRef:           String(d, "authn_context_class_ref"),
+				TypedAttributes:                Bool(d, "typed_attributes"),
+				IncludeAttributeNameFormat:     Bool(d, "include_attribute_name_format"),
+				Binding:                        String(d, "binding"),
+				SigningCert:                    String(d, "signing_cert"),
+			}
 
-			m.Set("audience", String(d, "audience"))
-			m.Set("authnContextClassRef", String(d, "authn_context_class_ref"))
-			m.Set("binding", String(d, "binding"))
-			m.Set("signingCert", String(d, "signing_cert"))
-			m.Set("createUpnClaim", Bool(d, "create_upn_claim"))
-			m.Set("destination", String(d, "destination"))
-			m.Set("digestAlgorithm", String(d, "digest_algorithm"))
-			m.Set("includeAttributeNameFormat", Bool(d, "include_attribute_name_format"))
-			m.Set("lifetimeInSeconds", Int(d, "lifetime_in_seconds"))
-			m.Set("logout", buildClientAddon(Map(d, "logout")))
-			m.Set("mapIdentities", Bool(d, "map_identities"))
-			m.Set("mappings", Map(d, "mappings"))
-			m.Set("mapUnknownClaimsAsIs", Bool(d, "map_unknown_claims_as_is"))
-			m.Set("nameIdentifierFormat", String(d, "name_identifier_format"))
-			m.Set("nameIdentifierProbes", Slice(d, "name_identifier_probes"))
-			m.Set("passthroughClaimsWithNoMapping", Bool(d, "passthrough_claims_with_no_mapping"))
-			m.Set("recipient", String(d, "recipient"))
-			m.Set("signatureAlgorithm", String(d, "signature_algorithm"))
-			m.Set("signResponse", Bool(d, "sign_response"))
-			m.Set("typedAttributes", Bool(d, "typed_attributes"))
-
-			c.Addons["samlp"] = m
+			List(d, "logout").Elem(func(d ResourceData) {
+				client.Addons.SAML.Logout = &management.ClientAddonSAMLLogout{
+					Callback:   String(d, "callback"),
+					SLOEnabled: Bool(d, "slo_enabled"),
+				}
+			})
 		})
 	})
 
 	if v, ok := d.GetOk("client_metadata"); ok {
-		c.ClientMetadata = make(map[string]string)
+		client.ClientMetadata = make(map[string]string)
 		for key, value := range v.(map[string]interface{}) {
-			c.ClientMetadata[key] = (value.(string))
+			client.ClientMetadata[key] = (value.(string))
 		}
 	}
 
 	List(d, "native_social_login").Elem(func(d ResourceData) {
-		c.NativeSocialLogin = &management.ClientNativeSocialLogin{}
+		client.NativeSocialLogin = &management.ClientNativeSocialLogin{}
 
 		List(d, "apple").Elem(func(d ResourceData) {
 			m := make(MapData)
 			m.Set("enabled", Bool(d, "enabled"))
 
-			c.NativeSocialLogin.Apple = m
+			client.NativeSocialLogin.Apple = m
 		})
 
 		List(d, "facebook").Elem(func(d ResourceData) {
 			m := make(MapData)
 			m.Set("enabled", Bool(d, "enabled"))
 
-			c.NativeSocialLogin.Facebook = m
+			client.NativeSocialLogin.Facebook = m
 		})
 	})
 
 	List(d, "mobile").Elem(func(d ResourceData) {
-		c.Mobile = make(map[string]interface{})
+		client.Mobile = &management.ClientMobile{}
 
 		List(d, "android").Elem(func(d ResourceData) {
-			m := make(MapData)
-			m.Set("app_package_name", String(d, "app_package_name"))
-			m.Set("sha256_cert_fingerprints", Slice(d, "sha256_cert_fingerprints"))
-
-			c.Mobile["android"] = m
+			client.Mobile.Android = &management.ClientMobileAndroid{
+				AppPackageName:         String(d, "app_package_name"),
+				SHA256CertFingerprints: StringSlice(d, "sha256_cert_fingerprints"),
+			}
 		})
 
 		List(d, "ios").Elem(func(d ResourceData) {
-			m := make(MapData)
-			m.Set("team_id", String(d, "team_id"))
-			m.Set("app_bundle_identifier", String(d, "app_bundle_identifier"))
-
-			c.Mobile["ios"] = m
+			client.Mobile.IOS = &management.ClientMobileIOS{
+				TeamID:              String(d, "team_id"),
+				AppBundleIdentifier: String(d, "app_bundle_identifier"),
+			}
 		})
 	})
 
-	return c
+	return client
 }
 
 func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
@@ -771,5 +775,74 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 		m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
 		m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
 	}
+	return []interface{}{m}
+}
+
+func flattenClientAddons(addons *management.ClientAddons) []interface{} {
+	m := make(map[string]interface{})
+
+	if addons == nil || addons.SAML == nil {
+		return nil
+	}
+
+	samlpMap := map[string]interface{}{
+		"audience":                           addons.SAML.Audience,
+		"recipient":                          addons.SAML.Recipient,
+		"mappings":                           addons.SAML.Mappings,
+		"create_upn_claim":                   addons.SAML.CreateUpnClaim,
+		"passthrough_claims_with_no_mapping": addons.SAML.PassThroughClaimsWithNoMapping,
+		"map_unknown_claims_as_is":           addons.SAML.MapUnknownClaimsAsIs,
+		"map_identities":                     addons.SAML.MapIdentities,
+		"signature_algorithm":                addons.SAML.SignatureAlgorithm,
+		"digest_algorithm":                   addons.SAML.DigestAlgorithm,
+		"destination":                        addons.SAML.Destination,
+		"lifetime_in_seconds":                addons.SAML.LifetimeInSeconds,
+		"sign_response":                      addons.SAML.SignResponse,
+		"name_identifier_format":             addons.SAML.NameIdentifierFormat,
+		"name_identifier_probes":             addons.SAML.NameIdentifierProbes,
+		"authn_context_class_ref":            addons.SAML.AuthnContextClassRef,
+		"typed_attributes":                   addons.SAML.TypedAttributes,
+		"include_attribute_name_format":      addons.SAML.IncludeAttributeNameFormat,
+		"binding":                            addons.SAML.Binding,
+		"signing_cert":                       addons.SAML.SigningCert,
+	}
+
+	if addons.SAML.Logout != nil {
+		logoutMap := map[string]interface{}{
+			"callback":    addons.SAML.Logout.Callback,
+			"slo_enabled": addons.SAML.Logout.SLOEnabled,
+		}
+		samlpMap["logout"] = []interface{}{logoutMap}
+	}
+
+	m["samlp"] = []interface{}{samlpMap}
+
+	return []interface{}{m}
+}
+
+func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
+	m := make(map[string]interface{})
+
+	if mobile == nil {
+		return nil
+	}
+
+	if mobile.Android != nil {
+		m["android"] = []interface{}{
+			map[string]interface{}{
+				"app_package_name":         mobile.Android.AppPackageName,
+				"sha256_cert_fingerprints": mobile.Android.SHA256CertFingerprints,
+			},
+		}
+	}
+	if mobile.IOS != nil {
+		m["ios"] = []interface{}{
+			map[string]interface{}{
+				"team_id":               mobile.IOS.TeamID,
+				"app_bundle_identifier": mobile.IOS.AppBundleIdentifier,
+			},
+		}
+	}
+
 	return []interface{}{m}
 }

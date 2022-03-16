@@ -273,6 +273,21 @@ func Slice(d ResourceData, key string, conditions ...Condition) (s []interface{}
 	return
 }
 
+// StringSlice accesses the value held by key and type asserts it to a slice of strings.
+func StringSlice(d ResourceData, key string, conditions ...Condition) (s *[]string) {
+	v, ok := d.GetOk(key)
+	if ok && Any(conditions...).Eval(d, key) {
+		vSlice := v.([]interface{})
+		stringSlice := make([]string, len(vSlice))
+		for index, value := range vSlice {
+			stringSlice[index] = value.(string)
+		}
+
+		s = &stringSlice
+	}
+	return
+}
+
 // Map accesses the value held by key and type asserts it to a map.
 func Map(d ResourceData, key string, conditions ...Condition) (m map[string]interface{}) {
 	v, ok := d.GetOk(key)

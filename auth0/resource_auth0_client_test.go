@@ -140,7 +140,7 @@ resource "auth0_client" "my_client" {
       name_identifier_probes = [
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
       ]
-      logout = {
+      logout {
         callback = "http://example.com/callback"
         slo_enabled = true
       }

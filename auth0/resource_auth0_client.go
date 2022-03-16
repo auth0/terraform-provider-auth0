@@ -9,21 +9,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	v "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
+	internalValidation "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
 )
 
 func newClient() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createClient,
 		Read:   readClient,
 		Update: updateClient,
 		Delete: deleteClient,
-
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -496,7 +493,7 @@ func newClient() *schema.Resource {
 				Optional: true,
 				ValidateFunc: validation.All(
 					validation.IsURLWithScheme([]string{"https"}),
-					v.IsURLWithNoFragment,
+					internalValidation.IsURLWithNoFragment,
 				),
 			},
 			"native_social_login": {
@@ -593,18 +590,18 @@ func newClient() *schema.Resource {
 }
 
 func createClient(d *schema.ResourceData, m interface{}) error {
-	c := expandClient(d)
+	client := expandClient(d)
 	api := m.(*management.Management)
-	if err := api.Client.Create(c); err != nil {
+	if err := api.Client.Create(client); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ClientID))
+	d.SetId(auth0.StringValue(client.ClientID))
 	return readClient(d, m)
 }
 
 func readClient(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.Client.Read(d.Id())
+	client, err := api.Client.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -615,49 +612,49 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("client_id", c.ClientID)
-	d.Set("client_secret", c.ClientSecret)
-	d.Set("name", c.Name)
-	d.Set("description", c.Description)
-	d.Set("app_type", c.AppType)
-	d.Set("logo_uri", c.LogoURI)
-	d.Set("is_first_party", c.IsFirstParty)
-	d.Set("is_token_endpoint_ip_header_trusted", c.IsTokenEndpointIPHeaderTrusted)
-	d.Set("oidc_conformant", c.OIDCConformant)
-	d.Set("callbacks", c.Callbacks)
-	d.Set("allowed_logout_urls", c.AllowedLogoutURLs)
-	d.Set("allowed_origins", c.AllowedOrigins)
-	d.Set("allowed_clients", c.AllowedClients)
-	d.Set("grant_types", c.GrantTypes)
-	d.Set("organization_usage", c.OrganizationUsage)
-	d.Set("organization_require_behavior", c.OrganizationRequireBehavior)
-	d.Set("web_origins", c.WebOrigins)
-	d.Set("sso", c.SSO)
-	d.Set("sso_disabled", c.SSODisabled)
-	d.Set("cross_origin_auth", c.CrossOriginAuth)
-	d.Set("cross_origin_loc", c.CrossOriginLocation)
-	d.Set("custom_login_page_on", c.CustomLoginPageOn)
-	d.Set("custom_login_page", c.CustomLoginPage)
-	d.Set("form_template", c.FormTemplate)
-	d.Set("token_endpoint_auth_method", c.TokenEndpointAuthMethod)
-	d.Set("native_social_login", flattenCustomSocialConfiguration(c.NativeSocialLogin))
-	d.Set("jwt_configuration", flattenClientJwtConfiguration(c.JWTConfiguration))
-	d.Set("refresh_token", flattenClientRefreshTokenConfiguration(c.RefreshToken))
-	d.Set("encryption_key", c.EncryptionKey)
-	d.Set("addons", c.Addons)
-	d.Set("client_metadata", c.ClientMetadata)
-	d.Set("mobile", c.Mobile)
-	d.Set("initiate_login_uri", c.InitiateLoginURI)
-	d.Set("signing_keys", c.SigningKeys)
+	d.Set("client_id", client.ClientID)
+	d.Set("client_secret", client.ClientSecret)
+	d.Set("name", client.Name)
+	d.Set("description", client.Description)
+	d.Set("app_type", client.AppType)
+	d.Set("logo_uri", client.LogoURI)
+	d.Set("is_first_party", client.IsFirstParty)
+	d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted)
+	d.Set("oidc_conformant", client.OIDCConformant)
+	d.Set("callbacks", client.Callbacks)
+	d.Set("allowed_logout_urls", client.AllowedLogoutURLs)
+	d.Set("allowed_origins", client.AllowedOrigins)
+	d.Set("allowed_clients", client.AllowedClients)
+	d.Set("grant_types", client.GrantTypes)
+	d.Set("organization_usage", client.OrganizationUsage)
+	d.Set("organization_require_behavior", client.OrganizationRequireBehavior)
+	d.Set("web_origins", client.WebOrigins)
+	d.Set("sso", client.SSO)
+	d.Set("sso_disabled", client.SSODisabled)
+	d.Set("cross_origin_auth", client.CrossOriginAuth)
+	d.Set("cross_origin_loc", client.CrossOriginLocation)
+	d.Set("custom_login_page_on", client.CustomLoginPageOn)
+	d.Set("custom_login_page", client.CustomLoginPage)
+	d.Set("form_template", client.FormTemplate)
+	d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod)
+	d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin))
+	d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration))
+	d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken))
+	d.Set("encryption_key", client.EncryptionKey)
+	d.Set("addons", client.Addons)
+	d.Set("client_metadata", client.ClientMetadata)
+	d.Set("mobile", client.Mobile)
+	d.Set("initiate_login_uri", client.InitiateLoginURI)
+	d.Set("signing_keys", client.SigningKeys)
 
 	return nil
 }
 
 func updateClient(d *schema.ResourceData, m interface{}) error {
-	c := expandClient(d)
+	client := expandClient(d)
 	api := m.(*management.Management)
-	if clientHasChange(c) {
-		err := api.Client.Update(d.Id(), c)
+	if clientHasChange(client) {
+		err := api.Client.Update(d.Id(), client)
 		if err != nil {
 			return err
 		}
@@ -686,7 +683,6 @@ func deleteClient(d *schema.ResourceData, m interface{}) error {
 }
 
 func expandClient(d *schema.ResourceData) *management.Client {
-
 	c := &management.Client{
 		Name:                           String(d, "name"),
 		Description:                    String(d, "description"),
@@ -743,7 +739,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	}
 
 	List(d, "addons").Elem(func(d ResourceData) {
-
 		c.Addons = make(map[string]interface{})
 
 		for _, name := range []string{
@@ -760,7 +755,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		}
 
 		List(d, "samlp").Elem(func(d ResourceData) {
-
 			m := make(MapData)
 
 			m.Set("audience", String(d, "audience"))
@@ -814,7 +808,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	})
 
 	List(d, "mobile").Elem(func(d ResourceData) {
-
 		c.Mobile = make(map[string]interface{})
 
 		List(d, "android").Elem(func(d ResourceData) {
@@ -838,13 +831,10 @@ func expandClient(d *schema.ResourceData) *management.Client {
 }
 
 func buildClientAddon(d map[string]interface{}) map[string]interface{} {
-
 	addon := make(map[string]interface{})
 
 	for key, value := range d {
-
 		switch v := value.(type) {
-
 		case string:
 			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
 				addon[key] = i
@@ -855,28 +845,26 @@ func buildClientAddon(d map[string]interface{}) map[string]interface{} {
 			} else {
 				addon[key] = v
 			}
-
 		case map[string]interface{}:
 			addon[key] = buildClientAddon(v)
-
 		case []interface{}:
 			addon[key] = v
-
 		default:
 			addon[key] = v
 		}
 	}
+
 	return addon
 }
 
 func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 	if d.HasChange("client_secret_rotation_trigger") {
 		api := m.(*management.Management)
-		c, err := api.Client.RotateSecret(d.Id())
+		client, err := api.Client.RotateSecret(d.Id())
 		if err != nil {
 			return err
 		}
-		d.Set("client_secret", c.ClientSecret)
+		d.Set("client_secret", client.ClientSecret)
 	}
 	d.SetPartial("client_secret_rotation_trigger")
 	return nil

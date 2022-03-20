@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
@@ -590,7 +591,11 @@ func newClient() *schema.Resource {
 }
 
 func createClient(d *schema.ResourceData, m interface{}) error {
-	client := expandClient(d)
+	client, err := expandClient(d)
+	if err != nil {
+		return err
+	}
+
 	api := m.(*management.Management)
 	if err := api.Client.Create(client); err != nil {
 		return err
@@ -612,46 +617,52 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("client_id", client.ClientID)
-	d.Set("client_secret", client.ClientSecret)
-	d.Set("name", client.Name)
-	d.Set("description", client.Description)
-	d.Set("app_type", client.AppType)
-	d.Set("logo_uri", client.LogoURI)
-	d.Set("is_first_party", client.IsFirstParty)
-	d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted)
-	d.Set("oidc_conformant", client.OIDCConformant)
-	d.Set("callbacks", client.Callbacks)
-	d.Set("allowed_logout_urls", client.AllowedLogoutURLs)
-	d.Set("allowed_origins", client.AllowedOrigins)
-	d.Set("allowed_clients", client.AllowedClients)
-	d.Set("grant_types", client.GrantTypes)
-	d.Set("organization_usage", client.OrganizationUsage)
-	d.Set("organization_require_behavior", client.OrganizationRequireBehavior)
-	d.Set("web_origins", client.WebOrigins)
-	d.Set("sso", client.SSO)
-	d.Set("sso_disabled", client.SSODisabled)
-	d.Set("cross_origin_auth", client.CrossOriginAuth)
-	d.Set("cross_origin_loc", client.CrossOriginLocation)
-	d.Set("custom_login_page_on", client.CustomLoginPageOn)
-	d.Set("custom_login_page", client.CustomLoginPage)
-	d.Set("form_template", client.FormTemplate)
-	d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod)
-	d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin))
-	d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration))
-	d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken))
-	d.Set("encryption_key", client.EncryptionKey)
-	d.Set("addons", client.Addons)
-	d.Set("client_metadata", client.ClientMetadata)
-	d.Set("mobile", client.Mobile)
-	d.Set("initiate_login_uri", client.InitiateLoginURI)
-	d.Set("signing_keys", client.SigningKeys)
+	result := multierror.Append(
+		d.Set("client_id", client.ClientID),
+		d.Set("client_secret", client.ClientSecret),
+		d.Set("name", client.Name),
+		d.Set("description", client.Description),
+		d.Set("app_type", client.AppType),
+		d.Set("logo_uri", client.LogoURI),
+		d.Set("is_first_party", client.IsFirstParty),
+		d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted),
+		d.Set("oidc_conformant", client.OIDCConformant),
+		d.Set("callbacks", client.Callbacks),
+		d.Set("allowed_logout_urls", client.AllowedLogoutURLs),
+		d.Set("allowed_origins", client.AllowedOrigins),
+		d.Set("allowed_clients", client.AllowedClients),
+		d.Set("grant_types", client.GrantTypes),
+		d.Set("organization_usage", client.OrganizationUsage),
+		d.Set("organization_require_behavior", client.OrganizationRequireBehavior),
+		d.Set("web_origins", client.WebOrigins),
+		d.Set("sso", client.SSO),
+		d.Set("sso_disabled", client.SSODisabled),
+		d.Set("cross_origin_auth", client.CrossOriginAuth),
+		d.Set("cross_origin_loc", client.CrossOriginLocation),
+		d.Set("custom_login_page_on", client.CustomLoginPageOn),
+		d.Set("custom_login_page", client.CustomLoginPage),
+		d.Set("form_template", client.FormTemplate),
+		d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod),
+		d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin)),
+		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration)),
+		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken)),
+		d.Set("encryption_key", client.EncryptionKey),
+		d.Set("addons", client.Addons),
+		d.Set("client_metadata", client.ClientMetadata),
+		d.Set("mobile", client.Mobile),
+		d.Set("initiate_login_uri", client.InitiateLoginURI),
+		d.Set("signing_keys", client.SigningKeys),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateClient(d *schema.ResourceData, m interface{}) error {
-	client := expandClient(d)
+	client, err := expandClient(d)
+	if err != nil {
+		return err
+	}
+
 	api := m.(*management.Management)
 	if clientHasChange(client) {
 		if err := api.Client.Update(d.Id(), client); err != nil {
@@ -682,7 +693,7 @@ func deleteClient(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func expandClient(d *schema.ResourceData) *management.Client {
+func expandClient(d *schema.ResourceData) (*management.Client, error) {
 	client := &management.Client{
 		Name:                           String(d, "name"),
 		Description:                    String(d, "description"),
@@ -738,6 +749,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		}
 	}
 
+	var result *multierror.Error
 	List(d, "addons").Elem(func(d ResourceData) {
 		client.Addons = make(map[string]interface{})
 
@@ -756,26 +768,28 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		List(d, "samlp").Elem(func(d ResourceData) {
 			m := make(MapData)
 
-			m.Set("audience", String(d, "audience"))
-			m.Set("authnContextClassRef", String(d, "authn_context_class_ref"))
-			m.Set("binding", String(d, "binding"))
-			m.Set("signingCert", String(d, "signing_cert"))
-			m.Set("createUpnClaim", Bool(d, "create_upn_claim"))
-			m.Set("destination", String(d, "destination"))
-			m.Set("digestAlgorithm", String(d, "digest_algorithm"))
-			m.Set("includeAttributeNameFormat", Bool(d, "include_attribute_name_format"))
-			m.Set("lifetimeInSeconds", Int(d, "lifetime_in_seconds"))
-			m.Set("logout", buildClientAddon(Map(d, "logout")))
-			m.Set("mapIdentities", Bool(d, "map_identities"))
-			m.Set("mappings", Map(d, "mappings"))
-			m.Set("mapUnknownClaimsAsIs", Bool(d, "map_unknown_claims_as_is"))
-			m.Set("nameIdentifierFormat", String(d, "name_identifier_format"))
-			m.Set("nameIdentifierProbes", Slice(d, "name_identifier_probes"))
-			m.Set("passthroughClaimsWithNoMapping", Bool(d, "passthrough_claims_with_no_mapping"))
-			m.Set("recipient", String(d, "recipient"))
-			m.Set("signatureAlgorithm", String(d, "signature_algorithm"))
-			m.Set("signResponse", Bool(d, "sign_response"))
-			m.Set("typedAttributes", Bool(d, "typed_attributes"))
+			result = multierror.Append(
+				m.Set("audience", String(d, "audience")),
+				m.Set("authnContextClassRef", String(d, "authn_context_class_ref")),
+				m.Set("binding", String(d, "binding")),
+				m.Set("signingCert", String(d, "signing_cert")),
+				m.Set("createUpnClaim", Bool(d, "create_upn_claim")),
+				m.Set("destination", String(d, "destination")),
+				m.Set("digestAlgorithm", String(d, "digest_algorithm")),
+				m.Set("includeAttributeNameFormat", Bool(d, "include_attribute_name_format")),
+				m.Set("lifetimeInSeconds", Int(d, "lifetime_in_seconds")),
+				m.Set("logout", buildClientAddon(Map(d, "logout"))),
+				m.Set("mapIdentities", Bool(d, "map_identities")),
+				m.Set("mappings", Map(d, "mappings")),
+				m.Set("mapUnknownClaimsAsIs", Bool(d, "map_unknown_claims_as_is")),
+				m.Set("nameIdentifierFormat", String(d, "name_identifier_format")),
+				m.Set("nameIdentifierProbes", Slice(d, "name_identifier_probes")),
+				m.Set("passthroughClaimsWithNoMapping", Bool(d, "passthrough_claims_with_no_mapping")),
+				m.Set("recipient", String(d, "recipient")),
+				m.Set("signatureAlgorithm", String(d, "signature_algorithm")),
+				m.Set("signResponse", Bool(d, "sign_response")),
+				m.Set("typedAttributes", Bool(d, "typed_attributes")),
+			)
 
 			client.Addons["samlp"] = m
 		})
@@ -793,14 +807,14 @@ func expandClient(d *schema.ResourceData) *management.Client {
 
 		List(d, "apple").Elem(func(d ResourceData) {
 			m := make(MapData)
-			m.Set("enabled", Bool(d, "enabled"))
+			result = multierror.Append(result, m.Set("enabled", Bool(d, "enabled")))
 
 			client.NativeSocialLogin.Apple = m
 		})
 
 		List(d, "facebook").Elem(func(d ResourceData) {
 			m := make(MapData)
-			m.Set("enabled", Bool(d, "enabled"))
+			result = multierror.Append(result, m.Set("enabled", Bool(d, "enabled")))
 
 			client.NativeSocialLogin.Facebook = m
 		})
@@ -811,22 +825,29 @@ func expandClient(d *schema.ResourceData) *management.Client {
 
 		List(d, "android").Elem(func(d ResourceData) {
 			m := make(MapData)
-			m.Set("app_package_name", String(d, "app_package_name"))
-			m.Set("sha256_cert_fingerprints", Slice(d, "sha256_cert_fingerprints"))
+			result = multierror.Append(
+				result,
+				m.Set("app_package_name", String(d, "app_package_name")),
+				m.Set("sha256_cert_fingerprints", Slice(d, "sha256_cert_fingerprints")),
+			)
 
 			client.Mobile["android"] = m
 		})
 
 		List(d, "ios").Elem(func(d ResourceData) {
 			m := make(MapData)
-			m.Set("team_id", String(d, "team_id"))
-			m.Set("app_bundle_identifier", String(d, "app_bundle_identifier"))
+
+			result = multierror.Append(
+				result,
+				m.Set("team_id", String(d, "team_id")),
+				m.Set("app_bundle_identifier", String(d, "app_bundle_identifier")),
+			)
 
 			client.Mobile["ios"] = m
 		})
 	})
 
-	return client
+	return client, result.ErrorOrNil()
 }
 
 func buildClientAddon(d map[string]interface{}) map[string]interface{} {
@@ -863,7 +884,10 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 		if err != nil {
 			return err
 		}
-		d.Set("client_secret", client.ClientSecret)
+
+		if err := d.Set("client_secret", client.ClientSecret); err != nil {
+			return err
+		}
 	}
 	d.SetPartial("client_secret_rotation_trigger")
 	return nil

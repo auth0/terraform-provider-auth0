@@ -269,6 +269,7 @@ func newClient() *schema.Resource {
 						"samlp": {
 							Type:     schema.TypeList,
 							MaxItems: 1,
+							Computed: true,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -355,18 +356,6 @@ func newClient() *schema.Resource {
 									"logout": {
 										Type:     schema.TypeMap,
 										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"callback": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"slo_enabled": {
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-											},
-										},
 									},
 									"binding": {
 										Type:     schema.TypeString,
@@ -432,6 +421,7 @@ func newClient() *schema.Resource {
 			"mobile": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -647,9 +637,9 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration)),
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken)),
 		d.Set("encryption_key", client.EncryptionKey),
-		d.Set("addons", client.Addons),
+		d.Set("addons", flattenClientAddons(client.Addons)),
 		d.Set("client_metadata", client.ClientMetadata),
-		d.Set("mobile", client.Mobile),
+		d.Set("mobile", flattenClientMobile(client.Mobile)),
 		d.Set("initiate_login_uri", client.InitiateLoginURI),
 		d.Set("signing_keys", client.SigningKeys),
 	)
@@ -761,7 +751,7 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 			"springcm", "wams", "wsfed", "zendesk", "zoom",
 		} {
 			if _, ok := d.GetOk(name); ok {
-				client.Addons[name] = buildClientAddon(Map(d, name))
+				client.Addons[name] = mapFromState(Map(d, name))
 			}
 		}
 
@@ -778,7 +768,6 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 				m.Set("digestAlgorithm", String(d, "digest_algorithm")),
 				m.Set("includeAttributeNameFormat", Bool(d, "include_attribute_name_format")),
 				m.Set("lifetimeInSeconds", Int(d, "lifetime_in_seconds")),
-				m.Set("logout", buildClientAddon(Map(d, "logout"))),
 				m.Set("mapIdentities", Bool(d, "map_identities")),
 				m.Set("mappings", Map(d, "mappings")),
 				m.Set("mapUnknownClaimsAsIs", Bool(d, "map_unknown_claims_as_is")),
@@ -789,6 +778,7 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 				m.Set("signatureAlgorithm", String(d, "signature_algorithm")),
 				m.Set("signResponse", Bool(d, "sign_response")),
 				m.Set("typedAttributes", Bool(d, "typed_attributes")),
+				m.Set("logout", mapFromState(Map(d, "logout"))),
 			)
 
 			client.Addons["samlp"] = m
@@ -850,31 +840,54 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 	return client, result.ErrorOrNil()
 }
 
-func buildClientAddon(d map[string]interface{}) map[string]interface{} {
-	addon := make(map[string]interface{})
+func mapFromState(input map[string]interface{}) map[string]interface{} {
+	output := make(map[string]interface{})
 
-	for key, value := range d {
+	for key, value := range input {
 		switch v := value.(type) {
 		case string:
 			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
-				addon[key] = i
+				output[key] = i
 			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
-				addon[key] = f
+				output[key] = f
 			} else if b, err := strconv.ParseBool(v); err == nil {
-				addon[key] = b
+				output[key] = b
 			} else {
-				addon[key] = v
+				output[key] = v
 			}
 		case map[string]interface{}:
-			addon[key] = buildClientAddon(v)
+			output[key] = mapFromState(v)
 		case []interface{}:
-			addon[key] = v
+			output[key] = v
 		default:
-			addon[key] = v
+			output[key] = v
 		}
 	}
 
-	return addon
+	return output
+}
+
+func mapToState(input map[string]interface{}) map[string]interface{} {
+	output := make(map[string]interface{})
+
+	for key, v := range input {
+		switch value := v.(type) {
+		case bool:
+			if value {
+				output[key] = "true"
+			} else {
+				output[key] = "false"
+			}
+		case float64:
+			output[key] = strconv.Itoa(int(value))
+		case int:
+			output[key] = strconv.Itoa(value)
+		default:
+			output[key] = value
+		}
+	}
+
+	return output
 }
 
 func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
@@ -898,24 +911,28 @@ func clientHasChange(c *management.Client) bool {
 }
 
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
-	if customSocial != nil {
-		m := make(map[string]interface{})
-
-		if customSocial.Apple != nil {
-			m["apple"] = map[string]interface{}{
-				"enabled": customSocial.Apple["enabled"],
-			}
-		}
-		if customSocial.Facebook != nil {
-			m["facebook"] = map[string]interface{}{
-				"enabled": customSocial.Facebook["enabled"],
-			}
-		}
-
-		return []interface{}{m}
+	if customSocial == nil {
+		return nil
 	}
 
-	return nil
+	m := make(map[string]interface{})
+
+	if customSocial.Apple != nil {
+		m["apple"] = []interface{}{
+			map[string]interface{}{
+				"enabled": customSocial.Apple["enabled"],
+			},
+		}
+	}
+	if customSocial.Facebook != nil {
+		m["facebook"] = []interface{}{
+			map[string]interface{}{
+				"enabled": customSocial.Facebook["enabled"],
+			},
+		}
+	}
+
+	return []interface{}{m}
 }
 
 func flattenClientJwtConfiguration(jwt *management.ClientJWTConfiguration) []interface{} {
@@ -930,15 +947,103 @@ func flattenClientJwtConfiguration(jwt *management.ClientJWTConfiguration) []int
 }
 
 func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefreshToken) []interface{} {
-	m := make(map[string]interface{})
-	if refreshToken != nil {
-		m["rotation_type"] = refreshToken.RotationType
-		m["expiration_type"] = refreshToken.ExpirationType
-		m["leeway"] = refreshToken.Leeway
-		m["token_lifetime"] = refreshToken.TokenLifetime
-		m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
-		m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
-		m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
+	if refreshToken == nil {
+		return nil
 	}
+
+	m := make(map[string]interface{})
+
+	m["rotation_type"] = refreshToken.RotationType
+	m["expiration_type"] = refreshToken.ExpirationType
+	m["leeway"] = refreshToken.Leeway
+	m["token_lifetime"] = refreshToken.TokenLifetime
+	m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
+	m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
+	m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
+
+	return []interface{}{m}
+}
+
+func flattenClientAddons(addons map[string]interface{}) []interface{} {
+	if addons == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if value, ok := addons["samlp"]; ok {
+		samlp := value.(map[string]interface{})
+
+		samlpMap := map[string]interface{}{
+			"audience":                           samlp["audience"],
+			"recipient":                          samlp["recipient"],
+			"mappings":                           samlp["mappings"],
+			"create_upn_claim":                   samlp["createUpnClaim"],
+			"passthrough_claims_with_no_mapping": samlp["passthroughClaimsWithNoMapping"],
+			"map_unknown_claims_as_is":           samlp["mapUnknownClaimsAsIs"],
+			"map_identities":                     samlp["mapIdentities"],
+			"signature_algorithm":                samlp["signatureAlgorithm"],
+			"digest_algorithm":                   samlp["digestAlgorithm"],
+			"destination":                        samlp["destination"],
+			"lifetime_in_seconds":                samlp["lifetimeInSeconds"],
+			"sign_response":                      samlp["signResponse"],
+			"name_identifier_format":             samlp["nameIdentifierFormat"],
+			"name_identifier_probes":             samlp["nameIdentifierProbes"],
+			"authn_context_class_ref":            samlp["authnContextClassRef"],
+			"typed_attributes":                   samlp["typedAttributes"],
+			"include_attribute_name_format":      samlp["includeAttributeNameFormat"],
+			"binding":                            samlp["binding"],
+			"signing_cert":                       samlp["signingCert"],
+			"logout":                             mapToState(samlp["logout"].(map[string]interface{})),
+		}
+
+		m["samlp"] = []interface{}{samlpMap}
+	}
+
+	for _, name := range []string{
+		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
+		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
+		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
+		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
+		"springcm", "wams", "wsfed", "zendesk", "zoom",
+	} {
+		if value, ok := addons[name]; ok {
+			addonType := value.(map[string]interface{})
+			m[name] = mapToState(addonType)
+		}
+	}
+
+	return []interface{}{m}
+}
+
+func flattenClientMobile(mobile map[string]interface{}) []interface{} {
+	if mobile == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if value, ok := mobile["android"]; ok {
+		android := value.(map[string]interface{})
+
+		m["android"] = []interface{}{
+			map[string]interface{}{
+				"app_package_name":         android["app_package_name"],
+				"sha256_cert_fingerprints": android["sha256_cert_fingerprints"],
+			},
+		}
+	}
+
+	if value, ok := mobile["ios"]; ok {
+		ios := value.(map[string]interface{})
+
+		m["ios"] = []interface{}{
+			map[string]interface{}{
+				"team_id":               ios["team_id"],
+				"app_bundle_identifier": ios["app_bundle_identifier"],
+			},
+		}
+	}
+
 	return []interface{}{m}
 }

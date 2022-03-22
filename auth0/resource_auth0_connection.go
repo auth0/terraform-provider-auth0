@@ -7,35 +7,10 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
-
-func newConnection() *schema.Resource {
-	return &schema.Resource{
-		Create: createConnection,
-		Read:   readConnection,
-		Update: updateConnection,
-		Delete: deleteConnection,
-		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
-		},
-		Schema:        connectionSchema,
-		SchemaVersion: 2,
-		StateUpgraders: []schema.StateUpgrader{
-			{
-				Type:    connectionSchemaV0().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV0,
-				Version: 0,
-			},
-			{
-				Type:    connectionSchemaV1().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV1,
-				Version: 1,
-			},
-		},
-	}
-}
 
 var connectionSchema = map[string]*schema.Schema{
 	"name": {
@@ -671,6 +646,32 @@ var connectionSchema = map[string]*schema.Schema{
 	},
 }
 
+func newConnection() *schema.Resource {
+	return &schema.Resource{
+		Create: createConnection,
+		Read:   readConnection,
+		Update: updateConnection,
+		Delete: deleteConnection,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
+		Schema:        connectionSchema,
+		SchemaVersion: 2,
+		StateUpgraders: []schema.StateUpgrader{
+			{
+				Type:    connectionSchemaV0().CoreConfigSchema().ImpliedType(),
+				Upgrade: connectionSchemaUpgradeV0,
+				Version: 0,
+			},
+			{
+				Type:    connectionSchemaV1().CoreConfigSchema().ImpliedType(),
+				Upgrade: connectionSchemaUpgradeV1,
+				Version: 1,
+			},
+		},
+	}
+}
+
 func connectionSchemaV0() *schema.Resource {
 	s := connectionSchema
 	s["strategy_version"] = &schema.Schema{
@@ -692,64 +693,58 @@ func connectionSchemaV1() *schema.Resource {
 }
 
 func connectionSchemaUpgradeV0(state map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-
-	o, ok := state["options"]
+	options, ok := state["options"]
 	if !ok {
 		return state, nil
 	}
 
-	l, ok := o.([]interface{})
-	if ok && len(l) > 0 {
+	optionsList, ok := options.([]interface{})
+	if ok && len(optionsList) > 0 {
+		m := optionsList[0].(map[string]interface{})
 
-		m := l[0].(map[string]interface{})
-
-		v, ok := m["strategy_version"]
+		strategyVersion, ok := m["strategy_version"]
 		if !ok {
 			return state, nil
 		}
 
-		s, ok := v.(string)
+		strategyVersionString, ok := strategyVersion.(string)
 		if !ok {
 			return state, nil
 		}
 
-		i, err := strconv.Atoi(s)
+		strategyVersionInt, err := strconv.Atoi(strategyVersionString)
 		if err == nil {
-			m["strategy_version"] = i
+			m["strategy_version"] = strategyVersionInt
 		} else {
 			m["strategy_version"] = 0
 		}
 
 		state["options"] = []interface{}{m}
 
-		log.Printf("[DEBUG] Schema upgrade: options.strategy_version has been migrated to %d", i)
+		log.Printf("[DEBUG] Schema upgrade: options.strategy_version has been migrated to %d", strategyVersionInt)
 	}
 
 	return state, nil
 }
 
 func connectionSchemaUpgradeV1(state map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-
-	o, ok := state["options"]
+	options, ok := state["options"]
 	if !ok {
 		return state, nil
 	}
 
-	l, ok := o.([]interface{})
-	if ok && len(l) > 0 {
+	optionsList, ok := options.([]interface{})
+	if ok && len(optionsList) > 0 {
+		m := optionsList[0].(map[string]interface{})
 
-		m := l[0].(map[string]interface{})
-
-		v, ok := m["validation"]
+		validationOption, ok := m["validation"]
 		if !ok {
 			return state, nil
 		}
 
-		validation := v.(interface{})
-
 		m["validation"] = []map[string][]interface{}{
 			{
-				"username": []interface{}{validation},
+				"username": []interface{}{validationOption.(interface{})},
 			},
 		}
 
@@ -762,18 +757,20 @@ func connectionSchemaUpgradeV1(state map[string]interface{}, meta interface{}) (
 }
 
 func createConnection(d *schema.ResourceData, m interface{}) error {
-	c := expandConnection(d)
+	connection := expandConnection(d)
 	api := m.(*management.Management)
-	if err := api.Connection.Create(c); err != nil {
+	if err := api.Connection.Create(connection); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ID))
+
+	d.SetId(auth0.StringValue(connection.ID))
+
 	return readConnection(d, m)
 }
 
 func readConnection(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.Connection.Read(d.Id())
+	connection, err := api.Connection.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -784,42 +781,44 @@ func readConnection(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(auth0.StringValue(c.ID))
-	d.Set("name", c.Name)
-	d.Set("display_name", c.DisplayName)
-	d.Set("is_domain_connection", c.IsDomainConnection)
-	d.Set("strategy", c.Strategy)
-	d.Set("options", flattenConnectionOptions(d, c.Options))
-	d.Set("enabled_clients", c.EnabledClients)
-	d.Set("realms", c.Realms)
+	d.SetId(auth0.StringValue(connection.ID))
 
-	switch *c.Strategy {
+	result := multierror.Append(
+		d.Set("name", connection.Name),
+		d.Set("display_name", connection.DisplayName),
+		d.Set("is_domain_connection", connection.IsDomainConnection),
+		d.Set("strategy", connection.Strategy),
+		d.Set("options", flattenConnectionOptions(d, connection.Options)),
+		d.Set("enabled_clients", connection.EnabledClients),
+		d.Set("realms", connection.Realms),
+	)
+
+	switch *connection.Strategy {
 	case management.ConnectionStrategyGoogleApps,
 		management.ConnectionStrategyOIDC,
 		management.ConnectionStrategyAD,
 		management.ConnectionStrategyAzureAD,
 		management.ConnectionStrategySAML,
 		management.ConnectionStrategyADFS:
-		d.Set("show_as_button", c.ShowAsButton)
+		result = multierror.Append(result, d.Set("show_as_button", connection.ShowAsButton))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateConnection(d *schema.ResourceData, m interface{}) error {
-	c := expandConnection(d)
+	connection := expandConnection(d)
 	api := m.(*management.Management)
-	err := api.Connection.Update(d.Id(), c)
-	if err != nil {
+	if err := api.Connection.Update(d.Id(), connection); err != nil {
 		return err
 	}
+
 	return readConnection(d, m)
 }
 
 func deleteConnection(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Connection.Delete(d.Id())
-	if err != nil {
+	if err := api.Connection.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -827,5 +826,6 @@ func deleteConnection(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }

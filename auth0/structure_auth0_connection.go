@@ -8,7 +8,6 @@ import (
 )
 
 func flattenConnectionOptions(d ResourceData, options interface{}) []interface{} {
-
 	var m interface{}
 
 	switch o := options.(type) {
@@ -204,12 +203,11 @@ func flattenConnectionOptionsSMS(o *management.ConnectionOptionsSMS) interface{}
 
 func flattenConnectionOptionsOIDC(o *management.ConnectionOptionsOIDC) interface{} {
 	return map[string]interface{}{
-		"client_id":      o.GetClientID(),
-		"client_secret":  o.GetClientSecret(),
-		"icon_url":       o.GetLogoURL(),
-		"tenant_domain":  o.GetTenantDomain(),
-		"domain_aliases": o.DomainAliases,
-
+		"client_id":                o.GetClientID(),
+		"client_secret":            o.GetClientSecret(),
+		"icon_url":                 o.GetLogoURL(),
+		"tenant_domain":            o.GetTenantDomain(),
+		"domain_aliases":           o.DomainAliases,
 		"type":                     o.GetType(),
 		"scopes":                   o.Scopes(),
 		"issuer":                   o.GetIssuer(),
@@ -318,7 +316,7 @@ func flattenConnectionOptionsSAML(o *management.ConnectionOptionsSAML) interface
 }
 
 func expandConnection(d ResourceData) *management.Connection {
-	c := &management.Connection{
+	connection := &management.Connection{
 		Name:               String(d, "name", IsNewResource()),
 		DisplayName:        String(d, "display_name"),
 		Strategy:           String(d, "strategy", IsNewResource()),
@@ -335,47 +333,47 @@ func expandConnection(d ResourceData) *management.Connection {
 		management.ConnectionStrategyAzureAD,
 		management.ConnectionStrategySAML,
 		management.ConnectionStrategyADFS:
-		c.ShowAsButton = Bool(d, "show_as_button")
+		connection.ShowAsButton = Bool(d, "show_as_button")
 	}
 
 	List(d, "options").Elem(func(d ResourceData) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			c.Options = expandConnectionOptionsAuth0(d)
+			connection.Options = expandConnectionOptionsAuth0(d)
 		case management.ConnectionStrategyGoogleOAuth2:
-			c.Options = expandConnectionOptionsGoogleOAuth2(d)
+			connection.Options = expandConnectionOptionsGoogleOAuth2(d)
 		case management.ConnectionStrategyGoogleApps:
-			c.Options = expandConnectionOptionsGoogleApps(d)
+			connection.Options = expandConnectionOptionsGoogleApps(d)
 		case management.ConnectionStrategyOAuth2:
-			c.Options = expandConnectionOptionsOAuth2(d)
+			connection.Options = expandConnectionOptionsOAuth2(d)
 		case management.ConnectionStrategyFacebook:
-			c.Options = expandConnectionOptionsFacebook(d)
+			connection.Options = expandConnectionOptionsFacebook(d)
 		case management.ConnectionStrategyApple:
-			c.Options = expandConnectionOptionsApple(d)
+			connection.Options = expandConnectionOptionsApple(d)
 		case management.ConnectionStrategyLinkedin:
-			c.Options = expandConnectionOptionsLinkedin(d)
+			connection.Options = expandConnectionOptionsLinkedin(d)
 		case management.ConnectionStrategyGitHub:
-			c.Options = expandConnectionOptionsGitHub(d)
+			connection.Options = expandConnectionOptionsGitHub(d)
 		case management.ConnectionStrategyWindowsLive:
-			c.Options = expandConnectionOptionsWindowsLive(d)
+			connection.Options = expandConnectionOptionsWindowsLive(d)
 		case management.ConnectionStrategySalesforce,
 			management.ConnectionStrategySalesforceCommunity,
 			management.ConnectionStrategySalesforceSandbox:
-			c.Options = expandConnectionOptionsSalesforce(d)
+			connection.Options = expandConnectionOptionsSalesforce(d)
 		case management.ConnectionStrategySMS:
-			c.Options = expandConnectionOptionsSMS(d)
+			connection.Options = expandConnectionOptionsSMS(d)
 		case management.ConnectionStrategyOIDC:
-			c.Options = expandConnectionOptionsOIDC(d)
+			connection.Options = expandConnectionOptionsOIDC(d)
 		case management.ConnectionStrategyAD:
-			c.Options = expandConnectionOptionsAD(d)
+			connection.Options = expandConnectionOptionsAD(d)
 		case management.ConnectionStrategyAzureAD:
-			c.Options = expandConnectionOptionsAzureAD(d)
+			connection.Options = expandConnectionOptionsAzureAD(d)
 		case management.ConnectionStrategyEmail:
-			c.Options = expandConnectionOptionsEmail(d)
+			connection.Options = expandConnectionOptionsEmail(d)
 		case management.ConnectionStrategySAML:
-			c.Options = expandConnectionOptionsSAML(d)
+			connection.Options = expandConnectionOptionsSAML(d)
 		case management.ConnectionStrategyADFS:
-			c.Options = expandConnectionOptionsADFS(d)
+			connection.Options = expandConnectionOptionsADFS(d)
 		default:
 			log.Printf("[WARN]: Unsupported connection strategy %s", strategy)
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
@@ -383,82 +381,79 @@ func expandConnection(d ResourceData) *management.Connection {
 		}
 	})
 
-	return c
+	return connection
 }
 
 func expandConnectionOptionsGitHub(d ResourceData) *management.ConnectionOptionsGitHub {
-
-	o := &management.ConnectionOptionsGitHub{
+	options := &management.ConnectionOptionsGitHub{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsAuth0(d ResourceData) *management.ConnectionOptions {
-
-	o := &management.ConnectionOptions{
+	options := &management.ConnectionOptions{
 		PasswordPolicy:     String(d, "password_policy"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
 	List(d, "validation").Elem(func(d ResourceData) {
-		o.Validation = make(map[string]interface{})
+		options.Validation = make(map[string]interface{})
 		List(d, "username").Elem(func(d ResourceData) {
 			usernameValidation := make(map[string]*int)
 			usernameValidation["min"] = Int(d, "min")
 			usernameValidation["max"] = Int(d, "max")
-			o.Validation["username"] = usernameValidation
+			options.Validation["username"] = usernameValidation
 		})
 	})
 
 	List(d, "password_history").Elem(func(d ResourceData) {
-		o.PasswordHistory = make(map[string]interface{})
-		o.PasswordHistory["enable"] = Bool(d, "enable")
-		o.PasswordHistory["size"] = Int(d, "size")
+		options.PasswordHistory = make(map[string]interface{})
+		options.PasswordHistory["enable"] = Bool(d, "enable")
+		options.PasswordHistory["size"] = Int(d, "size")
 	})
 
 	List(d, "password_no_personal_info").Elem(func(d ResourceData) {
-		o.PasswordNoPersonalInfo = make(map[string]interface{})
-		o.PasswordNoPersonalInfo["enable"] = Bool(d, "enable")
+		options.PasswordNoPersonalInfo = make(map[string]interface{})
+		options.PasswordNoPersonalInfo["enable"] = Bool(d, "enable")
 	})
 
 	List(d, "password_dictionary").Elem(func(d ResourceData) {
-		o.PasswordDictionary = make(map[string]interface{})
-		o.PasswordDictionary["enable"] = Bool(d, "enable")
-		o.PasswordDictionary["dictionary"] = Set(d, "dictionary").List()
+		options.PasswordDictionary = make(map[string]interface{})
+		options.PasswordDictionary["enable"] = Bool(d, "enable")
+		options.PasswordDictionary["dictionary"] = Set(d, "dictionary").List()
 	})
 
 	List(d, "password_complexity_options").Elem(func(d ResourceData) {
-		o.PasswordComplexityOptions = make(map[string]interface{})
-		o.PasswordComplexityOptions["min_length"] = Int(d, "min_length")
+		options.PasswordComplexityOptions = make(map[string]interface{})
+		options.PasswordComplexityOptions["min_length"] = Int(d, "min_length")
 	})
 
 	List(d, "mfa").Elem(func(d ResourceData) {
-		o.MFA = make(map[string]interface{})
-		o.MFA["active"] = Bool(d, "active")
-		o.MFA["return_enroll_settings"] = Bool(d, "return_enroll_settings")
+		options.MFA = make(map[string]interface{})
+		options.MFA["active"] = Bool(d, "active")
+		options.MFA["return_enroll_settings"] = Bool(d, "return_enroll_settings")
 	})
 
-	o.EnabledDatabaseCustomization = Bool(d, "enabled_database_customization")
-	o.BruteForceProtection = Bool(d, "brute_force_protection")
-	o.ImportMode = Bool(d, "import_mode")
-	o.DisableSignup = Bool(d, "disable_signup")
-	o.RequiresUsername = Bool(d, "requires_username")
-	o.CustomScripts = Map(d, "custom_scripts")
-	o.Configuration = Map(d, "configuration")
+	options.EnabledDatabaseCustomization = Bool(d, "enabled_database_customization")
+	options.BruteForceProtection = Bool(d, "brute_force_protection")
+	options.ImportMode = Bool(d, "import_mode")
+	options.DisableSignup = Bool(d, "disable_signup")
+	options.RequiresUsername = Bool(d, "requires_username")
+	options.CustomScripts = Map(d, "custom_scripts")
+	options.Configuration = Map(d, "configuration")
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsGoogleOAuth2(d ResourceData) *management.ConnectionOptionsGoogleOAuth2 {
-
-	o := &management.ConnectionOptionsGoogleOAuth2{
+	options := &management.ConnectionOptionsGoogleOAuth2{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		AllowedAudiences:   Set(d, "allowed_audiences").List(),
@@ -466,14 +461,13 @@ func expandConnectionOptionsGoogleOAuth2(d ResourceData) *management.ConnectionO
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsGoogleApps(d ResourceData) *management.ConnectionOptionsGoogleApps {
-
-	o := &management.ConnectionOptionsGoogleApps{
+	options := &management.ConnectionOptionsGoogleApps{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		Domain:             String(d, "domain"),
@@ -485,14 +479,13 @@ func expandConnectionOptionsGoogleApps(d ResourceData) *management.ConnectionOpt
 		LogoURL:            String(d, "icon_url"),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptionsOAuth2 {
-
-	o := &management.ConnectionOptionsOAuth2{
+	options := &management.ConnectionOptionsOAuth2{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		AuthorizationURL:   String(d, "authorization_endpoint"),
@@ -500,30 +493,28 @@ func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptions
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
-	o.Scripts = Map(d, "scripts")
+	options.Scripts = Map(d, "scripts")
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsFacebook(d ResourceData) *management.ConnectionOptionsFacebook {
-
-	o := &management.ConnectionOptionsFacebook{
+	options := &management.ConnectionOptionsFacebook{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsApple(d ResourceData) *management.ConnectionOptionsApple {
-
-	o := &management.ConnectionOptionsApple{
+	options := &management.ConnectionOptionsApple{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		TeamID:             String(d, "team_id"),
@@ -532,14 +523,13 @@ func expandConnectionOptionsApple(d ResourceData) *management.ConnectionOptionsA
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsLinkedin(d ResourceData) *management.ConnectionOptionsLinkedin {
-
-	o := &management.ConnectionOptionsLinkedin{
+	options := &management.ConnectionOptionsLinkedin{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		StrategyVersion:    Int(d, "strategy_version"),
@@ -547,14 +537,13 @@ func expandConnectionOptionsLinkedin(d ResourceData) *management.ConnectionOptio
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsSalesforce(d ResourceData) *management.ConnectionOptionsSalesforce {
-
-	o := &management.ConnectionOptionsSalesforce{
+	options := &management.ConnectionOptionsSalesforce{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		CommunityBaseURL:   String(d, "community_base_url"),
@@ -562,14 +551,13 @@ func expandConnectionOptionsSalesforce(d ResourceData) *management.ConnectionOpt
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsWindowsLive(d ResourceData) *management.ConnectionOptionsWindowsLive {
-
-	o := &management.ConnectionOptionsWindowsLive{
+	options := &management.ConnectionOptionsWindowsLive{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
 		StrategyVersion:    Int(d, "strategy_version"),
@@ -577,14 +565,13 @@ func expandConnectionOptionsWindowsLive(d ResourceData) *management.ConnectionOp
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS {
-
-	o := &management.ConnectionOptionsSMS{
+	options := &management.ConnectionOptionsSMS{
 		Name:                 String(d, "name"),
 		From:                 String(d, "from"),
 		Syntax:               String(d, "syntax"),
@@ -600,14 +587,14 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 	}
 
 	List(d, "totp").Elem(func(d ResourceData) {
-		o.OTP = &management.ConnectionOptionsOTP{
+		options.OTP = &management.ConnectionOptionsOTP{
 			TimeStep: Int(d, "time_step"),
 			Length:   Int(d, "length"),
 		}
 	})
 
 	List(d, "gateway_authentication").Elem(func(d ResourceData) {
-		o.GatewayAuthentication = &management.ConnectionGatewayAuthentication{
+		options.GatewayAuthentication = &management.ConnectionGatewayAuthentication{
 			Method:              String(d, "method"),
 			Subject:             String(d, "subject"),
 			Audience:            String(d, "audience"),
@@ -616,12 +603,11 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 		}
 	})
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsEmail {
-
-	o := &management.ConnectionOptionsEmail{
+	options := &management.ConnectionOptionsEmail{
 		Name:          String(d, "name"),
 		DisableSignup: Bool(d, "disable_signup"),
 		Email: &management.ConnectionOptionsEmailSettings{
@@ -636,18 +622,17 @@ func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsE
 	}
 
 	List(d, "totp").Elem(func(d ResourceData) {
-		o.OTP = &management.ConnectionOptionsOTP{
+		options.OTP = &management.ConnectionOptionsOTP{
 			TimeStep: Int(d, "time_step"),
 			Length:   Int(d, "length"),
 		}
 	})
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsAD(d ResourceData) *management.ConnectionOptionsAD {
-
-	o := &management.ConnectionOptionsAD{
+	options := &management.ConnectionOptionsAD{
 		DomainAliases:      Set(d, "domain_aliases").List(),
 		TenantDomain:       String(d, "tenant_domain"),
 		LogoURL:            String(d, "icon_url"),
@@ -666,14 +651,13 @@ func expandConnectionOptionsAD(d ResourceData) *management.ConnectionOptionsAD {
 	if !ok {
 		v = false
 	}
-	o.BruteForceProtection = auth0.Bool(v.(bool))
+	options.BruteForceProtection = auth0.Bool(v.(bool))
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsAzureAD(d ResourceData) *management.ConnectionOptionsAzureAD {
-
-	o := &management.ConnectionOptionsAzureAD{
+	options := &management.ConnectionOptionsAzureAD{
 		ClientID:            String(d, "client_id"),
 		ClientSecret:        String(d, "client_secret"),
 		AppID:               String(d, "app_id"),
@@ -692,14 +676,13 @@ func expandConnectionOptionsAzureAD(d ResourceData) *management.ConnectionOption
 		TrustEmailVerified:  String(d, "should_trust_email_verified_connection"),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsOIDC(d ResourceData) *management.ConnectionOptionsOIDC {
-
-	o := &management.ConnectionOptionsOIDC{
+	options := &management.ConnectionOptionsOIDC{
 		ClientID:              String(d, "client_id"),
 		ClientSecret:          String(d, "client_secret"),
 		TenantDomain:          String(d, "tenant_domain"),
@@ -716,13 +699,13 @@ func expandConnectionOptionsOIDC(d ResourceData) *management.ConnectionOptionsOI
 		NonPersistentAttrs:    castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
 
-	expandConnectionOptionsScopes(d, o)
+	expandConnectionOptionsScopes(d, options)
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSAML {
-	o := &management.ConnectionOptionsSAML{
+	options := &management.ConnectionOptionsSAML{
 		Debug:              Bool(d, "debug"),
 		SigningCert:        String(d, "signing_cert"),
 		ProtocolBinding:    String(d, "protocol_binding"),
@@ -743,14 +726,14 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 	}
 
 	List(d, "idp_initiated").Elem(func(d ResourceData) {
-		o.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
 			ClientID:             String(d, "client_id"),
 			ClientProtocol:       String(d, "client_protocol"),
 			ClientAuthorizeQuery: String(d, "client_authorize_query"),
 		}
 	})
 
-	return o
+	return options
 }
 
 func expandConnectionOptionsADFS(d ResourceData) *management.ConnectionOptionsADFS {
@@ -771,12 +754,12 @@ type scoper interface {
 }
 
 func expandConnectionOptionsScopes(d ResourceData, s scoper) {
-	add := Set(d, "scopes").List()
-	_, rm := Diff(d, "scopes")
-	for _, scope := range add {
+	scopesList := Set(d, "scopes").List()
+	_, scopesDiff := Diff(d, "scopes")
+	for _, scope := range scopesList {
 		s.SetScopes(true, scope.(string))
 	}
-	for _, scope := range rm.List() {
+	for _, scope := range scopesDiff.List() {
 		s.SetScopes(false, scope.(string))
 	}
 }

@@ -8,311 +8,368 @@ import (
 )
 
 func flattenConnectionOptions(d ResourceData, options interface{}) []interface{} {
+	if options == nil || optionsBlockIsNotDefined(d) {
+		return nil
+	}
+
 	var m interface{}
 
-	switch o := options.(type) {
+	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
-		m = flattenConnectionOptionsAuth0(d, o)
+		m = flattenConnectionOptionsAuth0(d, connectionOptions)
 	case *management.ConnectionOptionsGoogleOAuth2:
-		m = flattenConnectionOptionsGoogleOAuth2(o)
+		m = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
 	case *management.ConnectionOptionsGoogleApps:
-		m = flattenConnectionOptionsGoogleApps(o)
+		m = flattenConnectionOptionsGoogleApps(connectionOptions)
 	case *management.ConnectionOptionsOAuth2:
-		m = flattenConnectionOptionsOAuth2(o)
+		m = flattenConnectionOptionsOAuth2(connectionOptions)
 	case *management.ConnectionOptionsFacebook:
-		m = flattenConnectionOptionsFacebook(o)
+		m = flattenConnectionOptionsFacebook(connectionOptions)
 	case *management.ConnectionOptionsApple:
-		m = flattenConnectionOptionsApple(o)
+		m = flattenConnectionOptionsApple(connectionOptions)
 	case *management.ConnectionOptionsLinkedin:
-		m = flattenConnectionOptionsLinkedin(o)
+		m = flattenConnectionOptionsLinkedin(connectionOptions)
 	case *management.ConnectionOptionsGitHub:
-		m = flattenConnectionOptionsGitHub(o)
+		m = flattenConnectionOptionsGitHub(connectionOptions)
 	case *management.ConnectionOptionsWindowsLive:
-		m = flattenConnectionOptionsWindowsLive(o)
+		m = flattenConnectionOptionsWindowsLive(connectionOptions)
 	case *management.ConnectionOptionsSalesforce:
-		m = flattenConnectionOptionsSalesforce(o)
+		m = flattenConnectionOptionsSalesforce(connectionOptions)
 	case *management.ConnectionOptionsEmail:
-		m = flattenConnectionOptionsEmail(o)
+		m = flattenConnectionOptionsEmail(connectionOptions)
 	case *management.ConnectionOptionsSMS:
-		m = flattenConnectionOptionsSMS(o)
+		m = flattenConnectionOptionsSMS(connectionOptions)
 	case *management.ConnectionOptionsOIDC:
-		m = flattenConnectionOptionsOIDC(o)
+		m = flattenConnectionOptionsOIDC(connectionOptions)
 	case *management.ConnectionOptionsAD:
-		m = flattenConnectionOptionsAD(o)
+		m = flattenConnectionOptionsAD(connectionOptions)
 	case *management.ConnectionOptionsAzureAD:
-		m = flattenConnectionOptionsAzureAD(o)
+		m = flattenConnectionOptionsAzureAD(connectionOptions)
 	case *management.ConnectionOptionsADFS:
-		m = flattenConnectionOptionsADFS(o)
+		m = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m = flattenConnectionOptionsSAML(o)
+		m = flattenConnectionOptionsSAML(connectionOptions)
 	}
 
 	return []interface{}{m}
 }
 
-func flattenConnectionOptionsGitHub(o *management.ConnectionOptionsGitHub) interface{} {
+func optionsBlockIsNotDefined(d ResourceData) bool {
+	_, ok := d.GetOk("options")
+	return !ok
+}
+
+func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
-		"scopes":                   o.Scopes(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"scopes":                   options.Scopes(),
 	}
 }
 
-func flattenConnectionOptionsWindowsLive(o *management.ConnectionOptionsWindowsLive) interface{} {
+func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
-		"strategy_version":         o.GetStrategyVersion(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"strategy_version":         options.GetStrategyVersion(),
 	}
 }
 
-func flattenConnectionOptionsAuth0(d ResourceData, o *management.ConnectionOptions) interface{} {
+func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) interface{} {
+	m := map[string]interface{}{
+		"password_policy":                options.GetPasswordPolicy(),
+		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
+		"brute_force_protection":         options.GetBruteForceProtection(),
+		"import_mode":                    options.GetImportMode(),
+		"disable_signup":                 options.GetDisableSignup(),
+		"requires_username":              options.GetRequiresUsername(),
+		"custom_scripts":                 options.CustomScripts,
+		"configuration":                  Map(d, "options.0.configuration"), // does not get read back
+		"non_persistent_attrs":           options.GetNonPersistentAttrs(),
+	}
+
+	if options.PasswordComplexityOptions != nil {
+		m["password_complexity_options"] = []interface{}{options.PasswordComplexityOptions}
+	}
+	if options.PasswordDictionary != nil {
+		m["password_dictionary"] = []interface{}{options.PasswordDictionary}
+	}
+	if options.PasswordNoPersonalInfo != nil {
+		m["password_no_personal_info"] = []interface{}{options.PasswordNoPersonalInfo}
+	}
+	if options.PasswordHistory != nil {
+		m["password_history"] = []interface{}{options.PasswordHistory}
+	}
+	if options.MFA != nil {
+		m["mfa"] = []interface{}{options.MFA}
+	}
+	if options.Validation != nil {
+		m["validation"] = []interface{}{
+			map[string]interface{}{
+				"username": []interface{}{
+					options.Validation["username"],
+				},
+			},
+		}
+	}
+
+	return m
+}
+
+func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) interface{} {
 	return map[string]interface{}{
-		"validation":                     o.Validation,
-		"password_policy":                o.GetPasswordPolicy(),
-		"password_history":               o.PasswordHistory,
-		"password_no_personal_info":      o.PasswordNoPersonalInfo,
-		"password_dictionary":            o.PasswordDictionary,
-		"password_complexity_options":    o.PasswordComplexityOptions,
-		"enabled_database_customization": o.GetEnabledDatabaseCustomization(),
-		"brute_force_protection":         o.GetBruteForceProtection(),
-		"import_mode":                    o.GetImportMode(),
-		"disable_signup":                 o.GetDisableSignup(),
-		"requires_username":              o.GetRequiresUsername(),
-		"custom_scripts":                 o.CustomScripts,
-		"mfa":                            o.MFA,
-		"configuration":                  Map(d, "configuration"), // does not get read back
-		"non_persistent_attrs":           o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"allowed_audiences":        options.AllowedAudiences,
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsGoogleOAuth2(o *management.ConnectionOptionsGoogleOAuth2) interface{} {
+func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"allowed_audiences":        o.AllowedAudiences,
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"domain":                   options.GetDomain(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"api_enable_users":         options.GetEnableUsersAPI(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"domain_aliases":           options.DomainAliases,
+		"icon_url":                 options.GetLogoURL(),
 	}
 }
 
-func flattenConnectionOptionsGoogleApps(o *management.ConnectionOptionsGoogleApps) interface{} {
+func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"domain":                   o.GetDomain(),
-		"tenant_domain":            o.GetTenantDomain(),
-		"api_enable_users":         o.GetEnableUsersAPI(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
-		"domain_aliases":           o.DomainAliases,
-		"icon_url":                 o.GetLogoURL(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"scopes":                   options.Scopes(),
+		"token_endpoint":           options.GetTokenURL(),
+		"authorization_endpoint":   options.GetAuthorizationURL(),
+		"scripts":                  options.Scripts,
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsOAuth2(o *management.ConnectionOptionsOAuth2) interface{} {
+func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"scopes":                   o.Scopes(),
-		"token_endpoint":           o.GetTokenURL(),
-		"authorization_endpoint":   o.GetAuthorizationURL(),
-		"scripts":                  o.Scripts,
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsFacebook(o *management.ConnectionOptionsFacebook) interface{} {
+func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"team_id":                  options.GetTeamID(),
+		"key_id":                   options.GetKeyID(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsApple(o *management.ConnectionOptionsApple) interface{} {
+func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"team_id":                  o.GetTeamID(),
-		"key_id":                   o.GetKeyID(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"strategy_version":         options.GetStrategyVersion(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsLinkedin(o *management.ConnectionOptionsLinkedin) interface{} {
+func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"strategy_version":         o.GetStrategyVersion(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"community_base_url":       options.GetCommunityBaseURL(),
+		"scopes":                   options.Scopes(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsSalesforce(o *management.ConnectionOptionsSalesforce) interface{} {
+func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) interface{} {
+	m := map[string]interface{}{
+		"name":                   options.GetName(),
+		"from":                   options.GetFrom(),
+		"syntax":                 options.GetSyntax(),
+		"template":               options.GetTemplate(),
+		"twilio_sid":             options.GetTwilioSID(),
+		"twilio_token":           options.GetTwilioToken(),
+		"messaging_service_sid":  options.GetMessagingServiceSID(),
+		"disable_signup":         options.GetDisableSignup(),
+		"brute_force_protection": options.GetBruteForceProtection(),
+		"provider":               options.GetProvider(),
+		"gateway_url":            options.GetGatewayURL(),
+		"forward_request_info":   options.GetForwardRequestInfo(),
+	}
+
+	if options.OTP != nil {
+		m["totp"] = []interface{}{
+			map[string]interface{}{
+				"time_step": options.OTP.GetTimeStep(),
+				"length":    options.OTP.GetLength(),
+			},
+		}
+	}
+
+	if options.GatewayAuthentication != nil {
+		m["gateway_authentication"] = []interface{}{
+			map[string]interface{}{
+				"method":                options.GatewayAuthentication.GetMethod(),
+				"subject":               options.GatewayAuthentication.GetSubject(),
+				"audience":              options.GatewayAuthentication.GetAudience(),
+				"secret":                options.GatewayAuthentication.GetSecret(),
+				"secret_base64_encoded": options.GatewayAuthentication.GetSecretBase64Encoded(),
+			},
+		}
+	}
+
+	return m
+}
+
+func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"community_base_url":       o.GetCommunityBaseURL(),
-		"scopes":                   o.Scopes(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"icon_url":                 options.GetLogoURL(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.DomainAliases,
+		"type":                     options.GetType(),
+		"scopes":                   options.Scopes(),
+		"issuer":                   options.GetIssuer(),
+		"jwks_uri":                 options.GetJWKSURI(),
+		"discovery_url":            options.GetDiscoveryURL(),
+		"token_endpoint":           options.GetTokenEndpoint(),
+		"userinfo_endpoint":        options.GetUserInfoEndpoint(),
+		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsSMS(o *management.ConnectionOptionsSMS) interface{} {
+func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) interface{} {
+	m := map[string]interface{}{
+		"name":                     options.GetName(),
+		"from":                     options.GetEmail().GetFrom(),
+		"syntax":                   options.GetEmail().GetSyntax(),
+		"subject":                  options.GetEmail().GetSubject(),
+		"template":                 options.GetEmail().GetBody(),
+		"disable_signup":           options.GetDisableSignup(),
+		"brute_force_protection":   options.GetBruteForceProtection(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+	}
+
+	if options.OTP != nil {
+		m["totp"] = []interface{}{
+			map[string]interface{}{
+				"time_step": options.OTP.GetTimeStep(),
+				"length":    options.OTP.GetLength(),
+			},
+		}
+	}
+
+	return m
+}
+
+func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) interface{} {
 	return map[string]interface{}{
-		"name":                   o.GetName(),
-		"from":                   o.GetFrom(),
-		"syntax":                 o.GetSyntax(),
-		"template":               o.GetTemplate(),
-		"twilio_sid":             o.GetTwilioSID(),
-		"twilio_token":           o.GetTwilioToken(),
-		"messaging_service_sid":  o.GetMessagingServiceSID(),
-		"disable_signup":         o.GetDisableSignup(),
-		"brute_force_protection": o.GetBruteForceProtection(),
-		"totp": map[string]interface{}{
-			"time_step": o.OTP.GetTimeStep(),
-			"length":    o.OTP.GetLength(),
-		},
-		"provider":    o.GetProvider(),
-		"gateway_url": o.GetGatewayURL(),
-		"gateway_authentication": map[string]interface{}{
-			"method":                o.GatewayAuthentication.GetMethod(),
-			"subject":               o.GatewayAuthentication.GetSubject(),
-			"audience":              o.GatewayAuthentication.GetAudience(),
-			"secret_base64_encoded": o.GatewayAuthentication.GetSecretBase64Encoded(),
-		},
-		"forward_request_info": o.GetForwardRequestInfo(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.DomainAliases,
+		"icon_url":                 options.GetLogoURL(),
+		"ips":                      options.IPs,
+		"use_cert_auth":            options.GetCertAuth(),
+		"use_kerberos":             options.GetKerberos(),
+		"disable_cache":            options.GetDisableCache(),
+		"brute_force_protection":   options.GetBruteForceProtection(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsOIDC(o *management.ConnectionOptionsOIDC) interface{} {
+func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) interface{} {
 	return map[string]interface{}{
-		"client_id":                o.GetClientID(),
-		"client_secret":            o.GetClientSecret(),
-		"icon_url":                 o.GetLogoURL(),
-		"tenant_domain":            o.GetTenantDomain(),
-		"domain_aliases":           o.DomainAliases,
-		"type":                     o.GetType(),
-		"scopes":                   o.Scopes(),
-		"issuer":                   o.GetIssuer(),
-		"jwks_uri":                 o.GetJWKSURI(),
-		"discovery_url":            o.GetDiscoveryURL(),
-		"token_endpoint":           o.GetTokenEndpoint(),
-		"userinfo_endpoint":        o.GetUserInfoEndpoint(),
-		"authorization_endpoint":   o.GetAuthorizationEndpoint(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"client_id":                              options.GetClientID(),
+		"client_secret":                          options.GetClientSecret(),
+		"app_id":                                 options.GetAppID(),
+		"tenant_domain":                          options.GetTenantDomain(),
+		"domain":                                 options.GetDomain(),
+		"domain_aliases":                         options.DomainAliases,
+		"icon_url":                               options.GetLogoURL(),
+		"identity_api":                           options.GetIdentityAPI(),
+		"waad_protocol":                          options.GetWAADProtocol(),
+		"waad_common_endpoint":                   options.GetUseCommonEndpoint(),
+		"use_wsfed":                              options.GetUseWSFederation(),
+		"api_enable_users":                       options.GetEnableUsersAPI(),
+		"max_groups_to_retrieve":                 options.GetMaxGroupsToRetrieve(),
+		"scopes":                                 options.Scopes(),
+		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
+		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 	}
 }
 
-func flattenConnectionOptionsEmail(o *management.ConnectionOptionsEmail) interface{} {
+func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) interface{} {
 	return map[string]interface{}{
-		"name":                   o.GetName(),
-		"from":                   o.GetEmail().GetFrom(),
-		"syntax":                 o.GetEmail().GetSyntax(),
-		"subject":                o.GetEmail().GetSubject(),
-		"template":               o.GetEmail().GetBody(),
-		"disable_signup":         o.GetDisableSignup(),
-		"brute_force_protection": o.GetBruteForceProtection(),
-		"totp": map[string]interface{}{
-			"time_step": o.OTP.GetTimeStep(),
-			"length":    o.OTP.GetLength(),
-		},
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.DomainAliases,
+		"icon_url":                 options.GetLogoURL(),
+		"adfs_server":              options.GetADFSServer(),
+		"api_enable_users":         options.GetEnableUsersAPI(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
 }
 
-func flattenConnectionOptionsAD(o *management.ConnectionOptionsAD) interface{} {
-	return map[string]interface{}{
-		"tenant_domain":            o.GetTenantDomain(),
-		"domain_aliases":           o.DomainAliases,
-		"icon_url":                 o.GetLogoURL(),
-		"ips":                      o.IPs,
-		"use_cert_auth":            o.GetCertAuth(),
-		"use_kerberos":             o.GetKerberos(),
-		"disable_cache":            o.GetDisableCache(),
-		"brute_force_protection":   o.GetBruteForceProtection(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
+func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) interface{} {
+	m := map[string]interface{}{
+		"signing_cert":             options.GetSigningCert(),
+		"protocol_binding":         options.GetProtocolBinding(),
+		"debug":                    options.GetDebug(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.DomainAliases,
+		"sign_in_endpoint":         options.GetSignInEndpoint(),
+		"sign_out_endpoint":        options.GetSignOutEndpoint(),
+		"signature_algorithm":      options.GetSignatureAlgorithm(),
+		"digest_algorithm":         options.GetDigestAglorithm(),
+		"fields_map":               options.FieldsMap,
+		"sign_saml_request":        options.GetSignSAMLRequest(),
+		"icon_url":                 options.GetLogoURL(),
+		"request_template":         options.GetRequestTemplate(),
+		"user_id_attribute":        options.GetUserIDAttribute(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"entity_id":                options.GetEntityID(),
 	}
-}
 
-func flattenConnectionOptionsAzureAD(o *management.ConnectionOptionsAzureAD) interface{} {
-	return map[string]interface{}{
-		"client_id":                              o.GetClientID(),
-		"client_secret":                          o.GetClientSecret(),
-		"app_id":                                 o.GetAppID(),
-		"tenant_domain":                          o.GetTenantDomain(),
-		"domain":                                 o.GetDomain(),
-		"domain_aliases":                         o.DomainAliases,
-		"icon_url":                               o.GetLogoURL(),
-		"identity_api":                           o.GetIdentityAPI(),
-		"waad_protocol":                          o.GetWAADProtocol(),
-		"waad_common_endpoint":                   o.GetUseCommonEndpoint(),
-		"use_wsfed":                              o.GetUseWSFederation(),
-		"api_enable_users":                       o.GetEnableUsersAPI(),
-		"max_groups_to_retrieve":                 o.GetMaxGroupsToRetrieve(),
-		"scopes":                                 o.Scopes(),
-		"set_user_root_attributes":               o.GetSetUserAttributes(),
-		"non_persistent_attrs":                   o.GetNonPersistentAttrs(),
-		"should_trust_email_verified_connection": o.GetTrustEmailVerified(),
+	if options.IdpInitiated != nil {
+		m["idp_initiated"] = []interface{}{
+			map[string]interface{}{
+				"client_id":              options.IdpInitiated.GetClientID(),
+				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
+				"client_authorize_query": options.IdpInitiated.GetClientAuthorizeQuery(),
+			},
+		}
 	}
-}
 
-func flattenConnectionOptionsADFS(o *management.ConnectionOptionsADFS) interface{} {
-	return map[string]interface{}{
-		"tenant_domain":            o.GetTenantDomain(),
-		"domain_aliases":           o.DomainAliases,
-		"icon_url":                 o.GetLogoURL(),
-		"adfs_server":              o.GetADFSServer(),
-		"api_enable_users":         o.GetEnableUsersAPI(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
-	}
-}
-
-func flattenConnectionOptionsSAML(o *management.ConnectionOptionsSAML) interface{} {
-	return map[string]interface{}{
-		"signing_cert":     o.GetSigningCert(),
-		"protocol_binding": o.GetProtocolBinding(),
-		"debug":            o.GetDebug(),
-		"idp_initiated": map[string]interface{}{
-			"client_id":              o.IdpInitiated.GetClientID(),
-			"client_protocol":        o.IdpInitiated.GetClientProtocol(),
-			"client_authorize_query": o.IdpInitiated.GetClientAuthorizeQuery(),
-		},
-		"tenant_domain":            o.GetTenantDomain(),
-		"domain_aliases":           o.DomainAliases,
-		"sign_in_endpoint":         o.GetSignInEndpoint(),
-		"sign_out_endpoint":        o.GetSignOutEndpoint(),
-		"signature_algorithm":      o.GetSignatureAlgorithm(),
-		"digest_algorithm":         o.GetDigestAglorithm(),
-		"fields_map":               o.FieldsMap,
-		"sign_saml_request":        o.GetSignSAMLRequest(),
-		"icon_url":                 o.GetLogoURL(),
-		"request_template":         o.GetRequestTemplate(),
-		"user_id_attribute":        o.GetUserIDAttribute(),
-		"set_user_root_attributes": o.GetSetUserAttributes(),
-		"non_persistent_attrs":     o.GetNonPersistentAttrs(),
-		"entity_id":                o.GetEntityID(),
-	}
+	return m
 }
 
 func expandConnection(d ResourceData) *management.Connection {
@@ -416,7 +473,10 @@ func expandConnectionOptionsAuth0(d ResourceData) *management.ConnectionOptions 
 	List(d, "password_history").Elem(func(d ResourceData) {
 		options.PasswordHistory = make(map[string]interface{})
 		options.PasswordHistory["enable"] = Bool(d, "enable")
-		options.PasswordHistory["size"] = Int(d, "size")
+
+		if size, ok := d.GetOk("size"); ok {
+			options.PasswordHistory["size"] = auth0.Int(size.(int))
+		}
 	})
 
 	List(d, "password_no_personal_info").Elem(func(d ResourceData) {
@@ -633,25 +693,17 @@ func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsE
 
 func expandConnectionOptionsAD(d ResourceData) *management.ConnectionOptionsAD {
 	options := &management.ConnectionOptionsAD{
-		DomainAliases:      Set(d, "domain_aliases").List(),
-		TenantDomain:       String(d, "tenant_domain"),
-		LogoURL:            String(d, "icon_url"),
-		IPs:                Set(d, "ips").List(),
-		CertAuth:           Bool(d, "use_cert_auth"),
-		Kerberos:           Bool(d, "use_kerberos"),
-		DisableCache:       Bool(d, "disable_cache"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		DomainAliases:        Set(d, "domain_aliases").List(),
+		TenantDomain:         String(d, "tenant_domain"),
+		LogoURL:              String(d, "icon_url"),
+		IPs:                  Set(d, "ips").List(),
+		CertAuth:             Bool(d, "use_cert_auth"),
+		Kerberos:             Bool(d, "use_kerberos"),
+		DisableCache:         Bool(d, "disable_cache"),
+		SetUserAttributes:    String(d, "set_user_root_attributes"),
+		NonPersistentAttrs:   castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		BruteForceProtection: Bool(d, "brute_force_protection"),
 	}
-
-	// `brute_force_protection` will default to true by the API if we don't
-	// specify it. Therefore if it's not specified we'll set it to false
-	// ourselves.
-	v, ok := d.GetOk("brute_force_protection")
-	if !ok {
-		v = false
-	}
-	options.BruteForceProtection = auth0.Bool(v.(bool))
 
 	return options
 }

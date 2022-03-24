@@ -218,6 +218,7 @@ var connectionSchema = map[string]*schema.Schema{
 				},
 				"allowed_audiences": {
 					Type:        schema.TypeSet,
+					Computed:    true,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
 					Description: "",
@@ -244,6 +245,7 @@ var connectionSchema = map[string]*schema.Schema{
 				},
 				"domain_aliases": {
 					Type:        schema.TypeSet,
+					Computed:    true,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
 					Description: "",
@@ -287,6 +289,7 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:        schema.TypeSet,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
+					Computed:    true,
 					Description: "",
 				},
 				"use_cert_auth": {
@@ -366,6 +369,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"mfa": {
 					Type:     schema.TypeList,
 					MaxItems: 1,
+					Computed: true,
 					Optional: true,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -380,7 +384,6 @@ var connectionSchema = map[string]*schema.Schema{
 						},
 					},
 				},
-
 				// custom sms gateway options
 				"provider": {
 					Type:        schema.TypeString,
@@ -420,6 +423,7 @@ var connectionSchema = map[string]*schema.Schema{
 							"secret": {
 								Type:        schema.TypeString,
 								Optional:    true,
+								Sensitive:   true,
 								Description: "Secret used to sign the HS256 token sent to gateway_url",
 							},
 							"secret_base64_encoded": {
@@ -460,7 +464,6 @@ var connectionSchema = map[string]*schema.Schema{
 					}, false),
 					Description: "Choose how Auth0 sets the email_verified field in the user profile.",
 				},
-
 				// apple options
 				"team_id": {
 					Type:        schema.TypeString,
@@ -472,31 +475,27 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Apple Key ID",
 				},
-
 				// adfs options
 				"adfs_server": {
 					Type:     schema.TypeString,
 					Optional: true,
 				},
-
 				// salesforce options
 				"community_base_url": {
 					Type:     schema.TypeString,
 					Optional: true,
 				},
-
 				"strategy_version": {
 					Type:     schema.TypeInt,
 					Optional: true,
 					Computed: true,
 				},
-
 				"scopes": {
 					Type:     schema.TypeSet,
+					Computed: true,
 					Optional: true,
 					Elem:     &schema.Schema{Type: schema.TypeString},
 				},
-
 				// OIDC options
 				"type": {
 					Type:        schema.TypeString,
@@ -566,7 +565,6 @@ var connectionSchema = map[string]*schema.Schema{
 				"idp_initiated": {
 					Type:     schema.TypeList,
 					MaxItems: 1,
-					Required: false,
 					Optional: true,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{

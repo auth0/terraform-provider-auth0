@@ -27,7 +27,7 @@ jobs:
         run: docker-compose up -d --build
 
       - name: Run tests
-        run: make testacc OPTS=-coverprofile=c.out
+        run: make test
         env:
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}

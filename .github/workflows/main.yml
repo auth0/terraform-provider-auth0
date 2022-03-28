@@ -23,9 +23,6 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Install the provider
-        run: make build
-
       - name: Start docker containers
         run: docker-compose up -d --build
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -258,25 +259,27 @@ func readTenant(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("change_password", flattenTenantChangePassword(tenant.ChangePassword))
-	d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GuardianMFAPage))
-	d.Set("default_audience", tenant.DefaultAudience)
-	d.Set("default_directory", tenant.DefaultDirectory)
-	d.Set("default_redirection_uri", tenant.DefaultRedirectionURI)
-	d.Set("friendly_name", tenant.FriendlyName)
-	d.Set("picture_url", tenant.PictureURL)
-	d.Set("support_email", tenant.SupportEmail)
-	d.Set("support_url", tenant.SupportURL)
-	d.Set("allowed_logout_urls", tenant.AllowedLogoutURLs)
-	d.Set("session_lifetime", tenant.SessionLifetime)
-	d.Set("idle_session_lifetime", tenant.IdleSessionLifetime)
-	d.Set("sandbox_version", tenant.SandboxVersion)
-	d.Set("enabled_locales", tenant.EnabledLocales)
-	d.Set("error_page", flattenTenantErrorPage(tenant.ErrorPage))
-	d.Set("flags", flattenTenantFlags(tenant.Flags))
-	d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin))
+	result := multierror.Append(
+		d.Set("change_password", flattenTenantChangePassword(tenant.ChangePassword)),
+		d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GuardianMFAPage)),
+		d.Set("default_audience", tenant.DefaultAudience),
+		d.Set("default_directory", tenant.DefaultDirectory),
+		d.Set("default_redirection_uri", tenant.DefaultRedirectionURI),
+		d.Set("friendly_name", tenant.FriendlyName),
+		d.Set("picture_url", tenant.PictureURL),
+		d.Set("support_email", tenant.SupportEmail),
+		d.Set("support_url", tenant.SupportURL),
+		d.Set("allowed_logout_urls", tenant.AllowedLogoutURLs),
+		d.Set("session_lifetime", tenant.SessionLifetime),
+		d.Set("idle_session_lifetime", tenant.IdleSessionLifetime),
+		d.Set("sandbox_version", tenant.SandboxVersion),
+		d.Set("enabled_locales", tenant.EnabledLocales),
+		d.Set("error_page", flattenTenantErrorPage(tenant.ErrorPage)),
+		d.Set("flags", flattenTenantFlags(tenant.Flags)),
+		d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin)),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateTenant(d *schema.ResourceData, m interface{}) error {

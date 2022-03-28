@@ -60,7 +60,10 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 }
 
 func flattenTenantUniversalLogin(universalLogin *management.TenantUniversalLogin) []interface{} {
-	if universalLogin == nil && universalLogin.Colors == nil {
+	if universalLogin == nil {
+		return nil
+	}
+	if universalLogin.Colors == nil {
 		return nil
 	}
 

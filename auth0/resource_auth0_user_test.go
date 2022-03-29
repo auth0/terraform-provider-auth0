@@ -63,7 +63,6 @@ func TestAccUserMissingRequiredParams(t *testing.T) {
 }
 
 func TestAccUser(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -104,7 +103,6 @@ func TestAccUser(t *testing.T) {
 }
 
 const testAccUserCreate = `
-
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.random}}"
@@ -132,7 +130,6 @@ EOF
 `
 
 const testAccUserAddRole = `
-
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.random}}"
@@ -171,7 +168,6 @@ resource auth0_role admin {
 `
 
 const testAccUserRemoveRole = `
-
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.random}}"
@@ -205,7 +201,6 @@ resource auth0_role admin {
 `
 
 func TestAccUserIssue218(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -229,7 +224,6 @@ func TestAccUserIssue218(t *testing.T) {
 }
 
 const testAccUserIssue218 = `
-
 resource auth0_user auth0_user_issue_218 {
   connection_name = "Username-Password-Authentication"
   user_id = "id_{{.random}}"
@@ -241,7 +235,6 @@ resource auth0_user auth0_user_issue_218 {
 `
 
 func TestAccUserChangeUsername(t *testing.T) {
-
 	rand := random.String(4)
 
 	resource.Test(t, resource.TestCase{
@@ -267,14 +260,13 @@ func TestAccUserChangeUsername(t *testing.T) {
 			},
 			{
 				Config:      random.Template(testAccUserChangeUsernameAndPassword, rand),
-				ExpectError: regexp.MustCompile("Cannot update username and password simultaneously"),
+				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
 			},
 		},
 	})
 }
 
 const testAccUserChangeUsernameCreate = `
-
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
   username = "user_{{.random}}"
@@ -285,7 +277,6 @@ resource auth0_user auth0_user_change_username {
 `
 
 const testAccUserChangeUsernameUpdate = `
-
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
   username = "user_x_{{.random}}"
@@ -296,7 +287,6 @@ resource auth0_user auth0_user_change_username {
 `
 
 const testAccUserChangeUsernameAndPassword = `
-
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
   username = "user_{{.random}}"

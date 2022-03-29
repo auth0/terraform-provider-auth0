@@ -13,6 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
+type validateUserFunc func(*management.User) error
+
 func newUser() *schema.Resource {
 	return &schema.Resource{
 		Create: createUser,
@@ -118,7 +120,7 @@ func newUser() *schema.Resource {
 
 func readUser(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	u, err := api.User.Read(d.Id())
+	user, err := api.User.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -129,60 +131,61 @@ func readUser(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("user_id", u.ID)
-	d.Set("username", u.Username)
-	d.Set("name", u.Name)
-	d.Set("family_name", u.FamilyName)
-	d.Set("given_name", u.GivenName)
-	d.Set("nickname", u.Nickname)
-	d.Set("email", u.Email)
-	d.Set("email_verified", u.EmailVerified)
-	d.Set("verify_email", u.VerifyEmail)
-	d.Set("phone_number", u.PhoneNumber)
-	d.Set("phone_verified", u.PhoneVerified)
-	d.Set("blocked", u.Blocked)
-	d.Set("picture", u.Picture)
+	d.Set("user_id", user.ID)
+	d.Set("username", user.Username)
+	d.Set("name", user.Name)
+	d.Set("family_name", user.FamilyName)
+	d.Set("given_name", user.GivenName)
+	d.Set("nickname", user.Nickname)
+	d.Set("email", user.Email)
+	d.Set("email_verified", user.EmailVerified)
+	d.Set("verify_email", user.VerifyEmail)
+	d.Set("phone_number", user.PhoneNumber)
+	d.Set("phone_verified", user.PhoneVerified)
+	d.Set("blocked", user.Blocked)
+	d.Set("picture", user.Picture)
 
-	userMeta, err := structure.FlattenJsonToString(u.UserMetadata)
+	userMeta, err := structure.FlattenJsonToString(user.UserMetadata)
 	if err != nil {
 		return err
 	}
 	d.Set("user_metadata", userMeta)
 
-	appMeta, err := structure.FlattenJsonToString(u.AppMetadata)
+	appMeta, err := structure.FlattenJsonToString(user.AppMetadata)
 	if err != nil {
 		return err
 	}
 	d.Set("app_metadata", appMeta)
 
-	l, err := api.User.Roles(d.Id())
+	roleList, err := api.User.Roles(d.Id())
 	if err != nil {
 		return err
 	}
-	d.Set("roles", func() (v []interface{}) {
-		for _, role := range l.Roles {
-			v = append(v, auth0.StringValue(role.ID))
+	d.Set("roles", func() []interface{} {
+		var roles []interface{}
+		for _, role := range roleList.Roles {
+			roles = append(roles, auth0.StringValue(role.ID))
 		}
-		return
+		return roles
 	}())
 
 	return nil
 }
 
 func createUser(d *schema.ResourceData, m interface{}) error {
-	u, err := buildUser(d)
+	user, err := buildUser(d)
 	if err != nil {
 		return err
 	}
+
 	api := m.(*management.Management)
-	if err := api.User.Create(u); err != nil {
+	if err := api.User.Create(user); err != nil {
 		return err
 	}
-	d.SetId(*u.ID)
+	d.SetId(auth0.StringValue(user.ID))
 
 	d.Partial(true)
-	err = assignUserRoles(d, m)
-	if err != nil {
+	if err = assignUserRoles(d, m); err != nil {
 		return err
 	}
 	d.Partial(false)
@@ -191,32 +194,34 @@ func createUser(d *schema.ResourceData, m interface{}) error {
 }
 
 func updateUser(d *schema.ResourceData, m interface{}) error {
-	u, err := buildUser(d)
+	user, err := buildUser(d)
 	if err != nil {
 		return err
 	}
-	if err = validateUser(u); err != nil {
+
+	if err = validateUser(user); err != nil {
 		return err
 	}
+
 	api := m.(*management.Management)
-	if userHasChange(u) {
-		if err := api.User.Update(d.Id(), u); err != nil {
+	if userHasChange(user) {
+		if err := api.User.Update(d.Id(), user); err != nil {
 			return err
 		}
 	}
+
 	d.Partial(true)
-	err = assignUserRoles(d, m)
-	if err != nil {
+	if err = assignUserRoles(d, m); err != nil {
 		return fmt.Errorf("failed assigning user roles. %s", err)
 	}
 	d.Partial(false)
+
 	return readUser(d, m)
 }
 
 func deleteUser(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.User.Delete(d.Id())
-	if err != nil {
+	if err := api.User.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -224,115 +229,118 @@ func deleteUser(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
-func buildUser(d *schema.ResourceData) (u *management.User, err error) {
+func buildUser(d *schema.ResourceData) (*management.User, error) {
+	user := &management.User{
+		ID:            String(d, "user_id", IsNewResource()),
+		Connection:    String(d, "connection_name"),
+		Email:         String(d, "email", IsNewResource(), HasChange()),
+		Name:          String(d, "name"),
+		GivenName:     String(d, "given_name"),
+		FamilyName:    String(d, "family_name"),
+		Username:      String(d, "username", IsNewResource(), HasChange()),
+		Nickname:      String(d, "nickname"),
+		Password:      String(d, "password", IsNewResource(), HasChange()),
+		PhoneNumber:   String(d, "phone_number", IsNewResource(), HasChange()),
+		EmailVerified: Bool(d, "email_verified", IsNewResource(), HasChange()),
+		VerifyEmail:   Bool(d, "verify_email", IsNewResource(), HasChange()),
+		PhoneVerified: Bool(d, "phone_verified", IsNewResource(), HasChange()),
+		Picture:       String(d, "picture"),
+		Blocked:       Bool(d, "blocked"),
+	}
 
-	u = new(management.User)
-	u.ID = String(d, "user_id", IsNewResource())
-	u.Connection = String(d, "connection_name")
-
-	u.Name = String(d, "name")
-	u.FamilyName = String(d, "family_name")
-	u.GivenName = String(d, "given_name")
-	u.Nickname = String(d, "nickname")
-
-	u.Username = String(d, "username", IsNewResource(), HasChange())
-
-	u.Email = String(d, "email", IsNewResource(), HasChange())
-	u.EmailVerified = Bool(d, "email_verified", IsNewResource(), HasChange())
-	u.VerifyEmail = Bool(d, "verify_email", IsNewResource(), HasChange())
-
-	u.PhoneNumber = String(d, "phone_number", IsNewResource(), HasChange())
-	u.PhoneVerified = Bool(d, "phone_verified", IsNewResource(), HasChange())
-
-	u.Password = String(d, "password", IsNewResource(), HasChange())
-
-	u.Blocked = Bool(d, "blocked")
-	u.Picture = String(d, "picture")
-
-	u.UserMetadata, err = JSON(d, "user_metadata")
+	var err error
+	user.UserMetadata, err = JSON(d, "user_metadata")
 	if err != nil {
 		return nil, err
 	}
 
-	u.AppMetadata, err = JSON(d, "app_metadata")
+	user.AppMetadata, err = JSON(d, "app_metadata")
 	if err != nil {
 		return nil, err
 	}
 
-	return u, nil
+	return user, nil
 }
 
-func validateUser(u *management.User) error {
-	var validation error
-	for _, fn := range []validateUserFunc{
+func validateUser(user *management.User) error {
+	var result *multierror.Error
+	validations := []validateUserFunc{
 		validateNoUsernameAndPasswordSimultaneously(),
 		validateNoUsernameAndEmailVerifiedSimultaneously(),
 		validateNoPasswordAndEmailVerifiedSimultaneously(),
-	} {
-		if err := fn(u); err != nil {
-			validation = multierror.Append(validation, err)
+	}
+	for _, validationFunc := range validations {
+		if err := validationFunc(user); err != nil {
+			result = multierror.Append(result, err)
 		}
 	}
-	return validation
+
+	return result.ErrorOrNil()
 }
 
-type validateUserFunc func(*management.User) error
-
 func validateNoUsernameAndPasswordSimultaneously() validateUserFunc {
-	return func(u *management.User) (err error) {
-		if u.Username != nil && u.Password != nil {
-			err = fmt.Errorf("Cannot update username and password simultaneously")
+	return func(user *management.User) error {
+		var err error
+		if user.Username != nil && user.Password != nil {
+			err = fmt.Errorf("cannot update username and password simultaneously")
 		}
-		return
+		return err
 	}
 }
 
 func validateNoUsernameAndEmailVerifiedSimultaneously() validateUserFunc {
-	return func(u *management.User) (err error) {
-		if u.Username != nil && u.EmailVerified != nil {
-			err = fmt.Errorf("Cannot update username and email_verified simultaneously")
+	return func(user *management.User) error {
+		var err error
+		if user.Username != nil && user.EmailVerified != nil {
+			err = fmt.Errorf("cannot update username and email_verified simultaneously")
 		}
-		return
+		return err
 	}
 }
 
 func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
-	return func(u *management.User) (err error) {
-		if u.Password != nil && u.EmailVerified != nil {
-			err = fmt.Errorf("Cannot update password and email_verified simultaneously")
+	return func(user *management.User) error {
+		var err error
+		if user.Password != nil && user.EmailVerified != nil {
+			err = fmt.Errorf("cannot update password and email_verified simultaneously")
 		}
-		return
+		return err
 	}
 }
 
 func assignUserRoles(d *schema.ResourceData, m interface{}) error {
-
 	add, rm := Diff(d, "roles")
 
 	var addRoles []*management.Role
 	for _, addRole := range add.List() {
-		addRoles = append(addRoles, &management.Role{
-			ID: auth0.String(addRole.(string)),
-		})
+		addRoles = append(
+			addRoles,
+			&management.Role{
+				ID: auth0.String(addRole.(string)),
+			},
+		)
 	}
 
 	var rmRoles []*management.Role
 	for _, rmRole := range rm.List() {
-		rmRoles = append(rmRoles, &management.Role{
-			ID: auth0.String(rmRole.(string)),
-		})
+		rmRoles = append(
+			rmRoles,
+			&management.Role{
+				ID: auth0.String(rmRole.(string)),
+			},
+		)
 	}
 
 	api := m.(*management.Management)
 
 	if len(rmRoles) > 0 {
-		err := api.User.RemoveRoles(d.Id(), rmRoles)
-		if err != nil {
-			// Ignore 404 errors as the role may have been deleted prior to
-			// unassigning them from the user.
+		if err := api.User.RemoveRoles(d.Id(), rmRoles); err != nil {
+			// Ignore 404 errors as the role may have been deleted
+			// prior to un-assigning them from the user.
 			if mErr, ok := err.(management.Error); ok {
 				if mErr.Status() != http.StatusNotFound {
 					return err
@@ -344,17 +352,18 @@ func assignUserRoles(d *schema.ResourceData, m interface{}) error {
 	}
 
 	if len(addRoles) > 0 {
-		err := api.User.AssignRoles(d.Id(), addRoles)
-		if err != nil {
+		if err := api.User.AssignRoles(d.Id(), addRoles); err != nil {
 			return err
 		}
 	}
 
 	d.SetPartial("roles")
+
 	return nil
 }
 
 func userHasChange(u *management.User) bool {
-	// hacky but we need to tell if an empty json is sent to the api.
+	// Hacky but we need to tell if an
+	// empty json is sent to the api.
 	return u.String() != "{}"
 }

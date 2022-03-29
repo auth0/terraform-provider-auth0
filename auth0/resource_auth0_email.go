@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -118,9 +119,11 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(auth0.StringValue(email.Name))
 
-	d.Set("name", email.Name)
-	d.Set("enabled", email.Enabled)
-	d.Set("default_from_address", email.DefaultFromAddress)
+	result := multierror.Append(
+		d.Set("name", email.Name),
+		d.Set("enabled", email.Enabled),
+		d.Set("default_from_address", email.DefaultFromAddress),
+	)
 
 	if credentials := email.Credentials; credentials != nil {
 		credentialsMap := make(map[string]interface{})
@@ -134,10 +137,10 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 		credentialsMap["smtp_port"] = credentials.SMTPPort
 		credentialsMap["smtp_user"] = credentials.SMTPUser
 		credentialsMap["smtp_pass"] = d.Get("credentials.0.smtp_pass")
-		d.Set("credentials", []map[string]interface{}{credentialsMap})
+		result = multierror.Append(result, d.Set("credentials", []map[string]interface{}{credentialsMap}))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateEmail(d *schema.ResourceData, m interface{}) error {

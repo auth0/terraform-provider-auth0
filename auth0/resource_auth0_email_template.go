@@ -1,11 +1,11 @@
 package auth0
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -113,16 +113,18 @@ func readEmailTemplate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(auth0.StringValue(email.Template))
 
-	d.Set("template", email.Template)
-	d.Set("body", email.Body)
-	d.Set("from", email.From)
-	d.Set("result_url", email.ResultURL)
-	d.Set("subject", email.Subject)
-	d.Set("syntax", email.Syntax)
-	d.Set("url_lifetime_in_seconds", email.URLLifetimeInSecoonds)
-	d.Set("enabled", email.Enabled)
+	result := multierror.Append(
+		d.Set("template", email.Template),
+		d.Set("body", email.Body),
+		d.Set("from", email.From),
+		d.Set("result_url", email.ResultURL),
+		d.Set("subject", email.Subject),
+		d.Set("syntax", email.Syntax),
+		d.Set("url_lifetime_in_seconds", email.URLLifetimeInSecoonds),
+		d.Set("enabled", email.Enabled),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateEmailTemplate(d *schema.ResourceData, m interface{}) error {
@@ -164,8 +166,6 @@ func buildEmailTemplate(d *schema.ResourceData) *management.EmailTemplate {
 		URLLifetimeInSecoonds: Int(d, "url_lifetime_in_seconds"),
 		Enabled:               Bool(d, "enabled"),
 	}
-
-	log.Printf("[DEBUG] Template: %s", emailTemplate)
 
 	return emailTemplate
 }

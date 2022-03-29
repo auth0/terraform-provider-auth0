@@ -1,6 +1,8 @@
 package auth0
 
 import (
+	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
@@ -41,6 +43,26 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccAction_FailedBuild(t *testing.T) {
+
+	rand := random.String(6)
+
+	resource.Test(t, resource.TestCase{
+		Providers: map[string]terraform.ResourceProvider{
+			"auth0": Provider(),
+		},
+		Steps: []resource.TestStep{
+			{
+				Config: random.Template(testAccActionConfigCreateWithFailedBuild, rand),
+				Check: resource.ComposeTestCheckFunc(
+					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
+				),
+				ExpectError: regexp.MustCompile(fmt.Sprintf(`Action "Test Action %s" failed to build.  Check the Auth0 UI for errors.`, rand)),
 			},
 		},
 	})
@@ -89,6 +111,34 @@ resource auth0_action my_action {
 		console.log(event)
 	};"
 	EOT
+	deploy = true
+}
+`
+
+// This config makes use of a crypto dependency definition that causes the
+// action build to fail.  This is presumably because the crypto package has been
+// deprecated: https://www.npmjs.com/package/crypto
+//
+// If this is ever fixed in the API, another means of failing the build will
+// need to be used here.
+const testAccActionConfigCreateWithFailedBuild = `
+
+resource auth0_action my_action {
+	name = "Test Action {{.random}}"
+	supported_triggers {
+		id = "post-login"
+		version = "v2"
+	}
+	code = <<-EOT
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log(event)
+	};"
+	EOT
+	runtime = "node16"
+	dependencies {
+		name    = "crypto"
+		version = "17.7.1"
+	}
 	deploy = true
 }
 `

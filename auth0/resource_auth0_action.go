@@ -198,16 +198,23 @@ func deployAction(d *schema.ResourceData, m interface{}) error {
 				return resource.NonRetryableError(err)
 			}
 
-			if strings.ToLower(action.GetStatus()) != "built" {
+			if strings.ToLower(a.GetStatus()) == "failed" {
+				return resource.NonRetryableError(
+					fmt.Errorf(`Action %q failed to build.  Check the Auth0 UI for errors.`, a.GetName()),
+				)
+			}
+
+			if strings.ToLower(a.GetStatus()) != "built" {
 				return resource.RetryableError(
-					fmt.Errorf(`expected action status %q to equal "built"`, action.GetStatus()),
+					fmt.Errorf(`Expected action %q status %q to equal "built"`, a.GetName(), a.GetStatus()),
 				)
 			}
 
 			return nil
 		})
+
 		if err != nil {
-			return fmt.Errorf("action never reached built state: %w", err)
+			return fmt.Errorf(`Action %q never reached built state: %w`, d.Get("name"), err)
 		}
 
 		actionVersion, err := api.Action.Deploy(d.Id())

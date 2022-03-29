@@ -36,7 +36,6 @@ func init() {
 }
 
 func TestAccResourceServer(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -76,7 +75,6 @@ func TestAccResourceServer(t *testing.T) {
 }
 
 const testAccResourceServerConfigCreate = `
-
 resource "auth0_resource_server" "my_resource_server" {
 	name = "Acceptance Test - {{.random}}"
 	identifier = "https://uat.api.alexkappa.com/{{.random}}"
@@ -98,7 +96,6 @@ resource "auth0_resource_server" "my_resource_server" {
 `
 
 const testAccResourceServerConfigUpdate = `
-
 resource "auth0_resource_server" "my_resource_server" {
 	name = "Acceptance Test - {{.random}}"
 	identifier = "https://uat.api.alexkappa.com/{{.random}}"

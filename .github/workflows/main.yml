@@ -23,14 +23,11 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Install the provider
-        run: make build
-
       - name: Start docker containers
         run: docker-compose up -d --build
 
       - name: Run tests
-        run: make testacc OPTS=-coverprofile=c.out
+        run: make test
         env:
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}

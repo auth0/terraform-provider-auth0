@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -135,30 +136,35 @@ func readResourceServer(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("name", resourceServer.Name)
-	d.Set("identifier", resourceServer.Identifier)
-	d.Set("scopes", func() []map[string]interface{} {
-		scopes := make([]map[string]interface{}, len(resourceServer.Scopes))
-		for index, scope := range resourceServer.Scopes {
-			scopes[index] = map[string]interface{}{
-				"value":       scope.Value,
-				"description": scope.Description,
+	result := multierror.Append(
+		d.Set("name", resourceServer.Name),
+		d.Set("identifier", resourceServer.Identifier),
+		d.Set("scopes", func() []map[string]interface{} {
+			scopes := make([]map[string]interface{}, len(resourceServer.Scopes))
+			for index, scope := range resourceServer.Scopes {
+				scopes[index] = map[string]interface{}{
+					"value":       scope.Value,
+					"description": scope.Description,
+				}
 			}
-		}
-		return scopes
-	}())
-	d.Set("signing_alg", resourceServer.SigningAlgorithm)
-	d.Set("signing_secret", resourceServer.SigningSecret)
-	d.Set("allow_offline_access", resourceServer.AllowOfflineAccess)
-	d.Set("token_lifetime", resourceServer.TokenLifetime)
-	d.Set("token_lifetime_for_web", resourceServer.TokenLifetimeForWeb)
-	d.Set("skip_consent_for_verifiable_first_party_clients", resourceServer.SkipConsentForVerifiableFirstPartyClients)
-	d.Set("verification_location", resourceServer.VerificationLocation)
-	d.Set("options", resourceServer.Options)
-	d.Set("enforce_policies", resourceServer.EnforcePolicies)
-	d.Set("token_dialect", resourceServer.TokenDialect)
+			return scopes
+		}()),
+		d.Set("signing_alg", resourceServer.SigningAlgorithm),
+		d.Set("signing_secret", resourceServer.SigningSecret),
+		d.Set("allow_offline_access", resourceServer.AllowOfflineAccess),
+		d.Set("token_lifetime", resourceServer.TokenLifetime),
+		d.Set("token_lifetime_for_web", resourceServer.TokenLifetimeForWeb),
+		d.Set(
+			"skip_consent_for_verifiable_first_party_clients",
+			resourceServer.SkipConsentForVerifiableFirstPartyClients,
+		),
+		d.Set("verification_location", resourceServer.VerificationLocation),
+		d.Set("options", resourceServer.Options),
+		d.Set("enforce_policies", resourceServer.EnforcePolicies),
+		d.Set("token_dialect", resourceServer.TokenDialect),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateResourceServer(d *schema.ResourceData, m interface{}) error {

@@ -131,45 +131,50 @@ func readUser(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("user_id", user.ID)
-	d.Set("username", user.Username)
-	d.Set("name", user.Name)
-	d.Set("family_name", user.FamilyName)
-	d.Set("given_name", user.GivenName)
-	d.Set("nickname", user.Nickname)
-	d.Set("email", user.Email)
-	d.Set("email_verified", user.EmailVerified)
-	d.Set("verify_email", user.VerifyEmail)
-	d.Set("phone_number", user.PhoneNumber)
-	d.Set("phone_verified", user.PhoneVerified)
-	d.Set("blocked", user.Blocked)
-	d.Set("picture", user.Picture)
+	result := multierror.Append(
+		d.Set("user_id", user.ID),
+		d.Set("username", user.Username),
+		d.Set("name", user.Name),
+		d.Set("family_name", user.FamilyName),
+		d.Set("given_name", user.GivenName),
+		d.Set("nickname", user.Nickname),
+		d.Set("email", user.Email),
+		d.Set("email_verified", user.EmailVerified),
+		d.Set("verify_email", user.VerifyEmail),
+		d.Set("phone_number", user.PhoneNumber),
+		d.Set("phone_verified", user.PhoneVerified),
+		d.Set("blocked", user.Blocked),
+		d.Set("picture", user.Picture),
+	)
 
 	userMeta, err := structure.FlattenJsonToString(user.UserMetadata)
 	if err != nil {
 		return err
 	}
-	d.Set("user_metadata", userMeta)
+	result = multierror.Append(result, d.Set("user_metadata", userMeta))
 
 	appMeta, err := structure.FlattenJsonToString(user.AppMetadata)
 	if err != nil {
 		return err
 	}
-	d.Set("app_metadata", appMeta)
+	result = multierror.Append(result, d.Set("app_metadata", appMeta))
 
 	roleList, err := api.User.Roles(d.Id())
 	if err != nil {
 		return err
 	}
-	d.Set("roles", func() []interface{} {
-		var roles []interface{}
-		for _, role := range roleList.Roles {
-			roles = append(roles, auth0.StringValue(role.ID))
-		}
-		return roles
-	}())
+	result = multierror.Append(
+		result,
+		d.Set("roles", func() []interface{} {
+			var roles []interface{}
+			for _, role := range roleList.Roles {
+				roles = append(roles, auth0.StringValue(role.ID))
+			}
+			return roles
+		}()),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func createUser(d *schema.ResourceData, m interface{}) error {

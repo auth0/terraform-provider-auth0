@@ -34,7 +34,10 @@ func TestAccDataClientByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfig, rand), // must initialize resource before reading with data source
+				Config: random.Template(testAccClientConfig, rand),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
+				), // check that the client got created correctly before using the data source
 			},
 			{
 				Config: random.Template(fmt.Sprintf(testAccDataClientConfigByName, testAccClientConfig), rand),
@@ -44,7 +47,6 @@ func TestAccDataClientByName(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_client.test", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "app_type", "non_interactive"), // Arbitrary property selection
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
-					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret"),
 				),
 			},
 		},
@@ -62,6 +64,9 @@ func TestAccDataClientById(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfig, rand),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
+				), // check that the client got created correctly before using the data source
 			},
 			{
 				Config: random.Template(fmt.Sprintf(testAccDataClientConfigById, testAccClientConfig), rand),
@@ -70,7 +75,6 @@ func TestAccDataClientById(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
-					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret"),
 				),
 			},
 		},

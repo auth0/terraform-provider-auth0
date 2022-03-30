@@ -31,7 +31,6 @@ func TestAccDataGlobalClient(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_global_client.global", "client_id"),
 					resource.TestCheckResourceAttr("data.auth0_global_client.global", "app_type", ""),
 					resource.TestCheckResourceAttr("data.auth0_global_client.global", "name", "All Applications"),
-					resource.TestCheckNoResourceAttr("data.auth0_global_client.global", "client_secret"),
 				),
 			},
 		},

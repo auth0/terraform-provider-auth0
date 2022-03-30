@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -157,17 +158,18 @@ func readAction(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("name", action.Name)
-	d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers))
-	d.Set("code", action.Code)
-	d.Set("dependencies", flattenActionDependencies(action.Dependencies))
-	d.Set("runtime", action.Runtime)
-
+	result := multierror.Append(
+		d.Set("name", action.Name),
+		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
+		d.Set("code", action.Code),
+		d.Set("dependencies", flattenActionDependencies(action.Dependencies)),
+		d.Set("runtime", action.Runtime),
+	)
 	if action.DeployedVersion != nil {
-		d.Set("version_id", action.DeployedVersion.GetID())
+		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateAction(d *schema.ResourceData, m interface{}) error {
@@ -213,7 +215,9 @@ func deployAction(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 
-		d.Set("version_id", actionVersion.GetID())
+		if err := d.Set("version_id", actionVersion.GetID()); err != nil {
+			return err
+		}
 	}
 
 	return nil

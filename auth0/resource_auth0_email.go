@@ -5,12 +5,12 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func newEmail() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createEmail,
 		Read:   readEmail,
 		Update: updateEmail,
@@ -18,7 +18,6 @@ func newEmail() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -94,18 +93,20 @@ func newEmail() *schema.Resource {
 }
 
 func createEmail(d *schema.ResourceData, m interface{}) error {
-	e := buildEmail(d)
+	email := buildEmail(d)
 	api := m.(*management.Management)
-	if err := api.Email.Create(e); err != nil {
+	if err := api.Email.Create(email); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(e.Name))
+
+	d.SetId(auth0.StringValue(email.Name))
+
 	return readEmail(d, m)
 }
 
 func readEmail(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	e, err := api.Email.Read()
+	email, err := api.Email.Read()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -116,12 +117,15 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(auth0.StringValue(e.Name))
-	d.Set("name", e.Name)
-	d.Set("enabled", e.Enabled)
-	d.Set("default_from_address", e.DefaultFromAddress)
+	d.SetId(auth0.StringValue(email.Name))
 
-	if credentials := e.Credentials; credentials != nil {
+	result := multierror.Append(
+		d.Set("name", email.Name),
+		d.Set("enabled", email.Enabled),
+		d.Set("default_from_address", email.DefaultFromAddress),
+	)
+
+	if credentials := email.Credentials; credentials != nil {
 		credentialsMap := make(map[string]interface{})
 		credentialsMap["api_user"] = credentials.APIUser
 		credentialsMap["api_key"] = d.Get("credentials.0.api_key")
@@ -133,26 +137,25 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 		credentialsMap["smtp_port"] = credentials.SMTPPort
 		credentialsMap["smtp_user"] = credentials.SMTPUser
 		credentialsMap["smtp_pass"] = d.Get("credentials.0.smtp_pass")
-		d.Set("credentials", []map[string]interface{}{credentialsMap})
+		result = multierror.Append(result, d.Set("credentials", []map[string]interface{}{credentialsMap}))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateEmail(d *schema.ResourceData, m interface{}) error {
-	e := buildEmail(d)
+	email := buildEmail(d)
 	api := m.(*management.Management)
-	err := api.Email.Update(e)
-	if err != nil {
+	if err := api.Email.Update(email); err != nil {
 		return err
 	}
+
 	return readEmail(d, m)
 }
 
 func deleteEmail(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Email.Delete()
-	if err != nil {
+	if err := api.Email.Delete(); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -160,19 +163,19 @@ func deleteEmail(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
 func buildEmail(d *schema.ResourceData) *management.Email {
-	e := &management.Email{
+	email := &management.Email{
 		Name:               String(d, "name"),
 		Enabled:            Bool(d, "enabled"),
 		DefaultFromAddress: String(d, "default_from_address"),
 	}
 
 	List(d, "credentials").Elem(func(d ResourceData) {
-		// e.Credentials = buildEmailCredentials(v.(map[string]interface{}))
-		e.Credentials = &management.EmailCredentials{
+		email.Credentials = &management.EmailCredentials{
 			APIUser:         String(d, "api_user"),
 			APIKey:          String(d, "api_key"),
 			AccessKeyID:     String(d, "access_key_id"),
@@ -186,20 +189,5 @@ func buildEmail(d *schema.ResourceData) *management.Email {
 		}
 	})
 
-	return e
-}
-
-func buildEmailCredentials(m map[string]interface{}) *management.EmailCredentials {
-	return &management.EmailCredentials{
-		APIUser:         String(MapData(m), "api_user"),
-		APIKey:          String(MapData(m), "api_key"),
-		AccessKeyID:     String(MapData(m), "access_key_id"),
-		SecretAccessKey: String(MapData(m), "secret_access_key"),
-		Region:          String(MapData(m), "region"),
-		Domain:          String(MapData(m), "domain"),
-		SMTPHost:        String(MapData(m), "smtp_host"),
-		SMTPPort:        Int(MapData(m), "smtp_port"),
-		SMTPUser:        String(MapData(m), "smtp_user"),
-		SMTPPass:        String(MapData(m), "smtp_pass"),
-	}
+	return email
 }

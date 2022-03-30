@@ -21,7 +21,6 @@ func init() {
 }
 
 func TestAccEmail(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),

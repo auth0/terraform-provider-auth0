@@ -26,7 +26,6 @@ func init() {
 }
 
 func TestAccEmailTemplate(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),
@@ -50,7 +49,6 @@ func TestAccEmailTemplate(t *testing.T) {
 }
 
 const testAccEmailTemplateConfig = `
-
 resource "auth0_email" "my_email_provider" {
 	name = "ses"
 	enabled = true

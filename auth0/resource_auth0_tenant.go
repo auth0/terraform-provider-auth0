@@ -4,16 +4,16 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	v "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
+	internalValidation "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
 )
 
 func newTenant() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createTenant,
 		Read:   readTenant,
 		Update: updateTenant,
@@ -21,7 +21,6 @@ func newTenant() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"change_password": {
 				Type:     schema.TypeList,
@@ -234,7 +233,7 @@ func newTenant() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				ValidateFunc: validation.All(
-					v.IsURLWithNoFragment,
+					internalValidation.IsURLWithNoFragment,
 					validation.IsURLWithScheme([]string{"https"}),
 				),
 			},
@@ -249,7 +248,7 @@ func createTenant(d *schema.ResourceData, m interface{}) error {
 
 func readTenant(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	t, err := api.Tenant.Read()
+	tenant, err := api.Tenant.Read()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -260,37 +259,36 @@ func readTenant(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("change_password", flattenTenantChangePassword(t.ChangePassword))
-	d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(t.GuardianMFAPage))
+	result := multierror.Append(
+		d.Set("change_password", flattenTenantChangePassword(tenant.ChangePassword)),
+		d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GuardianMFAPage)),
+		d.Set("default_audience", tenant.DefaultAudience),
+		d.Set("default_directory", tenant.DefaultDirectory),
+		d.Set("default_redirection_uri", tenant.DefaultRedirectionURI),
+		d.Set("friendly_name", tenant.FriendlyName),
+		d.Set("picture_url", tenant.PictureURL),
+		d.Set("support_email", tenant.SupportEmail),
+		d.Set("support_url", tenant.SupportURL),
+		d.Set("allowed_logout_urls", tenant.AllowedLogoutURLs),
+		d.Set("session_lifetime", tenant.SessionLifetime),
+		d.Set("idle_session_lifetime", tenant.IdleSessionLifetime),
+		d.Set("sandbox_version", tenant.SandboxVersion),
+		d.Set("enabled_locales", tenant.EnabledLocales),
+		d.Set("error_page", flattenTenantErrorPage(tenant.ErrorPage)),
+		d.Set("flags", flattenTenantFlags(tenant.Flags)),
+		d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin)),
+	)
 
-	d.Set("default_audience", t.DefaultAudience)
-	d.Set("default_directory", t.DefaultDirectory)
-	d.Set("default_redirection_uri", t.DefaultRedirectionURI)
-
-	d.Set("friendly_name", t.FriendlyName)
-	d.Set("picture_url", t.PictureURL)
-	d.Set("support_email", t.SupportEmail)
-	d.Set("support_url", t.SupportURL)
-	d.Set("allowed_logout_urls", t.AllowedLogoutURLs)
-	d.Set("session_lifetime", t.SessionLifetime)
-	d.Set("idle_session_lifetime", t.IdleSessionLifetime)
-	d.Set("sandbox_version", t.SandboxVersion)
-	d.Set("enabled_locales", t.EnabledLocales)
-
-	d.Set("error_page", flattenTenantErrorPage(t.ErrorPage))
-	d.Set("flags", flattenTenantFlags(t.Flags))
-	d.Set("universal_login", flattenTenantUniversalLogin(t.UniversalLogin))
-
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateTenant(d *schema.ResourceData, m interface{}) error {
-	t := buildTenant(d)
+	tenant := buildTenant(d)
 	api := m.(*management.Management)
-	err := api.Tenant.Update(t)
-	if err != nil {
+	if err := api.Tenant.Update(tenant); err != nil {
 		return err
 	}
+
 	return readTenant(d, m)
 }
 
@@ -300,7 +298,7 @@ func deleteTenant(d *schema.ResourceData, m interface{}) error {
 }
 
 func buildTenant(d *schema.ResourceData) *management.Tenant {
-	t := &management.Tenant{
+	tenant := &management.Tenant{
 		DefaultAudience:       String(d, "default_audience"),
 		DefaultDirectory:      String(d, "default_directory"),
 		DefaultRedirectionURI: String(d, "default_redirection_uri"),
@@ -320,5 +318,5 @@ func buildTenant(d *schema.ResourceData) *management.Tenant {
 		UniversalLogin:        expandTenantUniversalLogin(d),
 	}
 
-	return t
+	return tenant
 }

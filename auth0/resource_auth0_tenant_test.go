@@ -8,7 +8,6 @@ import (
 )
 
 func TestAccTenant(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),
@@ -105,7 +104,6 @@ resource "auth0_tenant" "my_tenant" {
 `
 
 const testAccTenantConfigUpdate = `
-
 resource "auth0_tenant" "my_tenant" {
 	change_password {
 		enabled = true

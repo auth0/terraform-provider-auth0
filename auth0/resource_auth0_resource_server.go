@@ -6,22 +6,20 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func newResourceServer() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createResourceServer,
 		Read:   readResourceServer,
 		Update: updateResourceServer,
 		Delete: deleteResourceServer,
-
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -114,18 +112,20 @@ func newResourceServer() *schema.Resource {
 }
 
 func createResourceServer(d *schema.ResourceData, m interface{}) error {
-	s := expandResourceServer(d)
+	resourceServer := expandResourceServer(d)
 	api := m.(*management.Management)
-	if err := api.ResourceServer.Create(s); err != nil {
+	if err := api.ResourceServer.Create(resourceServer); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(s.ID))
+
+	d.SetId(auth0.StringValue(resourceServer.ID))
+
 	return readResourceServer(d, m)
 }
 
 func readResourceServer(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	s, err := api.ResourceServer.Read(d.Id())
+	resourceServer, err := api.ResourceServer.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -136,46 +136,52 @@ func readResourceServer(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(auth0.StringValue(s.ID))
-	d.Set("name", s.Name)
-	d.Set("identifier", s.Identifier)
-	d.Set("scopes", func() (m []map[string]interface{}) {
-		for _, scope := range s.Scopes {
-			m = append(m, map[string]interface{}{
-				"value":       scope.Value,
-				"description": scope.Description,
-			})
-		}
-		return m
-	}())
-	d.Set("signing_alg", s.SigningAlgorithm)
-	d.Set("signing_secret", s.SigningSecret)
-	d.Set("allow_offline_access", s.AllowOfflineAccess)
-	d.Set("token_lifetime", s.TokenLifetime)
-	d.Set("token_lifetime_for_web", s.TokenLifetimeForWeb)
-	d.Set("skip_consent_for_verifiable_first_party_clients", s.SkipConsentForVerifiableFirstPartyClients)
-	d.Set("verification_location", s.VerificationLocation)
-	d.Set("options", s.Options)
-	d.Set("enforce_policies", s.EnforcePolicies)
-	d.Set("token_dialect", s.TokenDialect)
-	return nil
+	result := multierror.Append(
+		d.Set("name", resourceServer.Name),
+		d.Set("identifier", resourceServer.Identifier),
+		d.Set("scopes", func() []map[string]interface{} {
+			scopes := make([]map[string]interface{}, len(resourceServer.Scopes))
+			for index, scope := range resourceServer.Scopes {
+				scopes[index] = map[string]interface{}{
+					"value":       scope.Value,
+					"description": scope.Description,
+				}
+			}
+			return scopes
+		}()),
+		d.Set("signing_alg", resourceServer.SigningAlgorithm),
+		d.Set("signing_secret", resourceServer.SigningSecret),
+		d.Set("allow_offline_access", resourceServer.AllowOfflineAccess),
+		d.Set("token_lifetime", resourceServer.TokenLifetime),
+		d.Set("token_lifetime_for_web", resourceServer.TokenLifetimeForWeb),
+		d.Set(
+			"skip_consent_for_verifiable_first_party_clients",
+			resourceServer.SkipConsentForVerifiableFirstPartyClients,
+		),
+		d.Set("verification_location", resourceServer.VerificationLocation),
+		d.Set("options", resourceServer.Options),
+		d.Set("enforce_policies", resourceServer.EnforcePolicies),
+		d.Set("token_dialect", resourceServer.TokenDialect),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func updateResourceServer(d *schema.ResourceData, m interface{}) error {
-	s := expandResourceServer(d)
-	s.Identifier = nil
+	resourceServer := expandResourceServer(d)
+	resourceServer.Identifier = nil
+
 	api := m.(*management.Management)
-	err := api.ResourceServer.Update(d.Id(), s)
-	if err != nil {
+	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
 		return err
 	}
+
 	return readResourceServer(d, m)
 }
 
 func deleteResourceServer(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.ResourceServer.Delete(d.Id())
-	if err != nil {
+	if err := api.ResourceServer.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -183,12 +189,12 @@ func deleteResourceServer(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
 func expandResourceServer(d *schema.ResourceData) *management.ResourceServer {
-
-	s := &management.ResourceServer{
+	resourceServer := &management.ResourceServer{
 		Name:                 String(d, "name"),
 		Identifier:           String(d, "identifier"),
 		SigningAlgorithm:     String(d, "signing_alg"),
@@ -200,16 +206,15 @@ func expandResourceServer(d *schema.ResourceData) *management.ResourceServer {
 		Options:              Map(d, "options"),
 		EnforcePolicies:      Bool(d, "enforce_policies"),
 		TokenDialect:         String(d, "token_dialect", IsNewResource(), HasChange()),
-
 		SkipConsentForVerifiableFirstPartyClients: Bool(d, "skip_consent_for_verifiable_first_party_clients"),
 	}
 
 	Set(d, "scopes").Elem(func(d ResourceData) {
-		s.Scopes = append(s.Scopes, &management.ResourceServerScope{
+		resourceServer.Scopes = append(resourceServer.Scopes, &management.ResourceServerScope{
 			Value:       String(d, "value"),
 			Description: String(d, "description"),
 		})
 	})
 
-	return s
+	return resourceServer
 }

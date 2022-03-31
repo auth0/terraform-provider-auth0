@@ -10,7 +10,6 @@ import (
 
 func newRole() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createRole,
 		Update: updateRole,
 		Read:   readRole,
@@ -18,7 +17,6 @@ func newRole() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -56,16 +54,16 @@ func newRole() *schema.Resource {
 }
 
 func createRole(d *schema.ResourceData, m interface{}) error {
-
-	c := expandRole(d)
+	role := expandRole(d)
 	api := m.(*management.Management)
-	if err := api.Role.Create(c); err != nil {
+	if err := api.Role.Create(role); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ID))
+
+	d.SetId(auth0.StringValue(role.ID))
 
 	// Enable partial state mode. Sub-resources can potentially cause partial
-	// state. Therefore we must explicitly tell Terraform what is safe to
+	// state. Therefore, we must explicitly tell Terraform what is safe to
 	// persist and what is not.
 	//
 	// See: https://www.terraform.io/docs/extend/writing-custom-providers.html
@@ -73,8 +71,8 @@ func createRole(d *schema.ResourceData, m interface{}) error {
 	if err := assignRolePermissions(d, m); err != nil {
 		return err
 	}
-	// We succeeded, disable partial mode. This causes Terraform to save
-	// all fields again.
+	// We succeeded, disable partial mode.
+	// This causes Terraform to save all fields again.
 	d.Partial(false)
 
 	return readRole(d, m)
@@ -82,7 +80,7 @@ func createRole(d *schema.ResourceData, m interface{}) error {
 
 func readRole(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.Role.Read(d.Id())
+	role, err := api.Role.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -93,22 +91,22 @@ func readRole(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(c.GetID())
-	d.Set("name", c.Name)
-	d.Set("description", c.Description)
+	d.SetId(role.GetID())
+
+	d.Set("name", role.Name)
+	d.Set("description", role.Description)
 
 	var permissions []*management.Permission
-
 	var page int
 	for {
-		l, err := api.Role.Permissions(d.Id(), management.Page(page))
+		permissionList, err := api.Role.Permissions(d.Id(), management.Page(page))
 		if err != nil {
 			return err
 		}
-		for _, permission := range l.Permissions {
+		for _, permission := range permissionList.Permissions {
 			permissions = append(permissions, permission)
 		}
-		if !l.HasNext() {
+		if !permissionList.HasNext() {
 			break
 		}
 		page++
@@ -120,24 +118,24 @@ func readRole(d *schema.ResourceData, m interface{}) error {
 }
 
 func updateRole(d *schema.ResourceData, m interface{}) error {
-	c := expandRole(d)
+	role := expandRole(d)
 	api := m.(*management.Management)
-	err := api.Role.Update(d.Id(), c)
-	if err != nil {
+	if err := api.Role.Update(d.Id(), role); err != nil {
 		return err
 	}
+
 	d.Partial(true)
 	if err := assignRolePermissions(d, m); err != nil {
 		return err
 	}
 	d.Partial(false)
+
 	return readRole(d, m)
 }
 
 func deleteRole(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Role.Delete(d.Id())
-	if err != nil {
+	if err := api.Role.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -145,7 +143,8 @@ func deleteRole(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
 func expandRole(d *schema.ResourceData) *management.Role {
@@ -156,7 +155,6 @@ func expandRole(d *schema.ResourceData) *management.Role {
 }
 
 func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
-
 	add, rm := Diff(d, "permissions")
 
 	var addPermissions []*management.Permission
@@ -180,30 +178,29 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
 
 	if len(rmPermissions) > 0 {
-		err := api.Role.RemovePermissions(d.Id(), rmPermissions)
-		if err != nil {
+		if err := api.Role.RemovePermissions(d.Id(), rmPermissions); err != nil {
 			return err
 		}
 	}
 
 	if len(addPermissions) > 0 {
-		err := api.Role.AssociatePermissions(d.Id(), addPermissions)
-		if err != nil {
+		if err := api.Role.AssociatePermissions(d.Id(), addPermissions); err != nil {
 			return err
 		}
 	}
 
 	d.SetPartial("permissions")
+
 	return nil
 }
 
 func flattenRolePermissions(permissions []*management.Permission) []interface{} {
-	var v []interface{}
+	var result []interface{}
 	for _, permission := range permissions {
-		v = append(v, map[string]interface{}{
+		result = append(result, map[string]interface{}{
 			"name":                       permission.Name,
 			"resource_server_identifier": permission.ResourceServerIdentifier,
 		})
 	}
-	return v
+	return result
 }

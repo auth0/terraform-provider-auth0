@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -90,18 +91,20 @@ func readCustomDomain(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("domain", customDomain.Domain)
-	d.Set("type", customDomain.Type)
-	d.Set("primary", customDomain.Primary)
-	d.Set("status", customDomain.Status)
+	result := multierror.Append(
+		d.Set("domain", customDomain.Domain),
+		d.Set("type", customDomain.Type),
+		d.Set("primary", customDomain.Primary),
+		d.Set("status", customDomain.Status),
+	)
 
 	if customDomain.Verification != nil {
-		d.Set("verification", []map[string]interface{}{
+		result = multierror.Append(result, d.Set("verification", []map[string]interface{}{
 			{"methods": customDomain.Verification.Methods},
-		})
+		}))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func deleteCustomDomain(d *schema.ResourceData, m interface{}) error {

@@ -8,7 +8,6 @@ import (
 )
 
 func TestAccGuardian(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),
@@ -138,7 +137,6 @@ resource "auth0_guardian" "foo" {
 `
 
 const testAccConfigureCustomPhone = `
-
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   phone {
@@ -146,11 +144,10 @@ resource "auth0_guardian" "foo" {
 	message_types = ["sms"]
 	options{
 	}
-	}
+  }
 }
 `
 const testAccConfigureTwilio = `
-
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   phone {
@@ -164,18 +161,17 @@ resource "auth0_guardian" "foo" {
 		auth_token = "bar"
 		sid = "foo"
 	}
-}
+  }
 }
 `
-const testAccConfigureTwilioUpdate = `
 
+const testAccConfigureTwilioUpdate = `
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
 }
 `
 
 const testAccConfigureAuth0 = `
-
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   phone {
@@ -188,15 +184,14 @@ resource "auth0_guardian" "foo" {
 }
 }
 `
-const testAccConfigureNoPhone = `
 
+const testAccConfigureNoPhone = `
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
 }
 `
 
 const testAccConfigureEmail = `
-
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   email  = true
@@ -204,7 +199,6 @@ resource "auth0_guardian" "foo" {
 `
 
 const testAccConfigureEmailUpdate = `
-
 resource "auth0_guardian" "foo" {
   policy = "all-applications"
   email  = false
@@ -212,7 +206,6 @@ resource "auth0_guardian" "foo" {
 `
 
 const testAccConfigureOTP = `
-
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	otp  = true
@@ -220,7 +213,6 @@ resource "auth0_guardian" "foo" {
 `
 
 const testAccConfigureOTPUpdate = `
-
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	otp  = false

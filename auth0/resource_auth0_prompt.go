@@ -5,15 +5,14 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func newPrompt() *schema.Resource {
-
 	return &schema.Resource{
-
 		Create: createPrompt,
 		Read:   readPrompt,
 		Update: updatePrompt,
@@ -21,7 +20,6 @@ func newPrompt() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"universal_login_experience": {
 				Type:     schema.TypeString,
@@ -45,7 +43,7 @@ func createPrompt(d *schema.ResourceData, m interface{}) error {
 
 func readPrompt(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	p, err := api.Prompt.Read()
+	prompt, err := api.Prompt.Read()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -55,18 +53,22 @@ func readPrompt(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
-	d.Set("universal_login_experience", p.UniversalLoginExperience)
-	d.Set("identifier_first", p.IdentifierFirst)
-	return nil
+
+	result := multierror.Append(
+		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
+		d.Set("identifier_first", prompt.IdentifierFirst),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func updatePrompt(d *schema.ResourceData, m interface{}) error {
-	p := buildPrompt(d)
+	prompt := buildPrompt(d)
 	api := m.(*management.Management)
-	err := api.Prompt.Update(p)
-	if err != nil {
+	if err := api.Prompt.Update(prompt); err != nil {
 		return err
 	}
+
 	return readPrompt(d, m)
 }
 

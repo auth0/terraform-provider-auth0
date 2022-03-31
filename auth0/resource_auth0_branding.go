@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -97,10 +98,16 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("favicon_url", branding.FaviconURL)
-	d.Set("logo_url", branding.LogoURL)
-	d.Set("colors", flattenBrandingColors(branding.Colors))
-	d.Set("font", flattenBrandingFont(branding.Font))
+	result := multierror.Append(
+		d.Set("favicon_url", branding.FaviconURL),
+		d.Set("logo_url", branding.LogoURL),
+	)
+	if _, ok := d.GetOk("colors"); ok {
+		result = multierror.Append(result, d.Set("colors", flattenBrandingColors(branding.Colors)))
+	}
+	if _, ok := d.GetOk("font"); ok {
+		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.Font)))
+	}
 
 	tenant, err := api.Tenant.Read()
 	if err != nil {
@@ -114,7 +121,7 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateBranding(d *schema.ResourceData, m interface{}) error {
@@ -200,31 +207,39 @@ func setUniversalLogin(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("universal_login", flattenBrandingUniversalLogin(universalLogin))
-	return nil
+	return d.Set("universal_login", flattenBrandingUniversalLogin(universalLogin))
 }
 
 func flattenBrandingColors(brandingColors *management.BrandingColors) []interface{} {
-	m := make(map[string]interface{})
-	if brandingColors != nil {
-		m["page_background"] = brandingColors.PageBackground
-		m["primary"] = brandingColors.Primary
+	if brandingColors == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"page_background": brandingColors.PageBackground,
+			"primary":         brandingColors.Primary,
+		},
+	}
 }
 
 func flattenBrandingUniversalLogin(brandingUniversalLogin *management.BrandingUniversalLogin) []interface{} {
-	m := make(map[string]interface{})
-	if brandingUniversalLogin != nil {
-		m["body"] = brandingUniversalLogin.Body
+	if brandingUniversalLogin == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"body": brandingUniversalLogin.Body,
+		},
+	}
 }
 
 func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
-	m := make(map[string]interface{})
-	if brandingFont != nil {
-		m["url"] = brandingFont.URL
+	if brandingFont == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"url": brandingFont.URL,
+		},
+	}
 }

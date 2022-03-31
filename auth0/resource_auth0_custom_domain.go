@@ -11,14 +11,12 @@ import (
 
 func newCustomDomain() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createCustomDomain,
 		Read:   readCustomDomain,
 		Delete: deleteCustomDomain,
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"domain": {
 				Type:     schema.TypeString,
@@ -68,18 +66,20 @@ func newCustomDomain() *schema.Resource {
 }
 
 func createCustomDomain(d *schema.ResourceData, m interface{}) error {
-	c := buildCustomDomain(d)
+	customDomain := buildCustomDomain(d)
 	api := m.(*management.Management)
-	if err := api.CustomDomain.Create(c); err != nil {
+	if err := api.CustomDomain.Create(customDomain); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ID))
+
+	d.SetId(auth0.StringValue(customDomain.ID))
+
 	return readCustomDomain(d, m)
 }
 
 func readCustomDomain(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.CustomDomain.Read(d.Id())
+	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -90,15 +90,14 @@ func readCustomDomain(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(auth0.StringValue(c.ID))
-	d.Set("domain", c.Domain)
-	d.Set("type", c.Type)
-	d.Set("primary", c.Primary)
-	d.Set("status", c.Status)
+	d.Set("domain", customDomain.Domain)
+	d.Set("type", customDomain.Type)
+	d.Set("primary", customDomain.Primary)
+	d.Set("status", customDomain.Status)
 
-	if c.Verification != nil {
+	if customDomain.Verification != nil {
 		d.Set("verification", []map[string]interface{}{
-			{"methods": c.Verification.Methods},
+			{"methods": customDomain.Verification.Methods},
 		})
 	}
 
@@ -107,8 +106,7 @@ func readCustomDomain(d *schema.ResourceData, m interface{}) error {
 
 func deleteCustomDomain(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.CustomDomain.Delete(d.Id())
-	if err != nil {
+	if err := api.CustomDomain.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -116,7 +114,8 @@ func deleteCustomDomain(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
 func buildCustomDomain(d *schema.ResourceData) *management.CustomDomain {

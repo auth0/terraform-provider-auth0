@@ -99,8 +99,13 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 
 	d.Set("favicon_url", branding.FaviconURL)
 	d.Set("logo_url", branding.LogoURL)
-	d.Set("colors", flattenBrandingColors(branding.Colors))
-	d.Set("font", flattenBrandingFont(branding.Font))
+
+	if _, ok := d.GetOk("colors"); ok {
+		d.Set("colors", flattenBrandingColors(branding.Colors))
+	}
+	if _, ok := d.GetOk("font"); ok {
+		d.Set("font", flattenBrandingFont(branding.Font))
+	}
 
 	tenant, err := api.Tenant.Read()
 	if err != nil {
@@ -205,26 +210,35 @@ func setUniversalLogin(d *schema.ResourceData, m interface{}) error {
 }
 
 func flattenBrandingColors(brandingColors *management.BrandingColors) []interface{} {
-	m := make(map[string]interface{})
-	if brandingColors != nil {
-		m["page_background"] = brandingColors.PageBackground
-		m["primary"] = brandingColors.Primary
+	if brandingColors == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"page_background": brandingColors.PageBackground,
+			"primary":         brandingColors.Primary,
+		},
+	}
 }
 
 func flattenBrandingUniversalLogin(brandingUniversalLogin *management.BrandingUniversalLogin) []interface{} {
-	m := make(map[string]interface{})
-	if brandingUniversalLogin != nil {
-		m["body"] = brandingUniversalLogin.Body
+	if brandingUniversalLogin == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"body": brandingUniversalLogin.Body,
+		},
+	}
 }
 
 func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
-	m := make(map[string]interface{})
-	if brandingFont != nil {
-		m["url"] = brandingFont.URL
+	if brandingFont == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"url": brandingFont.URL,
+		},
+	}
 }

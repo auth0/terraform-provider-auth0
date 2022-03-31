@@ -51,7 +51,6 @@ func init() {
 }
 
 func TestAccOrganization(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -93,7 +92,6 @@ func TestAccOrganization(t *testing.T) {
 }
 
 const testAccOrganizationAux = `
-
 resource auth0_connection acme {
 	name = "Acceptance-Test-Connection-Acme-{{.random}}"
 	strategy = "auth0"
@@ -106,11 +104,10 @@ resource auth0_connection acmeinc {
 `
 
 const testAccOrganizationCreate = testAccOrganizationAux + `
-
 resource auth0_organization acme {
 	name = "test-{{.random}}"
 	display_name = "Acme Inc. {{.random}}"
-	
+
 	connections {
 		connection_id = auth0_connection.acme.id
 	}
@@ -118,7 +115,6 @@ resource auth0_organization acme {
 `
 
 const testAccOrganizationUpdate = testAccOrganizationAux + `
-
 resource auth0_organization acme {
 	name = "test-{{.random}}"
 	display_name = "Acme Inc. {{.random}}"
@@ -140,7 +136,6 @@ resource auth0_organization acme {
 `
 
 const testAccOrganizationUpdateAgain = testAccOrganizationAux + `
-
 resource auth0_organization acme {
 	name = "test-{{.random}}"
 	display_name = "Acme Inc. {{.random}}"

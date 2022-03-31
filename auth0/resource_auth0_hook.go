@@ -6,13 +6,13 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func newHook() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createHook,
 		Read:   readHook,
 		Update: updateHook,
@@ -20,7 +20,6 @@ func newHook() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:         schema.TypeString,
@@ -72,21 +71,24 @@ func newHook() *schema.Resource {
 }
 
 func createHook(d *schema.ResourceData, m interface{}) error {
-	c := buildHook(d)
+	hook := buildHook(d)
 	api := m.(*management.Management)
-	if err := api.Hook.Create(c); err != nil {
+	if err := api.Hook.Create(hook); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ID))
+
+	d.SetId(auth0.StringValue(hook.ID))
+
 	if err := upsertHookSecrets(d, m); err != nil {
 		return err
 	}
+
 	return readHook(d, m)
 }
 
 func readHook(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.Hook.Read(d.Id())
+	hook, err := api.Hook.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -97,24 +99,28 @@ func readHook(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("name", c.Name)
-	d.Set("dependencies", c.Dependencies)
-	d.Set("script", c.Script)
-	d.Set("trigger_id", c.TriggerID)
-	d.Set("enabled", c.Enabled)
-	return nil
+	result := multierror.Append(
+		d.Set("name", hook.Name),
+		d.Set("dependencies", hook.Dependencies),
+		d.Set("script", hook.Script),
+		d.Set("trigger_id", hook.TriggerID),
+		d.Set("enabled", hook.Enabled),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func updateHook(d *schema.ResourceData, m interface{}) error {
-	c := buildHook(d)
+	hook := buildHook(d)
 	api := m.(*management.Management)
-	err := api.Hook.Update(d.Id(), c)
-	if err != nil {
+	if err := api.Hook.Update(d.Id(), hook); err != nil {
 		return err
 	}
-	if err = upsertHookSecrets(d, m); err != nil {
+
+	if err := upsertHookSecrets(d, m); err != nil {
 		return err
 	}
+
 	return readHook(d, m)
 }
 
@@ -125,6 +131,7 @@ func upsertHookSecrets(d *schema.ResourceData, m interface{}) error {
 		hookSecrets := toHookSecrets(secrets)
 		return api.Hook.ReplaceSecrets(d.Id(), hookSecrets)
 	}
+
 	return nil
 }
 
@@ -140,8 +147,7 @@ func toHookSecrets(val map[string]interface{}) management.HookSecrets {
 
 func deleteHook(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Hook.Delete(d.Id())
-	if err != nil {
+	if err := api.Hook.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -150,11 +156,12 @@ func deleteHook(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
-	return err
+
+	return nil
 }
 
 func buildHook(d *schema.ResourceData) *management.Hook {
-	h := &management.Hook{
+	hook := &management.Hook{
 		Name:      String(d, "name"),
 		Script:    String(d, "script"),
 		TriggerID: String(d, "trigger_id", IsNewResource()),
@@ -163,10 +170,10 @@ func buildHook(d *schema.ResourceData) *management.Hook {
 
 	deps := Map(d, "dependencies")
 	if deps != nil {
-		h.Dependencies = &deps
+		hook.Dependencies = &deps
 	}
 
-	return h
+	return hook
 }
 
 func validateHookNameFunc() schema.SchemaValidateFunc {

@@ -11,16 +11,13 @@ import (
 
 func newTriggerBinding() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createTriggerBinding,
 		Read:   readTriggerBinding,
 		Update: updateTriggerBinding,
 		Delete: deleteTriggerBinding,
-
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"trigger": {
 				Type:     schema.TypeString,
@@ -64,20 +61,21 @@ func newTriggerBinding() *schema.Resource {
 }
 
 func createTriggerBinding(d *schema.ResourceData, m interface{}) error {
-	api := m.(*management.Management)
 	id := d.Get("trigger").(string)
-	b := expandTriggerBindings(d)
-	err := api.Action.UpdateBindings(id, b)
-	if err != nil {
+	triggerBindings := expandTriggerBindings(d)
+	api := m.(*management.Management)
+	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
 		return err
 	}
+
 	d.SetId(id)
+
 	return readTriggerBinding(d, m)
 }
 
 func readTriggerBinding(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	b, err := api.Action.Bindings(d.Id())
+	triggerBindings, err := api.Action.Bindings(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -88,18 +86,16 @@ func readTriggerBinding(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("actions", flattenTriggerBindingActions(b.Bindings))
-
-	return nil
+	return d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings))
 }
 
 func updateTriggerBinding(d *schema.ResourceData, m interface{}) error {
-	b := expandTriggerBindings(d)
+	triggerBindings := expandTriggerBindings(d)
 	api := m.(*management.Management)
-	err := api.Action.UpdateBindings(d.Id(), b)
-	if err != nil {
+	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
 		return err
 	}
+
 	return readTriggerBinding(d, m)
 }
 
@@ -114,12 +110,15 @@ func deleteTriggerBinding(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
+
 	return nil
 }
 
-func expandTriggerBindings(d *schema.ResourceData) (b []*management.ActionBinding) {
+func expandTriggerBindings(d *schema.ResourceData) []*management.ActionBinding {
+	var triggerBindings []*management.ActionBinding
+
 	List(d, "actions").Elem(func(d ResourceData) {
-		b = append(b, &management.ActionBinding{
+		triggerBindings = append(triggerBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
 				Type:  auth0.String("action_id"),
 				Value: String(d, "id"),
@@ -127,15 +126,22 @@ func expandTriggerBindings(d *schema.ResourceData) (b []*management.ActionBindin
 			DisplayName: String(d, "display_name"),
 		})
 	})
-	return
+
+	return triggerBindings
 }
 
-func flattenTriggerBindingActions(bindings []*management.ActionBinding) (r []interface{}) {
-	for _, b := range bindings {
-		r = append(r, map[string]interface{}{
-			"id":           b.Action.GetID(),
-			"display_name": b.GetDisplayName(),
-		})
+func flattenTriggerBindingActions(bindings []*management.ActionBinding) []interface{} {
+	var triggerBindingActions []interface{}
+
+	for _, binding := range bindings {
+		triggerBindingActions = append(
+			triggerBindingActions,
+			map[string]interface{}{
+				"id":           binding.Action.GetID(),
+				"display_name": binding.GetDisplayName(),
+			},
+		)
 	}
-	return
+
+	return triggerBindingActions
 }

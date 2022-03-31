@@ -10,7 +10,6 @@ import (
 )
 
 func TestAccAction(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -48,7 +47,6 @@ func TestAccAction(t *testing.T) {
 }
 
 const testAccActionConfigCreate = `
-
 resource auth0_action my_action {
 	name = "Test Action {{.random}}"
 	supported_triggers {
@@ -64,7 +62,6 @@ resource auth0_action my_action {
 `
 
 const testAccActionConfigUpdate = `
-
 resource auth0_action my_action {
 	name = "Test Action {{.random}}"
 	supported_triggers {
@@ -81,7 +78,6 @@ resource auth0_action my_action {
 `
 
 const testAccActionConfigUpdateAgain = `
-
 resource auth0_action my_action {
 	name = "Test Action {{.random}}"
 	supported_triggers {
@@ -89,8 +85,8 @@ resource auth0_action my_action {
 		version = "v2"
 	}
 	code = <<-EOT
-	exports.onContinuePostLogin = async (event, api) => { 
-		console.log(event) 
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log(event)
 	};"
 	EOT
 	deploy = true

@@ -10,7 +10,6 @@ import (
 )
 
 func TestAccTriggerBinding(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -43,7 +42,6 @@ func TestAccTriggerBinding(t *testing.T) {
 }
 
 const testAccTriggerBindingAction = `
-
 resource auth0_action action_foo {
 	name = "Test Trigger Binding Foo {{.random}}"
 	supported_triggers {
@@ -51,8 +49,8 @@ resource auth0_action action_foo {
 		version = "v2"
 	}
 	code = <<-EOT
-	exports.onContinuePostLogin = async (event, api) => { 
-		console.log("foo") 
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log("foo")
 	};"
 	EOT
 	deploy = true
@@ -65,8 +63,8 @@ resource auth0_action action_bar {
 		version = "v2"
 	}
 	code = <<-EOT
-	exports.onContinuePostLogin = async (event, api) => { 
-		console.log("bar") 
+	exports.onContinuePostLogin = async (event, api) => {
+		console.log("bar")
 	};"
 	EOT
 	deploy = true
@@ -74,7 +72,6 @@ resource auth0_action action_bar {
 `
 
 const testAccTriggerBindingConfigCreate = testAccTriggerBindingAction + `
-
 resource auth0_trigger_binding login_flow {
 	trigger = "post-login"
 	actions {
@@ -89,7 +86,6 @@ resource auth0_trigger_binding login_flow {
 `
 
 const testAccTriggerBindingConfigUpdate = testAccTriggerBindingAction + `
-
 resource auth0_trigger_binding login_flow {
 	trigger = "post-login"
 	actions {

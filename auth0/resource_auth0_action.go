@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -15,7 +16,6 @@ import (
 
 func newAction() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createAction,
 		Read:   readAction,
 		Update: updateAction,
@@ -23,7 +23,6 @@ func newAction() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -129,17 +128,16 @@ func newAction() *schema.Resource {
 }
 
 func createAction(d *schema.ResourceData, m interface{}) error {
+	action := expandAction(d)
 	api := m.(*management.Management)
-	a := expandAction(d)
-	err := api.Action.Create(a)
-	if err != nil {
+	if err := api.Action.Create(action); err != nil {
 		return err
 	}
-	d.SetId(a.GetID())
+
+	d.SetId(action.GetID())
 
 	d.Partial(true)
-	err = deployAction(d, m)
-	if err != nil {
+	if err := deployAction(d, m); err != nil {
 		return err
 	}
 	d.Partial(false)
@@ -149,7 +147,7 @@ func createAction(d *schema.ResourceData, m interface{}) error {
 
 func readAction(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	a, err := api.Action.Read(d.Id())
+	action, err := api.Action.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -160,32 +158,33 @@ func readAction(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("name", a.Name)
-	d.Set("supported_triggers", flattenActionTriggers(a.SupportedTriggers))
-	d.Set("code", a.Code)
-	d.Set("dependencies", flattenActionDependencies(a.Dependencies))
-	d.Set("runtime", a.Runtime)
-
-	if a.DeployedVersion != nil {
-		d.Set("version_id", a.DeployedVersion.GetID())
+	result := multierror.Append(
+		d.Set("name", action.Name),
+		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
+		d.Set("code", action.Code),
+		d.Set("dependencies", flattenActionDependencies(action.Dependencies)),
+		d.Set("runtime", action.Runtime),
+	)
+	if action.DeployedVersion != nil {
+		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateAction(d *schema.ResourceData, m interface{}) error {
-	a := expandAction(d)
+	action := expandAction(d)
 	api := m.(*management.Management)
-	err := api.Action.Update(d.Id(), a)
-	if err != nil {
+	if err := api.Action.Update(d.Id(), action); err != nil {
 		return err
 	}
+
 	d.Partial(true)
-	err = deployAction(d, m)
-	if err != nil {
+	if err := deployAction(d, m); err != nil {
 		return err
 	}
 	d.Partial(false)
+
 	return readAction(d, m)
 }
 
@@ -194,30 +193,33 @@ func deployAction(d *schema.ResourceData, m interface{}) error {
 		api := m.(*management.Management)
 
 		err := resource.Retry(d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-			a, err := api.Action.Read(d.Id())
+			action, err := api.Action.Read(d.Id())
 			if err != nil {
 				return resource.NonRetryableError(err)
 			}
 
-			if strings.ToLower(a.GetStatus()) != "built" {
+			if strings.ToLower(action.GetStatus()) != "built" {
 				return resource.RetryableError(
-					fmt.Errorf(`Expected action status %q to equal "built"`, a.GetStatus()),
+					fmt.Errorf(`expected action status %q to equal "built"`, action.GetStatus()),
 				)
 			}
 
 			return nil
 		})
 		if err != nil {
-			return fmt.Errorf("Action never reached built state. %w", err)
+			return fmt.Errorf("action never reached built state: %w", err)
 		}
 
-		v, err := api.Action.Deploy(d.Id())
+		actionVersion, err := api.Action.Deploy(d.Id())
 		if err != nil {
 			return err
 		}
 
-		d.Set("version_id", v.GetID())
+		if err := d.Set("version_id", actionVersion.GetID()); err != nil {
+			return err
+		}
 	}
+
 	return nil
 }
 
@@ -232,18 +234,19 @@ func deleteAction(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
+
 	return nil
 }
 
 func expandAction(d *schema.ResourceData) *management.Action {
-	a := &management.Action{
+	action := &management.Action{
 		Name:    String(d, "name"),
 		Code:    String(d, "code"),
 		Runtime: String(d, "runtime"),
 	}
 
 	List(d, "supported_triggers").Elem(func(d ResourceData) {
-		a.SupportedTriggers = []*management.ActionTrigger{
+		action.SupportedTriggers = []*management.ActionTrigger{
 			{
 				ID:      String(d, "id"),
 				Version: String(d, "version"),
@@ -252,48 +255,40 @@ func expandAction(d *schema.ResourceData) *management.Action {
 	})
 
 	Set(d, "dependencies").Elem(func(d ResourceData) {
-		a.Dependencies = append(a.Dependencies, &management.ActionDependency{
+		action.Dependencies = append(action.Dependencies, &management.ActionDependency{
 			Name:    String(d, "name"),
 			Version: String(d, "version"),
 		})
 	})
 
 	List(d, "secrets").Elem(func(d ResourceData) {
-		a.Secrets = append(a.Secrets, &management.ActionSecret{
+		action.Secrets = append(action.Secrets, &management.ActionSecret{
 			Name:  String(d, "name"),
 			Value: String(d, "value"),
 		})
 	})
 
-	return a
+	return action
 }
 
-func flattenActionTriggers(triggers []*management.ActionTrigger) (ret []interface{}) {
+func flattenActionTriggers(triggers []*management.ActionTrigger) []interface{} {
+	var result []interface{}
 	for _, trigger := range triggers {
-		ret = append(ret, map[string]interface{}{
+		result = append(result, map[string]interface{}{
 			"id":      trigger.ID,
 			"version": trigger.Version,
 		})
 	}
-	return
+	return result
 }
 
-func flattenActionDependencies(dependencies []*management.ActionDependency) (ret []interface{}) {
+func flattenActionDependencies(dependencies []*management.ActionDependency) []interface{} {
+	var result []interface{}
 	for _, dependency := range dependencies {
-		ret = append(ret, map[string]interface{}{
+		result = append(result, map[string]interface{}{
 			"name":    dependency.Name,
 			"version": dependency.Version,
 		})
 	}
-	return
-}
-
-func flattenActionSecrets(secrets []*management.ActionSecret) (ret []interface{}) {
-	for _, secret := range secrets {
-		ret = append(ret, map[string]interface{}{
-			"name":  secret.Name,
-			"value": secret.Value,
-		})
-	}
-	return
+	return result
 }

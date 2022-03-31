@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -62,11 +63,13 @@ func readClientGrant(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("client_id", clientGrant.ClientID)
-	d.Set("audience", clientGrant.Audience)
-	d.Set("scope", clientGrant.Scope)
+	result := multierror.Append(
+		d.Set("client_id", clientGrant.ClientID),
+		d.Set("audience", clientGrant.Audience),
+		d.Set("scope", clientGrant.Scope),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateClientGrant(d *schema.ResourceData, m interface{}) error {

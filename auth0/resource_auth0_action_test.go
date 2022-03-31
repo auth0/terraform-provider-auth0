@@ -49,7 +49,6 @@ func TestAccAction(t *testing.T) {
 }
 
 func TestAccAction_FailedBuild(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -62,7 +61,9 @@ func TestAccAction_FailedBuild(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
 				),
-				ExpectError: regexp.MustCompile(fmt.Sprintf(`Action "Test Action %s" failed to build.  Check the Auth0 UI for errors.`, rand)),
+				ExpectError: regexp.MustCompile(
+					fmt.Sprintf(`action "Test Action %s" failed to build, check the Auth0 UI for errors`, rand),
+				),
 			},
 		},
 	})
@@ -122,7 +123,6 @@ resource auth0_action my_action {
 // If this is ever fixed in the API, another means of failing the build will
 // need to be used here.
 const testAccActionConfigCreateWithFailedBuild = `
-
 resource auth0_action my_action {
 	name = "Test Action {{.random}}"
 	supported_triggers {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
@@ -13,16 +14,13 @@ import (
 
 func newOrganization() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createOrganization,
 		Read:   readOrganization,
 		Update: updateOrganization,
 		Delete: deleteOrganization,
-
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
@@ -84,16 +82,16 @@ func newOrganization() *schema.Resource {
 }
 
 func createOrganization(d *schema.ResourceData, m interface{}) error {
-	o := expandOrganization(d)
+	organization := buildOrganization(d)
 	api := m.(*management.Management)
-	if err := api.Organization.Create(o); err != nil {
+	if err := api.Organization.Create(organization); err != nil {
 		return err
 	}
-	d.SetId(o.GetID())
+
+	d.SetId(organization.GetID())
 
 	d.Partial(true)
-	err := assignOrganizationConnections(d, m)
-	if err != nil {
+	if err := assignOrganizationConnections(d, m); err != nil {
 		return fmt.Errorf("failed assigning organization connections. %w", err)
 	}
 	d.Partial(false)
@@ -102,28 +100,31 @@ func createOrganization(d *schema.ResourceData, m interface{}) error {
 }
 
 func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err error) {
-
 	api := m.(*management.Management)
 
 	add, rm := Diff(d, "connections")
 
-	add.Elem(func(dd ResourceData) {
-		c := &management.OrganizationConnection{
-			ConnectionID:            String(dd, "connection_id"),
-			AssignMembershipOnLogin: Bool(dd, "assign_membership_on_login"),
+	add.Elem(func(data ResourceData) {
+		organizationConnection := &management.OrganizationConnection{
+			ConnectionID:            String(data, "connection_id"),
+			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
 		}
-		log.Printf("[DEBUG] (+) auth0_organization.%s.connections.%s", d.Id(), c.GetConnectionID())
-		err = api.Organization.AddConnection(d.Id(), c)
+
+		log.Printf("[DEBUG] (+) auth0_organization.%s.connections.%s", d.Id(), organizationConnection.GetConnectionID())
+
+		err = api.Organization.AddConnection(d.Id(), organizationConnection)
 		if err != nil {
 			return
 		}
 	})
 
-	rm.Elem(func(dd ResourceData) {
-		// Take connectionID before it changed (i.e. removed). Therefore we use
-		// GetChange() instead of the typical Get().
-		connectionID, _ := dd.GetChange("connection_id")
+	rm.Elem(func(data ResourceData) {
+		// Take connectionID before it changed (i.e. removed).
+		// Therefore we use GetChange() instead of the typical Get().
+		connectionID, _ := data.GetChange("connection_id")
+
 		log.Printf("[DEBUG] (-) auth0_organization.%s.connections.%s", d.Id(), connectionID.(string))
+
 		err = api.Organization.DeleteConnection(d.Id(), connectionID.(string))
 		if err != nil {
 			return
@@ -131,13 +132,15 @@ func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err e
 	})
 
 	// Update existing connections if any mutable properties have changed.
-	Set(d, "connections", HasChange()).Elem(func(dd ResourceData) {
-		connectionID := dd.Get("connection_id").(string)
-		c := &management.OrganizationConnection{
-			AssignMembershipOnLogin: Bool(dd, "assign_membership_on_login"),
+	Set(d, "connections", HasChange()).Elem(func(data ResourceData) {
+		connectionID := data.Get("connection_id").(string)
+		organizationConnection := &management.OrganizationConnection{
+			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
 		}
+
 		log.Printf("[DEBUG] (~) auth0_organization.%s.connections.%s", d.Id(), connectionID)
-		err = api.Organization.UpdateConnection(d.Id(), connectionID, c)
+
+		err = api.Organization.UpdateConnection(d.Id(), connectionID, organizationConnection)
 		if err != nil {
 			return
 		}
@@ -148,7 +151,7 @@ func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err e
 
 func readOrganization(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	o, err := api.Organization.Read(d.Id())
+	organization, err := api.Organization.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -159,41 +162,31 @@ func readOrganization(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(o.GetID())
-	d.Set("name", o.Name)
-	d.Set("display_name", o.DisplayName)
-	d.Set("branding", flattenOrganizationBranding(o.Branding))
-	d.Set("metadata", o.Metadata)
-
-	l, err := api.Organization.Connections(d.Id())
+	organizationConnectionList, err := api.Organization.Connections(d.Id())
 	if err != nil {
 		return err
 	}
 
-	d.Set("connections", func() (v []interface{}) {
-		for _, connection := range l.OrganizationConnections {
-			v = append(v, &map[string]interface{}{
-				"connection_id":              connection.ConnectionID,
-				"assign_membership_on_login": connection.AssignMembershipOnLogin,
-			})
-		}
-		return
-	}())
+	result := multierror.Append(
+		d.Set("name", organization.Name),
+		d.Set("display_name", organization.DisplayName),
+		d.Set("branding", flattenOrganizationBranding(organization.Branding)),
+		d.Set("metadata", organization.Metadata),
+		d.Set("connections", flattenOrganizationConnections(organizationConnectionList)),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateOrganization(d *schema.ResourceData, m interface{}) error {
-	o := expandOrganization(d)
+	organization := buildOrganization(d)
 	api := m.(*management.Management)
-	err := api.Organization.Update(d.Id(), o)
-	if err != nil {
+	if err := api.Organization.Update(d.Id(), organization); err != nil {
 		return err
 	}
 
 	d.Partial(true)
-	err = assignOrganizationConnections(d, m)
-	if err != nil {
+	if err := assignOrganizationConnections(d, m); err != nil {
 		return fmt.Errorf("failed updating organization connections. %w", err)
 	}
 	d.Partial(false)
@@ -203,8 +196,7 @@ func updateOrganization(d *schema.ResourceData, m interface{}) error {
 
 func deleteOrganization(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Organization.Delete(d.Id())
-	if err != nil {
+	if err := api.Organization.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -212,29 +204,51 @@ func deleteOrganization(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
-func expandOrganization(d *schema.ResourceData) *management.Organization {
-	o := &management.Organization{
+func buildOrganization(d *schema.ResourceData) *management.Organization {
+	organization := &management.Organization{
 		Name:        String(d, "name"),
 		DisplayName: String(d, "display_name"),
 		Metadata:    Map(d, "metadata"),
 	}
+
 	List(d, "branding").Elem(func(d ResourceData) {
-		o.Branding = &management.OrganizationBranding{
+		organization.Branding = &management.OrganizationBranding{
 			LogoURL: String(d, "logo_url"),
 			Colors:  Map(d, "colors"),
 		}
 	})
-	return o
+
+	return organization
 }
 
-func flattenOrganizationBranding(b *management.OrganizationBranding) []interface{} {
-	m := make(map[string]interface{})
-	if b != nil {
-		m["logo_url"] = b.LogoURL
-		m["colors"] = b.Colors
+func flattenOrganizationBranding(organizationBranding *management.OrganizationBranding) []interface{} {
+	if organizationBranding == nil {
+		return nil
 	}
-	return []interface{}{m}
+	return []interface{}{
+		map[string]interface{}{
+			"logo_url": organizationBranding.LogoURL,
+			"colors":   organizationBranding.Colors,
+		},
+	}
+}
+
+func flattenOrganizationConnections(organizationConnectionList *management.OrganizationConnectionList) []interface{} {
+	if organizationConnectionList == nil {
+		return nil
+	}
+
+	connections := make([]interface{}, len(organizationConnectionList.OrganizationConnections))
+	for index, connection := range organizationConnectionList.OrganizationConnections {
+		connections[index] = map[string]interface{}{
+			"connection_id":              connection.ConnectionID,
+			"assign_membership_on_login": connection.AssignMembershipOnLogin,
+		}
+	}
+
+	return connections
 }

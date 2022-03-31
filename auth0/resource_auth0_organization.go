@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
@@ -131,10 +132,10 @@ func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err e
 	})
 
 	// Update existing connections if any mutable properties have changed.
-	Set(d, "connections", HasChange()).Elem(func(dd ResourceData) {
-		connectionID := dd.Get("connection_id").(string)
+	Set(d, "connections", HasChange()).Elem(func(data ResourceData) {
+		connectionID := data.Get("connection_id").(string)
 		organizationConnection := &management.OrganizationConnection{
-			AssignMembershipOnLogin: Bool(dd, "assign_membership_on_login"),
+			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
 		}
 
 		log.Printf("[DEBUG] (~) auth0_organization.%s.connections.%s", d.Id(), connectionID)
@@ -161,21 +162,20 @@ func readOrganization(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(organization.GetID())
-
-	d.Set("name", organization.Name)
-	d.Set("display_name", organization.DisplayName)
-	d.Set("branding", flattenOrganizationBranding(organization.Branding))
-	d.Set("metadata", organization.Metadata)
-
 	organizationConnectionList, err := api.Organization.Connections(d.Id())
 	if err != nil {
 		return err
 	}
 
-	d.Set("connections", flattenOrganizationConnections(organizationConnectionList))
+	result := multierror.Append(
+		d.Set("name", organization.Name),
+		d.Set("display_name", organization.DisplayName),
+		d.Set("branding", flattenOrganizationBranding(organization.Branding)),
+		d.Set("metadata", organization.Metadata),
+		d.Set("connections", flattenOrganizationConnections(organizationConnectionList)),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateOrganization(d *schema.ResourceData, m interface{}) error {
@@ -242,12 +242,12 @@ func flattenOrganizationConnections(organizationConnectionList *management.Organ
 		return nil
 	}
 
-	var connections []interface{}
-	for _, connection := range organizationConnectionList.OrganizationConnections {
-		connections = append(connections, &map[string]interface{}{
+	connections := make([]interface{}, len(organizationConnectionList.OrganizationConnections))
+	for index, connection := range organizationConnectionList.OrganizationConnections {
+		connections[index] = map[string]interface{}{
 			"connection_id":              connection.ConnectionID,
 			"assign_membership_on_login": connection.AssignMembershipOnLogin,
-		})
+		}
 	}
 
 	return connections

@@ -66,6 +66,7 @@ func importPromptCustomText(d *schema.ResourceData, _ interface{}) ([]*schema.Re
 	}
 
 	d.SetId(d.Id())
+
 	d.Set("prompt", prompt)
 	d.Set("language", language)
 
@@ -95,8 +96,7 @@ func readPromptCustomText(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("body", body)
-	return nil
+	return d.Set("body", body)
 }
 
 func updatePromptCustomText(d *schema.ResourceData, m interface{}) error {
@@ -112,8 +112,7 @@ func updatePromptCustomText(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 
-		err := api.Prompt.SetCustomText(prompt, language, body)
-		if err != nil {
+		if err := api.Prompt.SetCustomText(prompt, language, body); err != nil {
 			return err
 		}
 	}
@@ -129,6 +128,7 @@ func deletePromptCustomText(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId("")
+
 	return nil
 }
 
@@ -153,13 +153,13 @@ func getPromptAndLanguage(d *schema.ResourceData) (string, string, error) {
 func marshalCustomTextBody(b map[string]interface{}) (string, error) {
 	bodyBytes, err := json.Marshal(b)
 	if err != nil {
-		return "", fmt.Errorf("Failed to serialize the custom texts to JSON: %w", err)
+		return "", fmt.Errorf("failed to serialize the custom texts to JSON: %w", err)
 	}
 
 	var buffer bytes.Buffer
 	const jsonIndentation = "    "
 	if err := json.Indent(&buffer, bodyBytes, "", jsonIndentation); err != nil {
-		return "", fmt.Errorf("Failed to format the custom texts JSON: %w", err)
+		return "", fmt.Errorf("failed to format the custom texts JSON: %w", err)
 	}
 
 	return buffer.String(), nil

@@ -8,7 +8,6 @@ import (
 )
 
 func TestAccPrompt(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),
@@ -33,7 +32,6 @@ func TestAccPrompt(t *testing.T) {
 }
 
 const testAccPromptCreate = `
-
 resource "auth0_prompt" "prompt" {
   universal_login_experience = "classic"
   identifier_first = false
@@ -41,7 +39,6 @@ resource "auth0_prompt" "prompt" {
 `
 
 const testAccPromptUpdate = `
-
 resource "auth0_prompt" "prompt" {
   universal_login_experience = "new"
   identifier_first = true

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -97,14 +98,15 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("favicon_url", branding.FaviconURL)
-	d.Set("logo_url", branding.LogoURL)
-
+	result := multierror.Append(
+		d.Set("favicon_url", branding.FaviconURL),
+		d.Set("logo_url", branding.LogoURL),
+	)
 	if _, ok := d.GetOk("colors"); ok {
-		d.Set("colors", flattenBrandingColors(branding.Colors))
+		result = multierror.Append(result, d.Set("colors", flattenBrandingColors(branding.Colors)))
 	}
 	if _, ok := d.GetOk("font"); ok {
-		d.Set("font", flattenBrandingFont(branding.Font))
+		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.Font)))
 	}
 
 	tenant, err := api.Tenant.Read()
@@ -119,7 +121,7 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateBranding(d *schema.ResourceData, m interface{}) error {
@@ -205,8 +207,7 @@ func setUniversalLogin(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("universal_login", flattenBrandingUniversalLogin(universalLogin))
-	return nil
+	return d.Set("universal_login", flattenBrandingUniversalLogin(universalLogin))
 }
 
 func flattenBrandingColors(brandingColors *management.BrandingColors) []interface{} {

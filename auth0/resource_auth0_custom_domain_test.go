@@ -26,7 +26,7 @@ func init() {
 			}
 			for _, domain := range domains {
 				log.Printf("[DEBUG] ➝ %s", domain.GetDomain())
-				if strings.Contains(domain.GetDomain(), "auth.uat.alexkappa.com") {
+				if strings.Contains(domain.GetDomain(), "auth.uat.terraform-provider-auth0.com") {
 					if e := api.CustomDomain.Delete(domain.GetID()); e != nil {
 						multierror.Append(err, e)
 					}
@@ -39,7 +39,6 @@ func init() {
 }
 
 func TestAccCustomDomain(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -50,7 +49,7 @@ func TestAccCustomDomain(t *testing.T) {
 			{
 				Config: random.Template(testAccCustomDomain, rand),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain", "{{.random}}.auth.uat.alexkappa.com", rand),
+					random.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain", "{{.random}}.auth.uat.terraform-provider-auth0.com", rand),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 				),
@@ -60,9 +59,8 @@ func TestAccCustomDomain(t *testing.T) {
 }
 
 const testAccCustomDomain = `
-
 resource "auth0_custom_domain" "my_custom_domain" {
-  domain = "{{.random}}.auth.uat.alexkappa.com"
+  domain = "{{.random}}.auth.uat.terraform-provider-auth0.com"
   type = "auth0_managed_certs"
 }
 `

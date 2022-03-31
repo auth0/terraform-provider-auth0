@@ -5,13 +5,13 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func newLogStream() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createLogStream,
 		Read:   readLogStream,
 		Update: updateLogStream,
@@ -181,21 +181,21 @@ func newLogStream() *schema.Resource {
 }
 
 func createLogStream(d *schema.ResourceData, m interface{}) error {
-	ls := expandLogStream(d)
+	logStream := buildLogStream(d)
 
 	api := m.(*management.Management)
-	if err := api.LogStream.Create(ls); err != nil {
+	if err := api.LogStream.Create(logStream); err != nil {
 		return err
 	}
-	d.SetId(ls.GetID())
 
-	// The Management API only allows updating a log stream's status. Therefore
+	d.SetId(logStream.GetID())
+
+	// The Management API only allows updating a log stream's status. Therefore,
 	// if the status field was present in the configuration, we perform an
 	// additional operation to modify it.
-	s := String(d, "status")
-	if s != nil && s != ls.Status {
-		err := api.LogStream.Update(ls.GetID(), &management.LogStream{Status: s})
-		if err != nil {
+	status := String(d, "status")
+	if status != nil && status != logStream.Status {
+		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: status}); err != nil {
 			return err
 		}
 	}
@@ -205,7 +205,7 @@ func createLogStream(d *schema.ResourceData, m interface{}) error {
 
 func readLogStream(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	ls, err := api.LogStream.Read(d.Id())
+	logStream, err := api.LogStream.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -216,29 +216,29 @@ func readLogStream(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.SetId(ls.GetID())
-	d.Set("name", ls.Name)
-	d.Set("status", ls.Status)
-	d.Set("type", ls.Type)
-	d.Set("sink", flattenLogStreamSink(d, ls.Sink))
-	return nil
+	result := multierror.Append(
+		d.Set("name", logStream.Name),
+		d.Set("status", logStream.Status),
+		d.Set("type", logStream.Type),
+		d.Set("sink", flattenLogStreamSink(logStream.Sink)),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func updateLogStream(d *schema.ResourceData, m interface{}) error {
-	ls := expandLogStream(d)
-
+	logStream := buildLogStream(d)
 	api := m.(*management.Management)
-	err := api.LogStream.Update(d.Id(), ls)
-	if err != nil {
+	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
 		return err
 	}
+
 	return readLogStream(d, m)
 }
 
 func deleteLogStream(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.LogStream.Delete(d.Id())
-	if err != nil {
+	if err := api.LogStream.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -246,27 +246,28 @@ func deleteLogStream(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
-func flattenLogStreamSink(d ResourceData, sink interface{}) []interface{} {
-
+func flattenLogStreamSink(sink interface{}) []interface{} {
 	var m interface{}
 
-	switch o := sink.(type) {
+	switch sinkType := sink.(type) {
 	case *management.LogStreamSinkAmazonEventBridge:
-		m = flattenLogStreamSinkAmazonEventBridge(o)
+		m = flattenLogStreamSinkAmazonEventBridge(sinkType)
 	case *management.LogStreamSinkAzureEventGrid:
-		m = flattenLogStreamSinkAzureEventGrid(o)
+		m = flattenLogStreamSinkAzureEventGrid(sinkType)
 	case *management.LogStreamSinkHTTP:
-		m = flattenLogStreamSinkHTTP(o)
+		m = flattenLogStreamSinkHTTP(sinkType)
 	case *management.LogStreamSinkDatadog:
-		m = flattenLogStreamSinkDatadog(o)
+		m = flattenLogStreamSinkDatadog(sinkType)
 	case *management.LogStreamSinkSplunk:
-		m = flattenLogStreamSinkSplunk(o)
+		m = flattenLogStreamSinkSplunk(sinkType)
 	case *management.LogStreamSinkSumo:
-		m = flattenLogStreamSinkSumo(o)
+		m = flattenLogStreamSinkSumo(sinkType)
 	}
+
 	return []interface{}{m}
 }
 
@@ -290,8 +291,8 @@ func flattenLogStreamSinkAzureEventGrid(o *management.LogStreamSinkAzureEventGri
 func flattenLogStreamSinkHTTP(o *management.LogStreamSinkHTTP) interface{} {
 	return map[string]interface{}{
 		"http_endpoint":       o.GetEndpoint(),
-		"http_contentFormat":  o.GetContentFormat(),
-		"http_contentType":    o.GetContentType(),
+		"http_content_format": o.GetContentFormat(),
+		"http_content_type":   o.GetContentType(),
 		"http_authorization":  o.GetAuthorization(),
 		"http_custom_headers": o.CustomHeaders,
 	}
@@ -319,93 +320,86 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 	}
 }
 
-func expandLogStream(d ResourceData) *management.LogStream {
-
-	ls := &management.LogStream{
+func buildLogStream(d ResourceData) *management.LogStream {
+	logStream := &management.LogStream{
 		Name:   String(d, "name"),
 		Type:   String(d, "type", IsNewResource()),
 		Status: String(d, "status", Not(IsNewResource())),
 	}
 
-	s := d.Get("type").(string)
+	streamType := d.Get("type").(string)
 
 	List(d, "sink").Elem(func(d ResourceData) {
-		switch s {
+		switch streamType {
 		case management.LogStreamTypeAmazonEventBridge:
 			// LogStreamTypeAmazonEventBridge cannot be updated
 			if d.IsNewResource() {
-				ls.Sink = expandLogStreamSinkAmazonEventBridge(d)
+				logStream.Sink = expandLogStreamSinkAmazonEventBridge(d)
 			}
 		case management.LogStreamTypeAzureEventGrid:
 			// LogStreamTypeAzureEventGrid cannot be updated
 			if d.IsNewResource() {
-				ls.Sink = expandLogStreamSinkAzureEventGrid(d)
+				logStream.Sink = expandLogStreamSinkAzureEventGrid(d)
 			}
 		case management.LogStreamTypeHTTP:
-			ls.Sink = expandLogStreamSinkHTTP(d)
+			logStream.Sink = expandLogStreamSinkHTTP(d)
 		case management.LogStreamTypeDatadog:
-			ls.Sink = expandLogStreamSinkDatadog(d)
+			logStream.Sink = expandLogStreamSinkDatadog(d)
 		case management.LogStreamTypeSplunk:
-			ls.Sink = expandLogStreamSinkSplunk(d)
+			logStream.Sink = expandLogStreamSinkSplunk(d)
 		case management.LogStreamTypeSumo:
-			ls.Sink = expandLogStreamSinkSumo(d)
+			logStream.Sink = expandLogStreamSinkSumo(d)
 		default:
-			log.Printf("[WARN]: Unsupported log stream sink %s", s)
+			log.Printf("[WARN]: Unsupported log stream sink %s", streamType)
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
 			log.Printf("[WARN]: 	https://github.com/auth0/terraform-provider-auth0/issues/new")
 		}
 	})
 
-	return ls
+	return logStream
 }
 
 func expandLogStreamSinkAmazonEventBridge(d ResourceData) *management.LogStreamSinkAmazonEventBridge {
-	o := &management.LogStreamSinkAmazonEventBridge{
+	return &management.LogStreamSinkAmazonEventBridge{
 		AccountID: String(d, "aws_account_id"),
 		Region:    String(d, "aws_region"),
 	}
-	return o
 }
 
 func expandLogStreamSinkAzureEventGrid(d ResourceData) *management.LogStreamSinkAzureEventGrid {
-	o := &management.LogStreamSinkAzureEventGrid{
+	return &management.LogStreamSinkAzureEventGrid{
 		SubscriptionID: String(d, "azure_subscription_id"),
 		ResourceGroup:  String(d, "azure_resource_group"),
 		Region:         String(d, "azure_region"),
 		PartnerTopic:   String(d, "azure_partner_topic"),
 	}
-	return o
 }
 
 func expandLogStreamSinkHTTP(d ResourceData) *management.LogStreamSinkHTTP {
-	o := &management.LogStreamSinkHTTP{
+	return &management.LogStreamSinkHTTP{
 		ContentFormat: String(d, "http_content_format"),
 		ContentType:   String(d, "http_content_type"),
 		Endpoint:      String(d, "http_endpoint"),
 		Authorization: String(d, "http_authorization"),
 		CustomHeaders: Set(d, "http_custom_headers").List(),
 	}
-	return o
 }
 func expandLogStreamSinkDatadog(d ResourceData) *management.LogStreamSinkDatadog {
-	o := &management.LogStreamSinkDatadog{
+	return &management.LogStreamSinkDatadog{
 		Region: String(d, "datadog_region"),
 		APIKey: String(d, "datadog_api_key"),
 	}
-	return o
 }
 func expandLogStreamSinkSplunk(d ResourceData) *management.LogStreamSinkSplunk {
-	o := &management.LogStreamSinkSplunk{
+	return &management.LogStreamSinkSplunk{
 		Domain: String(d, "splunk_domain"),
 		Token:  String(d, "splunk_token"),
 		Port:   String(d, "splunk_port"),
 		Secure: Bool(d, "splunk_secure"),
 	}
-	return o
 }
 func expandLogStreamSinkSumo(d ResourceData) *management.LogStreamSinkSumo {
-	o := &management.LogStreamSinkSumo{
+	return &management.LogStreamSinkSumo{
 		SourceAddress: String(d, "sumo_source_address"),
 	}
-	return o
 }

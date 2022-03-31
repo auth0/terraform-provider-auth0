@@ -9,7 +9,6 @@ import (
 )
 
 func TestAccHook(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),
@@ -29,7 +28,6 @@ func TestAccHook(t *testing.T) {
 }
 
 const testAccHookCreate = `
-
 resource "auth0_hook" "my_hook" {
   name = "pre-user-reg-hook"
   script = "function (user, context, callback) { callback(null, { user }); }"
@@ -39,7 +37,6 @@ resource "auth0_hook" "my_hook" {
 `
 
 func TestAccHookSecrets(t *testing.T) {
-
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]terraform.ResourceProvider{
 			"auth0": Provider(),

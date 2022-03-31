@@ -2,6 +2,7 @@ package auth0
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -9,16 +10,13 @@ import (
 
 func newGuardian() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createGuardian,
 		Read:   readGuardian,
 		Update: updateGuardian,
 		Delete: deleteGuardian,
-
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"policy": {
 				Type:     schema.TypeString,
@@ -125,18 +123,23 @@ func deleteGuardian(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func updateGuardian(d *schema.ResourceData, m interface{}) (err error) {
+func updateGuardian(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
 
 	if d.HasChange("policy") {
-		p := d.Get("policy").(string)
-		if p == "never" {
+		policy := d.Get("policy").(string)
+		if policy == "never" {
 			// Passing empty array to set it to the "never" policy.
-			err = api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{})
+			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}); err != nil {
+				return err
+			}
 		} else {
-			err = api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{p})
+			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{policy}); err != nil {
+				return err
+			}
 		}
 	}
+
 	if err := updatePhoneFactor(d, api); err != nil {
 		return err
 	}
@@ -146,6 +149,7 @@ func updateGuardian(d *schema.ResourceData, m interface{}) (err error) {
 	if err := updateOTPFactor(d, api); err != nil {
 		return err
 	}
+
 	return readGuardian(d, m)
 }
 
@@ -158,8 +162,10 @@ func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error
 		if err := api.Guardian.MultiFactor.Phone.Enable(true); err != nil {
 			return err
 		}
+
 		return configurePhone(d, api)
 	}
+
 	return api.Guardian.MultiFactor.Phone.Enable(false)
 }
 
@@ -176,111 +182,135 @@ func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
 		enabled := d.Get("otp").(bool)
 		return api.Guardian.MultiFactor.OTP.Enable(enabled)
 	}
+
 	return nil
 }
 
-func configurePhone(d *schema.ResourceData, api *management.Management) (err error) {
-	md := make(MapData)
+func configurePhone(d *schema.ResourceData, api *management.Management) error {
+	var err error
+
+	m := make(map[string]interface{})
 	List(d, "phone").Elem(func(d ResourceData) {
-		md.Set("provider", String(d, "provider", HasChange()))
-		md.Set("message_types", Slice(d, "message_types", HasChange()))
-		md.Set("options", List(d, "options"))
+		m["provider"] = String(d, "provider", HasChange())
+		m["message_types"] = Slice(d, "message_types", HasChange())
+		m["options"] = List(d, "options")
+
 		switch *String(d, "provider") {
 		case "twilio":
-			err = updateTwilioOptions(md["options"].(Iterator), api)
+			err = updateTwilioOptions(m["options"].(Iterator), api)
 		case "auth0":
-			err = updateAuth0Options(md["options"].(Iterator), api)
+			err = updateAuth0Options(m["options"].(Iterator), api)
 		}
 	})
+	if err != nil {
+		return err
+	}
 
-	if s, ok := md.GetOk("provider"); ok {
-		if err := api.Guardian.MultiFactor.Phone.UpdateProvider(&management.MultiFactorProvider{Provider: s.(*string)}); err != nil {
+	if provider, ok := m["provider"]; ok {
+		if err := api.Guardian.MultiFactor.Phone.UpdateProvider(
+			&management.MultiFactorProvider{
+				Provider: provider.(*string),
+			},
+		); err != nil {
 			return err
 		}
 	}
 
-	mtypes := typeAssertToStringArray(Slice(md, "message_types"))
-	if mtypes != nil {
-		if err := api.Guardian.MultiFactor.Phone.UpdateMessageTypes(&management.PhoneMessageTypes{MessageTypes: mtypes}); err != nil {
+	messageTypes := typeAssertToStringArray(m["message_types"].([]interface{}))
+	if messageTypes != nil {
+		if err := api.Guardian.MultiFactor.Phone.UpdateMessageTypes(
+			&management.PhoneMessageTypes{
+				MessageTypes: messageTypes,
+			},
+		); err != nil {
 			return err
 		}
 	}
+
+	return nil
+}
+
+func updateAuth0Options(opts Iterator, api *management.Management) error {
+	var err error
+	opts.Elem(func(d ResourceData) {
+		err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
+			&management.MultiFactorSMSTemplate{
+				EnrollmentMessage:   String(d, "enrollment_message"),
+				VerificationMessage: String(d, "verification_message"),
+			},
+		)
+	})
 
 	return err
 }
 
-func updateAuth0Options(opts Iterator, api *management.Management) (err error) {
-	opts.Elem(func(d ResourceData) {
-		err = api.Guardian.MultiFactor.SMS.UpdateTemplate(&management.MultiFactorSMSTemplate{
-			EnrollmentMessage:   String(d, "enrollment_message"),
-			VerificationMessage: String(d, "verification_message"),
-		})
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func updateTwilioOptions(opts Iterator, api *management.Management) error {
-	md := make(map[string]*string)
+	m := make(map[string]*string)
+
 	opts.Elem(func(d ResourceData) {
-		md["sid"] = String(d, "sid")
-		md["auth_token"] = String(d, "auth_token")
-		md["from"] = String(d, "from")
-		md["messaging_service_sid"] = String(d, "messaging_service_sid")
-		md["enrollment_message"] = String(d, "enrollment_message")
-		md["verification_message"] = String(d, "verification_message")
+		m["sid"] = String(d, "sid")
+		m["auth_token"] = String(d, "auth_token")
+		m["from"] = String(d, "from")
+		m["messaging_service_sid"] = String(d, "messaging_service_sid")
+		m["enrollment_message"] = String(d, "enrollment_message")
+		m["verification_message"] = String(d, "verification_message")
 	})
 
-	err := api.Guardian.MultiFactor.SMS.UpdateTwilio(&management.MultiFactorProviderTwilio{
-		From:                md["from"],
-		MessagingServiceSid: md["messaging_service_sid"],
-		AuthToken:           md["auth_token"],
-		SID:                 md["sid"],
-	})
+	err := api.Guardian.MultiFactor.SMS.UpdateTwilio(
+		&management.MultiFactorProviderTwilio{
+			From:                m["from"],
+			MessagingServiceSid: m["messaging_service_sid"],
+			AuthToken:           m["auth_token"],
+			SID:                 m["sid"],
+		},
+	)
 	if err != nil {
 		return err
 	}
-	err = api.Guardian.MultiFactor.SMS.UpdateTemplate(&management.MultiFactorSMSTemplate{
-		EnrollmentMessage:   md["enrollment_message"],
-		VerificationMessage: md["verification_message"],
-	})
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return api.Guardian.MultiFactor.SMS.UpdateTemplate(
+		&management.MultiFactorSMSTemplate{
+			EnrollmentMessage:   m["enrollment_message"],
+			VerificationMessage: m["verification_message"],
+		},
+	)
 }
 
 func readGuardian(d *schema.ResourceData, m interface{}) error {
-	api := m.(*management.Management)
-	mt, err := api.Guardian.MultiFactor.Phone.MessageTypes()
-	if err != nil {
-		return err
-	}
-	phoneData := make(map[string]interface{})
-	phoneData["message_types"] = mt.MessageTypes
-	prv, err := api.Guardian.MultiFactor.Phone.Provider()
-	if err != nil {
-		return err
-	}
-	phoneData["provider"] = prv.Provider
+	var result *multierror.Error
 
-	p, err := api.Guardian.MultiFactor.Policy()
+	api := m.(*management.Management)
+	messageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
 	if err != nil {
 		return err
 	}
-	if len(*p) == 0 {
-		d.Set("policy", "never")
-	} else {
-		err = d.Set("policy", (*p)[0])
+
+	phoneData := make(map[string]interface{})
+	phoneData["message_types"] = messageTypes.MessageTypes
+
+	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
+	if err != nil {
+		return err
 	}
-	var md map[string]interface{}
-	switch *prv.Provider {
+	phoneData["provider"] = phoneProvider.Provider
+
+	policy, err := api.Guardian.MultiFactor.Policy()
+	if err != nil {
+		return err
+	}
+
+	if len(*policy) == 0 {
+		result = multierror.Append(result, d.Set("policy", "never"))
+	} else {
+		result = multierror.Append(result, d.Set("policy", (*policy)[0]))
+	}
+
+	var phoneProviderFlattenedOptions map[string]interface{}
+	switch *phoneProvider.Provider {
 	case "twilio":
-		md, err = flattenTwilioOptions(api)
+		phoneProviderFlattenedOptions, err = flattenTwilioOptions(api)
 	case "auth0":
-		md, err = flattenAuth0Options(api)
+		phoneProviderFlattenedOptions, err = flattenAuth0Options(api)
 	}
 	if err != nil {
 		return err
@@ -291,30 +321,29 @@ func readGuardian(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	if ok {
-		phoneData["options"] = []interface{}{md}
-		err = d.Set("phone", []interface{}{phoneData})
+		phoneData["options"] = []interface{}{phoneProviderFlattenedOptions}
+		result = multierror.Append(result, d.Set("phone", []interface{}{phoneData}))
 	} else {
-		d.Set("phone", nil)
-	}
-	if err != nil {
-		return err
+		result = multierror.Append(result, d.Set("phone", nil))
 	}
 
 	factors, err := api.Guardian.MultiFactor.List()
 	if err != nil {
 		return err
 	}
-	for _, v := range factors {
-		if v.Name != nil {
-			if *v.Name == "email" {
-				d.Set("email", v.Enabled)
+
+	for _, factor := range factors {
+		if factor.Name != nil {
+			if *factor.Name == "email" {
+				result = multierror.Append(result, d.Set("email", factor.Enabled))
 			}
-			if *v.Name == "otp" {
-				d.Set("otp", v.Enabled)
+			if *factor.Name == "otp" {
+				result = multierror.Append(result, d.Set("otp", factor.Enabled))
 			}
 		}
 	}
-	return nil
+
+	return result.ErrorOrNil()
 }
 
 func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
@@ -323,37 +352,46 @@ func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
 		newState := n.([]interface{})
 		return len(newState) > 0
 	}
+
 	return false
 }
 
 func flattenAuth0Options(api *management.Management) (map[string]interface{}, error) {
 	md := make(map[string]interface{})
-	t, err := api.Guardian.MultiFactor.SMS.Template()
+
+	template, err := api.Guardian.MultiFactor.SMS.Template()
 	if err != nil {
 		return nil, err
 	}
-	md["enrollment_message"] = t.EnrollmentMessage
-	md["verification_message"] = t.VerificationMessage
+
+	md["enrollment_message"] = template.EnrollmentMessage
+	md["verification_message"] = template.VerificationMessage
+
 	return md, nil
 }
 
 func flattenTwilioOptions(api *management.Management) (map[string]interface{}, error) {
-	md := make(map[string]interface{})
-	t, err := api.Guardian.MultiFactor.SMS.Template()
+	m := make(map[string]interface{})
+
+	template, err := api.Guardian.MultiFactor.SMS.Template()
 	if err != nil {
 		return nil, err
 	}
-	md["enrollment_message"] = t.EnrollmentMessage
-	md["verification_message"] = t.VerificationMessage
-	tw, err := api.Guardian.MultiFactor.SMS.Twilio()
+
+	m["enrollment_message"] = template.EnrollmentMessage
+	m["verification_message"] = template.VerificationMessage
+
+	twilio, err := api.Guardian.MultiFactor.SMS.Twilio()
 	if err != nil {
 		return nil, err
 	}
-	md["auth_token"] = tw.AuthToken
-	md["from"] = tw.From
-	md["messaging_service_sid"] = tw.MessagingServiceSid
-	md["sid"] = tw.SID
-	return md, nil
+
+	m["auth_token"] = twilio.AuthToken
+	m["from"] = twilio.From
+	m["messaging_service_sid"] = twilio.MessagingServiceSid
+	m["sid"] = twilio.SID
+
+	return m, nil
 }
 
 func typeAssertToStringArray(from []interface{}) *[]string {
@@ -368,7 +406,9 @@ func typeAssertToStringArray(from []interface{}) *[]string {
 	return &stringArray
 }
 
-// Determines if the factor should be updated. This depends on if it is in the state, if it is about to be added to the state.
+// Determines if the factor should be updated.
+// This depends on if it is in the state,
+// if it is about to be added to the state.
 func factorShouldBeUpdated(d *schema.ResourceData, factor string) (bool, error) {
 	_, ok := d.GetOk(factor)
 	return ok || hasBlockPresentInNewState(d, factor), nil

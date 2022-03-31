@@ -10,7 +10,6 @@ import (
 )
 
 func TestAccClientGrant(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -49,7 +48,6 @@ func TestAccClientGrant(t *testing.T) {
 }
 
 const testAccClientGrantAuxConfig = `
-
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Client Grant - {{.random}}"
 	custom_login_page_on = true
@@ -71,7 +69,6 @@ resource "auth0_resource_server" "my_resource_server" {
 `
 
 const testAccClientGrantConfigCreate = testAccClientGrantAuxConfig + `
-
 resource "auth0_client_grant" "my_client_grant" {
 	client_id = "${auth0_client.my_client.id}"
 	audience = "${auth0_resource_server.my_resource_server.identifier}"
@@ -80,16 +77,14 @@ resource "auth0_client_grant" "my_client_grant" {
 `
 
 const testAccClientGrantConfigUpdate = testAccClientGrantAuxConfig + `
-
 resource "auth0_client_grant" "my_client_grant" {
 	client_id = "${auth0_client.my_client.id}"
 	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ "create:foo" ] 
+	scope = [ "create:foo" ]
 }
 `
 
 const testAccClientGrantConfigUpdateAgain = testAccClientGrantAuxConfig + `
-
 resource "auth0_client_grant" "my_client_grant" {
 	client_id = "${auth0_client.my_client.id}"
 	audience = "${auth0_resource_server.my_resource_server.identifier}"
@@ -98,7 +93,6 @@ resource "auth0_client_grant" "my_client_grant" {
 `
 
 const testAccClientGrantConfigUpdateChangeClient = testAccClientGrantAuxConfig + `
-
 resource "auth0_client" "my_client_alt" {
 	name = "Acceptance Test - Client Grant Alt - {{.random}}"
 	custom_login_page_on = true

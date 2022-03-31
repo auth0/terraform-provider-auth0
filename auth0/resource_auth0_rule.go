@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
@@ -14,7 +15,6 @@ var ruleNameRegexp = regexp.MustCompile("^[^\\s-][\\w -]+[^\\s-]$")
 
 func newRule() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createRule,
 		Read:   readRule,
 		Update: updateRule,
@@ -22,7 +22,6 @@ func newRule() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -50,18 +49,20 @@ func newRule() *schema.Resource {
 }
 
 func createRule(d *schema.ResourceData, m interface{}) error {
-	c := buildRule(d)
+	rule := buildRule(d)
 	api := m.(*management.Management)
-	if err := api.Rule.Create(c); err != nil {
+	if err := api.Rule.Create(rule); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(c.ID))
+
+	d.SetId(auth0.StringValue(rule.ID))
+
 	return readRule(d, m)
 }
 
 func readRule(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	c, err := api.Rule.Read(d.Id())
+	rule, err := api.Rule.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -72,27 +73,29 @@ func readRule(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("name", c.Name)
-	d.Set("script", c.Script)
-	d.Set("order", c.Order)
-	d.Set("enabled", c.Enabled)
-	return nil
+	result := multierror.Append(
+		d.Set("name", rule.Name),
+		d.Set("script", rule.Script),
+		d.Set("order", rule.Order),
+		d.Set("enabled", rule.Enabled),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func updateRule(d *schema.ResourceData, m interface{}) error {
-	c := buildRule(d)
+	rule := buildRule(d)
 	api := m.(*management.Management)
-	err := api.Rule.Update(d.Id(), c)
-	if err != nil {
+	if err := api.Rule.Update(d.Id(), rule); err != nil {
 		return err
 	}
+
 	return readRule(d, m)
 }
 
 func deleteRule(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.Rule.Delete(d.Id())
-	if err != nil {
+	if err := api.Rule.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -101,7 +104,8 @@ func deleteRule(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
-	return err
+
+	return nil
 }
 
 func buildRule(d *schema.ResourceData) *management.Rule {

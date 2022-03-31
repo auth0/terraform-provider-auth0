@@ -39,7 +39,6 @@ func init() {
 }
 
 func TestAccRuleConfig(t *testing.T) {
-
 	rand := random.String(4)
 
 	resource.Test(t, resource.TestCase{
@@ -76,7 +75,6 @@ func TestAccRuleConfig(t *testing.T) {
 }
 
 const testAccRuleConfigCreate = `
-
 resource "auth0_rule_config" "foo" {
   key = "acc_test_{{.random}}"
   value = "bar"
@@ -84,7 +82,6 @@ resource "auth0_rule_config" "foo" {
 `
 
 const testAccRuleConfigUpdateValue = `
-
 resource "auth0_rule_config" "foo" {
   key = "acc_test_{{.random}}"
   value = "foo"
@@ -92,7 +89,6 @@ resource "auth0_rule_config" "foo" {
 `
 
 const testAccRuleConfigUpdateKey = `
-
 resource "auth0_rule_config" "foo" {
   key = "acc_test_key_{{.random}}"
   value = "foo"

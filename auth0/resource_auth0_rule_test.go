@@ -11,7 +11,6 @@ import (
 )
 
 func TestAccRule(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -32,7 +31,6 @@ func TestAccRule(t *testing.T) {
 }
 
 const testAccRule = `
-
 resource "auth0_rule" "my_rule" {
   name = "acceptance-test-{{.random}}"
   script = "function (user, context, callback) { callback(null, user, context); }"
@@ -41,7 +39,6 @@ resource "auth0_rule" "my_rule" {
 `
 
 func TestRuleNameRegexp(t *testing.T) {
-
 	vf := validation.StringMatch(ruleNameRegexp, "invalid name")
 
 	for name, valid := range map[string]bool{

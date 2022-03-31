@@ -50,7 +50,6 @@ func init() {
 }
 
 func TestAccRole(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -78,7 +77,6 @@ func TestAccRole(t *testing.T) {
 }
 
 const testAccRoleAux = `
-
 resource auth0_resource_server matrix {
     name = "Role - Acceptance Test - {{.random}}"
     identifier = "https://{{.random}}.matrix.com/"
@@ -93,7 +91,6 @@ resource auth0_resource_server matrix {
 }`
 
 const testAccRoleCreate = testAccRoleAux + `
-
 resource auth0_role the_one {
   name = "The One - Acceptance Test - {{.random}}"
   description = "The One - Acceptance Test"
@@ -105,7 +102,6 @@ resource auth0_role the_one {
 `
 
 const testAccRoleUpdate = testAccRoleAux + `
-
 resource auth0_role the_one {
   name = "The One - Acceptance Test - {{.random}}"
   description = "The One who will bring peace - Acceptance Test"
@@ -121,7 +117,6 @@ resource auth0_role the_one {
 `
 
 func TestAccRolePermissions(t *testing.T) {
-
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
@@ -142,7 +137,6 @@ func TestAccRolePermissions(t *testing.T) {
 }
 
 const testAccRolePermissions = `
-
 locals {
 	permissions = {
 		"permission:1"   = "Permission 1"

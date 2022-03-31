@@ -10,7 +10,6 @@ import (
 
 func newRuleConfig() *schema.Resource {
 	return &schema.Resource{
-
 		Create: createRuleConfig,
 		Read:   readRuleConfig,
 		Update: updateRuleConfig,
@@ -18,7 +17,6 @@ func newRuleConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
-
 		Schema: map[string]*schema.Schema{
 			"key": {
 				Type:     schema.TypeString,
@@ -35,20 +33,22 @@ func newRuleConfig() *schema.Resource {
 }
 
 func createRuleConfig(d *schema.ResourceData, m interface{}) error {
-	r := buildRuleConfig(d)
-	key := auth0.StringValue(r.Key)
-	r.Key = nil
+	ruleConfig := buildRuleConfig(d)
+	key := auth0.StringValue(ruleConfig.Key)
+	ruleConfig.Key = nil
 	api := m.(*management.Management)
-	if err := api.RuleConfig.Upsert(key, r); err != nil {
+	if err := api.RuleConfig.Upsert(key, ruleConfig); err != nil {
 		return err
 	}
-	d.SetId(auth0.StringValue(r.Key))
+
+	d.SetId(auth0.StringValue(ruleConfig.Key))
+
 	return readRuleConfig(d, m)
 }
 
 func readRuleConfig(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	r, err := api.RuleConfig.Read(d.Id())
+	ruleConfig, err := api.RuleConfig.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -58,25 +58,24 @@ func readRuleConfig(d *schema.ResourceData, m interface{}) error {
 		}
 		return err
 	}
-	d.Set("key", r.Key)
-	return nil
+
+	return d.Set("key", ruleConfig.Key)
 }
 
 func updateRuleConfig(d *schema.ResourceData, m interface{}) error {
-	r := buildRuleConfig(d)
-	r.Key = nil
+	ruleConfig := buildRuleConfig(d)
+	ruleConfig.Key = nil
 	api := m.(*management.Management)
-	err := api.RuleConfig.Upsert(d.Id(), r)
-	if err != nil {
+	if err := api.RuleConfig.Upsert(d.Id(), ruleConfig); err != nil {
 		return err
 	}
+
 	return readRuleConfig(d, m)
 }
 
 func deleteRuleConfig(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
-	err := api.RuleConfig.Delete(d.Id())
-	if err != nil {
+	if err := api.RuleConfig.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -84,7 +83,8 @@ func deleteRuleConfig(d *schema.ResourceData, m interface{}) error {
 			}
 		}
 	}
-	return err
+
+	return nil
 }
 
 func buildRuleConfig(d *schema.ResourceData) *management.RuleConfig {

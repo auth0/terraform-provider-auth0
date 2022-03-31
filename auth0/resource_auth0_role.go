@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -93,8 +94,10 @@ func readRole(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(role.GetID())
 
-	d.Set("name", role.Name)
-	d.Set("description", role.Description)
+	result := multierror.Append(
+		d.Set("name", role.Name),
+		d.Set("description", role.Description),
+	)
 
 	var permissions []*management.Permission
 	var page int
@@ -112,9 +115,9 @@ func readRole(d *schema.ResourceData, m interface{}) error {
 		page++
 	}
 
-	d.Set("permissions", flattenRolePermissions(permissions))
+	result = multierror.Append(result, d.Set("permissions", flattenRolePermissions(permissions)))
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updateRole(d *schema.ResourceData, m interface{}) error {

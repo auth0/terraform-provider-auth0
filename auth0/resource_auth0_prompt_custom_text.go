@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -67,10 +68,12 @@ func importPromptCustomText(d *schema.ResourceData, _ interface{}) ([]*schema.Re
 
 	d.SetId(d.Id())
 
-	d.Set("prompt", prompt)
-	d.Set("language", language)
+	result := multierror.Append(
+		d.Set("prompt", prompt),
+		d.Set("language", language),
+	)
 
-	return []*schema.ResourceData{d}, nil
+	return []*schema.ResourceData{d}, result.ErrorOrNil()
 }
 
 func createPromptCustomText(d *schema.ResourceData, m interface{}) error {
@@ -121,8 +124,9 @@ func updatePromptCustomText(d *schema.ResourceData, m interface{}) error {
 }
 
 func deletePromptCustomText(d *schema.ResourceData, m interface{}) error {
-	d.Set("body", "{}")
-
+	if err := d.Set("body", "{}"); err != nil {
+		return err
+	}
 	if err := updatePromptCustomText(d, m); err != nil {
 		return err
 	}

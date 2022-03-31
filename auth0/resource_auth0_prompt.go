@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -53,10 +54,12 @@ func readPrompt(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	d.Set("universal_login_experience", prompt.UniversalLoginExperience)
-	d.Set("identifier_first", prompt.IdentifierFirst)
+	result := multierror.Append(
+		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
+		d.Set("identifier_first", prompt.IdentifierFirst),
+	)
 
-	return nil
+	return result.ErrorOrNil()
 }
 
 func updatePrompt(d *schema.ResourceData, m interface{}) error {

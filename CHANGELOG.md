@@ -1,3 +1,28 @@
+## 0.29.0
+
+FEATURES:
+
+* `data-source/auth0_tenant`: Added a new data source for a subset of a tenant's info ([#95](https://github.com/auth0/terraform-provider-auth0/pull/95))
+
+BUG FIXES:
+
+* `resource/*`: [DXCDT-80] Fixed surfaced errors on all resources after not ignoring them when setting resource data (
+  [#106](https://github.com/auth0/terraform-provider-auth0/pull/106),
+  [#104](https://github.com/auth0/terraform-provider-auth0/pull/104),
+  [#105](https://github.com/auth0/terraform-provider-auth0/pull/105),
+  [#94](https://github.com/auth0/terraform-provider-auth0/pull/94),
+  [#97](https://github.com/auth0/terraform-provider-auth0/pull/97),
+  [#101](https://github.com/auth0/terraform-provider-auth0/pull/101),
+  [#113](https://github.com/auth0/terraform-provider-auth0/pull/113),
+  [#112](https://github.com/auth0/terraform-provider-auth0/pull/112),
+  [#111](https://github.com/auth0/terraform-provider-auth0/pull/111),
+  [#110](https://github.com/auth0/terraform-provider-auth0/pull/110),
+  [#114](https://github.com/auth0/terraform-provider-auth0/pull/114),
+  [#109](https://github.com/auth0/terraform-provider-auth0/pull/109)
+)
+* `resource/auth0_action`: Failed fast when action fails to build ([#107](https://github.com/auth0/terraform-provider-auth0/pull/107))
+
+
 ## 0.28.1
 
 BUG FIXES:

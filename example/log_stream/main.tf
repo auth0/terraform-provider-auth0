@@ -8,6 +8,12 @@ resource "auth0_log_stream" "example_http" {
     http_content_type   = "application/json"
     http_content_format = "JSONOBJECT"
     http_authorization  = "AKIAXXXXXXXXXXXXXXXX"
+    http_custom_headers = [
+      {
+          header = "foo"
+          value  = "bar"
+      }
+    ]
   }
 }
 

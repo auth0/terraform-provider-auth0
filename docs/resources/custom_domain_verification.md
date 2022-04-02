@@ -53,7 +53,11 @@ domain name record (DNS) to be created before attempting to verify the custom do
 
 ## Attributes Reference
 
-No additional attributes are exported by this resource.
+In addition to the arguments listed above, the following computed attributes are
+exported:
+
+* `origin_domain_name` - String. The DNS name of the Auth0 origin server that handles traffic for the custom domain.
+* `cname_api_key` - String. The value of the `cname-api-key` header to send when forwarding requests. Only present if the type of the custom domain is `self_managed_certs` and Terraform originally managed the domain's verification.
 
 ## Import
 

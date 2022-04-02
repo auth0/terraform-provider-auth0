@@ -43,6 +43,10 @@ func newCustomDomain() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"origin_domain_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"verification_method": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -97,6 +101,7 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 		d.Set("type", customDomain.Type),
 		d.Set("primary", customDomain.Primary),
 		d.Set("status", customDomain.Status),
+		d.Set("origin_domain_name", customDomain.OriginDomainName),
 	)
 
 	if customDomain.Verification != nil {

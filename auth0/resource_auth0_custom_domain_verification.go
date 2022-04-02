@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -26,6 +27,15 @@ func newCustomDomainVerification() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+			},
+			"origin_domain_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"cname_api_key": {
+				Type:      schema.TypeString,
+				Computed:  true,
+				Sensitive: true,
 			},
 		},
 		Timeouts: &schema.ResourceTimeout{
@@ -52,14 +62,20 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 
 		d.SetId(customDomainVerification.GetID())
 
-		if result := readCustomDomainVerification(ctx, d, m); result.HasError() {
-			return resource.NonRetryableError(fmt.Errorf("failed to read custom domain verification"))
+		// The cname_api_key field is only given once: when verification
+		// succeeds for the first time. Therefore, we set it on the resource in
+		// the creation routine only, and never touch it again.
+		if err := d.Set("cname_api_key", customDomainVerification.CNAMEAPIKey); err != nil {
+			return resource.NonRetryableError(err)
 		}
 
 		return nil
 	})
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
-	return diag.FromErr(err)
+	return readCustomDomainVerification(ctx, d, m)
 }
 
 func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -75,7 +91,12 @@ func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(d.Set("custom_domain_id", customDomain.GetID()))
+	result := multierror.Append(
+		d.Set("custom_domain_id", customDomain.GetID()),
+		d.Set("origin_domain_name", customDomain.OriginDomainName),
+	)
+
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func deleteCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

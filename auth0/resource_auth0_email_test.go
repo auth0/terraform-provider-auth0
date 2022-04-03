@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func init() {
@@ -22,7 +22,7 @@ func init() {
 
 func TestAccEmail(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{

@@ -7,7 +7,7 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -45,7 +45,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -154,7 +154,7 @@ resource "auth0_log_stream" "my_log_stream" {
 func TestAccLogStreamEventBridge(t *testing.T) {
 	rand := random.String(6)
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -229,7 +229,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -284,7 +284,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -354,7 +354,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -413,7 +413,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{

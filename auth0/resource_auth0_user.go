@@ -362,8 +362,6 @@ func assignUserRoles(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	d.SetPartial("roles")
-
 	return nil
 }
 

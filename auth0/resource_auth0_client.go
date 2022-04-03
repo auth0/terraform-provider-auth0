@@ -902,7 +902,6 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 	}
-	d.SetPartial("client_secret_rotation_trigger")
 	return nil
 }
 

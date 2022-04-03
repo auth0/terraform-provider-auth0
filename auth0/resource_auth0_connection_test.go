@@ -1255,7 +1255,7 @@ func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV0(state, nil)
+			actual, err := connectionSchemaUpgradeV0(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}
@@ -1320,7 +1320,7 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV1(state, nil)
+			actual, err := connectionSchemaUpgradeV1(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}

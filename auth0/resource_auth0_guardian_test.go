@@ -30,7 +30,7 @@ func TestAccGuardian(t *testing.T) {
 				Config: testAccConfigureTwilioUpdate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
-					resource.TestCheckNoResourceAttr("auth0_guardian.foo", "phone"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
 
@@ -83,7 +83,7 @@ func TestAccGuardian(t *testing.T) {
 				Config: testAccConfigureNoPhone,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
-					resource.TestCheckNoResourceAttr("auth0_guardian.foo", "phone"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
 

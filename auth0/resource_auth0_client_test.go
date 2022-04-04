@@ -468,7 +468,7 @@ func TestAccClientMobileValidationError(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      random.Template(testAccClientConfigMobileUpdateError, rand),
-				ExpectError: regexp.MustCompile("config is invalid"),
+				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 		},
 	})

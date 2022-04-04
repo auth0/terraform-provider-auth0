@@ -50,7 +50,11 @@ func createCustomDomainVerification(d *schema.ResourceData, m interface{}) error
 
 		d.SetId(customDomainVerification.GetID())
 
-		return resource.NonRetryableError(readCustomDomainVerification(d, m))
+		if err := readCustomDomainVerification(d, m); err != nil {
+			return resource.NonRetryableError(err)
+		}
+
+		return nil
 	})
 }
 

@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"context"
 	"log"
 	"reflect"
 	"strings"
@@ -8,8 +9,8 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -57,7 +58,7 @@ func TestAccConnection(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -179,7 +180,7 @@ func TestAccConnectionAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -192,13 +193,13 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.tenant_domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.use_kerberos", "false"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.ips.3011009788", "192.168.1.2"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.ips.2555711295", "192.168.1.1"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.3506632655", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.3154807651", "api.example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.set_user_root_attributes", "on_each_login"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.non_persistent_attrs.180730300", "ethnicity"),
-					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.non_persistent_attrs.4212941087", "gender"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "ethnicity"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "gender"),
 				),
 			},
 		},
@@ -229,7 +230,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -244,12 +245,12 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.3506632655", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.3154807651", "api.example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.scopes.#", "3"),
-					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.scopes.370042894", "basic_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.scopes.1268340351", "ext_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.scopes.541325467", "ext_groups"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "basic_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "ext_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "ext_groups"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.should_trust_email_verified_connection", "never_set_emails_as_verified"),
 				),
@@ -292,7 +293,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -305,8 +306,8 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.3506632655", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.3154807651", "api.example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "back_channel"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://api.login.yahoo.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.login.yahoo.com/openid/v1/certs"),
@@ -315,12 +316,12 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.userinfo_endpoint", "https://api.login.yahoo.com/openid/v1/userinfo"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.authorization_endpoint", "https://api.login.yahoo.com/oauth2/request_auth"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.#", "3"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.2517049750", "openid"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.4080487570", "profile"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_each_login"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.4212941087", "gender"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.2145794573", "hair_color"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
 				),
 			},
 			{
@@ -330,7 +331,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.3506632655", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "front_channel"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://www.paypalobjects.com"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.paypal.com/v1/oauth2/certs"),
@@ -339,8 +340,8 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.userinfo_endpoint", "https://api.paypal.com/v1/oauth2/token/userinfo"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.authorization_endpoint", "https://www.paypal.com/signin/authorize"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.2517049750", "openid"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 				),
 			},
@@ -404,7 +405,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -418,9 +419,9 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.token_endpoint", "https://api.login.yahoo.com/oauth2/get_token"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.authorization_endpoint", "https://api.login.yahoo.com/oauth2/request_auth"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.#", "3"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.2517049750", "openid"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.4080487570", "profile"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_each_login"),
 				),
@@ -433,8 +434,8 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.token_endpoint", "https://api.paypal.com/v1/oauth2/token"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.authorization_endpoint", "https://www.paypal.com/signin/authorize"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.2517049750", "openid"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_first_login"),
 				),
@@ -485,7 +486,7 @@ func TestAccConnectionWithEnabledClients(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -542,7 +543,7 @@ func TestAccConnectionSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -591,7 +592,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -649,7 +650,7 @@ func TestAccConnectionEmail(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -724,7 +725,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -758,7 +759,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -770,11 +771,11 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.client_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.client_secret", ""),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.allowed_audiences.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.allowed_audiences.3506632655", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.allowed_audiences.3154807651", "api.example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.allowed_audiences.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.allowed_audiences.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.scopes.#", "4"),
-					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.scopes.881205744", "email"),
-					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.scopes.4080487570", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.scopes.*", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.scopes.*", "profile"),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.set_user_root_attributes", "on_each_login"),
 				),
 			},
@@ -801,7 +802,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -816,12 +817,12 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.tenant_domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain_aliases.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain_aliases.3506632655", "example.com"),
-					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain_aliases.3154807651", "api.example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.1268340351", "ext_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.541325467", "ext_groups"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
 				),
 			},
 		},
@@ -850,7 +851,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -862,8 +863,8 @@ func TestAccConnectionFacebook(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_secret", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.#", "4"),
-					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.3590537325", "public_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "public_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "email"),
 				),
 			},
 			{
@@ -874,8 +875,8 @@ func TestAccConnectionFacebook(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_secret", "client_secret_update"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.3590537325", "public_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "public_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "email"),
 				),
 			},
 		},
@@ -912,7 +913,7 @@ func TestAccConnectionApple(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -926,8 +927,8 @@ func TestAccConnectionApple(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.team_id", "team_id"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.key_id", "key_id"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.2318696674", "name"),
-					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "name"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.set_user_root_attributes", "on_each_login"),
 				),
 			},
@@ -937,7 +938,7 @@ func TestAccConnectionApple(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.team_id", "team_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.key_id", "key_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.set_user_root_attributes", "on_first_login"),
 				),
 			},
@@ -981,7 +982,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -994,8 +995,8 @@ func TestAccConnectionLinkedin(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.#", "3"),
-					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.370042894", "basic_profile"),
-					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.881205744", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "basic_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "email"),
 				),
 			},
 			{
@@ -1003,7 +1004,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret_update"),
-					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.370042894", "basic_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "basic_profile"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.#", "2"),
 				),
 			},
@@ -1043,7 +1044,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1055,26 +1056,26 @@ func TestAccConnectionGitHub(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.client_id", "client-id"),
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.client_secret", "client-secret"),
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.#", "20"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.881205744", "email"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.4080487570", "profile"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.862208977", "follow"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.347111084", "read_repo_hook"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.718177942", "admin_public_key"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.2480957806", "write_public_key"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.356496889", "write_repo_hook"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.3006585776", "write_org"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.855904415", "read_user"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.1560560783", "admin_repo_hook"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.2933527251", "admin_org"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.1314370975", "repo"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.2175618052", "repo_status"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.188173322", "read_org"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.133261078", "gist"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.1820025999", "repo_deployment"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.3220703903", "public_repo"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.2092139895", "notifications"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.672436223", "delete_repo"),
-					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.2296398814", "read_public_key"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "follow"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_public_key"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_public_key"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_user"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo_status"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "gist"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo_deployment"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "public_repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "notifications"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "delete_repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_public_key"),
 				),
 			},
 		},
@@ -1100,7 +1101,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1113,8 +1114,8 @@ func TestAccConnectionWindowslive(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_secret", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.2458861461", "signin"),
-					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.3904585843", "graph_user"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "signin"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "graph_user"),
 				),
 			},
 			{
@@ -1126,7 +1127,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_secret", "client_secret_update"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.2458861461", "signin"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "signin"),
 				),
 			},
 		},
@@ -1165,7 +1166,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -1255,7 +1256,7 @@ func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV0(state, nil)
+			actual, err := connectionSchemaUpgradeV0(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}
@@ -1320,7 +1321,7 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 				},
 			}
 
-			actual, err := connectionSchemaUpgradeV1(state, nil)
+			actual, err := connectionSchemaUpgradeV1(context.Background(), state, nil)
 			if err != nil {
 				t.Fatalf("error migrating state: %s", err)
 			}
@@ -1342,7 +1343,7 @@ func TestAccConnectionSAML(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{

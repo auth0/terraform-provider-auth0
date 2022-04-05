@@ -7,8 +7,8 @@ import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalValidation "github.com/auth0/terraform-provider-auth0/auth0/internal/validation"
 )
@@ -902,7 +902,6 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 	}
-	d.SetPartial("client_secret_rotation_trigger")
 	return nil
 }
 

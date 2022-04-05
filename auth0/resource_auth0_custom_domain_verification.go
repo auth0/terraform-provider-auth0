@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newCustomDomainVerification() *schema.Resource {
@@ -50,7 +50,11 @@ func createCustomDomainVerification(d *schema.ResourceData, m interface{}) error
 
 		d.SetId(customDomainVerification.GetID())
 
-		return resource.NonRetryableError(readCustomDomainVerification(d, m))
+		if err := readCustomDomainVerification(d, m); err != nil {
+			return resource.NonRetryableError(err)
+		}
+
+		return nil
 	})
 }
 

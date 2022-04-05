@@ -1,16 +1,18 @@
 package auth0
 
 import (
-	"errors"
+	"context"
+	"fmt"
 	"os"
 	"sort"
 	"strings"
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 const wiremockHost = "localhost:8080"
@@ -28,12 +30,14 @@ func providerWithTestingConfiguration() *schema.Provider {
 }
 
 func Auth0() (*management.Management, error) {
-	c := terraform.NewResourceConfigRaw(nil)
-	p := Provider()
-	if err := p.Configure(c); err != nil {
-		return nil, err
+	config := terraform.NewResourceConfigRaw(nil)
+	provider := Provider()
+
+	if result := provider.Configure(context.Background(), config); result.HasError() {
+		return nil, fmt.Errorf("failed to configure provider")
 	}
-	return p.Meta().(*management.Management), nil
+
+	return provider.Meta().(*management.Management), nil
 }
 
 func TestMain(m *testing.M) {
@@ -78,26 +82,48 @@ func TestProvider_configValidation(t *testing.T) {
 	testCases := []struct {
 		name           string
 		resourceConfig map[string]interface{}
-		expectedErrors []error
+		expectedErrors diag.Diagnostics
 	}{
 		{
 			name:           "missing client id",
 			resourceConfig: map[string]interface{}{"domain": "test", "client_secret": "test"},
-			expectedErrors: []error{errors.New("\"client_secret\": all of `client_id,client_secret` must be specified")},
+			expectedErrors: diag.Diagnostics{
+				diag.Diagnostic{
+					Summary: "RequiredWith",
+					Detail:  "\"client_secret\": all of `client_id,client_secret` must be specified",
+				},
+			},
 		},
 		{
 			name:           "missing client secret",
 			resourceConfig: map[string]interface{}{"domain": "test", "client_id": "test"},
-			expectedErrors: []error{errors.New("\"client_id\": all of `client_id,client_secret` must be specified")},
+			expectedErrors: diag.Diagnostics{
+				diag.Diagnostic{
+					Summary: "RequiredWith",
+					Detail:  "\"client_id\": all of `client_id,client_secret` must be specified",
+				},
+			},
 		},
 		{
 			name:           "conflicting auth0 client and management token without domain",
 			resourceConfig: map[string]interface{}{"client_id": "test", "client_secret": "test", "api_token": "test"},
-			expectedErrors: []error{
-				errors.New("\"domain\": required field is not set"),
-				errors.New("\"client_id\": conflicts with api_token"),
-				errors.New("\"client_secret\": conflicts with api_token"),
-				errors.New("\"api_token\": conflicts with client_id"),
+			expectedErrors: diag.Diagnostics{
+				diag.Diagnostic{
+					Summary: "Missing required argument",
+					Detail:  "The argument \"domain\" is required, but no definition was found.",
+				},
+				diag.Diagnostic{
+					Summary: "ConflictsWith",
+					Detail:  "\"api_token\": conflicts with client_id",
+				},
+				diag.Diagnostic{
+					Summary: "ConflictsWith",
+					Detail:  "\"client_id\": conflicts with api_token",
+				},
+				diag.Diagnostic{
+					Summary: "ConflictsWith",
+					Detail:  "\"client_secret\": conflicts with api_token",
+				},
 			},
 		},
 		{
@@ -116,10 +142,10 @@ func TestProvider_configValidation(t *testing.T) {
 	os.Clearenv()
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			c := terraform.NewResourceConfigRaw(test.resourceConfig)
-			p := Provider()
+			config := terraform.NewResourceConfigRaw(test.resourceConfig)
+			provider := Provider()
 
-			_, errs := p.Validate(c)
+			errs := provider.Validate(config)
 			assertErrorsSliceEqual(t, test.expectedErrors, errs)
 		})
 	}
@@ -130,23 +156,33 @@ func TestProvider_configValidation(t *testing.T) {
 	}
 }
 
-func sortErrors(errs []error) {
+func sortErrors(errs diag.Diagnostics) {
 	sort.Slice(errs, func(i, j int) bool {
-		return errs[i].Error() < errs[j].Error()
+		return errs[i].Detail < errs[j].Detail
 	})
 }
 
-func assertErrorsSliceEqual(t *testing.T, expected, actual []error) {
+func assertErrorsSliceEqual(t *testing.T, expected, actual diag.Diagnostics) {
 	if len(expected) != len(actual) {
-		t.Fatalf("actual did not match expected. len(expected) != len(actual). expected: %v, actual: %v", expected, actual)
+		t.Fatalf(
+			"actual did not match expected. len(expected) != len(actual). expected: %v, actual: %v",
+			expected,
+			actual,
+		)
 	}
 
 	sortErrors(expected)
 	sortErrors(actual)
 
 	for i := range expected {
-		if expected[i].Error() != actual[i].Error() {
-			t.Fatalf("actual did not match expected. expected[%d] != actual[%d]. expected: %v, actual: %v", i, i, expected, actual)
+		if expected[i].Detail != actual[i].Detail {
+			t.Fatalf(
+				"actual did not match expected. expected[%d] != actual[%d]. expected: %+v, actual: %+v",
+				i,
+				i,
+				expected,
+				actual,
+			)
 		}
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newRole() *schema.Resource {
@@ -26,13 +26,6 @@ func newRole() *schema.Resource {
 			"description": {
 				Type:     schema.TypeString,
 				Optional: true,
-			},
-			"user_ids": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
-				ForceNew: true,
-				Removed:  `This field has been removed. Use "auth0_user.roles" instead`,
 			},
 			"permissions": {
 				Type:     schema.TypeSet,
@@ -191,8 +184,6 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 	}
-
-	d.SetPartial("permissions")
 
 	return nil
 }

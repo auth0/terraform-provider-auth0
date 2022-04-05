@@ -3,13 +3,13 @@ package auth0
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func TestAccGuardian(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -30,7 +30,7 @@ func TestAccGuardian(t *testing.T) {
 				Config: testAccConfigureTwilioUpdate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
-					resource.TestCheckNoResourceAttr("auth0_guardian.foo", "phone"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
 
@@ -83,7 +83,7 @@ func TestAccGuardian(t *testing.T) {
 				Config: testAccConfigureNoPhone,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
-					resource.TestCheckNoResourceAttr("auth0_guardian.foo", "phone"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
 

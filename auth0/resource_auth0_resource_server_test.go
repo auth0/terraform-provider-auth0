@@ -7,8 +7,8 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -39,7 +39,7 @@ func TestAccResourceServer(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
+		Providers: map[string]*schema.Provider{
 			"auth0": Provider(),
 		},
 		Steps: []resource.TestStep{
@@ -55,10 +55,22 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.1906583762.value", "create:foo"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.1906583762.description", "Create foos"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.3536702635.value", "create:bar"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.3536702635.description", "Create bars"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_resource_server.my_resource_server",
+						"scopes.*",
+						map[string]string{
+							"value":       "create:foo",
+							"description": "Create foos",
+						},
+					),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_resource_server.my_resource_server",
+						"scopes.*",
+						map[string]string{
+							"value":       "create:bar",
+							"description": "Create bars",
+						},
+					),
 				),
 			},
 			{
@@ -66,8 +78,14 @@ func TestAccResourceServer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.1448666690.value", "create:bar"), // set id changes
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.1448666690.description", "Create bars for bar reasons"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_resource_server.my_resource_server",
+						"scopes.*",
+						map[string]string{
+							"value":       "create:bar",
+							"description": "Create bars for bar reasons",
+						},
+					),
 				),
 			},
 		},

@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/auth0/go-auth0"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 // ResourceData generalises schema.ResourceData so that we can reuse the

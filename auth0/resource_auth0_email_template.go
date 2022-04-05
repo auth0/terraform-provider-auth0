@@ -1,23 +1,25 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newEmailTemplate() *schema.Resource {
 	return &schema.Resource{
-		Create: createEmailTemplate,
-		Read:   readEmailTemplate,
-		Update: updateEmailTemplate,
-		Delete: deleteEmailTemplate,
+		CreateContext: createEmailTemplate,
+		ReadContext:   readEmailTemplate,
+		UpdateContext: updateEmailTemplate,
+		DeleteContext: deleteEmailTemplate,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"template": {
@@ -69,7 +71,7 @@ func newEmailTemplate() *schema.Resource {
 	}
 }
 
-func createEmailTemplate(d *schema.ResourceData, m interface{}) error {
+func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	email := buildEmailTemplate(d)
 	api := m.(*management.Management)
 
@@ -79,7 +81,7 @@ func createEmailTemplate(d *schema.ResourceData, m interface{}) error {
 	if _, err := api.EmailTemplate.Read(auth0.StringValue(email.Template)); err == nil {
 		// We succeeded in reading the template, this means it was created previously.
 		if err := api.EmailTemplate.Update(auth0.StringValue(email.Template), email); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 
 		d.SetId(auth0.StringValue(email.Template))
@@ -90,7 +92,7 @@ func createEmailTemplate(d *schema.ResourceData, m interface{}) error {
 	// If we reached this point the template doesn't exist.
 	// Therefore, it is safe to create it.
 	if err := api.EmailTemplate.Create(email); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(email.Template))
@@ -98,7 +100,7 @@ func createEmailTemplate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func readEmailTemplate(d *schema.ResourceData, m interface{}) error {
+func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	email, err := api.EmailTemplate.Read(d.Id())
 	if err != nil {
@@ -108,7 +110,7 @@ func readEmailTemplate(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(email.Template))
@@ -124,20 +126,20 @@ func readEmailTemplate(d *schema.ResourceData, m interface{}) error {
 		d.Set("enabled", email.Enabled),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateEmailTemplate(d *schema.ResourceData, m interface{}) error {
+func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	email := buildEmailTemplate(d)
 	api := m.(*management.Management)
 	if err := api.EmailTemplate.Update(d.Id(), email); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readEmailTemplate(d, m)
+	return readEmailTemplate(ctx, d, m)
 }
 
-func deleteEmailTemplate(d *schema.ResourceData, m interface{}) error {
+func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	emailTemplate := &management.EmailTemplate{
 		Template: auth0.String(d.Id()),

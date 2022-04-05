@@ -1,23 +1,25 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newCustomDomainVerification() *schema.Resource {
 	return &schema.Resource{
-		Create: createCustomDomainVerification,
-		Read:   readCustomDomainVerification,
-		Delete: deleteCustomDomainVerification,
+		CreateContext: createCustomDomainVerification,
+		ReadContext:   readCustomDomainVerification,
+		DeleteContext: deleteCustomDomainVerification,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"custom_domain_id": {
@@ -32,9 +34,9 @@ func newCustomDomainVerification() *schema.Resource {
 	}
 }
 
-func createCustomDomainVerification(d *schema.ResourceData, m interface{}) error {
+func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
-	return resource.Retry(d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
 		if err != nil {
 			return resource.NonRetryableError(err)
@@ -50,15 +52,17 @@ func createCustomDomainVerification(d *schema.ResourceData, m interface{}) error
 
 		d.SetId(customDomainVerification.GetID())
 
-		if err := readCustomDomainVerification(d, m); err != nil {
-			return resource.NonRetryableError(err)
+		if result := readCustomDomainVerification(ctx, d, m); result.HasError() {
+			return resource.NonRetryableError(fmt.Errorf("failed to read custom domain verification"))
 		}
 
 		return nil
 	})
+
+	return diag.FromErr(err)
 }
 
-func readCustomDomainVerification(d *schema.ResourceData, m interface{}) error {
+func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
@@ -68,13 +72,13 @@ func readCustomDomainVerification(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
-	return d.Set("custom_domain_id", customDomain.GetID())
+	return diag.FromErr(d.Set("custom_domain_id", customDomain.GetID()))
 }
 
-func deleteCustomDomainVerification(d *schema.ResourceData, m interface{}) error {
+func deleteCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

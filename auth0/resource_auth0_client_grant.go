@@ -1,22 +1,24 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newClientGrant() *schema.Resource {
 	return &schema.Resource{
-		Create: createClientGrant,
-		Read:   readClientGrant,
-		Update: updateClientGrant,
-		Delete: deleteClientGrant,
+		CreateContext: createClientGrant,
+		ReadContext:   readClientGrant,
+		UpdateContext: updateClientGrant,
+		DeleteContext: deleteClientGrant,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"client_id": {
@@ -38,19 +40,19 @@ func newClientGrant() *schema.Resource {
 	}
 }
 
-func createClientGrant(d *schema.ResourceData, m interface{}) error {
+func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	clientGrant := buildClientGrant(d)
 	api := m.(*management.Management)
 	if err := api.ClientGrant.Create(clientGrant); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(clientGrant.ID))
 
-	return readClientGrant(d, m)
+	return readClientGrant(ctx, d, m)
 }
 
-func readClientGrant(d *schema.ResourceData, m interface{}) error {
+func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	clientGrant, err := api.ClientGrant.Read(d.Id())
 	if err != nil {
@@ -60,7 +62,7 @@ func readClientGrant(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -69,22 +71,22 @@ func readClientGrant(d *schema.ResourceData, m interface{}) error {
 		d.Set("scope", clientGrant.Scope),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateClientGrant(d *schema.ResourceData, m interface{}) error {
+func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	clientGrant := buildClientGrant(d)
 	clientGrant.Audience = nil
 	clientGrant.ClientID = nil
 	api := m.(*management.Management)
 	if err := api.ClientGrant.Update(d.Id(), clientGrant); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readClientGrant(d, m)
+	return readClientGrant(ctx, d, m)
 }
 
-func deleteClientGrant(d *schema.ResourceData, m interface{}) error {
+func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.ClientGrant.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -93,7 +95,7 @@ func deleteClientGrant(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil

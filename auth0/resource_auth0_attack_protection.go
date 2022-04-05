@@ -1,9 +1,11 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -11,12 +13,12 @@ import (
 
 func newAttackProtection() *schema.Resource {
 	return &schema.Resource{
-		Create: createAttackProtection,
-		Read:   readAttackProtection,
-		Update: updateAttackProtection,
-		Delete: deleteAttackProtection,
+		CreateContext: createAttackProtection,
+		ReadContext:   readAttackProtection,
+		UpdateContext: updateAttackProtection,
+		DeleteContext: deleteAttackProtection,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"breached_password_detection": {
@@ -207,12 +209,12 @@ func newAttackProtection() *schema.Resource {
 	}
 }
 
-func createAttackProtection(d *schema.ResourceData, m interface{}) error {
+func createAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(resource.UniqueId())
-	return updateAttackProtection(d, m)
+	return updateAttackProtection(ctx, d, m)
 }
 
-func readAttackProtection(d *schema.ResourceData, m interface{}) error {
+func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
 	ipThrottling, err := api.AttackProtection.GetSuspiciousIPThrottling()
@@ -223,11 +225,11 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	if err = d.Set("suspicious_ip_throttling", flattenSuspiciousIPThrottling(ipThrottling)); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	bruteForce, err := api.AttackProtection.GetBruteForceProtection()
@@ -238,11 +240,11 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	if err = d.Set("brute_force_protection", flattenBruteForceProtection(bruteForce)); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
@@ -253,41 +255,41 @@ func readAttackProtection(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	if err = d.Set("breached_password_detection", flattenBreachedPasswordProtection(breachedPasswords)); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil
 }
 
-func updateAttackProtection(d *schema.ResourceData, m interface{}) error {
+func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
 	if ipt := expandSuspiciousIPThrottling(d); ipt != nil {
 		if err := api.AttackProtection.UpdateSuspiciousIPThrottling(ipt); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
 	if bfp := expandBruteForceProtection(d); bfp != nil {
 		if err := api.AttackProtection.UpdateBruteForceProtection(bfp); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
 	if bpd := expandBreachedPasswordDetection(d); bpd != nil {
 		if err := api.AttackProtection.UpdateBreachedPasswordDetection(bpd); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
-	return readAttackProtection(d, m)
+	return readAttackProtection(ctx, d, m)
 }
 
-func deleteAttackProtection(d *schema.ResourceData, m interface{}) error {
+func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

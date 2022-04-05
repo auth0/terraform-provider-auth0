@@ -1,12 +1,14 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 	"regexp"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -15,12 +17,12 @@ var ruleNameRegexp = regexp.MustCompile("^[^\\s-][\\w -]+[^\\s-]$")
 
 func newRule() *schema.Resource {
 	return &schema.Resource{
-		Create: createRule,
-		Read:   readRule,
-		Update: updateRule,
-		Delete: deleteRule,
+		CreateContext: createRule,
+		ReadContext:   readRule,
+		UpdateContext: updateRule,
+		DeleteContext: deleteRule,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -48,19 +50,19 @@ func newRule() *schema.Resource {
 	}
 }
 
-func createRule(d *schema.ResourceData, m interface{}) error {
+func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := buildRule(d)
 	api := m.(*management.Management)
 	if err := api.Rule.Create(rule); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(rule.ID))
 
-	return readRule(d, m)
+	return readRule(ctx, d, m)
 }
 
-func readRule(d *schema.ResourceData, m interface{}) error {
+func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	rule, err := api.Rule.Read(d.Id())
 	if err != nil {
@@ -70,7 +72,7 @@ func readRule(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -80,20 +82,20 @@ func readRule(d *schema.ResourceData, m interface{}) error {
 		d.Set("enabled", rule.Enabled),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateRule(d *schema.ResourceData, m interface{}) error {
+func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := buildRule(d)
 	api := m.(*management.Management)
 	if err := api.Rule.Update(d.Id(), rule); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readRule(d, m)
+	return readRule(ctx, d, m)
 }
 
-func deleteRule(d *schema.ResourceData, m interface{}) error {
+func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Rule.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -102,7 +104,7 @@ func deleteRule(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil

@@ -1,24 +1,26 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 	"regexp"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newHook() *schema.Resource {
 	return &schema.Resource{
-		Create: createHook,
-		Read:   readHook,
-		Update: updateHook,
-		Delete: deleteHook,
+		CreateContext: createHook,
+		ReadContext:   readHook,
+		UpdateContext: updateHook,
+		DeleteContext: deleteHook,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -70,23 +72,23 @@ func newHook() *schema.Resource {
 	}
 }
 
-func createHook(d *schema.ResourceData, m interface{}) error {
+func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	hook := buildHook(d)
 	api := m.(*management.Management)
 	if err := api.Hook.Create(hook); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(hook.ID))
 
 	if err := upsertHookSecrets(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readHook(d, m)
+	return readHook(ctx, d, m)
 }
 
-func readHook(d *schema.ResourceData, m interface{}) error {
+func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	hook, err := api.Hook.Read(d.Id())
 	if err != nil {
@@ -96,7 +98,7 @@ func readHook(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -107,21 +109,21 @@ func readHook(d *schema.ResourceData, m interface{}) error {
 		d.Set("enabled", hook.Enabled),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateHook(d *schema.ResourceData, m interface{}) error {
+func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	hook := buildHook(d)
 	api := m.(*management.Management)
 	if err := api.Hook.Update(d.Id(), hook); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if err := upsertHookSecrets(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readHook(d, m)
+	return readHook(ctx, d, m)
 }
 
 func upsertHookSecrets(d *schema.ResourceData, m interface{}) error {
@@ -145,7 +147,7 @@ func toHookSecrets(val map[string]interface{}) management.HookSecrets {
 	return hookSecrets
 }
 
-func deleteHook(d *schema.ResourceData, m interface{}) error {
+func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Hook.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -154,7 +156,7 @@ func deleteHook(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil

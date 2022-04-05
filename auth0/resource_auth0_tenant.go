@@ -1,10 +1,12 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -14,12 +16,12 @@ import (
 
 func newTenant() *schema.Resource {
 	return &schema.Resource{
-		Create: createTenant,
-		Read:   readTenant,
-		Update: updateTenant,
-		Delete: deleteTenant,
+		CreateContext: createTenant,
+		ReadContext:   readTenant,
+		UpdateContext: updateTenant,
+		DeleteContext: deleteTenant,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"change_password": {
@@ -241,12 +243,12 @@ func newTenant() *schema.Resource {
 	}
 }
 
-func createTenant(d *schema.ResourceData, m interface{}) error {
+func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(resource.UniqueId())
-	return updateTenant(d, m)
+	return updateTenant(ctx, d, m)
 }
 
-func readTenant(d *schema.ResourceData, m interface{}) error {
+func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	tenant, err := api.Tenant.Read()
 	if err != nil {
@@ -256,7 +258,7 @@ func readTenant(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -279,20 +281,20 @@ func readTenant(d *schema.ResourceData, m interface{}) error {
 		d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin)),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateTenant(d *schema.ResourceData, m interface{}) error {
+func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	tenant := buildTenant(d)
 	api := m.(*management.Management)
 	if err := api.Tenant.Update(tenant); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readTenant(d, m)
+	return readTenant(ctx, d, m)
 }
 
-func deleteTenant(d *schema.ResourceData, m interface{}) error {
+func deleteTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

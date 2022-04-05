@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -8,6 +9,7 @@ import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -17,12 +19,12 @@ type validateUserFunc func(*management.User) error
 
 func newUser() *schema.Resource {
 	return &schema.Resource{
-		Create: createUser,
-		Read:   readUser,
-		Update: updateUser,
-		Delete: deleteUser,
+		CreateContext: createUser,
+		ReadContext:   readUser,
+		UpdateContext: updateUser,
+		DeleteContext: deleteUser,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -118,7 +120,7 @@ func newUser() *schema.Resource {
 	}
 }
 
-func readUser(d *schema.ResourceData, m interface{}) error {
+func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	user, err := api.User.Read(d.Id())
 	if err != nil {
@@ -128,7 +130,7 @@ func readUser(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -149,19 +151,19 @@ func readUser(d *schema.ResourceData, m interface{}) error {
 
 	userMeta, err := structure.FlattenJsonToString(user.UserMetadata)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	result = multierror.Append(result, d.Set("user_metadata", userMeta))
 
 	appMeta, err := structure.FlattenJsonToString(user.AppMetadata)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	result = multierror.Append(result, d.Set("app_metadata", appMeta))
 
 	roleList, err := api.User.Roles(d.Id())
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	result = multierror.Append(
 		result,
@@ -174,57 +176,57 @@ func readUser(d *schema.ResourceData, m interface{}) error {
 		}()),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func createUser(d *schema.ResourceData, m interface{}) error {
+func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	user, err := buildUser(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	api := m.(*management.Management)
 	if err := api.User.Create(user); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(auth0.StringValue(user.ID))
 
 	d.Partial(true)
 	if err = assignUserRoles(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.Partial(false)
 
-	return readUser(d, m)
+	return readUser(ctx, d, m)
 }
 
-func updateUser(d *schema.ResourceData, m interface{}) error {
+func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	user, err := buildUser(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if err = validateUser(user); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	api := m.(*management.Management)
 	if userHasChange(user) {
 		if err := api.User.Update(d.Id(), user); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
 	d.Partial(true)
 	if err = assignUserRoles(d, m); err != nil {
-		return fmt.Errorf("failed assigning user roles. %s", err)
+		return diag.Errorf("failed assigning user roles. %s", err)
 	}
 	d.Partial(false)
 
-	return readUser(d, m)
+	return readUser(ctx, d, m)
 }
 
-func deleteUser(d *schema.ResourceData, m interface{}) error {
+func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.User.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

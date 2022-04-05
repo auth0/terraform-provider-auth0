@@ -1,12 +1,14 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -16,12 +18,12 @@ import (
 
 func newAction() *schema.Resource {
 	return &schema.Resource{
-		Create: createAction,
-		Read:   readAction,
-		Update: updateAction,
-		Delete: deleteAction,
+		CreateContext: createAction,
+		ReadContext:   readAction,
+		UpdateContext: updateAction,
+		DeleteContext: deleteAction,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -127,25 +129,25 @@ func newAction() *schema.Resource {
 	}
 }
 
-func createAction(d *schema.ResourceData, m interface{}) error {
+func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	action := expandAction(d)
 	api := m.(*management.Management)
 	if err := api.Action.Create(action); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(action.GetID())
 
 	d.Partial(true)
 	if err := deployAction(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.Partial(false)
 
-	return readAction(d, m)
+	return readAction(ctx, d, m)
 }
 
-func readAction(d *schema.ResourceData, m interface{}) error {
+func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	action, err := api.Action.Read(d.Id())
 	if err != nil {
@@ -155,7 +157,7 @@ func readAction(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -169,23 +171,23 @@ func readAction(d *schema.ResourceData, m interface{}) error {
 		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
 	}
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateAction(d *schema.ResourceData, m interface{}) error {
+func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	action := expandAction(d)
 	api := m.(*management.Management)
 	if err := api.Action.Update(d.Id(), action); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Partial(true)
 	if err := deployAction(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.Partial(false)
 
-	return readAction(d, m)
+	return readAction(ctx, d, m)
 }
 
 func deployAction(d *schema.ResourceData, m interface{}) error {
@@ -235,7 +237,7 @@ func deployAction(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func deleteAction(d *schema.ResourceData, m interface{}) error {
+func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Action.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -244,7 +246,7 @@ func deleteAction(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil

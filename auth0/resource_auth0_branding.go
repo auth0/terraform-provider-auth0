@@ -1,22 +1,24 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newBranding() *schema.Resource {
 	return &schema.Resource{
-		Create: createBranding,
-		Read:   readBranding,
-		Update: updateBranding,
-		Delete: deleteBranding,
+		CreateContext: createBranding,
+		ReadContext:   readBranding,
+		UpdateContext: updateBranding,
+		DeleteContext: deleteBranding,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"colors": {
@@ -80,12 +82,12 @@ func newBranding() *schema.Resource {
 	}
 }
 
-func createBranding(d *schema.ResourceData, m interface{}) error {
+func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(resource.UniqueId())
-	return updateBranding(d, m)
+	return updateBranding(ctx, d, m)
 }
 
-func readBranding(d *schema.ResourceData, m interface{}) error {
+func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	branding, err := api.Branding.Read()
 	if err != nil {
@@ -95,7 +97,7 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -111,42 +113,42 @@ func readBranding(d *schema.ResourceData, m interface{}) error {
 
 	tenant, err := api.Tenant.Read()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if tenant.Flags.EnableCustomDomainInEmails != nil && *tenant.Flags.EnableCustomDomainInEmails {
 		if err := setUniversalLogin(d, m); err != nil {
 			d.SetId("")
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateBranding(d *schema.ResourceData, m interface{}) error {
+func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
 	branding := buildBranding(d)
 	if err := api.Branding.Update(branding); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	universalLogin := buildBrandingUniversalLogin(d)
 	if universalLogin.GetBody() != "" {
 		if err := api.Branding.SetUniversalLogin(universalLogin); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
-	return readBranding(d, m)
+	return readBranding(ctx, d, m)
 }
 
-func deleteBranding(d *schema.ResourceData, m interface{}) error {
+func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	tenant, err := api.Tenant.Read()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if tenant.Flags.EnableCustomDomainInEmails != nil && *tenant.Flags.EnableCustomDomainInEmails {
@@ -160,7 +162,7 @@ func deleteBranding(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return err
+	return diag.FromErr(err)
 }
 
 func buildBranding(d *schema.ResourceData) *management.Branding {

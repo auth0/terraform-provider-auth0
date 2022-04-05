@@ -1,22 +1,24 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newEmail() *schema.Resource {
 	return &schema.Resource{
-		Create: createEmail,
-		Read:   readEmail,
-		Update: updateEmail,
-		Delete: deleteEmail,
+		CreateContext: createEmail,
+		ReadContext:   readEmail,
+		UpdateContext: updateEmail,
+		DeleteContext: deleteEmail,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -92,19 +94,19 @@ func newEmail() *schema.Resource {
 	}
 }
 
-func createEmail(d *schema.ResourceData, m interface{}) error {
+func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	email := buildEmail(d)
 	api := m.(*management.Management)
 	if err := api.Email.Create(email); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(email.Name))
 
-	return readEmail(d, m)
+	return readEmail(ctx, d, m)
 }
 
-func readEmail(d *schema.ResourceData, m interface{}) error {
+func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	email, err := api.Email.Read()
 	if err != nil {
@@ -114,7 +116,7 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(email.Name))
@@ -140,20 +142,20 @@ func readEmail(d *schema.ResourceData, m interface{}) error {
 		result = multierror.Append(result, d.Set("credentials", []map[string]interface{}{credentialsMap}))
 	}
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateEmail(d *schema.ResourceData, m interface{}) error {
+func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	email := buildEmail(d)
 	api := m.(*management.Management)
 	if err := api.Email.Update(email); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readEmail(d, m)
+	return readEmail(ctx, d, m)
 }
 
-func deleteEmail(d *schema.ResourceData, m interface{}) error {
+func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Email.Delete(); err != nil {
 		if mErr, ok := err.(management.Error); ok {

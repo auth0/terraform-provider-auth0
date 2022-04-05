@@ -1,11 +1,13 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
@@ -86,15 +88,17 @@ func Provider() *schema.Provider {
 		},
 	}
 
-	provider.ConfigureFunc = ConfigureProvider(provider.TerraformVersion)
+	provider.ConfigureContextFunc = ConfigureProvider(provider.TerraformVersion)
 
 	return provider
 }
 
 // ConfigureProvider will configure the *schema.Provider so that *management.Management
 // client is stored and passed into the subsequent resources as the meta parameter.
-func ConfigureProvider(terraformVersion string) func(data *schema.ResourceData) (interface{}, error) {
-	return func(data *schema.ResourceData) (interface{}, error) {
+func ConfigureProvider(
+	terraformVersion string,
+) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		providerVersion := version.ProviderVersion
 		sdkVersion := auth0.Version
 		terraformSDKVersion := meta.SDKVersionString()
@@ -120,10 +124,15 @@ func ConfigureProvider(terraformVersion string) func(data *schema.ResourceData) 
 			authenticationOption = management.WithClientCredentials(clientID, clientSecret)
 		}
 
-		return management.New(domain,
+		apiClient, err := management.New(domain,
 			authenticationOption,
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent),
 		)
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+
+		return apiClient, nil
 	}
 }

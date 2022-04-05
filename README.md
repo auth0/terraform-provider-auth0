@@ -41,7 +41,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "0.17.1"
+      version = "0.29.0"
     }
   }
 }
@@ -122,6 +122,8 @@ The [Responsible Disclosure Program](https://auth0.com/whitehat) details the pro
 
 ## License
 
-This project is licensed under the MPL-2.0 license. See the [LICENSE](LICENSE) file for more info.
+This project is licensed under the MPL-2.0 license. See the [LICENSE](LICENSE) file for more info or
+[auth0-terraform-provider.pdf](https://www.okta.com/sites/default/files/2022-03/auth0-terraform-provider.pdf) for a full
+report.
 
 [[table of contents]](#table-of-contents)

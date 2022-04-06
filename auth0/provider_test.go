@@ -19,12 +19,16 @@ const wiremockHost = "localhost:8080"
 
 func providerWithTestingConfiguration() *schema.Provider {
 	provider := Provider()
-	provider.ConfigureFunc = func(data *schema.ResourceData) (interface{}, error) {
-		return management.New(
+	provider.ConfigureContextFunc = func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		apiClient, err := management.New(
 			wiremockHost,
 			management.WithInsecure(),
 			management.WithDebug(true),
 		)
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+		return apiClient, nil
 	}
 	return provider
 }

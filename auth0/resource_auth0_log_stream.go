@@ -1,23 +1,25 @@
 package auth0
 
 import (
+	"context"
 	"log"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newLogStream() *schema.Resource {
 	return &schema.Resource{
-		Create: createLogStream,
-		Read:   readLogStream,
-		Update: updateLogStream,
-		Delete: deleteLogStream,
+		CreateContext: createLogStream,
+		ReadContext:   readLogStream,
+		UpdateContext: updateLogStream,
+		DeleteContext: deleteLogStream,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -180,12 +182,12 @@ func newLogStream() *schema.Resource {
 	}
 }
 
-func createLogStream(d *schema.ResourceData, m interface{}) error {
+func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	logStream := buildLogStream(d)
 
 	api := m.(*management.Management)
 	if err := api.LogStream.Create(logStream); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(logStream.GetID())
@@ -196,14 +198,14 @@ func createLogStream(d *schema.ResourceData, m interface{}) error {
 	status := String(d, "status")
 	if status != nil && status != logStream.Status {
 		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: status}); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
-	return readLogStream(d, m)
+	return readLogStream(ctx, d, m)
 }
 
-func readLogStream(d *schema.ResourceData, m interface{}) error {
+func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	logStream, err := api.LogStream.Read(d.Id())
 	if err != nil {
@@ -213,7 +215,7 @@ func readLogStream(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -223,20 +225,20 @@ func readLogStream(d *schema.ResourceData, m interface{}) error {
 		d.Set("sink", flattenLogStreamSink(logStream.Sink)),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateLogStream(d *schema.ResourceData, m interface{}) error {
+func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	logStream := buildLogStream(d)
 	api := m.(*management.Management)
 	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readLogStream(d, m)
+	return readLogStream(ctx, d, m)
 }
 
-func deleteLogStream(d *schema.ResourceData, m interface{}) error {
+func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.LogStream.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

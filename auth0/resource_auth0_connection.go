@@ -9,6 +9,7 @@ import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -647,12 +648,12 @@ var connectionSchema = map[string]*schema.Schema{
 
 func newConnection() *schema.Resource {
 	return &schema.Resource{
-		Create: createConnection,
-		Read:   readConnection,
-		Update: updateConnection,
-		Delete: deleteConnection,
+		CreateContext: createConnection,
+		ReadContext:   readConnection,
+		UpdateContext: updateConnection,
+		DeleteContext: deleteConnection,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema:        connectionSchema,
 		SchemaVersion: 2,
@@ -763,19 +764,19 @@ func connectionSchemaUpgradeV1(
 	return state, nil
 }
 
-func createConnection(d *schema.ResourceData, m interface{}) error {
+func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	connection := expandConnection(d)
 	api := m.(*management.Management)
 	if err := api.Connection.Create(connection); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(connection.ID))
 
-	return readConnection(d, m)
+	return readConnection(ctx, d, m)
 }
 
-func readConnection(d *schema.ResourceData, m interface{}) error {
+func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	connection, err := api.Connection.Read(d.Id())
 	if err != nil {
@@ -785,7 +786,7 @@ func readConnection(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(connection.ID))
@@ -810,20 +811,20 @@ func readConnection(d *schema.ResourceData, m interface{}) error {
 		result = multierror.Append(result, d.Set("show_as_button", connection.ShowAsButton))
 	}
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateConnection(d *schema.ResourceData, m interface{}) error {
+func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	connection := expandConnection(d)
 	api := m.(*management.Management)
 	if err := api.Connection.Update(d.Id(), connection); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readConnection(d, m)
+	return readConnection(ctx, d, m)
 }
 
-func deleteConnection(d *schema.ResourceData, m interface{}) error {
+func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Connection.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

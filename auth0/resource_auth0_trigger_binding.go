@@ -1,22 +1,24 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newTriggerBinding() *schema.Resource {
 	return &schema.Resource{
-		Create: createTriggerBinding,
-		Read:   readTriggerBinding,
-		Update: updateTriggerBinding,
-		Delete: deleteTriggerBinding,
+		CreateContext: createTriggerBinding,
+		ReadContext:   readTriggerBinding,
+		UpdateContext: updateTriggerBinding,
+		DeleteContext: deleteTriggerBinding,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"trigger": {
@@ -60,20 +62,20 @@ func newTriggerBinding() *schema.Resource {
 	}
 }
 
-func createTriggerBinding(d *schema.ResourceData, m interface{}) error {
+func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	id := d.Get("trigger").(string)
 	triggerBindings := expandTriggerBindings(d)
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(id)
 
-	return readTriggerBinding(d, m)
+	return readTriggerBinding(ctx, d, m)
 }
 
-func readTriggerBinding(d *schema.ResourceData, m interface{}) error {
+func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	triggerBindings, err := api.Action.Bindings(d.Id())
 	if err != nil {
@@ -83,23 +85,23 @@ func readTriggerBinding(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
-	return d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings))
+	return diag.FromErr(d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings)))
 }
 
-func updateTriggerBinding(d *schema.ResourceData, m interface{}) error {
+func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	triggerBindings := expandTriggerBindings(d)
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readTriggerBinding(d, m)
+	return readTriggerBinding(ctx, d, m)
 }
 
-func deleteTriggerBinding(d *schema.ResourceData, m interface{}) error {
+func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -108,7 +110,7 @@ func deleteTriggerBinding(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	return nil

@@ -1,24 +1,26 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func newResourceServer() *schema.Resource {
 	return &schema.Resource{
-		Create: createResourceServer,
-		Read:   readResourceServer,
-		Update: updateResourceServer,
-		Delete: deleteResourceServer,
+		CreateContext: createResourceServer,
+		ReadContext:   readResourceServer,
+		UpdateContext: updateResourceServer,
+		DeleteContext: deleteResourceServer,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -111,19 +113,19 @@ func newResourceServer() *schema.Resource {
 	}
 }
 
-func createResourceServer(d *schema.ResourceData, m interface{}) error {
+func createResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	resourceServer := expandResourceServer(d)
 	api := m.(*management.Management)
 	if err := api.ResourceServer.Create(resourceServer); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(auth0.StringValue(resourceServer.ID))
 
-	return readResourceServer(d, m)
+	return readResourceServer(ctx, d, m)
 }
 
-func readResourceServer(d *schema.ResourceData, m interface{}) error {
+func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	resourceServer, err := api.ResourceServer.Read(d.Id())
 	if err != nil {
@@ -133,7 +135,7 @@ func readResourceServer(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -164,22 +166,22 @@ func readResourceServer(d *schema.ResourceData, m interface{}) error {
 		d.Set("token_dialect", resourceServer.TokenDialect),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateResourceServer(d *schema.ResourceData, m interface{}) error {
+func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	resourceServer := expandResourceServer(d)
 	resourceServer.Identifier = nil
 
 	api := m.(*management.Management)
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readResourceServer(d, m)
+	return readResourceServer(ctx, d, m)
 }
 
-func deleteResourceServer(d *schema.ResourceData, m interface{}) error {
+func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.ResourceServer.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

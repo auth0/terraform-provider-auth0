@@ -1,11 +1,13 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -13,12 +15,12 @@ import (
 
 func newPrompt() *schema.Resource {
 	return &schema.Resource{
-		Create: createPrompt,
-		Read:   readPrompt,
-		Update: updatePrompt,
-		Delete: deletePrompt,
+		CreateContext: createPrompt,
+		ReadContext:   readPrompt,
+		UpdateContext: updatePrompt,
+		DeleteContext: deletePrompt,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"universal_login_experience": {
@@ -36,12 +38,12 @@ func newPrompt() *schema.Resource {
 	}
 }
 
-func createPrompt(d *schema.ResourceData, m interface{}) error {
+func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(resource.UniqueId())
-	return updatePrompt(d, m)
+	return updatePrompt(ctx, d, m)
 }
 
-func readPrompt(d *schema.ResourceData, m interface{}) error {
+func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	prompt, err := api.Prompt.Read()
 	if err != nil {
@@ -51,7 +53,7 @@ func readPrompt(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -59,20 +61,20 @@ func readPrompt(d *schema.ResourceData, m interface{}) error {
 		d.Set("identifier_first", prompt.IdentifierFirst),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updatePrompt(d *schema.ResourceData, m interface{}) error {
+func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	prompt := buildPrompt(d)
 	api := m.(*management.Management)
 	if err := api.Prompt.Update(prompt); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readPrompt(d, m)
+	return readPrompt(ctx, d, m)
 }
 
-func deletePrompt(d *schema.ResourceData, m interface{}) error {
+func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

@@ -1,8 +1,11 @@
 package auth0
 
 import (
+	"context"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -10,12 +13,12 @@ import (
 
 func newGuardian() *schema.Resource {
 	return &schema.Resource{
-		Create: createGuardian,
-		Read:   readGuardian,
-		Update: updateGuardian,
-		Delete: deleteGuardian,
+		CreateContext: createGuardian,
+		ReadContext:   readGuardian,
+		UpdateContext: updateGuardian,
+		DeleteContext: deleteGuardian,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"policy": {
@@ -103,27 +106,27 @@ func newGuardian() *schema.Resource {
 	}
 }
 
-func createGuardian(d *schema.ResourceData, m interface{}) error {
+func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(resource.UniqueId())
-	return updateGuardian(d, m)
+	return updateGuardian(ctx, d, m)
 }
 
-func deleteGuardian(d *schema.ResourceData, m interface{}) error {
+func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Guardian.MultiFactor.Phone.Enable(false); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if err := api.Guardian.MultiFactor.Email.Enable(false); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId("")
 	return nil
 }
 
-func updateGuardian(d *schema.ResourceData, m interface{}) error {
+func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
 	if d.HasChange("policy") {
@@ -131,26 +134,26 @@ func updateGuardian(d *schema.ResourceData, m interface{}) error {
 		if policy == "never" {
 			// Passing empty array to set it to the "never" policy.
 			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}); err != nil {
-				return err
+				return diag.FromErr(err)
 			}
 		} else {
 			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{policy}); err != nil {
-				return err
+				return diag.FromErr(err)
 			}
 		}
 	}
 
 	if err := updatePhoneFactor(d, api); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if err := updateEmailFactor(d, api); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if err := updateOTPFactor(d, api); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return readGuardian(d, m)
+	return readGuardian(ctx, d, m)
 }
 
 func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error {
@@ -276,13 +279,13 @@ func updateTwilioOptions(opts Iterator, api *management.Management) error {
 	)
 }
 
-func readGuardian(d *schema.ResourceData, m interface{}) error {
+func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	var result *multierror.Error
 
 	api := m.(*management.Management)
 	messageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	phoneData := make(map[string]interface{})
@@ -290,13 +293,13 @@ func readGuardian(d *schema.ResourceData, m interface{}) error {
 
 	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	phoneData["provider"] = phoneProvider.Provider
 
 	policy, err := api.Guardian.MultiFactor.Policy()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if len(*policy) == 0 {
@@ -313,12 +316,12 @@ func readGuardian(d *schema.ResourceData, m interface{}) error {
 		phoneProviderFlattenedOptions, err = flattenAuth0Options(api)
 	}
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	ok, err := factorShouldBeUpdated(d, "phone")
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if ok {
 		phoneData["options"] = []interface{}{phoneProviderFlattenedOptions}
@@ -329,7 +332,7 @@ func readGuardian(d *schema.ResourceData, m interface{}) error {
 
 	factors, err := api.Guardian.MultiFactor.List()
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	for _, factor := range factors {
@@ -343,7 +346,7 @@ func readGuardian(d *schema.ResourceData, m interface{}) error {
 		}
 	}
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {

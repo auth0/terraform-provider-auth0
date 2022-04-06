@@ -1,12 +1,14 @@
 package auth0
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
@@ -14,12 +16,12 @@ import (
 
 func newOrganization() *schema.Resource {
 	return &schema.Resource{
-		Create: createOrganization,
-		Read:   readOrganization,
-		Update: updateOrganization,
-		Delete: deleteOrganization,
+		CreateContext: createOrganization,
+		ReadContext:   readOrganization,
+		UpdateContext: updateOrganization,
+		DeleteContext: deleteOrganization,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -81,22 +83,22 @@ func newOrganization() *schema.Resource {
 	}
 }
 
-func createOrganization(d *schema.ResourceData, m interface{}) error {
+func createOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	organization := buildOrganization(d)
 	api := m.(*management.Management)
 	if err := api.Organization.Create(organization); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.SetId(organization.GetID())
 
 	d.Partial(true)
 	if err := assignOrganizationConnections(d, m); err != nil {
-		return fmt.Errorf("failed assigning organization connections. %w", err)
+		return diag.FromErr(fmt.Errorf("failed assigning organization connections. %w", err))
 	}
 	d.Partial(false)
 
-	return readOrganization(d, m)
+	return readOrganization(ctx, d, m)
 }
 
 func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err error) {
@@ -149,7 +151,7 @@ func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err e
 	return nil
 }
 
-func readOrganization(d *schema.ResourceData, m interface{}) error {
+func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	organization, err := api.Organization.Read(d.Id())
 	if err != nil {
@@ -159,12 +161,12 @@ func readOrganization(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	organizationConnectionList, err := api.Organization.Connections(d.Id())
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -175,26 +177,26 @@ func readOrganization(d *schema.ResourceData, m interface{}) error {
 		d.Set("connections", flattenOrganizationConnections(organizationConnectionList)),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateOrganization(d *schema.ResourceData, m interface{}) error {
+func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	organization := buildOrganization(d)
 	api := m.(*management.Management)
 	if err := api.Organization.Update(d.Id(), organization); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	d.Partial(true)
 	if err := assignOrganizationConnections(d, m); err != nil {
-		return fmt.Errorf("failed updating organization connections. %w", err)
+		return diag.FromErr(fmt.Errorf("failed updating organization connections. %w", err))
 	}
 	d.Partial(false)
 
-	return readOrganization(d, m)
+	return readOrganization(ctx, d, m)
 }
 
-func deleteOrganization(d *schema.ResourceData, m interface{}) error {
+func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Organization.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

@@ -1,16 +1,17 @@
 package auth0
 
 import (
-	"errors"
+	"context"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func newGlobalClient() *schema.Resource {
 	client := newClient()
-	client.Create = createGlobalClient
-	client.Delete = deleteGlobalClient
+	client.CreateContext = createGlobalClient
+	client.DeleteContext = deleteGlobalClient
 
 	exclude := []string{"client_secret_rotation_trigger"}
 
@@ -40,26 +41,26 @@ func in(needle string, haystack []string) bool {
 	return false
 }
 
-func createGlobalClient(d *schema.ResourceData, m interface{}) error {
-	if err := readGlobalClientID(d, m); err != nil {
+func createGlobalClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	if err := readGlobalClientID(ctx, d, m); err != nil {
 		return err
 	}
-	return updateClient(d, m)
+	return updateClient(ctx, d, m)
 }
 
-func readGlobalClientID(d *schema.ResourceData, m interface{}) error {
+func readGlobalClientID(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.IncludeFields("client_id"))
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	if len(clients.Clients) == 0 {
-		return errors.New("no auth0 global client found")
+		return diag.Errorf("no auth0 global client found")
 	}
 	d.SetId(clients.Clients[0].GetClientID())
 	return nil
 }
 
-func deleteGlobalClient(d *schema.ResourceData, m interface{}) error {
+func deleteGlobalClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	return nil
 }

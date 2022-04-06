@@ -2,6 +2,7 @@ package auth0
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -32,12 +34,12 @@ var (
 
 func newPromptCustomText() *schema.Resource {
 	return &schema.Resource{
-		Create: createPromptCustomText,
-		Read:   readPromptCustomText,
-		Update: updatePromptCustomText,
-		Delete: deletePromptCustomText,
+		CreateContext: createPromptCustomText,
+		ReadContext:   readPromptCustomText,
+		UpdateContext: updatePromptCustomText,
+		DeleteContext: deletePromptCustomText,
 		Importer: &schema.ResourceImporter{
-			State: importPromptCustomText,
+			StateContext: importPromptCustomText,
 		},
 		Schema: map[string]*schema.Schema{
 			"prompt": {
@@ -60,7 +62,7 @@ func newPromptCustomText() *schema.Resource {
 	}
 }
 
-func importPromptCustomText(d *schema.ResourceData, _ interface{}) ([]*schema.ResourceData, error) {
+func importPromptCustomText(ctx context.Context, d *schema.ResourceData, _ interface{}) ([]*schema.ResourceData, error) {
 	prompt, language, err := getPromptAndLanguage(d)
 	if err != nil {
 		return []*schema.ResourceData{}, err
@@ -76,12 +78,12 @@ func importPromptCustomText(d *schema.ResourceData, _ interface{}) ([]*schema.Re
 	return []*schema.ResourceData{d}, result.ErrorOrNil()
 }
 
-func createPromptCustomText(d *schema.ResourceData, m interface{}) error {
+func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(d.Get("prompt").(string) + ":" + d.Get("language").(string))
-	return updatePromptCustomText(d, m)
+	return updatePromptCustomText(ctx, d, m)
 }
 
-func readPromptCustomText(d *schema.ResourceData, m interface{}) error {
+func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	customText, err := api.Prompt.CustomText(d.Get("prompt").(string), d.Get("language").(string))
 	if err != nil {
@@ -91,43 +93,43 @@ func readPromptCustomText(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	body, err := marshalCustomTextBody(customText)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
-	return d.Set("body", body)
+	return diag.FromErr(d.Set("body", body))
 }
 
-func updatePromptCustomText(d *schema.ResourceData, m interface{}) error {
+func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	prompt, language, err := getPromptAndLanguage(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	if d.Get("body").(string) != "" {
 		var body map[string]interface{}
 		if err := json.Unmarshal([]byte(d.Get("body").(string)), &body); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 
 		if err := api.Prompt.SetCustomText(prompt, language, body); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
-	return readPromptCustomText(d, m)
+	return readPromptCustomText(ctx, d, m)
 }
 
-func deletePromptCustomText(d *schema.ResourceData, m interface{}) error {
+func deletePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	if err := d.Set("body", "{}"); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
-	if err := updatePromptCustomText(d, m); err != nil {
+	if err := updatePromptCustomText(ctx, d, m); err != nil {
 		return err
 	}
 

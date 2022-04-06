@@ -1,12 +1,14 @@
 package auth0
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
@@ -15,12 +17,12 @@ import (
 
 func newClient() *schema.Resource {
 	return &schema.Resource{
-		Create: createClient,
-		Read:   readClient,
-		Update: updateClient,
-		Delete: deleteClient,
+		CreateContext: createClient,
+		ReadContext:   readClient,
+		UpdateContext: updateClient,
+		DeleteContext: deleteClient,
 		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
+			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -580,21 +582,21 @@ func newClient() *schema.Resource {
 	}
 }
 
-func createClient(d *schema.ResourceData, m interface{}) error {
+func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	client, err := expandClient(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	api := m.(*management.Management)
 	if err := api.Client.Create(client); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.SetId(auth0.StringValue(client.ClientID))
-	return readClient(d, m)
+	return readClient(ctx, d, m)
 }
 
-func readClient(d *schema.ResourceData, m interface{}) error {
+func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	client, err := api.Client.Read(d.Id())
 	if err != nil {
@@ -604,7 +606,7 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 				return nil
 			}
 		}
-		return err
+		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
@@ -644,32 +646,32 @@ func readClient(d *schema.ResourceData, m interface{}) error {
 		d.Set("signing_keys", client.SigningKeys),
 	)
 
-	return result.ErrorOrNil()
+	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateClient(d *schema.ResourceData, m interface{}) error {
+func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	client, err := expandClient(d)
 	if err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 
 	api := m.(*management.Management)
 	if clientHasChange(client) {
 		if err := api.Client.Update(d.Id(), client); err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 	}
 
 	d.Partial(true)
 	if err := rotateClientSecret(d, m); err != nil {
-		return err
+		return diag.FromErr(err)
 	}
 	d.Partial(false)
 
-	return readClient(d, m)
+	return readClient(ctx, d, m)
 }
 
-func deleteClient(d *schema.ResourceData, m interface{}) error {
+func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Client.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

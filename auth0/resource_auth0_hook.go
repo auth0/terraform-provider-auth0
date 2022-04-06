@@ -24,10 +24,10 @@ func newHook() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:         schema.TypeString,
-				Required:     true,
-				ValidateFunc: validateHookNameFunc(),
-				Description:  "Name of this hook",
+				Type:             schema.TypeString,
+				Required:         true,
+				ValidateDiagFunc: validateHookName(),
+				Description:      "Name of this hook",
 			},
 			"dependencies": {
 				Type:        schema.TypeMap,
@@ -178,8 +178,10 @@ func buildHook(d *schema.ResourceData) *management.Hook {
 	return hook
 }
 
-func validateHookNameFunc() schema.SchemaValidateFunc {
-	return validation.StringMatch(
-		regexp.MustCompile("^[^\\s-][\\w -]+[^\\s-]$"),
-		"Can only contain alphanumeric characters, spaces and '-'. Can neither start nor end with '-' or spaces.")
+func validateHookName() schema.SchemaValidateDiagFunc {
+	hookNameValidation := validation.StringMatch(
+		regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`),
+		"Can only contain alphanumeric characters, spaces and '-'. Can neither start nor end with '-' or spaces.",
+	)
+	return validation.ToDiagFunc(hookNameValidation)
 }

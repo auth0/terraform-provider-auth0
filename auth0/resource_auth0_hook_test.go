@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -125,14 +126,13 @@ func TestHookNameRegexp(t *testing.T) {
 		" ":                         false,
 		"   ":                       false,
 	} {
-		fn := validateHookNameFunc()
+		fn := validateHookName()
 
-		_, errs := fn(name, "name")
-		if errs != nil && valid {
-			t.Fatalf("Expected %q to be valid, but got validation errors %v", name, errs)
+		validationResult := fn(name, cty.Path{cty.GetAttrStep{Name: "name"}})
+		if validationResult.HasError() && valid {
+			t.Fatalf("Expected %q to be valid, but got validation errors %v", name, validationResult)
 		}
-
-		if errs == nil && !valid {
+		if !validationResult.HasError() && !valid {
 			t.Fatalf("Expected %q to be invalid, but got no validation errors.", name)
 		}
 	}

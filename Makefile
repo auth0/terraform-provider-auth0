@@ -15,7 +15,6 @@ GO_ARCH ?= $(shell go env GOARCH)
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
 GO_FMT_SCRIPT ?= $(CURDIR)/scripts/gofmtcheck.sh
-GO_ERR_CHECK_SCRIPT ?= $(CURDIR)/scripts/errcheck.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
 # Colors for the printf
@@ -94,10 +93,6 @@ fmt: ## Format go files
 fmt-check: ## Check gofmt formatting
 	${call print, "Checking that code complies with gofmt requirements"}
 	@sh -c "${GO_FMT_SCRIPT}"
-
-err-check: ## Check for unchecked errors
-	${call print, "Checking for unchecked errors"}
-	@sh -c "${GO_ERR_CHECK_SCRIPT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing

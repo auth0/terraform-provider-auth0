@@ -58,7 +58,7 @@ deps-rm: ## Remove the dependencies folder
 #-----------------------------------------------------------------------------------------------------------------------
 .PHONY: build install clean
 
-build: fmt-check ## Build the provider binary. Usage: "make build VERSION=0.2.0"
+build: ## Build the provider binary. Usage: "make build VERSION=0.2.0"
 	${call print, "Building the provider binary"}
 	@if [ -z "$(VERSION)" ]; \
 	then \
@@ -97,12 +97,12 @@ lint: ## Run go linter checks
 
 test: test-unit test-acc ## Run all tests
 
-test-unit: fmt-check ## Run unit tests
+test-unit: ## Run unit tests
 	${call print, "Running unit tests"}
 	@go test ${GO_PACKAGES} || exit 1
 	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
-test-acc: fmt-check dev-up ## Run acceptance tests
+test-acc: dev-up ## Run acceptance tests
 	${call print, "Running acceptance tests"}
 	@TF_ACC=1 go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
 

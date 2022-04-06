@@ -15,16 +15,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-const wiremockHost = "localhost:8080"
+var testProviderFactories = map[string]func() (*schema.Provider, error){
+	"auth0": func() (*schema.Provider, error) {
+		return Provider(), nil
+	},
+}
 
-func providerWithTestingConfiguration() *schema.Provider {
+func providerWithMockedAPI() *schema.Provider {
+	const wiremockHost = "localhost:8080"
+
 	provider := Provider()
 	provider.ConfigureContextFunc = func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		apiClient, err := management.New(
-			wiremockHost,
-			management.WithInsecure(),
-			management.WithDebug(true),
-		)
+		apiClient, err := management.New(wiremockHost, management.WithInsecure())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
@@ -33,15 +35,24 @@ func providerWithTestingConfiguration() *schema.Provider {
 	return provider
 }
 
+// Auth0 returns an instance of the Management
+// API Client used within test sweepers.
 func Auth0() (*management.Management, error) {
-	config := terraform.NewResourceConfigRaw(nil)
-	provider := Provider()
-
-	if result := provider.Configure(context.Background(), config); result.HasError() {
-		return nil, fmt.Errorf("failed to configure provider")
+	domain := os.Getenv("AUTH0_DOMAIN")
+	if domain == "" {
+		return nil, fmt.Errorf("failed to instantiate api client: AUTH0_DOMAIN is empty")
 	}
 
-	return provider.Meta().(*management.Management), nil
+	apiToken := os.Getenv("AUTH0_API_TOKEN")
+	authenticationOption := management.WithStaticToken(apiToken)
+	if apiToken == "" {
+		authenticationOption = management.WithClientCredentials(
+			os.Getenv("AUTH0_CLIENT_ID"),
+			os.Getenv("AUTH0_CLIENT_SECRET"),
+		)
+	}
+
+	return management.New(domain, authenticationOption)
 }
 
 func TestMain(m *testing.M) {

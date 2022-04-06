@@ -10,7 +10,6 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -61,9 +60,7 @@ func TestAccConnection(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionConfig, rand),
@@ -183,9 +180,7 @@ func TestAccConnectionAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionADConfig, rand),
@@ -233,9 +228,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionAzureADConfig, rand),
@@ -296,9 +289,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionOIDCConfig, rand),
@@ -408,9 +399,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionOAuth2Config, rand),
@@ -489,9 +478,7 @@ func TestAccConnectionWithEnabledClients(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionWithEnabledClientsConfig, rand),
@@ -546,9 +533,7 @@ func TestAccConnectionSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionSMSConfig, rand),
@@ -595,9 +580,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionCustomSMSConfig, rand),
@@ -653,9 +636,7 @@ func TestAccConnectionEmail(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionEmailConfig, rand),
@@ -728,9 +709,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionSalesforceConfig, rand),
@@ -762,9 +741,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionGoogleOAuth2Config, rand),
@@ -805,9 +782,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionGoogleApps, rand),
@@ -854,9 +829,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionFacebookConfig, rand),
@@ -916,9 +889,7 @@ func TestAccConnectionApple(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionAppleConfig, rand),
@@ -985,9 +956,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionLinkedinConfig, rand),
@@ -1047,9 +1016,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionGitHubConfig, rand),
@@ -1104,9 +1071,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionWindowsliveConfig, rand),
@@ -1169,9 +1134,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccConnectionConfigurationCreate, rand),
@@ -1345,9 +1308,7 @@ func TestAccConnectionSAML(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testConnectionSAMLConfigCreate, rand),

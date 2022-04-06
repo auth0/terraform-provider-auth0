@@ -9,8 +9,10 @@ import (
 
 func TestAccCustomDomainVerification(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": providerWithTestingConfiguration(),
+		ProviderFactories: map[string]func() (*schema.Provider, error){
+			"auth0": func() (*schema.Provider, error) {
+				return providerWithMockedAPI(), nil
+			},
 		},
 		Steps: []resource.TestStep{
 			{

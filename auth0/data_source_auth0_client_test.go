@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -28,9 +27,7 @@ func TestAccDataClientByName(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories:         testProviderFactories,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
@@ -57,9 +54,7 @@ func TestAccDataClientById(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories:         testProviderFactories,
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{

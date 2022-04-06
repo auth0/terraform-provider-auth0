@@ -4,14 +4,11 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func TestAccPrompt(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPromptCreate,

@@ -139,8 +139,8 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	d.SetId(action.GetID())
 
 	d.Partial(true)
-	if err := deployAction(d, m); err != nil {
-		return diag.FromErr(err)
+	if result := deployAction(ctx, d, m); result.HasError() {
+		return result
 	}
 	d.Partial(false)
 
@@ -182,19 +182,20 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	}
 
 	d.Partial(true)
-	if err := deployAction(d, m); err != nil {
-		return diag.FromErr(err)
+	if result := deployAction(ctx, d, m); result.HasError() {
+		return result
 	}
 	d.Partial(false)
 
 	return readAction(ctx, d, m)
 }
 
-func deployAction(d *schema.ResourceData, m interface{}) error {
-	if d.Get("deploy").(bool) == true {
+func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	deployExists := d.Get("deploy").(bool)
+	if deployExists {
 		api := m.(*management.Management)
 
-		err := resource.Retry(d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 			action, err := api.Action.Read(d.Id())
 			if err != nil {
 				return resource.NonRetryableError(err)
@@ -219,19 +220,16 @@ func deployAction(d *schema.ResourceData, m interface{}) error {
 
 			return nil
 		})
-
 		if err != nil {
-			return fmt.Errorf("action %q never reached built state: %w", d.Get("name"), err)
+			return diag.FromErr(fmt.Errorf("action %q never reached built state: %w", d.Get("name"), err))
 		}
 
 		actionVersion, err := api.Action.Deploy(d.Id())
 		if err != nil {
-			return err
+			return diag.FromErr(err)
 		}
 
-		if err := d.Set("version_id", actionVersion.GetID()); err != nil {
-			return err
-		}
+		return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
 	}
 
 	return nil

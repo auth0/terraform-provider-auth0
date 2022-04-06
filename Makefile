@@ -14,6 +14,7 @@ GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
+GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
 # Colors for the printf
@@ -83,7 +84,11 @@ clean: ## Clean up installed provider binary. Usage: "make clean VERSION=0.2.0"
 #-----------------------------------------------------------------------------------------------------------------------
 # Code Style
 #-----------------------------------------------------------------------------------------------------------------------
+.PHONY: lint
 
+lint: ## Run go linter checks
+	${call print, "Running golangci-lint over project"}
+	@sh -c "${GO_LINT_SCRIPT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing

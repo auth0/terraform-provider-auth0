@@ -14,7 +14,6 @@ GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
-GO_FMT_SCRIPT ?= $(CURDIR)/scripts/gofmtcheck.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
 # Colors for the printf
@@ -84,15 +83,7 @@ clean: ## Clean up installed provider binary. Usage: "make clean VERSION=0.2.0"
 #-----------------------------------------------------------------------------------------------------------------------
 # Code Style
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: fmt fmt-check err-check
 
-fmt: ## Format go files
-	${call print, "Formatting go files"}
-	@gofmt -w ${GO_FILES}
-
-fmt-check: ## Check gofmt formatting
-	${call print, "Checking that code complies with gofmt requirements"}
-	@sh -c "${GO_FMT_SCRIPT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing

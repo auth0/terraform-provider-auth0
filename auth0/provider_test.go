@@ -65,9 +65,9 @@ func TestProvider_debugDefaults(t *testing.T) {
 		"foo":   false,
 		"":      false,
 	} {
-		os.Unsetenv("AUTH0_DEBUG")
+		_ = os.Unsetenv("AUTH0_DEBUG")
 		if value != "" {
-			os.Setenv("AUTH0_DEBUG", value)
+			_ = os.Setenv("AUTH0_DEBUG", value)
 		}
 
 		p := Provider()
@@ -142,7 +142,7 @@ func TestProvider_configValidation(t *testing.T) {
 		},
 	}
 
-	originalEnviroment := os.Environ()
+	originalEnvironment := os.Environ()
 	os.Clearenv()
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
@@ -154,9 +154,9 @@ func TestProvider_configValidation(t *testing.T) {
 		})
 	}
 
-	for _, e := range originalEnviroment {
+	for _, e := range originalEnvironment {
 		environmentPair := strings.Split(e, "=")
-		os.Setenv(environmentPair[0], environmentPair[1])
+		_ = os.Setenv(environmentPair[0], environmentPair[1])
 	}
 }
 

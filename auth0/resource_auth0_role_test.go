@@ -21,30 +21,32 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			var page int
+			var result *multierror.Error
 			for {
-				l, err := api.Role.List(management.Page(page))
+				roleList, err := api.Role.List(management.Page(page))
 				if err != nil {
 					return err
 				}
-				for _, role := range l.Roles {
+
+				for _, role := range roleList.Roles {
 					log.Printf("[DEBUG] ➝ %s", role.GetName())
 					if strings.Contains(role.GetName(), "Test") {
-						if e := api.Role.Delete(role.GetID()); e != nil {
-							multierror.Append(err, e)
-						}
+						result = multierror.Append(
+							result,
+							api.Role.Delete(role.GetID()),
+						)
 						log.Printf("[DEBUG] ✗ %s", role.GetName())
 					}
 				}
-				if err != nil {
-					return err
-				}
-				if !l.HasNext() {
+				if !roleList.HasNext() {
 					break
 				}
 				page++
 			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }

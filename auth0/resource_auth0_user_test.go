@@ -21,29 +21,31 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			var page int
+			var result *multierror.Error
 			for {
-				l, err := api.User.Search(
+				userList, err := api.User.Search(
 					management.Page(page),
 					management.Query(`email.domain:"acceptance.test.com"`))
 				if err != nil {
 					return err
 				}
-				for _, user := range l.Users {
+
+				for _, user := range userList.Users {
+					result = multierror.Append(
+						result,
+						api.User.Delete(user.GetID()),
+					)
 					log.Printf("[DEBUG] ✗ %s", user.GetName())
-					if e := api.User.Delete(user.GetID()); e != nil {
-						multierror.Append(err, e)
-					}
 				}
-				if err != nil {
-					return err
-				}
-				if !l.HasNext() {
+				if !userList.HasNext() {
 					break
 				}
 				page++
 			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }

@@ -23,33 +23,36 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			var page int
+			var result *multierror.Error
 			for {
-				l, err := api.Connection.List(
+				connectionList, err := api.Connection.List(
 					management.IncludeFields("id", "name"),
-					management.Page(page))
+					management.Page(page),
+				)
 				if err != nil {
 					return err
 				}
-				for _, connection := range l.Connections {
+
+				for _, connection := range connectionList.Connections {
 					log.Printf("[DEBUG] ➝ %s", connection.GetName())
+
 					if strings.Contains(connection.GetName(), "Test") {
-						if e := api.Connection.Delete(connection.GetID()); e != nil {
-							multierror.Append(err, e)
-						}
+						result = multierror.Append(
+							result,
+							api.Connection.Delete(connection.GetID()),
+						)
 						log.Printf("[DEBUG] ✗ %s", connection.GetName())
 					}
 				}
-
-				if err != nil {
-					return err
-				}
-				if !l.HasNext() {
+				if !connectionList.HasNext() {
 					break
 				}
 				page++
 			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }
@@ -1314,7 +1317,6 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-
 			state := map[string]interface{}{
 				"options": []interface{}{
 					map[string]interface{}{"validation": tt.validation},

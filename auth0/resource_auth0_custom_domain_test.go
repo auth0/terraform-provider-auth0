@@ -15,25 +15,32 @@ import (
 func init() {
 	resource.AddTestSweepers("auth0_custom_domain", &resource.Sweeper{
 		Name: "auth0_custom_domain",
-		F: func(_ string) (err error) {
+		F: func(_ string) error {
 			api, err := Auth0()
 			if err != nil {
-				return
+				return err
 			}
+
 			domains, err := api.CustomDomain.List()
 			if err != nil {
-				return
+				return err
 			}
+
+			var result *multierror.Error
 			for _, domain := range domains {
 				log.Printf("[DEBUG] ➝ %s", domain.GetDomain())
+
 				if strings.Contains(domain.GetDomain(), "auth.uat.terraform-provider-auth0.com") {
-					if e := api.CustomDomain.Delete(domain.GetID()); e != nil {
-						multierror.Append(err, e)
-					}
+					result = multierror.Append(
+						result,
+						api.CustomDomain.Delete(domain.GetID()),
+					)
+
 					log.Printf("[DEBUG] ✗ %s", domain.GetDomain())
 				}
 			}
-			return
+
+			return result.ErrorOrNil()
 		},
 	})
 }

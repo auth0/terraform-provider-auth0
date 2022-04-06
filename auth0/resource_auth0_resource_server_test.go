@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -21,15 +20,17 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			fn := func(rs *management.ResourceServer) {
 				log.Printf("[DEBUG] ➝ %s", rs.GetName())
 				if strings.Contains(rs.GetName(), "Test") {
-					if e := api.ResourceServer.Delete(rs.GetID()); e != nil {
-						multierror.Append(err, e)
+					if err := api.ResourceServer.Delete(rs.GetID()); err != nil {
+						log.Printf("[DEBUG] Failed to delete resource server with ID: %s", rs.GetID())
 					}
 					log.Printf("[DEBUG] ✗ %s", rs.GetName())
 				}
 			}
+
 			return api.ResourceServer.Stream(fn, management.IncludeFields("id", "name"))
 		},
 	})

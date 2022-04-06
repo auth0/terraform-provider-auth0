@@ -20,20 +20,25 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			configurations, err := api.RuleConfig.List()
 			if err != nil {
 				return err
 			}
+
+			var result *multierror.Error
 			for _, c := range configurations {
 				log.Printf("[DEBUG] ➝ %s", c.GetKey())
 				if strings.Contains(c.GetKey(), "test") {
-					if e := api.RuleConfig.Delete(c.GetKey()); e != nil {
-						multierror.Append(err, e)
-					}
+					result = multierror.Append(
+						result,
+						api.RuleConfig.Delete(c.GetKey()),
+					)
 					log.Printf("[DEBUG] ✗ %s", c.GetKey())
 				}
 			}
-			return err
+
+			return result.ErrorOrNil()
 		},
 	})
 }

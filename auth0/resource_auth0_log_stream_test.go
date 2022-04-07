@@ -7,7 +7,6 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -49,9 +48,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccLogStreamHTTPConfig, rand),
@@ -158,9 +155,7 @@ resource "auth0_log_stream" "my_log_stream" {
 func TestAccLogStreamEventBridge(t *testing.T) {
 	rand := random.String(6)
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(logStreamAwsEventBridgeConfig, rand),
@@ -233,9 +228,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(logStreamAzureEventGridConfig, rand),
@@ -288,9 +281,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(logStreamDatadogConfig, rand),
@@ -358,9 +349,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(logStreamSplunkConfig, rand),
@@ -417,9 +406,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(logStreamSumoConfig, rand),

@@ -9,7 +9,6 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
 )
@@ -57,9 +56,7 @@ func TestAccClient(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfig, rand),
@@ -173,9 +170,7 @@ func TestAccClientZeroValueCheck(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfigCreate, rand),
@@ -225,9 +220,7 @@ func TestAccClientRotateSecret(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfigRotateSecret, rand),
@@ -266,9 +259,7 @@ func TestAccClientInitiateLoginUri(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config:      random.Template(testAccClientConfigInitiateLoginURIHTTP, rand),
@@ -300,9 +291,7 @@ func TestAccClientJwtScopes(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfigJwtScopes, rand),
@@ -358,9 +347,7 @@ func TestAccClientMobile(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: random.Template(testAccClientConfigMobile, rand),
@@ -465,9 +452,7 @@ func TestAccClientMobileValidationError(t *testing.T) {
 	rand := random.String(6)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"auth0": Provider(),
-		},
+		ProviderFactories: testProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config:      random.Template(testAccClientConfigMobileUpdateError, rand),

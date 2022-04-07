@@ -14,8 +14,7 @@ GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
-GO_FMT_SCRIPT ?= $(CURDIR)/scripts/gofmtcheck.sh
-GO_ERR_CHECK_SCRIPT ?= $(CURDIR)/scripts/errcheck.sh
+GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
 # Colors for the printf
@@ -59,7 +58,7 @@ deps-rm: ## Remove the dependencies folder
 #-----------------------------------------------------------------------------------------------------------------------
 .PHONY: build install clean
 
-build: fmt-check ## Build the provider binary. Usage: "make build VERSION=0.2.0"
+build: ## Build the provider binary. Usage: "make build VERSION=0.2.0"
 	${call print, "Building the provider binary"}
 	@if [ -z "$(VERSION)" ]; \
 	then \
@@ -85,19 +84,11 @@ clean: ## Clean up installed provider binary. Usage: "make clean VERSION=0.2.0"
 #-----------------------------------------------------------------------------------------------------------------------
 # Code Style
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: fmt fmt-check err-check
+.PHONY: lint
 
-fmt: ## Format go files
-	${call print, "Formatting go files"}
-	@gofmt -w ${GO_FILES}
-
-fmt-check: ## Check gofmt formatting
-	${call print, "Checking that code complies with gofmt requirements"}
-	@sh -c "${GO_FMT_SCRIPT}"
-
-err-check: ## Check for unchecked errors
-	${call print, "Checking for unchecked errors"}
-	@sh -c "${GO_ERR_CHECK_SCRIPT}"
+lint: ## Run go linter checks
+	${call print, "Running golangci-lint over project"}
+	@sh -c "${GO_LINT_SCRIPT}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing
@@ -106,12 +97,12 @@ err-check: ## Check for unchecked errors
 
 test: test-unit test-acc ## Run all tests
 
-test-unit: fmt-check ## Run unit tests
+test-unit: ## Run unit tests
 	${call print, "Running unit tests"}
 	@go test ${GO_PACKAGES} || exit 1
 	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
-test-acc: fmt-check dev-up ## Run acceptance tests
+test-acc: dev-up ## Run acceptance tests
 	${call print, "Running acceptance tests"}
 	@TF_ACC=1 go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
 

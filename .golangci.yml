@@ -1,0 +1,35 @@
+run:
+  # Some linters are disabled because of go1.18.
+  # We can track the evolution of go1.18 support at
+  # https://github.com/golangci/golangci-lint/issues/2649.
+  go: "1.17"
+
+linters:
+  disable-all: true
+  enable:
+    - deadcode
+    - gofmt
+    - staticcheck
+    - revive
+    - godot
+    - whitespace
+    - goimports
+    - gosimple
+    - structcheck
+    - unused
+    - errcheck
+    - unconvert
+
+linters-settings:
+  gofmt:
+    simplify: true
+  staticcheck:
+    checks: [ "all" ]
+  godot:
+    scope: declarations
+    capital: true
+  goimports:
+    local-prefixes: "github.com/auth0/terraform-provider-auth0"
+
+issues:
+  exclude-use-default: false

@@ -1,0 +1,23 @@
+name: Test Sweep
+
+on: [workflow_dispatch]
+
+jobs:
+  sweep:
+    name: Sweep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Check out source
+        uses: actions/checkout@v2
+
+      - name: Sweep
+        run: make test-sweep
+        env:
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}

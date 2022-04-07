@@ -23,6 +23,9 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
+      - name: Check for linting errors
+        run: make lint
+
       - name: Start docker containers
         run: docker-compose up -d --build
 

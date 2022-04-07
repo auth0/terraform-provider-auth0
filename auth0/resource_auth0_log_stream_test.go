@@ -95,6 +95,22 @@ func TestAccLogStreamHTTP(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_authorization", "AKIAXXXXXXXXXXXXXXXX"),
 				),
 			},
+			{
+				Config: random.Template(testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders, rand),
+				Check: resource.ComposeTestCheckFunc(
+					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-new-{{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/logs"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_format", "JSONLINES"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_authorization", "AKIAXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.0.header", "foo"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.0.value", "bar"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.1.header", "bar"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.1.value", "foo"),
+				),
+			},
 		},
 	})
 }
@@ -148,6 +164,29 @@ resource "auth0_log_stream" "my_log_stream" {
 	  http_content_type = "application/json"
 	  http_content_format = "JSONLINES"
 	  http_authorization = "AKIAXXXXXXXXXXXXXXXX"
+	}
+}
+`
+
+const testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-http-new-{{.random}}"
+	type = "http"
+	sink {
+	  http_endpoint = "https://example.com/logs"
+	  http_content_type = "application/json"
+	  http_content_format = "JSONLINES"
+	  http_authorization = "AKIAXXXXXXXXXXXXXXXX"
+	  http_custom_headers = [
+        {
+          header = "foo"
+          value  = "bar"
+        },
+		{
+          header = "bar"
+          value  = "foo"
+        }
+      ]
 	}
 }
 `

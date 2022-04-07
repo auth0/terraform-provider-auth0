@@ -129,8 +129,11 @@ func newLogStream() *schema.Resource {
 							RequiredWith: []string{"sink.0.http_content_format", "sink.0.http_endpoint", "sink.0.http_content_type"},
 						},
 						"http_custom_headers": {
-							Type:        schema.TypeSet,
-							Elem:        &schema.Schema{Type: schema.TypeString},
+							Type: schema.TypeList,
+							Elem: &schema.Schema{
+								Type: schema.TypeMap,
+								Elem: &schema.Schema{Type: schema.TypeString},
+							},
 							Optional:    true,
 							Default:     nil,
 							Description: "Custom HTTP headers",
@@ -383,7 +386,7 @@ func expandLogStreamSinkHTTP(d ResourceData) *management.LogStreamSinkHTTP {
 		ContentType:   String(d, "http_content_type"),
 		Endpoint:      String(d, "http_endpoint"),
 		Authorization: String(d, "http_authorization"),
-		CustomHeaders: Set(d, "http_custom_headers").List(),
+		CustomHeaders: List(d, "http_custom_headers").List(),
 	}
 }
 func expandLogStreamSinkDatadog(d ResourceData) *management.LogStreamSinkDatadog {

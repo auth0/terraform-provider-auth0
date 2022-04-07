@@ -101,9 +101,9 @@ func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		if err != nil {
 			return diag.FromErr(err)
 		}
-		for _, permission := range permissionList.Permissions {
-			permissions = append(permissions, permission)
-		}
+
+		permissions = append(permissions, permissionList.Permissions...)
+
 		if !permissionList.HasNext() {
 			break
 		}

@@ -319,7 +319,6 @@ func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []int
 				}
 			}
 		}
-
 	}
 	return []interface{}{m}
 }

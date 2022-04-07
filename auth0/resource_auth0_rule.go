@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
-var ruleNameRegexp = regexp.MustCompile("^[^\\s-][\\w -]+[^\\s-]$")
+var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
 
 func newRule() *schema.Resource {
 	return &schema.Resource{

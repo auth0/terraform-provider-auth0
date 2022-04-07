@@ -24,9 +24,9 @@ func newClientSchema() map[string]*schema.Schema {
 }
 
 func readDataClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	clientId := auth0.StringValue(String(d, "client_id"))
-	if clientId != "" {
-		d.SetId(clientId)
+	clientID := auth0.StringValue(String(d, "client_id"))
+	if clientID != "" {
+		d.SetId(clientID)
 		return readClient(ctx, d, m)
 	}
 
@@ -43,8 +43,8 @@ func readDataClient(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 	for _, client := range clients.Clients {
 		if auth0.StringValue(client.Name) == name {
-			clientId = auth0.StringValue(client.ClientID)
-			d.SetId(clientId)
+			clientID = auth0.StringValue(client.ClientID)
+			d.SetId(clientID)
 			return readClient(ctx, d, m)
 		}
 	}

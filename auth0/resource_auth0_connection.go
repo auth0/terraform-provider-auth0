@@ -752,7 +752,7 @@ func connectionSchemaUpgradeV1(
 
 		m["validation"] = []map[string][]interface{}{
 			{
-				"username": []interface{}{validationOption.(interface{})},
+				"username": []interface{}{validationOption},
 			},
 		}
 

@@ -17,7 +17,7 @@ data auth0_client test {
 }
 `
 
-const testAccDataClientConfigById = `
+const testAccDataClientConfigByID = `
 %v
 data auth0_client test {
   client_id = auth0_client.my_client.client_id
@@ -69,7 +69,7 @@ func TestAccDataClientById(t *testing.T) {
 				), // check that the client got created correctly before using the data source
 			},
 			{
-				Config: random.Template(fmt.Sprintf(testAccDataClientConfigById, testAccClientConfig), rand),
+				Config: random.Template(fmt.Sprintf(testAccDataClientConfigByID, testAccClientConfig), rand),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "id"),
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),

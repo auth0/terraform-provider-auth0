@@ -51,6 +51,18 @@ func newLogStream() *schema.Resource {
 				}, false),
 				Description: "Status of the LogStream",
 			},
+			"filters": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Description: "Only logs events matching these filters will be delivered by the stream." +
+					" If omitted or empty, all events will be delivered.",
+				Elem: &schema.Schema{
+					Type: schema.TypeMap,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+			},
 			"sink": {
 				Type:     schema.TypeList,
 				MaxItems: 1,
@@ -186,7 +198,7 @@ func newLogStream() *schema.Resource {
 }
 
 func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	logStream := buildLogStream(d)
+	logStream := expandLogStream(d)
 
 	api := m.(*management.Management)
 	if err := api.LogStream.Create(logStream); err != nil {
@@ -225,6 +237,7 @@ func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) d
 		d.Set("name", logStream.Name),
 		d.Set("status", logStream.Status),
 		d.Set("type", logStream.Type),
+		d.Set("filters", logStream.Filters),
 		d.Set("sink", flattenLogStreamSink(logStream.Sink)),
 	)
 
@@ -232,7 +245,7 @@ func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) d
 }
 
 func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	logStream := buildLogStream(d)
+	logStream := expandLogStream(d)
 	api := m.(*management.Management)
 	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
 		return diag.FromErr(err)
@@ -325,24 +338,24 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 	}
 }
 
-func buildLogStream(d ResourceData) *management.LogStream {
+func expandLogStream(d ResourceData) *management.LogStream {
 	logStream := &management.LogStream{
-		Name:   String(d, "name"),
-		Type:   String(d, "type", IsNewResource()),
-		Status: String(d, "status", Not(IsNewResource())),
+		Name:    String(d, "name"),
+		Type:    String(d, "type", IsNewResource()),
+		Status:  String(d, "status", Not(IsNewResource())),
+		Filters: List(d, "filters").List(),
 	}
 
 	streamType := d.Get("type").(string)
-
 	List(d, "sink").Elem(func(d ResourceData) {
 		switch streamType {
 		case management.LogStreamTypeAmazonEventBridge:
-			// LogStreamTypeAmazonEventBridge cannot be updated
+			// LogStreamTypeAmazonEventBridge cannot be updated.
 			if d.IsNewResource() {
 				logStream.Sink = expandLogStreamSinkAmazonEventBridge(d)
 			}
 		case management.LogStreamTypeAzureEventGrid:
-			// LogStreamTypeAzureEventGrid cannot be updated
+			// LogStreamTypeAzureEventGrid cannot be updated.
 			if d.IsNewResource() {
 				logStream.Sink = expandLogStreamSinkAzureEventGrid(d)
 			}

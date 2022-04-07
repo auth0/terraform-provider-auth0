@@ -460,6 +460,20 @@ func TestAccLogStreamSumo(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-sumo-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "prod.sumo.com"),
+				),
+			},
+			{
+				Config: random.Template(logStreamSumoConfigUpdateWithFilters, rand),
+				Check: resource.ComposeTestCheckFunc(
+					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-sumo-{{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.name", "auth.login.fail"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.name", "auth.signup.fail"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "prod.sumo.com"),
 				),
 			},
@@ -480,6 +494,25 @@ const logStreamSumoConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-sumo-{{.random}}"
 	type = "sumo"
+	sink {
+	  sumo_source_address = "prod.sumo.com"
+	}
+}
+`
+const logStreamSumoConfigUpdateWithFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-sumo-{{.random}}"
+	type = "sumo"
+	filters = [
+		{
+			type = "category"
+			name = "auth.login.fail"
+		},
+		{
+			type = "category"
+			name = "auth.signup.fail"
+		}
+	]
 	sink {
 	  sumo_source_address = "prod.sumo.com"
 	}

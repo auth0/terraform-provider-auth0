@@ -22,30 +22,33 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			var page int
+			var result *multierror.Error
 			for {
-				l, err := api.Client.List(management.Page(page))
+				clientList, err := api.Client.List(management.Page(page))
 				if err != nil {
 					return err
 				}
-				for _, client := range l.Clients {
+
+				for _, client := range clientList.Clients {
 					log.Printf("[DEBUG] ➝ %s", client.GetName())
+
 					if strings.Contains(client.GetName(), "Test") {
-						if e := api.Client.Delete(client.GetClientID()); e != nil {
-							multierror.Append(err, e)
-						}
+						result = multierror.Append(
+							result,
+							api.Client.Delete(client.GetClientID()),
+						)
 						log.Printf("[DEBUG] ✗ %s", client.GetName())
 					}
 				}
-				if err != nil {
-					return err
-				}
-				if !l.HasNext() {
+				if !clientList.HasNext() {
 					break
 				}
 				page++
 			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }

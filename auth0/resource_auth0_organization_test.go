@@ -21,31 +21,34 @@ func init() {
 			if err != nil {
 				return err
 			}
+
 			var page int
+			var result *multierror.Error
 			for {
-				l, err := api.Organization.List(management.Page(page))
+				organizationList, err := api.Organization.List(management.Page(page))
 				if err != nil {
 					return err
 				}
-				for _, organization := range l.Organizations {
+
+				for _, organization := range organizationList.Organizations {
 					log.Printf("[DEBUG] ➝ %s", organization.GetName())
+
 					if strings.Contains(organization.GetName(), "test") {
-						if e := api.Organization.Delete(organization.GetID()); e != nil {
-							multierror.Append(err, e)
-						}
+						result = multierror.Append(
+							result,
+							api.Organization.Delete(organization.GetID()),
+						)
+
 						log.Printf("[DEBUG] ✗ %s", organization.GetName())
 					}
 				}
-
-				if err != nil {
-					return err
-				}
-				if !l.HasNext() {
+				if !organizationList.HasNext() {
 					break
 				}
 				page++
 			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }

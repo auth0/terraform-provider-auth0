@@ -20,23 +20,27 @@ func init() {
 			if err != nil {
 				return err
 			}
-			l, err := api.LogStream.List()
+
+			logStreams, err := api.LogStream.List()
 			if err != nil {
 				return err
 			}
-			for _, logstream := range l {
-				log.Printf("[DEBUG] ➝ %s", logstream.GetName())
-				if strings.Contains(logstream.GetName(), "Test") {
-					if e := api.LogStream.Delete(logstream.GetID()); e != nil {
-						multierror.Append(err, e)
-					}
-					log.Printf("[DEBUG] ✗ %v\n", logstream.GetName())
+
+			var result *multierror.Error
+			for _, logStream := range logStreams {
+				log.Printf("[DEBUG] ➝ %s", logStream.GetName())
+
+				if strings.Contains(logStream.GetName(), "Test") {
+					result = multierror.Append(
+						result,
+						api.LogStream.Delete(logStream.GetID()),
+					)
+
+					log.Printf("[DEBUG] ✗ %v\n", logStream.GetName())
 				}
 			}
-			if err != nil {
-				return err
-			}
-			return nil
+
+			return result.ErrorOrNil()
 		},
 	})
 }

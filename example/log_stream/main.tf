@@ -3,6 +3,16 @@ provider "auth0" {}
 resource "auth0_log_stream" "example_http" {
   name = "HTTP log stream"
   type = "http"
+  filters = [
+    {
+      type = "category"
+      name = "auth.login.fail"
+    },
+    {
+      type = "category"
+      name = "auth.signup.fail"
+    }
+  ]
   sink {
     http_endpoint       = "https://example.com/logs"
     http_content_type   = "application/json"
@@ -10,8 +20,8 @@ resource "auth0_log_stream" "example_http" {
     http_authorization  = "AKIAXXXXXXXXXXXXXXXX"
     http_custom_headers = [
       {
-          header = "foo"
-          value  = "bar"
+        header = "foo"
+        value  = "bar"
       }
     ]
   }

@@ -16,6 +16,16 @@ resource "auth0_log_stream" "example" {
   name = "AWS Eventbridge"
   type = "eventbridge"
   status = "active"
+  filters = [
+    {
+      type = "category"
+      name = "auth.login.fail"
+    },
+    {
+      type = "category"
+      name = "auth.signup.fail"
+    }
+  ]
   sink {
       aws_account_id = "my_account_id"
       aws_region = "us-east-2"
@@ -29,6 +39,7 @@ The following arguments are supported:
 
 - `name` - (Required) Name of the log stream
 - `type` - (Required) The type of log stream. Options are "eventbridge", "eventgrid", "http", "datadog", "splunk", "sumo"
+- `filters` - (Optional) Only logs events matching these filters will be delivered by the stream.
 - `status` - (Optional, Computed) The current status of the log stream. Options are "active", "paused", "suspended"
 - `sink` - (Optional) List(Resource) The sink configuration for the log stream. For details, see [Sink Configuration](#sink-configuration).
 

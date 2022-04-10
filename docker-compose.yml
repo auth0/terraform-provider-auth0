@@ -2,9 +2,10 @@ version: "3.8"
 
 services:
   auth0:
-    build:
-      context: .
-      dockerfile: dockerfiles/wiremock/Dockerfile
+    image: wiremock/wiremock:2.30.0
+    volumes:
+      - ./dockerfiles/wiremock/__files:/home/wiremock/__files
+      - ./dockerfiles/wiremock/mappings:/home/wiremock/mappings
     command: --port 8080 --verbose
     expose:
       - "8080"

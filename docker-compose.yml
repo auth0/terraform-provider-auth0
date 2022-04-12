@@ -7,6 +7,10 @@ services:
       - ./dockerfiles/wiremock/__files:/home/wiremock/__files
       - ./dockerfiles/wiremock/mappings:/home/wiremock/mappings
     command: --port 8080 --verbose
+    healthcheck:
+      test: "curl -f http://localhost:8080/__admin || false"
+      interval: 1s
+      retries: 60
     expose:
       - "8080"
     ports:

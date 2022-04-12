@@ -4,16 +4,11 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func TestAccCustomDomainVerificationWithAuth0ManagedCerts(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: map[string]func() (*schema.Provider, error){
-			"auth0": func() (*schema.Provider, error) {
-				return providerWithMockedAPI(), nil
-			},
-		},
+		ProviderFactories: testProviderFactoriesWithMockedAPI,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCustomDomainVerificationWithAuth0ManagedCerts,
@@ -62,11 +57,7 @@ resource "auth0_custom_domain_verification" "my_custom_domain_verification" {
 
 func TestAccCustomDomainVerificationWithSelfManagedCerts(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: map[string]func() (*schema.Provider, error){
-			"auth0": func() (*schema.Provider, error) {
-				return providerWithMockedAPI(), nil
-			},
-		},
+		ProviderFactories: testProviderFactoriesWithMockedAPI,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCustomDomainVerificationWithSelfManagedCerts,

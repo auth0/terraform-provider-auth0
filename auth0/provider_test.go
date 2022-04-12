@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -19,26 +18,32 @@ import (
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/wiremock"
 )
 
-var testProviderFactories = map[string]func() (*schema.Provider, error){
-	"auth0": func() (*schema.Provider, error) {
-		return Provider(), nil
-	},
-}
+const wireMockURL = "localhost:8080"
 
 var (
-	wireMockClient = wiremock.NewClient("localhost:8080")
-	wireMockReset  sync.Once
+	testProviderFactories = map[string]func() (*schema.Provider, error){
+		"auth0": func() (*schema.Provider, error) {
+			return Provider(), nil
+		},
+	}
+
+	testProviderFactoriesWithMockedAPI = map[string]func() (*schema.Provider, error){
+		"auth0": func() (*schema.Provider, error) {
+			return providerWithMockedAPI(), nil
+		},
+	}
+
+	wireMockReset sync.Once
 )
 
 func providerWithMockedAPI() *schema.Provider {
 	provider := Provider()
-	provider.ConfigureContextFunc = func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	provider.ConfigureContextFunc = func(ctx context.Context, _ *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		var err error
+
+		wireMockClient := wiremock.NewClient(wireMockURL)
 		wireMockReset.Do(func() {
-			err = multierror.Append(
-				wireMockClient.ResetAllMappings(ctx),
-				wireMockClient.ResetAllScenarios(ctx),
-			).ErrorOrNil()
+			err = wireMockClient.Reset(ctx)
 		})
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -48,6 +53,7 @@ func providerWithMockedAPI() *schema.Provider {
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
+
 		return apiClient, nil
 	}
 	return provider

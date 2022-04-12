@@ -27,7 +27,7 @@ jobs:
         run: make lint
 
       - name: Start docker containers
-        run: docker-compose up -d --build
+        run: make dev-up
 
       - name: Run tests
         run: make test
@@ -38,4 +38,4 @@ jobs:
 
       - name: Stop docker containers
         if: always()
-        run: docker-compose down
+        run: make dev-down

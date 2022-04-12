@@ -118,6 +118,7 @@ test-sweep: ## Clean up test tenant
 dev-up: ## Bootstrap the development containers
 	${call print, "Starting development containers"}
 	@docker-compose up -d
+	@sleep 2 # Let's make sure the container is fully up.
 
 dev-down: ## Bring down the development containers
 	${call print, "Bringing the development containers down"}

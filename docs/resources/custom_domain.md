@@ -35,6 +35,7 @@ Attributes exported by this resource include:
 
 * `primary` - Boolean. Indicates whether this is a primary domain.
 * `status` - String. Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, and `ready`.
+* `origin_domain_name` - String. Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 * `verification` - List(Resource). Configuration settings for verification. For details, see [Verification](#verification).
 
 ### Verification

@@ -1,3 +1,20 @@
+## 0.30.0
+
+FEATURES:
+
+- `resource/auth0_custom_domain*`: Added support for creating external resources associated with self-managed certificates ([#118](https://github.com/auth0/terraform-provider-auth0/pull/118))
+- `resource/auth0_log_stream`: [DXCDT-104] Added filters to log_stream resource ([#133](https://github.com/auth0/terraform-provider-auth0/pull/133))
+
+
+BUG FIXES:
+
+- `resource/auth0_log_stream`: Fixed serialization of log streams with http sink custom headers ([#120](https://github.com/auth0/terraform-provider-auth0/pull/120))
+
+NOTES:
+
+- Upgraded to terraform-plugin-sdk@v2 ([#121](https://github.com/auth0/terraform-provider-auth0/pull/121), [#122](https://github.com/auth0/terraform-provider-auth0/pull/122), [#126](https://github.com/auth0/terraform-provider-auth0/pull/126))
+
+
 ## 0.29.0
 
 FEATURES:

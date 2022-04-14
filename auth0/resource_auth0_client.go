@@ -995,7 +995,10 @@ func flattenClientAddons(addons map[string]interface{}) []interface{} {
 			"include_attribute_name_format":      samlp["includeAttributeNameFormat"],
 			"binding":                            samlp["binding"],
 			"signing_cert":                       samlp["signingCert"],
-			"logout":                             mapToState(samlp["logout"].(map[string]interface{})),
+		}
+
+		if logout, ok := samlp["logout"].(map[string]interface{}); ok {
+			samlpMap["logout"] = mapToState(logout)
 		}
 
 		m["samlp"] = []interface{}{samlpMap}
@@ -1009,8 +1012,9 @@ func flattenClientAddons(addons map[string]interface{}) []interface{} {
 		"springcm", "wams", "wsfed", "zendesk", "zoom",
 	} {
 		if value, ok := addons[name]; ok {
-			addonType := value.(map[string]interface{})
-			m[name] = mapToState(addonType)
+			if addonType, ok := value.(map[string]interface{}); ok {
+				m[name] = mapToState(addonType)
+			}
 		}
 	}
 

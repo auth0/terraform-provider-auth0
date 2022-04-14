@@ -1,3 +1,10 @@
+## 0.30.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Fix conversion issue flattenAddons func in client resource ([#140](https://github.com/auth0/terraform-provider-auth0/pull/140))
+
+
 ## 0.30.0
 
 FEATURES:

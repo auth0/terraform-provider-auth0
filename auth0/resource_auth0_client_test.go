@@ -86,11 +86,94 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
 				),
 			},
+			{
+				Config: random.Template(testAccClientConfigWithoutAddonsWithSAMLPLogout, rand),
+				Check: resource.ComposeTestCheckFunc(
+					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.%", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.callback", "http://example.com/callback"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.slo_enabled", "true"),
+				),
+			},
 		},
 	})
 }
 
 const testAccClientConfig = `
+resource "auth0_client" "my_client" {
+  name = "Acceptance Test - {{.random}}"
+  description = "Test Application Long Description"
+  app_type = "non_interactive"
+  custom_login_page_on = true
+  is_first_party = true
+  is_token_endpoint_ip_header_trusted = true
+  token_endpoint_auth_method = "client_secret_post"
+  oidc_conformant = true
+  callbacks = [ "https://example.com/callback" ]
+  allowed_origins = [ "https://example.com" ]
+  allowed_clients = [ "https://allowed.example.com" ]
+  grant_types = [ "authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token" ]
+  organization_usage = "deny"
+  organization_require_behavior = "no_prompt"
+  allowed_logout_urls = [ "https://example.com" ]
+  web_origins = [ "https://example.com" ]
+  jwt_configuration {
+    lifetime_in_seconds = 300
+    secret_encoded = true
+    alg = "RS256"
+    scopes = {
+      foo = "bar"
+    }
+  }
+  client_metadata = {
+    foo = "zoo"
+  }
+  addons {
+    firebase = {
+      client_email = "john.doe@example.com"
+      lifetime_in_seconds = 1
+      private_key = "wer"
+      private_key_id = "qwreerwerwe"
+    }
+    samlp {
+      audience = "https://example.com/saml"
+      mappings = {
+        email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        name = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+      }
+      create_upn_claim = false
+      passthrough_claims_with_no_mapping = false
+      map_unknown_claims_as_is = false
+      map_identities = false
+      name_identifier_format = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+      name_identifier_probes = [
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+      ]
+	  signing_cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+    }
+  }
+  refresh_token {
+    leeway = 42
+    token_lifetime = 424242
+    rotation_type = "rotating"
+    expiration_type = "expiring"
+    infinite_token_lifetime = true
+    infinite_idle_token_lifetime = false
+    idle_token_lifetime = 3600
+  }
+  mobile {
+    ios {
+      team_id = "9JA89QQLNQ"
+      app_bundle_identifier = "com.my.bundle.id"
+    }
+  }
+  initiate_login_uri = "https://example.com/login"
+}
+`
+
+const testAccClientConfigWithoutAddonsWithSAMLPLogout = `
 resource "auth0_client" "my_client" {
   name = "Acceptance Test - {{.random}}"
   description = "Test Application Long Description"

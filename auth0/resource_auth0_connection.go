@@ -56,6 +56,7 @@ var connectionSchema = map[string]*schema.Schema{
 	},
 	"options": {
 		Type:     schema.TypeList,
+		Computed: true,
 		Optional: true,
 		MaxItems: 1,
 		Elem: &schema.Resource{

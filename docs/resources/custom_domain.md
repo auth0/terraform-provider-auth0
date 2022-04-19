@@ -26,8 +26,7 @@ Arguments accepted by this resource include:
 
 * `domain` - (Required) String. Name of the custom domain. 
 * `type` - (Required) String. Provisioning type for the custom domain. Options include `auth0_managed_certs` and `self_managed_certs`.
-* `verification_method` - (Deprecated) String. Domain verification method. The method is chosen according to the type of
-the custom domain. `CNAME` for `auth0_managed_certs`, `TXT` for `self_managed_certs`.
+
 
 ## Attribute Reference
 

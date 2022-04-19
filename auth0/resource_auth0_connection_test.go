@@ -485,6 +485,7 @@ func TestAccConnectionWithEnabledClients(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "enabled_clients.#", "4"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"), // Gets computed with defaults by the API.
 				),
 			},
 		},
@@ -1314,15 +1315,20 @@ func TestAccConnectionSAML(t *testing.T) {
 				Config: random.Template(testConnectionSAMLConfigCreate, rand),
 				Check: resource.ComposeTestCheckFunc(
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-SAML-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", "Acceptance-Test-SAML-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
-					random.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", "Acceptance-Test-SAML-{{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml.provider/sign_out"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
 				),
 			},
 			{
 				Config: random.Template(testConnectionSAMLConfigUpdate, rand),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),

@@ -56,6 +56,7 @@ var connectionSchema = map[string]*schema.Schema{
 	},
 	"options": {
 		Type:     schema.TypeList,
+		Computed: true,
 		Optional: true,
 		MaxItems: 1,
 		Elem: &schema.Resource{
@@ -788,8 +789,6 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		}
 		return diag.FromErr(err)
 	}
-
-	d.SetId(auth0.StringValue(connection.ID))
 
 	result := multierror.Append(
 		d.Set("name", connection.Name),

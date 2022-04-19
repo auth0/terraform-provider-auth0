@@ -8,7 +8,7 @@ import (
 )
 
 func flattenConnectionOptions(d ResourceData, options interface{}) []interface{} {
-	if options == nil || optionsBlockIsNotDefined(d) {
+	if options == nil {
 		return nil
 	}
 
@@ -52,11 +52,6 @@ func flattenConnectionOptions(d ResourceData, options interface{}) []interface{}
 	}
 
 	return []interface{}{m}
-}
-
-func optionsBlockIsNotDefined(d ResourceData) bool {
-	_, ok := d.GetOk("options")
-	return !ok
 }
 
 func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) interface{} {

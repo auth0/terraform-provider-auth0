@@ -47,13 +47,6 @@ func newCustomDomain() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"verification_method": {
-				Type:         schema.TypeString,
-				Optional:     true,
-				ForceNew:     true,
-				Deprecated:   "The method is chosen according to the type of the custom domain. CNAME for auth0_managed_certs, TXT for self_managed_certs",
-				ValidateFunc: validation.StringInSlice([]string{"txt"}, true),
-			},
 			"verification": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -72,7 +65,7 @@ func newCustomDomain() *schema.Resource {
 }
 
 func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	customDomain := buildCustomDomain(d)
+	customDomain := expandCustomDomain(d)
 	api := m.(*management.Management)
 	if err := api.CustomDomain.Create(customDomain); err != nil {
 		return diag.FromErr(err)
@@ -127,10 +120,9 @@ func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	return nil
 }
 
-func buildCustomDomain(d *schema.ResourceData) *management.CustomDomain {
+func expandCustomDomain(d *schema.ResourceData) *management.CustomDomain {
 	return &management.CustomDomain{
-		Domain:             String(d, "domain"),
-		Type:               String(d, "type"),
-		VerificationMethod: String(d, "verification_method"),
+		Domain: String(d, "domain"),
+		Type:   String(d, "type"),
 	}
 }

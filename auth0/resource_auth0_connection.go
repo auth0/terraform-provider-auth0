@@ -789,8 +789,6 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(connection.ID))
-
 	result := multierror.Append(
 		d.Set("name", connection.Name),
 		d.Set("display_name", connection.DisplayName),

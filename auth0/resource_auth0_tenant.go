@@ -285,7 +285,7 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	tenant := buildTenant(d)
+	tenant := expandTenant(d)
 	api := m.(*management.Management)
 	if err := api.Tenant.Update(tenant); err != nil {
 		return diag.FromErr(err)
@@ -299,7 +299,7 @@ func deleteTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return nil
 }
 
-func buildTenant(d *schema.ResourceData) *management.Tenant {
+func expandTenant(d *schema.ResourceData) *management.Tenant {
 	tenant := &management.Tenant{
 		DefaultAudience:       String(d, "default_audience"),
 		DefaultDirectory:      String(d, "default_directory"),
@@ -316,7 +316,7 @@ func buildTenant(d *schema.ResourceData) *management.Tenant {
 		ChangePassword:        expandTenantChangePassword(d),
 		GuardianMFAPage:       expandTenantGuardianMFAPage(d),
 		ErrorPage:             expandTenantErrorPage(d),
-		Flags:                 expandTenantFlags(d),
+		Flags:                 expandTenantFlags(d.GetRawConfig().GetAttr("flags")),
 		UniversalLogin:        expandTenantUniversalLogin(d),
 	}
 

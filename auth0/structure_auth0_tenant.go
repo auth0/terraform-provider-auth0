@@ -1,6 +1,9 @@
 package auth0
 
-import "github.com/auth0/go-auth0/management"
+import (
+	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
+)
 
 func flattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
 	if changePassword == nil {
@@ -112,23 +115,27 @@ func expandTenantErrorPage(d ResourceData) *management.TenantErrorPage {
 	return &errorPage
 }
 
-func expandTenantFlags(d ResourceData) *management.TenantFlags {
-	var flags management.TenantFlags
+func expandTenantFlags(flagsList cty.Value) *management.TenantFlags {
+	var tenantFlags *management.TenantFlags
 
-	List(d, "flags").Elem(func(d ResourceData) {
-		flags.EnableClientConnections = Bool(d, "enable_client_connections")
-		flags.EnableAPIsSection = Bool(d, "enable_apis_section")
-		flags.EnablePipeline2 = Bool(d, "enable_pipeline2")
-		flags.EnableDynamicClientRegistration = Bool(d, "enable_dynamic_client_registration")
-		flags.EnableCustomDomainInEmails = Bool(d, "enable_custom_domain_in_emails")
-		flags.UniversalLogin = Bool(d, "universal_login")
-		flags.EnableLegacyLogsSearchV2 = Bool(d, "enable_legacy_logs_search_v2")
-		flags.DisableClickjackProtectionHeaders = Bool(d, "disable_clickjack_protection_headers")
-		flags.EnablePublicSignupUserExistsError = Bool(d, "enable_public_signup_user_exists_error")
-		flags.UseScopeDescriptionsForConsent = Bool(d, "use_scope_descriptions_for_consent")
+	flagsList.ForEachElement(func(_ cty.Value, flags cty.Value) (stop bool) {
+		tenantFlags = &management.TenantFlags{
+			EnableClientConnections:           Flag(flags, "enable_client_connections"),
+			EnableAPIsSection:                 Flag(flags, "enable_apis_section"),
+			EnablePipeline2:                   Flag(flags, "enable_pipeline2"),
+			EnableDynamicClientRegistration:   Flag(flags, "enable_dynamic_client_registration"),
+			EnableCustomDomainInEmails:        Flag(flags, "enable_custom_domain_in_emails"),
+			UniversalLogin:                    Flag(flags, "universal_login"),
+			EnableLegacyLogsSearchV2:          Flag(flags, "enable_legacy_logs_search_v2"),
+			DisableClickjackProtectionHeaders: Flag(flags, "disable_clickjack_protection_headers"),
+			EnablePublicSignupUserExistsError: Flag(flags, "enable_public_signup_user_exists_error"),
+			UseScopeDescriptionsForConsent:    Flag(flags, "use_scope_descriptions_for_consent"),
+		}
+
+		return stop
 	})
 
-	return &flags
+	return tenantFlags
 }
 
 func expandTenantUniversalLogin(d ResourceData) *management.TenantUniversalLogin {

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/auth0/go-auth0"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
@@ -257,11 +258,25 @@ func Float64(d ResourceData, key string, conditions ...Condition) (f *float64) {
 // Bool accesses the value held by key and type asserts it to a pointer to a
 // bool.
 func Bool(d ResourceData, key string, conditions ...Condition) (b *bool) {
+	// We need to keep using this for bool values even if it's marked as deprecated.
+	// See https://github.com/hashicorp/terraform-plugin-sdk/issues/817.
 	v, ok := d.GetOkExists(key)
 	if ok && Any(conditions...).Eval(d, key) {
 		b = auth0.Bool(v.(bool))
 	}
 	return
+}
+
+// Flag accesses the value held by the bool flag key
+// and type asserts it as a pointer to a bool.
+func Flag(configFlags cty.Value, key string) *bool {
+	configFlag := configFlags.GetAttr(key)
+
+	if configFlag.IsNull() {
+		return nil
+	}
+
+	return auth0.Bool(configFlag.True())
 }
 
 // Slice accesses the value held by key and type asserts it to a slice.

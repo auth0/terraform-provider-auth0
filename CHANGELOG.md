@@ -1,3 +1,14 @@
+## 0.30.2
+
+BUG FIXES:
+
+- `resource/auth0_tenant`: Fixed auth0 tenant flags so it only sends set values ([#144](https://github.com/auth0/terraform-provider-auth0/pull/144))
+- `resource/auth0_connection`: Fixed missing options when importing a connection object ([#142](https://github.com/auth0/terraform-provider-auth0/pull/142))
+
+NOTES:
+
+- `resource/auth0_custom_domain`: Removed deprecated verification_method from custom domain resource ([#143](https://github.com/auth0/terraform-provider-auth0/pull/143))
+
 ## 0.30.1
 
 BUG FIXES:

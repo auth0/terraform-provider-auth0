@@ -377,6 +377,13 @@ func expandConnection(d ResourceData) *management.Connection {
 		Realms:             Slice(d, "realms", IsNewResource(), HasChange()),
 	}
 
+	if metadataKeyMap := Map(d, "metadata"); metadataKeyMap != nil {
+		connection.Metadata = map[string]string{}
+		for key, value := range metadataKeyMap {
+			connection.Metadata[key] = value.(string)
+		}
+	}
+
 	strategy := d.Get("strategy").(string)
 	switch strategy {
 	case management.ConnectionStrategyGoogleApps,

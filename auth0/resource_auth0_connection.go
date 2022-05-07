@@ -54,6 +54,13 @@ var connectionSchema = map[string]*schema.Schema{
 		ForceNew:    true,
 		Description: "Type of the connection, which indicates the identity provider",
 	},
+	"metadata": {
+		Type:             schema.TypeMap,
+		Elem:             &schema.Schema{Type: schema.TypeString},
+		Optional:         true,
+		ValidateDiagFunc: validation.MapKeyLenBetween(0, 10),
+		Description:      "Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.",
+	},
 	"options": {
 		Type:     schema.TypeList,
 		Computed: true,
@@ -798,6 +805,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		d.Set("options", flattenConnectionOptions(d, connection.Options)),
 		d.Set("enabled_clients", connection.EnabledClients),
 		d.Set("realms", connection.Realms),
+		d.Set("metadata", connection.Metadata),
 	)
 
 	switch *connection.Strategy {

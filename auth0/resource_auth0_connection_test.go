@@ -68,6 +68,8 @@ func TestAccConnection(t *testing.T) {
 					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", rand),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "foo"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "bar"),
 					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
@@ -102,6 +104,10 @@ resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
 	strategy = "auth0"
+	metadata = {
+		key1 = "foo"
+		key2 = "bar"
+	}
 	options {
 		password_policy = "fair"
 		password_history {

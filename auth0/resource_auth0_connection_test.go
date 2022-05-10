@@ -154,6 +154,10 @@ resource "auth0_connection" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.random}}"
 	is_domain_connection = true
 	strategy = "auth0"
+	metadata = {
+		key1 = "foo"
+		key2 = "bar"
+	}
 	options {
 		password_policy = "fair"
 		password_history {

@@ -39,6 +39,10 @@ EOF
       bar = "baz"
     }
   }
+  metadata = {
+    key1 = "foo"
+    key2 = "bar"
+  }
 }
 ```
 
@@ -55,6 +59,7 @@ Arguments accepted by this resource include:
 * `options` - (Optional) Configuration settings for connection options. For details, see [Options](#options).
 * `enabled_clients` - (Optional) IDs of the clients for which the connection is enabled. If not specified, no clients are enabled.
 * `realms` - (Optional) Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm.
+* `metadata` - (Optional) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 
 ### Options
 
@@ -515,6 +520,7 @@ Attributes exported by this resource include:
 * `is_domain_connection` - Boolean. Indicates whether the connection is domain level.
 * `options` - List(Resource). Configuration settings for connection options. For details, see [Options Attributes](#options-attributes).
 * `realms` - List(String). Defines the realms for which the connection will be used (i.e., email domains). If the array is empty or the property is not specified, the connection name is added as the realm.
+* `metadata` - Map(String). Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 
 ### Options Attributes
 

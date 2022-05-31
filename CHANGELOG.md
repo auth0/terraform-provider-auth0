@@ -1,3 +1,10 @@
+## 0.30.3
+
+FEATURES:
+
+- `resource/auth0_connection`: Added support for connection metadata field ([#158](https://github.com/auth0/terraform-provider-auth0/pull/158))
+
+
 ## 0.30.2
 
 BUG FIXES:
@@ -8,6 +15,7 @@ BUG FIXES:
 NOTES:
 
 - `resource/auth0_custom_domain`: Removed deprecated verification_method from custom domain resource ([#143](https://github.com/auth0/terraform-provider-auth0/pull/143))
+
 
 ## 0.30.1
 

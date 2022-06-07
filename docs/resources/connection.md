@@ -16,15 +16,15 @@ and manage connections to be used with your clients and users.
 
 ```hcl
 resource "auth0_connection" "my_connection" {
-  name = "Example-Connection"
+  name     = "Example-Connection"
   strategy = "auth0"
   options {
     password_policy = "excellent"
     password_history {
       enable = true
-      size = 3
+      size   = 3
     }
-    brute_force_protection = true
+    brute_force_protection         = true
     enabled_database_customization = true
     custom_scripts = {
       get_user = <<EOF
@@ -144,13 +144,13 @@ With the `google-oauth2` connection strategy, `options` supports the following a
 
 ```hcl
 resource "auth0_connection" "google_oauth2" {
-  name = "Google-OAuth2-Connection"
+  name     = "Google-OAuth2-Connection"
   strategy = "google-oauth2"
   options {
-    client_id = "<client-id>"
-    client_secret = "<client-secret>"
-    allowed_audiences = [ "example.com", "api.example.com" ]
-    scopes = [ "email", "profile", "gmail", "youtube" ]
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    allowed_audiences        = [ "example.com", "api.example.com" ]
+    scopes                   = [ "email", "profile", "gmail", "youtube" ]
     set_user_root_attributes = "on_each_login"
   }
 }
@@ -170,12 +170,12 @@ With the `facebook` connection strategy, `options` supports the following argume
 
 ```hcl
 resource "auth0_connection" "facebook" {
-  name = "Facebook-Connection"
+  name     = "Facebook-Connection"
   strategy = "facebook"
   options {
-    client_id = "<client-id>"
+    client_id     = "<client-id>"
     client_secret = "<client-secret>"
-    scopes = [ "public_profile",  "email",  "groups_access_member_info",  "user_birthday" ]
+    scopes        = [ "public_profile",  "email",  "groups_access_member_info",  "user_birthday" ]
   }
 }
 ```
@@ -196,14 +196,14 @@ With the `apple` connection strategy, `options` supports the following arguments
 
 ```hcl
 resource "auth0_connection" "apple" {
-  name = "Apple-Connection"
+  name     = "Apple-Connection"
   strategy = "apple"
   options {
-    client_id = "<client-id>"
+    client_id     = "<client-id>"
     client_secret = "<private-key>"
-    team_id = "<team-id>"
-    key_id = "<key-id>"
-    scopes = ["email", "name"]
+    team_id       = "<team-id>"
+    key_id        = "<key-id>"
+    scopes        = ["email", "name"]
   }
 }
 ```
@@ -223,13 +223,13 @@ With the `linkedin` connection strategy, `options` supports the following argume
 
 ```hcl
 resource "auth0_connection" "linkedin" {
-  name = "Linkedin-Connection"
+  name     = "Linkedin-Connection"
   strategy = "linkedin"
   options {
-    client_id = "<client-id>"
-    client_secret = "<client-secret>"
+    client_id        = "<client-id>"
+    client_secret    = "<client-secret>"
     strategy_version = 2
-    scopes = [ "basic_profile", "profile", "email" ]
+    scopes           = [ "basic_profile", "profile", "email" ]
   }
 }
 ```
@@ -247,12 +247,12 @@ With the `github` connection strategy, `options` supports the following argument
 
 ```hcl
 resource "auth0_connection" "github" {
-  name = "GitHub-Connection"
+  name     = "GitHub-Connection"
   strategy = "github"
   options {
-    client_id = "<client-id>"
+    client_id     = "<client-id>"
     client_secret = "<client-secret>"
-    scopes = [ "email", "profile", "public_repo", "repo" ]
+    scopes        = [ "email", "profile", "public_repo", "repo" ]
   }
 }
 ```
@@ -272,13 +272,13 @@ With the `salesforce`, `salesforce-community` and `salesforce-sandbox` connectio
 
 ```hcl
 resource "auth0_connection" "salesforce" {
-	name = "Salesforce-Connection"
-	strategy = "salesforce"
-	options {
-		client_id = "<client-id>"
-		client_secret = "<client-secret>"
-		community_base_url = "https://salesforce.example.com"
-	}
+  name     = "Salesforce-Connection"
+  strategy = "salesforce"
+  options {
+    client_id          = "<client-id>"
+    client_secret      = "<client-secret>"
+    community_base_url = "https://salesforce.example.com"
+  }
 }
 ```
 
@@ -316,21 +316,21 @@ With the `oauth2` connection strategy, `options` supports the following argument
 
 ```hcl
 resource "auth0_connection" "oauth2" {
-	name = "OAuth2-Connection"
-	strategy = "oauth2"
-	options {
-		client_id = "<client-id>"
-		client_secret = "<client-secret>"
-		token_endpoint = "https://auth.example.com/oauth2/token"
+  name = "OAuth2-Connection"
+  strategy = "oauth2"
+  options {
+    client_id              = "<client-id>"
+    client_secret          = "<client-secret>"
+    token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
     scripts = {
-			fetchUserProfile = <<EOF
+      fetchUserProfile = <<EOF
 function function(accessToken, ctx, cb) {
   return callback(new Error("Whoops!"))
 }
 EOF
-		}
-	}
+    }
+  }
 }
 ```
 
@@ -372,31 +372,31 @@ Example of [custom SMS gateway connection](https://auth0.com/docs/authenticate/p
 
 ```hcl
 resource "auth0_connection" "sms" {
-	name = "custom-sms-gateway"
-	is_domain_connection = false
-	strategy = "sms"
-	options {
-		disable_signup = false
-		name = "sms"
-		from = "+15555555555"
-		syntax = "md_with_macros"
-		template = "@@password@@"
-		brute_force_protection = true
-		totp {
-			time_step = 300
-			length = 6
-		}
-		provider = "sms_gateway"
-		gateway_url = "https://somewhere.com/sms-gateway"
-		gateway_authentication {
-			method = "bearer"
-			subject = "test.us.auth0.com:sms"
-			audience = "https://somewhere.com/sms-gateway"
-			secret = "4e2680bb74ec2ae24736476dd37ed6c2"
-			secret_base64_encoded = false
-		}
-		forward_request_info = true
-	}
+  name                 = "custom-sms-gateway"
+  is_domain_connection = false
+  strategy             = "sms"
+  options {
+    disable_signup = false
+    name                   = "sms"
+    from                   = "+15555555555"
+    syntax                 = "md_with_macros"
+    template               = "@@password@@"
+	brute_force_protection = true
+    totp {
+      time_step = 300
+      length    = 6
+    }
+    provider    = "sms_gateway"
+    gateway_url = "https://somewhere.com/sms-gateway"
+    gateway_authentication {
+      method                = "bearer"
+      subject               = "test.us.auth0.com:sms"
+      audience              = "https://somewhere.com/sms-gateway"
+      secret                = "4e2680bb74ec2ae24736476dd37ed6c2"
+      secret_base64_encoded = false
+    }
+    forward_request_info = true
+  }
 }
 ```
 
@@ -411,21 +411,21 @@ resource "auth0_connection" "sms" {
 
 ```hcl
 resource "auth0_connection" "sms" {
-  name = "SMS-Connection"
+  name     = "SMS-Connection"
   strategy = "sms"
   options {
-    name = "SMS OTP"
-    twilio_sid = "<twilio-sid>"
-    twilio_token = "<twilio-token>"
-    from = "<phone-number>"
-    syntax = "md_with_macros"
-    template = "Your one-time password is @@password@@"
-    messaging_service_sid = "<messaging-service-sid>"
-    disable_signup = false
+    name                   = "SMS OTP"
+    twilio_sid             = "<twilio-sid>"
+    twilio_token           = "<twilio-token>"
+    from                   = "<phone-number>"
+    syntax                 = "md_with_macros"
+    template               = "Your one-time password is @@password@@"
+    messaging_service_sid  = "<messaging-service-sid>"
+    disable_signup         = false
     brute_force_protection = true
     totp {
       time_step = 300
-      length = 6
+      length    = 6
     }
   }
 }
@@ -466,24 +466,24 @@ With the `samlp` connection strategy, `options` supports the following arguments
 **Example**:
 ```hcl
 resource "auth0_connection" "samlp" {
-	name = "SAML-Connection"
-	strategy = "samlp"
-	options {
-		signing_cert = "<signing-certificate>"
-		sign_in_endpoint = "https://saml.provider/sign_in"
-		sign_out_endpoint = "https://saml.provider/sign_out"
-		tenant_domain = "example.com"
-		domain_aliases = ["example.com", "alias.example.com"]
-		binding_method = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    request_template = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-    user_id_attribute = "https://saml.provider/imi/ns/identity-200810"
-		signature_algorithm = "rsa-sha256"
-		digest_algorithm = "sha256"
-		fields_map = {
-			foo = "bar"
-			baz = "baa"
-		}
-	}
+  name = "SAML-Connection"
+  strategy = "samlp"
+  options {
+    signing_cert        = "<signing-certificate>"
+    sign_in_endpoint    = "https://saml.provider/sign_in"
+    sign_out_endpoint   = "https://saml.provider/sign_out"
+    tenant_domain       = "example.com"
+    domain_aliases      = ["example.com", "alias.example.com"]
+    binding_method      = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    request_template    = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+    user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
+    signature_algorithm = "rsa-sha256"
+    digest_algorithm    = "sha256"
+    fields_map = {
+      foo = "bar"
+      baz = "baa"
+    }
+  }
 }
 ```
 
@@ -502,13 +502,13 @@ With the `windowslive` connection strategy, `options` supports the following arg
 
 ```hcl
 resource "auth0_connection" "windowslive" {
-  name = "Windowslive-Connection"
+  name     = "Windowslive-Connection"
   strategy = "windowslive"
   options {
-    client_id = "<client-id>"
-    client_secret = "<client-secret>"
+    client_id        = "<client-id>"
+    client_secret    = "<client-secret>"
     strategy_version = 2
-    scopes = [ "signin", "graph_user" ]
+    scopes           = [ "signin", "graph_user" ]
   }
 }
 ```

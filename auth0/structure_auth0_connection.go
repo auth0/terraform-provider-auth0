@@ -793,7 +793,7 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 func expandConnectionOptionsADFS(d ResourceData) *management.ConnectionOptionsADFS {
 	return &management.ConnectionOptionsADFS{
 		TenantDomain:       String(d, "tenant_domain"),
-		DomainAliases:      Slice(d, "domain_aliases"),
+		DomainAliases:      Set(d, "domain_aliases").List(),
 		LogoURL:            String(d, "icon_url"),
 		ADFSServer:         String(d, "adfs_server"),
 		EnableUsersAPI:     Bool(d, "api_enable_users"),

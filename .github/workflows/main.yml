@@ -39,3 +39,10 @@ jobs:
       - name: Stop docker containers
         if: always()
         run: make dev-down
+
+      - name: Update codecov report
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.out
+          fail_ci_if_error: false
+          verbose: true

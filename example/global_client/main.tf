@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    auth0 = {
+      source = "auth0/auth0"
+    }
+  }
+}
+
 provider "auth0" {}
 
 resource "auth0_global_client" "global" {
@@ -14,7 +22,8 @@ PAGE
   callbacks            = ["http://somehostname.com/a/callback"]
 }
 
-// Generally should never be used as it is non-expiring access token to every part of your auth0 tenant
+// Generally should never be used as it is non-expiring
+// access token to every part of your auth0 tenant.
 output "auth0_global_client_id" {
   value = auth0_global_client.global.client_id
 }

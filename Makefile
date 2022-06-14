@@ -102,8 +102,13 @@ test-unit: ## Run unit tests
 	@go test ${GO_PACKAGES} || exit 1
 	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
-test-acc: dev-up ## Run acceptance tests
+test-acc: ## Run acceptance tests with http recordings
 	${call print, "Running acceptance tests"}
+	@AUTH0_HTTP_RECORDINGS=on AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com TF_ACC=1 \
+		go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
+
+test-acc-e2e: ## Run acceptance tests end to end
+	${call print, "Running acceptance tests E2E"}
 	@TF_ACC=1 go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
 
 test-sweep: ## Clean up test tenant

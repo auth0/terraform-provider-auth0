@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","strategy":"waad","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":null,"waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified","non_persistent_attrs":null}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    method: POST
+  response:
+    body: '{"id":"con_zpxu80w165g04dvc","options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":null,"waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified","non_persistent_attrs":null,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","thumbprints":["9cea37643ace0d710ad63296857b251d1fca5c48","977b10fb9d1c087e3105564b1d31b09d247bebcd","32be7e01489b7c18a2ecd7758c179b6b16e85d6d","8d2d57a353960e3ff9daf6f018d82f40ed95ccc7","d994292775296e30185d819a5c4265f255744ce2","0ea52ef207fe9c081cca33f7f92ba994d0170277","3b36790db99cb28f50cedd8ca1d1a68a1837d01a"]},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/IuVE2jvO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_zpxu80w165g04dvc
+    method: GET
+  response:
+    body: '{"id":"con_zpxu80w165g04dvc","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["9cea37643ace0d710ad63296857b251d1fca5c48","977b10fb9d1c087e3105564b1d31b09d247bebcd","32be7e01489b7c18a2ecd7758c179b6b16e85d6d","8d2d57a353960e3ff9daf6f018d82f40ed95ccc7","d994292775296e30185d819a5c4265f255744ce2","0ea52ef207fe9c081cca33f7f92ba994d0170277","3b36790db99cb28f50cedd8ca1d1a68a1837d01a"],"identity_api":null,"basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"api_enable_users":true,"useCommonEndpoint":false,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/IuVE2jvO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_zpxu80w165g04dvc
+    method: GET
+  response:
+    body: '{"id":"con_zpxu80w165g04dvc","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["9cea37643ace0d710ad63296857b251d1fca5c48","977b10fb9d1c087e3105564b1d31b09d247bebcd","32be7e01489b7c18a2ecd7758c179b6b16e85d6d","8d2d57a353960e3ff9daf6f018d82f40ed95ccc7","d994292775296e30185d819a5c4265f255744ce2","0ea52ef207fe9c081cca33f7f92ba994d0170277","3b36790db99cb28f50cedd8ca1d1a68a1837d01a"],"identity_api":null,"basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"api_enable_users":true,"useCommonEndpoint":false,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/IuVE2jvO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_zpxu80w165g04dvc
+    method: DELETE
+  response:
+    body: '{"deleted_at":"2022-06-13T13:14:09.235Z"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 202 Accepted
+    code: 202
+    duration: 1ms

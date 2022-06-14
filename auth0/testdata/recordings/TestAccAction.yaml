@@ -1,0 +1,335 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"code":"exports.onExecutePostLogin = async (event, api) =\u003e {};","secrets":[{"name":"foo","value":"123"}]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+    method: POST
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:11:59.845285403Z","code":"exports.onExecutePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[{"name":"foo","updated_at":"2022-06-13T13:11:59.845285403Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:11:59.845285403Z","code":"exports.onExecutePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:11:59.845285403Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:11:59.845285403Z","code":"exports.onExecutePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:11:59.845285403Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:11:59.845285403Z","code":"exports.onExecutePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:11:59.845285403Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {};","runtime":"node16","secrets":[{"name":"foo","value":"123456"}]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: PATCH
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.343236012Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.343236012Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b/deploy
+    method: POST
+  response:
+    body: '{"code":"exports.onContinuePostLogin = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":false,"number":1,"secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.330560598Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}],"action":{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test
+      Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.333526242Z","all_changes_deployed":false}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.343236012Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"61089d1c-1373-4df1-9b44-823246674ab6","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-06-13T13:12:04.425115124Z","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":true,"number":1,"built_at":"2022-06-13T13:12:04.425115124Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.343236012Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"61089d1c-1373-4df1-9b44-823246674ab6","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-06-13T13:12:04.425115124Z","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":true,"number":1,"built_at":"2022-06-13T13:12:04.425115124Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:03.343236012Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"61089d1c-1373-4df1-9b44-823246674ab6","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-06-13T13:12:04.425115124Z","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":true,"number":1,"built_at":"2022-06-13T13:12:04.425115124Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {\n\tconsole.log(event)\n};\"\n","runtime":"node16"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: PATCH
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:07.844752547Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"runtime":"node16","status":"pending","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"61089d1c-1373-4df1-9b44-823246674ab6","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-06-13T13:12:04.425115124Z","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":true,"number":1,"built_at":"2022-06-13T13:12:04.425115124Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:07.844752547Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"61089d1c-1373-4df1-9b44-823246674ab6","code":"exports.onContinuePostLogin
+      = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-06-13T13:12:04.425115124Z","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {};","dependencies":[],"id":"61089d1c-1373-4df1-9b44-823246674ab6","deployed":true,"number":1,"built_at":"2022-06-13T13:12:04.425115124Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:04.330560598Z","updated_at":"2022-06-13T13:12:04.426854686Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b/deploy
+    method: POST
+  response:
+    body: '{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"id":"743600e2-3bcd-44bc-9f21-e19a5b685ed0","deployed":false,"number":2,"secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:08.726187545Z","updated_at":"2022-06-13T13:12:08.726187545Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}],"action":{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test
+      Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:07.835737983Z","all_changes_deployed":false}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:07.844752547Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"743600e2-3bcd-44bc-9f21-e19a5b685ed0","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","runtime":"node16","status":"BUILT","number":2,"build_time":"2022-06-13T13:12:08.815715781Z","created_at":"2022-06-13T13:12:08.726187545Z","updated_at":"2022-06-13T13:12:08.817432575Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"id":"743600e2-3bcd-44bc-9f21-e19a5b685ed0","deployed":true,"number":2,"built_at":"2022-06-13T13:12:08.815715781Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:08.726187545Z","updated_at":"2022-06-13T13:12:08.817432575Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: GET
+  response:
+    body: '{"id":"7ea20156-266f-4c33-af8a-2b9a01744b3b","name":"Test Action TestAccAction","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-06-13T13:11:59.822814816Z","updated_at":"2022-06-13T13:12:07.844752547Z","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"current_version":{"id":"743600e2-3bcd-44bc-9f21-e19a5b685ed0","code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","runtime":"node16","status":"BUILT","number":2,"build_time":"2022-06-13T13:12:08.815715781Z","created_at":"2022-06-13T13:12:08.726187545Z","updated_at":"2022-06-13T13:12:08.817432575Z"},"deployed_version":{"code":"exports.onContinuePostLogin
+      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[],"id":"743600e2-3bcd-44bc-9f21-e19a5b685ed0","deployed":true,"number":2,"built_at":"2022-06-13T13:12:08.815715781Z","secrets":[{"name":"foo","updated_at":"2022-06-13T13:12:03.343236012Z"}],"status":"built","created_at":"2022-06-13T13:12:08.726187545Z","updated_at":"2022-06-13T13:12:08.817432575Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/7ea20156-266f-4c33-af8a-2b9a01744b3b
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms

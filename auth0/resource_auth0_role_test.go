@@ -51,21 +51,21 @@ func init() {
 }
 
 func TestAccRole(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRoleCreate, rand),
+				Config: random.Template(testAccRoleCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_role.the_one", "name", "The One - Acceptance Test - {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_role.the_one", "name", "The One - Acceptance Test - {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccRoleUpdate, rand),
+				Config: random.Template(testAccRoleUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One who will bring peace - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "2"),
@@ -116,15 +116,15 @@ resource auth0_role the_one {
 `
 
 func TestAccRolePermissions(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRolePermissions, rand),
+				Config: random.Template(testAccRolePermissions, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_role.role", "name", "The One - Acceptance Test - {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_role.role", "name", "The One - Acceptance Test - {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_role.role", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.role", "permissions.#", "58"),
 				),

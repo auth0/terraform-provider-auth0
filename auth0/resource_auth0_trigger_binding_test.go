@@ -9,29 +9,29 @@ import (
 )
 
 func TestAccTriggerBinding(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccTriggerBindingConfigCreate, rand),
+				Config: random.Template(testAccTriggerBindingConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Bar {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Foo {{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Bar {{.random}}", t.Name()),
 				),
 			},
 			{
-				Config: random.Template(testAccTriggerBindingConfigUpdate, rand),
+				Config: random.Template(testAccTriggerBindingConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Bar {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Foo {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Bar {{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Foo {{.random}}", t.Name()),
 				),
 			},
 		},
@@ -54,6 +54,7 @@ resource auth0_action action_foo {
 }
 
 resource auth0_action action_bar {
+	depends_on = [auth0_action.action_foo]
 	name = "Test Trigger Binding Bar {{.random}}"
 	supported_triggers {
 		id = "post-login"

@@ -43,32 +43,32 @@ func init() {
 }
 
 func TestAccRuleConfig(t *testing.T) {
-	rand := random.String(4)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRuleConfigCreate, rand),
+				Config: random.Template(testAccRuleConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "bar"),
 				),
 			},
 			{
-				Config: random.Template(testAccRuleConfigUpdateValue, rand),
+				Config: random.Template(testAccRuleConfigUpdateValue, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "foo"),
 				),
 			},
 			{
-				Config: random.Template(testAccRuleConfigUpdateKey, rand),
+				Config: random.Template(testAccRuleConfigUpdateKey, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_key_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_key_{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_key_{{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_key_{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "foo"),
 				),
 			},

@@ -53,24 +53,24 @@ func init() {
 }
 
 func TestAccOrganization(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccOrganizationCreate, rand),
+				Config: random.Template(testAccOrganizationCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", strings.ToLower(t.Name())),
+					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccOrganizationUpdate, rand),
+				Config: random.Template(testAccOrganizationUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", strings.ToLower(t.Name())),
+					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
@@ -80,10 +80,10 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccOrganizationUpdateAgain, rand),
+				Config: random.Template(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", strings.ToLower(t.Name())),
+					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
@@ -98,6 +98,7 @@ resource auth0_connection acme {
 }
 
 resource auth0_connection acmeinc {
+	depends_on = [auth0_connection.acme]
 	name = "Acceptance-Test-Connection-Acme-Inc-{{.random}}"
 	strategy = "auth0"
 }

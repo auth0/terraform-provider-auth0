@@ -57,15 +57,15 @@ func init() {
 }
 
 func TestAccConnection(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionConfig, rand),
+				Config: random.Template(testAccConnectionConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "foo"),
@@ -89,7 +89,7 @@ func TestAccConnection(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionConfigUpdate, rand),
+				Config: random.Template(testAccConnectionConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "false"),
@@ -187,15 +187,15 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestAccConnectionAD(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionADConfig, rand),
+				Config: random.Template(testAccConnectionADConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.ad", "name", "Acceptance-Test-AD-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.ad", "name", "Acceptance-Test-AD-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "strategy", "ad"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.#", "2"),
@@ -235,15 +235,15 @@ resource "auth0_connection" "ad" {
 `
 
 func TestAccConnectionAzureAD(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionAzureADConfig, rand),
+				Config: random.Template(testAccConnectionAzureADConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.azure_ad", "name", "Acceptance-Test-Azure-AD-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.azure_ad", "name", "Acceptance-Test-Azure-AD-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "strategy", "waad"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
@@ -296,15 +296,15 @@ resource "auth0_connection" "azure_ad" {
 `
 
 func TestAccConnectionOIDC(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionOIDCConfig, rand),
+				Config: random.Template(testAccConnectionOIDCConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.oidc", "name", "Acceptance-Test-OIDC-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.oidc", "name", "Acceptance-Test-OIDC-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "123456"),
@@ -329,7 +329,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionOIDCConfigUpdate, rand),
+				Config: random.Template(testAccConnectionOIDCConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
@@ -406,15 +406,15 @@ resource "auth0_connection" "oidc" {
 `
 
 func TestAccConnectionOAuth2(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionOAuth2Config, rand),
+				Config: random.Template(testAccConnectionOAuth2Config, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.oauth2", "name", "Acceptance-Test-OAuth2-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.oauth2", "name", "Acceptance-Test-OAuth2-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "strategy", "oauth2"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_secret", "123456"),
@@ -429,7 +429,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionOAuth2ConfigUpdate, rand),
+				Config: random.Template(testAccConnectionOAuth2ConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_id", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_secret", "1234567"),
@@ -485,15 +485,15 @@ resource "auth0_connection" "oauth2" {
 `
 
 func TestAccConnectionWithEnabledClients(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionWithEnabledClientsConfig, rand),
+				Config: random.Template(testAccConnectionWithEnabledClientsConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-Connection-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "enabled_clients.#", "4"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"), // Gets computed with defaults by the API.
 				),
@@ -510,18 +510,21 @@ resource "auth0_client" "my_client_1" {
 }
 
 resource "auth0_client" "my_client_2" {
+	depends_on = [auth0_client.my_client_1]
 	name = "Application - Acceptance Test - 2 - {{.random}}"
 	description = "Test Applications Long Description"
 	app_type = "non_interactive"
 }
 
 resource "auth0_client" "my_client_3" {
+	depends_on = [auth0_client.my_client_2]
 	name = "Application - Acceptance Test - 3 - {{.random}}"
 	description = "Test Applications Long Description"
 	app_type = "non_interactive"
 }
 
 resource "auth0_client" "my_client_4" {
+	depends_on = [auth0_client.my_client_3]
 	name = "Application - Acceptance Test - 4 - {{.random}}"
 	description = "Test Applications Long Description"
 	app_type = "non_interactive"
@@ -532,24 +535,24 @@ resource "auth0_connection" "my_connection" {
 	is_domain_connection = true
 	strategy = "auth0"
 	enabled_clients = [
-		"${auth0_client.my_client_1.id}",
-		"${auth0_client.my_client_2.id}",
-		"${auth0_client.my_client_3.id}",
-		"${auth0_client.my_client_4.id}",
+		auth0_client.my_client_1.id,
+		auth0_client.my_client_2.id,
+		auth0_client.my_client_3.id,
+		auth0_client.my_client_4.id,
 	]
 }
 `
 
 func TestAccConnectionSMS(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionSMSConfig, rand),
+				Config: random.Template(testAccConnectionSMSConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.sms", "name", "Acceptance-Test-SMS-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.sms", "name", "Acceptance-Test-SMS-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "strategy", "sms"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.twilio_sid", "ABC123"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.twilio_token", "DEF456"),
@@ -588,15 +591,15 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionCustomSMS(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionCustomSMSConfig, rand),
+				Config: random.Template(testAccConnectionCustomSMSConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.sms", "name", "Acceptance-Test-Custom-SMS-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.sms", "name", "Acceptance-Test-Custom-SMS-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "strategy", "sms"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.totp.0.time_step", "300"),
@@ -644,15 +647,15 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionEmail(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionEmailConfig, rand),
+				Config: random.Template(testAccConnectionEmailConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.email", "name", "Acceptance-Test-Email-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.email", "name", "Acceptance-Test-Email-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.email", "strategy", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.from", "Magic Password <password@example.com>"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.subject", "Sign in!"),
@@ -662,7 +665,7 @@ func TestAccConnectionEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionEmailConfigUpdate, rand),
+				Config: random.Template(testAccConnectionEmailConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "360"),
@@ -717,15 +720,15 @@ resource "auth0_connection" "email" {
 `
 
 func TestAccConnectionSalesforce(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionSalesforceConfig, rand),
+				Config: random.Template(testAccConnectionSalesforceConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.salesforce_community", "name", "Acceptance-Test-Salesforce-Connection-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.salesforce_community", "name", "Acceptance-Test-Salesforce-Connection-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "strategy", "salesforce-community"),
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "options.0.community_base_url", "https://salesforce.example.com"),
 				),
@@ -749,15 +752,15 @@ resource "auth0_connection" "salesforce_community" {
 `
 
 func TestAccConnectionGoogleOAuth2(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionGoogleOAuth2Config, rand),
+				Config: random.Template(testAccConnectionGoogleOAuth2Config, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.google_oauth2", "name", "Acceptance-Test-Google-OAuth2-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.google_oauth2", "name", "Acceptance-Test-Google-OAuth2-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "strategy", "google-oauth2"),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.client_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.client_secret", ""),
@@ -790,15 +793,15 @@ resource "auth0_connection" "google_oauth2" {
 `
 
 func TestAccConnectionGoogleApps(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionGoogleApps, rand),
+				Config: random.Template(testAccConnectionGoogleApps, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.google_apps", "name", "Acceptance-Test-Google-Apps-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.google_apps", "name", "Acceptance-Test-Google-Apps-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "strategy", "google-apps"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.client_id", ""),
@@ -837,15 +840,15 @@ resource "auth0_connection" "google_apps" {
 `
 
 func TestAccConnectionFacebook(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionFacebookConfig, rand),
+				Config: random.Template(testAccConnectionFacebookConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.facebook", "name", "Acceptance-Test-Facebook-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.facebook", "name", "Acceptance-Test-Facebook-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "strategy", "facebook"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_secret", "client_secret"),
@@ -855,9 +858,9 @@ func TestAccConnectionFacebook(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionFacebookConfigUpdate, rand),
+				Config: random.Template(testAccConnectionFacebookConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.facebook", "name", "Acceptance-Test-Facebook-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.facebook", "name", "Acceptance-Test-Facebook-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "strategy", "facebook"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.client_secret", "client_secret_update"),
@@ -897,15 +900,15 @@ resource "auth0_connection" "facebook" {
 `
 
 func TestAccConnectionApple(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionAppleConfig, rand),
+				Config: random.Template(testAccConnectionAppleConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.apple", "name", "Acceptance-Test-Apple-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.apple", "name", "Acceptance-Test-Apple-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "strategy", "apple"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.client_secret", "-----BEGIN PRIVATE KEY-----\nMIHBAgEAMA0GCSqGSIb3DQEBAQUABIGsMIGpAgEAAiEA3+luhVHxSJ8cv3VNzQDP\nEL6BPs7FjBq4oro0MWM+QJMCAwEAAQIgWbq6/pRK4/ZXV+ZTSj7zuxsWZuK5i3ET\nfR2TCEkZR3kCEQD2ElqDr/pY5aHA++9HioY9AhEA6PIxC1c/K3gJqu+K+EsfDwIQ\nG5MS8Y7Wzv9skOOqfKnZQQIQdG24vaZZ2GwiyOD5YKiLWQIQYNtrb3j0BWsT4LI+\nN9+l1g==\n-----END PRIVATE KEY-----"),
@@ -918,7 +921,7 @@ func TestAccConnectionApple(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionAppleConfigUpdate, rand),
+				Config: random.Template(testAccConnectionAppleConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.team_id", "team_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.key_id", "key_id_update"),
@@ -964,15 +967,15 @@ resource "auth0_connection" "apple" {
 `
 
 func TestAccConnectionLinkedin(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionLinkedinConfig, rand),
+				Config: random.Template(testAccConnectionLinkedinConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.linkedin", "name", "Acceptance-Test-Linkedin-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.linkedin", "name", "Acceptance-Test-Linkedin-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "strategy", "linkedin"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret"),
@@ -983,7 +986,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionLinkedinConfigUpdate, rand),
+				Config: random.Template(testAccConnectionLinkedinConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret_update"),
@@ -1024,15 +1027,15 @@ resource "auth0_connection" "linkedin" {
 `
 
 func TestAccConnectionGitHub(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionGitHubConfig, rand),
+				Config: random.Template(testAccConnectionGitHubConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.github", "name", "Acceptance-Test-GitHub-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.github", "name", "Acceptance-Test-GitHub-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.github", "strategy", "github"),
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.client_id", "client-id"),
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.client_secret", "client-secret"),
@@ -1079,15 +1082,15 @@ resource "auth0_connection" "github" {
 `
 
 func TestAccConnectionWindowslive(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionWindowsliveConfig, rand),
+				Config: random.Template(testAccConnectionWindowsliveConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.windowslive", "name", "Acceptance-Test-Windowslive-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.windowslive", "name", "Acceptance-Test-Windowslive-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "strategy", "windowslive"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_secret", "client_secret"),
@@ -1098,9 +1101,9 @@ func TestAccConnectionWindowslive(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionWindowsliveConfigUpdate, rand),
+				Config: random.Template(testAccConnectionWindowsliveConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.windowslive", "name", "Acceptance-Test-Windowslive-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.windowslive", "name", "Acceptance-Test-Windowslive-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "strategy", "windowslive"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.client_secret", "client_secret_update"),
@@ -1142,13 +1145,13 @@ resource "auth0_connection" "windowslive" {
 `
 
 func TestAccConnectionConfiguration(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccConnectionConfigurationCreate, rand),
+				Config: random.Template(testAccConnectionConfigurationCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.%", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.foo", "xxx"),
@@ -1156,7 +1159,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccConnectionConfigurationUpdate, rand),
+				Config: random.Template(testAccConnectionConfigurationUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.%", "3"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.foo", "xxx"),
@@ -1316,16 +1319,16 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 }
 
 func TestAccConnectionSAML(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testConnectionSAMLConfigCreate, rand),
+				Config: random.Template(testConnectionSAMLConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-SAML-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", "Acceptance-Test-SAML-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_connection.my_connection", "name", "Acceptance-Test-SAML-{{.random}}", t.Name()),
+					random.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", "Acceptance-Test-SAML-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
@@ -1335,7 +1338,7 @@ func TestAccConnectionSAML(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testConnectionSAMLConfigUpdate, rand),
+				Config: random.Template(testConnectionSAMLConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),

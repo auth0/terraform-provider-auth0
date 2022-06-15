@@ -26,19 +26,12 @@ jobs:
       - name: Check for linting errors
         run: make lint
 
-      - name: Start docker containers
-        run: make dev-up
-
       - name: Run tests
         run: make test
         env:
           AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-
-      - name: Stop docker containers
-        if: always()
-        run: make dev-down
 
       - name: Update codecov report
         uses: codecov/codecov-action@v3

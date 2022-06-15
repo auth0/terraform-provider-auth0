@@ -116,28 +116,6 @@ test-sweep: ## Clean up test tenant
 	@go test ./auth0 -v -sweep="phony" $(SWEEPARGS)
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Development
-#-----------------------------------------------------------------------------------------------------------------------
-.PHONY: dev-up dev-down dev-stop dev-clean
-
-dev-up: ## Bootstrap the development containers
-	${call print, "Starting development containers"}
-	@docker-compose up -d
-	@sleep 2 # Let's make sure the container is fully up.
-
-dev-down: ## Bring down the development containers
-	${call print, "Bringing the development containers down"}
-	@docker-compose down
-
-dev-stop: ## Stop the development containers
-	${call print, "Stopping the development containers"}
-	@docker-compose stop
-
-dev-rm: ## Delete the development containers
-	${call print, "Deleting the development containers"}
-	@docker-compose rm -f
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Helpers
 #-----------------------------------------------------------------------------------------------------------------------
 define print

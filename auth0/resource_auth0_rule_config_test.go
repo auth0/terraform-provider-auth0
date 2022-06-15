@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -8,7 +9,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -49,26 +50,26 @@ func TestAccRuleConfig(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRuleConfigCreate, t.Name()),
+				Config: template.ParseTestName(testAccRuleConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", t.Name()),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "bar"),
 				),
 			},
 			{
-				Config: random.Template(testAccRuleConfigUpdateValue, t.Name()),
+				Config: template.ParseTestName(testAccRuleConfigUpdateValue, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_{{.random}}", t.Name()),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "foo"),
 				),
 			},
 			{
-				Config: random.Template(testAccRuleConfigUpdateKey, t.Name()),
+				Config: template.ParseTestName(testAccRuleConfigUpdateKey, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "id", "acc_test_key_{{.random}}", t.Name()),
-					random.TestCheckResourceAttr("auth0_rule_config.foo", "key", "acc_test_key_{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_key_%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_key_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "foo"),
 				),
 			},
@@ -78,21 +79,21 @@ func TestAccRuleConfig(t *testing.T) {
 
 const testAccRuleConfigCreate = `
 resource "auth0_rule_config" "foo" {
-  key = "acc_test_{{.random}}"
+  key = "acc_test_{{.testName}}"
   value = "bar"
 }
 `
 
 const testAccRuleConfigUpdateValue = `
 resource "auth0_rule_config" "foo" {
-  key = "acc_test_{{.random}}"
+  key = "acc_test_{{.testName}}"
   value = "foo"
 }
 `
 
 const testAccRuleConfigUpdateKey = `
 resource "auth0_rule_config" "foo" {
-  key = "acc_test_key_{{.random}}"
+  key = "acc_test_key_{{.testName}}"
   value = "foo"
 }
 `

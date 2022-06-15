@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -8,7 +9,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -51,9 +52,9 @@ func TestAccLogStreamHTTP(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccLogStreamHTTPConfig, t.Name()),
+				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "status", "paused"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
@@ -63,9 +64,9 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY, t.Name()),
+				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json; charset=utf-8"),
@@ -74,9 +75,9 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccLogStreamHTTPConfigUpdateFormatToJSONOBJECT, t.Name()),
+				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONOBJECT, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json; charset=utf-8"),
@@ -85,9 +86,9 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccLogStreamHTTPConfigUpdate, t.Name()),
+				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-new-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json"),
@@ -96,9 +97,9 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders, t.Name()),
+				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-http-new-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json"),
@@ -117,7 +118,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 
 const testAccLogStreamHTTPConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-http-{{.random}}"
+	name = "Acceptance-Test-LogStream-http-{{.testName}}"
 	type = "http"
 	status = "paused"
 	sink {
@@ -131,7 +132,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 const testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-http-{{.random}}"
+	name = "Acceptance-Test-LogStream-http-{{.testName}}"
 	type = "http"
 	sink {
 	  http_endpoint = "https://example.com/webhook/logs"
@@ -144,7 +145,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 const testAccLogStreamHTTPConfigUpdateFormatToJSONOBJECT = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-http-{{.random}}"
+	name = "Acceptance-Test-LogStream-http-{{.testName}}"
 	type = "http"
 	sink {
 	  http_endpoint = "https://example.com/webhook/logs"
@@ -157,7 +158,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 const testAccLogStreamHTTPConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-http-new-{{.random}}"
+	name = "Acceptance-Test-LogStream-http-new-{{.testName}}"
 	type = "http"
 	sink {
 	  http_endpoint = "https://example.com/logs"
@@ -170,7 +171,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 const testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-http-new-{{.random}}"
+	name = "Acceptance-Test-LogStream-http-new-{{.testName}}"
 	type = "http"
 	sink {
 	  http_endpoint = "https://example.com/logs"
@@ -198,27 +199,27 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(logStreamAwsEventBridgeConfig, t.Name()),
+				Config: template.ParseTestName(logStreamAwsEventBridgeConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-aws-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_account_id", "999999999999"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_region", "us-west-2"),
 				),
 			},
 			{
-				Config: random.Template(logStreamAwsEventBridgeConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamAwsEventBridgeConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-aws-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_account_id", "899999999998"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_region", "us-west-1"),
 				),
 			},
 			{
-				Config: random.Template(logStreamAwsEventBridgeConfigUpdateName, t.Name()),
+				Config: template.ParseTestName(logStreamAwsEventBridgeConfigUpdateName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-aws-new-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_account_id", "899999999998"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.aws_region", "us-west-1"),
@@ -230,7 +231,7 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 
 const logStreamAwsEventBridgeConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-aws-{{.random}}"
+	name = "Acceptance-Test-LogStream-aws-{{.testName}}"
 	type = "eventbridge"
 	sink {
 	  aws_account_id = "999999999999"
@@ -240,7 +241,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamAwsEventBridgeConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-aws-{{.random}}"
+	name = "Acceptance-Test-LogStream-aws-{{.testName}}"
 	type = "eventbridge"
 	sink {
 	  aws_account_id = "899999999998"
@@ -251,7 +252,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 const logStreamAwsEventBridgeConfigUpdateName = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-aws-new-{{.random}}"
+	name = "Acceptance-Test-LogStream-aws-new-{{.testName}}"
 	type = "eventbridge"
 	sink {
 	  aws_account_id = "899999999998"
@@ -271,9 +272,9 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(logStreamAzureEventGridConfig, t.Name()),
+				Config: template.ParseTestName(logStreamAzureEventGridConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-azure-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-azure-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventgrid"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_subscription_id", "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_region", "northeurope"),
@@ -281,9 +282,9 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(logStreamAzureEventGridConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamAzureEventGridConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-azure-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-azure-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventgrid"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_subscription_id", "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_region", "northeurope"),
@@ -296,7 +297,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 
 const logStreamAzureEventGridConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-azure-{{.random}}"
+	name = "Acceptance-Test-LogStream-azure-{{.testName}}"
 	type = "eventgrid"
 	sink {
   	  azure_subscription_id = "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"
@@ -307,7 +308,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamAzureEventGridConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-azure-{{.random}}"
+	name = "Acceptance-Test-LogStream-azure-{{.testName}}"
 	type = "eventgrid"
 	sink {
   	  azure_subscription_id = "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"
@@ -324,27 +325,27 @@ func TestAccLogStreamDatadog(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(logStreamDatadogConfig, t.Name()),
+				Config: template.ParseTestName(logStreamDatadogConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-datadog-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "us"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key", "121233123455"),
 				),
 			},
 			{
-				Config: random.Template(logStreamDatadogConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamDatadogConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-datadog-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "eu"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key", "121233123455"),
 				),
 			},
 			{
-				Config: random.Template(logStreamDatadogConfigRemoveAndCreate, t.Name()),
+				Config: template.ParseTestName(logStreamDatadogConfigRemoveAndCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-datadog-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_region", "eu"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.datadog_api_key", "1212331234556667"),
@@ -356,7 +357,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 
 const logStreamDatadogConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-datadog-{{.random}}"
+	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
 	type = "datadog"
 	sink {
 	  datadog_region = "us"
@@ -366,7 +367,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamDatadogConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-datadog-{{.random}}"
+	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
 	type = "datadog"
 	sink {
 	  datadog_region = "eu"
@@ -376,7 +377,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamDatadogConfigRemoveAndCreate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-datadog-{{.random}}"
+	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
 	type = "datadog"
 	sink {
 	  datadog_region = "eu"
@@ -392,9 +393,9 @@ func TestAccLogStreamSplunk(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(logStreamSplunkConfig, t.Name()),
+				Config: template.ParseTestName(logStreamSplunkConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-splunk-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-splunk-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_domain", "demo.splunk.com"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_token", "12a34ab5-c6d7-8901-23ef-456b7c89d0c1"),
@@ -403,9 +404,9 @@ func TestAccLogStreamSplunk(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(logStreamSplunkConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamSplunkConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-splunk-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-splunk-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_domain", "prod.splunk.com"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_token", "12a34ab5-c6d7-8901-23ef-456b7c89d0d1"),
@@ -419,7 +420,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 
 const logStreamSplunkConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-splunk-{{.random}}"
+	name = "Acceptance-Test-LogStream-splunk-{{.testName}}"
 	type = "splunk"
 	sink {
 	  splunk_domain = "demo.splunk.com"
@@ -431,7 +432,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamSplunkConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-splunk-{{.random}}"
+	name = "Acceptance-Test-LogStream-splunk-{{.testName}}"
 	type = "splunk"
 	sink {
 	  splunk_domain = "prod.splunk.com"
@@ -449,26 +450,26 @@ func TestAccLogStreamSumo(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(logStreamSumoConfig, t.Name()),
+				Config: template.ParseTestName(logStreamSumoConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-sumo-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "demo.sumo.com"),
 				),
 			},
 			{
-				Config: random.Template(logStreamSumoConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamSumoConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-sumo-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "prod.sumo.com"),
 				),
 			},
 			{
-				Config: random.Template(logStreamSumoConfigUpdateWithFilters, t.Name()),
+				Config: template.ParseTestName(logStreamSumoConfigUpdateWithFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", "Acceptance-Test-LogStream-sumo-{{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "2"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.type", "category"),
@@ -484,7 +485,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 
 const logStreamSumoConfig = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-sumo-{{.random}}"
+	name = "Acceptance-Test-LogStream-sumo-{{.testName}}"
 	type = "sumo"
 	sink {
 	  sumo_source_address = "demo.sumo.com"
@@ -493,7 +494,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamSumoConfigUpdate = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-sumo-{{.random}}"
+	name = "Acceptance-Test-LogStream-sumo-{{.testName}}"
 	type = "sumo"
 	sink {
 	  sumo_source_address = "prod.sumo.com"
@@ -502,7 +503,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 const logStreamSumoConfigUpdateWithFilters = `
 resource "auth0_log_stream" "my_log_stream" {
-	name = "Acceptance-Test-LogStream-sumo-{{.random}}"
+	name = "Acceptance-Test-LogStream-sumo-{{.testName}}"
 	type = "sumo"
 	filters = [
 		{

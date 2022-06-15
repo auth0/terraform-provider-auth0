@@ -7,7 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func TestAccAction(t *testing.T) {
@@ -17,26 +17,26 @@ func TestAccAction(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccActionConfigCreate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccActionConfigUpdate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccActionConfigUpdateAgain, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 				),
@@ -52,9 +52,9 @@ func TestAccAction_FailedBuild(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccActionConfigCreateWithFailedBuild, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 				),
 				ExpectError: regexp.MustCompile(
 					fmt.Sprintf(`action "Test Action %s" failed to build, check the Auth0 UI for errors`, t.Name()),
@@ -66,7 +66,7 @@ func TestAccAction_FailedBuild(t *testing.T) {
 
 const testAccActionConfigCreate = `
 resource auth0_action my_action {
-	name = "Test Action {{.random}}"
+	name = "Test Action {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"
@@ -81,7 +81,7 @@ resource auth0_action my_action {
 
 const testAccActionConfigUpdate = `
 resource auth0_action my_action {
-	name = "Test Action {{.random}}"
+	name = "Test Action {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"
@@ -97,7 +97,7 @@ resource auth0_action my_action {
 
 const testAccActionConfigUpdateAgain = `
 resource auth0_action my_action {
-	name = "Test Action {{.random}}"
+	name = "Test Action {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"
@@ -119,7 +119,7 @@ resource auth0_action my_action {
 // need to be used here.
 const testAccActionConfigCreateWithFailedBuild = `
 resource auth0_action my_action {
-	name = "Test Action {{.random}}"
+	name = "Test Action {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"

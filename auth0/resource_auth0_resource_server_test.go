@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -8,7 +9,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -36,16 +37,16 @@ func init() {
 }
 
 func TestAccResourceServer(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccResourceServerConfigCreate, rand),
+				Config: template.ParseTestName(testAccResourceServerConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", "Acceptance Test - {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", "https://uat.api.alexkappa.com/{{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "signing_alg", "RS256"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
@@ -72,7 +73,7 @@ func TestAccResourceServer(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccResourceServerConfigUpdate, rand),
+				Config: template.ParseTestName(testAccResourceServerConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
@@ -92,8 +93,8 @@ func TestAccResourceServer(t *testing.T) {
 
 const testAccResourceServerConfigCreate = `
 resource "auth0_resource_server" "my_resource_server" {
-	name = "Acceptance Test - {{.random}}"
-	identifier = "https://uat.api.alexkappa.com/{{.random}}"
+	name = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
 	signing_alg = "RS256"
 	scopes {
 		value = "create:foo"
@@ -113,8 +114,8 @@ resource "auth0_resource_server" "my_resource_server" {
 
 const testAccResourceServerConfigUpdate = `
 resource "auth0_resource_server" "my_resource_server" {
-	name = "Acceptance Test - {{.random}}"
-	identifier = "https://uat.api.alexkappa.com/{{.random}}"
+	name = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
 	signing_alg = "RS256"
 	scopes {
 		value = "create:foo"

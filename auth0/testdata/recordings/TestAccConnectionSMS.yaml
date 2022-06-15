@@ -1,0 +1,80 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance-Test-SMS-TestAccConnectionSMS","strategy":"sms","is_domain_connection":false,"options":{"name":"SMS OTP","from":"+12345678","syntax":"md_with_macros","template":"@@password@@","totp":{"time_step":300,"length":6},"twilio_sid":"ABC123","twilio_token":"DEF456","messaging_service_sid":"GHI789","disable_signup":false,"brute_force_protection":true}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    method: POST
+  response:
+    body: '{"id":"con_2ZmDrvgIQ15ea5rR","options":{"name":"SMS OTP","from":"+12345678","syntax":"md_with_macros","template":"@@password@@","totp":{"time_step":300,"length":6},"twilio_sid":"ABC123","twilio_token":"DEF456","messaging_service_sid":"GHI789","disable_signup":false,"brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2ZmDrvgIQ15ea5rR
+    method: GET
+  response:
+    body: '{"id":"con_2ZmDrvgIQ15ea5rR","options":{"from":"+12345678","name":"SMS
+      OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2ZmDrvgIQ15ea5rR
+    method: GET
+  response:
+    body: '{"id":"con_2ZmDrvgIQ15ea5rR","options":{"from":"+12345678","name":"SMS
+      OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2ZmDrvgIQ15ea5rR
+    method: DELETE
+  response:
+    body: '{"deleted_at":"2022-06-13T13:14:38.158Z"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 202 Accepted
+    code: 202
+    duration: 1ms

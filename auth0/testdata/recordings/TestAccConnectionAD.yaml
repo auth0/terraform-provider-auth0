@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance-Test-AD-TestAccConnectionAD","strategy":"ad","show_as_button":true,"options":{"tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"ips":["192.168.1.1","192.168.1.2"],"brute_force_protection":true,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["ethnicity","gender"]}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    method: POST
+  response:
+    body: '{"id":"con_aBhf6n2pgXp17087","options":{"tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"ips":["192.168.1.1","192.168.1.2"],"brute_force_protection":true,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["ethnicity","gender"]},"strategy":"ad","name":"Acceptance-Test-AD-TestAccConnectionAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/ad/fOQMg2YofuuI6jL3sZoBYuks3jWC4lCO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-AD-TestAccConnectionAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_aBhf6n2pgXp17087
+    method: GET
+  response:
+    body: '{"id":"con_aBhf6n2pgXp17087","options":{"ips":["192.168.1.1","192.168.1.2"],"tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"non_persistent_attrs":["ethnicity","gender"],"brute_force_protection":true,"set_user_root_attributes":"on_each_login"},"strategy":"ad","name":"Acceptance-Test-AD-TestAccConnectionAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/ad/fOQMg2YofuuI6jL3sZoBYuks3jWC4lCO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-AD-TestAccConnectionAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_aBhf6n2pgXp17087
+    method: GET
+  response:
+    body: '{"id":"con_aBhf6n2pgXp17087","options":{"ips":["192.168.1.1","192.168.1.2"],"tenant_domain":"example.com","domain_aliases":["api.example.com","example.com"],"non_persistent_attrs":["ethnicity","gender"],"brute_force_protection":true,"set_user_root_attributes":"on_each_login"},"strategy":"ad","name":"Acceptance-Test-AD-TestAccConnectionAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/ad/fOQMg2YofuuI6jL3sZoBYuks3jWC4lCO","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-AD-TestAccConnectionAD"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_aBhf6n2pgXp17087
+    method: DELETE
+  response:
+    body: '{"deleted_at":"2022-06-13T13:14:04.449Z"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 202 Accepted
+    code: 202
+    duration: 1ms

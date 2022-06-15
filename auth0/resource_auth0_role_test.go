@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -51,21 +52,21 @@ func init() {
 }
 
 func TestAccRole(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRoleCreate, rand),
+				Config: template.ParseTestName(testAccRoleCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_role.the_one", "name", "The One - Acceptance Test - {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccRoleUpdate, rand),
+				Config: template.ParseTestName(testAccRoleUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One who will bring peace - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "2"),
@@ -77,8 +78,8 @@ func TestAccRole(t *testing.T) {
 
 const testAccRoleAux = `
 resource auth0_resource_server matrix {
-    name = "Role - Acceptance Test - {{.random}}"
-    identifier = "https://{{.random}}.matrix.com/"
+    name = "Role - Acceptance Test - {{.testName}}"
+    identifier = "https://{{.testName}}.matrix.com/"
     scopes {
         value = "stop:bullets"
         description = "Stop bullets"
@@ -91,7 +92,7 @@ resource auth0_resource_server matrix {
 
 const testAccRoleCreate = testAccRoleAux + `
 resource auth0_role the_one {
-  name = "The One - Acceptance Test - {{.random}}"
+  name = "The One - Acceptance Test - {{.testName}}"
   description = "The One - Acceptance Test"
   permissions {
     name = "stop:bullets"
@@ -102,7 +103,7 @@ resource auth0_role the_one {
 
 const testAccRoleUpdate = testAccRoleAux + `
 resource auth0_role the_one {
-  name = "The One - Acceptance Test - {{.random}}"
+  name = "The One - Acceptance Test - {{.testName}}"
   description = "The One who will bring peace - Acceptance Test"
   permissions {
     name = "stop:bullets"
@@ -116,15 +117,15 @@ resource auth0_role the_one {
 `
 
 func TestAccRolePermissions(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRolePermissions, rand),
+				Config: template.ParseTestName(testAccRolePermissions, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_role.role", "name", "The One - Acceptance Test - {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_role.role", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.role", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.role", "permissions.#", "58"),
 				),
@@ -198,8 +199,8 @@ locals {
 }
 
 resource auth0_resource_server server {
-	name = "Role - Acceptance Test - {{.random}}"
-	identifier = "https://{{.random}}.matrix.com/"
+	name = "Role - Acceptance Test - {{.testName}}"
+	identifier = "https://{{.testName}}.matrix.com/"
 
 	dynamic scopes {
 		for_each = local.permissions
@@ -212,7 +213,7 @@ resource auth0_resource_server server {
 }
 
 resource auth0_role role {
-	name = "The One - Acceptance Test - {{.random}}"
+	name = "The One - Acceptance Test - {{.testName}}"
 	description = "The One - Acceptance Test"
 	dynamic permissions {
 		for_each = local.permissions

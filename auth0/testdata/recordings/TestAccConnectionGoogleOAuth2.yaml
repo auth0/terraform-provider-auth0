@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2","strategy":"google-oauth2","is_domain_connection":false,"options":{"allowed_audiences":["api.example.com","example.com"],"email":true,"profile":true,"gmail":true,"youtube":true,"set_user_root_attributes":"on_each_login","non_persistent_attrs":null}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    method: POST
+  response:
+    body: '{"id":"con_VnZw9r2Gkc3Az7uE","options":{"allowed_audiences":["api.example.com","example.com"],"email":true,"profile":true,"gmail":true,"youtube":true,"set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"scope":["email","profile","https://mail.google.com/mail/feed/atom","https://gdata.youtube.com"]},"strategy":"google-oauth2","name":"Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VnZw9r2Gkc3Az7uE
+    method: GET
+  response:
+    body: '{"id":"con_VnZw9r2Gkc3Az7uE","options":{"email":true,"gmail":true,"scope":["email","profile","https://mail.google.com/mail/feed/atom","https://gdata.youtube.com"],"profile":true,"youtube":true,"allowed_audiences":["api.example.com","example.com"],"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"google-oauth2","name":"Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VnZw9r2Gkc3Az7uE
+    method: GET
+  response:
+    body: '{"id":"con_VnZw9r2Gkc3Az7uE","options":{"email":true,"gmail":true,"scope":["email","profile","https://mail.google.com/mail/feed/atom","https://gdata.youtube.com"],"profile":true,"youtube":true,"allowed_audiences":["api.example.com","example.com"],"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"google-oauth2","name":"Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Google-OAuth2-TestAccConnectionGoogleOAuth2"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VnZw9r2Gkc3Az7uE
+    method: DELETE
+  response:
+    body: '{"deleted_at":"2022-06-13T13:14:58.393Z"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 202 Accepted
+    code: 202
+    duration: 1ms

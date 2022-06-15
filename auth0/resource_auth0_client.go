@@ -963,7 +963,7 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 	m["expiration_type"] = refreshToken.ExpirationType
 	m["leeway"] = refreshToken.Leeway
 	m["token_lifetime"] = refreshToken.TokenLifetime
-	m["infinite_token_lifetime"] = refreshToken.GetInfiniteTokenLifetime()
+	m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
 	m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
 	m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
 

@@ -10,15 +10,15 @@ import (
 )
 
 func TestAccRule(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRule, rand),
+				Config: random.Template(testAccRule, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule.my_rule", "name", "acceptance-test-{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_rule.my_rule", "name", "acceptance-test-{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "script", "function (user, context, callback) { callback(null, user, context); }"),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "enabled", "true"),
 				),

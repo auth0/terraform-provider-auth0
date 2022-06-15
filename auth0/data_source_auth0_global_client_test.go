@@ -14,8 +14,10 @@ data auth0_global_client global {
 `
 
 func TestAccDataGlobalClient(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccGlobalClientConfigWithCustomLogin,

@@ -9,33 +9,33 @@ import (
 )
 
 func TestAccClientGrant(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientGrantConfigCreate, rand),
+				Config: random.Template(testAccClientGrantConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", "https://uat.tf.alexkappa.com/client-grant/{{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", "https://uat.tf.terraform-provider-auth0.com/client-grant/{{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
 			},
 			{
-				Config: random.Template(testAccClientGrantConfigUpdate, rand),
+				Config: random.Template(testAccClientGrantConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.0", "create:foo"),
 				),
 			},
 			{
-				Config: random.Template(testAccClientGrantConfigUpdateAgain, rand),
+				Config: random.Template(testAccClientGrantConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
 			},
 			{
-				Config: random.Template(testAccClientGrantConfigUpdateChangeClient, rand),
+				Config: random.Template(testAccClientGrantConfigUpdateChangeClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
@@ -53,7 +53,7 @@ resource "auth0_client" "my_client" {
 
 resource "auth0_resource_server" "my_resource_server" {
 	name = "Acceptance Test - Client Grant - {{.random}}"
-	identifier = "https://uat.tf.alexkappa.com/client-grant/{{.random}}"
+	identifier = "https://uat.tf.terraform-provider-auth0.com/client-grant/{{.random}}"
 	scopes {
 		value = "create:foo"
 		description = "Create foos"

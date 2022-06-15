@@ -45,15 +45,15 @@ func init() {
 }
 
 func TestAccCustomDomain(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccCustomDomain, rand),
+				Config: random.Template(testAccCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain", "{{.random}}.auth.uat.terraform-provider-auth0.com", rand),
+					random.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain", "{{.random}}.auth.uat.terraform-provider-auth0.com", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 				),

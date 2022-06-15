@@ -9,8 +9,10 @@ import (
 )
 
 func TestAccHook(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccHookCreate,
@@ -35,8 +37,10 @@ resource "auth0_hook" "my_hook" {
 `
 
 func TestAccHookSecrets(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccHookSecrets("alpha"),

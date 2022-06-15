@@ -11,32 +11,32 @@ import (
 )
 
 func TestAccAction(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccActionConfigCreate, rand),
+				Config: random.Template(testAccActionConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccActionConfigUpdate, rand),
+				Config: random.Template(testAccActionConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccActionConfigUpdateAgain, rand),
+				Config: random.Template(testAccActionConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 				),
@@ -46,18 +46,18 @@ func TestAccAction(t *testing.T) {
 }
 
 func TestAccAction_FailedBuild(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccActionConfigCreateWithFailedBuild, rand),
+				Config: random.Template(testAccActionConfigCreateWithFailedBuild, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", rand),
+					random.TestCheckResourceAttr("auth0_action.my_action", "name", "Test Action {{.random}}", t.Name()),
 				),
 				ExpectError: regexp.MustCompile(
-					fmt.Sprintf(`action "Test Action %s" failed to build, check the Auth0 UI for errors`, rand),
+					fmt.Sprintf(`action "Test Action %s" failed to build, check the Auth0 UI for errors`, t.Name()),
 				),
 			},
 		},

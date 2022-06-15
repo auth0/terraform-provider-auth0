@@ -959,8 +959,6 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 
 	m := make(map[string]interface{})
 
-	// log out `m`
-
 	m["rotation_type"] = refreshToken.RotationType
 	m["expiration_type"] = refreshToken.ExpirationType
 	m["leeway"] = refreshToken.Leeway

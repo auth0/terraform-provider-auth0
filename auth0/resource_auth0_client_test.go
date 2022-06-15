@@ -555,3 +555,31 @@ resource "auth0_client" "my_client" {
   }
 }
 `
+
+func TestRefreshTokenSubsequentApply(t *testing.T) {
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviderFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccClientConfigWithRefreshToken,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.auth0_test_client", "name", "AppName"),
+					resource.TestCheckResourceAttr("auth0_client.auth0_test_client", "refresh_token.#", "1"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientConfigWithRefreshToken = `
+resource "auth0_client" "auth0_test_client" {
+	name                       = "AppName"
+	app_type                   = "spa"
+  
+	refresh_token {
+	  rotation_type   = "non-rotating"
+	  expiration_type = "non-expiring"
+	}
+  }
+`

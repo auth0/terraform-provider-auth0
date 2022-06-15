@@ -550,22 +550,27 @@ func newClient() *schema.Resource {
 							}, false),
 						},
 						"leeway": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
 						"token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
 						"infinite_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
 						"infinite_idle_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
 						"idle_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
@@ -954,11 +959,13 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 
 	m := make(map[string]interface{})
 
+	// log out `m`
+
 	m["rotation_type"] = refreshToken.RotationType
 	m["expiration_type"] = refreshToken.ExpirationType
 	m["leeway"] = refreshToken.Leeway
 	m["token_lifetime"] = refreshToken.TokenLifetime
-	m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
+	m["infinite_token_lifetime"] = refreshToken.GetInfiniteTokenLifetime()
 	m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
 	m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
 

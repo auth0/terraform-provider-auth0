@@ -3,60 +3,77 @@ package auth0
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
-	"sync"
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/dnaeon/go-vcr/v2/recorder"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/wiremock"
 )
 
-const wireMockURL = "localhost:8080"
-
-var (
-	testProviderFactories = map[string]func() (*schema.Provider, error){
+func testProviders(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
+	return map[string]func() (*schema.Provider, error){
 		"auth0": func() (*schema.Provider, error) {
-			return Provider(), nil
+			provider := Provider()
+
+			provider.ConfigureContextFunc = configureTestProvider(httpRecorder)
+
+			return provider, nil
 		},
 	}
+}
 
-	testProviderFactoriesWithMockedAPI = map[string]func() (*schema.Provider, error){
-		"auth0": func() (*schema.Provider, error) {
-			return providerWithMockedAPI(), nil
-		},
-	}
+func configureTestProvider(
+	httpRecorder *recorder.Recorder,
+) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		domain := data.Get("domain").(string)
+		debug := data.Get("debug").(bool)
 
-	wireMockReset sync.Once
-)
+		testClient := &http.Client{}
+		if httpRecorder != nil {
+			testClient.Transport = httpRecorder
+		}
 
-func providerWithMockedAPI() *schema.Provider {
-	provider := Provider()
-	provider.ConfigureContextFunc = func(ctx context.Context, _ *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		var err error
-
-		wireMockClient := wiremock.NewClient(wireMockURL)
-		wireMockReset.Do(func() {
-			err = wireMockClient.Reset(ctx)
-		})
+		apiClient, err := management.New(
+			domain,
+			management.WithStaticToken("insecure"),
+			management.WithClient(testClient),
+			management.WithDebug(debug),
+		)
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
 
-		apiClient, err := wireMockClient.NewManagementAPIClient()
-		if err != nil {
-			return nil, diag.FromErr(err)
+		if domain != recordingsDomain {
+			clientID := data.Get("client_id").(string)
+			clientSecret := data.Get("client_secret").(string)
+			apiToken := data.Get("api_token").(string)
+
+			authenticationOption := management.WithStaticToken(apiToken)
+			if apiToken == "" {
+				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+			}
+
+			apiClient, err = management.New(
+				domain,
+				authenticationOption,
+				management.WithClient(testClient),
+				management.WithDebug(debug),
+			)
+			if err != nil {
+				return nil, diag.FromErr(err)
+			}
 		}
 
 		return apiClient, nil
 	}
-	return provider
 }
 
 // Auth0 returns an instance of the Management

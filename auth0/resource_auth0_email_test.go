@@ -20,8 +20,10 @@ func init() {
 }
 
 func TestAccEmail(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: `

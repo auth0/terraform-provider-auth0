@@ -1,0 +1,192 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"user_id":"id_issue#218","connection":"Username-Password-Authentication","email":"issue.218.issue#218@acceptance.test.com","username":"user_issue#218","password":"MyPass123$","email_verified":true}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
+    method: POST
+  response:
+    body: '{"created_at":"2022-06-14T10:07:28.874Z","email":"issue.218.issue#218@acceptance.test.com","email_verified":true,"identities":[{"user_id":"id_issue#218","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"issue.218.issue#218@acceptance.test.com","nickname":"issue.218.issue#218","picture":"https://s.gravatar.com/avatar/46726a3b458bc8a321f980489b11dab6?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fis.png","updated_at":"2022-06-14T10:07:28.874Z","user_id":"auth0|id_issue#218","username":"user_issue#218"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218
+    method: GET
+  response:
+    body: '{"created_at":"2022-06-14T10:07:28.874Z","email":"issue.218.issue#218@acceptance.test.com","email_verified":true,"identities":[{"user_id":"id_issue#218","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"issue.218.issue#218@acceptance.test.com","nickname":"issue.218.issue#218","picture":"https://s.gravatar.com/avatar/46726a3b458bc8a321f980489b11dab6?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fis.png","updated_at":"2022-06-14T10:07:28.874Z","user_id":"auth0|id_issue#218","username":"user_issue#218"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218
+    method: GET
+  response:
+    body: '{"created_at":"2022-06-14T10:07:28.874Z","email":"issue.218.issue#218@acceptance.test.com","email_verified":true,"identities":[{"user_id":"id_issue#218","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"issue.218.issue#218@acceptance.test.com","nickname":"issue.218.issue#218","picture":"https://s.gravatar.com/avatar/46726a3b458bc8a321f980489b11dab6?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fis.png","updated_at":"2022-06-14T10:07:28.874Z","user_id":"auth0|id_issue#218","username":"user_issue#218"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218
+    method: GET
+  response:
+    body: '{"created_at":"2022-06-14T10:07:28.874Z","email":"issue.218.issue#218@acceptance.test.com","email_verified":true,"identities":[{"user_id":"id_issue#218","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"issue.218.issue#218@acceptance.test.com","nickname":"issue.218.issue#218","picture":"https://s.gravatar.com/avatar/46726a3b458bc8a321f980489b11dab6?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fis.png","updated_at":"2022-06-14T10:07:28.874Z","user_id":"auth0|id_issue#218","username":"user_issue#218"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218
+    method: GET
+  response:
+    body: '{"created_at":"2022-06-14T10:07:28.874Z","email":"issue.218.issue#218@acceptance.test.com","email_verified":true,"identities":[{"user_id":"id_issue#218","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"issue.218.issue#218@acceptance.test.com","nickname":"issue.218.issue#218","picture":"https://s.gravatar.com/avatar/46726a3b458bc8a321f980489b11dab6?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fis.png","updated_at":"2022-06-14T10:07:28.874Z","user_id":"auth0|id_issue#218","username":"user_issue#218"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cid_issue%23218
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms

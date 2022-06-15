@@ -1,24 +1,25 @@
 package auth0
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func TestAccRule(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccRule, rand),
+				Config: template.ParseTestName(testAccRule, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_rule.my_rule", "name", "acceptance-test-{{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_rule.my_rule", "name", fmt.Sprintf("acceptance-test-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "script", "function (user, context, callback) { callback(null, user, context); }"),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "enabled", "true"),
 				),
@@ -29,7 +30,7 @@ func TestAccRule(t *testing.T) {
 
 const testAccRule = `
 resource "auth0_rule" "my_rule" {
-  name = "acceptance-test-{{.random}}"
+  name = "acceptance-test-{{.testName}}"
   script = "function (user, context, callback) { callback(null, user, context); }"
   enabled = true
 }

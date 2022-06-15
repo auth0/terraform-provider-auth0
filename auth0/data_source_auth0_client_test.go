@@ -6,13 +6,13 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 const testAccDataClientConfigByName = `
 %v
 data auth0_client test {
-  name = "Acceptance Test - {{.random}}"
+  name = "Acceptance Test - {{.testName}}"
 }
 `
 
@@ -24,24 +24,24 @@ data auth0_client test {
 `
 
 func TestAccDataClientByName(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories:         testProviderFactories,
+		ProviderFactories:         testProviders(httpRecorder),
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfig, rand),
+				Config: template.ParseTestName(testAccClientConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 				), // check that the client got created correctly before using the data source
 			},
 			{
-				Config: random.Template(fmt.Sprintf(testAccDataClientConfigByName, testAccClientConfig), rand),
+				Config: template.ParseTestName(fmt.Sprintf(testAccDataClientConfigByName, testAccClientConfig), t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "client_id"),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
-					resource.TestCheckResourceAttr("data.auth0_client.test", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
+					resource.TestCheckResourceAttr("data.auth0_client.test", "name", fmt.Sprintf("Acceptance Test - %v", t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "app_type", "non_interactive"), // Arbitrary property selection
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
 				),
@@ -51,20 +51,20 @@ func TestAccDataClientByName(t *testing.T) {
 }
 
 func TestAccDataClientById(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories:         testProviderFactories,
+		ProviderFactories:         testProviders(httpRecorder),
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfig, rand),
+				Config: template.ParseTestName(testAccClientConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", rand)),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", t.Name())),
 				), // check that the client got created correctly before using the data source
 			},
 			{
-				Config: random.Template(fmt.Sprintf(testAccDataClientConfigByID, testAccClientConfig), rand),
+				Config: template.ParseTestName(fmt.Sprintf(testAccDataClientConfigByID, testAccClientConfig), t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "id"),
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),

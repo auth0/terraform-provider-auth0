@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -8,7 +9,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -51,9 +52,13 @@ func TestAccCustomDomain(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccCustomDomain, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain", "{{.random}}.auth.uat.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+					resource.TestCheckResourceAttr(
+						"auth0_custom_domain.my_custom_domain",
+						"domain",
+						fmt.Sprintf("%s.auth.uat.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+					),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 				),
@@ -64,7 +69,7 @@ func TestAccCustomDomain(t *testing.T) {
 
 const testAccCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-  domain = "{{.random}}.auth.uat.terraform-provider-auth0.com"
+  domain = "{{.testName}}.auth.uat.terraform-provider-auth0.com"
   type = "auth0_managed_certs"
 }
 `

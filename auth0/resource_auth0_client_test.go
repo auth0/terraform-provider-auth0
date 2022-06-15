@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -10,7 +11,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -59,9 +60,9 @@ func TestAccClient(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfig, t.Name()),
+				Config: template.ParseTestName(testAccClientConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_clients.0", "https://allowed.example.com"),
@@ -87,9 +88,9 @@ func TestAccClient(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigWithoutAddonsWithSAMLPLogout, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigWithoutAddonsWithSAMLPLogout, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.%", "2"),
@@ -103,7 +104,7 @@ func TestAccClient(t *testing.T) {
 
 const testAccClientConfig = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - {{.random}}"
+  name = "Acceptance Test - {{.testName}}"
   description = "Test Application Long Description"
   app_type = "non_interactive"
   custom_login_page_on = true
@@ -175,7 +176,7 @@ resource "auth0_client" "my_client" {
 
 const testAccClientConfigWithoutAddonsWithSAMLPLogout = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - {{.random}}"
+  name = "Acceptance Test - {{.testName}}"
   description = "Test Application Long Description"
   app_type = "non_interactive"
   custom_login_page_on = true
@@ -256,20 +257,20 @@ func TestAccClientZeroValueCheck(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfigCreate, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - Zero Value Check - {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Zero Value Check - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigUpdate, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigUpdateAgain, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
 				),
@@ -280,21 +281,21 @@ func TestAccClientZeroValueCheck(t *testing.T) {
 
 const testAccClientConfigCreate = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Zero Value Check - {{.random}}"
+  name = "Acceptance Test - Zero Value Check - {{.testName}}"
   is_first_party = false
 }
 `
 
 const testAccClientConfigUpdate = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Zero Value Check - {{.random}}"
+  name = "Acceptance Test - Zero Value Check - {{.testName}}"
   is_first_party = true
 }
 `
 
 const testAccClientConfigUpdateAgain = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Zero Value Check - {{.random}}"
+  name = "Acceptance Test - Zero Value Check - {{.testName}}"
   is_first_party = false
 }
 `
@@ -306,13 +307,13 @@ func TestAccClientRotateSecret(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfigRotateSecret, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigRotateSecret, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - Rotate Secret - {{.random}}", t.Name()),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Rotate Secret - %s", t.Name())),
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigRotateSecretUpdate, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigRotateSecretUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger.triggered_at", "2018-01-02T23:12:01Z"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger.triggered_by", "alex"),
@@ -324,13 +325,13 @@ func TestAccClientRotateSecret(t *testing.T) {
 
 const testAccClientConfigRotateSecret = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Rotate Secret - {{.random}}"
+  name = "Acceptance Test - Rotate Secret - {{.testName}}"
 }
 `
 
 const testAccClientConfigRotateSecretUpdate = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Rotate Secret - {{.random}}"
+  name = "Acceptance Test - Rotate Secret - {{.testName}}"
   client_secret_rotation_trigger = {
     triggered_at = "2018-01-02T23:12:01Z"
     triggered_by = "alex"
@@ -345,11 +346,11 @@ func TestAccClientInitiateLoginUri(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config:      random.Template(testAccClientConfigInitiateLoginURIHTTP, t.Name()),
+				Config:      template.ParseTestName(testAccClientConfigInitiateLoginURIHTTP, t.Name()),
 				ExpectError: regexp.MustCompile("to have a url with schema"),
 			},
 			{
-				Config:      random.Template(testAccClientConfigInitiateLoginURIFragment, t.Name()),
+				Config:      template.ParseTestName(testAccClientConfigInitiateLoginURIFragment, t.Name()),
 				ExpectError: regexp.MustCompile("to have a url with an empty fragment"),
 			},
 		},
@@ -358,14 +359,14 @@ func TestAccClientInitiateLoginUri(t *testing.T) {
 
 const testAccClientConfigInitiateLoginURIHTTP = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Initiate Login URI - {{.random}}"
+  name = "Acceptance Test - Initiate Login URI - {{.testName}}"
   initiate_login_uri = "http://example.com/login"
 }
 `
 
 const testAccClientConfigInitiateLoginURIFragment = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Initiate Login URI - {{.random}}"
+  name = "Acceptance Test - Initiate Login URI - {{.testName}}"
   initiate_login_uri = "https://example.com/login#fragment"
 }
 `
@@ -377,7 +378,7 @@ func TestAccClientJwtScopes(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfigJwtScopes, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigJwtScopes, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.secret_encoded", "true"),
@@ -386,7 +387,7 @@ func TestAccClientJwtScopes(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigJwtScopesUpdate, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigJwtScopesUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
@@ -402,7 +403,7 @@ func TestAccClientJwtScopes(t *testing.T) {
 
 const testAccClientConfigJwtScopes = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - JWT Scopes - {{.random}}"
+  name = "Acceptance Test - JWT Scopes - {{.testName}}"
   jwt_configuration {
     lifetime_in_seconds = 300
     secret_encoded = true
@@ -414,7 +415,7 @@ resource "auth0_client" "my_client" {
 
 const testAccClientConfigJwtScopesUpdate = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - JWT Scopes - {{.random}}"
+  name = "Acceptance Test - JWT Scopes - {{.testName}}"
   jwt_configuration {
     lifetime_in_seconds = 300
     secret_encoded = true
@@ -433,7 +434,7 @@ func TestAccClientMobile(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccClientConfigMobile, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigMobile, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -444,7 +445,7 @@ func TestAccClientMobile(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccClientConfigMobileUpdate, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigMobileUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -455,7 +456,7 @@ func TestAccClientMobile(t *testing.T) {
 			},
 			{
 				// This just makes sure that you can change the type (where native_social_login cannot be set)
-				Config: random.Template(testAccClientConfigMobileUpdateNonMobile, t.Name()),
+				Config: template.ParseTestName(testAccClientConfigMobileUpdateNonMobile, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
 				),
@@ -466,7 +467,7 @@ func TestAccClientMobile(t *testing.T) {
 
 const testAccClientConfigMobile = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Mobile - {{.random}}"
+  name = "Acceptance Test - Mobile - {{.testName}}"
   app_type = "native"
   mobile {
     android {
@@ -491,7 +492,7 @@ resource "auth0_client" "my_client" {
 
 const testAccClientConfigMobileUpdate = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Mobile - {{.random}}"
+  name = "Acceptance Test - Mobile - {{.testName}}"
   app_type = "native"
   mobile {
     android {
@@ -517,7 +518,7 @@ resource "auth0_client" "my_client" {
 const testAccClientConfigMobileUpdateNonMobile = `
 
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Mobile - {{.random}}"
+  name = "Acceptance Test - Mobile - {{.testName}}"
   app_type = "non_interactive"
 
   native_social_login {
@@ -538,7 +539,7 @@ func TestAccClientMobileValidationError(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config:      random.Template(testAccClientConfigMobileUpdateError, t.Name()),
+				Config:      template.ParseTestName(testAccClientConfigMobileUpdateError, t.Name()),
 				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 		},
@@ -547,7 +548,7 @@ func TestAccClientMobileValidationError(t *testing.T) {
 
 const testAccClientConfigMobileUpdateError = `
 resource "auth0_client" "my_client" {
-  name = "Acceptance Test - Mobile - {{.random}}"
+  name = "Acceptance Test - Mobile - {{.testName}}"
   mobile {
     android {
       # nothing specified, should throw validation error

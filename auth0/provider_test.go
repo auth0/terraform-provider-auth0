@@ -7,7 +7,6 @@ import (
 	"os"
 	"sort"
 	"strings"
-	"sync"
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
@@ -16,11 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/wiremock"
 )
-
-const wireMockURL = "localhost:8080"
 
 func testProviders(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
 	return map[string]func() (*schema.Provider, error){
@@ -79,31 +74,6 @@ func configureTestProvider(
 
 		return apiClient, nil
 	}
-}
-
-var wireMockReset sync.Once
-
-func providerWithMockedAPI() *schema.Provider {
-	provider := Provider()
-	provider.ConfigureContextFunc = func(ctx context.Context, _ *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		var err error
-
-		wireMockClient := wiremock.NewClient(wireMockURL)
-		wireMockReset.Do(func() {
-			err = wireMockClient.Reset(ctx)
-		})
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
-
-		apiClient, err := wireMockClient.NewManagementAPIClient()
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
-
-		return apiClient, nil
-	}
-	return provider
 }
 
 // Auth0 returns an instance of the Management

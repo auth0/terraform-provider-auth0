@@ -1,0 +1,154 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","strategy":"linkedin","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"non_persistent_attrs":null}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    method: POST
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"non_persistent_attrs":null,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"]},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: GET
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: GET
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: GET
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"is_domain_connection":false,"options":{"client_id":"client_id_update","client_secret":"client_secret_update","strategy_version":2,"email":false,"profile":true,"basic_profile":true,"non_persistent_attrs":null}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: PATCH
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: GET
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: GET
+  response:
+    body: '{"id":"con_E1ffeC22MWrqhvxn","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.3
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_E1ffeC22MWrqhvxn
+    method: DELETE
+  response:
+    body: '{"deleted_at":"2022-06-13T13:15:25.859Z"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 202 Accepted
+    code: 202
+    duration: 1ms

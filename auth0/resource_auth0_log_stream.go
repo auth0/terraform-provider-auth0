@@ -153,9 +153,12 @@ func newLogStream() *schema.Resource {
 
 						"datadog_region": {
 							Type:         schema.TypeString,
-							Sensitive:    true,
 							Optional:     true,
 							RequiredWith: []string{"sink.0.datadog_api_key"},
+							ValidateFunc: validation.StringInSlice(
+								[]string{"us", "eu", "us3", "us5"},
+								false,
+							),
 						},
 						"datadog_api_key": {
 							Type:         schema.TypeString,

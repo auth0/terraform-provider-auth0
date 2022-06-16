@@ -66,7 +66,7 @@ For "http" the following arguments are supported:
 - `http_custom_headers` - (Optional) Additional HTTP headers to be included as part of the HTTP request
 
 For "datadog" the following arguments are supported:
-- `datadog_region` - (Required) The Datadog region
+- `datadog_region` - (Required) The Datadog region. Options are ["us", "eu", "us3", "us5"]
 - `datadog_api_key` - (Required) The Datadog API key
 
 For "splunk" the following arguments are supported:

@@ -3,6 +3,7 @@ package auth0
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -314,6 +315,33 @@ resource "auth0_log_stream" "my_log_stream" {
   	  azure_subscription_id = "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"
 	  azure_region = "westeurope"
 	  azure_resource_group = "azure-logs-rg"
+	}
+}
+`
+
+func TestAccLogStreamDataDogRegionValidation(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(nil),
+		Steps: []resource.TestStep{
+			{
+				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "uS"),
+				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \[us eu us3 us5\], got uS`),
+			},
+			{
+				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "us9"),
+				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \[us eu us3 us5\], got us9`),
+			},
+		},
+	})
+}
+
+const logStreamDatadogInvalidConfig = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-datadog-{{.testName}}"
+	type = "datadog"
+	sink {
+	  datadog_region = "%s"
+	  datadog_api_key = "121233123455"
 	}
 }
 `

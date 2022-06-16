@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -147,11 +148,11 @@ resource "auth0_tenant" "my_tenant" {
 `
 
 func TestAccTenantDefaults(t *testing.T) {
-	// if os.Getenv("AUTH0_DOMAIN") != recordingsDomain {
-	// 	// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant
-	// 	// and this test will only pass when the tenant has not been configured yet (aka "fresh" tenants).
-	// 	t.Skip()
-	// }
+	if os.Getenv("AUTH0_DOMAIN") != recordingsDomain {
+		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant
+		// and this test will only pass when the tenant has not been configured yet (aka "fresh" tenants).
+		t.Skip()
+	}
 
 	httpRecorder := configureHTTPRecorder(t)
 

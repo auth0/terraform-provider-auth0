@@ -556,3 +556,40 @@ resource "auth0_client" "my_client" {
   }
 }
 `
+
+func TestAccClientRefreshTokenApplied(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccClientConfigWithRefreshToken, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Refresh Token - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
+
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.token_lifetime"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.infinite_token_lifetime"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.idle_token_lifetime"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientConfigWithRefreshToken = `
+resource "auth0_client" "my_client" {
+	name                       = "Acceptance Test - Refresh Token - {{.testName}}"
+	app_type                   = "spa"
+  
+	refresh_token {
+	  rotation_type   = "non-rotating"
+	  expiration_type = "non-expiring"
+	  # Intentionally not setting leeway, token_lifetime, infinite_token_lifetime, infinite_idle_token_lifetime, idle_token_lifetime because those get inferred by Auth0 defaults
+	}
+  }
+`

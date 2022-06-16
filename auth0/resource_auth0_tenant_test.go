@@ -145,3 +145,34 @@ resource "auth0_tenant" "my_tenant" {
 	default_redirection_uri = "https://example.com/login"
 }
 `
+
+func TestAccTenantDefaults(t *testing.T) {
+	// if os.Getenv("AUTH0_DOMAIN") != recordingsDomain {
+	// 	// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant
+	// 	// and this test will only pass when the tenant has not been configured yet (aka "fresh" tenants).
+	// 	t.Skip()
+	// }
+
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config:        testAccEmptyTenant,
+				ImportState:   true,
+				ImportStateId: "some-arbitrary-identifier",
+				ResourceName:  "auth0_tenant.my_tenant",
+			},
+			{
+				Config: testAccEmptyTenant,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckNoResourceAttr("auth0_tenant.my_tenant", "session_lifetime"),
+					resource.TestCheckNoResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime"),
+				),
+			},
+		},
+	})
+}
+
+const testAccEmptyTenant = `resource "auth0_tenant" "my_tenant" {}`

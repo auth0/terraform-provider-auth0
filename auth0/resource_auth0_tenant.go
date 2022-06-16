@@ -121,7 +121,7 @@ func newTenant() *schema.Resource {
 			"session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Computed:     false,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 			},
 			"sandbox_version": {
@@ -132,7 +132,7 @@ func newTenant() *schema.Resource {
 			"idle_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Computed:     false,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 			},
 			"enabled_locales": {

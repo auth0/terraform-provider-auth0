@@ -2,11 +2,12 @@ package auth0
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"regexp"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -58,9 +59,10 @@ func newHook() *schema.Resource {
 			},
 			"secrets": {
 				Type:        schema.TypeMap,
+				Elem:        schema.TypeString,
+				Sensitive:   true,
 				Optional:    true,
 				Description: "The secrets associated with the hook",
-				Elem:        schema.TypeString,
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
@@ -73,15 +75,15 @@ func newHook() *schema.Resource {
 }
 
 func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	hook := buildHook(d)
+	hook := expandHook(d)
 	api := m.(*management.Management)
 	if err := api.Hook.Create(hook); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(hook.ID))
+	d.SetId(hook.GetID())
 
-	if err := upsertHookSecrets(d, m); err != nil {
+	if err := upsertHookSecrets(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -101,6 +103,8 @@ func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(err)
 	}
 
+	diagnostics := checkForUntrackedHookSecrets(ctx, d, m)
+
 	result := multierror.Append(
 		d.Set("name", hook.Name),
 		d.Set("dependencies", hook.Dependencies),
@@ -109,42 +113,25 @@ func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("enabled", hook.Enabled),
 	)
 
-	return diag.FromErr(result.ErrorOrNil())
+	if err = result.ErrorOrNil(); err != nil {
+		diagnostics = append(diagnostics, diag.FromErr(err)...)
+	}
+
+	return diagnostics
 }
 
 func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	hook := buildHook(d)
+	hook := expandHook(d)
 	api := m.(*management.Management)
 	if err := api.Hook.Update(d.Id(), hook); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := upsertHookSecrets(d, m); err != nil {
+	if err := upsertHookSecrets(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readHook(ctx, d, m)
-}
-
-func upsertHookSecrets(d *schema.ResourceData, m interface{}) error {
-	if d.IsNewResource() || d.HasChange("secrets") {
-		secrets := Map(d, "secrets")
-		api := m.(*management.Management)
-		hookSecrets := toHookSecrets(secrets)
-		return api.Hook.ReplaceSecrets(d.Id(), hookSecrets)
-	}
-
-	return nil
-}
-
-func toHookSecrets(val map[string]interface{}) management.HookSecrets {
-	hookSecrets := management.HookSecrets{}
-	for key, value := range val {
-		if strVal, ok := value.(string); ok {
-			hookSecrets[key] = strVal
-		}
-	}
-	return hookSecrets
 }
 
 func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -162,7 +149,43 @@ func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func buildHook(d *schema.ResourceData) *management.Hook {
+func checkForUntrackedHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	secretsFromConfig := Map(d, "secrets")
+
+	api := m.(*management.Management)
+	secretsFromAPI, err := api.Hook.Secrets(d.Id())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	var warnings diag.Diagnostics
+	for key := range secretsFromAPI {
+		if _, ok := secretsFromConfig[key]; !ok {
+			warnings = append(warnings, diag.Diagnostic{
+				Severity: diag.Warning,
+				Summary:  "Unexpected Hook Secrets",
+				Detail: fmt.Sprintf("Found unexpected hook secrets with key: %s. ", key) +
+					"To prevent issues, manage them through terraform. If you've just imported this resource " +
+					"(and your secrets match), to make this warning disappear, run a terraform apply.",
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+			})
+		}
+	}
+
+	return warnings
+}
+
+func upsertHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) error {
+	if d.IsNewResource() || d.HasChange("secrets") {
+		hookSecrets := expandHookSecrets(d)
+		api := m.(*management.Management)
+		return api.Hook.ReplaceSecrets(d.Id(), hookSecrets)
+	}
+
+	return nil
+}
+
+func expandHook(d *schema.ResourceData) *management.Hook {
 	hook := &management.Hook{
 		Name:      String(d, "name"),
 		Script:    String(d, "script"),
@@ -170,12 +193,24 @@ func buildHook(d *schema.ResourceData) *management.Hook {
 		Enabled:   Bool(d, "enabled"),
 	}
 
-	deps := Map(d, "dependencies")
-	if deps != nil {
+	if deps := Map(d, "dependencies"); deps != nil {
 		hook.Dependencies = &deps
 	}
 
 	return hook
+}
+
+func expandHookSecrets(d *schema.ResourceData) management.HookSecrets {
+	hookSecrets := management.HookSecrets{}
+	secrets := Map(d, "secrets")
+
+	for key, value := range secrets {
+		if strVal, ok := value.(string); ok {
+			hookSecrets[key] = strVal
+		}
+	}
+
+	return hookSecrets
 }
 
 func validateHookName() schema.SchemaValidateDiagFunc {

@@ -7,7 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 const testAccDataTenantConfig = `
@@ -15,7 +15,7 @@ data auth0_tenant current {
 }
 
 resource auth0_client my_client {
-	name = "Acceptance Test - Tenant Data Source - {{.random}}"
+	name = "Acceptance Test - Tenant Data Source - {{.testName}}"
 	app_type = "non_interactive"
 }
 
@@ -27,13 +27,13 @@ resource auth0_client_grant management_api {
 `
 
 func TestAccDataTenant(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccDataTenantConfig, rand),
+				Config: template.ParseTestName(testAccDataTenantConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "domain", os.Getenv("AUTH0_DOMAIN")),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "management_api_identifier", fmt.Sprintf("https://%s/api/v2/", os.Getenv("AUTH0_DOMAIN"))),

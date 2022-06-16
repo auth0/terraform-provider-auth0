@@ -6,14 +6,17 @@ import (
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAccHook(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccHookCreate,
+				Config: fmt.Sprintf(testAccHookCreate, ""),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "name", "pre-user-reg-hook"),
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "script", "function (user, context, callback) { callback(null, { user }); }"),
@@ -31,15 +34,18 @@ resource "auth0_hook" "my_hook" {
   script = "function (user, context, callback) { callback(null, { user }); }"
   trigger_id = "pre-user-registration"
   enabled = true
+  %s
 }
 `
 
 func TestAccHookSecrets(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccHookSecrets("alpha"),
+				Config: fmt.Sprintf(testAccHookCreate, testAccHookSecrets),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "name", "pre-user-reg-hook"),
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "dependencies.auth0", "2.30.0"),
@@ -51,7 +57,7 @@ func TestAccHookSecrets(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccHookSecrets2("gamma", "kappa"),
+				Config: fmt.Sprintf(testAccHookCreate, testAccHookSecretsUpdate),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "name", "pre-user-reg-hook"),
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "dependencies.auth0", "2.30.0"),
@@ -63,7 +69,7 @@ func TestAccHookSecrets(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccHookSecrets("delta"),
+				Config: fmt.Sprintf(testAccHookCreate, testAccHookSecretsUpdateAndRemoval),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "name", "pre-user-reg-hook"),
 					resource.TestCheckResourceAttr("auth0_hook.my_hook", "script", "function (user, context, callback) { callback(null, { user }); }"),
@@ -77,58 +83,44 @@ func TestAccHookSecrets(t *testing.T) {
 	})
 }
 
-func testAccHookSecrets(fooValue string) string {
-	return fmt.Sprintf(`
-resource "auth0_hook" "my_hook" {
-  name = "pre-user-reg-hook"
-  script = "function (user, context, callback) { callback(null, { user }); }"
-  trigger_id = "pre-user-registration"
-  enabled = true
+const testAccHookSecrets = `
   dependencies = {
     auth0 = "2.30.0"
   }
-	secrets = {
-    foo = "%s"
-  }
-}
-`, fooValue)
-}
-
-func testAccHookSecrets2(fooValue string, barValue string) string {
-	return fmt.Sprintf(`
-resource "auth0_hook" "my_hook" {
-  name = "pre-user-reg-hook"
-  script = "function (user, context, callback) { callback(null, { user }); }"
-  trigger_id = "pre-user-registration"
-  dependencies = {
-    auth0 = "2.30.0"
-  }
-  enabled = true
   secrets = {
-    foo = "%s"
-    bar = "%s"
+    foo = "alpha"
   }
-}
-`, fooValue, barValue)
-}
+`
+
+const testAccHookSecretsUpdate = `
+  dependencies = {
+    auth0 = "2.30.0"
+  }
+  secrets = {
+    foo = "gamma"
+    bar = "kappa"
+  }
+`
+
+const testAccHookSecretsUpdateAndRemoval = `
+  dependencies = {
+    auth0 = "2.30.0"
+  }
+  secrets = {
+    foo = "delta"
+  }
+`
 
 func TestHookNameRegexp(t *testing.T) {
-	for name, valid := range map[string]bool{
-		"my-hook-1":                 true,
-		"hook 2 name with spaces":   true,
-		" hook with a space prefix": false,
-		"hook with a space suffix ": false,
-		" ":                         false,
-		"   ":                       false,
+	for givenHookName, expectedError := range map[string]bool{
+		"my-hook-1":                 false,
+		"hook 2 name with spaces":   false,
+		" hook with a space prefix": true,
+		"hook with a space suffix ": true,
+		" ":                         true,
+		"   ":                       true,
 	} {
-		fn := validateHookName()
-
-		validationResult := fn(name, cty.Path{cty.GetAttrStep{Name: "name"}})
-		if validationResult.HasError() && valid {
-			t.Fatalf("Expected %q to be valid, but got validation errors %v", name, validationResult)
-		}
-		if !validationResult.HasError() && !valid {
-			t.Fatalf("Expected %q to be invalid, but got no validation errors.", name)
-		}
+		validationResult := validateHookName()(givenHookName, cty.Path{cty.GetAttrStep{Name: "name"}})
+		assert.Equal(t, expectedError, validationResult.HasError())
 	}
 }

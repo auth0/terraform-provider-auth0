@@ -7,8 +7,10 @@ import (
 )
 
 func TestAccCustomDomainVerificationWithAuth0ManagedCerts(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactoriesWithMockedAPI,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCustomDomainVerificationWithAuth0ManagedCerts,
@@ -56,8 +58,10 @@ resource "auth0_custom_domain_verification" "my_custom_domain_verification" {
 `
 
 func TestAccCustomDomainVerificationWithSelfManagedCerts(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactoriesWithMockedAPI,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCustomDomainVerificationWithSelfManagedCerts,

@@ -102,35 +102,18 @@ test-unit: ## Run unit tests
 	@go test ${GO_PACKAGES} || exit 1
 	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
-test-acc: dev-up ## Run acceptance tests
+test-acc: ## Run acceptance tests with http recordings
 	${call print, "Running acceptance tests"}
+	@AUTH0_HTTP_RECORDINGS=on AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com TF_ACC=1 \
+		go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
+
+test-acc-e2e: ## Run acceptance tests end to end
+	${call print, "Running acceptance tests E2E"}
 	@TF_ACC=1 go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
 
 test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
 	@go test ./auth0 -v -sweep="phony" $(SWEEPARGS)
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Development
-#-----------------------------------------------------------------------------------------------------------------------
-.PHONY: dev-up dev-down dev-stop dev-clean
-
-dev-up: ## Bootstrap the development containers
-	${call print, "Starting development containers"}
-	@docker-compose up -d
-	@sleep 2 # Let's make sure the container is fully up.
-
-dev-down: ## Bring down the development containers
-	${call print, "Bringing the development containers down"}
-	@docker-compose down
-
-dev-stop: ## Stop the development containers
-	${call print, "Stopping the development containers"}
-	@docker-compose stop
-
-dev-rm: ## Delete the development containers
-	${call print, "Deleting the development containers"}
-	@docker-compose rm -f
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helpers

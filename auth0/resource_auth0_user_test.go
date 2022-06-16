@@ -1,15 +1,17 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -51,7 +53,7 @@ func init() {
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      "resource auth0_user user {}",
@@ -62,27 +64,27 @@ func TestAccUserMissingRequiredParams(t *testing.T) {
 }
 
 func TestAccUser(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccUserCreate, rand),
+				Config: template.ParseTestName(testAccUserCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_user.user", "user_id", "auth0|{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_user.user", "email", "{{.random}}@acceptance.test.com", rand),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "family_name", "Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),
-					resource.TestCheckResourceAttr("auth0_user.user", "nickname", rand),
+					resource.TestCheckResourceAttr("auth0_user.user", "nickname", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "picture", "https://www.example.com/picture.jpg"),
 				),
 			},
 			{
-				Config: random.Template(testAccUserAddRole, rand),
+				Config: template.ParseTestName(testAccUserAddRole, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
 					resource.TestCheckResourceAttr("auth0_role.owner", "name", "owner"),
@@ -90,7 +92,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccUserRemoveRole, rand),
+				Config: template.ParseTestName(testAccUserRemoveRole, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
 				),
@@ -102,14 +104,14 @@ func TestAccUser(t *testing.T) {
 const testAccUserCreate = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
-	username = "{{.random}}"
-	user_id = "{{.random}}"
-	email = "{{.random}}@acceptance.test.com"
+	username = "{{.testName}}"
+	user_id = "{{.testName}}"
+	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
 	given_name = "Firstname"
 	family_name = "Lastname"
-	nickname = "{{.random}}"
+	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
 	user_metadata = <<EOF
 {
@@ -128,15 +130,16 @@ EOF
 
 const testAccUserAddRole = `
 resource auth0_user user {
+	depends_on = [auth0_role.owner, auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
-	username = "{{.random}}"
-	user_id = "{{.random}}"
-	email = "{{.random}}@acceptance.test.com"
+	username = "{{.testName}}"
+	user_id = "{{.testName}}"
+	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
 	given_name = "Firstname"
 	family_name = "Lastname"
-	nickname = "{{.random}}"
+	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
 	roles = [ auth0_role.owner.id, auth0_role.admin.id ]
 	user_metadata = <<EOF
@@ -161,20 +164,22 @@ resource auth0_role owner {
 resource auth0_role admin {
 	name = "admin"
 	description = "Administrator"
+	depends_on = [auth0_role.owner]
 }
 `
 
 const testAccUserRemoveRole = `
 resource auth0_user user {
+	depends_on = [auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
-	username = "{{.random}}"
-	user_id = "{{.random}}"
-	email = "{{.random}}@acceptance.test.com"
+	username = "{{.testName}}"
+	user_id = "{{.testName}}"
+	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
 	given_name = "Firstname"
 	family_name = "Lastname"
-	nickname = "{{.random}}"
+	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
 	roles = [ auth0_role.admin.id ]
 	user_metadata = <<EOF
@@ -198,21 +203,21 @@ resource auth0_role admin {
 `
 
 func TestAccUserIssue218(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccUserIssue218, rand),
+				Config: template.ParseTestName(testAccUserIssue218, "issue#218"),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "user_id", "auth0|id_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "username", "user_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "email", "issue.218.{{.random}}@acceptance.test.com", rand),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "user_id", "auth0|id_issue#218"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "username", "user_issue#218"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "email", "issue.218.issue#218@acceptance.test.com"),
 				),
 			},
 			{
-				Config: random.Template(testAccUserIssue218, rand),
+				Config: template.ParseTestName(testAccUserIssue218, "issue#218"),
 			},
 		},
 	})
@@ -221,38 +226,38 @@ func TestAccUserIssue218(t *testing.T) {
 const testAccUserIssue218 = `
 resource auth0_user auth0_user_issue_218 {
   connection_name = "Username-Password-Authentication"
-  user_id = "id_{{.random}}"
-  username = "user_{{.random}}"
-  email = "issue.218.{{.random}}@acceptance.test.com"
+  user_id = "id_{{.testName}}"
+  username = "user_{{.testName}}"
+  email = "issue.218.{{.testName}}@acceptance.test.com"
   email_verified = true
   password = "MyPass123$"
 }
 `
 
 func TestAccUserChangeUsername(t *testing.T) {
-	rand := random.String(4)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccUserChangeUsernameCreate, rand),
+				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.{{.random}}@acceptance.test.com", rand),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_terra"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
 				),
 			},
 			{
-				Config: random.Template(testAccUserChangeUsernameUpdate, rand),
+				Config: template.ParseTestName(testAccUserChangeUsernameUpdate, "terra"),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_x_{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.{{.random}}@acceptance.test.com", rand),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_x_terra"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
 				),
 			},
 			{
-				Config:      random.Template(testAccUserChangeUsernameAndPassword, rand),
+				Config:      template.ParseTestName(testAccUserChangeUsernameAndPassword, "terra"),
 				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
 			},
 		},
@@ -262,8 +267,8 @@ func TestAccUserChangeUsername(t *testing.T) {
 const testAccUserChangeUsernameCreate = `
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
-  username = "user_{{.random}}"
-  email = "change.username.{{.random}}@acceptance.test.com"
+  username = "user_{{.testName}}"
+  email = "change.username.{{.testName}}@acceptance.test.com"
   email_verified = true
   password = "MyPass123$"
 }
@@ -272,8 +277,8 @@ resource auth0_user auth0_user_change_username {
 const testAccUserChangeUsernameUpdate = `
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
-  username = "user_x_{{.random}}"
-  email = "change.username.{{.random}}@acceptance.test.com"
+  username = "user_x_{{.testName}}"
+  email = "change.username.{{.testName}}@acceptance.test.com"
   email_verified = true
   password = "MyPass123$"
 }
@@ -282,8 +287,8 @@ resource auth0_user auth0_user_change_username {
 const testAccUserChangeUsernameAndPassword = `
 resource auth0_user auth0_user_change_username {
   connection_name = "Username-Password-Authentication"
-  username = "user_{{.random}}"
-  email = "change.username.{{.random}}@acceptance.test.com"
+  username = "user_{{.testName}}"
+  email = "change.username.{{.testName}}@acceptance.test.com"
   email_verified = true
   password = "MyPass123456$"
 }

@@ -550,22 +550,27 @@ func newClient() *schema.Resource {
 							}, false),
 						},
 						"leeway": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
 						"token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
 						"infinite_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
 						"infinite_idle_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
 						"idle_token_lifetime": {
+							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
 						},

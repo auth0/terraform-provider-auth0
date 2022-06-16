@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"testing"
@@ -9,7 +10,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func init() {
@@ -53,24 +54,24 @@ func init() {
 }
 
 func TestAccOrganization(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccOrganizationCreate, rand),
+				Config: template.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
 			{
-				Config: random.Template(testAccOrganizationUpdate, rand),
+				Config: template.ParseTestName(testAccOrganizationUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
@@ -80,10 +81,10 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: random.Template(testAccOrganizationUpdateAgain, rand),
+				Config: template.ParseTestName(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_organization.acme", "name", "test-{{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_organization.acme", "display_name", "Acme Inc. {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
@@ -93,20 +94,21 @@ func TestAccOrganization(t *testing.T) {
 
 const testAccOrganizationAux = `
 resource auth0_connection acme {
-	name = "Acceptance-Test-Connection-Acme-{{.random}}"
+	name = "Acceptance-Test-Connection-Acme-{{.testName}}"
 	strategy = "auth0"
 }
 
 resource auth0_connection acmeinc {
-	name = "Acceptance-Test-Connection-Acme-Inc-{{.random}}"
+	depends_on = [auth0_connection.acme]
+	name = "Acceptance-Test-Connection-Acme-Inc-{{.testName}}"
 	strategy = "auth0"
 }
 `
 
 const testAccOrganizationCreate = testAccOrganizationAux + `
 resource auth0_organization acme {
-	name = "test-{{.random}}"
-	display_name = "Acme Inc. {{.random}}"
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
 
 	connections {
 		connection_id = auth0_connection.acme.id
@@ -116,8 +118,8 @@ resource auth0_organization acme {
 
 const testAccOrganizationUpdate = testAccOrganizationAux + `
 resource auth0_organization acme {
-	name = "test-{{.random}}"
-	display_name = "Acme Inc. {{.random}}"
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
 	branding {
 		logo_url = "https://acme.com/logo.svg"
 		colors = {
@@ -137,8 +139,8 @@ resource auth0_organization acme {
 
 const testAccOrganizationUpdateAgain = testAccOrganizationAux + `
 resource auth0_organization acme {
-	name = "test-{{.random}}"
-	display_name = "Acme Inc. {{.random}}"
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
 	branding {
 		logo_url = "https://acme.com/logo.svg"
 		colors = {

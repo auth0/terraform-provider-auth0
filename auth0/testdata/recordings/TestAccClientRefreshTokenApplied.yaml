@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance Test - Refresh Token - TestAccClientRefreshTokenApplied","app_type":"spa","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring"}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.4
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+    method: POST
+  response:
+    body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshTokenApplied","client_id":"I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.4
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshTokenApplied","client_id":"I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.4
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshTokenApplied","client_id":"I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.6.4
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/I4VnvxRCuWqO7aHBzbZtkL6IGNuMbIpf
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms

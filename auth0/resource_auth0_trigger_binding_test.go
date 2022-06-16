@@ -1,37 +1,38 @@
 package auth0
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/random"
+	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
 
 func TestAccTriggerBinding(t *testing.T) {
-	rand := random.String(6)
+	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviderFactories,
+		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: random.Template(testAccTriggerBindingConfigCreate, rand),
+				Config: template.ParseTestName(testAccTriggerBindingConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Bar {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 				),
 			},
 			{
-				Config: random.Template(testAccTriggerBindingConfigUpdate, rand),
+				Config: template.ParseTestName(testAccTriggerBindingConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					random.TestCheckResourceAttr("auth0_action.action_foo", "name", "Test Trigger Binding Foo {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_action.action_bar", "name", "Test Trigger Binding Bar {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", "Test Trigger Binding Bar {{.random}}", rand),
-					random.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", "Test Trigger Binding Foo {{.random}}", rand),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 				),
 			},
 		},
@@ -40,7 +41,7 @@ func TestAccTriggerBinding(t *testing.T) {
 
 const testAccTriggerBindingAction = `
 resource auth0_action action_foo {
-	name = "Test Trigger Binding Foo {{.random}}"
+	name = "Test Trigger Binding Foo {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"
@@ -54,7 +55,8 @@ resource auth0_action action_foo {
 }
 
 resource auth0_action action_bar {
-	name = "Test Trigger Binding Bar {{.random}}"
+	depends_on = [auth0_action.action_foo]
+	name = "Test Trigger Binding Bar {{.testName}}"
 	supported_triggers {
 		id = "post-login"
 		version = "v2"

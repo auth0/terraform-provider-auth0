@@ -32,7 +32,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
-
 			{
 				Config: testAccConfigureTwilio,
 				Check: resource.ComposeTestCheckFunc(
@@ -46,7 +45,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.auth_token", "bar"),
 				),
 			},
-
 			{
 				Config: testAccConfigureCustomPhone,
 				Check: resource.ComposeTestCheckFunc(
@@ -55,7 +53,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "phone-message-hook"),
 				),
 			},
-
 			{
 				Config: testAccConfigureAuth0Custom,
 				Check: resource.ComposeTestCheckFunc(
@@ -66,7 +63,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.verification_message", "verify foo"),
 				),
 			},
-
 			{
 				Config: testAccConfigureAuth0,
 				Check: resource.ComposeTestCheckFunc(
@@ -77,7 +73,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.0.verification_message", "verify foo"),
 				),
 			},
-
 			{
 				Config: testAccConfigureNoPhone,
 				Check: resource.ComposeTestCheckFunc(
@@ -85,7 +80,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
 				),
 			},
-
 			{
 				Config: testAccConfigureEmail,
 				Check: resource.ComposeTestCheckFunc(
@@ -93,7 +87,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "email", "true"),
 				),
 			},
-
 			{
 				Config: testAccConfigureEmailUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -101,7 +94,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "email", "false"),
 				),
 			},
-
 			{
 				Config: testAccConfigureOTP,
 				Check: resource.ComposeTestCheckFunc(
@@ -109,7 +101,6 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "otp", "true"),
 				),
 			},
-
 			{
 				Config: testAccConfigureOTPUpdate,
 				Check: resource.ComposeTestCheckFunc(
@@ -215,5 +206,72 @@ const testAccConfigureOTPUpdate = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	otp  = false
+}
+`
+
+func TestAccGuardianIssue159(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccGuardianIssue159,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "0"),
+				),
+			},
+			{
+				Config: testAccGuardianIssue159Update,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.provider", "phone-message-hook"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.message_types.0", "sms"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.options.#", "1"),
+				),
+			},
+			{
+				Config: testAccGuardianIssue159Update2,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.provider", "phone-message-hook"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.message_types.0", "sms"),
+					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.options.#", "1"),
+				),
+			},
+		},
+	})
+}
+
+const testAccGuardianIssue159 = `
+resource "auth0_guardian" "default" {
+  policy     = "all-applications"
+  otp        = false
+  email      = false
+}
+`
+
+const testAccGuardianIssue159Update = `
+resource "auth0_guardian" "default" {
+  policy     = "all-applications"
+  otp        = false
+  email      = false
+  phone {
+    provider = "phone-message-hook"
+    message_types = ["sms"]
+  }
+}
+`
+
+const testAccGuardianIssue159Update2 = `
+resource "auth0_guardian" "default" {
+  policy     = "all-applications"
+  otp        = false
+  email      = false
+  phone {
+    provider = "phone-message-hook"
+    message_types = ["sms"]
+	options {}
+  }
 }
 `

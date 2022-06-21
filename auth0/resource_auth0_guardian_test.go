@@ -209,20 +209,20 @@ resource "auth0_guardian" "foo" {
 }
 `
 
-func TestAccGuardianIssue159(t *testing.T) {
+func TestAccGuardianPhoneMessageHookWithNoOptions(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccGuardianIssue159,
+				Config: testAccGuardianPhoneMessageHookWithNoOptions,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "0"),
 				),
 			},
 			{
-				Config: testAccGuardianIssue159Update,
+				Config: testAccGuardianPhoneMessageHookWithNoOptionsUpdate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.provider", "phone-message-hook"),
@@ -231,7 +231,7 @@ func TestAccGuardianIssue159(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccGuardianIssue159Update2,
+				Config: testAccGuardianPhoneMessageHookWithNoOptionsUpdate2,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.default", "phone.0.provider", "phone-message-hook"),
@@ -243,7 +243,7 @@ func TestAccGuardianIssue159(t *testing.T) {
 	})
 }
 
-const testAccGuardianIssue159 = `
+const testAccGuardianPhoneMessageHookWithNoOptions = `
 resource "auth0_guardian" "default" {
   policy     = "all-applications"
   otp        = false
@@ -251,7 +251,7 @@ resource "auth0_guardian" "default" {
 }
 `
 
-const testAccGuardianIssue159Update = `
+const testAccGuardianPhoneMessageHookWithNoOptionsUpdate = `
 resource "auth0_guardian" "default" {
   policy     = "all-applications"
   otp        = false
@@ -263,7 +263,7 @@ resource "auth0_guardian" "default" {
 }
 `
 
-const testAccGuardianIssue159Update2 = `
+const testAccGuardianPhoneMessageHookWithNoOptionsUpdate2 = `
 resource "auth0_guardian" "default" {
   policy     = "all-applications"
   otp        = false

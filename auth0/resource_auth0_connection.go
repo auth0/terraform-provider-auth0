@@ -126,6 +126,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"password_no_personal_info": {
 					Type:     schema.TypeList,
 					Optional: true,
+					Computed: true,
 					MaxItems: 1,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -140,6 +141,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"password_dictionary": {
 					Type:     schema.TypeList,
 					Optional: true,
+					Computed: true,
 					MaxItems: 1,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -159,6 +161,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"password_complexity_options": {
 					Type:     schema.TypeList,
 					Optional: true,
+					Computed: true,
 					MaxItems: 1,
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{

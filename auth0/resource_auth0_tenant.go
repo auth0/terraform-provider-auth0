@@ -118,21 +118,21 @@ func newTenant() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
-			"session_lifetime": {
-				Type:         schema.TypeFloat,
-				Optional:     true,
-				Computed:     true,
-				ValidateFunc: validation.FloatAtLeast(0.01),
-			},
 			"sandbox_version": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
+			"session_lifetime": {
+				Type:         schema.TypeFloat,
+				Optional:     true,
+				ValidateFunc: validation.FloatAtLeast(0.01),
+				Default:      168,
+			},
 			"idle_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Computed:     true,
+				Default:      72,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 			},
 			"enabled_locales": {

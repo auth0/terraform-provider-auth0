@@ -24,7 +24,7 @@ resource "auth0_connection" "my_connection" {
       enable = true
       size   = 3
     }
-   brute_force_protection         = true
+    brute_force_protection         = true
     enabled_database_customization = true
     custom_scripts = {
       get_user = <<EOF

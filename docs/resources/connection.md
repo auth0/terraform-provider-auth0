@@ -240,6 +240,7 @@ With the `github` connection strategy, `options` supports the following argument
 
 * `client_id` - (Optional) GitHub client ID.
 * `client_secret` - (Optional) GitHub client secret.
+* `scopes` - Permissions to grant connection. Available values: `admin_org`, `admin_public_key`, `admin_repo_hook`, `delete_repo`, `email`, `follow`, `gist`, `notifications`, `profile`, `public_repo`, `read_org`, `read_public_key`, `read_repo_hook`, `read_user`, `repo`, `repo_deployment`, `repo_status`, `write_org`, `write_public_key`, `write_repo_hook`
 * `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
 * `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
 

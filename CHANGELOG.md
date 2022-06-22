@@ -1,3 +1,29 @@
+## 0.31.0
+
+FEATURES:
+
+- `resource/auth0_hook`: Add warnings for untracked hook secrets ([#189](https://github.com/auth0/terraform-provider-auth0/pull/189))
+- `resource/auth0_log_stream`: Add datadog_region validation ([#192](https://github.com/auth0/terraform-provider-auth0/pull/192))
+- `resource/auth0_connection`: Add computed to password* fields in connection resource ([#191](https://github.com/auth0/terraform-provider-auth0/pull/191))
+- `resource/auth0_connection`: Adding icon_url to OAuth2 connection types ([#196](https://github.com/auth0/terraform-provider-auth0/pull/196))
+
+BUG FIXES:
+
+- `resource/auth0_connection`: Fix crash with domain_aliases for ADFS ([#172](https://github.com/auth0/terraform-provider-auth0/pull/172))
+- `resource/auth0_connection`: Fix subsequent updates to partial refresh_token object ([#187](https://github.com/auth0/terraform-provider-auth0/pull/187))
+- `resource/auth0_tenant`: Setting session lifetime values as non-computed ([#193](https://github.com/auth0/terraform-provider-auth0/pull/193))
+- `resource/auth0_user`: Preserve user ID casing in state ([#197](https://github.com/auth0/terraform-provider-auth0/pull/197))
+- `resource/auth0_guardian`: Fix phone options issue#159 and refactor guardian resource implementation ([#195](https://github.com/auth0/terraform-provider-auth0/pull/195))
+
+
+NOTES:
+
+- Correct docs example typo binding_method to protocol_binding ([#179](https://github.com/auth0/terraform-provider-auth0/pull/179))
+- Enabled http recordings with go-vcr to be used within tests for more reliable testing
+- Adding documentation for passwordless email connection ([#179](https://github.com/auth0/terraform-provider-auth0/pull/179))
+- Adding GitHub connection scopes documentation ([#199](https://github.com/auth0/terraform-provider-auth0/pull/199))
+
+
 ## 0.30.3
 
 FEATURES:

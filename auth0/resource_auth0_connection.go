@@ -508,9 +508,6 @@ var connectionSchema = map[string]*schema.Schema{
 					Computed: true,
 					Optional: true,
 					Elem:     &schema.Schema{Type: schema.TypeString},
-					ValidateFunc: validation.StringInSlice([]string{
-						"admin_org", "admin_public_key", "admin_repo_hook", "delete_repo", "email", "follow", "gist", "notifications", "profile", "public_repo", "read_org", "read_public_key", "read_repo_hook", "read_user", "repo", "repo_deployment", "repo_status", "write_org", "write_public_key", "write_repo_hook",
-					}, true),
 				},
 				// OIDC options
 				"type": {

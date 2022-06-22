@@ -427,6 +427,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", ""),
 				),
 			},
 			{
@@ -441,6 +442,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oauth2", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", "https://cdn.paypal.com/assets/logo.png"),
 				),
 			},
 		},
@@ -478,6 +480,7 @@ resource "auth0_connection" "oauth2" {
 		authorization_endpoint = "https://www.paypal.com/signin/authorize"
 		scopes = [ "openid", "email" ]
 		set_user_root_attributes = "on_first_login"
+		icon_url = "https://cdn.paypal.com/assets/logo.png"
 		scripts = {
 			fetchUserProfile= "function( { return callback(null) }"
 		}

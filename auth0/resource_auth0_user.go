@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -34,9 +33,6 @@ func newUser() *schema.Resource {
 				Computed: true,
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					return old == "auth0|"+new
-				},
-				StateFunc: func(s interface{}) string {
-					return strings.ToLower(s.(string))
 				},
 			},
 			"connection_name": {

@@ -49,7 +49,6 @@ func newGuardian() *schema.Resource {
 						"message_types": {
 							Type:     schema.TypeList,
 							Required: true,
-
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -57,6 +56,7 @@ func newGuardian() *schema.Resource {
 						"options": {
 							Type:     schema.TypeList,
 							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 							MinItems: 1,
 							Elem: &schema.Resource{
@@ -111,8 +111,103 @@ func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return updateGuardian(ctx, d, m)
 }
 
+func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
+	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	result := &multierror.Error{}
+	if len(*multiFactorPolicies) == 0 {
+		result = multierror.Append(result, d.Set("policy", "never"))
+	} else {
+		result = multierror.Append(result, d.Set("policy", (*multiFactorPolicies)[0]))
+	}
+
+	multiFactorList, err := api.Guardian.MultiFactor.List()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	var phoneEnabled bool
+	for _, factor := range multiFactorList {
+		switch factor.GetName() {
+		case "email":
+			result = multierror.Append(result, d.Set("email", factor.GetEnabled()))
+		case "otp":
+			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
+		case "sms":
+			phoneEnabled = factor.GetEnabled()
+		}
+	}
+
+	if !phoneEnabled {
+		result = multierror.Append(result, d.Set("phone", nil))
+		return diag.FromErr(result.ErrorOrNil())
+	}
+
+	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	phoneData := make(map[string]interface{})
+	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
+
+	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	phoneData["provider"] = phoneProvider.GetProvider()
+
+	var phoneProviderOptions []interface{}
+	switch phoneProvider.GetProvider() {
+	case "twilio":
+		phoneProviderOptions, err = flattenTwilioOptions(api)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	case "auth0":
+		phoneProviderOptions, err = flattenAuth0Options(api)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	case "phone-message-hook":
+		phoneProviderOptions = []interface{}{nil}
+	}
+
+	phoneData["options"] = phoneProviderOptions
+	result = multierror.Append(result, d.Set("phone", []interface{}{phoneData}))
+
+	return diag.FromErr(result.ErrorOrNil())
+}
+
+func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
+	if err := updatePolicy(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := updateEmailFactor(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := updateOTPFactor(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := updatePhoneFactor(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	return readGuardian(ctx, d, m)
+}
+
 func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Guardian.MultiFactor.Phone.Enable(false); err != nil {
 		return diag.FromErr(err)
 	}
@@ -122,46 +217,85 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
 		return diag.FromErr(err)
 	}
+
 	d.SetId("")
+
 	return nil
 }
 
-func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+func flattenAuth0Options(api *management.Management) ([]interface{}, error) {
+	m := make(map[string]interface{})
 
+	template, err := api.Guardian.MultiFactor.SMS.Template()
+	if err != nil {
+		return nil, err
+	}
+
+	m["enrollment_message"] = template.GetEnrollmentMessage()
+	m["verification_message"] = template.GetVerificationMessage()
+
+	return []interface{}{m}, nil
+}
+
+func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
+	m := make(map[string]interface{})
+
+	template, err := api.Guardian.MultiFactor.SMS.Template()
+	if err != nil {
+		return nil, err
+	}
+
+	m["enrollment_message"] = template.GetEnrollmentMessage()
+	m["verification_message"] = template.GetVerificationMessage()
+
+	twilio, err := api.Guardian.MultiFactor.SMS.Twilio()
+	if err != nil {
+		return nil, err
+	}
+
+	m["auth_token"] = twilio.GetAuthToken()
+	m["from"] = twilio.GetFrom()
+	m["messaging_service_sid"] = twilio.GetMessagingServiceSid()
+	m["sid"] = twilio.GetSID()
+
+	return []interface{}{m}, nil
+}
+
+func updatePolicy(d *schema.ResourceData, api *management.Management) error {
 	if d.HasChange("policy") {
+		multiFactorPolicies := management.MultiFactorPolicies{}
+
 		policy := d.Get("policy").(string)
-		if policy == "never" {
-			// Passing empty array to set it to the "never" policy.
-			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}); err != nil {
-				return diag.FromErr(err)
-			}
-		} else {
-			if err := api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{policy}); err != nil {
-				return diag.FromErr(err)
-			}
+		if policy != "never" {
+			multiFactorPolicies = append(multiFactorPolicies, policy)
 		}
-	}
 
-	if err := updatePhoneFactor(d, api); err != nil {
-		return diag.FromErr(err)
+		// If the policy is "never" then the slice needs to be empty.
+		return api.Guardian.MultiFactor.UpdatePolicy(&multiFactorPolicies)
 	}
-	if err := updateEmailFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := updateOTPFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
+	return nil
+}
 
-	return readGuardian(ctx, d, m)
+func updateEmailFactor(d *schema.ResourceData, api *management.Management) error {
+	if d.HasChange("email") {
+		enabled := d.Get("email").(bool)
+		return api.Guardian.MultiFactor.Email.Enable(enabled)
+	}
+	return nil
+}
+
+func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
+	if d.HasChange("otp") {
+		enabled := d.Get("otp").(bool)
+		return api.Guardian.MultiFactor.OTP.Enable(enabled)
+	}
+	return nil
 }
 
 func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error {
-	ok, err := factorShouldBeUpdated(d, "phone")
-	if err != nil {
-		return err
-	}
-	if ok {
+	if factorShouldBeUpdated(d, "phone") {
+		// Always enable phone factor before configuring it.
+		// Otherwise, we encounter an error with message_types.
 		if err := api.Guardian.MultiFactor.Phone.Enable(true); err != nil {
 			return err
 		}
@@ -172,65 +306,59 @@ func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error
 	return api.Guardian.MultiFactor.Phone.Enable(false)
 }
 
-func updateEmailFactor(d *schema.ResourceData, api *management.Management) error {
-	if changed := d.HasChange("email"); changed {
-		enabled := d.Get("email").(bool)
-		return api.Guardian.MultiFactor.Email.Enable(enabled)
-	}
-	return nil
+// Determines if the factor should be updated.
+// This depends on if it is in the state,
+// if it is about to be added to the state.
+func factorShouldBeUpdated(d *schema.ResourceData, factor string) bool {
+	_, ok := d.GetOk(factor)
+	return ok || hasBlockPresentInNewState(d, factor)
 }
 
-func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
-	if changed := d.HasChange("otp"); changed {
-		enabled := d.Get("otp").(bool)
-		return api.Guardian.MultiFactor.OTP.Enable(enabled)
+func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
+	if d.HasChange(factor) {
+		_, n := d.GetChange(factor)
+		newState := n.([]interface{})
+		return len(newState) > 0
 	}
 
-	return nil
+	return false
 }
 
 func configurePhone(d *schema.ResourceData, api *management.Management) error {
-	var err error
-
 	m := make(map[string]interface{})
 	List(d, "phone").Elem(func(d ResourceData) {
-		m["provider"] = String(d, "provider", HasChange())
-		m["message_types"] = Slice(d, "message_types", HasChange())
+		m["provider"] = String(d, "provider")
+		m["message_types"] = Slice(d, "message_types")
 		m["options"] = List(d, "options")
-
-		switch *String(d, "provider") {
-		case "twilio":
-			err = updateTwilioOptions(m["options"].(Iterator), api)
-		case "auth0":
-			err = updateAuth0Options(m["options"].(Iterator), api)
-		}
 	})
-	if err != nil {
-		return err
-	}
 
-	if provider, ok := m["provider"]; ok {
-		if err := api.Guardian.MultiFactor.Phone.UpdateProvider(
-			&management.MultiFactorProvider{
-				Provider: provider.(*string),
-			},
-		); err != nil {
+	if p, ok := m["provider"]; ok && p != nil {
+		provider := p.(*string)
+		switch *provider {
+		case "twilio":
+			if err := updateTwilioOptions(m["options"].(Iterator), api); err != nil {
+				return err
+			}
+		case "auth0":
+			if err := updateAuth0Options(m["options"].(Iterator), api); err != nil {
+				return err
+			}
+		}
+
+		multiFactorProvider := &management.MultiFactorProvider{Provider: provider}
+		if err := api.Guardian.MultiFactor.Phone.UpdateProvider(multiFactorProvider); err != nil {
 			return err
 		}
 	}
 
-	messageTypes := typeAssertToStringArray(m["message_types"].([]interface{}))
-	if messageTypes != nil {
-		if err := api.Guardian.MultiFactor.Phone.UpdateMessageTypes(
-			&management.PhoneMessageTypes{
-				MessageTypes: messageTypes,
-			},
-		); err != nil {
-			return err
-		}
+	messageTypes := fromInterfaceSliceToStringSlice(m["message_types"].([]interface{}))
+	if len(messageTypes) == 0 {
+		return nil
 	}
 
-	return nil
+	return api.Guardian.MultiFactor.Phone.UpdateMessageTypes(
+		&management.PhoneMessageTypes{MessageTypes: &messageTypes},
+	)
 }
 
 func updateAuth0Options(opts Iterator, api *management.Management) error {
@@ -279,140 +407,16 @@ func updateTwilioOptions(opts Iterator, api *management.Management) error {
 	)
 }
 
-func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	var result *multierror.Error
-
-	api := m.(*management.Management)
-	messageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	phoneData := make(map[string]interface{})
-	phoneData["message_types"] = messageTypes.MessageTypes
-
-	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	phoneData["provider"] = phoneProvider.Provider
-
-	policy, err := api.Guardian.MultiFactor.Policy()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	if len(*policy) == 0 {
-		result = multierror.Append(result, d.Set("policy", "never"))
-	} else {
-		result = multierror.Append(result, d.Set("policy", (*policy)[0]))
-	}
-
-	var phoneProviderFlattenedOptions map[string]interface{}
-	switch *phoneProvider.Provider {
-	case "twilio":
-		phoneProviderFlattenedOptions, err = flattenTwilioOptions(api)
-	case "auth0":
-		phoneProviderFlattenedOptions, err = flattenAuth0Options(api)
-	}
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	ok, err := factorShouldBeUpdated(d, "phone")
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	if ok {
-		phoneData["options"] = []interface{}{phoneProviderFlattenedOptions}
-		result = multierror.Append(result, d.Set("phone", []interface{}{phoneData}))
-	} else {
-		result = multierror.Append(result, d.Set("phone", nil))
-	}
-
-	factors, err := api.Guardian.MultiFactor.List()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	for _, factor := range factors {
-		if factor.Name != nil {
-			if *factor.Name == "email" {
-				result = multierror.Append(result, d.Set("email", factor.Enabled))
-			}
-			if *factor.Name == "otp" {
-				result = multierror.Append(result, d.Set("otp", factor.Enabled))
-			}
-		}
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
-}
-
-func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
-	if ok := d.HasChange(factor); ok {
-		_, n := d.GetChange(factor)
-		newState := n.([]interface{})
-		return len(newState) > 0
-	}
-
-	return false
-}
-
-func flattenAuth0Options(api *management.Management) (map[string]interface{}, error) {
-	md := make(map[string]interface{})
-
-	template, err := api.Guardian.MultiFactor.SMS.Template()
-	if err != nil {
-		return nil, err
-	}
-
-	md["enrollment_message"] = template.EnrollmentMessage
-	md["verification_message"] = template.VerificationMessage
-
-	return md, nil
-}
-
-func flattenTwilioOptions(api *management.Management) (map[string]interface{}, error) {
-	m := make(map[string]interface{})
-
-	template, err := api.Guardian.MultiFactor.SMS.Template()
-	if err != nil {
-		return nil, err
-	}
-
-	m["enrollment_message"] = template.EnrollmentMessage
-	m["verification_message"] = template.VerificationMessage
-
-	twilio, err := api.Guardian.MultiFactor.SMS.Twilio()
-	if err != nil {
-		return nil, err
-	}
-
-	m["auth_token"] = twilio.AuthToken
-	m["from"] = twilio.From
-	m["messaging_service_sid"] = twilio.MessagingServiceSid
-	m["sid"] = twilio.SID
-
-	return m, nil
-}
-
-func typeAssertToStringArray(from []interface{}) *[]string {
+func fromInterfaceSliceToStringSlice(from []interface{}) []string {
 	length := len(from)
-	if length < 1 {
+	if length == 0 {
 		return nil
 	}
+
 	stringArray := make([]string, length)
 	for i, v := range from {
 		stringArray[i] = v.(string)
 	}
-	return &stringArray
-}
 
-// Determines if the factor should be updated.
-// This depends on if it is in the state,
-// if it is about to be added to the state.
-func factorShouldBeUpdated(d *schema.ResourceData, factor string) (bool, error) {
-	_, ok := d.GetOk(factor)
-	return ok || hasBlockPresentInNewState(d, factor), nil
+	return stringArray
 }

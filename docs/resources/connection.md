@@ -240,6 +240,7 @@ With the `github` connection strategy, `options` supports the following argument
 
 * `client_id` - (Optional) GitHub client ID.
 * `client_secret` - (Optional) GitHub client secret.
+* `scopes` - Permissions to grant connection. Available values: `admin_org`, `admin_public_key`, `admin_repo_hook`, `delete_repo`, `email`, `follow`, `gist`, `notifications`, `profile`, `public_repo`, `read_org`, `read_public_key`, `read_repo_hook`, `read_user`, `repo`, `repo_deployment`, `repo_status`, `write_org`, `write_public_key`, `write_repo_hook`
 * `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
 * `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
 
@@ -509,6 +510,54 @@ resource "auth0_connection" "windowslive" {
     client_secret    = "<client-secret>"
     strategy_version = 2
     scopes           = [ "signin", "graph_user" ]
+  }
+}
+```
+
+
+### Passwordless Email
+
+Passwordless email connections can be created using the `email` connection strategy. The `options` block supports the following arguments:
+
+
+* `from` - (Required) String. Email address to use as the sender. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+* `subject` - (Required) String. Subject line of the email. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+* `syntax` - (Required) String. Syntax of the template body. You can use either text or HTML + Liquid syntax.
+* `template` - (Required) String. Body of the email template. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+* `disable_signup` - (Optional) Boolean. Indicates whether or not to allow user sign-ups to your application.
+* `brute_force_protection` - (Optional) Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
+* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+* `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
+
+#### TOTP
+
+`totp` supports the following arguments:
+
+* `time_step` - (Optional) Integer. Seconds between allowed generation of new passwords.
+* `length` - (Optional) Integer. Length of the one-time password.
+
+
+**Example**:
+
+```hcl
+resource "auth0_connection" "passwordless_email" {
+  strategy = "email"
+  name = "email"
+
+  options{
+    from = "{{ application.name }} \u003croot@auth0.com\u003e"
+    subject = "Welcome to {{ application.name }}"
+    syntax = "liquid"
+    template = "<html>This is the body of the email</html>"
+    disable_signup = false
+    brute_force_protection = true
+    set_user_root_attributes = []
+    non_persistent_attrs = []
+    totp {
+      time_step = 300
+      length    = 6
+    }
   }
 }
 ```

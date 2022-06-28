@@ -342,7 +342,7 @@ EOF
 With the `waad` connection strategy, `options` supports the following arguments:
 
 * `app_id` - (Optional) Azure AD app ID.
-* `app_domain` - (Optional) Azure AD domain name.
+* `domain` - (Optional) Azure AD domain name.
 * `client_id` - (Optional) Client ID for your Azure AD application.
 * `client_secret` - (Optional) Client secret for your Azure AD application.
 * `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.

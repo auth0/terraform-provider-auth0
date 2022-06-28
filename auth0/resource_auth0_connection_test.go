@@ -1337,6 +1337,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml.provider/sign_out"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_sign_out", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
@@ -1349,6 +1350,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_sign_out", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"appelido\",\"name\":[\"name\"]}"),
 				),
@@ -1391,6 +1393,7 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 EOF
 		sign_in_endpoint = "https://saml.provider/sign_in"
 		sign_out_endpoint = "https://saml.provider/sign_out"
+		disable_sign_out = false
 		user_id_attribute = "https://saml.provider/imi/ns/identity-200810"
 		tenant_domain = "example.com"
 		domain_aliases = ["example.com", "example.coz"]
@@ -1447,6 +1450,7 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 EOF
 		sign_in_endpoint = "https://saml.provider/sign_in"
 		sign_out_endpoint = ""
+		disable_sign_out = true
 		tenant_domain = "example.com"
 		domain_aliases = ["example.com", "example.coz"]
 		protocol_binding = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

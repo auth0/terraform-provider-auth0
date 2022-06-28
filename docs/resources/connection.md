@@ -454,6 +454,7 @@ With the `samlp` connection strategy, `options` supports the following arguments
 * `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
 * `sign_in_endpoint` - SAML single login URL for the connection.
 * `sign_out_endpoint` - (Optional) SAML single logout URL for the connection.
+* `disable_sign_out` - (Optional) (Boolean) Disables or enables user sign out..
 * `fields_map` - (Optional) SAML Attributes mapping. If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
 * `sign_saml_request` - (Optional) (Boolean) When enabled, the SAML authentication request will be signed.
 * `signature_algorithm` - (Optional) Sign Request Algorithm
@@ -473,6 +474,7 @@ resource "auth0_connection" "samlp" {
     signing_cert        = "<signing-certificate>"
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
+    disable_sign_out    = true
     tenant_domain       = "example.com"
     domain_aliases      = ["example.com", "alias.example.com"]
     protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

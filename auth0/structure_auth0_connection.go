@@ -354,6 +354,8 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) int
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
+		"metadata_url":             options.GetMetadataURL(),
+		"metadata_xml":             options.GetMetadataXML(),
 	}
 
 	if options.IdpInitiated != nil {
@@ -781,6 +783,8 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		EntityID:           String(d, "entity_id"),
+		MetadataXML:        String(d, "metadata_xml"),
+		MetadataURL:        String(d, "metadata_url"),
 	}
 
 	List(d, "idp_initiated").Elem(func(d ResourceData) {

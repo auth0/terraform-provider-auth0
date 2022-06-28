@@ -357,6 +357,8 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
+		"metadata_url":             options.GetMetadataURL(),
+		"metadata_xml":             options.GetMetadataXML(),
 	}
 
 	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
@@ -793,6 +795,8 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		EntityID:           String(d, "entity_id"),
+		MetadataXML:        String(d, "metadata_xml"),
+		MetadataURL:        String(d, "metadata_url"),
 	}
 
 	var err error

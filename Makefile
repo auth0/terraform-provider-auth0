@@ -70,16 +70,9 @@ install: build ## Install the provider as a terraform plugin. Usage: "make insta
 	@mkdir -p "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)/${GO_OS}_${GO_ARCH}"
 	@mv "${BUILD_DIR}/${BINARY}_v$(VERSION)" "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)/${GO_OS}_${GO_ARCH}"
 
-clean: ## Clean up installed provider binary. Usage: "make clean VERSION=0.2.0"
-	${call print_warning, "Cleaning installed provider binary: ${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)"}
-	@if [ -z "$(VERSION)" ]; \
-    	then \
-    	  echo "Please provide a version. Example: make clean VERSION=0.2.0" && exit 1; \
-     	fi
-	@if [ -d "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)" ]; \
-	then \
-	  rm -rf "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)"; \
- 	fi
+clean: ## Clean up locally installed provider binaries."
+	${call print_warning, "Cleaning locally installed provider binaries"}
+	@rm -rf "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Code Style

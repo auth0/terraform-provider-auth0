@@ -484,6 +484,7 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml"
     fields_map = {
       foo = "bar"
       baz = "baa"

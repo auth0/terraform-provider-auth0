@@ -601,10 +601,10 @@ var connectionSchema = map[string]*schema.Schema{
 					Description: "SAML single logout URL for the connection.",
 				},
 				"fields_map": {
-					Type:        schema.TypeMap,
-					Elem:        &schema.Schema{Type: schema.TypeString},
-					Optional:    true,
-					Description: "If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.",
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.StringIsJSON,
+					Description:  "If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.",
 				},
 				"sign_saml_request": {
 					Type:        schema.TypeBool,
@@ -770,7 +770,11 @@ func connectionSchemaUpgradeV1(
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection := expandConnection(d)
+	connection, err := expandConnection(d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	api := m.(*management.Management)
 	if err := api.Connection.Create(connection); err != nil {
 		return diag.FromErr(err)
@@ -794,12 +798,16 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 
+	connectionOptions, err := flattenConnectionOptions(d, connection.Options)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	result := multierror.Append(
 		d.Set("name", connection.Name),
 		d.Set("display_name", connection.DisplayName),
 		d.Set("is_domain_connection", connection.IsDomainConnection),
 		d.Set("strategy", connection.Strategy),
-		d.Set("options", flattenConnectionOptions(d, connection.Options)),
+		d.Set("options", connectionOptions),
 		d.Set("enabled_clients", connection.EnabledClients),
 		d.Set("realms", connection.Realms),
 		d.Set("metadata", connection.Metadata),
@@ -819,7 +827,11 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection := expandConnection(d)
+	connection, err := expandConnection(d)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	api := m.(*management.Management)
 	if err := api.Connection.Update(d.Id(), connection); err != nil {
 		return diag.FromErr(err)

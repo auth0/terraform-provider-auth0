@@ -5,15 +5,16 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
-func flattenConnectionOptions(d ResourceData, options interface{}) []interface{} {
+func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{}, error) {
 	if options == nil {
-		return nil
+		return nil, nil
 	}
 
 	var m interface{}
-
+	var err error
 	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
 		m = flattenConnectionOptionsAuth0(d, connectionOptions)
@@ -48,10 +49,13 @@ func flattenConnectionOptions(d ResourceData, options interface{}) []interface{}
 	case *management.ConnectionOptionsADFS:
 		m = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m = flattenConnectionOptionsSAML(connectionOptions)
+		m, err = flattenConnectionOptionsSAML(connectionOptions)
+	}
+	if err != nil {
+		return nil, err
 	}
 
-	return []interface{}{m}
+	return []interface{}{m}, nil
 }
 
 func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) interface{} {
@@ -334,7 +338,7 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) int
 	}
 }
 
-func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) interface{} {
+func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (interface{}, error) {
 	m := map[string]interface{}{
 		"signing_cert":             options.GetSigningCert(),
 		"protocol_binding":         options.GetProtocolBinding(),
@@ -345,7 +349,6 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) int
 		"sign_out_endpoint":        options.GetSignOutEndpoint(),
 		"signature_algorithm":      options.GetSignatureAlgorithm(),
 		"digest_algorithm":         options.GetDigestAglorithm(),
-		"fields_map":               options.FieldsMap,
 		"sign_saml_request":        options.GetSignSAMLRequest(),
 		"icon_url":                 options.GetLogoURL(),
 		"request_template":         options.GetRequestTemplate(),
@@ -354,6 +357,12 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) int
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
 	}
+
+	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
+	if err != nil {
+		return nil, err
+	}
+	m["fields_map"] = fieldsMap
 
 	if options.IdpInitiated != nil {
 		m["idp_initiated"] = []interface{}{
@@ -365,10 +374,10 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) int
 		}
 	}
 
-	return m
+	return m, nil
 }
 
-func expandConnection(d ResourceData) *management.Connection {
+func expandConnection(d ResourceData) (*management.Connection, error) {
 	connection := &management.Connection{
 		Name:               String(d, "name", IsNewResource()),
 		DisplayName:        String(d, "display_name"),
@@ -396,6 +405,7 @@ func expandConnection(d ResourceData) *management.Connection {
 		connection.ShowAsButton = Bool(d, "show_as_button")
 	}
 
+	var err error
 	List(d, "options").Elem(func(d ResourceData) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
@@ -431,7 +441,7 @@ func expandConnection(d ResourceData) *management.Connection {
 		case management.ConnectionStrategyEmail:
 			connection.Options = expandConnectionOptionsEmail(d)
 		case management.ConnectionStrategySAML:
-			connection.Options = expandConnectionOptionsSAML(d)
+			connection.Options, err = expandConnectionOptionsSAML(d)
 		case management.ConnectionStrategyADFS:
 			connection.Options = expandConnectionOptionsADFS(d)
 		default:
@@ -440,8 +450,11 @@ func expandConnection(d ResourceData) *management.Connection {
 			log.Printf("[WARN]: 	https://github.com/auth0/terraform-provider-auth0/issues/new")
 		}
 	})
+	if err != nil {
+		return nil, err
+	}
 
-	return connection
+	return connection, nil
 }
 
 func expandConnectionOptionsGitHub(d ResourceData) *management.ConnectionOptionsGitHub {
@@ -760,7 +773,7 @@ func expandConnectionOptionsOIDC(d ResourceData) *management.ConnectionOptionsOI
 	return options
 }
 
-func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSAML {
+func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsSAML, error) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:              Bool(d, "debug"),
 		SigningCert:        String(d, "signing_cert"),
@@ -771,7 +784,6 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 		SignOutEndpoint:    String(d, "sign_out_endpoint"),
 		SignatureAlgorithm: String(d, "signature_algorithm"),
 		DigestAglorithm:    String(d, "digest_algorithm"),
-		FieldsMap:          Map(d, "fields_map"),
 		SignSAMLRequest:    Bool(d, "sign_saml_request"),
 		RequestTemplate:    String(d, "request_template"),
 		UserIDAttribute:    String(d, "user_id_attribute"),
@@ -779,6 +791,12 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		EntityID:           String(d, "entity_id"),
+	}
+
+	var err error
+	options.FieldsMap, err = JSON(d, "fields_map")
+	if err != nil {
+		return nil, err
 	}
 
 	List(d, "idp_initiated").Elem(func(d ResourceData) {
@@ -789,7 +807,7 @@ func expandConnectionOptionsSAML(d ResourceData) *management.ConnectionOptionsSA
 		}
 	})
 
-	return options
+	return options, nil
 }
 
 func expandConnectionOptionsADFS(d ResourceData) *management.ConnectionOptionsADFS {

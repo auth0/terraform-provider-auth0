@@ -480,10 +480,11 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
-    fields_map = {
-      foo = "bar"
-      baz = "baa"
-    }
+    fields_map = jsonencode({
+      "name": ["name", "nameidentifier"]
+      "email": ["emailaddress", "nameidentifier"]
+      "family_name": "surname"
+    })
   }
 }
 ```

@@ -88,15 +88,15 @@ func Provider() *schema.Provider {
 		},
 	}
 
-	provider.ConfigureContextFunc = ConfigureProvider(provider.TerraformVersion)
+	provider.ConfigureContextFunc = configureProvider(&provider.TerraformVersion)
 
 	return provider
 }
 
 // ConfigureProvider will configure the *schema.Provider so that *management.Management
 // client is stored and passed into the subsequent resources as the meta parameter.
-func ConfigureProvider(
-	terraformVersion string,
+func configureProvider(
+	terraformVersion *string,
 ) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		providerVersion := version.ProviderVersion
@@ -108,7 +108,7 @@ func ConfigureProvider(
 			providerVersion,
 			sdkVersion,
 			terraformSDKVersion,
-			terraformVersion,
+			*terraformVersion,
 		)
 
 		domain := data.Get("domain").(string)

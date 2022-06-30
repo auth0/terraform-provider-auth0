@@ -1339,6 +1339,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml.provider/sign_out"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
 				),
 			},
 			{
@@ -1349,6 +1350,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"appelido\",\"name\":[\"name\"]}"),
 				),
 			},
 		},
@@ -1397,10 +1399,11 @@ EOF
 		signature_algorithm = "rsa-sha256"
 		digest_algorithm = "sha256"
 		icon_url = "https://example.com/logo.svg"
-		fields_map = {
-			foo = "bar"
-			baz = "baa"
-		}
+		fields_map = jsonencode({
+			"name": ["name", "nameidentifier"]
+			"email": ["emailaddress", "nameidentifier"]
+			"family_name": "surname"
+		})
 		idp_initiated {
 			client_id = "client_id"
 			client_protocol = "samlp"
@@ -1450,10 +1453,11 @@ EOF
 		signature_algorithm = "rsa-sha256"
 		digest_algorithm = "sha256"
 		entity_id = "example"
-		fields_map = {
-			foo = "bar"
-			baz = "baa"
-		}
+		fields_map = jsonencode({
+			"name": ["name"]
+			"email": ["emailaddress", "nameidentifier"]
+			"family_name": "appelido"
+		})
 		idp_initiated {
 			client_id = "client_id"
 			client_protocol = "samlp"

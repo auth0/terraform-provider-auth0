@@ -24,11 +24,14 @@ func newGuardian() *schema.Resource {
 			"policy": {
 				Type:     schema.TypeString,
 				Required: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"all-applications",
-					"confidence-score",
-					"never",
-				}, false),
+				ValidateFunc: validation.StringInSlice(
+					[]string{
+						"all-applications",
+						"confidence-score",
+						"never",
+					},
+					false,
+				),
 			},
 			"phone": {
 				Type:     schema.TypeList,
@@ -40,11 +43,14 @@ func newGuardian() *schema.Resource {
 						"provider": {
 							Type:     schema.TypeString,
 							Required: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"auth0",
-								"twilio",
-								"phone-message-hook",
-							}, false),
+							ValidateFunc: validation.StringInSlice(
+								[]string{
+									"auth0",
+									"twilio",
+									"phone-message-hook",
+								},
+								false,
+							),
 						},
 						"message_types": {
 							Type:     schema.TypeList,
@@ -119,10 +125,8 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	result := &multierror.Error{}
-	if len(*multiFactorPolicies) == 0 {
-		result = multierror.Append(result, d.Set("policy", "never"))
-	} else {
+	result := multierror.Append(d.Set("policy", "never"))
+	if len(*multiFactorPolicies) > 0 {
 		result = multierror.Append(result, d.Set("policy", (*multiFactorPolicies)[0]))
 	}
 
@@ -131,7 +135,6 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	var phoneEnabled bool
 	for _, factor := range multiFactorList {
 		switch factor.GetName() {
 		case "email":
@@ -139,47 +142,19 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		case "otp":
 			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
 		case "sms":
-			phoneEnabled = factor.GetEnabled()
+			if !factor.GetEnabled() {
+				result = multierror.Append(result, d.Set("phone", nil))
+				return diag.FromErr(result.ErrorOrNil())
+			}
 		}
 	}
 
-	if !phoneEnabled {
-		result = multierror.Append(result, d.Set("phone", nil))
-		return diag.FromErr(result.ErrorOrNil())
-	}
-
-	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
+	phone, err := flattenPhone(api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	phoneData := make(map[string]interface{})
-	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
-
-	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	phoneData["provider"] = phoneProvider.GetProvider()
-
-	var phoneProviderOptions []interface{}
-	switch phoneProvider.GetProvider() {
-	case "twilio":
-		phoneProviderOptions, err = flattenTwilioOptions(api)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	case "auth0":
-		phoneProviderOptions, err = flattenAuth0Options(api)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	case "phone-message-hook":
-		phoneProviderOptions = []interface{}{nil}
-	}
-
-	phoneData["options"] = phoneProviderOptions
-	result = multierror.Append(result, d.Set("phone", []interface{}{phoneData}))
+	result = multierror.Append(result, d.Set("phone", phone))
 
 	return diag.FromErr(result.ErrorOrNil())
 }
@@ -221,6 +196,42 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	d.SetId("")
 
 	return nil
+}
+
+func flattenPhone(api *management.Management) ([]interface{}, error) {
+	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
+	if err != nil {
+		return nil, err
+	}
+
+	phoneData := make(map[string]interface{})
+	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
+
+	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
+	if err != nil {
+		return nil, err
+	}
+	phoneData["provider"] = phoneProvider.GetProvider()
+
+	var phoneProviderOptions []interface{}
+	switch phoneProvider.GetProvider() {
+	case "twilio":
+		phoneProviderOptions, err = flattenTwilioOptions(api)
+		if err != nil {
+			return nil, err
+		}
+	case "auth0":
+		phoneProviderOptions, err = flattenAuth0Options(api)
+		if err != nil {
+			return nil, err
+		}
+	case "phone-message-hook":
+		phoneProviderOptions = []interface{}{nil}
+	}
+
+	phoneData["options"] = phoneProviderOptions
+
+	return []interface{}{phoneData}, nil
 }
 
 func flattenAuth0Options(api *management.Management) ([]interface{}, error) {

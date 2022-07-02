@@ -15,6 +15,10 @@ access. With this resource you can configure some options available for MFA.
 ```hcl
 resource "auth0_guardian" "default" {
   policy = "all-applications"
+  webauthn_roaming {
+      user_verification = "required"
+  } 
+  webauthn_roaming {}
   phone {
     provider      = "auth0"
     message_types = ["sms"]
@@ -35,6 +39,8 @@ Arguments accepted by this resource include:
 * `policy` - (Required) String. Policy to use. Available options are `never`, `all-applications` and `confidence-score`.
 The option `confidence-score` means the trigger of MFA will be adaptive. See [Auth0 docs](https://auth0.com/docs/mfa/adaptive-mfa).
 * `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. For details, see [Phone](#phone).
+* `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA. For details, see [WebAuthn Roaming](#webauthn-roaming).
+* `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. For details, see [WebAuthn Platform](#webauthn-platform).
 * `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
 * `OTP` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
 
@@ -46,14 +52,14 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `message_types` - (Required) List(String). Message types to use, array of `sms` and or `voice`. Adding both to array should enable the user to choose.
 * `options`- (Required) List(Resource). Options for the various providers. See [Options](#options).
 
-### Options
+#### Options
 `options` supports different arguments depending on the provider specified in [Phone](#phone).
 
-### Auth0
+##### Auth0
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 
-### Twilio
+##### Twilio
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `sid`(Optional) String.
@@ -61,10 +67,25 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `from` (Optional) String.
 * `messaging_service_sid`(Optional) String.
 
-### Phone message hook
+##### Phone message hook
 
 Options have to be empty. Custom code has to be written in a phone message hook.
 See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/send-phone-message).
+
+### WebAuthn Roaming
+
+`webauth_roaming` supports the following arguments:
+
+* `user_verification` - (Optional) String. User verification, one of `discouraged`, `preferred` or `required`.
+* `override_relying_party` - (Optional) Bool. The Relying Party is the domain for which the WebAuthn keys will be issued, set to true if you are customizing the identifier. 
+* `relying_party_identifier`- (Optional) String. The Relying Party should be a suffix of the custom domain.
+
+### WebAuthn Platform
+
+`webauth_roaming` supports the following arguments:
+
+* `override_relying_party` - (Optional) Bool. The Relying Party is the domain for which the WebAuthn keys will be issued, set to true if you are customizing the identifier.
+* `relying_party_identifier`- (Optional) String. The Relying Party should be a suffix of the custom domain.
 
 ## Attributes Reference
 

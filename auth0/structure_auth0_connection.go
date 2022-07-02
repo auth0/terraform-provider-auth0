@@ -157,6 +157,7 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
+		"pkce_enabled":             options.GetPKCEEnabled(),
 	}
 }
 
@@ -581,6 +582,7 @@ func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptions
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		LogoURL:            String(d, "icon_url"),
+		PKCEEnabled:        Bool(d, "pkce_enabled"),
 	}
 	options.Scripts = Map(d, "scripts")
 

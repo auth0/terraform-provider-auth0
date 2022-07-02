@@ -660,6 +660,11 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Custom Entity ID for the connection",
 				},
+				"pkce_enabled": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Enables proof key for code exchange (PKCE) functionality for OAuth2 connections",
+				},
 			},
 		},
 		Description: "Configuration settings for connection options",

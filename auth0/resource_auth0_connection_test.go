@@ -428,6 +428,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "true"),
 				),
 			},
 			{
@@ -443,6 +444,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scripts.fetchUserProfile", "function( { return callback(null) }"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", "https://cdn.paypal.com/assets/logo.png"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "false"),
 				),
 			},
 		},
@@ -464,6 +466,7 @@ resource "auth0_connection" "oauth2" {
 		scripts = {
 			fetchUserProfile= "function( { return callback(null) }"
 		}
+		pkce_enabled = true
 	}
 }
 `
@@ -484,6 +487,7 @@ resource "auth0_connection" "oauth2" {
 		scripts = {
 			fetchUserProfile= "function( { return callback(null) }"
 		}
+		pkce_enabled = false
 	}
 }
 `

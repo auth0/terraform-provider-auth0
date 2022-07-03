@@ -366,3 +366,47 @@ resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 }
 `
+
+func TestAccGuardianDUO(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConfigureDUOCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.0.hostname", "api-hostname"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.0.secret_key", "someSecret"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.0.integration_key", "someKey"),
+				),
+			},
+			{
+				Config: testAccConfigureDUODelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConfigureDUOCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	duo {
+		integration_key = "someKey"
+		secret_key = "someSecret"
+		hostname = "api-hostname"
+	}
+}
+`
+
+const testAccConfigureDUODelete = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`

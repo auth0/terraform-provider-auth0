@@ -41,6 +41,7 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. For details, see [Phone](#phone).
 * `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA. For details, see [WebAuthn Roaming](#webauthn-roaming).
 * `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. For details, see [WebAuthn Platform](#webauthn-platform).
+* `duo` - (Optional) List(Resource). Configuration settings for the Duo MFA. For details, see [Duo](#duo).
 * `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
 * `OTP` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
 
@@ -86,6 +87,15 @@ See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/
 
 * `override_relying_party` - (Optional) Bool. The Relying Party is the domain for which the WebAuthn keys will be issued, set to true if you are customizing the identifier.
 * `relying_party_identifier`- (Optional) String. The Relying Party should be a suffix of the custom domain.
+
+### Duo
+
+`duo` supports the following arguments:
+
+* `integration_key` - (Optional) String. Duo client ID, see the Duo documentation for more details on Duo setup.
+* `secret_key`- (Optional) String. Duo client secret, see the Duo documentation for more details on Duo setup.
+* `hostname`- (Optional) String. Duo API Hostname, see the Duo documentation for more details on Duo setup.
+
 
 ## Attributes Reference
 

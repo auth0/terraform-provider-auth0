@@ -108,6 +108,21 @@ func flattenWebAuthnPlatform(api *management.Management) ([]interface{}, error) 
 	return []interface{}{m}, nil
 }
 
+func flattenDUO(api *management.Management) ([]interface{}, error) {
+	duoSettings, err := api.Guardian.MultiFactor.DUO.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	m := map[string]interface{}{
+		"integration_key": duoSettings.GetIntegrationKey(),
+		"secret_key":      duoSettings.GetSecretKey(),
+		"hostname":        duoSettings.GetHostname(),
+	}
+
+	return []interface{}{m}, nil
+}
+
 func updatePolicy(d *schema.ResourceData, api *management.Management) error {
 	if d.HasChange("policy") {
 		multiFactorPolicies := management.MultiFactorPolicies{}
@@ -313,4 +328,24 @@ func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) 
 	}
 
 	return api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false)
+}
+
+func updateDUO(d *schema.ResourceData, api *management.Management) error {
+	if factorShouldBeUpdated(d, "duo") {
+		if err := api.Guardian.MultiFactor.DUO.Enable(true); err != nil {
+			return err
+		}
+
+		var duoSettings management.MultiFactorDUOSettings
+
+		List(d, "duo").Elem(func(d ResourceData) {
+			duoSettings.SecretKey = String(d, "secret_key")
+			duoSettings.Hostname = String(d, "hostname")
+			duoSettings.IntegrationKey = String(d, "integration_key")
+		})
+
+		return api.Guardian.MultiFactor.DUO.Update(&duoSettings)
+	}
+
+	return api.Guardian.MultiFactor.DUO.Enable(false)
 }

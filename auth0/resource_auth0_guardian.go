@@ -163,6 +163,29 @@ func newGuardian() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"duo": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				MinItems: 0,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"integration_key": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"secret_key": {
+							Type:      schema.TypeString,
+							Required:  true,
+							Sensitive: true,
+						},
+						"hostname": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -229,6 +252,17 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 				result = multierror.Append(result, d.Set("webauthn_platform", webAuthnPlatform))
 			}
+		case "duo":
+			result = multierror.Append(result, d.Set("duo", nil))
+
+			if factor.GetEnabled() {
+				duo, err := flattenDUO(api)
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				result = multierror.Append(result, d.Set("duo", duo))
+			}
 		}
 	}
 
@@ -261,6 +295,10 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 
+	if err := updateDUO(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return readGuardian(ctx, d, m)
 }
 
@@ -277,6 +315,12 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := api.Guardian.MultiFactor.DUO.Enable(false); err != nil {
 		return diag.FromErr(err)
 	}
 

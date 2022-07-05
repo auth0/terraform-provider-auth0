@@ -123,6 +123,39 @@ func flattenDUO(api *management.Management) ([]interface{}, error) {
 	return []interface{}{m}, nil
 }
 
+func flattenPush(api *management.Management) ([]interface{}, error) {
+	amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS()
+	if err != nil {
+		return nil, err
+	}
+
+	pushData := make(map[string]interface{})
+	pushData["amazon_sns"] = []interface{}{
+		map[string]interface{}{
+			"aws_access_key_id":                 amazonSNS.GetAccessKeyID(),
+			"aws_region":                        amazonSNS.GetRegion(),
+			"aws_secret_access_key":             amazonSNS.GetSecretAccessKeyID(),
+			"sns_apns_platform_application_arn": amazonSNS.GetAPNSPlatformApplicationARN(),
+			"sns_gcm_platform_application_arn":  amazonSNS.GetGCMPlatformApplicationARN(),
+		},
+	}
+
+	customApp, err := api.Guardian.MultiFactor.Push.CustomApp()
+	if err != nil {
+		return nil, err
+	}
+
+	pushData["custom_app"] = []interface{}{
+		map[string]interface{}{
+			"app_name":        customApp.GetAppName(),
+			"apple_app_link":  customApp.GetAppleAppLink(),
+			"google_app_link": customApp.GetGoogleAppLink(),
+		},
+	}
+
+	return []interface{}{pushData}, nil
+}
+
 func updatePolicy(d *schema.ResourceData, api *management.Management) error {
 	if d.HasChange("policy") {
 		multiFactorPolicies := management.MultiFactorPolicies{}
@@ -348,4 +381,44 @@ func updateDUO(d *schema.ResourceData, api *management.Management) error {
 	}
 
 	return api.Guardian.MultiFactor.DUO.Enable(false)
+}
+
+func updatePush(d *schema.ResourceData, api *management.Management) error {
+	if factorShouldBeUpdated(d, "push") {
+		if err := api.Guardian.MultiFactor.Push.Enable(true); err != nil {
+			return err
+		}
+
+		var amazonSNS *management.MultiFactorProviderAmazonSNS
+		List(d, "amazon_sns", HasChange()).Elem(func(d ResourceData) {
+			amazonSNS = &management.MultiFactorProviderAmazonSNS{
+				AccessKeyID:                String(d, "aws_access_key_id"),
+				SecretAccessKeyID:          String(d, "aws_secret_access_key"),
+				Region:                     String(d, "aws_region"),
+				APNSPlatformApplicationARN: String(d, "sns_apns_platform_application_arn"),
+				GCMPlatformApplicationARN:  String(d, "sns_gcm_platform_application_arn"),
+			}
+		})
+		if amazonSNS != nil {
+			if err := api.Guardian.MultiFactor.Push.UpdateAmazonSNS(amazonSNS); err != nil {
+				return err
+			}
+		}
+
+		var customApp *management.MultiFactorPushCustomApp
+		List(d, "custom_app", HasChange()).Elem(func(d ResourceData) {
+			customApp = &management.MultiFactorPushCustomApp{
+				AppName:       String(d, "app_name"),
+				AppleAppLink:  String(d, "apple_app_link"),
+				GoogleAppLink: String(d, "google_app_link"),
+			}
+		})
+		if customApp != nil {
+			if err := api.Guardian.MultiFactor.Push.UpdateCustomApp(customApp); err != nil {
+				return err
+			}
+		}
+	}
+
+	return api.Guardian.MultiFactor.Push.Enable(false)
 }

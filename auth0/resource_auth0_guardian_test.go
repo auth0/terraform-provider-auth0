@@ -410,3 +410,99 @@ resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 }
 `
+
+func TestAccGuardianPush(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConfigurePushCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+				),
+			},
+			{
+				Config: testAccConfigurePushUpdateAmazonSNS,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_access_key_id", "test1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_region", "us-west-1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_secret_access_key", "secretKey"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.sns_apns_platform_application_arn", "test_arn"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.sns_gcm_platform_application_arn", "test_arn"),
+				),
+			},
+			{
+				Config: testAccConfigurePushUpdateCustomApp,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.app_name", "CustomApp"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.apple_app_link", "https://itunes.apple.com/us/app/my-app/id123121"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.google_app_link", "https://play.google.com/store/apps/details?id=com.my.app"),
+				),
+			},
+			{
+				Config: testAccConfigurePushDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConfigurePushCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	push {}
+}
+`
+
+const testAccConfigurePushUpdateAmazonSNS = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	push {
+		amazon_sns {
+			aws_access_key_id = "test1"
+			aws_region = "us-west-1"
+			aws_secret_access_key = "secretKey"
+			sns_apns_platform_application_arn = "test_arn"
+			sns_gcm_platform_application_arn = "test_arn"
+		}
+	}
+}
+`
+
+const testAccConfigurePushUpdateCustomApp = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	push {
+		amazon_sns {
+			aws_access_key_id = "test1"
+			aws_region = "us-west-1"
+			aws_secret_access_key = "secretKey"
+			sns_apns_platform_application_arn = "test_arn"
+			sns_gcm_platform_application_arn = "test_arn"
+		}
+		custom_app {
+			app_name = "CustomApp"
+			apple_app_link = "https://itunes.apple.com/us/app/my-app/id123121"
+			google_app_link = "https://play.google.com/store/apps/details?id=com.my.app"
+		}
+	}
+}
+`
+
+const testAccConfigurePushDelete = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`

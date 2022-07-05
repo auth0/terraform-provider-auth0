@@ -187,6 +187,14 @@ func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
 	return nil
 }
 
+func updateRecoveryCodeFactor(d *schema.ResourceData, api *management.Management) error {
+	if d.HasChange("recovery_code") {
+		enabled := d.Get("recovery_code").(bool)
+		return api.Guardian.MultiFactor.RecoveryCode.Enable(enabled)
+	}
+	return nil
+}
+
 func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error {
 	if factorShouldBeUpdated(d, "phone") {
 		// Always enable phone factor before configuring it.

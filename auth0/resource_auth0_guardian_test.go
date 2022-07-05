@@ -34,6 +34,20 @@ resource "auth0_guardian" "foo" {
 }
 `
 
+const testAccGuardianRecoveryCodeCreate = `
+resource "auth0_guardian" "foo" {
+	policy        = "all-applications"
+	recovery_code = true
+}
+`
+
+const testAccGuardianRecoveryCodeDelete = `
+resource "auth0_guardian" "foo" {
+	policy        = "all-applications"
+	recovery_code = false
+}
+`
+
 func TestAccGuardian(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)
 
@@ -51,6 +65,7 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 			{
@@ -64,6 +79,7 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 			{
@@ -77,6 +93,7 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 			{
@@ -90,6 +107,35 @@ func TestAccGuardian(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
+				),
+			},
+			{
+				Config: testAccGuardianRecoveryCodeCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "otp", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "true"),
+				),
+			},
+			{
+				Config: testAccGuardianRecoveryCodeDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "email", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "otp", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},
@@ -171,6 +217,7 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "phone-message-hook"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
@@ -186,6 +233,7 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "phone-message-hook"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
@@ -201,6 +249,8 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "voice"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "auth0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
@@ -218,6 +268,8 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.message_types.0", "sms"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.provider", "twilio"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "phone.0.options.#", "1"),
@@ -240,6 +292,7 @@ func TestAccGuardianPhone(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},
@@ -284,6 +337,7 @@ func TestAccGuardianWebAuthnRoaming(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "1"),
 				),
 			},
@@ -297,6 +351,7 @@ func TestAccGuardianWebAuthnRoaming(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.0.user_verification", "required"),
 				),
@@ -312,6 +367,7 @@ func TestAccGuardianWebAuthnRoaming(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},
@@ -347,6 +403,7 @@ func TestAccGuardianWebAuthnPlatform(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "1"),
 				),
 			},
@@ -361,6 +418,7 @@ func TestAccGuardianWebAuthnPlatform(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},
@@ -400,6 +458,7 @@ func TestAccGuardianDUO(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.0.hostname", "api-hostname"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.0.secret_key", "someSecret"),
@@ -417,6 +476,7 @@ func TestAccGuardianDUO(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},
@@ -487,6 +547,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
 				),
 			},
@@ -500,6 +561,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_access_key_id", "test1"),
@@ -519,6 +581,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "duo.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.app_name", "CustomApp"),
@@ -537,6 +600,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 				),
 			},
 		},

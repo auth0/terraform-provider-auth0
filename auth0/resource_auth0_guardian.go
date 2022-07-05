@@ -159,6 +159,11 @@ func newGuardian() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"recovery_code": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"duo": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -276,6 +281,8 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 			result = multierror.Append(result, d.Set("email", factor.GetEnabled()))
 		case "otp":
 			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
+		case "recovery-code":
+			result = multierror.Append(result, d.Set("recovery_code", factor.GetEnabled()))
 		case "sms":
 			result = multierror.Append(result, d.Set("phone", nil))
 
@@ -347,7 +354,12 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	if err := updateEmailFactor(d, api); err != nil {
 		return diag.FromErr(err)
 	}
+
 	if err := updateOTPFactor(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := updateRecoveryCodeFactor(d, api); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -384,6 +396,9 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := api.Guardian.MultiFactor.RecoveryCode.Enable(false); err != nil {
 		return diag.FromErr(err)
 	}
 	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false); err != nil {

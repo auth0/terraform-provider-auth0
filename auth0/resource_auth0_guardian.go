@@ -260,15 +260,12 @@ func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy()
+	flattenedPolicy, err := flattenMultiFactorPolicy(api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(d.Set("policy", "never"))
-	if len(*multiFactorPolicies) > 0 {
-		result = multierror.Append(result, d.Set("policy", (*multiFactorPolicies)[0]))
-	}
+	result := multierror.Append(d.Set("policy", flattenedPolicy))
 
 	multiFactorList, err := api.Guardian.MultiFactor.List()
 	if err != nil {
@@ -347,39 +344,18 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	if err := updatePolicy(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateEmailFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateOTPFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateRecoveryCodeFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updatePhoneFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateWebAuthnRoaming(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateWebAuthnPlatform(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateDUO(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updatePush(d, api); err != nil {
+	result := multierror.Append(
+		updatePolicy(d, api),
+		updateEmailFactor(d, api),
+		updateOTPFactor(d, api),
+		updateRecoveryCodeFactor(d, api),
+		updatePhoneFactor(d, api),
+		updateWebAuthnRoaming(d, api),
+		updateWebAuthnPlatform(d, api),
+		updateDUO(d, api),
+		updatePush(d, api),
+	)
+	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -389,28 +365,17 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	if err := api.Guardian.MultiFactor.Phone.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.Email.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.RecoveryCode.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.DUO.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.Push.Enable(false); err != nil {
+	result := multierror.Append(
+		api.Guardian.MultiFactor.Phone.Enable(false),
+		api.Guardian.MultiFactor.Email.Enable(false),
+		api.Guardian.MultiFactor.OTP.Enable(false),
+		api.Guardian.MultiFactor.RecoveryCode.Enable(false),
+		api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false),
+		api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false),
+		api.Guardian.MultiFactor.DUO.Enable(false),
+		api.Guardian.MultiFactor.Push.Enable(false),
+	)
+	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)
 	}
 

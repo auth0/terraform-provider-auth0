@@ -448,6 +448,7 @@ With the `samlp` connection strategy, `options` supports the following arguments
 
 * `debug` - (Optional) (Boolean) When enabled additional debugging information will be generated.
 * `signing_cert` - The X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded
+* `signing_key` - (Optional). The key used to sign requests in the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively.
 * `protocol_binding` - (Optional) The SAML Response Binding - how the SAML token is received by Auth0 from IdP. Two possible values are `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect` (default) and `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST`
 * `idp_initiated` - (Optional) Configuration Options for IDP Initiated Authentication.  This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`
 * `tenant_domain` - (Optional)
@@ -477,6 +478,10 @@ resource "auth0_connection" "samlp" {
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
     disable_sign_out    = true
+    signing_key {
+      key = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----",
+      cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+    }
     tenant_domain       = "example.com"
     domain_aliases      = ["example.com", "alias.example.com"]
     protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

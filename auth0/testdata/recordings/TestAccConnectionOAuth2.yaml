@@ -3,7 +3,7 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","strategy":"oauth2","is_domain_connection":false,"options":{"client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"scripts":{"fetchUserProfile":"function( { return callback(null) }"}}}
+      {"name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","strategy":"oauth2","is_domain_connection":false,"options":{"client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"pkce_enabled":true}}
     form: {}
     headers:
       Content-Type:
@@ -35,7 +35,7 @@ interactions:
     method: GET
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":true,"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -55,7 +55,7 @@ interactions:
     method: GET
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":true,"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -75,7 +75,7 @@ interactions:
     method: GET
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":true,"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -84,7 +84,7 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"is_domain_connection":false,"options":{"client_id":"1234567","icon_url":"https://cdn.paypal.com/assets/logo.png","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","tokenURL":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login","non_persistent_attrs":null,"scripts":{"fetchUserProfile":"function( { return callback(null) }"}}}
+      {"is_domain_connection":false,"options":{"client_id":"1234567","icon_url":"https://cdn.paypal.com/assets/logo.png","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","tokenURL":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login","non_persistent_attrs":null,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"pkce_enabled":false}}
     form: {}
     headers:
       Content-Type:
@@ -95,7 +95,7 @@ interactions:
     method: PATCH
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"icon_url":"https://cdn.paypal.com/assets/logo.png","scope":"email openid","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":false,"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -115,7 +115,7 @@ interactions:
     method: GET
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"scope":"email openid","icon_url":"https://cdn.paypal.com/assets/logo.png","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":false,"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -135,7 +135,7 @@ interactions:
     method: GET
   response:
     body: '{"id":"con_EFFoG0suO6epOXKQ","options":{"scope":"email openid","icon_url":"https://cdn.paypal.com/assets/logo.png","scripts":{"fetchUserProfile":"function(
-      { return callback(null) }"},"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      { return callback(null) }"},"pkce_enabled":false,"tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

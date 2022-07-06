@@ -58,6 +58,18 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["disable_clickjack_protection_headers"] = flags.DisableClickjackProtectionHeaders
 	m["enable_public_signup_user_exists_error"] = flags.EnablePublicSignupUserExistsError
 	m["use_scope_descriptions_for_consent"] = flags.UseScopeDescriptionsForConsent
+	m["allow_legacy_delegation_grant_types"] = flags.AllowLegacyDelegationGrantTypes
+	m["allow_legacy_ro_grant_types"] = flags.AllowLegacyROGrantTypes
+	m["allow_legacy_tokeninfo_endpoint"] = flags.AllowLegacyTokenInfoEndpoint
+	m["enable_legacy_profile"] = flags.EnableLegacyProfile
+	m["enable_idtoken_api2"] = flags.EnableIDTokenAPI2
+	m["no_disclose_enterprise_connections"] = flags.NoDisclosureEnterpriseConnections
+	m["disable_management_api_sms_obfuscation"] = flags.DisableManagementAPISMSObfuscation
+	m["enable_adfs_waad_email_verification"] = flags.EnableADFSWAADEmailVerification
+	m["revoke_refresh_token_grant"] = flags.RevokeRefreshTokenGrant
+	m["dashboard_log_streams_next"] = flags.DashboardLogStreams
+	m["dashboard_insights_view"] = flags.DashboardInsightsView
+	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 
 	return []interface{}{m}
 }
@@ -120,16 +132,28 @@ func expandTenantFlags(flagsList cty.Value) *management.TenantFlags {
 
 	flagsList.ForEachElement(func(_ cty.Value, flags cty.Value) (stop bool) {
 		tenantFlags = &management.TenantFlags{
-			EnableClientConnections:           Flag(flags, "enable_client_connections"),
-			EnableAPIsSection:                 Flag(flags, "enable_apis_section"),
-			EnablePipeline2:                   Flag(flags, "enable_pipeline2"),
-			EnableDynamicClientRegistration:   Flag(flags, "enable_dynamic_client_registration"),
-			EnableCustomDomainInEmails:        Flag(flags, "enable_custom_domain_in_emails"),
-			UniversalLogin:                    Flag(flags, "universal_login"),
-			EnableLegacyLogsSearchV2:          Flag(flags, "enable_legacy_logs_search_v2"),
-			DisableClickjackProtectionHeaders: Flag(flags, "disable_clickjack_protection_headers"),
-			EnablePublicSignupUserExistsError: Flag(flags, "enable_public_signup_user_exists_error"),
-			UseScopeDescriptionsForConsent:    Flag(flags, "use_scope_descriptions_for_consent"),
+			EnableClientConnections:            Flag(flags, "enable_client_connections"),
+			EnableAPIsSection:                  Flag(flags, "enable_apis_section"),
+			EnablePipeline2:                    Flag(flags, "enable_pipeline2"),
+			EnableDynamicClientRegistration:    Flag(flags, "enable_dynamic_client_registration"),
+			EnableCustomDomainInEmails:         Flag(flags, "enable_custom_domain_in_emails"),
+			UniversalLogin:                     Flag(flags, "universal_login"),
+			EnableLegacyLogsSearchV2:           Flag(flags, "enable_legacy_logs_search_v2"),
+			DisableClickjackProtectionHeaders:  Flag(flags, "disable_clickjack_protection_headers"),
+			EnablePublicSignupUserExistsError:  Flag(flags, "enable_public_signup_user_exists_error"),
+			UseScopeDescriptionsForConsent:     Flag(flags, "use_scope_descriptions_for_consent"),
+			AllowLegacyDelegationGrantTypes:    Flag(flags, "allow_legacy_delegation_grant_types"),
+			AllowLegacyROGrantTypes:            Flag(flags, "allow_legacy_ro_grant_types"),
+			AllowLegacyTokenInfoEndpoint:       Flag(flags, "allow_legacy_tokeninfo_endpoint"),
+			EnableLegacyProfile:                Flag(flags, "enable_legacy_profile"),
+			EnableIDTokenAPI2:                  Flag(flags, "enable_idtoken_api2"),
+			NoDisclosureEnterpriseConnections:  Flag(flags, "no_disclose_enterprise_connections"),
+			DisableManagementAPISMSObfuscation: Flag(flags, "disable_management_api_sms_obfuscation"),
+			EnableADFSWAADEmailVerification:    Flag(flags, "enable_adfs_waad_email_verification"),
+			RevokeRefreshTokenGrant:            Flag(flags, "revoke_refresh_token_grant"),
+			DashboardLogStreams:                Flag(flags, "dashboard_log_streams_next"),
+			DashboardInsightsView:              Flag(flags, "dashboard_insights_view"),
+			DisableFieldsMapFix:                Flag(flags, "disable_fields_map_fix"),
 		}
 
 		return stop

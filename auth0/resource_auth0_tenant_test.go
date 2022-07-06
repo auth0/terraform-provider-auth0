@@ -92,6 +92,9 @@ resource "auth0_tenant" "my_tenant" {
 		disable_clickjack_protection_headers = true
 		enable_public_signup_user_exists_error = true
 		use_scope_descriptions_for_consent = true
+		no_disclose_enterprise_connections = false
+		disable_management_api_sms_obfuscation = false
+		disable_fields_map_fix = false
 	}
 	universal_login {
 		colors {
@@ -136,6 +139,9 @@ resource "auth0_tenant" "my_tenant" {
 		enable_public_signup_user_exists_error = true
 		disable_clickjack_protection_headers = false # <---- disable and test
 		use_scope_descriptions_for_consent = false   #
+		no_disclose_enterprise_connections = false
+		disable_management_api_sms_obfuscation = true
+		disable_fields_map_fix = true
 	}
 	universal_login {
 		colors {

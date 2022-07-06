@@ -43,6 +43,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.primary", "#0059d6"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.page_background", "#000000"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 				),
 			},
 			{
@@ -53,6 +54,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 				),
 			},
 		},
@@ -103,6 +105,9 @@ resource "auth0_tenant" "my_tenant" {
 		}
 	}
 	default_redirection_uri = "https://example.com/login"
+	session_cookie {
+		mode = "non-persistent"
+	}
 }
 `
 
@@ -150,6 +155,9 @@ resource "auth0_tenant" "my_tenant" {
 		}
 	}
 	default_redirection_uri = "https://example.com/login"
+	session_cookie {
+		mode = "persistent"
+	}
 }
 `
 

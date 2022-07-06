@@ -49,7 +49,7 @@ func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{
 	case *management.ConnectionOptionsADFS:
 		m = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m, err = flattenConnectionOptionsSAML(connectionOptions)
+		m, err = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
 	if err != nil {
 		return nil, err
@@ -157,6 +157,7 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
+		"pkce_enabled":             options.GetPKCEEnabled(),
 	}
 }
 
@@ -338,7 +339,7 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) int
 	}
 }
 
-func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (interface{}, error) {
+func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, error) {
 	m := map[string]interface{}{
 		"signing_cert":             options.GetSigningCert(),
 		"protocol_binding":         options.GetProtocolBinding(),
@@ -358,7 +359,7 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
 		"metadata_url":             options.GetMetadataURL(),
-		"metadata_xml":             options.GetMetadataXML(),
+		"metadata_xml":             String(d, "options.0.metadata_xml"), // Does not get read back.
 	}
 
 	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
@@ -373,6 +374,15 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 				"client_id":              options.IdpInitiated.GetClientID(),
 				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
 				"client_authorize_query": options.IdpInitiated.GetClientAuthorizeQuery(),
+			},
+		}
+	}
+
+	if options.SigningKey != nil {
+		m["signing_key"] = []interface{}{
+			map[string]interface{}{
+				"key":  options.SigningKey.GetKey(),
+				"cert": options.SigningKey.GetCert(),
 			},
 		}
 	}
@@ -572,6 +582,7 @@ func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptions
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		LogoURL:            String(d, "icon_url"),
+		PKCEEnabled:        Bool(d, "pkce_enabled"),
 	}
 	options.Scripts = Map(d, "scripts")
 
@@ -799,12 +810,6 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		MetadataURL:        String(d, "metadata_url"),
 	}
 
-	var err error
-	options.FieldsMap, err = JSON(d, "fields_map")
-	if err != nil {
-		return nil, err
-	}
-
 	List(d, "idp_initiated").Elem(func(d ResourceData) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
 			ClientID:             String(d, "client_id"),
@@ -812,6 +817,19 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 			ClientAuthorizeQuery: String(d, "client_authorize_query"),
 		}
 	})
+
+	List(d, "signing_key").Elem(func(d ResourceData) {
+		options.SigningKey = &management.ConnectionOptionsSAMLSigningKey{
+			Cert: String(d, "cert"),
+			Key:  String(d, "key"),
+		}
+	})
+
+	var err error
+	options.FieldsMap, err = JSON(d, "fields_map")
+	if err != nil {
+		return nil, err
+	}
 
 	return options, nil
 }

@@ -550,6 +550,23 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded",
 				},
+				"signing_key": {
+					Type:     schema.TypeList,
+					Optional: true,
+					MaxItems: 1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"key": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"cert": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
+					},
+				},
 				"protocol_binding": {
 					Type:        schema.TypeString,
 					Optional:    true,
@@ -606,14 +623,16 @@ var connectionSchema = map[string]*schema.Schema{
 					Description: "When enabled, will disable sign out.",
 				},
 				"metadata_xml": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "The XML content for the SAML metadata document.",
+					Type:          schema.TypeString,
+					Optional:      true,
+					Description:   "The XML content for the SAML metadata document.",
+					ConflictsWith: []string{"options.0.metadata_url"},
 				},
 				"metadata_url": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "The URL of the SAML metadata document.",
+					Type:          schema.TypeString,
+					Optional:      true,
+					Description:   "The URL of the SAML metadata document.",
+					ConflictsWith: []string{"options.0.metadata_xml"},
 				},
 				"fields_map": {
 					Type:         schema.TypeString,
@@ -640,6 +659,11 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:        schema.TypeString,
 					Optional:    true,
 					Description: "Custom Entity ID for the connection",
+				},
+				"pkce_enabled": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Enables proof key for code exchange (PKCE) functionality for OAuth2 connections",
 				},
 			},
 		},

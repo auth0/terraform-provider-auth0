@@ -312,6 +312,7 @@ With the `oauth2` connection strategy, `options` supports the following argument
 * `authorization_endpoint` - (Optional)
 * `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
 * `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+* `pkce_enabled` - (optional) (Boolean) Enables proof key for code exchange (PKCE) functionality for OAuth2 connections.
 
 **Example**:
 
@@ -324,6 +325,7 @@ resource "auth0_connection" "oauth2" {
     client_secret          = "<client-secret>"
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
+    pkce_enabled           = true
     scripts = {
       fetchUserProfile = <<EOF
 function function(accessToken, ctx, cb) {
@@ -448,6 +450,7 @@ With the `samlp` connection strategy, `options` supports the following arguments
 
 * `debug` - (Optional) (Boolean) When enabled additional debugging information will be generated.
 * `signing_cert` - The X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded
+* `signing_key` - (Optional). The key used to sign requests in the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively.
 * `protocol_binding` - (Optional) The SAML Response Binding - how the SAML token is received by Auth0 from IdP. Two possible values are `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect` (default) and `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST`
 * `idp_initiated` - (Optional) Configuration Options for IDP Initiated Authentication.  This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`
 * `tenant_domain` - (Optional)
@@ -477,6 +480,10 @@ resource "auth0_connection" "samlp" {
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
     disable_sign_out    = true
+    signing_key {
+      key = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----",
+      cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+    }
     tenant_domain       = "example.com"
     domain_aliases      = ["example.com", "alias.example.com"]
     protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

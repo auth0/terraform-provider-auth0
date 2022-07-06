@@ -1,3 +1,19 @@
+## 0.32.0
+
+FEATURES:
+
+- `resource/auth0_connection`: Added `disable_sign_out` field to samlp connections ([#204](https://github.com/auth0/terraform-provider-auth0/pull/204))
+- `resource/auth0_connection`: Added `metadata_xml` and `metadata_url` to connection schema ([#204](https://github.com/auth0/terraform-provider-auth0/pull/204))
+- `resource/auth0_connection`: Added `signing_key` to samlp connections ([#210](https://github.com/auth0/terraform-provider-auth0/pull/210))
+- `resource/auth0_connection`: Adding `pkce_enabled` field to Oauth2 connection options ([#212](https://github.com/auth0/terraform-provider-auth0/pull/212))
+- `resource/auth0_tenant`: Added several missing tenant flags ([#208](https://github.com/auth0/terraform-provider-auth0/pull/208))
+
+BREAKING CHANGES:
+
+- `resource/auth0_connection`: Removed deprecated `options.app_domain` in connection resource ([#202](https://github.com/auth0/terraform-provider-auth0/pull/202))
+- `resource/auth0_connection`: Changed `options.fields_map` from Map to String ([#207](https://github.com/auth0/terraform-provider-auth0/pull/207))
+
+
 ## 0.31.0
 
 FEATURES:

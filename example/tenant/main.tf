@@ -30,4 +30,8 @@ resource "auth0_tenant" "tenant" {
   session_lifetime = 8760
   sandbox_version  = "8"
   enabled_locales  = ["en"]
+
+  session_cookie {
+    mode = "non-persistent"
+  }
 }

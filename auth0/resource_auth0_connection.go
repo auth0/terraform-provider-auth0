@@ -600,6 +600,21 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "SAML single logout URL for the connection.",
 				},
+				"disable_sign_out": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "When enabled, will disable sign out.",
+				},
+				"metadata_xml": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The XML content for the SAML metadata document.",
+				},
+				"metadata_url": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "The URL of the SAML metadata document.",
+				},
 				"fields_map": {
 					Type:         schema.TypeString,
 					Optional:     true,

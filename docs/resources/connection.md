@@ -454,6 +454,7 @@ With the `samlp` connection strategy, `options` supports the following arguments
 * `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
 * `sign_in_endpoint` - SAML single login URL for the connection.
 * `sign_out_endpoint` - (Optional) SAML single logout URL for the connection.
+* `disable_sign_out` - (Optional) (Boolean) Disables or enables user sign out.
 * `fields_map` - (Optional) SAML Attributes mapping. If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
 * `sign_saml_request` - (Optional) (Boolean) When enabled, the SAML authentication request will be signed.
 * `signature_algorithm` - (Optional) Sign Request Algorithm
@@ -463,6 +464,8 @@ With the `samlp` connection strategy, `options` supports the following arguments
 * `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
 * `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
 * `entity_id` - (Optional) Custom Entity ID for the connection.
+* `metadata_url` - (Optional) URL of the SAML metadata document.
+* `metadata_xml` - (Optional) XML content for the SAML metadata document.
 
 **Example**:
 ```hcl
@@ -473,6 +476,7 @@ resource "auth0_connection" "samlp" {
     signing_cert        = "<signing-certificate>"
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
+    disable_sign_out    = true
     tenant_domain       = "example.com"
     domain_aliases      = ["example.com", "alias.example.com"]
     protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
@@ -480,6 +484,7 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml"
     fields_map = jsonencode({
       "name": ["name", "nameidentifier"]
       "email": ["emailaddress", "nameidentifier"]

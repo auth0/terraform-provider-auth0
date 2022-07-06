@@ -347,6 +347,7 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		"domain_aliases":           options.DomainAliases,
 		"sign_in_endpoint":         options.GetSignInEndpoint(),
 		"sign_out_endpoint":        options.GetSignOutEndpoint(),
+		"disable_sign_out":         options.GetDisableSignOut(),
 		"signature_algorithm":      options.GetSignatureAlgorithm(),
 		"digest_algorithm":         options.GetDigestAglorithm(),
 		"sign_saml_request":        options.GetSignSAMLRequest(),
@@ -356,6 +357,8 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
+		"metadata_url":             options.GetMetadataURL(),
+		"metadata_xml":             options.GetMetadataXML(),
 	}
 
 	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
@@ -782,6 +785,7 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		DomainAliases:      Set(d, "domain_aliases").List(),
 		SignInEndpoint:     String(d, "sign_in_endpoint"),
 		SignOutEndpoint:    String(d, "sign_out_endpoint"),
+		DisableSignOut:     Bool(d, "disable_sign_out"),
 		SignatureAlgorithm: String(d, "signature_algorithm"),
 		DigestAglorithm:    String(d, "digest_algorithm"),
 		SignSAMLRequest:    Bool(d, "sign_saml_request"),
@@ -791,6 +795,8 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 		EntityID:           String(d, "entity_id"),
+		MetadataXML:        String(d, "metadata_xml"),
+		MetadataURL:        String(d, "metadata_url"),
 	}
 
 	var err error

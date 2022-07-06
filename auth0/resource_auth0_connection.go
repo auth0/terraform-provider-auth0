@@ -623,14 +623,16 @@ var connectionSchema = map[string]*schema.Schema{
 					Description: "When enabled, will disable sign out.",
 				},
 				"metadata_xml": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "The XML content for the SAML metadata document.",
+					Type:          schema.TypeString,
+					Optional:      true,
+					Description:   "The XML content for the SAML metadata document.",
+					ConflictsWith: []string{"options.0.metadata_url"},
 				},
 				"metadata_url": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "The URL of the SAML metadata document.",
+					Type:          schema.TypeString,
+					Optional:      true,
+					Description:   "The URL of the SAML metadata document.",
+					ConflictsWith: []string{"options.0.metadata_xml"},
 				},
 				"fields_map": {
 					Type:         schema.TypeString,

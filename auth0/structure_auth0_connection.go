@@ -49,7 +49,7 @@ func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{
 	case *management.ConnectionOptionsADFS:
 		m = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m, err = flattenConnectionOptionsSAML(connectionOptions)
+		m, err = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
 	if err != nil {
 		return nil, err
@@ -338,7 +338,7 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) int
 	}
 }
 
-func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (interface{}, error) {
+func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, error) {
 	m := map[string]interface{}{
 		"signing_cert":             options.GetSigningCert(),
 		"protocol_binding":         options.GetProtocolBinding(),
@@ -358,7 +358,7 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
 		"metadata_url":             options.GetMetadataURL(),
-		"metadata_xml":             options.GetMetadataXML(),
+		"metadata_xml":             String(d, "options.0.metadata_xml"), // Does not get read back.
 	}
 
 	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)

@@ -1342,7 +1342,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", ""),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", "<?xml version=\"1.0\" encoding=\"utf-8\"?><EntityDescriptor ID=\"_391f377b-78d8-54132-1d47-a130e933bb1c\" entityID=\"https://example.com\" xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\"></EntityDescriptor>"),
+					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.metadata_xml"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
@@ -1354,11 +1354,11 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml.provider/sign_out"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_sign_out", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"appelido\",\"name\":[\"name\"]}"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://saml.provider/imi/ns/FederationMetadata.xml"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 				),
@@ -1424,8 +1424,15 @@ EOF
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=30"
 		}
-		metadata_xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><EntityDescriptor ID=\"_391f377b-78d8-54132-1d47-a130e933bb1c\" entityID=\"https://example.com\" xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\"></EntityDescriptor>"
-		metadata_url = ""
+		metadata_xml = <<EOF
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
+  <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_out"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_in"/>
+  </md:IDPSSODescriptor>
+</md:EntityDescriptor>
+EOF
 	}
 }
 `
@@ -1463,7 +1470,7 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 -----END CERTIFICATE-----
 EOF
 		sign_in_endpoint = "https://saml.provider/sign_in"
-		sign_out_endpoint = ""
+		sign_out_endpoint = "https://saml.provider/sign_out"
 		disable_sign_out = true
 		tenant_domain = "example.com"
 		domain_aliases = ["example.com", "example.coz"]
@@ -1481,8 +1488,7 @@ EOF
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=60"
 		}
-		metadata_xml = ""
-		metadata_url = "https://saml.provider/imi/ns/FederationMetadata.xml"
+		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"
 	}
 }
 `

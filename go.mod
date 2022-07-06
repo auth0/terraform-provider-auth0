@@ -3,7 +3,7 @@ module github.com/auth0/terraform-provider-auth0
 go 1.18
 
 require (
-	github.com/auth0/go-auth0 v0.7.0
+	github.com/auth0/go-auth0 v0.8.0
 	github.com/dnaeon/go-vcr/v2 v2.0.1
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1

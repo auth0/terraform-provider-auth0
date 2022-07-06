@@ -198,6 +198,66 @@ func newTenant() *schema.Resource {
 							Optional: true,
 							Computed: true,
 						},
+						"allow_legacy_delegation_grant_types": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"allow_legacy_ro_grant_types": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"allow_legacy_tokeninfo_endpoint": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"enable_legacy_profile": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"enable_idtoken_api2": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"no_disclose_enterprise_connections": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"disable_management_api_sms_obfuscation": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"enable_adfs_waad_email_verification": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"revoke_refresh_token_grant": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"dashboard_log_streams_next": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"dashboard_insights_view": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"disable_fields_map_fix": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
 					},
 				},
 			},

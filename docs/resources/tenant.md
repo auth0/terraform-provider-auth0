@@ -109,6 +109,18 @@ Arguments accepted by this resource include:
 * `enable_legacy_logs_search_v2` - (Optional) Boolean. Indicates whether to use the older v2 legacy logs search.
 * `disable_clickjack_protection_headers` - (Optional) Boolean. Indicated whether classic Universal Login prompts include additional security headers to prevent clickjacking.
 * `enable_public_signup_user_exists_error` - (Optional) Boolean. Indicates whether the public sign up process shows a user_exists error if the user already exists.
+* `allow_legacy_delegation_grant_types` - (Optional) Boolean. Whether the legacy delegation endpoint will be enabled for your account (true) or not available (false).
+* `allow_legacy_ro_grant_types` - (Optional) Boolean. Whether the legacy `auth/ro` endpoint (used with resource owner password and passwordless features) will be enabled for your account (true) or not available (false).
+* `allow_legacy_tokeninfo_endpoint` - (Optional) Boolean. If enabled, customers can use Tokeninfo Endpoint, otherwise they can not use it.
+* `enable_legacy_profile` - (Optional) Boolean. Whether ID tokens and the userinfo endpoint includes a complete user profile (true) or only OpenID Connect claims (false).
+* `enable_idtoken_api2` - (Optional) Boolean. Whether ID tokens can be used to authorize some types of requests to API v2 (true) not not (false).
+* `no_disclose_enterprise_connections` - (Optional) Boolean. Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
+* `disable_management_api_sms_obfuscation` - (Optional) Boolean. If true, SMS phone numbers will not be obfuscated in Management API GET calls.
+* `enable_adfs_waad_email_verification` - (Optional) Boolean. If enabled, users will be presented with an email verification prompt during their first login when using Azure AD or ADFS connections.
+* `revoke_refresh_token_grant` - (Optional) Boolean. Delete underlying grant when a Refresh Token is revoked via the Authentication API.
+* `dashboard_log_streams_next` - (Optional) Boolean. Enables beta access to log streaming changes.
+* `dashboard_insights_view` - (Optional) Boolean. Enables new insights activity page view.
+* `disable_fields_map_fix` - (Optional) Boolean. Disables SAML fields map fix for bad mappings with repeated attributes.
 
 ### Universal Login
 

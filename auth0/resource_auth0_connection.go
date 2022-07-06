@@ -550,6 +550,23 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded",
 				},
+				"signing_key": {
+					Type:     schema.TypeList,
+					Optional: true,
+					MaxItems: 1,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"key": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"cert": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
+					},
+				},
 				"protocol_binding": {
 					Type:        schema.TypeString,
 					Optional:    true,

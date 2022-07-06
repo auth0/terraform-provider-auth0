@@ -377,6 +377,15 @@ func flattenConnectionOptionsSAML(options *management.ConnectionOptionsSAML) (in
 		}
 	}
 
+	if options.SigningKey != nil {
+		m["signing_key"] = []interface{}{
+			map[string]interface{}{
+				"key":  options.SigningKey.GetKey(),
+				"cert": options.SigningKey.GetCert(),
+			},
+		}
+	}
+
 	return m, nil
 }
 
@@ -799,12 +808,6 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		MetadataURL:        String(d, "metadata_url"),
 	}
 
-	var err error
-	options.FieldsMap, err = JSON(d, "fields_map")
-	if err != nil {
-		return nil, err
-	}
-
 	List(d, "idp_initiated").Elem(func(d ResourceData) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
 			ClientID:             String(d, "client_id"),
@@ -812,6 +815,19 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 			ClientAuthorizeQuery: String(d, "client_authorize_query"),
 		}
 	})
+
+	List(d, "signing_key").Elem(func(d ResourceData) {
+		options.SigningKey = &management.ConnectionOptionsSAMLSigningKey{
+			Cert: String(d, "cert"),
+			Key:  String(d, "key"),
+		}
+	})
+
+	var err error
+	options.FieldsMap, err = JSON(d, "fields_map")
+	if err != nil {
+		return nil, err
+	}
 
 	return options, nil
 }

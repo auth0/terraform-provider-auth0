@@ -1343,6 +1343,9 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", "<?xml version=\"1.0\" encoding=\"utf-8\"?><EntityDescriptor ID=\"_391f377b-78d8-54132-1d47-a130e933bb1c\" entityID=\"https://example.com\" xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\"></EntityDescriptor>"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 				),
 			},
 			{
@@ -1357,6 +1360,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"appelido\",\"name\":[\"name\"]}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://saml.provider/imi/ns/FederationMetadata.xml"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 				),
 			},
 		},
@@ -1395,6 +1399,10 @@ SIb3DQEBBQUAA4GBAOKnQDtqBV24vVqvesL5dnmyFpFPXBn3WdFfwD6DzEb21UVG
 ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 -----END CERTIFICATE-----
 EOF
+		signing_key {
+			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+       		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+		}
 		sign_in_endpoint = "https://saml.provider/sign_in"
 		sign_out_endpoint = "https://saml.provider/sign_out"
 		disable_sign_out = false

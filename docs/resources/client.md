@@ -180,6 +180,8 @@ Arguments accepted by this resource include:
 
 ### SAML
 
+SAML apps facilitate the configurations for various Single Sign-on (SSO) integrations including the following types: G Suite, Hosted Graphite, Litmos, Cisco Webex, Sprout Video, FreshDesk, Tableau Online, Tableau Server, Datadog, Egencia, Github Cloud, Github Server, Heroku, Workday, Pluralsight and Workpath.
+
 `samlp` supports the following arguments:
 
 * `audience` - (Optional) String. Audience of the SAML Assertion. Default will be the Issuer on SAMLRequest.

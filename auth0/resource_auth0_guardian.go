@@ -24,11 +24,69 @@ func newGuardian() *schema.Resource {
 			"policy": {
 				Type:     schema.TypeString,
 				Required: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"all-applications",
-					"confidence-score",
-					"never",
-				}, false),
+				ValidateFunc: validation.StringInSlice(
+					[]string{
+						"all-applications",
+						"confidence-score",
+						"never",
+					},
+					false,
+				),
+			},
+			"webauthn_roaming": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				MinItems: 0,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"user_verification": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice(
+								[]string{
+									"discouraged",
+									"preferred",
+									"required",
+								},
+								false,
+							),
+						},
+						"override_relying_party": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"relying_party_identifier": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							RequiredWith: []string{"webauthn_roaming.0.override_relying_party"},
+						},
+					},
+				},
+			},
+			"webauthn_platform": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				MinItems: 0,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"override_relying_party": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+						},
+						"relying_party_identifier": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Computed:     true,
+							RequiredWith: []string{"webauthn_platform.0.override_relying_party"},
+						},
+					},
+				},
 			},
 			"phone": {
 				Type:     schema.TypeList,
@@ -40,11 +98,14 @@ func newGuardian() *schema.Resource {
 						"provider": {
 							Type:     schema.TypeString,
 							Required: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								"auth0",
-								"twilio",
-								"phone-message-hook",
-							}, false),
+							ValidateFunc: validation.StringInSlice(
+								[]string{
+									"auth0",
+									"twilio",
+									"phone-message-hook",
+								},
+								false,
+							),
 						},
 						"message_types": {
 							Type:     schema.TypeList,
@@ -119,10 +180,8 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	result := &multierror.Error{}
-	if len(*multiFactorPolicies) == 0 {
-		result = multierror.Append(result, d.Set("policy", "never"))
-	} else {
+	result := multierror.Append(d.Set("policy", "never"))
+	if len(*multiFactorPolicies) > 0 {
 		result = multierror.Append(result, d.Set("policy", (*multiFactorPolicies)[0]))
 	}
 
@@ -131,7 +190,6 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	var phoneEnabled bool
 	for _, factor := range multiFactorList {
 		switch factor.GetName() {
 		case "email":
@@ -139,47 +197,40 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		case "otp":
 			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
 		case "sms":
-			phoneEnabled = factor.GetEnabled()
+			result = multierror.Append(result, d.Set("phone", nil))
+
+			if factor.GetEnabled() {
+				phone, err := flattenPhone(api)
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				result = multierror.Append(result, d.Set("phone", phone))
+			}
+		case "webauthn-roaming":
+			result = multierror.Append(result, d.Set("webauthn_roaming", nil))
+
+			if factor.GetEnabled() {
+				webAuthnRoaming, err := flattenWebAuthnRoaming(api)
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				result = multierror.Append(result, d.Set("webauthn_roaming", webAuthnRoaming))
+			}
+		case "webauthn-platform":
+			result = multierror.Append(result, d.Set("webauthn_platform", nil))
+
+			if factor.GetEnabled() {
+				webAuthnPlatform, err := flattenWebAuthnPlatform(api)
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				result = multierror.Append(result, d.Set("webauthn_platform", webAuthnPlatform))
+			}
 		}
 	}
-
-	if !phoneEnabled {
-		result = multierror.Append(result, d.Set("phone", nil))
-		return diag.FromErr(result.ErrorOrNil())
-	}
-
-	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	phoneData := make(map[string]interface{})
-	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
-
-	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	phoneData["provider"] = phoneProvider.GetProvider()
-
-	var phoneProviderOptions []interface{}
-	switch phoneProvider.GetProvider() {
-	case "twilio":
-		phoneProviderOptions, err = flattenTwilioOptions(api)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	case "auth0":
-		phoneProviderOptions, err = flattenAuth0Options(api)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	case "phone-message-hook":
-		phoneProviderOptions = []interface{}{nil}
-	}
-
-	phoneData["options"] = phoneProviderOptions
-	result = multierror.Append(result, d.Set("phone", []interface{}{phoneData}))
 
 	return diag.FromErr(result.ErrorOrNil())
 }
@@ -202,6 +253,14 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 
+	if err := updateWebAuthnRoaming(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := updateWebAuthnPlatform(d, api); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return readGuardian(ctx, d, m)
 }
 
@@ -217,10 +276,49 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
 		return diag.FromErr(err)
 	}
+	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false); err != nil {
+		return diag.FromErr(err)
+	}
 
 	d.SetId("")
 
 	return nil
+}
+
+func flattenPhone(api *management.Management) ([]interface{}, error) {
+	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
+	if err != nil {
+		return nil, err
+	}
+
+	phoneData := make(map[string]interface{})
+	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
+
+	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
+	if err != nil {
+		return nil, err
+	}
+	phoneData["provider"] = phoneProvider.GetProvider()
+
+	var phoneProviderOptions []interface{}
+	switch phoneProvider.GetProvider() {
+	case "twilio":
+		phoneProviderOptions, err = flattenTwilioOptions(api)
+		if err != nil {
+			return nil, err
+		}
+	case "auth0":
+		phoneProviderOptions, err = flattenAuth0Options(api)
+		if err != nil {
+			return nil, err
+		}
+	case "phone-message-hook":
+		phoneProviderOptions = []interface{}{nil}
+	}
+
+	phoneData["options"] = phoneProviderOptions
+
+	return []interface{}{phoneData}, nil
 }
 
 func flattenAuth0Options(api *management.Management) ([]interface{}, error) {
@@ -257,6 +355,35 @@ func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
 	m["from"] = twilio.GetFrom()
 	m["messaging_service_sid"] = twilio.GetMessagingServiceSid()
 	m["sid"] = twilio.GetSID()
+
+	return []interface{}{m}, nil
+}
+
+func flattenWebAuthnRoaming(api *management.Management) ([]interface{}, error) {
+	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnRoaming.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	m := map[string]interface{}{
+		"user_verification":        webAuthnSettings.GetUserVerification(),
+		"override_relying_party":   webAuthnSettings.GetOverrideRelyingParty(),
+		"relying_party_identifier": webAuthnSettings.GetRelyingPartyIdentifier(),
+	}
+
+	return []interface{}{m}, nil
+}
+
+func flattenWebAuthnPlatform(api *management.Management) ([]interface{}, error) {
+	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnPlatform.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	m := map[string]interface{}{
+		"override_relying_party":   webAuthnSettings.GetOverrideRelyingParty(),
+		"relying_party_identifier": webAuthnSettings.GetRelyingPartyIdentifier(),
+	}
 
 	return []interface{}{m}, nil
 }
@@ -419,4 +546,51 @@ func fromInterfaceSliceToStringSlice(from []interface{}) []string {
 	}
 
 	return stringArray
+}
+
+func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) error {
+	if factorShouldBeUpdated(d, "webauthn_roaming") {
+		if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(true); err != nil {
+			return err
+		}
+
+		var webAuthnSettings management.MultiFactorWebAuthnSettings
+
+		List(d, "webauthn_roaming").Elem(func(d ResourceData) {
+			webAuthnSettings.OverrideRelyingParty = Bool(d, "override_relying_party")
+			webAuthnSettings.RelyingPartyIdentifier = String(d, "relying_party_identifier")
+			webAuthnSettings.UserVerification = String(d, "user_verification")
+		})
+
+		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
+			return nil
+		}
+
+		return api.Guardian.MultiFactor.WebAuthnRoaming.Update(&webAuthnSettings)
+	}
+
+	return api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false)
+}
+
+func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) error {
+	if factorShouldBeUpdated(d, "webauthn_platform") {
+		if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(true); err != nil {
+			return err
+		}
+
+		var webAuthnSettings management.MultiFactorWebAuthnSettings
+
+		List(d, "webauthn_platform").Elem(func(d ResourceData) {
+			webAuthnSettings.OverrideRelyingParty = Bool(d, "override_relying_party")
+			webAuthnSettings.RelyingPartyIdentifier = String(d, "relying_party_identifier")
+		})
+
+		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
+			return nil
+		}
+
+		return api.Guardian.MultiFactor.WebAuthnPlatform.Update(&webAuthnSettings)
+	}
+
+	return api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false)
 }

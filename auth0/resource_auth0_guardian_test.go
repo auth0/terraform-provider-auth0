@@ -275,3 +275,94 @@ resource "auth0_guardian" "default" {
   }
 }
 `
+
+func TestAccGuardianWebAuthnRoaming(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConfigureWebAuthnRoamingCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "1"),
+				),
+			},
+			{
+				Config: testAccConfigureWebAuthnRoamingUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.0.user_verification", "required"),
+				),
+			},
+			{
+				Config: testAccConfigureWebAuthnRoamingDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_roaming.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConfigureWebAuthnRoamingCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	webauthn_roaming {}
+}
+`
+
+const testAccConfigureWebAuthnRoamingUpdate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	webauthn_roaming {
+		user_verification = "required"
+	}
+}
+`
+
+const testAccConfigureWebAuthnRoamingDelete = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`
+
+func TestAccGuardianWebAuthnPlatform(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccConfigureWebAuthnPlatformCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "1"),
+				),
+			},
+			{
+				Config: testAccConfigureWebAuthnPlatformDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConfigureWebAuthnPlatformCreate = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	webauthn_platform {}
+}
+`
+
+const testAccConfigureWebAuthnPlatformDelete = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+}
+`

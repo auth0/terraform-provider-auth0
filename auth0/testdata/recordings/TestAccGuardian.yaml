@@ -9,7 +9,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: PUT
   response:
@@ -28,7 +28,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
     method: PUT
   response:
@@ -47,7 +47,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: PUT
   response:
@@ -66,7 +66,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: PUT
   response:
@@ -85,7 +85,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: PUT
   response:
@@ -104,7 +104,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: PUT
   response:
@@ -117,13 +117,51 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       null
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -142,7 +180,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -161,7 +199,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -180,7 +218,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -199,7 +237,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -218,7 +256,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -237,7 +275,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -256,7 +294,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -275,7 +313,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -294,7 +332,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -313,7 +351,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -332,7 +370,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -351,7 +389,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -370,7 +408,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -389,7 +427,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -408,7 +446,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -427,7 +465,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -446,7 +484,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -465,8 +503,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
     method: PUT
   response:
     body: '{"enabled":false}'
@@ -484,7 +560,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -503,7 +579,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -522,7 +598,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -541,7 +617,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -560,7 +636,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -579,7 +655,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -598,7 +674,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
     method: PUT
   response:
@@ -617,7 +693,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: PUT
   response:
@@ -636,7 +712,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: PUT
   response:
@@ -655,7 +731,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: PUT
   response:
@@ -674,7 +750,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: PUT
   response:
@@ -687,13 +763,51 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       null
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -712,7 +826,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -731,7 +845,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -750,7 +864,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -769,7 +883,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -788,7 +902,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -807,7 +921,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -826,7 +940,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -845,7 +959,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -864,7 +978,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -883,7 +997,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -902,7 +1016,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -921,7 +1035,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -940,7 +1054,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -959,7 +1073,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -978,7 +1092,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -997,7 +1111,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1016,7 +1130,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/providers/twilio
     method: GET
   response:
@@ -1035,7 +1149,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
     method: PUT
   response:
@@ -1054,7 +1168,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: PUT
   response:
@@ -1073,7 +1187,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: PUT
   response:
@@ -1086,13 +1200,95 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       null
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+    method: GET
+  response:
+    body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has
+      been reached","errorCode":"too_many_requests"}'
+    headers:
+      Content-Length:
+      - "120"
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 429 Too Many Requests
+    code: 429
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+    method: GET
+  response:
+    body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has
+      been reached","errorCode":"too_many_requests"}'
+    headers:
+      Content-Length:
+      - "120"
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 429 Too Many Requests
+    code: 429
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1111,7 +1307,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1130,7 +1326,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1149,7 +1345,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1168,7 +1364,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1187,7 +1383,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1206,7 +1402,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1225,7 +1421,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1244,7 +1440,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1263,7 +1459,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1282,7 +1478,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1301,7 +1497,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1320,7 +1516,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
     method: PUT
   response:
@@ -1339,7 +1535,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: PUT
   response:
@@ -1358,7 +1554,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: PUT
   response:
@@ -1377,7 +1573,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: PUT
   response:
@@ -1390,13 +1586,51 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       null
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1415,7 +1649,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1434,7 +1668,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1453,7 +1687,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1472,7 +1706,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1491,7 +1725,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1510,7 +1744,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1529,7 +1763,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1548,7 +1782,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1567,7 +1801,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1586,7 +1820,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1605,7 +1839,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1624,7 +1858,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1643,7 +1877,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1662,7 +1896,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1681,7 +1915,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1700,7 +1934,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1719,7 +1953,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1738,7 +1972,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1757,7 +1991,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1776,7 +2010,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1795,7 +2029,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1814,7 +2048,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/message-types
     method: GET
   response:
@@ -1833,7 +2067,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/phone/selected-provider
     method: GET
   response:
@@ -1852,7 +2086,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms/templates
     method: GET
   response:
@@ -1871,8 +2105,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
     method: PUT
   response:
     body: '{"enabled":false}'
@@ -1890,7 +2162,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1909,7 +2181,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1928,7 +2200,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1947,7 +2219,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -1966,7 +2238,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -1985,7 +2257,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2004,7 +2276,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/email
     method: PUT
   response:
@@ -2023,8 +2295,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
     method: PUT
   response:
     body: '{"enabled":false}'
@@ -2042,7 +2352,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2061,7 +2371,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2080,7 +2390,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2099,7 +2409,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2118,7 +2428,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2137,7 +2447,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2156,7 +2466,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/email
     method: PUT
   response:
@@ -2175,8 +2485,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
     method: PUT
   response:
     body: '{"enabled":false}'
@@ -2194,7 +2542,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2213,7 +2561,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2232,7 +2580,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2251,7 +2599,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2270,7 +2618,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2289,7 +2637,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2308,7 +2656,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/otp
     method: PUT
   response:
@@ -2327,8 +2675,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
     method: PUT
   response:
     body: '{"enabled":false}'
@@ -2346,7 +2732,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2365,7 +2751,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2384,7 +2770,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2403,7 +2789,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2422,7 +2808,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
     method: GET
   response:
@@ -2441,7 +2827,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
     method: GET
   response:
@@ -2460,7 +2846,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/otp
     method: PUT
   response:
@@ -2479,102 +2865,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
-    method: PUT
-  response:
-    body: '{"enabled":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.4
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
-    method: GET
-  response:
-    body: '["all-applications"]'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.4
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
-    method: GET
-  response:
-    body: '[{"name":"sms","enabled":false,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.4
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
-    method: GET
-  response:
-    body: '["all-applications"]'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.4
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
-    method: GET
-  response:
-    body: '[{"name":"sms","enabled":false,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      {"enabled":false}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
     method: PUT
   response:
@@ -2593,7 +2884,184 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has
+      been reached","errorCode":"too_many_requests"}'
+    headers:
+      Content-Length:
+      - "120"
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 429 Too Many Requests
+    code: 429
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has
+      been reached","errorCode":"too_many_requests"}'
+    headers:
+      Content-Length:
+      - "120"
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 429 Too Many Requests
+    code: 429
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-platform
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+    method: GET
+  response:
+    body: '["all-applications"]'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
+    method: GET
+  response:
+    body: '[{"name":"sms","enabled":false,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/policies
+    method: GET
+  response:
+    body: '["all-applications"]'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors
+    method: GET
+  response:
+    body: '[{"name":"sms","enabled":false,"trial_expired":false},{"name":"push-notification","enabled":false,"trial_expired":false},{"name":"otp","enabled":false,"trial_expired":false},{"name":"email","enabled":false,"trial_expired":false},{"name":"duo","enabled":false,"trial_expired":false},{"name":"webauthn-roaming","enabled":false,"trial_expired":false},{"name":"webauthn-platform","enabled":false,"trial_expired":false},{"name":"recovery-code","enabled":false,"trial_expired":false}]'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/sms
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/email
     method: PUT
   response:
@@ -2612,8 +3080,27 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.4
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/otp
+    method: PUT
+  response:
+    body: '{"enabled":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"enabled":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/guardian/factors/webauthn-roaming
     method: PUT
   response:
     body: '{"enabled":false}'

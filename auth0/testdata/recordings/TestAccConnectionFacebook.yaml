@@ -3,17 +3,17 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","strategy":"facebook","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","email":true,"groups_access_member_info":true,"user_birthday":true,"public_profile":true,"non_persistent_attrs":null}}
+      {"name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","strategy":"facebook","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","email":true,"groups_access_member_info":true,"user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"client_id":"client_id","client_secret":"client_secret","email":true,"groups_access_member_info":true,"user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"scope":"email,groups_access_member_info,user_birthday,public_profile"},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"client_id":"client_id","client_secret":"client_secret","email":true,"groups_access_member_info":true,"user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":"email,groups_access_member_info,user_birthday,public_profile"},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: GET
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -47,11 +47,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: GET
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -66,11 +66,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: GET
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,groups_access_member_info,user_birthday,public_profile","client_id":"client_id","client_secret":"client_secret","user_birthday":true,"public_profile":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"groups_access_member_info":true},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -85,11 +85,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: PATCH
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -104,11 +104,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: GET
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -123,11 +123,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: GET
   response:
-    body: '{"id":"con_BZHok1o2PJ6gzZ3N","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
+    body: '{"id":"con_OTHxLs3ZBpGLPTUE","options":{"email":true,"scope":"email,public_profile","client_id":"client_id_update","client_secret":"client_secret_update","user_birthday":false,"public_profile":true,"non_persistent_attrs":null,"groups_access_member_info":false},"strategy":"facebook","name":"Acceptance-Test-Facebook-TestAccConnectionFacebook","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Facebook-TestAccConnectionFacebook"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -141,11 +141,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_BZHok1o2PJ6gzZ3N
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OTHxLs3ZBpGLPTUE
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-06-13T13:15:10.325Z"}'
+    body: '{"deleted_at":"2022-07-07T15:38:42.334Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

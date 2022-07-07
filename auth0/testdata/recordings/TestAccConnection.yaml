@@ -3,17 +3,17 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-Connection-TestAccConnection","strategy":"auth0","is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["password","admin","1234"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":null}}
+      {"name":"Acceptance-Test-Connection-TestAccConnection","strategy":"auth0","is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["password","admin","1234"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"fair","validation":{"username":{"max":40,"min":10}},"password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["password","admin","1234"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"non_persistent_attrs":null,"configuration":{"foo":"2.0$ddb9806e003163e8547eaac6ae3f21dc$1ca7137ee64edc9cc8f520c9208797d1$23d2620552817342917871181bcbfb6ca39f54809d64b2a70dd77079d63e4f1e"},"strategy_version":2},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"fair","validation":{"username":{"max":40,"min":10}},"password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["password","admin","1234"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"configuration":{"foo":"2.0$fd86c628407297f1d83a457143d5290d$3fe7c14cb36b95efa25c8ffa851f4db6$07b3f0a1b3564dd0bdfb68c9081c779378999ef1ebe8b5d211a9eb599fc4c416"},"strategy_version":2},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: GET
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$ddb9806e003163e8547eaac6ae3f21dc$1ca7137ee64edc9cc8f520c9208797d1$23d2620552817342917871181bcbfb6ca39f54809d64b2a70dd77079d63e4f1e"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fd86c628407297f1d83a457143d5290d$3fe7c14cb36b95efa25c8ffa851f4db6$07b3f0a1b3564dd0bdfb68c9081c779378999ef1ebe8b5d211a9eb599fc4c416"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -47,11 +47,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: GET
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$ddb9806e003163e8547eaac6ae3f21dc$1ca7137ee64edc9cc8f520c9208797d1$23d2620552817342917871181bcbfb6ca39f54809d64b2a70dd77079d63e4f1e"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fd86c628407297f1d83a457143d5290d$3fe7c14cb36b95efa25c8ffa851f4db6$07b3f0a1b3564dd0bdfb68c9081c779378999ef1ebe8b5d211a9eb599fc4c416"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -66,11 +66,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: GET
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$ddb9806e003163e8547eaac6ae3f21dc$1ca7137ee64edc9cc8f520c9208797d1$23d2620552817342917871181bcbfb6ca39f54809d64b2a70dd77079d63e4f1e"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fd86c628407297f1d83a457143d5290d$3fe7c14cb36b95efa25c8ffa851f4db6$07b3f0a1b3564dd0bdfb68c9081c779378999ef1ebe8b5d211a9eb599fc4c416"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -79,17 +79,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":false},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":false,"brute_force_protection":false,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":null}}
+      {"is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":false},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["password","admin","1234"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":false,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":null}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: PATCH
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$04452128e8a09b879e8c483390e7fbb0$219329678307025363b4dfada823e083$2854e1b18f6b176c2490189b741029545a3efbc77a7e1107ab3c56cc85ca7413"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$9f25320abd453d543c74942add159f36$165e12f7c7500d97db2ff1e74740f166$9a4ac8031a2ef802ee9021bd97ae10a2f9cc6853f89340c7c0d5c42339677e8d"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -104,11 +104,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: GET
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$04452128e8a09b879e8c483390e7fbb0$219329678307025363b4dfada823e083$2854e1b18f6b176c2490189b741029545a3efbc77a7e1107ab3c56cc85ca7413"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$9f25320abd453d543c74942add159f36$165e12f7c7500d97db2ff1e74740f166$9a4ac8031a2ef802ee9021bd97ae10a2f9cc6853f89340c7c0d5c42339677e8d"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -123,11 +123,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: GET
   response:
-    body: '{"id":"con_SQKxuRr6Ut3hQid2","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$04452128e8a09b879e8c483390e7fbb0$219329678307025363b4dfada823e083$2854e1b18f6b176c2490189b741029545a3efbc77a7e1107ab3c56cc85ca7413"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+    body: '{"id":"con_OtvPChLpJsXvr7oE","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$9f25320abd453d543c74942add159f36$165e12f7c7500d97db2ff1e74740f166$9a4ac8031a2ef802ee9021bd97ae10a2f9cc6853f89340c7c0d5c42339677e8d"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["password","admin","1234"]},"non_persistent_attrs":null,"brute_force_protection":false,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -141,11 +141,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_SQKxuRr6Ut3hQid2
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OtvPChLpJsXvr7oE
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-06-13T13:14:00.142Z"}'
+    body: '{"deleted_at":"2022-07-07T15:37:41.738Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

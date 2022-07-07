@@ -3,19 +3,19 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-Email-TestAccConnectionEmail","strategy":"email","is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null}}
+      {"name":"Acceptance-Test-Email-TestAccConnectionEmail","strategy":"email","is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic
       Password <password@example.com>","subject":"Sign in!","body":"<html><body><h1>Here''s
-      your password!</h1></body></html>"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      your password!</h1></body></html>"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -30,13 +30,13 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: GET
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -51,13 +51,13 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: GET
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -72,13 +72,13 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: GET
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -93,11 +93,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: PATCH
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
       in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
@@ -114,11 +114,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: GET
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
       in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
@@ -135,11 +135,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: GET
   response:
-    body: '{"id":"con_LegaycPbocOIWrIg","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
+    body: '{"id":"con_oD4hCHcKtt4UqKEz","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
       in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
@@ -155,11 +155,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_LegaycPbocOIWrIg
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_oD4hCHcKtt4UqKEz
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-06-13T13:14:49.326Z"}'
+    body: '{"deleted_at":"2022-07-07T15:38:27.066Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

@@ -366,6 +366,7 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	api := m.(*management.Management)
 
 	result := multierror.Append(
+		api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}),
 		api.Guardian.MultiFactor.Phone.Enable(false),
 		api.Guardian.MultiFactor.Email.Enable(false),
 		api.Guardian.MultiFactor.OTP.Enable(false),

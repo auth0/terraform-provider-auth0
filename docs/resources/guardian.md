@@ -13,15 +13,18 @@ access. With this resource you can configure some options available for MFA.
 ## Example Usage
 
 ```hcl
-resource "auth0_guardian" "default" {
-  policy = "all-applications"
+resource "auth0_guardian" "my_guardian" {
+  policy        = "all-applications"
+  email         = true
+  otp           = true
+  recovery_code = true
+  webauthn_platform {} # This will enable it. Removing this block will disable it.
   webauthn_roaming {
-      user_verification = "required"
-  } 
-  webauthn_roaming {}
+    user_verification = "required"
+  }
   phone {
     provider      = "auth0"
-    message_types = ["sms"]
+    message_types = ["sms", "voice"]
     options {
       enrollment_message   = "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."
       verification_message = "{{code}} is your verification code for {{tenant.friendly_name}}."
@@ -29,21 +32,23 @@ resource "auth0_guardian" "default" {
   }
   push {
     amazon_sns {
-      aws_access_key_id = "test1"
-      aws_region = "us-west-1"
-      aws_secret_access_key = "secretKey"
+      aws_access_key_id                 = "test1"
+      aws_region                        = "us-west-1"
+      aws_secret_access_key             = "secretKey"
       sns_apns_platform_application_arn = "test_arn"
-      sns_gcm_platform_application_arn = "test_arn"
+      sns_gcm_platform_application_arn  = "test_arn"
     }
     custom_app {
-      app_name = "CustomApp"
-      apple_app_link = "https://itunes.apple.com/us/app/my-app/id123121"
+      app_name        = "CustomApp"
+      apple_app_link  = "https://itunes.apple.com/us/app/my-app/id123121"
       google_app_link = "https://play.google.com/store/apps/details?id=com.my.app"
     }
-  }    
-  email = true
-  otp = true
-  recovery_code = true    
+  }
+  duo {
+    integration_key = "someKey"
+    secret_key      = "someSecret"
+    hostname        = "api-hostname"
+  }
 }
 ```
 
@@ -53,11 +58,18 @@ Arguments accepted by this resource include:
 
 * `policy` - (Required) String. Policy to use. Available options are `never`, `all-applications` and `confidence-score`.
 The option `confidence-score` means the trigger of MFA will be adaptive. See [Auth0 docs](https://auth0.com/docs/mfa/adaptive-mfa).
-* `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. For details, see [Phone](#phone).
-* `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA. For details, see [WebAuthn Roaming](#webauthn-roaming).
-* `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. For details, see [WebAuthn Platform](#webauthn-platform).
-* `duo` - (Optional) List(Resource). Configuration settings for the Duo MFA. For details, see [Duo](#duo).
-* `push` - (Optional) List(Resource). Configuration settings for the Push MFA. For details, see [Push](#push).
+* `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. 
+If this block is present, Phone MFA will be enabled, and disabled otherwise. For details, see [Phone](#phone).
+* `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA.
+If this block is present, WebAuthn with FIDO Security Keys MFA will be enabled, and disabled otherwise.
+For details, see [WebAuthn Roaming](#webauthn-roaming).
+* `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA.
+If this block is present, WebAuthn with FIDO Device Biometrics MFA will be enabled, and disabled otherwise.
+For details, see [WebAuthn Platform](#webauthn-platform).
+* `duo` - (Optional) List(Resource). Configuration settings for the Duo MFA.
+If this block is present, Duo MFA will be enabled, and disabled otherwise. For details, see [Duo](#duo).
+* `push` - (Optional) List(Resource). Configuration settings for the Push MFA.
+If this block is present, Push MFA will be enabled, and disabled otherwise. For details, see [Push](#push).
 * `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
 * `otp` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
 * `recovery_code` - (Optional) Boolean. Indicates whether recovery code MFA is enabled.
@@ -71,13 +83,16 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `options`- (Required) List(Resource). Options for the various providers. See [Options](#options).
 
 #### Options
+
 `options` supports different arguments depending on the provider specified in [Phone](#phone).
 
 ##### Auth0
+
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 
 ##### Twilio
+
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `sid`(Optional) String.
@@ -85,7 +100,7 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `from` (Optional) String.
 * `messaging_service_sid`(Optional) String.
 
-##### Phone message hook
+##### Phone Message Hook
 
 Options have to be empty. Custom code has to be written in a phone message hook.
 See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/send-phone-message).

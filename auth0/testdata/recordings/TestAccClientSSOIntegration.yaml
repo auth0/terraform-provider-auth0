@@ -1,0 +1,154 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","app_type":"sso_integration","addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient","signatureAlgorithm":"rsa-sha1","typedAttributes":true}}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+    method: POST
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient","signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient","signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient","signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient","signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"lifetime_in_seconds":36000},"sso":false,"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience-different","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient-different","signResponse":false,"signatureAlgorithm":"rsa-sha1","typedAttributes":true}}}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: PATCH
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso":false,"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience-different","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient-different","signResponse":false,"signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso":false,"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience-different","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient-different","signResponse":false,"signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: GET
+  response:
+    body: '{"name":"Acceptance Test - SSO Integration - TestAccClientSSOIntegration","client_id":"j6quWJi3UeGHcagWnYafQJh4udgAaZCf","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso":false,"sso_disabled":false,"cross_origin_auth":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"samlp":{"audience":"http://tableau-server-test.domain.eu.com/audience-different","createUpnClaim":true,"destination":"http://tableau-server-test.domain.eu.com/destination","digestAlgorithm":"sha256","includeAttributeNameFormat":true,"lifetimeInSeconds":3600,"logout":{},"mapIdentities":true,"mapUnknownClaimsAsIs":false,"mappings":{"email":"username"},"nameIdentifierFormat":"urn:oasis:names:tc:SAML:2.0:attrname-format:basic","passthroughClaimsWithNoMapping":false,"recipient":"http://tableau-server-test.domain.eu.com/recipient-different","signResponse":false,"signatureAlgorithm":"rsa-sha1","typedAttributes":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/j6quWJi3UeGHcagWnYafQJh4udgAaZCf
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms

@@ -5,6 +5,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+func flattenMultiFactorPolicy(api *management.Management) (string, error) {
+	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy()
+	if err != nil {
+		return "", err
+	}
+
+	flattenedPolicy := "never"
+	if len(*multiFactorPolicies) > 0 {
+		flattenedPolicy = (*multiFactorPolicies)[0]
+	}
+
+	return flattenedPolicy, nil
+}
+
 func flattenPhone(api *management.Management) ([]interface{}, error) {
 	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
 	if err != nil {
@@ -183,6 +197,14 @@ func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
 	if d.HasChange("otp") {
 		enabled := d.Get("otp").(bool)
 		return api.Guardian.MultiFactor.OTP.Enable(enabled)
+	}
+	return nil
+}
+
+func updateRecoveryCodeFactor(d *schema.ResourceData, api *management.Management) error {
+	if d.HasChange("recovery_code") {
+		enabled := d.Get("recovery_code").(bool)
+		return api.Guardian.MultiFactor.RecoveryCode.Enable(enabled)
 	}
 	return nil
 }

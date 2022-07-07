@@ -37,7 +37,6 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				MinItems: 0,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"user_verification": {
@@ -71,7 +70,6 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				MinItems: 0,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"override_relying_party": {
@@ -92,7 +90,6 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				MinItems: 0,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"provider": {
@@ -119,7 +116,6 @@ func newGuardian() *schema.Resource {
 							Optional: true,
 							Computed: true,
 							MaxItems: 1,
-							MinItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enrollment_message": {
@@ -163,11 +159,15 @@ func newGuardian() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"recovery_code": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			"duo": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				MinItems: 0,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"integration_key": {
@@ -190,14 +190,12 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				MinItems: 0,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"amazon_sns": {
 							Type:     schema.TypeList,
 							Optional: true,
 							MaxItems: 1,
-							MinItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"aws_access_key_id": {
@@ -262,15 +260,12 @@ func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy()
+	flattenedPolicy, err := flattenMultiFactorPolicy(api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(d.Set("policy", "never"))
-	if len(*multiFactorPolicies) > 0 {
-		result = multierror.Append(result, d.Set("policy", (*multiFactorPolicies)[0]))
-	}
+	result := multierror.Append(d.Set("policy", flattenedPolicy))
 
 	multiFactorList, err := api.Guardian.MultiFactor.List()
 	if err != nil {
@@ -283,6 +278,8 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 			result = multierror.Append(result, d.Set("email", factor.GetEnabled()))
 		case "otp":
 			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
+		case "recovery-code":
+			result = multierror.Append(result, d.Set("recovery_code", factor.GetEnabled()))
 		case "sms":
 			result = multierror.Append(result, d.Set("phone", nil))
 
@@ -347,34 +344,18 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	if err := updatePolicy(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateEmailFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := updateOTPFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updatePhoneFactor(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateWebAuthnRoaming(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateWebAuthnPlatform(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updateDUO(d, api); err != nil {
-		return diag.FromErr(err)
-	}
-
-	if err := updatePush(d, api); err != nil {
+	result := multierror.Append(
+		updatePolicy(d, api),
+		updateEmailFactor(d, api),
+		updateOTPFactor(d, api),
+		updateRecoveryCodeFactor(d, api),
+		updatePhoneFactor(d, api),
+		updateWebAuthnRoaming(d, api),
+		updateWebAuthnPlatform(d, api),
+		updateDUO(d, api),
+		updatePush(d, api),
+	)
+	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -384,25 +365,17 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	if err := api.Guardian.MultiFactor.Phone.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.Email.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.OTP.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.DUO.Enable(false); err != nil {
-		return diag.FromErr(err)
-	}
-	if err := api.Guardian.MultiFactor.Push.Enable(false); err != nil {
+	result := multierror.Append(
+		api.Guardian.MultiFactor.Phone.Enable(false),
+		api.Guardian.MultiFactor.Email.Enable(false),
+		api.Guardian.MultiFactor.OTP.Enable(false),
+		api.Guardian.MultiFactor.RecoveryCode.Enable(false),
+		api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false),
+		api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false),
+		api.Guardian.MultiFactor.DUO.Enable(false),
+		api.Guardian.MultiFactor.Push.Enable(false),
+	)
+	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)
 	}
 

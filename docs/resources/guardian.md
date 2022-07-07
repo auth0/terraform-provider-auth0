@@ -27,8 +27,23 @@ resource "auth0_guardian" "default" {
       verification_message = "{{code}} is your verification code for {{tenant.friendly_name}}."
     }
   }
+  push {
+    amazon_sns {
+      aws_access_key_id = "test1"
+      aws_region = "us-west-1"
+      aws_secret_access_key = "secretKey"
+      sns_apns_platform_application_arn = "test_arn"
+      sns_gcm_platform_application_arn = "test_arn"
+    }
+    custom_app {
+      app_name = "CustomApp"
+      apple_app_link = "https://itunes.apple.com/us/app/my-app/id123121"
+      google_app_link = "https://play.google.com/store/apps/details?id=com.my.app"
+    }
+  }    
   email = true
   otp = true
+  recovery_code = true    
 }
 ```
 
@@ -42,8 +57,10 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA. For details, see [WebAuthn Roaming](#webauthn-roaming).
 * `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. For details, see [WebAuthn Platform](#webauthn-platform).
 * `duo` - (Optional) List(Resource). Configuration settings for the Duo MFA. For details, see [Duo](#duo).
+* `push` - (Optional) List(Resource). Configuration settings for the Push MFA. For details, see [Push](#push).
 * `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
-* `OTP` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
+* `otp` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
+* `recovery_code` - (Optional) Boolean. Indicates whether recovery code MFA is enabled.
 
 ### Phone
 
@@ -95,6 +112,28 @@ See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/
 * `integration_key` - (Optional) String. Duo client ID, see the Duo documentation for more details on Duo setup.
 * `secret_key`- (Optional) String. Duo client secret, see the Duo documentation for more details on Duo setup.
 * `hostname`- (Optional) String. Duo API Hostname, see the Duo documentation for more details on Duo setup.
+
+### Push
+
+`push` supports the following arguments:
+
+#### AmazonSNS
+
+`amazon_sns` supports the following arguments:
+
+* `aws_access_key_id` - (Required) String. Your AWS Access Key ID.
+* `aws_region`- (Required) String. Your AWS application's region.
+* `aws_secret_access_key`- (Required) String. Your AWS Secret Access Key.
+* `sns_apns_platform_application_arn`- (Required) String. The Amazon Resource Name for your Apple Push Notification Service.
+* `sns_gcm_platform_application_arn`- (Required) String. The Amazon Resource Name for your Firebase Cloud Messaging Service.
+
+#### CustomApp
+
+`custom_app` supports the following arguments:
+
+* `app_name` - (Optional) String. Custom Application Name.
+* `apple_app_link`- (Optional) String. Apple App Store URL.
+* `google_app_link`- (Optional) String. Google Store URL.
 
 
 ## Attributes Reference

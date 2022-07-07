@@ -665,6 +665,12 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Enables proof key for code exchange (PKCE) functionality for OAuth2 connections",
 				},
+				"upstream_params": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.StringIsJSON,
+					Description:  "You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.",
+				},
 			},
 		},
 		Description: "Configuration settings for connection options",

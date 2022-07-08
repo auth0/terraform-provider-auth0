@@ -54,7 +54,7 @@ func newClient() *schema.Resource {
 					"native", "spa", "regular_web", "non_interactive", "rms",
 					"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 					"egnyte", "newrelic", "office365", "salesforce", "sentry",
-					"sharepoint", "slack", "springcm", "zendesk", "zoom",
+					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
 				}, false),
 			},
 			"logo_uri": {

@@ -440,6 +440,8 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 				return err
 			}
 		}
+
+		return nil
 	}
 
 	return api.Guardian.MultiFactor.Push.Enable(false)

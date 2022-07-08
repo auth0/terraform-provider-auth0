@@ -94,14 +94,8 @@ func flattenTenantUniversalLogin(universalLogin *management.TenantUniversalLogin
 }
 
 func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) []interface{} {
-	if sessionCookie == nil {
-		return nil
-	}
-	if sessionCookie.Mode == nil {
-		return nil
-	}
 	m := make(map[string]interface{})
-	m["mode"] = sessionCookie.Mode
+	m["mode"] = sessionCookie.GetMode()
 
 	return []interface{}{m}
 }

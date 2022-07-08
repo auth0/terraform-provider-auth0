@@ -309,7 +309,6 @@ func newTenant() *schema.Resource {
 						"mode": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Computed: true,
 							ValidateFunc: validation.StringInSlice([]string{
 								"persistent",
 								"non-persistent",

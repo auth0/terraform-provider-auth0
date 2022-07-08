@@ -57,6 +57,12 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 				),
 			},
+			{
+				Config: `resource "auth0_tenant" "my_tenant" {}`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
+				),
+			},
 		},
 	})
 }

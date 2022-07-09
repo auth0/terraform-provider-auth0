@@ -205,6 +205,104 @@ func newAttackProtection() *schema.Resource {
 					},
 				},
 			},
+			"bot_detection": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "BotDetection mitigates scripted attacks by detecting when a request is likely to be coming from a bot.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"response": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Block suspected bot traffic by requiring a CAPTCHA during the login process.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice(
+											[]string{
+												"off",
+												"always_on",
+												"high_risk",
+											},
+											false,
+										),
+									},
+									"selected": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice(
+											[]string{
+												"auth0",
+												"recaptcha_v2",
+												"recaptcha_enterprise",
+											},
+											false,
+										),
+									},
+									"providers": {
+										Type:     schema.TypeList,
+										Optional: true,
+										Computed: true,
+										MaxItems: 1,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"recaptcha_v2": {
+													Type:     schema.TypeList,
+													Optional: true,
+													Computed: true,
+													MaxItems: 1,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"secret": {
+																Type:      schema.TypeString,
+																Optional:  true,
+																Sensitive: true,
+															},
+															"site_key": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+												"recaptcha_enterprise": {
+													Type:     schema.TypeList,
+													Optional: true,
+													Computed: true,
+													MaxItems: 1,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"api_key": {
+																Type:      schema.TypeString,
+																Optional:  true,
+																Sensitive: true,
+															},
+															"project_id": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"site_key": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -262,6 +360,21 @@ func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
+	botDetection, err := api.AttackProtection.GetBotDetection()
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok {
+			if mErr.Status() == http.StatusNotFound {
+				d.SetId("")
+				return nil
+			}
+		}
+		return diag.FromErr(err)
+	}
+
+	if err = d.Set("bot_detection", flattenBotDetection(botDetection)); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return nil
 }
 
@@ -282,6 +395,12 @@ func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 
 	if bpd := expandBreachedPasswordDetection(d); bpd != nil {
 		if err := api.AttackProtection.UpdateBreachedPasswordDetection(bpd); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	if bot := expandBotDetection(d); bot != nil {
+		if err := api.AttackProtection.UpdateBotDetection(bot); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -343,6 +462,36 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 		m["method"] = bpd.Method
 		m["shields"] = bpd.Shields
 	}
+	return []interface{}{m}
+}
+
+func flattenBotDetection(bot *management.BotDetection) []interface{} {
+	m := make(map[string]interface{})
+
+	m["response"] = []interface{}{
+		map[string]interface{}{
+			"policy":   bot.GetResponse().GetPolicy(),
+			"selected": bot.GetResponse().GetSelected(),
+			"providers": []interface{}{
+				map[string]interface{}{
+					"recaptcha_v2": []interface{}{
+						map[string]interface{}{
+							"secret":   bot.GetResponse().GetProviders().GetRecaptchaV2().GetSecret(),
+							"site_key": bot.GetResponse().GetProviders().GetRecaptchaV2().GetSiteKey(),
+						},
+					},
+					"recaptcha_enterprise": []interface{}{
+						map[string]interface{}{
+							"api_key":    bot.GetResponse().GetProviders().GetRecaptchaEnterprise().GetAPIKey(),
+							"project_id": bot.GetResponse().GetProviders().GetRecaptchaEnterprise().GetProjectID(),
+							"site_key":   bot.GetResponse().GetProviders().GetRecaptchaEnterprise().GetSiteKey(),
+						},
+					},
+				},
+			},
+		},
+	}
+
 	return []interface{}{m}
 }
 
@@ -445,4 +594,40 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 	})
 
 	return &bpd
+}
+
+func expandBotDetection(d *schema.ResourceData) *management.BotDetection {
+	var bot management.BotDetection
+
+	List(d, "bot_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+		List(d, "response", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+			bot.Response = &management.BotDetectionResponse{
+				Policy:   String(d, "policy"),
+				Selected: String(d, "selected"),
+			}
+
+			List(d, "providers", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+				bot.Response.Providers = &management.CaptchaProviders{}
+
+				List(d, "recaptcha_v2", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+					bot.Response.Providers.RecaptchaV2 =
+						&management.CaptchaProviderRecaptchaV2{
+							Secret:  String(d, "secret"),
+							SiteKey: String(d, "site_key"),
+						}
+				})
+
+				List(d, "recaptcha_enterprise", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
+					bot.Response.Providers.RecaptchaEnterprise =
+						&management.CaptchaProviderRecaptchaEnterprise{
+							APIKey:    String(d, "api_key"),
+							ProjectID: String(d, "project_id"),
+							SiteKey:   String(d, "site_key"),
+						}
+				})
+			})
+		})
+	})
+
+	return &bot
 }

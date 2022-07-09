@@ -9,7 +9,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: PATCH
   response:
@@ -28,7 +28,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: PATCH
   response:
@@ -47,7 +47,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: PATCH
   response:
@@ -60,13 +60,32 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"policy":"always_on","selected":"auth0"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: POST
+  response:
+    body: '{"selected":"auth0","policy":"always_on","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       {}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: GET
   response:
@@ -85,7 +104,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: GET
   response:
@@ -104,11 +123,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: GET
   response:
     body: '{"enabled":true,"shields":[],"admin_notification_frequency":[],"method":"standard"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: GET
+  response:
+    body: '{"selected":"auth0","policy":"always_on","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -123,7 +161,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: GET
   response:
@@ -142,7 +180,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: GET
   response:
@@ -161,11 +199,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: GET
   response:
     body: '{"enabled":true,"shields":[],"admin_notification_frequency":[],"method":"standard"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: GET
+  response:
+    body: '{"selected":"auth0","policy":"always_on","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -180,7 +237,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: GET
   response:
@@ -199,7 +256,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: GET
   response:
@@ -218,11 +275,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: GET
   response:
     body: '{"enabled":true,"shields":[],"admin_notification_frequency":[],"method":"standard"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: GET
+  response:
+    body: '{"selected":"auth0","policy":"always_on","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -237,7 +313,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: PATCH
   response:
@@ -256,7 +332,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: PATCH
   response:
@@ -275,7 +351,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: PATCH
   response:
@@ -288,13 +364,32 @@ interactions:
     duration: 1ms
 - request:
     body: |
+      {"policy":"high_risk","selected":"recaptcha_v2"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: POST
+  response:
+    body: '{"selected":"recaptcha_v2","policy":"high_risk","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
       {}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: GET
   response:
@@ -313,7 +408,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: GET
   response:
@@ -332,11 +427,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: GET
   response:
     body: '{"enabled":false,"shields":[],"admin_notification_frequency":[],"method":"standard"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: GET
+  response:
+    body: '{"selected":"recaptcha_v2","policy":"high_risk","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -351,7 +465,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/suspicious-ip-throttling
     method: GET
   response:
@@ -370,7 +484,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/brute-force-protection
     method: GET
   response:
@@ -389,11 +503,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/latest
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/attack-protection/breached-password-detection
     method: GET
   response:
     body: '{"enabled":false,"shields":[],"admin_notification_frequency":[],"method":"standard"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/latest
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/anomaly/captchas
+    method: GET
+  response:
+    body: '{"selected":"recaptcha_v2","policy":"high_risk","providers":{"auth0":{},"recaptcha_v2":{"siteKey":"someSiteKey","secret":"someSecret"},"recaptcha_enterprise":{"siteKey":"someSiteKey","apiKey":"someApiKey","projectId":"someID"}}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

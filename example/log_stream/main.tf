@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    auth0 = {
+      source = "auth0/auth0"
+    }
+  }
+}
+
 provider "auth0" {}
 
 resource "auth0_log_stream" "example_http" {
@@ -13,6 +21,7 @@ resource "auth0_log_stream" "example_http" {
       name = "auth.signup.fail"
     }
   ]
+
   sink {
     http_endpoint       = "https://example.com/logs"
     http_content_type   = "application/json"

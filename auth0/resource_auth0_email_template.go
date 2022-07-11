@@ -67,12 +67,18 @@ func newEmailTemplate() *schema.Resource {
 				Type:     schema.TypeBool,
 				Required: true,
 			},
+			"include_email_in_redirect": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether the `reset_email` and `verify_email` templates should include the user's email address as the email parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true.",
+			},
 		},
 	}
 }
 
 func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := buildEmailTemplate(d)
+	email := expandEmailTemplate(d)
 	api := m.(*management.Management)
 
 	// The email template resource doesn't allow deleting templates, so in order
@@ -124,13 +130,14 @@ func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{
 		d.Set("syntax", email.Syntax),
 		d.Set("url_lifetime_in_seconds", email.URLLifetimeInSecoonds),
 		d.Set("enabled", email.Enabled),
+		d.Set("include_email_in_redirect", email.GetIncludeEmailInRedirect()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := buildEmailTemplate(d)
+	email := expandEmailTemplate(d)
 	api := m.(*management.Management)
 	if err := api.EmailTemplate.Update(d.Id(), email); err != nil {
 		return diag.FromErr(err)
@@ -157,16 +164,17 @@ func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	return nil
 }
 
-func buildEmailTemplate(d *schema.ResourceData) *management.EmailTemplate {
+func expandEmailTemplate(d *schema.ResourceData) *management.EmailTemplate {
 	emailTemplate := &management.EmailTemplate{
-		Template:              String(d, "template"),
-		Body:                  String(d, "body"),
-		From:                  String(d, "from"),
-		ResultURL:             String(d, "result_url"),
-		Subject:               String(d, "subject"),
-		Syntax:                String(d, "syntax"),
-		URLLifetimeInSecoonds: Int(d, "url_lifetime_in_seconds"),
-		Enabled:               Bool(d, "enabled"),
+		Template:               String(d, "template"),
+		Body:                   String(d, "body"),
+		From:                   String(d, "from"),
+		ResultURL:              String(d, "result_url"),
+		Subject:                String(d, "subject"),
+		Syntax:                 String(d, "syntax"),
+		URLLifetimeInSecoonds:  Int(d, "url_lifetime_in_seconds"),
+		Enabled:                Bool(d, "enabled"),
+		IncludeEmailInRedirect: Bool(d, "include_email_in_redirect"),
 	}
 
 	return emailTemplate

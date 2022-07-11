@@ -35,6 +35,7 @@ resource "auth0_email_template" "my_email_template" {
   syntax = "liquid"
   url_lifetime_in_seconds = 3600
   enabled = true
+  include_email_in_redirect = true
 
   depends_on = [ "${auth0_email.my_email_provider}" ]
 }
@@ -52,6 +53,7 @@ Arguments accepted by this resource include:
 * `syntax` - (Required) String. Syntax of the template body. You can use either text or HTML + Liquid syntax.
 * `url_lifetime_in_seconds` - (Optional) Integer. Number of seconds during which the link within the email will be valid.
 * `enabled` - (Required) Boolean. Indicates whether the template is enabled.
+* `include_email_in_redirect` - (Optional) Boolean. Whether the `reset_email` and `verify_email` templates should include the user's email address as the email parameter in the `returnUrl` (true) or whether no email address should be included in the redirect (false). Defaults to true.
 
 ## Attributes Reference
 

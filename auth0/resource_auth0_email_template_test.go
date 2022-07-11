@@ -41,6 +41,7 @@ func TestAccEmailTemplate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_email_template.my_email_template", "syntax", "liquid"),
 					resource.TestCheckResourceAttr("auth0_email_template.my_email_template", "url_lifetime_in_seconds", "3600"),
 					resource.TestCheckResourceAttr("auth0_email_template.my_email_template", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_template.my_email_template", "include_email_in_redirect", "false"),
 				),
 			},
 		},
@@ -68,6 +69,7 @@ resource "auth0_email_template" "my_email_template" {
 	syntax = "liquid"
 	url_lifetime_in_seconds = 3600
 	enabled = true
+	include_email_in_redirect = false
 
 	depends_on = ["auth0_email.my_email_provider"]
 }

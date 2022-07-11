@@ -20,7 +20,7 @@ resource "auth0_action" "my_action" {
 	name = "Example Action"
 	supported_triggers {
 		id = "post-login"
-		version = "v2"
+		version = "v3"
 	}
 	runtime = "node16"
 	code = <<-EOT

@@ -1,8 +1,7 @@
 terraform {
   required_providers {
     auth0 = {
-      source  = "alexkappa/auth0"
-      version = "0.22.0"
+      source = "auth0/auth0"
     }
   }
 }
@@ -10,17 +9,17 @@ terraform {
 provider "auth0" {}
 
 resource "auth0_organization" "organization" {
-  name         = "alex-inc"
-  display_name = "Alex Inc."
+  name         = "auth0-inc"
+  display_name = "Auth0 Inc."
   branding {
-    logo_url = "https://alexkappa.com/assets/icons/icon.png"
+    logo_url = "https://example.com/assets/icons/icon.png"
     colors = {
       primary         = "#f2f2f2"
       page_background = "#e1e1e1"
     }
   }
   connections {
-    connection_id = "con_X7iCWk8xB076gRi2"
+    connection_id = "con_X7iAWk1xB076gRi2"
   }
 }
 

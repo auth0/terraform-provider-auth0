@@ -94,7 +94,7 @@ Arguments accepted by this resource include:
 * `name` - (Required) String. Name of the client.
 * `description` - (Optional) String, (Max length = 140 characters). Description of the purpose of the client.
 * `client_secret_rotation_trigger` - (Optional) Map. Custom metadata for the rotation. For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).
-* `app_type` - (Optional) String. Type of application the client represents. Options include `native`, `spa`, `regular_web`, `non_interactive`, `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+* `app_type` - (Optional) String. Type of application the client represents. Options include `native`, `spa`, `regular_web`, `non_interactive`, `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `sso_integration`, `zendesk`, `zoom`.
 * `logo_uri` - (Optional) String. URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 * `is_first_party` - (Optional) Boolean. Indicates whether or not this client is a first-party client.
 * `is_token_endpoint_ip_header_trusted` - (Optional) Boolean. Indicates whether or not the token endpoint IP header is trusted.
@@ -179,6 +179,8 @@ Arguments accepted by this resource include:
 * `zoom`- (Optional) String
 
 ### SAML
+
+SAML apps facilitate the configurations for various Single Sign-on (SSO) integrations including the following types: G Suite, Hosted Graphite, Litmos, Cisco Webex, Sprout Video, FreshDesk, Tableau Online, Tableau Server, Datadog, Egencia, Github Cloud, Github Server, Heroku, Workday, Pluralsight and Workpath.
 
 `samlp` supports the following arguments:
 

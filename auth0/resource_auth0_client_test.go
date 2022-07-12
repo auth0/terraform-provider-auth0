@@ -593,3 +593,73 @@ resource "auth0_client" "my_client" {
 	}
   }
 `
+
+func TestAccClientSSOIntegration(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccClientSSOIntegrationCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "http://tableau-server-test.domain.eu.com/audience"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "http://tableau-server-test.domain.eu.com/recipient"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "http://tableau-server-test.domain.eu.com/destination"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccClientSSOIntegrationUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "http://tableau-server-test.domain.eu.com/audience-different"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "http://tableau-server-test.domain.eu.com/recipient-different"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "http://tableau-server-test.domain.eu.com/destination"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientSSOIntegrationCreate = `
+resource "auth0_client" "my_client" {
+  name = "Acceptance Test - SSO Integration - {{.testName}}"
+  app_type = "sso_integration"
+  addons{
+	samlp {
+		audience= "http://tableau-server-test.domain.eu.com/audience"
+		destination= "http://tableau-server-test.domain.eu.com/destination"
+		digest_algorithm= "sha256"
+		lifetime_in_seconds= 3600
+		mappings= {
+			email= "username"
+		}
+		name_identifier_format= "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+		passthrough_claims_with_no_mapping= false
+		recipient= "http://tableau-server-test.domain.eu.com/recipient"
+	}
+  }
+}
+`
+
+const testAccClientSSOIntegrationUpdate = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+	addons{
+	  samlp {
+		audience= "http://tableau-server-test.domain.eu.com/audience-different"
+		destination= "http://tableau-server-test.domain.eu.com/destination"
+		digest_algorithm= "sha256"
+		lifetime_in_seconds= 3600
+		mappings= {
+			email= "username"
+		}
+		name_identifier_format= "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+		passthrough_claims_with_no_mapping= false
+		recipient= "http://tableau-server-test.domain.eu.com/recipient-different"
+	  }
+	}
+  }
+`

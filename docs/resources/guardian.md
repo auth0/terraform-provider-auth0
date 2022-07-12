@@ -13,18 +13,42 @@ access. With this resource you can configure some options available for MFA.
 ## Example Usage
 
 ```hcl
-resource "auth0_guardian" "default" {
-  policy = "all-applications"
+resource "auth0_guardian" "my_guardian" {
+  policy        = "all-applications"
+  email         = true
+  otp           = true
+  recovery_code = true
+  webauthn_platform {} # This will enable it. Removing this block will disable it.
+  webauthn_roaming {
+    user_verification = "required"
+  }
   phone {
     provider      = "auth0"
-    message_types = ["sms"]
+    message_types = ["sms", "voice"]
     options {
       enrollment_message   = "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."
       verification_message = "{{code}} is your verification code for {{tenant.friendly_name}}."
     }
   }
-  email = true
-  otp = true
+  push {
+    amazon_sns {
+      aws_access_key_id                 = "test1"
+      aws_region                        = "us-west-1"
+      aws_secret_access_key             = "secretKey"
+      sns_apns_platform_application_arn = "test_arn"
+      sns_gcm_platform_application_arn  = "test_arn"
+    }
+    custom_app {
+      app_name        = "CustomApp"
+      apple_app_link  = "https://itunes.apple.com/us/app/my-app/id123121"
+      google_app_link = "https://play.google.com/store/apps/details?id=com.my.app"
+    }
+  }
+  duo {
+    integration_key = "someKey"
+    secret_key      = "someSecret"
+    hostname        = "api-hostname"
+  }
 }
 ```
 
@@ -34,9 +58,21 @@ Arguments accepted by this resource include:
 
 * `policy` - (Required) String. Policy to use. Available options are `never`, `all-applications` and `confidence-score`.
 The option `confidence-score` means the trigger of MFA will be adaptive. See [Auth0 docs](https://auth0.com/docs/mfa/adaptive-mfa).
-* `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. For details, see [Phone](#phone).
+* `phone` - (Optional) List(Resource). Configuration settings for the phone MFA. 
+If this block is present, Phone MFA will be enabled, and disabled otherwise. For details, see [Phone](#phone).
+* `webauthn_roaming` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Security Keys MFA.
+If this block is present, WebAuthn with FIDO Security Keys MFA will be enabled, and disabled otherwise.
+For details, see [WebAuthn Roaming](#webauthn-roaming).
+* `webauthn_platform` - (Optional) List(Resource). Configuration settings for the WebAuthn with FIDO Device Biometrics MFA.
+If this block is present, WebAuthn with FIDO Device Biometrics MFA will be enabled, and disabled otherwise.
+For details, see [WebAuthn Platform](#webauthn-platform).
+* `duo` - (Optional) List(Resource). Configuration settings for the Duo MFA.
+If this block is present, Duo MFA will be enabled, and disabled otherwise. For details, see [Duo](#duo).
+* `push` - (Optional) List(Resource). Configuration settings for the Push MFA.
+If this block is present, Push MFA will be enabled, and disabled otherwise. For details, see [Push](#push).
 * `email` - (Optional) Boolean. Indicates whether email MFA is enabled.
-* `OTP` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
+* `otp` - (Optional) Boolean. Indicates whether one time password MFA is enabled.
+* `recovery_code` - (Optional) Boolean. Indicates whether recovery code MFA is enabled.
 
 ### Phone
 
@@ -46,14 +82,17 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `message_types` - (Required) List(String). Message types to use, array of `sms` and or `voice`. Adding both to array should enable the user to choose.
 * `options`- (Required) List(Resource). Options for the various providers. See [Options](#options).
 
-### Options
+#### Options
+
 `options` supports different arguments depending on the provider specified in [Phone](#phone).
 
-### Auth0
+##### Auth0
+
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 
-### Twilio
+##### Twilio
+
 * `enrollment_message` (Optional) String. This message will be sent whenever a user enrolls a new device for the first time using MFA. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `verification_message` (Optional) String. This message will be sent whenever a user logs in after the enrollment. Supports liquid syntax, see [Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).
 * `sid`(Optional) String.
@@ -61,10 +100,56 @@ The option `confidence-score` means the trigger of MFA will be adaptive. See [Au
 * `from` (Optional) String.
 * `messaging_service_sid`(Optional) String.
 
-### Phone message hook
+##### Phone Message Hook
 
 Options have to be empty. Custom code has to be written in a phone message hook.
 See [phone message hook docs](https://auth0.com/docs/hooks/extensibility-points/send-phone-message).
+
+### WebAuthn Roaming
+
+`webauth_roaming` supports the following arguments:
+
+* `user_verification` - (Optional) String. User verification, one of `discouraged`, `preferred` or `required`.
+* `override_relying_party` - (Optional) Bool. The Relying Party is the domain for which the WebAuthn keys will be issued, set to true if you are customizing the identifier. 
+* `relying_party_identifier`- (Optional) String. The Relying Party should be a suffix of the custom domain.
+
+### WebAuthn Platform
+
+`webauth_roaming` supports the following arguments:
+
+* `override_relying_party` - (Optional) Bool. The Relying Party is the domain for which the WebAuthn keys will be issued, set to true if you are customizing the identifier.
+* `relying_party_identifier`- (Optional) String. The Relying Party should be a suffix of the custom domain.
+
+### Duo
+
+`duo` supports the following arguments:
+
+* `integration_key` - (Optional) String. Duo client ID, see the Duo documentation for more details on Duo setup.
+* `secret_key`- (Optional) String. Duo client secret, see the Duo documentation for more details on Duo setup.
+* `hostname`- (Optional) String. Duo API Hostname, see the Duo documentation for more details on Duo setup.
+
+### Push
+
+`push` supports the following arguments:
+
+#### AmazonSNS
+
+`amazon_sns` supports the following arguments:
+
+* `aws_access_key_id` - (Required) String. Your AWS Access Key ID.
+* `aws_region`- (Required) String. Your AWS application's region.
+* `aws_secret_access_key`- (Required) String. Your AWS Secret Access Key.
+* `sns_apns_platform_application_arn`- (Required) String. The Amazon Resource Name for your Apple Push Notification Service.
+* `sns_gcm_platform_application_arn`- (Required) String. The Amazon Resource Name for your Firebase Cloud Messaging Service.
+
+#### CustomApp
+
+`custom_app` supports the following arguments:
+
+* `app_name` - (Optional) String. Custom Application Name.
+* `apple_app_link`- (Optional) String. Apple App Store URL.
+* `google_app_link`- (Optional) String. Google Store URL.
+
 
 ## Attributes Reference
 

@@ -87,6 +87,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "true"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.configuration.foo"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -94,6 +95,7 @@ func TestAccConnection(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -146,6 +148,11 @@ resource "auth0_connection" "my_connection" {
 			active                 = true
 			return_enroll_settings = true
 		}
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -209,6 +216,7 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "ethnicity"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -216,7 +224,6 @@ func TestAccConnectionAD(t *testing.T) {
 }
 
 const testAccConnectionADConfig = `
-
 resource "auth0_connection" "ad" {
 	name = "Acceptance-Test-AD-{{.testName}}"
 	strategy = "ad"
@@ -231,6 +238,11 @@ resource "auth0_connection" "ad" {
 		ips = [ "192.168.1.1", "192.168.1.2" ]
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["ethnicity","gender"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -260,6 +272,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "ext_groups"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.should_trust_email_verified_connection", "never_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -267,7 +280,6 @@ func TestAccConnectionAzureAD(t *testing.T) {
 }
 
 const testAccConnectionAzureADConfig = `
-
 resource "auth0_connection" "azure_ad" {
 	name     = "Acceptance-Test-Azure-AD-{{.testName}}"
 	strategy = "waad"
@@ -292,6 +304,11 @@ resource "auth0_connection" "azure_ad" {
 		]
 		set_user_root_attributes = "on_each_login"
 		should_trust_email_verified_connection = "never_set_emails_as_verified"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -327,6 +344,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -348,6 +366,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "openid"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -377,6 +396,11 @@ resource "auth0_connection" "oidc" {
 		scopes                 = [ "openid", "email", "profile" ]
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -429,6 +453,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", ""),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -445,6 +470,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", "https://cdn.paypal.com/assets/logo.png"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -467,6 +493,11 @@ resource "auth0_connection" "oauth2" {
 			fetchUserProfile= "function( { return callback(null) }"
 		}
 		pkce_enabled = true
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -567,6 +598,7 @@ func TestAccConnectionSMS(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.totp.0.time_step", "300"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.totp.0.length", "6"),
+					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -578,7 +610,6 @@ resource "auth0_connection" "sms" {
 	name = "Acceptance-Test-SMS-{{.testName}}"
 	is_domain_connection = false
 	strategy = "sms"
-
 	options {
 		disable_signup = false
 		name = "SMS OTP"
@@ -589,11 +620,15 @@ resource "auth0_connection" "sms" {
 		template = "@@password@@"
 		messaging_service_sid = "GHI789"
 		brute_force_protection = true
-
 		totp {
 			time_step = 300
 			length = 6
 		}
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -618,6 +653,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.gateway_authentication.0.subject", "test.us.auth0.com:sms"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.gateway_authentication.0.audience", "https://somewhere.com/sms-gateway"),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.gateway_authentication.0.secret", "4e2680bb72ec2ae24836476dd37ed6c2"),
+					resource.TestCheckResourceAttr("auth0_connection.sms", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -650,6 +686,11 @@ resource "auth0_connection" "sms" {
 			secret_base64_encoded = false
 		}
 		forward_request_info = true
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -670,6 +711,7 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "300"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "6"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -678,6 +720,7 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "360"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "4"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -701,6 +744,11 @@ resource "auth0_connection" "email" {
 			time_step = 300
 			length = 6
 		}
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 
@@ -739,6 +787,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "name", fmt.Sprintf("Acceptance-Test-Salesforce-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "strategy", "salesforce-community"),
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "options.0.community_base_url", "https://salesforce.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -750,11 +799,15 @@ resource "auth0_connection" "salesforce_community" {
 	name = "Acceptance-Test-Salesforce-Connection-{{.testName}}"
 	is_domain_connection = false
 	strategy = "salesforce-community"
-
 	options {
 		client_id = "client-id"
 		client_secret = "client-secret"
 		community_base_url = "https://salesforce.example.com"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -779,6 +832,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.scopes.*", "email"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_oauth2", "options.0.scopes.*", "profile"),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -796,6 +850,11 @@ resource "auth0_connection" "google_oauth2" {
 		allowed_audiences = [ "example.com", "api.example.com" ]
 		scopes = [ "email", "profile", "gmail", "youtube" ]
 		set_user_root_attributes = "on_each_login"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -823,6 +882,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -843,6 +903,11 @@ resource "auth0_connection" "google_apps" {
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
 		scopes = [ "ext_profile", "ext_groups" ]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -863,6 +928,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.#", "4"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "public_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -875,6 +941,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "public_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.facebook", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.facebook", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -890,6 +957,11 @@ resource "auth0_connection" "facebook" {
 		client_id = "client_id"
 		client_secret = "client_secret"
 		scopes = [ "public_profile", "email", "groups_access_member_info", "user_birthday" ]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -926,6 +998,7 @@ func TestAccConnectionApple(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "name"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -936,6 +1009,7 @@ func TestAccConnectionApple(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.scopes.#", "1"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.apple", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -954,6 +1028,11 @@ resource "auth0_connection" "apple" {
 		key_id = "key_id"
 		scopes = ["email", "name"]
 		set_user_root_attributes = "on_each_login"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -991,6 +1070,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.#", "3"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "basic_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -1000,6 +1080,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret_update"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.linkedin", "options.0.scopes.*", "basic_profile"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.scopes.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -1016,6 +1097,11 @@ resource "auth0_connection" "linkedin" {
 		client_secret = "client_secret"
 		strategy_version = 2
 		scopes = [ "basic_profile", "profile", "email" ]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -1068,6 +1154,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "notifications"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "delete_repo"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_public_key"),
+					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 		},
@@ -1085,6 +1172,11 @@ resource "auth0_connection" "github" {
 				   "delete_repo", "notifications", "gist", "read_repo_hook", "write_repo_hook", "admin_repo_hook",
 				   "read_org", "admin_org", "read_public_key", "write_public_key", "admin_public_key", "write_org"
 		]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -1106,6 +1198,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "signin"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "graph_user"),
+					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -1118,6 +1211,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.scopes.#", "1"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.windowslive", "options.0.scopes.*", "signin"),
+					resource.TestCheckResourceAttr("auth0_connection.windowslive", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -1134,6 +1228,11 @@ resource "auth0_connection" "windowslive" {
 		client_secret = "client_secret"
 		strategy_version = 2
 		scopes = ["signin", "graph_user"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
 	}
 }
 `
@@ -1350,6 +1449,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
 			{
@@ -1365,6 +1465,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 				),
 			},
 		},
@@ -1422,6 +1523,11 @@ EOF
 			"name": ["name", "nameidentifier"]
 			"email": ["emailaddress", "nameidentifier"]
 			"family_name": "surname"
+		})
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
 		})
 		idp_initiated {
 			client_id = "client_id"

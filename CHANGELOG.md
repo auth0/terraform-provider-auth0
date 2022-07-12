@@ -1,3 +1,17 @@
+## 0.33.0
+
+FEATURES:
+
+- `resource/auth0_guardian`: Added webauthn MFA ([#213](https://github.com/auth0/terraform-provider-auth0/pull/213))
+- `resource/auth0_guardian`: Added duo MFA ([#214](https://github.com/auth0/terraform-provider-auth0/pull/214))
+- `resource/auth0_guardian`: Added push (Amazon SNS, custom app) MFA ([#215](https://github.com/auth0/terraform-provider-auth0/pull/215))
+- `resource/auth0_guardian`: Added recovery code ([#216](https://github.com/auth0/terraform-provider-auth0/pull/216))
+- `resource/auth0_tenant`: Added `session_cookie` field ([#220](https://github.com/auth0/terraform-provider-auth0/pull/220))
+- `resource/auth0_client`: Added `sso_integration` as valid app type ([#221](https://github.com/auth0/terraform-provider-auth0/pull/221))
+- `resource/auth0_email_template`: Added `include_email_in_redirect` field ([#229](https://github.com/auth0/terraform-provider-auth0/pull/229))
+- `resource/auth0_connection`: Added `upstream_params` field ([#223](https://github.com/auth0/terraform-provider-auth0/pull/223))
+  
+
 ## 0.32.0
 
 FEATURES:

@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    auth0 = {
+      source = "auth0/auth0"
+    }
+  }
+}
+
 provider "auth0" {}
 
 resource "auth0_client" "my_client" {
@@ -14,6 +22,10 @@ resource "auth0_client" "my_client" {
   grant_types                         = ["authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token"]
   allowed_logout_urls                 = ["https://example.com"]
   web_origins                         = ["https://example.com"]
+  client_metadata = {
+    foo = "zoo"
+  }
+
   jwt_configuration {
     lifetime_in_seconds = 300
     secret_encoded      = true
@@ -22,9 +34,7 @@ resource "auth0_client" "my_client" {
       foo = "bar"
     }
   }
-  client_metadata = {
-    foo = "zoo"
-  }
+
   addons {
     firebase = {
       client_email        = "john.doe@example.com"
@@ -32,6 +42,7 @@ resource "auth0_client" "my_client" {
       private_key         = "wer"
       private_key_id      = "qwreerwerwe"
     }
+
     samlp {
       audience = "https://example.com/saml"
       mappings = {
@@ -47,18 +58,21 @@ resource "auth0_client" "my_client" {
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
       ]
       signing_cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+
       signing_key {
-        key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+        key  = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
         cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
       }
     }
   }
+
   mobile {
     ios {
       team_id               = "9JA89QQLNQ"
       app_bundle_identifier = "com.my.bundle.id"
     }
   }
+
   refresh_token {
     leeway          = 0
     token_lifetime  = 2592000

@@ -93,6 +93,13 @@ func flattenTenantUniversalLogin(universalLogin *management.TenantUniversalLogin
 	return []interface{}{m}
 }
 
+func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) []interface{} {
+	m := make(map[string]interface{})
+	m["mode"] = sessionCookie.GetMode()
+
+	return []interface{}{m}
+}
+
 func expandTenantChangePassword(d ResourceData) *management.TenantChangePassword {
 	var changePassword management.TenantChangePassword
 
@@ -175,4 +182,14 @@ func expandTenantUniversalLogin(d ResourceData) *management.TenantUniversalLogin
 	})
 
 	return &universalLogin
+}
+
+func expandTenantSessionCookie(d ResourceData) *management.TenantSessionCookie {
+	var sessionCookie management.TenantSessionCookie
+
+	List(d, "session_cookie").Elem(func(d ResourceData) {
+		sessionCookie.Mode = String(d, "mode")
+	})
+
+	return &sessionCookie
 }

@@ -3,17 +3,17 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","strategy":"github","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null}}
+      {"name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","strategy":"github","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_H0B7o6C73DDOngQ0","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"]},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+    body: '{"id":"con_r4RljadIT8vqqrav","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"]},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_H0B7o6C73DDOngQ0
+      - Go-Auth0-SDK/0.9.0
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_r4RljadIT8vqqrav
     method: GET
   response:
-    body: '{"id":"con_H0B7o6C73DDOngQ0","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+    body: '{"id":"con_r4RljadIT8vqqrav","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -47,11 +47,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_H0B7o6C73DDOngQ0
+      - Go-Auth0-SDK/0.9.0
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_r4RljadIT8vqqrav
     method: GET
   response:
-    body: '{"id":"con_H0B7o6C73DDOngQ0","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+    body: '{"id":"con_r4RljadIT8vqqrav","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -65,11 +65,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_H0B7o6C73DDOngQ0
+      - Go-Auth0-SDK/0.9.0
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_r4RljadIT8vqqrav
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-06-13T13:15:29.561Z"}'
+    body: '{"deleted_at":"2022-07-12T14:56:58.497Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

@@ -299,6 +299,25 @@ func newTenant() *schema.Resource {
 					validation.IsURLWithScheme([]string{"https"}),
 				),
 			},
+			"session_cookie": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"mode": {
+							Type:     schema.TypeString,
+							Optional: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"persistent",
+								"non-persistent",
+							}, false),
+							Description: "Behavior of tenant session cookie. Accepts either \"persistent\" or \"non-persistent\"",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -339,6 +358,7 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("error_page", flattenTenantErrorPage(tenant.ErrorPage)),
 		d.Set("flags", flattenTenantFlags(tenant.Flags)),
 		d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin)),
+		d.Set("session_cookie", flattenTenantSessionCookie(tenant.SessionCookie)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -378,6 +398,7 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		ErrorPage:             expandTenantErrorPage(d),
 		Flags:                 expandTenantFlags(d.GetRawConfig().GetAttr("flags")),
 		UniversalLogin:        expandTenantUniversalLogin(d),
+		SessionCookie:         expandTenantSessionCookie(d),
 	}
 
 	return tenant

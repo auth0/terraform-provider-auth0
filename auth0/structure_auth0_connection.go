@@ -17,37 +17,37 @@ func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{
 	var err error
 	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
-		m = flattenConnectionOptionsAuth0(d, connectionOptions)
+		m, err = flattenConnectionOptionsAuth0(d, connectionOptions)
 	case *management.ConnectionOptionsGoogleOAuth2:
-		m = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
+		m, err = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
 	case *management.ConnectionOptionsGoogleApps:
-		m = flattenConnectionOptionsGoogleApps(connectionOptions)
+		m, err = flattenConnectionOptionsGoogleApps(connectionOptions)
 	case *management.ConnectionOptionsOAuth2:
-		m = flattenConnectionOptionsOAuth2(connectionOptions)
+		m, err = flattenConnectionOptionsOAuth2(connectionOptions)
 	case *management.ConnectionOptionsFacebook:
-		m = flattenConnectionOptionsFacebook(connectionOptions)
+		m, err = flattenConnectionOptionsFacebook(connectionOptions)
 	case *management.ConnectionOptionsApple:
-		m = flattenConnectionOptionsApple(connectionOptions)
+		m, err = flattenConnectionOptionsApple(connectionOptions)
 	case *management.ConnectionOptionsLinkedin:
-		m = flattenConnectionOptionsLinkedin(connectionOptions)
+		m, err = flattenConnectionOptionsLinkedin(connectionOptions)
 	case *management.ConnectionOptionsGitHub:
-		m = flattenConnectionOptionsGitHub(connectionOptions)
+		m, err = flattenConnectionOptionsGitHub(connectionOptions)
 	case *management.ConnectionOptionsWindowsLive:
-		m = flattenConnectionOptionsWindowsLive(connectionOptions)
+		m, err = flattenConnectionOptionsWindowsLive(connectionOptions)
 	case *management.ConnectionOptionsSalesforce:
-		m = flattenConnectionOptionsSalesforce(connectionOptions)
+		m, err = flattenConnectionOptionsSalesforce(connectionOptions)
 	case *management.ConnectionOptionsEmail:
-		m = flattenConnectionOptionsEmail(connectionOptions)
+		m, err = flattenConnectionOptionsEmail(connectionOptions)
 	case *management.ConnectionOptionsSMS:
-		m = flattenConnectionOptionsSMS(connectionOptions)
+		m, err = flattenConnectionOptionsSMS(connectionOptions)
 	case *management.ConnectionOptionsOIDC:
-		m = flattenConnectionOptionsOIDC(connectionOptions)
+		m, err = flattenConnectionOptionsOIDC(connectionOptions)
 	case *management.ConnectionOptionsAD:
-		m = flattenConnectionOptionsAD(connectionOptions)
+		m, err = flattenConnectionOptionsAD(connectionOptions)
 	case *management.ConnectionOptionsAzureAD:
-		m = flattenConnectionOptionsAzureAD(connectionOptions)
+		m, err = flattenConnectionOptionsAzureAD(connectionOptions)
 	case *management.ConnectionOptionsADFS:
-		m = flattenConnectionOptionsADFS(connectionOptions)
+		m, err = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
 		m, err = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
@@ -58,18 +58,26 @@ func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{
 	return []interface{}{m}, nil
 }
 
-func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"scopes":                   options.Scopes(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
@@ -77,9 +85,17 @@ func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWi
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"strategy_version":         options.GetStrategyVersion(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) interface{} {
+func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) (interface{}, error) {
 	m := map[string]interface{}{
 		"password_policy":                options.GetPasswordPolicy(),
 		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
@@ -117,11 +133,17 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 		}
 	}
 
-	return m
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"allowed_audiences":        options.AllowedAudiences,
@@ -129,10 +151,18 @@ func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsG
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"domain":                   options.GetDomain(),
@@ -144,10 +174,18 @@ func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoo
 		"domain_aliases":           options.DomainAliases,
 		"icon_url":                 options.GetLogoURL(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
@@ -159,20 +197,36 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"team_id":                  options.GetTeamID(),
@@ -181,10 +235,18 @@ func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) i
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"strategy_version":         options.GetStrategyVersion(),
@@ -192,10 +254,18 @@ func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinke
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"community_base_url":       options.GetCommunityBaseURL(),
@@ -203,9 +273,17 @@ func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSal
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) interface{} {
+func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (interface{}, error) {
 	m := map[string]interface{}{
 		"name":                   options.GetName(),
 		"from":                   options.GetFrom(),
@@ -242,11 +320,17 @@ func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) inter
 		}
 	}
 
-	return m
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"icon_url":                 options.GetLogoURL(),
@@ -263,9 +347,17 @@ func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) int
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) interface{} {
+func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (interface{}, error) {
 	m := map[string]interface{}{
 		"name":                     options.GetName(),
 		"from":                     options.GetEmail().GetFrom(),
@@ -287,11 +379,17 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) i
 		}
 	}
 
-	return m
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, error) {
+	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
 		"domain_aliases":           options.DomainAliases,
 		"icon_url":                 options.GetLogoURL(),
@@ -303,10 +401,18 @@ func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) interfa
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) (interface{}, error) {
+	m := map[string]interface{}{
 		"client_id":                              options.GetClientID(),
 		"client_secret":                          options.GetClientSecret(),
 		"app_id":                                 options.GetAppID(),
@@ -325,10 +431,18 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
-func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) interface{} {
-	return map[string]interface{}{
+func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, error) {
+	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
 		"domain_aliases":           options.DomainAliases,
 		"icon_url":                 options.GetLogoURL(),
@@ -337,6 +451,14 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) int
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
 }
 
 func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, error) {
@@ -362,12 +484,6 @@ func flattenConnectionOptionsSAML(d ResourceData, options *management.Connection
 		"metadata_xml":             String(d, "options.0.metadata_xml"), // Does not get read back.
 	}
 
-	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
-	if err != nil {
-		return nil, err
-	}
-	m["fields_map"] = fieldsMap
-
 	if options.IdpInitiated != nil {
 		m["idp_initiated"] = []interface{}{
 			map[string]interface{}{
@@ -386,6 +502,18 @@ func flattenConnectionOptionsSAML(d ResourceData, options *management.Connection
 			},
 		}
 	}
+
+	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
+	if err != nil {
+		return nil, err
+	}
+	m["fields_map"] = fieldsMap
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, err
+	}
+	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
@@ -422,41 +550,41 @@ func expandConnection(d ResourceData) (*management.Connection, error) {
 	List(d, "options").Elem(func(d ResourceData) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			connection.Options = expandConnectionOptionsAuth0(d)
+			connection.Options, err = expandConnectionOptionsAuth0(d)
 		case management.ConnectionStrategyGoogleOAuth2:
-			connection.Options = expandConnectionOptionsGoogleOAuth2(d)
+			connection.Options, err = expandConnectionOptionsGoogleOAuth2(d)
 		case management.ConnectionStrategyGoogleApps:
-			connection.Options = expandConnectionOptionsGoogleApps(d)
+			connection.Options, err = expandConnectionOptionsGoogleApps(d)
 		case management.ConnectionStrategyOAuth2:
-			connection.Options = expandConnectionOptionsOAuth2(d)
+			connection.Options, err = expandConnectionOptionsOAuth2(d)
 		case management.ConnectionStrategyFacebook:
-			connection.Options = expandConnectionOptionsFacebook(d)
+			connection.Options, err = expandConnectionOptionsFacebook(d)
 		case management.ConnectionStrategyApple:
-			connection.Options = expandConnectionOptionsApple(d)
+			connection.Options, err = expandConnectionOptionsApple(d)
 		case management.ConnectionStrategyLinkedin:
-			connection.Options = expandConnectionOptionsLinkedin(d)
+			connection.Options, err = expandConnectionOptionsLinkedin(d)
 		case management.ConnectionStrategyGitHub:
-			connection.Options = expandConnectionOptionsGitHub(d)
+			connection.Options, err = expandConnectionOptionsGitHub(d)
 		case management.ConnectionStrategyWindowsLive:
-			connection.Options = expandConnectionOptionsWindowsLive(d)
+			connection.Options, err = expandConnectionOptionsWindowsLive(d)
 		case management.ConnectionStrategySalesforce,
 			management.ConnectionStrategySalesforceCommunity,
 			management.ConnectionStrategySalesforceSandbox:
-			connection.Options = expandConnectionOptionsSalesforce(d)
+			connection.Options, err = expandConnectionOptionsSalesforce(d)
 		case management.ConnectionStrategySMS:
-			connection.Options = expandConnectionOptionsSMS(d)
+			connection.Options, err = expandConnectionOptionsSMS(d)
 		case management.ConnectionStrategyOIDC:
-			connection.Options = expandConnectionOptionsOIDC(d)
+			connection.Options, err = expandConnectionOptionsOIDC(d)
 		case management.ConnectionStrategyAD:
-			connection.Options = expandConnectionOptionsAD(d)
+			connection.Options, err = expandConnectionOptionsAD(d)
 		case management.ConnectionStrategyAzureAD:
-			connection.Options = expandConnectionOptionsAzureAD(d)
+			connection.Options, err = expandConnectionOptionsAzureAD(d)
 		case management.ConnectionStrategyEmail:
-			connection.Options = expandConnectionOptionsEmail(d)
+			connection.Options, err = expandConnectionOptionsEmail(d)
 		case management.ConnectionStrategySAML:
 			connection.Options, err = expandConnectionOptionsSAML(d)
 		case management.ConnectionStrategyADFS:
-			connection.Options = expandConnectionOptionsADFS(d)
+			connection.Options, err = expandConnectionOptionsADFS(d)
 		default:
 			log.Printf("[WARN]: Unsupported connection strategy %s", strategy)
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
@@ -470,7 +598,7 @@ func expandConnection(d ResourceData) (*management.Connection, error) {
 	return connection, nil
 }
 
-func expandConnectionOptionsGitHub(d ResourceData) *management.ConnectionOptionsGitHub {
+func expandConnectionOptionsGitHub(d ResourceData) (*management.ConnectionOptionsGitHub, error) {
 	options := &management.ConnectionOptionsGitHub{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -480,10 +608,16 @@ func expandConnectionOptionsGitHub(d ResourceData) *management.ConnectionOptions
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsAuth0(d ResourceData) *management.ConnectionOptions {
+func expandConnectionOptionsAuth0(d ResourceData) (*management.ConnectionOptions, error) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:     String(d, "password_policy"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
@@ -538,10 +672,16 @@ func expandConnectionOptionsAuth0(d ResourceData) *management.ConnectionOptions 
 	options.CustomScripts = Map(d, "custom_scripts")
 	options.Configuration = Map(d, "configuration")
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsGoogleOAuth2(d ResourceData) *management.ConnectionOptionsGoogleOAuth2 {
+func expandConnectionOptionsGoogleOAuth2(d ResourceData) (*management.ConnectionOptionsGoogleOAuth2, error) {
 	options := &management.ConnectionOptionsGoogleOAuth2{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -552,10 +692,16 @@ func expandConnectionOptionsGoogleOAuth2(d ResourceData) *management.ConnectionO
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsGoogleApps(d ResourceData) *management.ConnectionOptionsGoogleApps {
+func expandConnectionOptionsGoogleApps(d ResourceData) (*management.ConnectionOptionsGoogleApps, error) {
 	options := &management.ConnectionOptionsGoogleApps{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -570,10 +716,16 @@ func expandConnectionOptionsGoogleApps(d ResourceData) *management.ConnectionOpt
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptionsOAuth2 {
+func expandConnectionOptionsOAuth2(d ResourceData) (*management.ConnectionOptionsOAuth2, error) {
 	options := &management.ConnectionOptionsOAuth2{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -588,10 +740,16 @@ func expandConnectionOptionsOAuth2(d ResourceData) *management.ConnectionOptions
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsFacebook(d ResourceData) *management.ConnectionOptionsFacebook {
+func expandConnectionOptionsFacebook(d ResourceData) (*management.ConnectionOptionsFacebook, error) {
 	options := &management.ConnectionOptionsFacebook{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -601,10 +759,16 @@ func expandConnectionOptionsFacebook(d ResourceData) *management.ConnectionOptio
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsApple(d ResourceData) *management.ConnectionOptionsApple {
+func expandConnectionOptionsApple(d ResourceData) (*management.ConnectionOptionsApple, error) {
 	options := &management.ConnectionOptionsApple{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -616,10 +780,16 @@ func expandConnectionOptionsApple(d ResourceData) *management.ConnectionOptionsA
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsLinkedin(d ResourceData) *management.ConnectionOptionsLinkedin {
+func expandConnectionOptionsLinkedin(d ResourceData) (*management.ConnectionOptionsLinkedin, error) {
 	options := &management.ConnectionOptionsLinkedin{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -630,10 +800,16 @@ func expandConnectionOptionsLinkedin(d ResourceData) *management.ConnectionOptio
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsSalesforce(d ResourceData) *management.ConnectionOptionsSalesforce {
+func expandConnectionOptionsSalesforce(d ResourceData) (*management.ConnectionOptionsSalesforce, error) {
 	options := &management.ConnectionOptionsSalesforce{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -644,10 +820,16 @@ func expandConnectionOptionsSalesforce(d ResourceData) *management.ConnectionOpt
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsWindowsLive(d ResourceData) *management.ConnectionOptionsWindowsLive {
+func expandConnectionOptionsWindowsLive(d ResourceData) (*management.ConnectionOptionsWindowsLive, error) {
 	options := &management.ConnectionOptionsWindowsLive{
 		ClientID:           String(d, "client_id"),
 		ClientSecret:       String(d, "client_secret"),
@@ -658,10 +840,16 @@ func expandConnectionOptionsWindowsLive(d ResourceData) *management.ConnectionOp
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS {
+func expandConnectionOptionsSMS(d ResourceData) (*management.ConnectionOptionsSMS, error) {
 	options := &management.ConnectionOptionsSMS{
 		Name:                 String(d, "name"),
 		From:                 String(d, "from"),
@@ -694,10 +882,16 @@ func expandConnectionOptionsSMS(d ResourceData) *management.ConnectionOptionsSMS
 		}
 	})
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsEmail {
+func expandConnectionOptionsEmail(d ResourceData) (*management.ConnectionOptionsEmail, error) {
 	options := &management.ConnectionOptionsEmail{
 		Name:          String(d, "name"),
 		DisableSignup: Bool(d, "disable_signup"),
@@ -719,10 +913,16 @@ func expandConnectionOptionsEmail(d ResourceData) *management.ConnectionOptionsE
 		}
 	})
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsAD(d ResourceData) *management.ConnectionOptionsAD {
+func expandConnectionOptionsAD(d ResourceData) (*management.ConnectionOptionsAD, error) {
 	options := &management.ConnectionOptionsAD{
 		DomainAliases:        Set(d, "domain_aliases").List(),
 		TenantDomain:         String(d, "tenant_domain"),
@@ -736,10 +936,16 @@ func expandConnectionOptionsAD(d ResourceData) *management.ConnectionOptionsAD {
 		BruteForceProtection: Bool(d, "brute_force_protection"),
 	}
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsAzureAD(d ResourceData) *management.ConnectionOptionsAzureAD {
+func expandConnectionOptionsAzureAD(d ResourceData) (*management.ConnectionOptionsAzureAD, error) {
 	options := &management.ConnectionOptionsAzureAD{
 		ClientID:            String(d, "client_id"),
 		ClientSecret:        String(d, "client_secret"),
@@ -761,10 +967,16 @@ func expandConnectionOptionsAzureAD(d ResourceData) *management.ConnectionOption
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
-func expandConnectionOptionsOIDC(d ResourceData) *management.ConnectionOptionsOIDC {
+func expandConnectionOptionsOIDC(d ResourceData) (*management.ConnectionOptionsOIDC, error) {
 	options := &management.ConnectionOptionsOIDC{
 		ClientID:              String(d, "client_id"),
 		ClientSecret:          String(d, "client_secret"),
@@ -784,7 +996,13 @@ func expandConnectionOptionsOIDC(d ResourceData) *management.ConnectionOptionsOI
 
 	expandConnectionOptionsScopes(d, options)
 
-	return options
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
 func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsSAML, error) {
@@ -831,11 +1049,16 @@ func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsS
 		return nil, err
 	}
 
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
 	return options, nil
 }
 
-func expandConnectionOptionsADFS(d ResourceData) *management.ConnectionOptionsADFS {
-	return &management.ConnectionOptionsADFS{
+func expandConnectionOptionsADFS(d ResourceData) (*management.ConnectionOptionsADFS, error) {
+	options := &management.ConnectionOptionsADFS{
 		TenantDomain:       String(d, "tenant_domain"),
 		DomainAliases:      Set(d, "domain_aliases").List(),
 		LogoURL:            String(d, "icon_url"),
@@ -844,6 +1067,14 @@ func expandConnectionOptionsADFS(d ResourceData) *management.ConnectionOptionsAD
 		SetUserAttributes:  String(d, "set_user_root_attributes"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
 	}
+
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+	if err != nil {
+		return nil, err
+	}
+
+	return options, nil
 }
 
 type scoper interface {

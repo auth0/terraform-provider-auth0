@@ -9,7 +9,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
     method: POST
   response:
@@ -28,7 +28,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
     method: GET
   response:
@@ -47,11 +47,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/email-templates/welcome_email
     method: GET
   response:
-    body: '{"syntax":"liquid","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","subject":"Welcome","template":"welcome_email","resultUrl":"https://example.com/welcome","urlLifetimeInSeconds":3600,"enabled":false}'
+    body: '{"template":"welcome_email","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"includeEmailInRedirect":false,"enabled":false}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -60,17 +60,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"template":"welcome_email","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eWelcome!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"enabled":true}
+      {"template":"welcome_email","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eWelcome!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"enabled":true,"includeEmailInRedirect":false}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/email-templates/welcome_email
     method: PATCH
   response:
-    body: '{"syntax":"liquid","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","subject":"Welcome","template":"welcome_email","resultUrl":"https://example.com/welcome","urlLifetimeInSeconds":3600,"enabled":true}'
+    body: '{"template":"welcome_email","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"includeEmailInRedirect":false,"enabled":true}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -85,7 +85,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
     method: GET
   response:
@@ -104,11 +104,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/email-templates/welcome_email
     method: GET
   response:
-    body: '{"syntax":"liquid","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","subject":"Welcome","template":"welcome_email","resultUrl":"https://example.com/welcome","urlLifetimeInSeconds":3600,"enabled":true}'
+    body: '{"template":"welcome_email","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"includeEmailInRedirect":false,"enabled":true}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -123,11 +123,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/email-templates/welcome_email
     method: PATCH
   response:
-    body: '{"syntax":"liquid","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","subject":"Welcome","template":"welcome_email","resultUrl":"https://example.com/welcome","urlLifetimeInSeconds":3600,"enabled":false}'
+    body: '{"template":"welcome_email","body":"<html><body><h1>Welcome!</h1></body></html>","from":"welcome@example.com","resultUrl":"https://example.com/welcome","subject":"Welcome","syntax":"liquid","urlLifetimeInSeconds":3600,"includeEmailInRedirect":false,"enabled":false}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -141,7 +141,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.0
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
     method: DELETE
   response:

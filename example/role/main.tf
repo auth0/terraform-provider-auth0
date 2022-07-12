@@ -1,13 +1,21 @@
+terraform {
+  required_providers {
+    auth0 = {
+      source = "auth0/auth0"
+    }
+  }
+}
+
 provider "auth0" {}
 
 resource "auth0_resource_server" "my_resource_server" {
-  name                                            = "My Resource Server (Managed by Terraform)"
-  identifier                                      = "my-resource-server-identifier"
-  signing_alg                                     = "RS256"
+  name        = "My Resource Server (Managed by Terraform)"
+  identifier  = "my-resource-server-identifier"
+  signing_alg = "RS256"
+
   token_lifetime                                  = 86400
   skip_consent_for_verifiable_first_party_clients = true
-
-  enforce_policies = true
+  enforce_policies                                = true
 
   scopes {
     value       = "read:something"

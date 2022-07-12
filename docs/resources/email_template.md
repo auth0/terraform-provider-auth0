@@ -37,7 +37,7 @@ resource "auth0_email_template" "my_email_template" {
   enabled = true
   include_email_in_redirect = true
 
-  depends_on = [ "${auth0_email.my_email_provider}" ]
+  depends_on = [auth0_email.my_email_provider]
 }
 ```
 

@@ -712,6 +712,7 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "300"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "6"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckNoResourceAttr("auth0_connection.email", "options.0.auth_params"),
 				),
 			},
 			{
@@ -721,6 +722,16 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "360"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "4"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "3"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.scope", "openid email profile offline_access"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.response_type", "code"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.some_arbitrary_query_param", "some string"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionEmailConfigClearAuthParams, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "0"),
 				),
 			},
 		},
@@ -771,6 +782,33 @@ resource "auth0_connection" "email" {
 			time_step = 360
 			length = 4
 		}
+		auth_params = {
+			scope = "openid email profile offline_access"
+        	response_type = "code"
+			some_arbitrary_query_param = "some string"
+		}
+	}
+}
+`
+
+const testAccConnectionEmailConfigClearAuthParams = `
+resource "auth0_connection" "email" {
+	name = "Acceptance-Test-Email-{{.testName}}"
+	is_domain_connection = false
+	strategy = "email"
+	options {
+		disable_signup = false
+		name = "Email OTP"
+		from = "Magic Password <password@example.com>"
+		subject = "Sign in!"
+		syntax = "liquid"
+		template = "<html><body><h1>Here's your password!</h1></body></html>"
+		brute_force_protection = true
+		totp {
+			time_step = 360
+			length = 4
+		}
+		auth_params = {}
 	}
 }
 `

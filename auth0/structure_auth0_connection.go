@@ -368,6 +368,7 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		"brute_force_protection":   options.GetBruteForceProtection(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"auth_params":              options.AuthParams,
 	}
 
 	if options.OTP != nil {
@@ -384,6 +385,13 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		return nil, err
 	}
 	m["upstream_params"] = upstreamParams
+
+	if options.AuthParams != nil {
+		v, ok := options.AuthParams.(map[string]string)
+		if ok {
+			m["auth_params"] = []interface{}{v}
+		}
+	}
 
 	return m, nil
 }
@@ -917,6 +925,11 @@ func expandConnectionOptionsEmail(d ResourceData) (*management.ConnectionOptions
 	options.UpstreamParams, err = JSON(d, "upstream_params")
 	if err != nil {
 		return nil, err
+	}
+
+	options.AuthParams = map[string]interface{}{}
+	if authParamsMap := Map(d, "auth_params"); authParamsMap != nil {
+		options.AuthParams = authParamsMap
 	}
 
 	return options, nil

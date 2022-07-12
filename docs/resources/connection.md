@@ -583,6 +583,7 @@ Passwordless email connections can be created using the `email` connection strat
 * `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
 * `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
 * `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+* `auth_params` - (Optional) Map(String). Use this to append or override the link parameters (like `scope`, `redirect_uri`, `protocol`, `response_type`), when you send a link using email.
 
 #### TOTP
 
@@ -612,6 +613,10 @@ resource "auth0_connection" "passwordless_email" {
       time_step = 300
       length    = 6
     }
+    auth_params = {
+			scope = "openid email profile offline_access"
+      response_type = "code"
+		}
   }
 }
 ```

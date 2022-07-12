@@ -671,6 +671,14 @@ var connectionSchema = map[string]*schema.Schema{
 					ValidateFunc: validation.StringIsJSON,
 					Description:  "You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.",
 				},
+				"auth_params": {
+					Type: schema.TypeMap,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+					Optional:    true,
+					Description: "Query string parameters to be included as part of the generated passwordless email link.",
+				},
 			},
 		},
 		Description: "Configuration settings for connection options",

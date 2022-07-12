@@ -49,6 +49,9 @@ resource "auth0_tenant" "tenant" {
   ]
   session_lifetime = 46000
   sandbox_version  = "8"
+  session_cookie {
+    mode = "non-persistent"
+  }
 }
 ```
 
@@ -73,6 +76,7 @@ Arguments accepted by this resource include:
 * `flags` - (Optional) List(Resource). Configuration settings for tenant flags. For details, see [Flags](#flags).
 * `universal_login` - (Optional) List(Resource). Configuration settings for Universal Login. For details, see [Universal Login](#universal-login).
 * `default_redirection_uri` - (Optional) String. The default absolute redirection uri, must be https and cannot contain a fragment.
+* `session_cookie` - (Optional) List(Resource). Alters behavior of tenant's session cookie. Contains a single `mode` property that accepts two values: `"persistent"` or `"non-persistent"`.
 
 ### Change Password Page
 

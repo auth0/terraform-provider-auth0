@@ -38,4 +38,8 @@ resource "auth0_tenant" "tenant" {
     show_log_link = true
     url           = "http://example.com/errors"
   }
+
+  session_cookie {
+    mode = "non-persistent"
+  }
 }

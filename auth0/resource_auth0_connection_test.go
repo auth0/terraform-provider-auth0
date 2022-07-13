@@ -712,7 +712,7 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "300"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "6"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
-					resource.TestCheckNoResourceAttr("auth0_connection.email", "options.0.auth_params"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "0"),
 				),
 			},
 			{

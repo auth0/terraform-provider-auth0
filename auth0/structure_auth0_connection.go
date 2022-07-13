@@ -368,7 +368,6 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		"brute_force_protection":   options.GetBruteForceProtection(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"auth_params":              options.AuthParams,
 	}
 
 	if options.OTP != nil {
@@ -385,6 +384,15 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		return nil, err
 	}
 	m["upstream_params"] = upstreamParams
+
+	if options.AuthParams != nil {
+		v, ok := options.AuthParams.(map[string]interface{})
+		if ok {
+			m["auth_params"] = v
+		} else {
+			log.Printf("[WARN]: Unable to cast email connection's `auth_params` property into a `map[string]string`. Original value: %v", options.AuthParams)
+		}
+	}
 
 	return m, nil
 }

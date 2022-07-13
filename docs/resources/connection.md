@@ -82,13 +82,13 @@ creation of multiple connections per strategy, the additional connections may no
 
 Arguments accepted by this resource include:
 
-* `name` - (Required) Name of the connection.
-* `is_domain_connection` - (Optional) Indicates whether the connection is domain level.
-* `strategy` - (Required) Type of the connection, which indicates the identity provider. Options include `ad`, `adfs`, `amazon`, `aol`, `apple`, `auth0`, `auth0-adldap`, `auth0-oidc`, `baidu`, `bitbucket`, `bitly`, `box`, `custom`, `daccount`, `dropbox`, `dwolla`, `email`, `evernote`, `evernote-sandbox`, `exact`, `facebook`, `fitbit`, `flickr`, `github`, `google-apps`, `google-oauth2`, `guardian`, `instagram`, `ip`, `line`, `linkedin`, `miicard`, `oauth1`, `oauth2`, `office365`, `oidc`, `paypal`, `paypal-sandbox`, `pingfederate`, `planningcenter`, `renren`, `salesforce`, `salesforce-community`, `salesforce-sandbox` `samlp`, `sharepoint`, `shopify`, `sms`, `soundcloud`, `thecity`, `thecity-sandbox`, `thirtysevensignals`, `twitter`, `untappd`, `vkontakte`, `waad`, `weibo`, `windowslive`, `wordpress`, `yahoo`, `yammer`, `yandex`.
-* `options` - (Optional) Configuration settings for connection options. For details, see [Options](#options).
-* `enabled_clients` - (Optional) IDs of the clients for which the connection is enabled. If not specified, no clients are enabled.
-* `realms` - (Optional) Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm.
-* `metadata` - (Optional) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
+- `name` - (Required) Name of the connection.
+- `is_domain_connection` - (Optional) Indicates whether the connection is domain level.
+- `strategy` - (Required) Type of the connection, which indicates the identity provider. Options include `ad`, `adfs`, `amazon`, `aol`, `apple`, `auth0`, `auth0-adldap`, `auth0-oidc`, `baidu`, `bitbucket`, `bitly`, `box`, `custom`, `daccount`, `dropbox`, `dwolla`, `email`, `evernote`, `evernote-sandbox`, `exact`, `facebook`, `fitbit`, `flickr`, `github`, `google-apps`, `google-oauth2`, `guardian`, `instagram`, `ip`, `line`, `linkedin`, `miicard`, `oauth1`, `oauth2`, `office365`, `oidc`, `paypal`, `paypal-sandbox`, `pingfederate`, `planningcenter`, `renren`, `salesforce`, `salesforce-community`, `salesforce-sandbox` `samlp`, `sharepoint`, `shopify`, `sms`, `soundcloud`, `thecity`, `thecity-sandbox`, `thirtysevensignals`, `twitter`, `untappd`, `vkontakte`, `waad`, `weibo`, `windowslive`, `wordpress`, `yahoo`, `yammer`, `yandex`.
+- `options` - (Optional) Configuration settings for connection options. For details, see [Options](#options).
+- `enabled_clients` - (Optional) IDs of the clients for which the connection is enabled. If not specified, no clients are enabled.
+- `realms` - (Optional) Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm.
+- `metadata` - (Optional) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 
 ### Options
 
@@ -98,62 +98,62 @@ Arguments accepted by this resource include:
 
 With the `auth0` connection strategy, `options` supports the following arguments:
 
-* `validation` - (Optional) Validation of the minimum and maximum values allowed for a user to have as username. For details, see [Validation](#validation).
-* `password_policy` - (Optional) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
-* `password_history` - (Optional) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. For details, see [Password History](#password-history).
-* `password_no_personal_info` - (Optional) Configuration settings for the password personal info check, which does not allow passwords that contain any part of the user's personal data, including user's name, username, nickname, user_metadata.name, user_metadata.first, user_metadata.last, user's email, or first part of the user's email. For details, see [Password No Personal Info](#password-no-personal-info).
-* `password_dictionary` - (Optional) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. For details, see [Password Dictionary](#password-dictionary).
-* `password_complexity_options` - (Optional) Configuration settings for password complexity. For details, see [Password Complexity Options](#password-complexity-options).
-* `api_enable_users` - (Optional)
-* `enabled_database_customization` - (Optional)
-* `brute_force_protection` - (Optional) Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
-* `import_mode` - (Optional) Indicates whether or not you have a legacy user store and want to gradually migrate those users to the Auth0 user store. [Learn more](https://auth0.com/docs/users/guides/configure-automatic-migration).
-* `disable_signup` - (Optional) Boolean. Indicates whether or not to allow user sign-ups to your application.
-* `requires_username` - (Optional) Indicates whether or not the user is required to provide a username in addition to an email address.
-* `custom_scripts` - (Optional) Custom database action scripts. For more information, read [Custom Database Action Script Templates](https://auth0.com/docs/connections/database/custom-db/templates).
-* `configuration` - (Optional) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
-* `mfa` - (Optional) Configuration settings Options for multifactor authentication. For details, see [MFA Options](#mfa-options).
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `validation` - (Optional) Validation of the minimum and maximum values allowed for a user to have as username. For details, see [Validation](#validation).
+- `password_policy` - (Optional) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
+- `password_history` - (Optional) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. For details, see [Password History](#password-history).
+- `password_no_personal_info` - (Optional) Configuration settings for the password personal info check, which does not allow passwords that contain any part of the user's personal data, including user's name, username, nickname, user_metadata.name, user_metadata.first, user_metadata.last, user's email, or first part of the user's email. For details, see [Password No Personal Info](#password-no-personal-info).
+- `password_dictionary` - (Optional) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. For details, see [Password Dictionary](#password-dictionary).
+- `password_complexity_options` - (Optional) Configuration settings for password complexity. For details, see [Password Complexity Options](#password-complexity-options).
+- `api_enable_users` - (Optional)
+- `enabled_database_customization` - (Optional)
+- `brute_force_protection` - (Optional) Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
+- `import_mode` - (Optional) Indicates whether or not you have a legacy user store and want to gradually migrate those users to the Auth0 user store. [Learn more](https://auth0.com/docs/users/guides/configure-automatic-migration).
+- `disable_signup` - (Optional) Boolean. Indicates whether or not to allow user sign-ups to your application.
+- `requires_username` - (Optional) Indicates whether or not the user is required to provide a username in addition to an email address.
+- `custom_scripts` - (Optional) Custom database action scripts. For more information, read [Custom Database Action Script Templates](https://auth0.com/docs/connections/database/custom-db/templates).
+- `configuration` - (Optional) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
+- `mfa` - (Optional) Configuration settings Options for multifactor authentication. For details, see [MFA Options](#mfa-options).
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 #### Validation
 
 `validation` supports the following arguments:
 
-* `username` (Required) Specifies the `min` and `max` values of username length. `min` and `max` are integers.
+- `username` (Required) Specifies the `min` and `max` values of username length. `min` and `max` are integers.
 
 #### Password History
 
 `password_history` supports the following arguments:
 
-* `enable` - (Optional) Indicates whether password history is enabled for the connection. When enabled, any existing users in this connection will be unaffected; the system will maintain their password history going forward.
-* `size` - (Optional) Indicates the number of passwords to keep in history with a maximum of 24.
+- `enable` - (Optional) Indicates whether password history is enabled for the connection. When enabled, any existing users in this connection will be unaffected; the system will maintain their password history going forward.
+- `size` - (Optional) Indicates the number of passwords to keep in history with a maximum of 24.
 
 #### Password No Personal Info
 
 `password_no_personal_info` supports the following arguments:
 
-* `enable` - (Optional) Indicates whether the password personal info check is enabled for this connection.
+- `enable` - (Optional) Indicates whether the password personal info check is enabled for this connection.
 
 #### Password Dictionary
 
 `password_dictionary` supports the following arguments:
 
-* `enable` - (Optional) Indicates whether the password dictionary check is enabled for this connection.
-* `dictionary` - (Optional) Customized contents of the password dictionary. By default, the password dictionary contains a list of the [10,000 most common passwords](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10k-most-common.txt); your customized content is used in addition to the default password dictionary. Matching is not case-sensitive.
+- `enable` - (Optional) Indicates whether the password dictionary check is enabled for this connection.
+- `dictionary` - (Optional) Customized contents of the password dictionary. By default, the password dictionary contains a list of the [10,000 most common passwords](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10k-most-common.txt); your customized content is used in addition to the default password dictionary. Matching is not case-sensitive.
 
 #### Password Complexity Options
 
 `password_complexity_options` supports the following arguments:
 
-* `min_length` - (Optional) Minimum number of characters allowed in passwords.
+- `min_length` - (Optional) Minimum number of characters allowed in passwords.
 
 #### MFA Options
 
 `mfa` supports the following arguments:
 
-* `active` - (Optional) Indicates whether multifactor authentication is enabled for this connection.
-* `return_enroll_settings` - (Optional) Indicates whether multifactor authentication enrollment settings will be returned.
+- `active` - (Optional) Indicates whether multifactor authentication is enabled for this connection.
+- `return_enroll_settings` - (Optional) Indicates whether multifactor authentication enrollment settings will be returned.
 
 ### Google OAuth2
 
@@ -161,13 +161,12 @@ With the `auth0` connection strategy, `options` supports the following arguments
 
 With the `google-oauth2` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) Google client ID.
-* `client_secret` - (Optional) Google client secret.
-* `allowed_audiences` - (Optional) List of allowed audiences.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
-
+- `client_id` - (Optional) Google client ID.
+- `client_secret` - (Optional) Google client secret.
+- `allowed_audiences` - (Optional) List of allowed audiences.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -189,12 +188,12 @@ resource "auth0_connection" "google_oauth2" {
 
 With the `facebook` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) Facebook client ID.
-* `client_secret` - (Optional) Facebook client secret.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) Facebook client ID.
+- `client_secret` - (Optional) Facebook client secret.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -214,14 +213,14 @@ resource "auth0_connection" "facebook" {
 
 With the `apple` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) Apple client ID.
-* `client_secret` - (Optional) App secret.
-* `team_id` - (Optional) Team ID.
-* `key_id` - (Optional) Key ID.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) Apple client ID.
+- `client_secret` - (Optional) App secret.
+- `team_id` - (Optional) Team ID.
+- `key_id` - (Optional) Key ID.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -243,13 +242,13 @@ resource "auth0_connection" "apple" {
 
 With the `linkedin` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) Linkedin API key.
-* `client_secret` - (Optional) Linkedin secret key.
-* `strategy_version` - (Optional) Version 1 is deprecated, use version 2.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) Linkedin API key.
+- `client_secret` - (Optional) Linkedin secret key.
+- `strategy_version` - (Optional) Version 1 is deprecated, use version 2.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -270,12 +269,12 @@ resource "auth0_connection" "linkedin" {
 
 With the `github` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) GitHub client ID.
-* `client_secret` - (Optional) GitHub client secret.
-* `scopes` - Permissions to grant connection. Available values: `admin_org`, `admin_public_key`, `admin_repo_hook`, `delete_repo`, `email`, `follow`, `gist`, `notifications`, `profile`, `public_repo`, `read_org`, `read_public_key`, `read_repo_hook`, `read_user`, `repo`, `repo_deployment`, `repo_status`, `write_org`, `write_public_key`, `write_repo_hook`
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) GitHub client ID.
+- `client_secret` - (Optional) GitHub client secret.
+- `scopes` - Permissions to grant connection. Available values: `admin_org`, `admin_public_key`, `admin_repo_hook`, `delete_repo`, `email`, `follow`, `gist`, `notifications`, `profile`, `public_repo`, `read_org`, `read_public_key`, `read_repo_hook`, `read_user`, `repo`, `repo_deployment`, `repo_status`, `write_org`, `write_public_key`, `write_repo_hook`
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -295,13 +294,13 @@ resource "auth0_connection" "github" {
 
 With the `salesforce`, `salesforce-community` and `salesforce-sandbox` connection strategies, `options` supports the following arguments:
 
-* `client_id` - (Optional) The Salesforce client ID.
-* `client_secret` - (Optional) The Salesforce client secret.
-* `community_base_url` - (Optional) String.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) The Salesforce client ID.
+- `client_secret` - (Optional) The Salesforce client secret.
+- `community_base_url` - (Optional) String.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -319,36 +318,36 @@ resource "auth0_connection" "salesforce" {
 
 ### OIDC
 
-* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+- `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `oidc` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) OIDC provider client ID.
-* `client_secret` - (Optional) OIDC provider client secret.
-* `type` - (Optional) Value can be `back_channel` or `front_channel`.
-* `scopes` - (Optional) Scopes required by the connection. The value must be a list, for example `["openid", "profile", "email"]`.
-* `issuer` - (Optional) Issuer URL. E.g. `https://auth.example.com`
-* `discovery_url` - (Optional) OpenID discovery URL. E.g. `https://auth.example.com/.well-known/openid-configuration`.
-* `jwks_uri` - (Optional)
-* `token_endpoint` - (Optional)
-* `userinfo_endpoint` - (Optional)
-* `authorization_endpoint` - (Optional)
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) OIDC provider client ID.
+- `client_secret` - (Optional) OIDC provider client secret.
+- `type` - (Optional) Value can be `back_channel` or `front_channel`.
+- `scopes` - (Optional) Scopes required by the connection. The value must be a list, for example `["openid", "profile", "email"]`.
+- `issuer` - (Optional) Issuer URL. E.g. `https://auth.example.com`
+- `discovery_url` - (Optional) OpenID discovery URL. E.g. `https://auth.example.com/.well-known/openid-configuration`.
+- `jwks_uri` - (Optional)
+- `token_endpoint` - (Optional)
+- `userinfo_endpoint` - (Optional)
+- `authorization_endpoint` - (Optional)
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 ### OAuth2
 
 With the `oauth2` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) OIDC provider client ID.
-* `client_secret` - (Optional) OIDC provider client secret.
-* `scopes` - (Optional) Scopes required by the connection. The value must be a list, for example `["openid", "profile", "email"]`.
-* `token_endpoint` - (Optional)
-* `authorization_endpoint` - (Optional)
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `pkce_enabled` - (optional) (Boolean) Enables proof key for code exchange (PKCE) functionality for OAuth2 connections.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) OIDC provider client ID.
+- `client_secret` - (Optional) OIDC provider client secret.
+- `scopes` - (Optional) Scopes required by the connection. The value must be a list, for example `["openid", "profile", "email"]`.
+- `token_endpoint` - (Optional)
+- `authorization_endpoint` - (Optional)
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `pkce_enabled` - (optional) (Boolean) Enables proof key for code exchange (PKCE) functionality for OAuth2 connections.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -375,38 +374,38 @@ EOF
 
 ### Azure AD
 
-* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+- `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `waad` connection strategy, `options` supports the following arguments:
 
-* `app_id` - (Optional) Azure AD app ID.
-* `domain` - (Optional) Azure AD domain name.
-* `client_id` - (Optional) Client ID for your Azure AD application.
-* `client_secret` - (Optional) Client secret for your Azure AD application.
-* `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
-* `max_groups_to_retrieve` - (Optional) Maximum number of groups to retrieve.
-* `tenant_domain` - (Optional)
-* `use_wsfed` - (Optional)
-* `waad_protocol` - (Optional)
-* `waad_common_endpoint` - (Optional) Indicates whether or not to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `should_trust_email_verified_connection` - (Optional) Determines how Auth0 sets the email_verified field in the user profile. Can either be set to `never_set_emails_as_verified` or `always_set_emails_as_verified`.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `app_id` - (Optional) Azure AD app ID.
+- `domain` - (Optional) Azure AD domain name.
+- `client_id` - (Optional) Client ID for your Azure AD application.
+- `client_secret` - (Optional) Client secret for your Azure AD application.
+- `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
+- `max_groups_to_retrieve` - (Optional) Maximum number of groups to retrieve.
+- `tenant_domain` - (Optional)
+- `use_wsfed` - (Optional)
+- `waad_protocol` - (Optional)
+- `waad_common_endpoint` - (Optional) Indicates whether or not to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `should_trust_email_verified_connection` - (Optional) Determines how Auth0 sets the email_verified field in the user profile. Can either be set to `never_set_emails_as_verified` or `always_set_emails_as_verified`.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 ### Twilio / SMS
 
 With the `sms` connection strategy, `options` supports the following arguments:
 
-* `name` - (Optional)
-* `twilio_sid` - (Optional) SID for your Twilio account.
-* `twilio_token` - (Optional) AuthToken for your Twilio account.
-* `from` - (Optional) SMS number for the sender. Used when SMS Source is From.
-* `syntax` - (Optional) Syntax of the SMS. Options include `markdown` and `liquid`.
-* `template` - (Optional) Template for the SMS. You can use `@@password@@` as a placeholder for the password value.
-* `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
-* `messaging_service_sid` - (Optional) SID for Copilot. Used when SMS Source is Copilot.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `name` - (Optional)
+- `twilio_sid` - (Optional) SID for your Twilio account.
+- `twilio_token` - (Optional) AuthToken for your Twilio account.
+- `from` - (Optional) SMS number for the sender. Used when SMS Source is From.
+- `syntax` - (Optional) Syntax of the SMS. Options include `markdown` and `liquid`.
+- `template` - (Optional) Template for the SMS. You can use `@@password@@` as a placeholder for the password value.
+- `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
+- `messaging_service_sid` - (Optional) SID for Copilot. Used when SMS Source is Copilot.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 Example of [custom SMS gateway connection](https://auth0.com/docs/authenticate/passwordless/authentication-methods/use-sms-gateway-passwordless):
 
@@ -444,8 +443,8 @@ resource "auth0_connection" "sms" {
 
 `totp` supports the following arguments:
 
-* `time_step` - (Optional) Integer. Seconds between allowed generation of new passwords.
-* `length` - (Optional) Integer. Length of the one-time password.
+- `time_step` - (Optional) Integer. Seconds between allowed generation of new passwords.
+- `length` - (Optional) Integer. Length of the one-time password.
 
 **Example**:
 
@@ -473,43 +472,44 @@ resource "auth0_connection" "sms" {
 
 ### ADFS
 
-* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+- `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `adfs` connection strategy, `options` supports the following arguments:
 
-* `adfs_server` - (Optional) ADFS Metadata source.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `adfs_server` - (Optional) ADFS Metadata source.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 ### SAML
 
-* `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
+- `show_as_button` - (Optional) Display connection as a button. Only available for enterprise connections.
 
 With the `samlp` connection strategy, `options` supports the following arguments:
 
-* `debug` - (Optional) (Boolean) When enabled additional debugging information will be generated.
-* `signing_cert` - The X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded
-* `signing_key` - (Optional). The key used to sign requests in the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively.
-* `protocol_binding` - (Optional) The SAML Response Binding - how the SAML token is received by Auth0 from IdP. Two possible values are `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect` (default) and `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST`
-* `idp_initiated` - (Optional) Configuration Options for IDP Initiated Authentication.  This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`
-* `tenant_domain` - (Optional)
-* `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
-* `sign_in_endpoint` - SAML single login URL for the connection.
-* `sign_out_endpoint` - (Optional) SAML single logout URL for the connection.
-* `disable_sign_out` - (Optional) (Boolean) Disables or enables user sign out.
-* `fields_map` - (Optional) SAML Attributes mapping. If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
-* `sign_saml_request` - (Optional) (Boolean) When enabled, the SAML authentication request will be signed.
-* `signature_algorithm` - (Optional) Sign Request Algorithm
-* `digest_algorithm` - (Optional) Sign Request Algorithm Digest
-* `request_template` - (Optional) Template that formats the SAML request
-* `user_id_attribute` - (Optional) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `entity_id` - (Optional) Custom Entity ID for the connection.
-* `metadata_url` - (Optional) URL of the SAML metadata document.
-* `metadata_xml` - (Optional) XML content for the SAML metadata document.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `debug` - (Optional) (Boolean) When enabled additional debugging information will be generated.
+- `signing_cert` - The X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded
+- `signing_key` - (Optional). The key used to sign requests in the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively.
+- `protocol_binding` - (Optional) The SAML Response Binding - how the SAML token is received by Auth0 from IdP. Two possible values are `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect` (default) and `urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST`
+- `idp_initiated` - (Optional) Configuration Options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`
+- `tenant_domain` - (Optional)
+- `domain_aliases` - (Optional) List of the domains that can be authenticated using the Identity Provider. Only needed for Identifier First authentication flows.
+- `sign_in_endpoint` - SAML single login URL for the connection.
+- `sign_out_endpoint` - (Optional) SAML single logout URL for the connection.
+- `disable_sign_out` - (Optional) (Boolean) Disables or enables user sign out.
+- `fields_map` - (Optional) SAML Attributes mapping. If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
+- `sign_saml_request` - (Optional) (Boolean) When enabled, the SAML authentication request will be signed.
+- `signature_algorithm` - (Optional) Sign Request Algorithm
+- `digest_algorithm` - (Optional) Sign Request Algorithm Digest
+- `request_template` - (Optional) Template that formats the SAML request
+- `user_id_attribute` - (Optional) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `entity_id` - (Optional) Custom Entity ID for the connection.
+- `metadata_url` - (Optional) URL of the SAML metadata document.
+- `metadata_xml` - (Optional) XML content for the SAML metadata document.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
+
 ```hcl
 resource "auth0_connection" "samlp" {
   name = "SAML-Connection"
@@ -544,13 +544,13 @@ resource "auth0_connection" "samlp" {
 
 With the `windowslive` connection strategy, `options` supports the following arguments:
 
-* `client_id` - (Optional) API key.
-* `client_secret` - (Optional) secret key.
-* `strategy_version` - (Optional) Version 1 is deprecated, use version 2.
-* `scopes` - (Optional) Scopes.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `client_id` - (Optional) API key.
+- `client_secret` - (Optional) secret key.
+- `strategy_version` - (Optional) Version 1 is deprecated, use version 2.
+- `scopes` - (Optional) Scopes.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
 
 **Example**:
 
@@ -567,31 +567,28 @@ resource "auth0_connection" "windowslive" {
 }
 ```
 
-
 ### Passwordless Email
 
 Passwordless email connections can be created using the `email` connection strategy. The `options` block supports the following arguments:
 
-
-* `from` - (Required) String. Email address to use as the sender. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
-* `subject` - (Required) String. Subject line of the email. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
-* `syntax` - (Required) String. Syntax of the template body. You can use either text or HTML + Liquid syntax.
-* `template` - (Required) String. Body of the email template. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
-* `disable_signup` - (Optional) Boolean. Indicates whether or not to allow user sign-ups to your application.
-* `brute_force_protection` - (Optional) Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
-* `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
-* `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
-* `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
-* `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
-* `auth_params` - (Optional) Map(String). Use this to append or override the link parameters (like `scope`, `redirect_uri`, `protocol`, `response_type`), when you send a link using email.
+- `from` - (Required) String. Email address to use as the sender. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+- `subject` - (Required) String. Subject line of the email. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+- `syntax` - (Required) String. Syntax of the template body. You can use either text or HTML + Liquid syntax.
+- `template` - (Required) String. Body of the email template. You can include [common variables](https://auth0.com/docs/email/templates#common-variables).
+- `disable_signup` - (Optional) Boolean. Indicates whether or not to allow user sign-ups to your application.
+- `brute_force_protection` - (Optional) Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
+- `set_user_root_attributes` - (Optional) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using the external IdP. Default is `on_each_login` and can be set to `on_first_login`.
+- `non_persistent_attrs` - (Optional) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the denylist. See [here](https://auth0.com/docs/security/denylist-user-attributes) for more info.
+- `totp` - (Optional) Configuration options for one-time passwords. For details, see [TOTP](#totp).
+- `upstream_params` - (Optional) String (JSON Encoded). You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.
+- `auth_params` - (Optional) Map(String). Use this to append or override the link parameters (like `scope`, `redirect_uri`, `protocol`, `response_type`), when you send a link using email.
 
 #### TOTP
 
 `totp` supports the following arguments:
 
-* `time_step` - (Optional) Integer. Seconds between allowed generation of new passwords.
-* `length` - (Optional) Integer. Length of the one-time password.
-
+- `time_step` - (Optional) Integer. Seconds between allowed generation of new passwords.
+- `length` - (Optional) Integer. Length of the one-time password.
 
 **Example**:
 
@@ -614,9 +611,9 @@ resource "auth0_connection" "passwordless_email" {
       length    = 6
     }
     auth_params = {
-			scope = "openid email profile offline_access"
+      scope = "openid email profile offline_access"
       response_type = "code"
-		}
+    }
   }
 }
 ```
@@ -625,23 +622,23 @@ resource "auth0_connection" "passwordless_email" {
 
 Attributes exported by this resource include:
 
-* `is_domain_connection` - Boolean. Indicates whether the connection is domain level.
-* `options` - List(Resource). Configuration settings for connection options. For details, see [Options Attributes](#options-attributes).
-* `realms` - List(String). Defines the realms for which the connection will be used (i.e., email domains). If the array is empty or the property is not specified, the connection name is added as the realm.
-* `metadata` - Map(String). Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
+- `is_domain_connection` - Boolean. Indicates whether the connection is domain level.
+- `options` - List(Resource). Configuration settings for connection options. For details, see [Options Attributes](#options-attributes).
+- `realms` - List(String). Defines the realms for which the connection will be used (i.e., email domains). If the array is empty or the property is not specified, the connection name is added as the realm.
+- `metadata` - Map(String). Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 
 ### Options Attributes
 
 `options` exports the following attributes:
 
-* `password_history` - List(Resource). Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. For details, see [Password History Attributes](#password-attributes-history).
+- `password_history` - List(Resource). Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. For details, see [Password History Attributes](#password-attributes-history).
 
 #### Password History Attributes
 
 `password_history` exports the following attributes:
 
-* `enable` - Boolean. Indicates whether password history is enabled for the connection. When enabled, any existing users in this connection will be unaffected; the system will maintain their password history going forward.
-* `size` - Integer. Indicates the number of passwords to keep in history.
+- `enable` - Boolean. Indicates whether password history is enabled for the connection. When enabled, any existing users in this connection will be unaffected; the system will maintain their password history going forward.
+- `size` - Integer. Indicates the number of passwords to keep in history.
 
 ## Import
 

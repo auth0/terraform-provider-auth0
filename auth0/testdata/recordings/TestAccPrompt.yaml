@@ -79,7 +79,7 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"universal_login_experience":"new","identifier_first":true}
+      {"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}
     form: {}
     headers:
       Content-Type:
@@ -89,7 +89,7 @@ interactions:
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
     method: PATCH
   response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -108,7 +108,7 @@ interactions:
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
     method: GET
   response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -127,7 +127,7 @@ interactions:
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
     method: GET
   response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

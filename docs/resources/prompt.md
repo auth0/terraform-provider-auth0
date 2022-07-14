@@ -13,8 +13,9 @@ With this resource, you can manage your Auth0 prompts, including choosing the lo
 
 ```
 resource "auth0_prompt" "example" {
-  universal_login_experience = "classic"
-  identifier_first           = false
+  universal_login_experience      = "classic"
+  identifier_first                = false
+  webauthn_platform_first_factor  = true
 }
 ```
 
@@ -23,8 +24,8 @@ resource "auth0_prompt" "example" {
 The following arguments are supported:
 
 - `universal_login_experience` - (Optional) Which login experience to use. Options include `classic` and `new`.
-- `identifier_first` - (Optional) Boolean. Indicates whether the identifier first is used when using the new universal 
-login experience.
+- `identifier_first` - (Optional) Boolean. Indicates whether the identifier first is used when using the new universal login experience.
+- `webauthn_platform_first_factor` - (Optional) Boolean. Determines if the login screen uses identifier and biometrics first.
 
 ## Attributes Reference
 

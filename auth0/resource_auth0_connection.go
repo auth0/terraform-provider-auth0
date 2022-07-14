@@ -823,19 +823,21 @@ func connectionSchemaUpgradeV1(
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection, err := expandConnection(d)
-	if err != nil {
-		return diag.FromErr(err)
+	connection, diagnostics := expandConnection(d)
+	if diagnostics.HasError() {
+		return diagnostics
 	}
 
 	api := m.(*management.Management)
 	if err := api.Connection.Create(connection); err != nil {
-		return diag.FromErr(err)
+		diagnostics = append(diagnostics, diag.FromErr(err)...)
+		return diagnostics
 	}
 
 	d.SetId(auth0.StringValue(connection.ID))
 
-	return readConnection(ctx, d, m)
+	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	return diagnostics
 }
 
 func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -880,17 +882,19 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection, err := expandConnection(d)
-	if err != nil {
-		return diag.FromErr(err)
+	connection, diagnostics := expandConnection(d)
+	if diagnostics.HasError() {
+		return diagnostics
 	}
 
 	api := m.(*management.Management)
 	if err := api.Connection.Update(d.Id(), connection); err != nil {
-		return diag.FromErr(err)
+		diagnostics = append(diagnostics, diag.FromErr(err)...)
+		return diagnostics
 	}
 
-	return readConnection(ctx, d, m)
+	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	return diagnostics
 }
 
 func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

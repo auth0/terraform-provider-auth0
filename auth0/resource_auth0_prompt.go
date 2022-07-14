@@ -31,8 +31,14 @@ func newPrompt() *schema.Resource {
 				}, false),
 			},
 			"identifier_first": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Determines if the login screen prompts for just the identifier, identifier and password first.",
+			},
+			"webauthn_platform_first_factor": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Determines if the login screen uses identifier and biometrics first.",
 			},
 		},
 	}
@@ -59,6 +65,7 @@ func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	result := multierror.Append(
 		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
 		d.Set("identifier_first", prompt.IdentifierFirst),
+		d.Set("webauthn_platform_first_factor", prompt.WebAuthnPlatformFirstFactor),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -81,7 +88,8 @@ func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func buildPrompt(d *schema.ResourceData) *management.Prompt {
 	return &management.Prompt{
-		UniversalLoginExperience: auth0.StringValue(String(d, "universal_login_experience")),
-		IdentifierFirst:          Bool(d, "identifier_first"),
+		UniversalLoginExperience:    auth0.StringValue(String(d, "universal_login_experience")),
+		IdentifierFirst:             Bool(d, "identifier_first"),
+		WebAuthnPlatformFirstFactor: Bool(d, "webauthn_platform_first_factor"),
 	}
 }

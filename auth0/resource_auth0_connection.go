@@ -854,9 +854,10 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
-	if diags != nil {
+	if diags.HasError() {
 		return diags
 	}
+
 	result := multierror.Append(
 		d.Set("name", connection.Name),
 		d.Set("display_name", connection.DisplayName),
@@ -878,7 +879,8 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		result = multierror.Append(result, d.Set("show_as_button", connection.ShowAsButton))
 	}
 
-	return diag.FromErr(result.ErrorOrNil())
+	diags = append(diags, diag.FromErr(result.ErrorOrNil())...)
+	return diags
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

@@ -2,7 +2,6 @@ package auth0
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -12,13 +11,12 @@ import (
 )
 
 func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
-	var m interface{}
-	var diags diag.Diagnostics
-
 	if options == nil {
-		return nil, diags
+		return nil, nil
 	}
 
+	var m interface{}
+	var diags diag.Diagnostics
 	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
 		m, diags = flattenConnectionOptionsAuth0(d, connectionOptions)
@@ -55,11 +53,8 @@ func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{
 	case *management.ConnectionOptionsSAML:
 		m, diags = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
-	if diags != nil {
-		return nil, diags
-	}
 
-	return []interface{}{m}, err
+	return []interface{}{m}, diags
 }
 
 func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) (interface{}, diag.Diagnostics) {
@@ -916,14 +911,14 @@ func expandConnectionOptionsEmail(d ResourceData) (*management.ConnectionOptions
 		}
 	})
 
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
 	if authParamsMap := Map(d, "auth_params"); authParamsMap != nil {
 		options.AuthParams = authParamsMap
 	}
 
-	return options, nil
+	var err error
+	options.UpstreamParams, err = JSON(d, "upstream_params")
+
+	return options, diag.FromErr(err)
 }
 
 func expandConnectionOptionsAD(d ResourceData) (*management.ConnectionOptionsAD, diag.Diagnostics) {

@@ -79,6 +79,23 @@ func newOrganization() *schema.Resource {
 				},
 				Set: hash.StringKey("connection_id"),
 			},
+			"users": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Computed: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"user_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"role": {
+							Type: schema.TypeSet,
+							Elem: schema.TypeString,
+						},
+					},
+				},
+			},
 		},
 	}
 }

@@ -1,10 +1,12 @@
 package auth0
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
@@ -389,11 +391,15 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 
 	if options.AuthParams != nil {
 		v, ok := options.AuthParams.(map[string]interface{})
-		if ok {
-			m["auth_params"] = v
-		} else {
-			log.Printf("[WARN]: Unable to cast email connection's `auth_params` property into a `map[string]string`. Original value: %v", options.AuthParams)
+		if !ok {
+			return m, diag.Diagnostics{{
+				Severity:      diag.Warning,
+				Summary:       "Unable to cast auth_params to map[string]string",
+				Detail:        fmt.Sprintf(`Authentication Parameters are required to be a map of strings, the existing value of %v is not compatible. It is recommended to express the existing value as a valid map[string]string. Subsequent terraform applys will clear this configuration to empty map.`, options.AuthParams),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.auth_params"}},
+			}}
 		}
+		m["auth_params"] = v
 	}
 
 	return m, nil

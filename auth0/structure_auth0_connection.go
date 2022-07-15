@@ -385,6 +385,15 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 	}
 	m["upstream_params"] = upstreamParams
 
+	if options.AuthParams != nil {
+		v, ok := options.AuthParams.(map[string]interface{})
+		if ok {
+			m["auth_params"] = v
+		} else {
+			log.Printf("[WARN]: Unable to cast email connection's `auth_params` property into a `map[string]string`. Original value: %v", options.AuthParams)
+		}
+	}
+
 	return m, nil
 }
 
@@ -917,6 +926,10 @@ func expandConnectionOptionsEmail(d ResourceData) (*management.ConnectionOptions
 	options.UpstreamParams, err = JSON(d, "upstream_params")
 	if err != nil {
 		return nil, err
+	}
+
+	if authParamsMap := Map(d, "auth_params"); authParamsMap != nil {
+		options.AuthParams = authParamsMap
 	}
 
 	return options, nil

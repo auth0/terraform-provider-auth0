@@ -80,10 +80,11 @@ func newOrganization() *schema.Resource {
 				Set: hash.StringKey("connection_id"),
 			},
 			"members": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
+				Type:        schema.TypeSet,
+				Computed:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "Members to add to organization by user ID",
 			},
 		},
 	}

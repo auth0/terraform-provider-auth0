@@ -712,6 +712,7 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "300"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "6"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "0"),
 				),
 			},
 			{
@@ -721,6 +722,16 @@ func TestAccConnectionEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "360"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.length", "4"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "3"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.scope", "openid email profile offline_access"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.response_type", "code"),
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.some_arbitrary_query_param", "some string"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionEmailConfigClearAuthParams, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "0"),
 				),
 			},
 		},
@@ -771,6 +782,33 @@ resource "auth0_connection" "email" {
 			time_step = 360
 			length = 4
 		}
+		auth_params = {
+			scope = "openid email profile offline_access"
+        	response_type = "code"
+			some_arbitrary_query_param = "some string"
+		}
+	}
+}
+`
+
+const testAccConnectionEmailConfigClearAuthParams = `
+resource "auth0_connection" "email" {
+	name = "Acceptance-Test-Email-{{.testName}}"
+	is_domain_connection = false
+	strategy = "email"
+	options {
+		disable_signup = false
+		name = "Email OTP"
+		from = "Magic Password <password@example.com>"
+		subject = "Sign in!"
+		syntax = "liquid"
+		template = "<html><body><h1>Here's your password!</h1></body></html>"
+		brute_force_protection = true
+		totp {
+			time_step = 360
+			length = 4
+		}
+		auth_params = {}
 	}
 }
 `
@@ -1599,6 +1637,64 @@ EOF
 			client_authorize_query = "type=code&timeout=60"
 		}
 		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"
+	}
+}
+`
+
+func TestAccConnectionTwitter(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccConnectionTwitterConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_id", "someClientID"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_secret", "someClientSecret"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.scopes.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionTwitterConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_id", "someClientID"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_secret", "someClientSecret"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.scopes.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.twitter", "options.0.scopes.*", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionTwitterConfig = `
+resource "auth0_connection" "twitter" {
+	name = "Acceptance-Test-Twitter-{{.testName}}"
+	strategy = "twitter"
+	options {
+		client_id = "someClientID"
+		client_secret = "someClientSecret"
+		set_user_root_attributes = "on_each_login"
+	}
+}
+`
+
+const testAccConnectionTwitterConfigUpdate = `
+resource "auth0_connection" "twitter" {
+	name = "Acceptance-Test-Twitter-{{.testName}}"
+	strategy = "twitter"
+	options {
+		client_id = "someClientID"
+		client_secret = "someClientSecret"
+		set_user_root_attributes = "on_each_login"
+		scopes = ["basic_profile"]
 	}
 }
 `

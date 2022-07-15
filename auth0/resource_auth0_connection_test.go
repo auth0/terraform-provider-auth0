@@ -1640,3 +1640,61 @@ EOF
 	}
 }
 `
+
+func TestAccConnectionTwitter(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccConnectionTwitterConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_id", "someClientID"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_secret", "someClientSecret"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.scopes.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionTwitterConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_id", "someClientID"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.client_secret", "someClientSecret"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.scopes.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.twitter", "options.0.scopes.*", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.twitter", "options.0.set_user_root_attributes", "on_each_login"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionTwitterConfig = `
+resource "auth0_connection" "twitter" {
+	name = "Acceptance-Test-Twitter-{{.testName}}"
+	strategy = "twitter"
+	options {
+		client_id = "someClientID"
+		client_secret = "someClientSecret"
+		set_user_root_attributes = "on_each_login"
+	}
+}
+`
+
+const testAccConnectionTwitterConfigUpdate = `
+resource "auth0_connection" "twitter" {
+	name = "Acceptance-Test-Twitter-{{.testName}}"
+	strategy = "twitter"
+	options {
+		client_id = "someClientID"
+		client_secret = "someClientSecret"
+		set_user_root_attributes = "on_each_login"
+		scopes = ["basic_profile"]
+	}
+}
+`

@@ -823,19 +823,21 @@ func connectionSchemaUpgradeV1(
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection, err := expandConnection(d)
-	if err != nil {
-		return diag.FromErr(err)
+	connection, diagnostics := expandConnection(d)
+	if diagnostics.HasError() {
+		return diagnostics
 	}
 
 	api := m.(*management.Management)
 	if err := api.Connection.Create(connection); err != nil {
-		return diag.FromErr(err)
+		diagnostics = append(diagnostics, diag.FromErr(err)...)
+		return diagnostics
 	}
 
 	d.SetId(auth0.StringValue(connection.ID))
 
-	return readConnection(ctx, d, m)
+	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	return diagnostics
 }
 
 func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -852,9 +854,10 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
-	if diags != nil {
+	if diags.HasError() {
 		return diags
 	}
+
 	result := multierror.Append(
 		d.Set("name", connection.Name),
 		d.Set("display_name", connection.DisplayName),
@@ -876,21 +879,24 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		result = multierror.Append(result, d.Set("show_as_button", connection.ShowAsButton))
 	}
 
-	return diag.FromErr(result.ErrorOrNil())
+	diags = append(diags, diag.FromErr(result.ErrorOrNil())...)
+	return diags
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	connection, err := expandConnection(d)
-	if err != nil {
-		return diag.FromErr(err)
+	connection, diagnostics := expandConnection(d)
+	if diagnostics.HasError() {
+		return diagnostics
 	}
 
 	api := m.(*management.Management)
 	if err := api.Connection.Update(d.Id(), connection); err != nil {
-		return diag.FromErr(err)
+		diagnostics = append(diagnostics, diag.FromErr(err)...)
+		return diagnostics
 	}
 
-	return readConnection(ctx, d, m)
+	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	return diagnostics
 }
 
 func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

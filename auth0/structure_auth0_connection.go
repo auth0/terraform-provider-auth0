@@ -5,60 +5,62 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
-func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{}, error) {
+func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
+	var m interface{}
+	var diags diag.Diagnostics
+
 	if options == nil {
-		return nil, nil
+		return nil, diags
 	}
 
-	var m interface{}
-	var err error
 	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
-		m, err = flattenConnectionOptionsAuth0(d, connectionOptions)
+		m, diags = flattenConnectionOptionsAuth0(d, connectionOptions)
 	case *management.ConnectionOptionsGoogleOAuth2:
-		m, err = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
+		m, diags = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
 	case *management.ConnectionOptionsGoogleApps:
-		m, err = flattenConnectionOptionsGoogleApps(connectionOptions)
+		m, diags = flattenConnectionOptionsGoogleApps(connectionOptions)
 	case *management.ConnectionOptionsOAuth2:
-		m, err = flattenConnectionOptionsOAuth2(connectionOptions)
+		m, diags = flattenConnectionOptionsOAuth2(connectionOptions)
 	case *management.ConnectionOptionsFacebook:
-		m, err = flattenConnectionOptionsFacebook(connectionOptions)
+		m, diags = flattenConnectionOptionsFacebook(connectionOptions)
 	case *management.ConnectionOptionsApple:
-		m, err = flattenConnectionOptionsApple(connectionOptions)
+		m, diags = flattenConnectionOptionsApple(connectionOptions)
 	case *management.ConnectionOptionsLinkedin:
-		m, err = flattenConnectionOptionsLinkedin(connectionOptions)
+		m, diags = flattenConnectionOptionsLinkedin(connectionOptions)
 	case *management.ConnectionOptionsGitHub:
-		m, err = flattenConnectionOptionsGitHub(connectionOptions)
+		m, diags = flattenConnectionOptionsGitHub(connectionOptions)
 	case *management.ConnectionOptionsWindowsLive:
-		m, err = flattenConnectionOptionsWindowsLive(connectionOptions)
+		m, diags = flattenConnectionOptionsWindowsLive(connectionOptions)
 	case *management.ConnectionOptionsSalesforce:
-		m, err = flattenConnectionOptionsSalesforce(connectionOptions)
+		m, diags = flattenConnectionOptionsSalesforce(connectionOptions)
 	case *management.ConnectionOptionsEmail:
-		m, err = flattenConnectionOptionsEmail(connectionOptions)
+		m, diags = flattenConnectionOptionsEmail(connectionOptions)
 	case *management.ConnectionOptionsSMS:
-		m, err = flattenConnectionOptionsSMS(connectionOptions)
+		m, diags = flattenConnectionOptionsSMS(connectionOptions)
 	case *management.ConnectionOptionsOIDC:
-		m, err = flattenConnectionOptionsOIDC(connectionOptions)
+		m, diags = flattenConnectionOptionsOIDC(connectionOptions)
 	case *management.ConnectionOptionsAD:
-		m, err = flattenConnectionOptionsAD(connectionOptions)
+		m, diags = flattenConnectionOptionsAD(connectionOptions)
 	case *management.ConnectionOptionsAzureAD:
-		m, err = flattenConnectionOptionsAzureAD(connectionOptions)
+		m, diags = flattenConnectionOptionsAzureAD(connectionOptions)
 	case *management.ConnectionOptionsADFS:
-		m, err = flattenConnectionOptionsADFS(connectionOptions)
+		m, diags = flattenConnectionOptionsADFS(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m, err = flattenConnectionOptionsSAML(d, connectionOptions)
+		m, diags = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
-	if err != nil {
-		return nil, err
+	if diags != nil {
+		return nil, diags
 	}
 
 	return []interface{}{m}, nil
 }
 
-func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) (interface{}, error) {
+func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -69,14 +71,14 @@ func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub)
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) (interface{}, error) {
+func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -88,14 +90,14 @@ func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWi
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) (interface{}, error) {
+func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"password_policy":                options.GetPasswordPolicy(),
 		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
@@ -135,14 +137,14 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) (interface{}, error) {
+func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -154,14 +156,14 @@ func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsG
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) (interface{}, error) {
+func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -177,14 +179,14 @@ func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoo
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) (interface{}, error) {
+func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -200,14 +202,14 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) (interface{}, error) {
+func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -218,14 +220,14 @@ func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFaceb
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (interface{}, error) {
+func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -238,14 +240,14 @@ func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) (interface{}, error) {
+func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -257,14 +259,14 @@ func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinke
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) (interface{}, error) {
+func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -276,14 +278,14 @@ func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSal
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (interface{}, error) {
+func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"name":                   options.GetName(),
 		"from":                   options.GetFrom(),
@@ -322,14 +324,14 @@ func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (inte
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (interface{}, error) {
+func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -350,14 +352,14 @@ func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (in
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (interface{}, error) {
+func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"name":                     options.GetName(),
 		"from":                     options.GetEmail().GetFrom(),
@@ -381,7 +383,7 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
@@ -397,7 +399,7 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 	return m, nil
 }
 
-func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, error) {
+func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
 		"domain_aliases":           options.DomainAliases,
@@ -413,14 +415,14 @@ func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interf
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) (interface{}, error) {
+func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                              options.GetClientID(),
 		"client_secret":                          options.GetClientSecret(),
@@ -443,14 +445,14 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, error) {
+func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
 		"domain_aliases":           options.DomainAliases,
@@ -463,14 +465,14 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (in
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
 }
 
-func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, error) {
+func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"signing_cert":             options.GetSigningCert(),
 		"protocol_binding":         options.GetProtocolBinding(),
@@ -514,13 +516,13 @@ func flattenConnectionOptionsSAML(d ResourceData, options *management.Connection
 
 	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["fields_map"] = fieldsMap
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 	m["upstream_params"] = upstreamParams
 

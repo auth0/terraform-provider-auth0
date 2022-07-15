@@ -851,9 +851,9 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(err)
 	}
 
-	connectionOptions, err := flattenConnectionOptions(d, connection.Options)
-	if err != nil {
-		return diag.FromErr(err)
+	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
+	if diags != nil {
+		return diags
 	}
 	result := multierror.Append(
 		d.Set("name", connection.Name),

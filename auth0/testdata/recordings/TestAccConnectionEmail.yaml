@@ -3,7 +3,7 @@ version: 1
 interactions:
 - request:
     body: |
-      {"name":"Acceptance-Test-Email-TestAccConnectionEmail","strategy":"email","is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":300,"length":6},"authParams":null,"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+      {"name":"Acceptance-Test-Email-TestAccConnectionEmail","strategy":"email","is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
     form: {}
     headers:
       Content-Type:
@@ -15,7 +15,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic
       Password <password@example.com>","subject":"Sign in!","body":"<html><body><h1>Here''s
-      your password!</h1></body></html>"},"totp":{"time_step":300,"length":6},"authParams":null,"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      your password!</h1></body></html>"},"totp":{"time_step":300,"length":6},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -36,7 +36,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -57,7 +57,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -78,7 +78,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":6,"time_step":300},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -175,7 +175,7 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":360,"length":4},"authParams":null,"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null}}
+      {"is_domain_connection":false,"options":{"name":"Email OTP","email":{"syntax":"liquid","from":"Magic Password \u003cpassword@example.com\u003e","subject":"Sign in!","body":"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eHere's your password!\u003c/h1\u003e\u003c/body\u003e\u003c/html\u003e"},"totp":{"time_step":360,"length":4},"disable_signup":false,"brute_force_protection":true,"non_persistent_attrs":null}}
     form: {}
     headers:
       Content-Type:
@@ -187,7 +187,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -208,7 +208,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -229,7 +229,7 @@ interactions:
   response:
     body: '{"id":"con_egYuLgwSi4YUfIAL","options":{"name":"Email OTP","totp":{"length":4,"time_step":360},"email":{"body":"<html><body><h1>Here''s
       your password!</h1></body></html>","from":"Magic Password <password@example.com>","syntax":"liquid","subject":"Sign
-      in!"},"authParams":null,"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
+      in!"},"disable_signup":false,"non_persistent_attrs":null,"brute_force_protection":true},"strategy":"email","name":"Acceptance-Test-Email-TestAccConnectionEmail","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Email-TestAccConnectionEmail"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8

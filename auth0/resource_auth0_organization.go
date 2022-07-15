@@ -79,22 +79,11 @@ func newOrganization() *schema.Resource {
 				},
 				Set: hash.StringKey("connection_id"),
 			},
-			"users": {
+			"members": {
 				Type:     schema.TypeSet,
-				Optional: true,
 				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"user_id": {
-							Type:     schema.TypeString,
-							Required: true,
-						},
-						"role": {
-							Type: schema.TypeSet,
-							Elem: schema.TypeString,
-						},
-					},
-				},
+				Elem:     &schema.Schema{Type: schema.TypeString},
+				Optional: true,
 			},
 		},
 	}
@@ -112,6 +101,9 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	d.Partial(true)
 	if err := assignOrganizationConnections(d, m); err != nil {
 		return diag.FromErr(fmt.Errorf("failed assigning organization connections. %w", err))
+	}
+	if err := assignOrganizationMembers(d, m); err != nil {
+		return diag.FromErr(fmt.Errorf("failed to assign members to organization. %w", err))
 	}
 	d.Partial(false)
 
@@ -168,6 +160,30 @@ func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err e
 	return nil
 }
 
+func assignOrganizationMembers(d *schema.ResourceData, m interface{}) (err error) {
+	api := m.(*management.Management)
+
+	add, rm := Diff(d, "members")
+
+	addMembers := castToListOfStrings(add.List())
+	if len(*addMembers) > 0 {
+		err = api.Organization.AddMembers(d.Id(), *addMembers)
+		if err != nil {
+			return
+		}
+	}
+
+	rmMembers := castToListOfStrings(rm.List())
+	if len(*rmMembers) > 0 {
+		err = api.Organization.DeleteMember(d.Id(), *rmMembers)
+		if err != nil {
+			return
+		}
+	}
+
+	return nil
+}
+
 func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	organization, err := api.Organization.Read(d.Id())
@@ -186,12 +202,18 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
+	organizationMemberList, err := api.Organization.Members(d.Id())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
 	result := multierror.Append(
 		d.Set("name", organization.Name),
 		d.Set("display_name", organization.DisplayName),
 		d.Set("branding", flattenOrganizationBranding(organization.Branding)),
 		d.Set("metadata", organization.Metadata),
 		d.Set("connections", flattenOrganizationConnections(organizationConnectionList)),
+		d.Set("members", flattenOrganizationMembers(organizationMemberList)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -207,6 +229,9 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	d.Partial(true)
 	if err := assignOrganizationConnections(d, m); err != nil {
 		return diag.FromErr(fmt.Errorf("failed updating organization connections. %w", err))
+	}
+	if err := assignOrganizationMembers(d, m); err != nil {
+		return diag.FromErr(fmt.Errorf("failed to assign members to organization. %w", err))
 	}
 	d.Partial(false)
 
@@ -270,4 +295,17 @@ func flattenOrganizationConnections(organizationConnectionList *management.Organ
 	}
 
 	return connections
+}
+
+func flattenOrganizationMembers(orgMemberList *management.OrganizationMemberList) []string {
+	if orgMemberList == nil {
+		return nil
+	}
+
+	members := make([]string, len(orgMemberList.Members))
+	for i, member := range orgMemberList.Members {
+		members[i] = *member.UserID
+	}
+
+	return members
 }

@@ -44,6 +44,7 @@ resource "auth0_organization" "acme" {
 		connection_id = auth0_connection.acme.id
 		assign_membership_on_login = true
 	}
+  members = [ auth0_user.root_user.id, auth0_user.other_user.id ]
 }
 ```
 
@@ -59,6 +60,7 @@ The following arguments are supported:
   10 metadata properties allowed
 * `connections` – (Optional) Connections assigned to the organization. For
   details, see [Connections](#connections)
+* `members` - (Optional) Set(String). Members assigned to the organization by user ID.
 
 ### Branding
 

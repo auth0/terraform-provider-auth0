@@ -3,6 +3,7 @@ package auth0
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"strings"
 	"testing"
 
@@ -152,5 +153,92 @@ resource auth0_organization acme {
 		connection_id = auth0_connection.acmeinc.id
 		assign_membership_on_login = false
 	}
+}
+`
+
+func TestAccOrganizationAssignUsers(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	testName := strings.ToLower(t.Name() + fmt.Sprintf("%d", rand.Intn(99))) // TODO: REMOVE! This is only here to get around annoying 409s
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{{
+			Config: template.ParseTestName(testAccOrganizationAssignUsersCreateOrg, testName),
+			Check: resource.ComposeTestCheckFunc(
+				resource.TestCheckResourceAttr("auth0_organization.some_org", "name", fmt.Sprintf("some-org-%s", testName)),
+				resource.TestCheckResourceAttr("auth0_organization.some_org", "members.#", "0"),
+			),
+		},
+			{
+				Config: template.ParseTestName(
+					testAccOrganizationAssignUsersAux+`
+					resource auth0_organization some_org{
+						depends_on = [ auth0_user.user1, auth0_user.user2]
+						name = "some-org-{{.testName}}"
+						display_name = "{{.testName}}"
+						members = [ auth0_user.user1.id ]
+					}
+				`, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "name", fmt.Sprintf("some-org-%s", testName)),
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "members.#", "1"),
+				),
+			},
+			{
+				Config: template.ParseTestName(
+					testAccOrganizationAssignUsersAux+`
+					resource auth0_organization some_org{
+						depends_on = [ auth0_user.user1, auth0_user.user2]
+						name = "some-org-{{.testName}}"
+						display_name = "{{.testName}}"
+						members = [ auth0_user.user1.id, auth0_user.user2.id ]
+					}
+				`, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "name", fmt.Sprintf("some-org-%s", testName)),
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "members.#", "2"),
+				),
+			},
+			{
+				Config: template.ParseTestName(
+					testAccOrganizationAssignUsersAux+`
+					resource auth0_organization some_org{
+						depends_on = [ auth0_user.user1, auth0_user.user2]
+						name = "some-org-{{.testName}}"
+						display_name = "{{.testName}}"
+						members = []
+					}
+				`, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "name", fmt.Sprintf("some-org-%s", testName)),
+					resource.TestCheckResourceAttr("auth0_organization.some_org", "members.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccOrganizationAssignUsersAux = `
+resource auth0_user user1 {
+	email = "will.vedder+1{{.testName}}@auth0.com"
+	connection_name = "Username-Password-Authentication"
+	email_verified = true
+	password = "MyPass123$"
+}
+	
+resource auth0_user user2 {
+	email = "will.vedder+2{{.testName}}@auth0.com"
+	connection_name = "Username-Password-Authentication"
+	email_verified = true
+	password = "MyPass123$"
+}
+`
+
+const testAccOrganizationAssignUsersCreateOrg = testAccOrganizationAssignUsersAux +
+	`
+resource auth0_organization some_org{
+	name = "some-org-{{.testName}}"
+	display_name = "{{.testName}}"
 }
 `

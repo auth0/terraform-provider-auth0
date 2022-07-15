@@ -1,0 +1,1463 @@
+---
+version: 1
+interactions:
+- request:
+    body: |
+      {"name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
+    method: POST
+  response:
+    body: '{"name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23","id":"org_qnZzFtcJUbnLcttu"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      {"connection":"Username-Password-Authentication","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","password":"MyPass123$","email_verified":true}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
+    method: POST
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      {"connection":"Username-Password-Authentication","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","password":"MyPass123$","email_verified":true}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
+    method: POST
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: PATCH
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","display_name":"testaccorganizationassignusers23","name":"some-org-testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"members":["auth0|62d1de95f3ef43c4e21e2d58"]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members
+    method: POST
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":1}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":1}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":1}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: PATCH
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","display_name":"testaccorganizationassignusers23","name":"some-org-testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"members":["auth0|62d1de95b0099d070ebf57bc"]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members
+    method: POST
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"},{"user_id":"auth0|62d1de95b0099d070ebf57bc","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+2testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":2}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"},{"user_id":"auth0|62d1de95b0099d070ebf57bc","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+2testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":2}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[{"user_id":"auth0|62d1de95f3ef43c4e21e2d58","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+1testaccorganizationassignusers23@auth0.com"},{"user_id":"auth0|62d1de95b0099d070ebf57bc","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","name":"will.vedder+2testaccorganizationassignusers23@auth0.com"}],"start":0,"limit":50,"total":2}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: PATCH
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","display_name":"testaccorganizationassignusers23","name":"some-org-testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"members":["auth0|62d1de95b0099d070ebf57bc","auth0|62d1de95f3ef43c4e21e2d58"]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.381Z","email":"will.vedder+1testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95f3ef43c4e21e2d58","provider":"auth0","isSocial":false}],"name":"will.vedder+1testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+1testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/9a9448fb333cb98ac4c54d474ab9d9fc?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.381Z","user_id":"auth0|62d1de95f3ef43c4e21e2d58"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-15T21:39:33.303Z","email":"will.vedder+2testaccorganizationassignusers23@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d1de95b0099d070ebf57bc","provider":"auth0","isSocial":false}],"name":"will.vedder+2testaccorganizationassignusers23@auth0.com","nickname":"will.vedder+2testaccorganizationassignusers23","picture":"https://s.gravatar.com/avatar/132d6342322c9a2f9d189ec050be8a2c?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fwi.png","updated_at":"2022-07-15T21:39:33.303Z","user_id":"auth0|62d1de95b0099d070ebf57bc"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: GET
+  response:
+    body: '{"id":"org_qnZzFtcJUbnLcttu","name":"some-org-testaccorganizationassignusers23","display_name":"testaccorganizationassignusers23"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/enabled_connections?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu/members?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"members":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_qnZzFtcJUbnLcttu
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95f3ef43c4e21e2d58
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.1
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d1de95b0099d070ebf57bc
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
+    duration: 1ms

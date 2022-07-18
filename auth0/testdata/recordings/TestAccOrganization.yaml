@@ -9,11 +9,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -41,17 +41,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization"}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","metadata":{"some_key":"some_value"}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
     method: POST
   response:
-    body: '{"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","id":"org_xTyfdjiSg4O4CzLh"}'
+    body: '{"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","metadata":{"some_key":"some_value"},"id":"org_K59CyA6NYuIVrX7L"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -66,11 +66,30 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 201 Created
+    code: 201
+    duration: 1ms
+- request:
+    body: |
+      {"connection_id":"con_mvje0nBmfgbUca6j"}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections
+    method: POST
+  response:
+    body: '{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -85,35 +104,16 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
     status: 200 OK
     code: 200
-    duration: 1ms
-- request:
-    body: |
-      {"connection_id":"con_GfSl3oqfVdyUc6sT"}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections
-    method: POST
-  response:
-    body: '{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
     duration: 1ms
 - request:
     body: |
@@ -123,11 +123,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_mvje0nBmfgbUca6j
     method: PATCH
   response:
-    body: '{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -142,12 +142,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization"}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -162,11 +162,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -181,11 +181,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -200,12 +200,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization"}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -220,11 +220,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -239,11 +239,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -258,11 +258,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -277,11 +277,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -296,12 +296,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization"}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -316,11 +316,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -329,18 +329,18 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"another_key":"another_value","some_key":"some_value"}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: PATCH
   response:
-    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_xTyfdjiSg4O4CzLh","display_name":"Acme
-      Inc. testaccorganization","name":"test-testaccorganization"}'
+    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_K59CyA6NYuIVrX7L","display_name":"Acme
+      Inc. testaccorganization","name":"test-testaccorganization","metadata":{"another_key":"another_value","some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -349,17 +349,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"connection_id":"con_HkFqsGw8IazuHe8A"}
+      {"connection_id":"con_5EHmGg3t80xX2gMH"}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections
     method: POST
   response:
-    body: '{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -374,11 +374,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_5EHmGg3t80xX2gMH
     method: PATCH
   response:
-    body: '{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -393,11 +393,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_mvje0nBmfgbUca6j
     method: PATCH
   response:
-    body: '{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -412,12 +412,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"another_key":"another_value","some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -432,11 +432,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}},{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}},{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -451,11 +451,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -470,11 +470,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -489,12 +489,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"another_key":"another_value","some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -509,11 +509,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}},{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}},{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -528,11 +528,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -547,11 +547,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -566,12 +566,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"another_key":"another_value","some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -586,11 +586,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_GfSl3oqfVdyUc6sT","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}},{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}},{"connection_id":"con_mvje0nBmfgbUca6j","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-testaccorganization","strategy":"auth0"}}],"start":0,"limit":2,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -599,18 +599,18 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"some_key":"some_value"}}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: PATCH
   response:
-    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_xTyfdjiSg4O4CzLh","display_name":"Acme
-      Inc. testaccorganization","name":"test-testaccorganization"}'
+    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_K59CyA6NYuIVrX7L","display_name":"Acme
+      Inc. testaccorganization","name":"test-testaccorganization","metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -624,8 +624,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_mvje0nBmfgbUca6j
     method: DELETE
   response:
     body: ""
@@ -643,11 +643,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_5EHmGg3t80xX2gMH
     method: PATCH
   response:
-    body: '{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -662,12 +662,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -682,11 +682,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -701,11 +701,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -720,11 +720,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -739,12 +739,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -759,11 +759,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -778,11 +778,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -797,11 +797,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -816,12 +816,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
-      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
+      Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":{"some_key":"some_value"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -836,11 +836,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":false,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -849,17 +849,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":null}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: PATCH
   response:
-    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_xTyfdjiSg4O4CzLh","display_name":"Acme
+    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_K59CyA6NYuIVrX7L","display_name":"Acme
       Inc. testaccorganization","name":"test-testaccorganization"}'
     headers:
       Content-Type:
@@ -875,11 +875,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_5EHmGg3t80xX2gMH
     method: PATCH
   response:
-    body: '{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
+    body: '{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -894,11 +894,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
       Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
     headers:
       Content-Type:
@@ -914,11 +914,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -933,11 +933,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -952,11 +952,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -971,11 +971,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
       Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
     headers:
       Content-Type:
@@ -991,11 +991,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1010,11 +1010,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: GET
   response:
-    body: '{"id":"con_GfSl3oqfVdyUc6sT","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
+    body: '{"id":"con_5EHmGg3t80xX2gMH","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1029,11 +1029,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
       Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
     headers:
       Content-Type:
@@ -1049,11 +1049,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: GET
   response:
-    body: '{"id":"con_HkFqsGw8IazuHe8A","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
+    body: '{"id":"con_mvje0nBmfgbUca6j","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-testaccorganization"]}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1068,11 +1068,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"enabled_connections":[{"connection_id":"con_HkFqsGw8IazuHe8A","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
+    body: '{"enabled_connections":[{"connection_id":"con_5EHmGg3t80xX2gMH","assign_membership_on_login":true,"connection":{"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}}],"start":0,"limit":1,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1086,11 +1086,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_5EHmGg3t80xX2gMH
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-07-18T15:27:53.880Z"}'
+    body: '{"deleted_at":"2022-07-18T16:04:16.214Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1104,11 +1104,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_GfSl3oqfVdyUc6sT
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_mvje0nBmfgbUca6j
     method: DELETE
   response:
-    body: '{"deleted_at":"2022-07-18T15:27:54.311Z"}'
+    body: '{"deleted_at":"2022-07-18T16:04:16.650Z"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -1117,17 +1117,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"metadata":null}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: PATCH
   response:
-    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_xTyfdjiSg4O4CzLh","display_name":"Acme
+    body: '{"branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}},"id":"org_K59CyA6NYuIVrX7L","display_name":"Acme
       Inc. testaccorganization","name":"test-testaccorganization"}'
     headers:
       Content-Type:
@@ -1142,8 +1142,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections/con_HkFqsGw8IazuHe8A
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections/con_5EHmGg3t80xX2gMH
     method: DELETE
   response:
     body: ""
@@ -1161,11 +1161,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
       Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
     headers:
       Content-Type:
@@ -1181,8 +1181,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
@@ -1200,11 +1200,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: GET
   response:
-    body: '{"id":"org_xTyfdjiSg4O4CzLh","name":"test-testaccorganization","display_name":"Acme
+    body: '{"id":"org_K59CyA6NYuIVrX7L","name":"test-testaccorganization","display_name":"Acme
       Inc. testaccorganization","branding":{"logo_url":"https://acme.com/logo.svg","colors":{"page_background":"#e3e2ff","primary":"#e3e2f0"}}}'
     headers:
       Content-Type:
@@ -1220,8 +1220,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh/enabled_connections?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L/enabled_connections?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
@@ -1238,8 +1238,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.9.1
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_xTyfdjiSg4O4CzLh
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_K59CyA6NYuIVrX7L
     method: DELETE
   response:
     body: ""

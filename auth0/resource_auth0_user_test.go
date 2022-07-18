@@ -75,22 +75,10 @@ resource auth0_user user {
 	family_name = "Lastname"
 	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
-	user_metadata = <<EOF
-{
-  "foo": "bar",
-  "bar": { "baz": "qux" }
-}
-EOF
-	app_metadata = <<EOF
-{
-  "foo": "bar",
-  "bar": { "baz": "qux" }
-}
-EOF
 }
 `
 
-const testAccUserAddRole = `
+const testAccUserUpdateWithRolesAndMetadata = `
 resource auth0_user user {
 	depends_on = [auth0_role.owner, auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
@@ -104,18 +92,14 @@ resource auth0_user user {
 	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
 	roles = [ auth0_role.owner.id, auth0_role.admin.id ]
-	user_metadata = <<EOF
-{
-  "foo": "bar",
-  "bar": { "baz": "qux" }
-}
-EOF
-app_metadata = <<EOF
-{
-  "foo": "bar",
-  "bar": { "baz": "qux" }
-}
-EOF
+	user_metadata = jsonencode({
+		"foo": "bar",
+		"baz": "qux"
+	})
+	app_metadata = jsonencode({
+		"foo": "bar",
+		"baz": "qux"
+	})
 }
 
 resource auth0_role owner {
@@ -130,7 +114,7 @@ resource auth0_role admin {
 }
 `
 
-const testAccUserRemoveRole = `
+const testAccUserUpdateRemovingOneRoleAndUpdatingMetadata = `
 resource auth0_user user {
 	depends_on = [auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
@@ -144,23 +128,55 @@ resource auth0_user user {
 	nickname = "{{.testName}}"
 	picture = "https://www.example.com/picture.jpg"
 	roles = [ auth0_role.admin.id ]
-	user_metadata = <<EOF
-{
-  	"foo": "bar",
-  	"bar": { "baz": "qux" }
-}
-EOF
-  app_metadata = <<EOF
-{
-  	"foo": "bar",
-  	"bar": { "baz": "qux" }
-}
-EOF
+	user_metadata = jsonencode({
+		"foo": "bars",
+	})
+	app_metadata = jsonencode({
+		"foo": "bars",
+	})
 }
 
 resource auth0_role admin {
 	name = "admin"
 	description = "Administrator"
+}
+`
+
+const testAccUserUpdateRemovingAllRolesAndUpdatingMetadata = `
+resource auth0_user user {
+	connection_name = "Username-Password-Authentication"
+	username = "{{.testName}}"
+	user_id = "{{.testName}}"
+	email = "{{.testName}}@acceptance.test.com"
+	password = "passpass$12$12"
+	name = "Firstname Lastname"
+	given_name = "Firstname"
+	family_name = "Lastname"
+	nickname = "{{.testName}}"
+	picture = "https://www.example.com/picture.jpg"
+	user_metadata = jsonencode({
+		"foo": "barss",
+		"foo2": "bar2",
+	})
+	app_metadata = jsonencode({
+		"foo": "barss",
+		"foo2": "bar2",
+	})
+}
+`
+
+const testAccUserUpdateRemovingMetadata = `
+resource auth0_user user {
+	connection_name = "Username-Password-Authentication"
+	username = "{{.testName}}"
+	user_id = "{{.testName}}"
+	email = "{{.testName}}@acceptance.test.com"
+	password = "passpass$12$12"
+	name = "Firstname Lastname"
+	given_name = "Firstname"
+	family_name = "Lastname"
+	nickname = "{{.testName}}"
+	picture = "https://www.example.com/picture.jpg"
 }
 `
 
@@ -173,62 +189,53 @@ func TestAccUser(t *testing.T) {
 			{
 				Config: template.ParseTestName(testAccUserCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
+					resource.TestCheckResourceAttr("auth0_user.user", "username", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
-					resource.TestCheckResourceAttr("auth0_user.user", "family_name", "Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),
+					resource.TestCheckResourceAttr("auth0_user.user", "family_name", "Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "nickname", strings.ToLower(t.Name())),
-					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "picture", "https://www.example.com/picture.jpg"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserAddRole, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccUserUpdateWithRolesAndMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
 					resource.TestCheckResourceAttr("auth0_role.owner", "name", "owner"),
 					resource.TestCheckResourceAttr("auth0_role.admin", "name", "admin"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"baz":"qux","foo":"bar"}`),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"baz":"qux","foo":"bar"}`),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserRemoveRole, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccUserUpdateRemovingOneRoleAndUpdatingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"bars"}`),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"foo":"bars"}`),
 				),
 			},
-		},
-	})
-}
-
-const testAccUserCanSerializeEmptyMetadataFields = `
-resource auth0_user auth0_user_issue_218 {
-  connection_name = "Username-Password-Authentication"
-  user_id = "id_{{.testName}}"
-  username = "user_{{.testName}}"
-  email = "issue.218.{{.testName}}@acceptance.test.com"
-  email_verified = true
-  password = "MyPass123$"
-}
-`
-
-func TestAccUserCanSerializeEmptyMetadataFields(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserCanSerializeEmptyMetadataFields, "issue#218"),
+				Config: template.ParseTestName(testAccUserUpdateRemovingAllRolesAndUpdatingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "user_id", "auth0|id_issue#218"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "username", "user_issue#218"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "email", "issue.218.issue#218@acceptance.test.com"),
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"barss","foo2":"bar2"}`),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"foo":"barss","foo2":"bar2"}`),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserCanSerializeEmptyMetadataFields, "issue#218"),
+				Config: template.ParseTestName(testAccUserUpdateRemovingMetadata, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
+				),
 			},
 		},
 	})

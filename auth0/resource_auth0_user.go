@@ -120,11 +120,9 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 	api := m.(*management.Management)
 	user, err := api.User.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
@@ -250,19 +248,52 @@ func expandUser(d *schema.ResourceData) (*management.User, error) {
 		Blocked:       Bool(d, "blocked"),
 	}
 
-	userMeta, err := JSON(d, "user_metadata")
-	if err != nil {
-		return nil, err
+	if d.HasChange("user_metadata") {
+		userMetadata, err := expandMetadata(d, "user")
+		if err != nil {
+			return nil, err
+		}
+		user.UserMetadata = &userMetadata
 	}
-	user.UserMetadata = &userMeta
 
-	appMeta, err := JSON(d, "app_metadata")
-	if err != nil {
-		return nil, err
+	if d.HasChange("app_metadata") {
+		appMetadata, err := expandMetadata(d, "app")
+		if err != nil {
+			return nil, err
+		}
+		user.AppMetadata = &appMetadata
 	}
-	user.AppMetadata = &appMeta
 
 	return user, nil
+}
+
+func expandMetadata(d *schema.ResourceData, metadataType string) (map[string]interface{}, error) {
+	oldMetadata, newMetadata := d.GetChange(metadataType + "_metadata")
+	if oldMetadata == "" {
+		return JSON(d, metadataType+"_metadata")
+	}
+
+	if newMetadata == "" {
+		return map[string]interface{}{}, nil
+	}
+
+	oldMap, err := structure.ExpandJsonFromString(oldMetadata.(string))
+	if err != nil {
+		return map[string]interface{}{}, err
+	}
+
+	newMap, err := structure.ExpandJsonFromString(newMetadata.(string))
+	if err != nil {
+		return map[string]interface{}{}, err
+	}
+
+	for key := range oldMap {
+		if _, ok := newMap[key]; !ok {
+			newMap[key] = nil
+		}
+	}
+
+	return newMap, nil
 }
 
 func flattenUserRoles(roleList *management.RoleList) []interface{} {

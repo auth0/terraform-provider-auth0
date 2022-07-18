@@ -3,17 +3,17 @@ version: 1
 interactions:
 - request:
     body: |
-      {"connection":"Username-Password-Authentication","email":"change.username.terra@acceptance.test.com","username":"user_terra","password":"MyPass123$","email_verified":true}
+      {"connection":"Username-Password-Authentication","email":"change.username.terra@acceptance.test.com","username":"user_terra","password":"MyPass123$","user_metadata":{},"app_metadata":{},"email_verified":true}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
     method: POST
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:35.691Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_terra"}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:14.640Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_terra"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -28,11 +28,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:35.691Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_terra"}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:14.640Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_terra"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -47,8 +47,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"roles":[],"start":0,"limit":50,"total":0}'
@@ -66,11 +66,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:35.691Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_terra"}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:14.640Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_terra"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -85,8 +85,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"roles":[],"start":0,"limit":50,"total":0}'
@@ -104,11 +104,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:35.691Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_terra"}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:14.640Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_terra"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -123,8 +123,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"roles":[],"start":0,"limit":50,"total":0}'
@@ -136,17 +136,17 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"connection":"Username-Password-Authentication","name":"change.username.terra@acceptance.test.com","username":"user_x_terra","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480\u0026r=pg\u0026d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","blocked":false}
+      {"connection":"Username-Password-Authentication","name":"change.username.terra@acceptance.test.com","username":"user_x_terra","nickname":"change.username.terra","user_metadata":{},"app_metadata":{},"picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480\u0026r=pg\u0026d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","blocked":false}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: PATCH
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:39.787Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_x_terra","blocked":false}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:17.973Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_x_terra","blocked":false}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -161,11 +161,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:39.787Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_x_terra","blocked":false}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:17.973Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_x_terra","blocked":false}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -180,46 +180,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
-    method: GET
-  response:
-    body: '{"roles":[],"start":0,"limit":50,"total":0}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
-    method: GET
-  response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:39.787Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_x_terra","blocked":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"roles":[],"start":0,"limit":50,"total":0}'
@@ -237,11 +199,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:35.691Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62a85de7c061c48d036b850d","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-06-14T10:07:39.787Z","user_id":"auth0|62a85de7c061c48d036b850d","username":"user_x_terra","blocked":false}'
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:17.973Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_x_terra","blocked":false}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -256,8 +218,46 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d/roles?include_totals=true&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-18T18:05:14.640Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"62d5a0da011dc8d027e1807e","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2022-07-18T18:05:17.973Z","user_id":"auth0|62d5a0da011dc8d027e1807e","user_metadata":{},"username":"user_x_terra","blocked":false}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e/roles?include_totals=true&per_page=50
     method: GET
   response:
     body: '{"roles":[],"start":0,"limit":50,"total":0}'
@@ -274,8 +274,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62a85de7c061c48d036b850d
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C62d5a0da011dc8d027e1807e
     method: DELETE
   response:
     body: ""

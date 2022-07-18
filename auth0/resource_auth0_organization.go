@@ -145,12 +145,11 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 	if err := api.Organization.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
 	return nil
@@ -208,10 +207,12 @@ func updateOrganizationConnections(d *schema.ResourceData, api *management.Manag
 }
 
 func expandOrganization(d *schema.ResourceData) *management.Organization {
+	metadata := Map(d, "metadata")
+
 	organization := &management.Organization{
 		Name:        String(d, "name"),
 		DisplayName: String(d, "display_name"),
-		Metadata:    Map(d, "metadata"),
+		Metadata:    &metadata,
 	}
 
 	List(d, "branding").Elem(func(d ResourceData) {

@@ -145,15 +145,21 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("picture", user.Picture),
 	)
 
-	userMeta, err := structure.FlattenJsonToString(user.UserMetadata)
-	if err != nil {
-		return diag.FromErr(err)
+	var userMeta string
+	if user.UserMetadata != nil {
+		userMeta, err = structure.FlattenJsonToString(*user.UserMetadata)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	result = multierror.Append(result, d.Set("user_metadata", userMeta))
 
-	appMeta, err := structure.FlattenJsonToString(user.AppMetadata)
-	if err != nil {
-		return diag.FromErr(err)
+	var appMeta string
+	if user.AppMetadata != nil {
+		appMeta, err = structure.FlattenJsonToString(*user.AppMetadata)
+		if err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	result = multierror.Append(result, d.Set("app_metadata", appMeta))
 
@@ -255,16 +261,17 @@ func buildUser(d *schema.ResourceData) (*management.User, error) {
 		Blocked:       Bool(d, "blocked"),
 	}
 
-	var err error
-	user.UserMetadata, err = JSON(d, "user_metadata")
+	userMeta, err := JSON(d, "user_metadata")
 	if err != nil {
 		return nil, err
 	}
+	user.UserMetadata = &userMeta
 
-	user.AppMetadata, err = JSON(d, "app_metadata")
+	appMeta, err := JSON(d, "app_metadata")
 	if err != nil {
 		return nil, err
 	}
+	user.AppMetadata = &appMeta
 
 	return user, nil
 }

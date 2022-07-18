@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -12,8 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
 )
 
 func newAction() *schema.Resource {
@@ -35,7 +32,7 @@ func newAction() *schema.Resource {
 				Type:     schema.TypeList,
 				Required: true,
 				MinItems: 1,
-				MaxItems: 1, // NOTE: Changes must be made together with expandAction()
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"id": {
@@ -62,7 +59,6 @@ func newAction() *schema.Resource {
 			"dependencies": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				MinItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -77,7 +73,6 @@ func newAction() *schema.Resource {
 						},
 					},
 				},
-				Set:         hash.StringKey("name"),
 				Description: "List of third party npm modules, and their versions, that this action depends on",
 			},
 			"runtime": {
@@ -93,7 +88,6 @@ func newAction() *schema.Resource {
 			"secrets": {
 				Type:     schema.TypeList,
 				Optional: true,
-				MinItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -131,6 +125,7 @@ func newAction() *schema.Resource {
 
 func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	action := expandAction(d)
+
 	api := m.(*management.Management)
 	if err := api.Action.Create(action); err != nil {
 		return diag.FromErr(err)
@@ -138,11 +133,9 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	d.SetId(action.GetID())
 
-	d.Partial(true)
 	if result := deployAction(ctx, d, m); result.HasError() {
 		return result
 	}
-	d.Partial(false)
 
 	return readAction(ctx, d, m)
 }
@@ -176,63 +169,17 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	action := expandAction(d)
+
 	api := m.(*management.Management)
 	if err := api.Action.Update(d.Id(), action); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.Partial(true)
 	if result := deployAction(ctx, d, m); result.HasError() {
 		return result
 	}
-	d.Partial(false)
 
 	return readAction(ctx, d, m)
-}
-
-func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	deployExists := d.Get("deploy").(bool)
-	if deployExists {
-		api := m.(*management.Management)
-
-		err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
-			action, err := api.Action.Read(d.Id())
-			if err != nil {
-				return resource.NonRetryableError(err)
-			}
-
-			if strings.ToLower(action.GetStatus()) == "failed" {
-				return resource.NonRetryableError(
-					fmt.Errorf("action %q failed to build, check the Auth0 UI for errors", action.GetName()),
-				)
-			}
-
-			if strings.ToLower(action.GetStatus()) != "built" {
-				return resource.RetryableError(
-					fmt.Errorf(
-						"expected action %q status %q to equal %q",
-						action.GetName(),
-						action.GetStatus(),
-						"built",
-					),
-				)
-			}
-
-			return nil
-		})
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("action %q never reached built state: %w", d.Get("name"), err))
-		}
-
-		actionVersion, err := api.Action.Deploy(d.Id())
-		if err != nil {
-			return diag.FromErr(err)
-		}
-
-		return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
-	}
-
-	return nil
 }
 
 func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -248,6 +195,60 @@ func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	}
 
 	return nil
+}
+
+func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	deployExists := d.Get("deploy").(bool)
+	if !deployExists {
+		return nil
+	}
+
+	api := m.(*management.Management)
+
+	err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+		action, err := api.Action.Read(d.Id())
+		if err != nil {
+			return resource.NonRetryableError(err)
+		}
+
+		if action.GetStatus() == management.ActionStatusFailed {
+			return resource.NonRetryableError(
+				fmt.Errorf(
+					"action %q failed to build, check the Auth0 UI for errors",
+					action.GetName(),
+				),
+			)
+		}
+
+		if action.GetStatus() != management.ActionStatusBuilt {
+			return resource.RetryableError(
+				fmt.Errorf(
+					"expected action %q status %q to equal %q",
+					action.GetName(),
+					action.GetStatus(),
+					"built",
+				),
+			)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return diag.FromErr(
+			fmt.Errorf(
+				"action %q never reached built state: %w",
+				d.Get("name").(string),
+				err,
+			),
+		)
+	}
+
+	actionVersion, err := api.Action.Deploy(d.Id())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
 }
 
 func expandAction(d *schema.ResourceData) *management.Action {

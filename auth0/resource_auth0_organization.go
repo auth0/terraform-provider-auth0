@@ -3,15 +3,13 @@ package auth0
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-
-	"github.com/auth0/terraform-provider-auth0/auth0/internal/hash"
 )
 
 func newOrganization() *schema.Resource {
@@ -39,7 +37,6 @@ func newOrganization() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				MinItems:    1,
 				Description: "Defines how to style the login pages",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -64,7 +61,6 @@ func newOrganization() *schema.Resource {
 			"connections": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {
@@ -74,17 +70,18 @@ func newOrganization() *schema.Resource {
 						"assign_membership_on_login": {
 							Type:     schema.TypeBool,
 							Optional: true,
+							Default:  false,
 						},
 					},
 				},
-				Set: hash.StringKey("connection_id"),
 			},
 		},
 	}
 }
 
 func createOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	organization := buildOrganization(d)
+	organization := expandOrganization(d)
+
 	api := m.(*management.Management)
 	if err := api.Organization.Create(organization); err != nil {
 		return diag.FromErr(err)
@@ -92,63 +89,11 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 
 	d.SetId(organization.GetID())
 
-	d.Partial(true)
-	if err := assignOrganizationConnections(d, m); err != nil {
-		return diag.FromErr(fmt.Errorf("failed assigning organization connections. %w", err))
+	if err := updateOrganizationConnections(d, api); err != nil {
+		return diag.FromErr(fmt.Errorf("failed to update organization connections: %w", err))
 	}
-	d.Partial(false)
 
 	return readOrganization(ctx, d, m)
-}
-
-func assignOrganizationConnections(d *schema.ResourceData, m interface{}) (err error) {
-	api := m.(*management.Management)
-
-	add, rm := Diff(d, "connections")
-
-	add.Elem(func(data ResourceData) {
-		organizationConnection := &management.OrganizationConnection{
-			ConnectionID:            String(data, "connection_id"),
-			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
-		}
-
-		log.Printf("[DEBUG] (+) auth0_organization.%s.connections.%s", d.Id(), organizationConnection.GetConnectionID())
-
-		err = api.Organization.AddConnection(d.Id(), organizationConnection)
-		if err != nil {
-			return
-		}
-	})
-
-	rm.Elem(func(data ResourceData) {
-		// Take connectionID before it changed (i.e. removed).
-		// Therefore we use GetChange() instead of the typical Get().
-		connectionID, _ := data.GetChange("connection_id")
-
-		log.Printf("[DEBUG] (-) auth0_organization.%s.connections.%s", d.Id(), connectionID.(string))
-
-		err = api.Organization.DeleteConnection(d.Id(), connectionID.(string))
-		if err != nil {
-			return
-		}
-	})
-
-	// Update existing connections if any mutable properties have changed.
-	Set(d, "connections", HasChange()).Elem(func(data ResourceData) {
-		connectionID := data.Get("connection_id").(string)
-		organizationConnection := &management.OrganizationConnection{
-			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
-		}
-
-		log.Printf("[DEBUG] (~) auth0_organization.%s.connections.%s", d.Id(), connectionID)
-
-		err = api.Organization.UpdateConnection(d.Id(), connectionID, organizationConnection)
-		if err != nil {
-			return
-		}
-	})
-
-	return nil
 }
 
 func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -181,17 +126,18 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	organization := buildOrganization(d)
+	organization := expandOrganization(d)
+
 	api := m.(*management.Management)
 	if err := api.Organization.Update(d.Id(), organization); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.Partial(true)
-	if err := assignOrganizationConnections(d, m); err != nil {
-		return diag.FromErr(fmt.Errorf("failed updating organization connections. %w", err))
+	if d.HasChange("connections") {
+		if err := updateOrganizationConnections(d, api); err != nil {
+			return diag.FromErr(fmt.Errorf("failed to update organization connections: %w", err))
+		}
 	}
-	d.Partial(false)
 
 	return readOrganization(ctx, d, m)
 }
@@ -210,7 +156,58 @@ func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	return nil
 }
 
-func buildOrganization(d *schema.ResourceData) *management.Organization {
+func updateOrganizationConnections(d *schema.ResourceData, api *management.Management) error {
+	toAdd, toRemove := Diff(d, "connections")
+
+	connectionOperations := make(map[string]string)
+	toRemove.Elem(func(data ResourceData) {
+		oldConnectionID, _ := data.GetChange("connection_id")
+		connectionOperations[oldConnectionID.(string)] = "deleteConnection"
+	})
+
+	toAdd.Elem(func(data ResourceData) {
+		newConnectionID := data.Get("connection_id").(string)
+
+		if _, ok := connectionOperations[newConnectionID]; ok {
+			delete(connectionOperations, newConnectionID)
+		} else {
+			connectionOperations[newConnectionID] = "addConnection"
+		}
+	})
+
+	for key, value := range connectionOperations {
+		if value == "deleteConnection" {
+			if err := api.Organization.DeleteConnection(d.Id(), key); err != nil {
+				return err
+			}
+		}
+		if value == "addConnection" {
+			organizationConnection := &management.OrganizationConnection{
+				ConnectionID: auth0.String(key),
+			}
+			if err := api.Organization.AddConnection(d.Id(), organizationConnection); err != nil {
+				return err
+			}
+		}
+	}
+
+	var err error
+	Set(d, "connections").Elem(func(data ResourceData) {
+		connectionID := data.Get("connection_id").(string)
+		organizationConnection := &management.OrganizationConnection{
+			AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
+		}
+
+		err = api.Organization.UpdateConnection(d.Id(), connectionID, organizationConnection)
+		if err != nil {
+			return
+		}
+	})
+
+	return err
+}
+
+func expandOrganization(d *schema.ResourceData) *management.Organization {
 	organization := &management.Organization{
 		Name:        String(d, "name"),
 		DisplayName: String(d, "display_name"),
@@ -231,24 +228,25 @@ func flattenOrganizationBranding(organizationBranding *management.OrganizationBr
 	if organizationBranding == nil {
 		return nil
 	}
+
 	return []interface{}{
 		map[string]interface{}{
-			"logo_url": organizationBranding.LogoURL,
+			"logo_url": organizationBranding.GetLogoURL(),
 			"colors":   organizationBranding.Colors,
 		},
 	}
 }
 
-func flattenOrganizationConnections(organizationConnectionList *management.OrganizationConnectionList) []interface{} {
-	if organizationConnectionList == nil {
+func flattenOrganizationConnections(connectionList *management.OrganizationConnectionList) []interface{} {
+	if connectionList == nil {
 		return nil
 	}
 
-	connections := make([]interface{}, len(organizationConnectionList.OrganizationConnections))
-	for index, connection := range organizationConnectionList.OrganizationConnections {
+	connections := make([]interface{}, len(connectionList.OrganizationConnections))
+	for index, connection := range connectionList.OrganizationConnections {
 		connections[index] = map[string]interface{}{
-			"connection_id":              connection.ConnectionID,
-			"assign_membership_on_login": connection.AssignMembershipOnLogin,
+			"connection_id":              connection.GetConnectionID(),
+			"assign_membership_on_login": connection.GetAssignMembershipOnLogin(),
 		}
 	}
 

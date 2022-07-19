@@ -63,44 +63,6 @@ func TestAccUserMissingRequiredParams(t *testing.T) {
 	})
 }
 
-func TestAccUser(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
-			{
-				Config: template.ParseTestName(testAccUserCreate, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
-					resource.TestCheckResourceAttr("auth0_user.user", "family_name", "Lastname"),
-					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),
-					resource.TestCheckResourceAttr("auth0_user.user", "nickname", strings.ToLower(t.Name())),
-					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
-					resource.TestCheckResourceAttr("auth0_user.user", "picture", "https://www.example.com/picture.jpg"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccUserAddRole, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
-					resource.TestCheckResourceAttr("auth0_role.owner", "name", "owner"),
-					resource.TestCheckResourceAttr("auth0_role.admin", "name", "admin"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccUserRemoveRole, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
-				),
-			},
-		},
-	})
-}
-
 const testAccUserCreate = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
@@ -202,28 +164,45 @@ resource auth0_role admin {
 }
 `
 
-func TestAccUserIssue218(t *testing.T) {
+func TestAccUser(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserIssue218, "issue#218"),
+				Config: template.ParseTestName(testAccUserCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "user_id", "auth0|id_issue#218"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "username", "user_issue#218"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "email", "issue.218.issue#218@acceptance.test.com"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
+					resource.TestCheckResourceAttr("auth0_user.user", "family_name", "Lastname"),
+					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),
+					resource.TestCheckResourceAttr("auth0_user.user", "nickname", strings.ToLower(t.Name())),
+					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_user.user", "picture", "https://www.example.com/picture.jpg"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserIssue218, "issue#218"),
+				Config: template.ParseTestName(testAccUserAddRole, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
+					resource.TestCheckResourceAttr("auth0_role.owner", "name", "owner"),
+					resource.TestCheckResourceAttr("auth0_role.admin", "name", "admin"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccUserRemoveRole, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
+				),
 			},
 		},
 	})
 }
 
-const testAccUserIssue218 = `
+const testAccUserCanSerializeEmptyMetadataFields = `
 resource auth0_user auth0_user_issue_218 {
   connection_name = "Username-Password-Authentication"
   user_id = "id_{{.testName}}"
@@ -234,31 +213,22 @@ resource auth0_user auth0_user_issue_218 {
 }
 `
 
-func TestAccUserChangeUsername(t *testing.T) {
+func TestAccUserCanSerializeEmptyMetadataFields(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),
+				Config: template.ParseTestName(testAccUserCanSerializeEmptyMetadataFields, "issue#218"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_terra"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "user_id", "auth0|id_issue#218"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "username", "user_issue#218"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_issue_218", "email", "issue.218.issue#218@acceptance.test.com"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserChangeUsernameUpdate, "terra"),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_x_terra"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
-					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
-				),
-			},
-			{
-				Config:      template.ParseTestName(testAccUserChangeUsernameAndPassword, "terra"),
-				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
+				Config: template.ParseTestName(testAccUserCanSerializeEmptyMetadataFields, "issue#218"),
 			},
 		},
 	})
@@ -293,3 +263,33 @@ resource auth0_user auth0_user_change_username {
   password = "MyPass123456$"
 }
 `
+
+func TestAccUserChangeUsername(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_terra"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccUserChangeUsernameUpdate, "terra"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_x_terra"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "password", "MyPass123$"),
+				),
+			},
+			{
+				Config:      template.ParseTestName(testAccUserChangeUsernameAndPassword, "terra"),
+				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
+			},
+		},
+	})
+}

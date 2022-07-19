@@ -167,22 +167,13 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	result = multierror.Append(
-		result,
-		d.Set("roles", func() []interface{} {
-			var roles []interface{}
-			for _, role := range roleList.Roles {
-				roles = append(roles, auth0.StringValue(role.ID))
-			}
-			return roles
-		}()),
-	)
+	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	user, err := buildUser(d)
+	user, err := expandUser(d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -191,19 +182,18 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	if err := api.User.Create(user); err != nil {
 		return diag.FromErr(err)
 	}
+
 	d.SetId(auth0.StringValue(user.ID))
 
-	d.Partial(true)
-	if err = assignUserRoles(d, m); err != nil {
+	if err = updateUserRoles(d, api); err != nil {
 		return diag.FromErr(err)
 	}
-	d.Partial(false)
 
 	return readUser(ctx, d, m)
 }
 
 func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	user, err := buildUser(d)
+	user, err := expandUser(d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -219,11 +209,9 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		}
 	}
 
-	d.Partial(true)
-	if err = assignUserRoles(d, m); err != nil {
+	if err = updateUserRoles(d, api); err != nil {
 		return diag.Errorf("failed assigning user roles. %s", err)
 	}
-	d.Partial(false)
 
 	return readUser(ctx, d, m)
 }
@@ -237,12 +225,13 @@ func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 				return nil
 			}
 		}
+		return diag.FromErr(err)
 	}
 
 	return nil
 }
 
-func buildUser(d *schema.ResourceData) (*management.User, error) {
+func expandUser(d *schema.ResourceData) (*management.User, error) {
 	user := &management.User{
 		ID:            String(d, "user_id", IsNewResource()),
 		Connection:    String(d, "connection_name"),
@@ -276,13 +265,22 @@ func buildUser(d *schema.ResourceData) (*management.User, error) {
 	return user, nil
 }
 
+func flattenUserRoles(roleList *management.RoleList) []interface{} {
+	var roles []interface{}
+	for _, role := range roleList.Roles {
+		roles = append(roles, auth0.StringValue(role.ID))
+	}
+	return roles
+}
+
 func validateUser(user *management.User) error {
-	var result *multierror.Error
 	validations := []validateUserFunc{
 		validateNoUsernameAndPasswordSimultaneously(),
 		validateNoUsernameAndEmailVerifiedSimultaneously(),
 		validateNoPasswordAndEmailVerifiedSimultaneously(),
 	}
+
+	var result *multierror.Error
 	for _, validationFunc := range validations {
 		if err := validationFunc(user); err != nil {
 			result = multierror.Append(result, err)
@@ -294,80 +292,76 @@ func validateUser(user *management.User) error {
 
 func validateNoUsernameAndPasswordSimultaneously() validateUserFunc {
 	return func(user *management.User) error {
-		var err error
 		if user.Username != nil && user.Password != nil {
-			err = fmt.Errorf("cannot update username and password simultaneously")
+			return fmt.Errorf("cannot update username and password simultaneously")
 		}
-		return err
+		return nil
 	}
 }
 
 func validateNoUsernameAndEmailVerifiedSimultaneously() validateUserFunc {
 	return func(user *management.User) error {
-		var err error
 		if user.Username != nil && user.EmailVerified != nil {
-			err = fmt.Errorf("cannot update username and email_verified simultaneously")
+			return fmt.Errorf("cannot update username and email_verified simultaneously")
 		}
-		return err
+		return nil
 	}
 }
 
 func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 	return func(user *management.User) error {
-		var err error
 		if user.Password != nil && user.EmailVerified != nil {
-			err = fmt.Errorf("cannot update password and email_verified simultaneously")
+			return fmt.Errorf("cannot update password and email_verified simultaneously")
 		}
-		return err
+		return nil
 	}
 }
 
-func assignUserRoles(d *schema.ResourceData, m interface{}) error {
-	add, rm := Diff(d, "roles")
+func updateUserRoles(d *schema.ResourceData, api *management.Management) error {
+	toAdd, toRemove := Diff(d, "roles")
 
-	var addRoles []*management.Role
-	for _, addRole := range add.List() {
-		addRoles = append(
-			addRoles,
-			&management.Role{
-				ID: auth0.String(addRole.(string)),
-			},
-		)
+	if err := removeUserRoles(api, d.Id(), toRemove.List()); err != nil {
+		return err
 	}
 
+	return assignUserRoles(api, d.Id(), toAdd.List())
+}
+
+func removeUserRoles(api *management.Management, userID string, userRolesToRemove []interface{}) error {
 	var rmRoles []*management.Role
-	for _, rmRole := range rm.List() {
-		rmRoles = append(
-			rmRoles,
-			&management.Role{
-				ID: auth0.String(rmRole.(string)),
-			},
-		)
+	for _, rmRole := range userRolesToRemove {
+		role := &management.Role{ID: auth0.String(rmRole.(string))}
+		rmRoles = append(rmRoles, role)
 	}
 
-	api := m.(*management.Management)
+	if len(rmRoles) == 0 {
+		return nil
+	}
 
-	if len(rmRoles) > 0 {
-		if err := api.User.RemoveRoles(d.Id(), rmRoles); err != nil {
-			// Ignore 404 errors as the role may have been deleted
-			// prior to un-assigning them from the user.
-			if mErr, ok := err.(management.Error); ok {
-				if mErr.Status() != http.StatusNotFound {
-					return err
-				}
-			} else {
-				return err
-			}
+	err := api.User.RemoveRoles(userID, rmRoles)
+	if err != nil {
+		// Ignore 404 errors as the role may have been deleted
+		// prior to un-assigning them from the user.
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			return nil
 		}
 	}
 
-	if len(addRoles) > 0 {
-		if err := api.User.AssignRoles(d.Id(), addRoles); err != nil {
-			return err
-		}
+	return err
+}
+
+func assignUserRoles(api *management.Management, userID string, userRolesToAdd []interface{}) error {
+	var addRoles []*management.Role
+	for _, addRole := range userRolesToAdd {
+		role := &management.Role{ID: auth0.String(addRole.(string))}
+		addRoles = append(addRoles, role)
 	}
 
-	return nil
+	if len(addRoles) == 0 {
+		return nil
+	}
+
+	return api.User.AssignRoles(userID, addRoles)
 }
 
 func userHasChange(u *management.User) bool {

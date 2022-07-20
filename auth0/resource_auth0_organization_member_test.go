@@ -1,9 +1,7 @@
 package auth0
 
 import (
-	"fmt"
 	"log"
-	"math/rand"
 	"strings"
 	"testing"
 
@@ -28,7 +26,8 @@ func init() {
 			for {
 				organizationList, err := api.Organization.List(management.Page(page))
 				if err != nil {
-					return err
+					result = multierror.Append(result, err)
+					break
 				}
 
 				for _, organization := range organizationList.Organizations {
@@ -79,57 +78,57 @@ func init() {
 func TestAccOrganizationMember(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)
 
-	testName := strings.ToLower(t.Name() + fmt.Sprintf("%d", rand.Intn(931013557))) // TODO: REMOVE! This is only here to get around annoying 409s
+	testName := strings.ToLower(t.Name())
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{{
-			Config: template.ParseTestName(testAccOrganizationMembersAux+
-				`
+			Config: template.ParseTestName(testAccOrganizationMembersAux+`
 			resource auth0_organization_member member1 {
 				depends_on = [ auth0_user.user, auth0_organization.some_org ]
 				organization_id = auth0_organization.some_org.id
 				user_id = auth0_user.user.id
-			}`, testName),
+			}
+			`, testName),
 			Check: resource.ComposeTestCheckFunc(
 				resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "0"),
 			),
 		},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+
-					`
-			resource auth0_organization_member member1 {
-				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader ]
-				organization_id = auth0_organization.some_org.id
-				user_id = auth0_user.user.id
-				roles = [ auth0_role.reader.id ]
-			}`, testName),
+				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				resource auth0_organization_member member1 {
+					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader ]
+					organization_id = auth0_organization.some_org.id
+					user_id = auth0_user.user.id
+					roles = [ auth0_role.reader.id ] // Adding role
+				}
+			`, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "1"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+
-					`
-			resource auth0_organization_member member1 {
-				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
-				organization_id = auth0_organization.some_org.id
-				user_id = auth0_user.user.id
-				roles = [ auth0_role.reader.id, auth0_role.admin.id ]
-			}`, testName),
+				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				resource auth0_organization_member member1 {
+					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
+					organization_id = auth0_organization.some_org.id
+					user_id = auth0_user.user.id
+					roles = [ auth0_role.reader.id, auth0_role.admin.id ] // Adding an additional role
+				}
+			`, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "2"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+
-					`
-			resource auth0_organization_member member1 {
-				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
-				organization_id = auth0_organization.some_org.id
-				user_id = auth0_user.user.id
-				roles = [ auth0_role.admin.id ]
-			}`, testName),
+				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				resource auth0_organization_member member1 {
+					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
+					organization_id = auth0_organization.some_org.id
+					user_id = auth0_user.user.id
+					roles = [ auth0_role.admin.id ] // Removing a role
+				}
+			`, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "1"),
 				),
@@ -141,6 +140,7 @@ func TestAccOrganizationMember(t *testing.T) {
 				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 				organization_id = auth0_organization.some_org.id
 				user_id = auth0_user.user.id
+				// Removing roles entirely
 			}`, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "0"),
@@ -160,25 +160,14 @@ resource auth0_role admin {
 }
 
 resource auth0_user user {
-	email = "will.vedder+1{{.testName}}@auth0.com"
+	email = "{{.testName}}@auth0.com"
 	connection_name = "Username-Password-Authentication"
 	email_verified = true
 	password = "MyPass123$"
-	// TODO: remove the below code until nil fixes for these properties get added
-	app_metadata = jsonencode({
-		"foo":"bar"
-	})
-	user_metadata = jsonencode({
-		"foo":"bar"
-	})
 }
 
 resource auth0_organization some_org{
 	name = "some-org-{{.testName}}"
 	display_name = "{{.testName}}"
-	// TODO: remove the below code until nil fixes for this property
-	metadata = {
-		"foo" = "bar"
-	}
 }
 `

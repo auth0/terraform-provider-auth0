@@ -62,7 +62,7 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 func assignRoles(d *schema.ResourceData, m interface{}) error {
 	api := m.(*management.Management)
 	orgID := String(d, "organization_id")
-	memberID := String(d, "user_id")
+	userID := String(d, "user_id")
 
 	add, rm := Diff(d, "roles")
 
@@ -71,7 +71,7 @@ func assignRoles(d *schema.ResourceData, m interface{}) error {
 		rolesToAssign = append(rolesToAssign, r.(string))
 	}
 	if len(rolesToAssign) > 0 {
-		err := api.Organization.AssignMemberRoles(*orgID, *memberID, rolesToAssign)
+		err := api.Organization.AssignMemberRoles(*orgID, *userID, rolesToAssign)
 		if err != nil {
 			return err
 		}
@@ -82,7 +82,7 @@ func assignRoles(d *schema.ResourceData, m interface{}) error {
 		rolesToRemove = append(rolesToRemove, r.(string))
 	}
 	if len(rolesToRemove) > 0 {
-		err := api.Organization.DeleteMemberRoles(*orgID, *memberID, rolesToRemove)
+		err := api.Organization.DeleteMemberRoles(*orgID, *userID, rolesToRemove)
 		if err != nil {
 			return err
 		}
@@ -95,9 +95,9 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 	api := m.(*management.Management)
 
 	orgID := String(d, "organization_id")
-	memberID := String(d, "user_id")
+	userID := String(d, "user_id")
 
-	roles, err := api.Organization.MemberRoles(*orgID, *memberID)
+	roles, err := api.Organization.MemberRoles(*orgID, *userID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -132,9 +132,9 @@ func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	api := m.(*management.Management)
 
 	orgID := String(d, "organization_id")
-	memberID := String(d, "user_id")
+	userID := String(d, "user_id")
 
-	if err := api.Organization.DeleteMember(*orgID, []string{*memberID}); err != nil {
+	if err := api.Organization.DeleteMember(*orgID, []string{*userID}); err != nil {
 		return diag.FromErr(err)
 	}
 

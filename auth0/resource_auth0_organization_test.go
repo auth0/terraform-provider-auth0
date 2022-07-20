@@ -53,46 +53,7 @@ func init() {
 	})
 }
 
-func TestAccOrganization(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
-			{
-				Config: template.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccOrganizationUpdate, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.primary", "#e3e2f0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "2"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
-				),
-			},
-		},
-	})
-}
-
-const testAccOrganizationAux = `
+const testAccOrganizationGiven2Connections = `
 resource auth0_connection acme {
 	name = "Acceptance-Test-Connection-Acme-{{.testName}}"
 	strategy = "auth0"
@@ -105,10 +66,14 @@ resource auth0_connection acmeinc {
 }
 `
 
-const testAccOrganizationCreate = testAccOrganizationAux + `
+const testAccOrganizationCreate = testAccOrganizationGiven2Connections + `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
+
+	metadata = {
+		some_key = "some_value"
+	}
 
 	connections {
 		connection_id = auth0_connection.acme.id
@@ -116,10 +81,16 @@ resource auth0_organization acme {
 }
 `
 
-const testAccOrganizationUpdate = testAccOrganizationAux + `
+const testAccOrganizationUpdate = testAccOrganizationGiven2Connections + `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
+
+	metadata = {
+		some_key = "some_value"
+		another_key = "another_value"
+	}
+
 	branding {
 		logo_url = "https://acme.com/logo.svg"
 		colors = {
@@ -127,9 +98,12 @@ resource auth0_organization acme {
 			page_background = "#e3e2ff"
 		}
 	}
+
 	connections {
 		connection_id = auth0_connection.acme.id
+		assign_membership_on_login = false
 	}
+
 	connections {
 		connection_id = auth0_connection.acmeinc.id
 		assign_membership_on_login = true
@@ -137,10 +111,15 @@ resource auth0_organization acme {
 }
 `
 
-const testAccOrganizationUpdateAgain = testAccOrganizationAux + `
+const testAccOrganizationUpdateAgain = testAccOrganizationGiven2Connections + `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
+
+	metadata = {
+		some_key = "some_value"
+	}
+
 	branding {
 		logo_url = "https://acme.com/logo.svg"
 		colors = {
@@ -148,9 +127,122 @@ resource auth0_organization acme {
 			page_background = "#e3e2ff"
 		}
 	}
+
 	connections {
 		connection_id = auth0_connection.acmeinc.id
 		assign_membership_on_login = false
 	}
 }
 `
+
+const testAccOrganizationUpdateAgainAndAgain = testAccOrganizationGiven2Connections + `
+resource auth0_organization acme {
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
+
+	branding {
+		logo_url = "https://acme.com/logo.svg"
+		colors = {
+			primary = "#e3e2f0"
+			page_background = "#e3e2ff"
+		}
+	}
+
+	connections {
+		connection_id = auth0_connection.acmeinc.id
+		assign_membership_on_login = true
+	}
+}
+`
+
+const testAccOrganizationRemoveAllConnections = `
+resource auth0_organization acme {
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
+}
+`
+
+func TestAccOrganization(t *testing.T) {
+	httpRecorder := configureHTTPRecorder(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "1"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.some_key", "some_value"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccOrganizationUpdate, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.primary", "#e3e2f0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "2"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.some_key", "some_value"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.another_key", "another_value"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "2"),
+					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
+					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.1.connection_id"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.1.assign_membership_on_login", "true"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.primary", "#e3e2f0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "1"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.some_key", "some_value"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccOrganizationUpdateAgainAndAgain, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.logo_url", "https://acme.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.%", "2"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.primary", "#e3e2f0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "true"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccOrganizationRemoveAllConnections, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
+				),
+			},
+		},
+	})
+}

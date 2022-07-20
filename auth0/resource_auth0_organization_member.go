@@ -8,6 +8,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -45,7 +46,7 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	userID := String(d, "user_id")
 	orgID := String(d, "organization_id")
 
-	d.SetId(*userID)
+	d.SetId(resource.UniqueId())
 
 	api := m.(*management.Management)
 	if err := api.Organization.AddMembers(*orgID, []string{*userID}); err != nil {

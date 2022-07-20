@@ -164,10 +164,21 @@ resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	email_verified = true
 	password = "MyPass123$"
+	// TODO: remove the below code until nil fixes for these properties get added
+	app_metadata = jsonencode({
+		"foo":"bar"
+	})
+	user_metadata = jsonencode({
+		"foo":"bar"
+	})
 }
 
 resource auth0_organization some_org{
 	name = "some-org-{{.testName}}"
 	display_name = "{{.testName}}"
+	// TODO: remove the below code until nil fixes for this property
+	metadata = {
+		"foo" = "bar"
+	}
 }
 `

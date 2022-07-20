@@ -84,19 +84,21 @@ func TestAccOrganizationMember(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{{
 			Config: template.ParseTestName(testAccOrganizationMembersAux+`
-			resource auth0_organization_member member1 {
+			resource auth0_organization_member test_member {
 				depends_on = [ auth0_user.user, auth0_organization.some_org ]
 				organization_id = auth0_organization.some_org.id
 				user_id = auth0_user.user.id
 			}
 			`, testName),
 			Check: resource.ComposeTestCheckFunc(
-				resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "0"),
+				resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "0"),
+				resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
+				resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
 			),
 		},
 			{
 				Config: template.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member member1 {
+				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader ]
 					organization_id = auth0_organization.some_org.id
 					user_id = auth0_user.user.id
@@ -104,12 +106,15 @@ func TestAccOrganizationMember(t *testing.T) {
 				}
 			`, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "1"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
+					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.reader", "id"),
 				),
 			},
 			{
 				Config: template.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member member1 {
+				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 					organization_id = auth0_organization.some_org.id
 					user_id = auth0_user.user.id
@@ -117,12 +122,16 @@ func TestAccOrganizationMember(t *testing.T) {
 				}
 			`, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "2"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
+					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "2"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.reader", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.1", "auth0_role.admin", "id"),
 				),
 			},
 			{
 				Config: template.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member member1 {
+				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 					organization_id = auth0_organization.some_org.id
 					user_id = auth0_user.user.id
@@ -130,20 +139,25 @@ func TestAccOrganizationMember(t *testing.T) {
 				}
 			`, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "1"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
+					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.admin", "id"),
 				),
 			},
 			{
 				Config: template.ParseTestName(testAccOrganizationMembersAux+
 					`
-			resource auth0_organization_member member1 {
+			resource auth0_organization_member test_member {
 				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 				organization_id = auth0_organization.some_org.id
 				user_id = auth0_user.user.id
 				// Removing roles entirely
 			}`, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization_member.member1", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "0"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
 				),
 			},
 		},

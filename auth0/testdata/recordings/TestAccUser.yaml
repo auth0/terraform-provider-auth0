@@ -3,18 +3,18 @@ version: 1
 interactions:
 - request:
     body: |
-      {"user_id":"testaccuser","connection":"Username-Password-Authentication","email":"testaccuser@acceptance.test.com","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","username":"testaccuser","nickname":"testaccuser","password":"passpass$12$12","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"picture":"https://www.example.com/picture.jpg"}
+      {"user_id":"testaccuser","connection":"Username-Password-Authentication","email":"testaccuser@acceptance.test.com","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","username":"testaccuser","nickname":"testaccuser","password":"passpass$12$12","picture":"https://www.example.com/picture.jpg"}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
     method: POST
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:11.250Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:49.355Z","user_id":"auth0|testaccuser","username":"testaccuser"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -29,12 +29,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:11.250Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:49.355Z","user_id":"auth0|testaccuser","username":"testaccuser"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -49,7 +49,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
@@ -68,12 +68,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:11.250Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:49.355Z","user_id":"auth0|testaccuser","username":"testaccuser"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -88,7 +88,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
@@ -107,12 +107,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:11.250Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:49.355Z","user_id":"auth0|testaccuser","username":"testaccuser"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -127,7 +127,7 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
@@ -146,11 +146,49 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
     method: POST
   response:
-    body: '{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}'
+    body: '{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B
+    method: GET
+  response:
+    body: '{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B/permissions?include_totals=true&page=0&per_page=50
+    method: GET
+  response:
+    body: '{"permissions":[],"start":0,"limit":50,"total":0}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -165,11 +203,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
     method: POST
   response:
-    body: '{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}'
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -184,11 +222,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
     method: GET
   response:
-    body: '{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}'
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -203,27 +241,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn
-    method: GET
-  response:
-    body: '{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv/permissions?include_totals=true&page=0&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO/permissions?include_totals=true&page=0&per_page=50
     method: GET
   response:
     body: '{"permissions":[],"start":0,"limit":50,"total":0}'
@@ -235,37 +254,18 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      null
+      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"},"picture":"https://www.example.com/picture.jpg","blocked":false}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn/permissions?include_totals=true&page=0&per_page=50
-    method: GET
-  response:
-    body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"picture":"https://www.example.com/picture.jpg","blocked":false}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: PATCH
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:16.967Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:55.393Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -274,13 +274,13 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"roles":["rol_QBc0kb691vncIbqv","rol_idJWxoOUpGZv9Hxn"]}
+      {"roles":["rol_E7Iv5M5BzbcXLdNO","rol_wce2BfE7eHrGmN5B"]}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles
     method: POST
   response:
@@ -299,12 +299,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:16.967Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:55.393Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -319,11 +319,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"roles":[{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"},{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"},{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -338,11 +338,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B
     method: GET
   response:
-    body: '{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}'
+    body: '{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -357,27 +357,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv
-    method: GET
-  response:
-    body: '{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn/permissions?include_totals=true&page=0&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B/permissions?include_totals=true&page=0&per_page=50
     method: GET
   response:
     body: '{"permissions":[],"start":0,"limit":50,"total":0}'
@@ -395,8 +376,27 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv/permissions?include_totals=true&page=0&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
+    method: GET
+  response:
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO/permissions?include_totals=true&page=0&per_page=50
     method: GET
   response:
     body: '{"permissions":[],"start":0,"limit":50,"total":0}'
@@ -414,12 +414,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:16.967Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:55.393Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -434,11 +434,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"roles":[{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"},{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"},{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -453,11 +453,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B
     method: GET
   response:
-    body: '{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}'
+    body: '{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -472,11 +472,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
     method: GET
   response:
-    body: '{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}'
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -491,27 +491,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv/permissions?include_totals=true&page=0&per_page=50
-    method: GET
-  response:
-    body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn/permissions?include_totals=true&page=0&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B/permissions?include_totals=true&page=0&per_page=50
     method: GET
   response:
     body: '{"permissions":[],"start":0,"limit":50,"total":0}'
@@ -529,12 +510,31 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO/permissions?include_totals=true&page=0&per_page=50
+    method: GET
+  response:
+    body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:16.967Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:27:55.393Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -549,11 +549,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"roles":[{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"},{"id":"rol_idJWxoOUpGZv9Hxn","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"},{"id":"rol_wce2BfE7eHrGmN5B","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -568,8 +568,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_idJWxoOUpGZv9Hxn
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_wce2BfE7eHrGmN5B
     method: DELETE
   response:
     body: '{}'
@@ -581,18 +581,18 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"picture":"https://www.example.com/picture.jpg","blocked":false}
+      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{"baz":null,"foo":"bars"},"app_metadata":{"baz":null,"foo":"bars"},"picture":"https://www.example.com/picture.jpg","blocked":false}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: PATCH
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:23.378Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:02.094Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"bars"},"app_metadata":{"foo":"bars"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -601,13 +601,13 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"roles":["rol_idJWxoOUpGZv9Hxn"]}
+      {"roles":["rol_wce2BfE7eHrGmN5B"]}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles
     method: DELETE
   response:
@@ -626,12 +626,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:23.378Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:02.094Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"bars"},"app_metadata":{"foo":"bars"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -646,11 +646,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"roles":[{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}],"start":0,"limit":50,"total":1}'
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}],"start":0,"limit":50,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -665,11 +665,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
     method: GET
   response:
-    body: '{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}'
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -684,8 +684,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv/permissions?include_totals=true&page=0&per_page=50
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO/permissions?include_totals=true&page=0&per_page=50
     method: GET
   response:
     body: '{"permissions":[],"start":0,"limit":50,"total":0}'
@@ -703,12 +703,12 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
     method: GET
   response:
-    body: '{"created_at":"2022-06-14T10:07:11.250Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
-      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-06-14T10:07:23.378Z","user_id":"auth0|testaccuser","user_metadata":{"bar":{"baz":"qux"},"foo":"bar"},"username":"testaccuser","blocked":false,"app_metadata":{"bar":{"baz":"qux"},"foo":"bar"}}'
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:02.094Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"bars"},"app_metadata":{"foo":"bars"}}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -723,11 +723,11 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
+      - Go-Auth0-SDK/0.9.2
     url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
     method: GET
   response:
-    body: '{"roles":[{"id":"rol_QBc0kb691vncIbqv","name":"admin","description":"Administrator"}],"start":0,"limit":50,"total":1}'
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}],"start":0,"limit":50,"total":1}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
@@ -735,22 +735,101 @@ interactions:
     code: 200
     duration: 1ms
 - request:
-    body: ""
+    body: |
+      null
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
-    method: DELETE
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
+    method: GET
   response:
-    body: ""
+    body: '{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}'
     headers:
       Content-Type:
       - application/json; charset=utf-8
-    status: 204 No Content
-    code: 204
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:02.094Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"bars"},"app_metadata":{"foo":"bars"}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO/permissions?include_totals=true&page=0&per_page=50
+    method: GET
+  response:
+    body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has
+      been reached","errorCode":"too_many_requests"}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 429 Too Many Requests
+    code: 429
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[{"id":"rol_E7Iv5M5BzbcXLdNO","name":"admin","description":"Administrator"}],"start":0,"limit":50,"total":1}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
     duration: 1ms
 - request:
     body: |
@@ -760,8 +839,8 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_QBc0kb691vncIbqv
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E7Iv5M5BzbcXLdNO
     method: DELETE
   response:
     body: '{}'
@@ -770,4 +849,276 @@ interactions:
       - application/json; charset=utf-8
     status: 200 OK
     code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{"foo":"barss","foo2":"bar2"},"app_metadata":{"foo":"barss","foo2":"bar2"},"picture":"https://www.example.com/picture.jpg","blocked":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: PATCH
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:12.497Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"barss","foo2":"bar2"},"app_metadata":{"foo":"barss","foo2":"bar2"}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"roles":["rol_E7Iv5M5BzbcXLdNO"]}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles
+    method: DELETE
+  response:
+    body: '{"statusCode":404,"error":"Not Found","message":"The role does not exist."}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 404 Not Found
+    code: 404
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:12.497Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"barss","foo2":"bar2"},"app_metadata":{"foo":"barss","foo2":"bar2"}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:12.497Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"barss","foo2":"bar2"},"app_metadata":{"foo":"barss","foo2":"bar2"}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:12.497Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{"foo":"barss","foo2":"bar2"},"app_metadata":{"foo":"barss","foo2":"bar2"}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      {"connection":"Username-Password-Authentication","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","nickname":"testaccuser","user_metadata":{},"app_metadata":{},"picture":"https://www.example.com/picture.jpg","blocked":false}
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: PATCH
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:16.785Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:16.785Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: GET
+  response:
+    body: '{"created_at":"2022-07-20T15:27:49.355Z","email":"testaccuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname
+      Lastname","nickname":"testaccuser","picture":"https://www.example.com/picture.jpg","updated_at":"2022-07-20T15:28:16.785Z","user_id":"auth0|testaccuser","username":"testaccuser","blocked":false,"user_metadata":{}}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: |
+      null
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser/roles?include_totals=true&per_page=50
+    method: GET
+  response:
+    body: '{"roles":[],"start":0,"limit":50,"total":0}'
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 200 OK
+    code: 200
+    duration: 1ms
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Go-Auth0-SDK/0.9.2
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccuser
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+    status: 204 No Content
+    code: 204
     duration: 1ms

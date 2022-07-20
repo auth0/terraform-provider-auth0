@@ -61,6 +61,9 @@ func newOrganization() *schema.Resource {
 			"connections": {
 				Type:     schema.TypeSet,
 				Optional: true,
+				Computed: true,
+				Deprecated: "This attribute will be removed in the future. " +
+					"Please use the auth0_organization_connection resource instead.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {

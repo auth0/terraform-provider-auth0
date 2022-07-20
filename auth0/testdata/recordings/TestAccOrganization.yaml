@@ -48,7 +48,7 @@ interactions:
       - application/json
       User-Agent:
       - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
     method: POST
   response:
     body: '{"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization","id":"org_p71pwYkVS4iArKzJ"}'
@@ -60,14 +60,14 @@ interactions:
     duration: 1ms
 - request:
     body: |
-      {"name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","strategy":"auth0"}
+      {"name":"test-testaccorganization","display_name":"Acme Inc. testaccorganization"}
     form: {}
     headers:
       Content-Type:
       - application/json
       User-Agent:
       - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
     method: POST
   response:
     body: '{"id":"con_l80iCx5lmo2HTbYS","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-Acme-Inc-testaccorganization","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-Acme-Inc-testaccorganization"]}'
@@ -93,12 +93,12 @@ interactions:
     headers:
       Content-Type:
       - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
+    status: 200 OK
+    code: 200
     duration: 1ms
 - request:
     body: |
-      null
+      {"connection_id":"con_9sdg0Jy5SSSQzPUX"}
     form: {}
     headers:
       Content-Type:
@@ -112,8 +112,8 @@ interactions:
     headers:
       Content-Type:
       - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
+    status: 201 Created
+    code: 201
     duration: 1ms
 - request:
     body: |

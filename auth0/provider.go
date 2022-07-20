@@ -77,6 +77,7 @@ func Provider() *schema.Provider {
 			"auth0_branding":                   newBranding(),
 			"auth0_guardian":                   newGuardian(),
 			"auth0_organization":               newOrganization(),
+			"auth0_organization_connection":    newOrganizationConnection(),
 			"auth0_organization_member":        newOrganizationMember(),
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),

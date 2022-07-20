@@ -239,7 +239,10 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
+					// We now have to set connections.# to 1 because it is a computed property so removing it won't
+					// trigger a change. Connections on the organization resource will get removed in the future
+					// and this behavior will get fixed by using the auth0_organization_connection resource instead.
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
 		},

@@ -13,6 +13,7 @@ import (
 
 func newOrganizationConnection() *schema.Resource {
 	return &schema.Resource{
+		Description:   "With this resource, you can manage enabled connections on an organization.",
 		CreateContext: createOrganizationConnection,
 		ReadContext:   readOrganizationConnection,
 		UpdateContext: updateOrganizationConnection,
@@ -22,25 +23,32 @@ func newOrganizationConnection() *schema.Resource {
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The ID of the organization to enable the connection for.",
 			},
 			"connection_id": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The ID of the connection to enable for the organization.",
 			},
 			"assign_membership_on_login": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
+				Description: "When true, all users that log in with this connection will be automatically granted " +
+					"membership in the organization. When false, users must be granted membership in the organization" +
+					" before logging in with this connection.",
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The name of the enabled connection.",
 			},
 			"strategy": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The strategy of the enabled connection.",
 			},
 		},
 	}

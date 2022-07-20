@@ -114,7 +114,7 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 	}
 
 	result := multierror.Append(
-		d.Set("roles", rolesToSet), //TODO: actually populate!
+		d.Set("roles", rolesToSet),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

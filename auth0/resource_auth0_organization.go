@@ -207,12 +207,14 @@ func updateOrganizationConnections(d *schema.ResourceData, api *management.Manag
 }
 
 func expandOrganization(d *schema.ResourceData) *management.Organization {
-	metadata := Map(d, "metadata")
-
 	organization := &management.Organization{
 		Name:        String(d, "name"),
 		DisplayName: String(d, "display_name"),
-		Metadata:    &metadata,
+	}
+
+	if d.HasChange("metadata") {
+		metadata := Map(d, "metadata")
+		organization.Metadata = &metadata
 	}
 
 	List(d, "branding").Elem(func(d ResourceData) {

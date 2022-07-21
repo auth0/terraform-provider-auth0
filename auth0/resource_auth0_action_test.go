@@ -5,7 +5,12 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/auth0/go-auth0"
+	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
@@ -18,6 +23,11 @@ resource auth0_action my_action {
 	supported_triggers {
 		id = "post-login"
 		version = "v3"
+	}
+
+	secrets {
+		name = "foo"
+		value = "111111"
 	}
 }
 `
@@ -42,6 +52,11 @@ resource auth0_action my_action {
 	secrets {
 		name = "foo"
 		value = "123456"
+	}
+
+	secrets {
+		name = "bar"
+		value = "654321"
 	}
 }
 `
@@ -79,7 +94,9 @@ func TestAccAction(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "111111"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "false"),
@@ -103,9 +120,11 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.name", "auth0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.version", "2.41.0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "2"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "123456"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.name", "bar"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.value", "654321"),
 				),
 			},
 			{
@@ -179,3 +198,70 @@ resource auth0_action my_action {
 	}
 }
 `
+
+func TestCheckForUntrackedActionSecrets(t *testing.T) {
+	var testCases = []struct {
+		name                 string
+		givenSecretsInConfig []interface{}
+		givenActionSecrets   []*management.ActionSecret
+		expectedDiagnostics  diag.Diagnostics
+	}{
+		{
+			name:                 "action has no secrets",
+			givenSecretsInConfig: []interface{}{},
+			givenActionSecrets:   []*management.ActionSecret{},
+			expectedDiagnostics:  diag.Diagnostics(nil),
+		},
+		{
+			name: "action has no untracked secrets",
+			givenSecretsInConfig: []interface{}{
+				map[string]interface{}{
+					"name": "secretName",
+				},
+			},
+			givenActionSecrets: []*management.ActionSecret{
+				{
+					Name: auth0.String("secretName"),
+				},
+			},
+			expectedDiagnostics: diag.Diagnostics(nil),
+		},
+		{
+			name: "action has untracked secrets",
+			givenSecretsInConfig: []interface{}{
+				map[string]interface{}{
+					"name": "secretName",
+				},
+			},
+			givenActionSecrets: []*management.ActionSecret{
+				{
+					Name: auth0.String("secretName"),
+				},
+				{
+					Name: auth0.String("anotherSecretName"),
+				},
+			},
+			expectedDiagnostics: diag.Diagnostics{
+				{
+					Severity: diag.Error,
+					Summary:  "Unmanaged Action Secret",
+					Detail: "Detected an action secret not managed though Terraform: anotherSecretName. " +
+						"If you proceed, this secret will get deleted. It is required to add this secret to " +
+						"your action configuration to prevent unintentionally destructive results.",
+					AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+				},
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			actualDiagnostics := checkForUnmanagedActionSecrets(
+				testCase.givenSecretsInConfig,
+				testCase.givenActionSecrets,
+			)
+
+			assert.Equal(t, testCase.expectedDiagnostics, actualDiagnostics)
+		})
+	}
+}

@@ -245,8 +245,9 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 				{
 					Severity: diag.Error,
 					Summary:  "Unmanaged Action Secret",
-					Detail: "Found unmanaged action secret with key: anotherSecretName. " +
-						"Add this secret to your configuration so it does not get wiped.",
+					Detail: "Detected an action secret not managed though Terraform: anotherSecretName. " +
+						"If you proceed, this secret will get deleted. It is required to add this secret to " +
+						"your action configuration to prevent unintentionally destructive results.",
 					AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
 				},
 			},

@@ -295,10 +295,10 @@ func checkForUnmanagedActionSecrets(
 		secretKeysInConfigMap[secretKeyName] = true
 	}
 
-	var warnings diag.Diagnostics
+	var diagnostics diag.Diagnostics
 	for _, secret := range secretsFromAPI {
 		if _, ok := secretKeysInConfigMap[secret.GetName()]; !ok {
-			warnings = append(warnings, diag.Diagnostic{
+			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  "Unmanaged Action Secret",
 				Detail: fmt.Sprintf(
@@ -311,7 +311,7 @@ func checkForUnmanagedActionSecrets(
 		}
 	}
 
-	return warnings
+	return diagnostics
 }
 
 func expandAction(d *schema.ResourceData) *management.Action {

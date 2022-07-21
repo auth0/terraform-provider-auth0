@@ -201,23 +201,20 @@ resource auth0_action my_action {
 
 func TestCheckForUntrackedActionSecrets(t *testing.T) {
 	var testCases = []struct {
-		name                  string
-		givenOldSecretsConfig []interface{}
-		givenNewSecretsConfig []interface{}
-		givenActionSecrets    []*management.ActionSecret
-		expectedDiagnostics   diag.Diagnostics
+		name                 string
+		givenSecretsInConfig []interface{}
+		givenActionSecrets   []*management.ActionSecret
+		expectedDiagnostics  diag.Diagnostics
 	}{
 		{
-			name:                  "action has no secrets",
-			givenOldSecretsConfig: []interface{}{},
-			givenNewSecretsConfig: []interface{}{},
-			givenActionSecrets:    []*management.ActionSecret{},
-			expectedDiagnostics:   diag.Diagnostics(nil),
+			name:                 "action has no secrets",
+			givenSecretsInConfig: []interface{}{},
+			givenActionSecrets:   []*management.ActionSecret{},
+			expectedDiagnostics:  diag.Diagnostics(nil),
 		},
 		{
-			name:                  "action has no untracked secrets",
-			givenOldSecretsConfig: []interface{}{},
-			givenNewSecretsConfig: []interface{}{
+			name: "action has no untracked secrets",
+			givenSecretsInConfig: []interface{}{
 				map[string]interface{}{
 					"name": "secretName",
 				},
@@ -230,9 +227,8 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 			expectedDiagnostics: diag.Diagnostics(nil),
 		},
 		{
-			name:                  "action has untracked secrets",
-			givenOldSecretsConfig: []interface{}{},
-			givenNewSecretsConfig: []interface{}{
+			name: "action has untracked secrets",
+			givenSecretsInConfig: []interface{}{
 				map[string]interface{}{
 					"name": "secretName",
 				},
@@ -260,8 +256,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
 			actualDiagnostics := checkForUnmanagedActionSecrets(
-				testCase.givenOldSecretsConfig,
-				testCase.givenNewSecretsConfig,
+				testCase.givenSecretsInConfig,
 				testCase.givenActionSecrets,
 			)
 

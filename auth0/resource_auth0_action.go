@@ -269,29 +269,21 @@ func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Mana
 		return diag.FromErr(err)
 	}
 
+	// We need to also include the secrets that we're about to remove
+	// against the checks, not just the ones with which we are left.
 	oldSecrets, newSecrets := d.GetChange("secrets")
+	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
-	return checkForUnmanagedActionSecrets(
-		oldSecrets.([]interface{}),
-		newSecrets.([]interface{}),
-		preUpdateAction.Secrets,
-	)
+	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.Secrets)
 }
 
 func checkForUnmanagedActionSecrets(
-	oldSecretsFromConfig []interface{},
-	newSecretsFromConfig []interface{},
+	secretsFromConfig []interface{},
 	secretsFromAPI []*management.ActionSecret,
 ) diag.Diagnostics {
-	secretKeysInConfigMap := make(map[string]bool, len(secretsFromAPI))
-
-	for _, oldSecret := range oldSecretsFromConfig {
-		secretKeyName := oldSecret.(map[string]interface{})["name"].(string)
-		secretKeysInConfigMap[secretKeyName] = true
-	}
-
-	for _, newSecret := range newSecretsFromConfig {
-		secretKeyName := newSecret.(map[string]interface{})["name"].(string)
+	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
+	for _, secret := range secretsFromConfig {
+		secretKeyName := secret.(map[string]interface{})["name"].(string)
 		secretKeysInConfigMap[secretKeyName] = true
 	}
 
@@ -301,9 +293,9 @@ func checkForUnmanagedActionSecrets(
 			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  "Unmanaged Action Secret",
-				Detail: fmt.Sprintf(
-					"Found unmanaged action secret with key: %s. "+
-						"Add this secret to your configuration so it does not get wiped.",
+				Detail: fmt.Sprintf("Detected an action secret not managed though Terraform: %s. If you proceed, "+
+					"this secret will get deleted. It is required to add this secret to your action configuration "+
+					"to prevent unintentionally destructive results.",
 					secret.GetName(),
 				),
 				AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},

@@ -36,7 +36,7 @@ func newOrganizationMember() *schema.Resource {
 			"roles": {
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Role ID(s) to assign to member",
+				Description: "The role ID(s) to assign to the organization member.",
 				Optional:    true,
 			},
 		},

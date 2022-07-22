@@ -86,12 +86,19 @@ func removeMemberRoles(orgID string, userID string, roles []interface{}, m inter
 	for _, r := range roles {
 		rolesToRemove = append(rolesToRemove, r.(string))
 	}
-	if len(rolesToRemove) > 0 {
-		err := api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
-		if err != nil {
-			return err
+	if len(rolesToRemove) == 0 {
+		return nil
+	}
+
+	err := api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
+	if err != nil {
+		// Ignore 404 errors as the role may have been deleted
+		// prior to un-assigning them from the member.
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			return nil
 		}
 	}
+
 	return nil
 }
 
@@ -102,12 +109,15 @@ func addMemberRoles(orgID string, userID string, roles []interface{}, m interfac
 	for _, r := range roles {
 		rolesToAssign = append(rolesToAssign, r.(string))
 	}
-	if len(rolesToAssign) > 0 {
-		err := api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
-		if err != nil {
-			return err
-		}
+	if len(rolesToAssign) == 0 {
+		return nil
 	}
+
+	err := api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

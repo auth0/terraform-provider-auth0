@@ -155,7 +155,7 @@ resource auth0_organization acme {
 }
 `
 
-const testAccOrganizationRemoveAllConnections = `
+const testAccOrganizationRemoveAllOptionalParams = `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
@@ -234,12 +234,11 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationRemoveAllConnections, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccOrganizationRemoveAllOptionalParams, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
 				),
 			},
 		},

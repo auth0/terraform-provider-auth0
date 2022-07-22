@@ -13,7 +13,8 @@ import (
 )
 
 func newOrganizationMember() *schema.Resource {
-	return &schema.Resource{
+    return &schema.Resource{
+    Description: "This resource is used to manage the assignment of members and their roles within an organization."
 		CreateContext: createOrganizationMember,
 		ReadContext:   readOrganizationMember,
 		UpdateContext: updateOrganizationMember,
@@ -25,17 +26,17 @@ func newOrganizationMember() *schema.Resource {
 			"organization_id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The ID of the organization to assign member to",
+				Description: "The ID of the organization to assign the member to.",
 			},
 			"user_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "ID of the user to add as organization member",
+				Required:    true,
+				Description: "ID of the user to add as an organization member.",
 			},
 			"roles": {
 				Type:        schema.TypeSet,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Role ID(s) to assign to member",
+				Description: "The role ID(s) to assign to the organization member.",
 				Optional:    true,
 			},
 		},
@@ -54,7 +55,7 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	d.SetId(resource.UniqueId())
 
 	if err := assignRoles(d, m); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member. %w", err))
+		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member: %w", err))
 	}
 
 	return readOrganizationMember(ctx, d, m)

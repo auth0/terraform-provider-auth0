@@ -155,7 +155,7 @@ resource auth0_organization acme {
 }
 `
 
-const testAccOrganizationRemoveAllConnections = `
+const testAccOrganizationRemoveAllOptionalParams = `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
@@ -234,15 +234,11 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationRemoveAllConnections, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccOrganizationRemoveAllOptionalParams, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					// We now have to set connections.# to 1 because it is a computed property so removing it won't
-					// trigger a change. Connections on the organization resource will get removed in the future
-					// and this behavior will get fixed by using the auth0_organization_connection resource instead.
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
 				),
 			},
 		},

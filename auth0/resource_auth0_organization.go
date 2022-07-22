@@ -62,8 +62,9 @@ func newOrganization() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Computed: true,
-				Deprecated: "This attribute will be removed in the future. " +
-					"Please use the auth0_organization_connection resource instead.",
+				Deprecated: "Management of organizations through this property has been deprecated in favor of the " +
+					"`auth0_organization_connection` resource and will be deleted in future versions. It is " +
+					"advised to migrate all managed organization connections to the new resource type.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {

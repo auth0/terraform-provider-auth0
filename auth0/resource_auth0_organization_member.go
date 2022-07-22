@@ -46,12 +46,12 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	userID := String(d, "user_id")
 	orgID := String(d, "organization_id")
 
-	d.SetId(resource.UniqueId())
-
 	api := m.(*management.Management)
 	if err := api.Organization.AddMembers(*orgID, []string{*userID}); err != nil {
 		return diag.FromErr(err)
 	}
+
+	d.SetId(resource.UniqueId())
 
 	if err := assignRoles(d, m); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member. %w", err))
@@ -61,44 +61,63 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 }
 
 func assignRoles(d *schema.ResourceData, m interface{}) error {
-	api := m.(*management.Management)
-	orgID := String(d, "organization_id")
-	userID := String(d, "user_id")
+	orgID := d.Get("organization_id").(string)
+	userID := d.Get("user_id").(string)
 
 	add, rm := Diff(d, "roles")
 
-	rolesToAssign := []string{}
-	for _, r := range add.List() {
-		rolesToAssign = append(rolesToAssign, r.(string))
-	}
-	if len(rolesToAssign) > 0 {
-		err := api.Organization.AssignMemberRoles(*orgID, *userID, rolesToAssign)
-		if err != nil {
-			return err
-		}
+	err := addMemberRoles(orgID, userID, add.List(), m)
+	if err != nil {
+		return err
 	}
 
+	err = removeMemberRoles(orgID, userID, rm.List(), m)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func removeMemberRoles(orgID string, userID string, roles []interface{}, m interface{}) error {
+	api := m.(*management.Management)
+
 	rolesToRemove := []string{}
-	for _, r := range rm.List() {
+	for _, r := range roles {
 		rolesToRemove = append(rolesToRemove, r.(string))
 	}
 	if len(rolesToRemove) > 0 {
-		err := api.Organization.DeleteMemberRoles(*orgID, *userID, rolesToRemove)
+		err := api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
 		if err != nil {
 			return err
 		}
 	}
+	return nil
+}
 
+func addMemberRoles(orgID string, userID string, roles []interface{}, m interface{}) error {
+	api := m.(*management.Management)
+
+	rolesToAssign := []string{}
+	for _, r := range roles {
+		rolesToAssign = append(rolesToAssign, r.(string))
+	}
+	if len(rolesToAssign) > 0 {
+		err := api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	orgID := String(d, "organization_id")
-	userID := String(d, "user_id")
+	orgID := d.Get("organization_id").(string)
+	userID := d.Get("user_id").(string)
 
-	roles, err := api.Organization.MemberRoles(*orgID, *userID)
+	roles, err := api.Organization.MemberRoles(orgID, userID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -132,12 +151,14 @@ func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	orgID := String(d, "organization_id")
-	userID := String(d, "user_id")
+	orgID := d.Get("organization_id").(string)
+	userID := d.Get("user_id").(string)
 
-	if err := api.Organization.DeleteMember(*orgID, []string{*userID}); err != nil {
+	if err := api.Organization.DeleteMember(orgID, []string{userID}); err != nil {
 		return diag.FromErr(err)
 	}
+
+	d.SetId("")
 
 	return nil
 }

@@ -43,7 +43,7 @@ func TestAccOrganizationMember(t *testing.T) {
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
 					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.reader", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.reader", "id"),
 				),
 			},
 			{
@@ -59,8 +59,8 @@ func TestAccOrganizationMember(t *testing.T) {
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
 					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "2"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.reader", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.1", "auth0_role.admin", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.reader", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.admin", "id"),
 				),
 			},
 			{
@@ -76,7 +76,7 @@ func TestAccOrganizationMember(t *testing.T) {
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
 					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
 					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.0", "auth0_role.admin", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.admin", "id"),
 				),
 			},
 			{

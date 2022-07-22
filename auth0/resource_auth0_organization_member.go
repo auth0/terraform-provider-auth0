@@ -44,11 +44,11 @@ func newOrganizationMember() *schema.Resource {
 }
 
 func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	userID := String(d, "user_id")
-	orgID := String(d, "organization_id")
+	userID := d.Get("user_id").(string)
+	orgID := d.Get("organization_id").(string)
 
 	api := m.(*management.Management)
-	if err := api.Organization.AddMembers(*orgID, []string{*userID}); err != nil {
+	if err := api.Organization.AddMembers(orgID, []string{userID}); err != nil {
 		return diag.FromErr(err)
 	}
 

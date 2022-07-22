@@ -25,7 +25,7 @@ func newOrganizationMember() *schema.Resource {
 			"organization_id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The ID of the organization to assign member to",
+				Description: "The ID of the organization to assign the member to.",
 			},
 			"user_id": {
 				Type:        schema.TypeString,

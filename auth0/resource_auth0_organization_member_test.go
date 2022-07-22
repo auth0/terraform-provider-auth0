@@ -104,6 +104,7 @@ resource auth0_role reader {
 }
 
 resource auth0_role admin {
+	depends_on = [ auth0_role.reader ] 
 	name = "Admin - {{.testName}}"
 }
 

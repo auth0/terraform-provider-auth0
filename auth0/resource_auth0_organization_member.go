@@ -13,7 +13,8 @@ import (
 )
 
 func newOrganizationMember() *schema.Resource {
-	return &schema.Resource{
+    return &schema.Resource{
+    Description: "This resource is used to manage the assignment of members and their roles within an organization."
 		CreateContext: createOrganizationMember,
 		ReadContext:   readOrganizationMember,
 		UpdateContext: updateOrganizationMember,

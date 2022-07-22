@@ -1,3 +1,22 @@
+## 0.34.0
+
+FEATURES:
+
+- `resource/auth0_prompt`:  Added `webauthn_platform_first_factor` field ([#237](https://github.com/auth0/terraform-provider-auth0/pull/237))
+- `resource/auth0_connection`:  Added `auth_params` for passwordless email connections ([#235](https://github.com/auth0/terraform-provider-auth0/pull/235), [#240](https://github.com/auth0/terraform-provider-auth0/pull/240), [#241](https://github.com/auth0/terraform-provider-auth0/pull/241))
+- `resource/auth0_connection`:  Added support for multiple OAuth2 compatible strategies ([#239](https://github.com/auth0/terraform-provider-auth0/pull/235))
+- `resource/auth0_organization_member`:  Added new resource to manage organization members and their roles ([#256](https://github.com/auth0/terraform-provider-auth0/pull/256))
+- `resource/auth0_organization_connection`:  Added new resource to manage organization connections ([#253](https://github.com/auth0/terraform-provider-auth0/pull/253))
+
+
+BUG FIXES:
+
+- `resource/auth0_organization`: Fixed issue with not being able to update `connections` ([#244](https://github.com/auth0/terraform-provider-auth0/pull/244))
+- `resource/auth0_organization`: Fixed issue with `metadata` field not getting set to empty ([#245](https://github.com/auth0/terraform-provider-auth0/pull/245), [#254](https://github.com/auth0/terraform-provider-auth0/pull/254))
+- `resource/auth0_action`: Fix issue with not being able to update `dependencies` ([#247](https://github.com/auth0/terraform-provider-auth0/pull/247))
+- `resource/auth0_user`: Fix infinite plan on `user_metadata` ([#249](https://github.com/auth0/terraform-provider-auth0/pull/249), [#250](https://github.com/auth0/terraform-provider-auth0/pull/250))
+
+
 ## 0.33.0
 
 FEATURES:
@@ -26,7 +45,7 @@ BREAKING CHANGES:
 
 - `resource/auth0_connection`: Removed deprecated `options.app_domain` in connection resource ([#202](https://github.com/auth0/terraform-provider-auth0/pull/202))
 - `resource/auth0_connection`: Changed `options.fields_map` from Map to String ([#207](https://github.com/auth0/terraform-provider-auth0/pull/207))
-
+  - Please make sure to do a `terraform state rm auth0_connection.<resource name> && terraform import auth0_connection.<resource name> <connID>` in order to prevent issues due to the breaking change after upgrading to this version.
 
 ## 0.31.0
 

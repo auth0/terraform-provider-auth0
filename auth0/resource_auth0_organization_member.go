@@ -29,7 +29,7 @@ func newOrganizationMember() *schema.Resource {
 			},
 			"user_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "ID of the user to add as organization member",
 			},
 			"roles": {

@@ -55,7 +55,7 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	}
 
 	if err := assignRoles(d, m); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member. %w", err))
+		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member: %w", err))
 	}
 
 	return readOrganizationMember(ctx, d, m)

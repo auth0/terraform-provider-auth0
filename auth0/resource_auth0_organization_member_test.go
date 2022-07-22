@@ -1,79 +1,13 @@
 package auth0
 
 import (
-	"log"
 	"strings"
 	"testing"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/auth0/internal/template"
 )
-
-func init() {
-	resource.AddTestSweepers("auth0_organization_member", &resource.Sweeper{
-		Name: "auth0_organization_member",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-
-			var page int
-			var result *multierror.Error
-			for {
-				organizationList, err := api.Organization.List(management.Page(page))
-				if err != nil {
-					result = multierror.Append(result, err)
-					break
-				}
-
-				for _, organization := range organizationList.Organizations {
-					log.Printf("[DEBUG] ➝ %s", organization.GetName())
-
-					if strings.Contains(organization.GetName(), "test") {
-						result = multierror.Append(
-							result,
-							api.Organization.Delete(organization.GetID()),
-						)
-
-						log.Printf("[DEBUG] ✗ %s", organization.GetName())
-					}
-				}
-				if !organizationList.HasNext() {
-					break
-				}
-				page++
-			}
-
-			users, err := api.User.List()
-			if err != nil {
-				return err
-			}
-			for _, user := range users.Users {
-				if strings.Contains(*user.Email, "test") {
-					err = api.User.Delete(*user.ID)
-					result = multierror.Append(result, err)
-				}
-			}
-
-			roles, err := api.Role.List()
-			if err != nil {
-				return err
-			}
-			for _, role := range roles.Roles {
-				if strings.Contains(*role.Name, "test") {
-					err = api.Role.Delete(*role.ID)
-					result = multierror.Append(result, err)
-				}
-			}
-
-			return result.ErrorOrNil()
-		},
-	})
-}
 
 func TestAccOrganizationMember(t *testing.T) {
 	httpRecorder := configureHTTPRecorder(t)

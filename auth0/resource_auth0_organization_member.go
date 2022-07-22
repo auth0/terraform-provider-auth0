@@ -130,12 +130,6 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 
 	roles, err := api.Organization.MemberRoles(orgID, userID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
 		return diag.FromErr(err)
 	}
 
@@ -166,6 +160,9 @@ func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	userID := d.Get("user_id").(string)
 
 	if err := api.Organization.DeleteMember(orgID, []string{userID}); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			return nil
+		}
 		return diag.FromErr(err)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -160,6 +161,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("dependencies", flattenActionDependencies(action.Dependencies)),
 		d.Set("runtime", action.Runtime),
 	)
+
 	if action.DeployedVersion != nil {
 		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
 	}
@@ -171,6 +173,12 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	action := expandAction(d)
 
 	api := m.(*management.Management)
+
+	diagnostics := preventErasingUnmanagedSecrets(d, api)
+	if diagnostics.HasError() {
+		return diagnostics
+	}
+
 	if err := api.Action.Update(d.Id(), action); err != nil {
 		return diag.FromErr(err)
 	}
@@ -249,6 +257,53 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	}
 
 	return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
+}
+
+func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Management) diag.Diagnostics {
+	if !d.HasChange("secrets") {
+		return nil
+	}
+
+	preUpdateAction, err := api.Action.Read(d.Id())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	// We need to also include the secrets that we're about to remove
+	// against the checks, not just the ones with which we are left.
+	oldSecrets, newSecrets := d.GetChange("secrets")
+	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
+
+	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.Secrets)
+}
+
+func checkForUnmanagedActionSecrets(
+	secretsFromConfig []interface{},
+	secretsFromAPI []*management.ActionSecret,
+) diag.Diagnostics {
+	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
+	for _, secret := range secretsFromConfig {
+		secretKeyName := secret.(map[string]interface{})["name"].(string)
+		secretKeysInConfigMap[secretKeyName] = true
+	}
+
+	var diagnostics diag.Diagnostics
+	for _, secret := range secretsFromAPI {
+		if _, ok := secretKeysInConfigMap[secret.GetName()]; !ok {
+			diagnostics = append(diagnostics, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Unmanaged Action Secret",
+				Detail: fmt.Sprintf("Detected an action secret not managed though Terraform: %s. If you proceed, "+
+					"this secret will get deleted. It is required to add this secret to your action configuration "+
+					"to prevent unintentionally destructive results.",
+					secret.GetName(),
+				),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
+			})
+		}
+	}
+
+	return diagnostics
 }
 
 func expandAction(d *schema.ResourceData) *management.Action {

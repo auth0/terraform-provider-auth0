@@ -77,7 +77,7 @@ available resources.
 
 ## Usage
 
-You can find examples on usage under the [example](example) folder.
+You can find examples on usage under the [examples](examples) folder.
 
 [[table of contents]](#table-of-contents)
 

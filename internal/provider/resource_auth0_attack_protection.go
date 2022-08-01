@@ -22,7 +22,7 @@ func newAttackProtection() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Description: "Auth0 can detect attacks and stop malicious attempts to access your " +
-			"application such as blocking traffic from certain IPs and displaying CAPTCHA.",
+			"application such as blocking traffic from certain IPs and displaying CAPTCHAs.",
 		Schema: map[string]*schema.Schema{
 			"breached_password_detection": {
 				Type:     schema.TypeList,

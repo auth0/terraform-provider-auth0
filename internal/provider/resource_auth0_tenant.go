@@ -269,7 +269,7 @@ func newTenant() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Whether ID tokens can be used to authorize some types of requests to API v2 (true) not not (false).",
+							Description: "Whether ID tokens can be used to authorize some types of requests to API v2 (true) or not (false).",
 						},
 						"no_disclose_enterprise_connections": {
 							Type:        schema.TypeBool,

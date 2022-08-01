@@ -12,8 +12,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/auth0/terraform-provider-auth0/auth0"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 )
 
 var args = struct {
@@ -31,7 +32,7 @@ func init() {
 
 func main() {
 	buf := bytes.NewBuffer([]byte{})
-	p := auth0.Provider()
+	p := provider.New()
 	r := &Resource{
 		ProviderKey:    args.provider,
 		ProviderName:   args.providerName,

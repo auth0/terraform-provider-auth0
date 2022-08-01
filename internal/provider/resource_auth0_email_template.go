@@ -91,7 +91,7 @@ func newEmailTemplate() *schema.Resource {
 				Computed: true,
 				Description: "Whether the `reset_email` and `verify_email` templates should include the user's " +
 					"email address as the email parameter in the `returnUrl` (true) or whether no email address " +
-					"should be included in the redirect (false). Defaults to true.",
+					"should be included in the redirect (false). Defaults to `true`.",
 			},
 		},
 	}

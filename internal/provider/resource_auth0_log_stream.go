@@ -138,7 +138,7 @@ func newLogStream() *schema.Resource {
 						"http_content_type": {
 							Type:     schema.TypeString,
 							Optional: true,
-							Description: "The Content-Type header to send over HTTP. " +
+							Description: "The \"Content-Type\" header to send over HTTP. " +
 								"Common value is \"application/json\".",
 							RequiredWith: []string{"sink.0.http_endpoint", "sink.0.http_authorization", "sink.0.http_content_format"},
 						},

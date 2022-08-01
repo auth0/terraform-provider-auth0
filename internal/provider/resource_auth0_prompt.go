@@ -37,7 +37,7 @@ func newPrompt() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Description: "Indicates whether the identifier first is used when " +
-					"using the new universal login experience.",
+					"using the new Universal Login experience.",
 			},
 			"webauthn_platform_first_factor": {
 				Type:        schema.TypeBool,

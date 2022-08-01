@@ -145,7 +145,7 @@ func newGuardian() *schema.Resource {
 										Optional: true,
 										Description: "This message will be sent whenever a user enrolls a new device " +
 											"for the first time using MFA. Supports liquid syntax, see " +
-											"[Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).",
+											"[Auth0 docs](https://auth0.com/docs/customize/customize-sms-or-voice-messages).",
 									},
 									"verification_message": {
 										Type:     schema.TypeString,

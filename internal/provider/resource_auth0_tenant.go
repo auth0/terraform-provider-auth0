@@ -215,7 +215,7 @@ func newTenant() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Indicates whether the tenant uses universal login.",
+							Description: "Indicates whether the tenant uses Universal Login.",
 						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,

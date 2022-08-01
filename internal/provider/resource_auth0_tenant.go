@@ -293,7 +293,7 @@ func newTenant() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Delete underlying grant when a Refresh Token is revoked via the Authentication API.",
+							Description: "Delete underlying grant when a refresh token is revoked via the Authentication API.",
 						},
 						"dashboard_log_streams_next": {
 							Type:        schema.TypeBool,

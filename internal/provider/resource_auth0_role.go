@@ -22,7 +22,7 @@ func newRole() *schema.Resource {
 		},
 		Description: "With this resource, you can create and manage collections of permissions that can be " +
 			"assigned to users, which are otherwise known as roles. Permissions (scopes) are created on " +
-			"auth0_resource_server, then associated with roles and optionally, users using this resource.",
+			"`auth0_resource_server`, then associated with roles and optionally, users using this resource.",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,

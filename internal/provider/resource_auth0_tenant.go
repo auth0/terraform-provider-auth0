@@ -357,7 +357,7 @@ func newTenant() *schema.Resource {
 					internalValidation.IsURLWithNoFragment,
 					validation.IsURLWithScheme([]string{"https"}),
 				),
-				Description: "The default absolute redirection uri, must be https and cannot contain a fragment.",
+				Description: "The default absolute redirection URI, must be https and cannot contain a fragment.",
 			},
 			"session_cookie": {
 				Type:        schema.TypeList,

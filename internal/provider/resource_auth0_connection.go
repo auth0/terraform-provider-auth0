@@ -146,9 +146,9 @@ var connectionSchema = map[string]*schema.Schema{
 					},
 					Description: "Configuration settings for the password personal info check, " +
 						"which does not allow passwords that contain any part " +
-						"of the user's personal data, including user's name, username, nickname, " +
-						"user_metadata.name, user_metadata.first, user_metadata.last, user's email, " +
-						"or first part of the user's email.",
+						"of the user's personal data, including user's `name`, `username`, `nickname`, " +
+						"`user_metadata.name`, `user_metadata.first`, `user_metadata.last`, user's `email`, " +
+						"or first part of the user's `email`.",
 				},
 				"password_dictionary": {
 					Type:     schema.TypeList,
@@ -198,7 +198,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"enabled_database_customization": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Set to true to use a legacy user store.",
+					Description: "Set to `true` to use a legacy user store.",
 				},
 				"brute_force_protection": {
 					Type:     schema.TypeBool,
@@ -233,7 +233,7 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:        schema.TypeMap,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
-					Description: "A map of scripts used for an OAuth connection. Only accepts a fetchUserProfile script.",
+					Description: "A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.",
 				},
 				"configuration": {
 					Type:      schema.TypeMap,
@@ -281,7 +281,7 @@ var connectionSchema = map[string]*schema.Schema{
 					Computed: true,
 					Elem:     &schema.Schema{Type: schema.TypeString},
 					Optional: true,
-					Description: "List of the domains that can be authenticated using the Identity Provider. " +
+					Description: "List of the domains that can be authenticated using the identity provider. " +
 						"Only needed for Identifier First authentication flows.",
 				},
 				"max_groups_to_retrieve": {
@@ -297,7 +297,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"use_wsfed": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Whether to use wsfed.",
+					Description: "Whether to use WS-Fed.",
 				},
 				"waad_protocol": {
 					Type:        schema.TypeString,
@@ -409,7 +409,7 @@ var connectionSchema = map[string]*schema.Schema{
 					MaxItems:    1,
 					Computed:    true,
 					Optional:    true,
-					Description: "Configuration settings Options for multifactor authentication.",
+					Description: "Configuration options for multifactor authentication.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"active": {
@@ -430,7 +430,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"provider": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Defines the custom sms_gateway provider.",
+					Description: "Defines the custom `sms_gateway` provider.",
 					ValidateFunc: validation.StringInSlice([]string{
 						"sms_gateway",
 					}, false),
@@ -438,7 +438,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"gateway_url": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Defines a custom sms gateway to use instead of twilio.",
+					Description: "Defines a custom sms gateway to use instead of Twilio.",
 				},
 				"gateway_authentication": {
 					Type:        schema.TypeList,
@@ -450,28 +450,28 @@ var connectionSchema = map[string]*schema.Schema{
 							"method": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Authentication method (default is bearer token).",
+								Description: "Authentication method (default is `bearer` token).",
 							},
 							"subject": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Subject claim for the HS256 token sent to gateway_url.",
+								Description: "Subject claim for the HS256 token sent to `gateway_url`.",
 							},
 							"audience": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Audience claim for the HS256 token sent to gateway_url.",
+								Description: "Audience claim for the HS256 token sent to `gateway_url`.",
 							},
 							"secret": {
 								Type:        schema.TypeString,
 								Optional:    true,
 								Sensitive:   true,
-								Description: "Secret used to sign the HS256 token sent to gateway_url.",
+								Description: "Secret used to sign the HS256 token sent to `gateway_url`.",
 							},
 							"secret_base64_encoded": {
 								Type:        schema.TypeBool,
 								Optional:    true,
-								Description: "Specifies whether or not the secret is base64 encoded.",
+								Description: "Specifies whether or not the secret is Base64-encoded.",
 							},
 						},
 					},
@@ -495,7 +495,7 @@ var connectionSchema = map[string]*schema.Schema{
 						"automatically update the root attributes from the external IdP with each user login. " +
 						"When this setting is used, root attributes cannot be independently updated), " +
 						"'on_first_login' (configures the connection to only set the root attributes on " +
-						"first login, allowing them to be independently updated thereafter)",
+						"first login, allowing them to be independently updated thereafter).",
 				},
 				"non_persistent_attrs": {
 					Type:     schema.TypeSet,
@@ -531,7 +531,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"community_base_url": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Salesforce community base url.",
+					Description: "Salesforce community base URL.",
 				},
 				"strategy_version": {
 					Type:        schema.TypeInt,
@@ -569,7 +569,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"token_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Token Endpoint.",
+					Description: "Token endpoint.",
 				},
 				"userinfo_endpoint": {
 					Type:        schema.TypeString,

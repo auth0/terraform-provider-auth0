@@ -129,7 +129,7 @@ func newAttackProtection() *schema.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								"count_per_identifier_and_ip", "count_per_identifier",
 							}, false),
-							Description: "Determines whether IP address is used when counting failed attempts. " +
+							Description: "Determines whether the IP address is used when counting failed attempts. " +
 								"Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.",
 						},
 						"max_attempts": {

@@ -62,7 +62,7 @@ func newEmailTemplate() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Description: "URL to redirect the user to after a successful action. " +
-					"[Learn more](https://auth0.com/docs/email/templates#configuring-the-redirect-to-url).",
+					"[Learn more](https://auth0.com/docs/customize/email/email-templates#configure-template-fields).",
 			},
 			"subject": {
 				Type:     schema.TypeString,

@@ -614,7 +614,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"protocol_binding": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "The SAML Response Binding: how the SAML token is received by Auth0 from IdP.",
+					Description: "The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.",
 					ValidateFunc: validation.StringInSlice([]string{
 						"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
 						"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
@@ -634,7 +634,7 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:     schema.TypeList,
 					MaxItems: 1,
 					Optional: true,
-					Description: "Configuration Options for IDP Initiated Authentication. This is an object " +
+					Description: "Configuration options for IDP Initiated Authentication. This is an object " +
 						"with the properties: `client_id`, `client_protocol`, and `client_authorize_query`.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
@@ -710,7 +710,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"pkce_enabled": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Enables proof key for code exchange (PKCE) functionality for OAuth2 connections.",
+					Description: "Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.",
 				},
 				"upstream_params": {
 					Type:         schema.TypeString,
@@ -743,7 +743,7 @@ var connectionSchema = map[string]*schema.Schema{
 		Elem:     &schema.Schema{Type: schema.TypeString},
 		Optional: true,
 		Computed: true,
-		Description: "Defines the realms for which the connection will be used (i.e., email domains). " +
+		Description: "Defines the realms for which the connection will be used (e.g., email domains). " +
 			"If not specified, the connection name is added as the realm.",
 	},
 	"show_as_button": {

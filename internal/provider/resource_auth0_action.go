@@ -68,7 +68,7 @@ func newAction() *schema.Resource {
 						"name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Dependency name, e.g. lodash.",
+							Description: "Dependency name, e.g. `lodash`.",
 						},
 						"version": {
 							Type:        schema.TypeString,

@@ -151,7 +151,7 @@ func newGuardian() *schema.Resource {
 										Type:     schema.TypeString,
 										Optional: true,
 										Description: "This message will be sent whenever a user logs in after the " +
-											"enrollment. Supports liquid syntax, see " +
+											"enrollment. Supports Liquid syntax, see " +
 											"[Auth0 docs](https://auth0.com/docs/customize/customize-sms-or-voice-messages).",
 									},
 									"from": {

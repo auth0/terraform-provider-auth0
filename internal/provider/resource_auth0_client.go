@@ -41,7 +41,7 @@ func newClient() *schema.Resource {
 			"client_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "The ID of the Client.",
+				Description: "The ID of the client.",
 			},
 			"client_secret": {
 				Type:        schema.TypeString,
@@ -118,7 +118,7 @@ func newClient() *schema.Resource {
 					"deny", "allow", "require",
 				}, false),
 				Description: "Defines how to proceed during an authentication transaction with " +
-					"regards an organization. Can be `deny` (default), `allow` or `require`.",
+					"regards to an organization. Can be `deny` (default), `allow` or `require`.",
 			},
 			"organization_require_behavior": {
 				Type:     schema.TypeString,
@@ -168,7 +168,7 @@ func newClient() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							ForceNew:    true,
-							Description: "Indicates whether the client secret is base64 encoded.",
+							Description: "Indicates whether the client secret is Base64-encoded.",
 						},
 						"scopes": {
 							Type:        schema.TypeMap,
@@ -188,13 +188,13 @@ func newClient() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Encryption used for WsFed responses with this client.",
+				Description: "Encryption used for Ws-Fed responses with this client.",
 			},
 			"sso": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Description: "Applies only to SSO clients and determines whether Auth0 will handle " +
-					"Single Sign On (true) or whether the Identity Provider will (false).",
+					"Single Sign On (true) or whether the identity provider will (false).",
 			},
 			"sso_disabled": {
 				Type:        schema.TypeBool,
@@ -210,7 +210,7 @@ func newClient() *schema.Resource {
 			"cross_origin_loc": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Description: "URL of the location in your site where the cross origin verification " +
+				Description: "URL of the location in your site where the cross-origin verification " +
 					"takes place for the cross-origin auth flow when performing Auth in your own " +
 					"domain instead of Auth0 hosted login page.",
 			},
@@ -331,8 +331,8 @@ func newClient() *schema.Resource {
 										Type:     schema.TypeString,
 										Optional: true,
 										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
-											"Default is AssertionConsumerUrl on SAMLRequest or " +
-											"Callback URL if no SAMLRequest was sent.",
+											"Default is `AssertionConsumerUrl` on SAMLRequest or " +
+											"callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
 										Type:     schema.TypeMap,
@@ -371,7 +371,7 @@ func newClient() *schema.Resource {
 										Default:  true,
 										Description: "Indicates whether or not to add additional identity " +
 											"information in the token, such as the provider used and the " +
-											"access_token, if available. Defaults to `true`.",
+											"`access_token`, if available. Defaults to `true`.",
 									},
 									"signature_algorithm": {
 										Type:     schema.TypeString,
@@ -391,8 +391,8 @@ func newClient() *schema.Resource {
 										Type:     schema.TypeString,
 										Optional: true,
 										Description: "Destination of the SAML Response. If not specified, " +
-											"it will be AssertionConsumerUrl of SAMLRequest " +
-											"or Callback URL if there was no SAMLRequest.",
+											"it will be `AssertionConsumerUrl` of SAMLRequest " +
+											"or callback URL if there was no SAMLRequest.",
 									},
 									"lifetime_in_seconds": {
 										Type:        schema.TypeInt,
@@ -486,7 +486,7 @@ func newClient() *schema.Resource {
 							Type:     schema.TypeMap,
 							Optional: true,
 							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored " +
-								"in callback and client_aliases properties on the client.",
+								"in callback and `client_aliases` properties on the client.",
 						},
 						"zendesk": {
 							Type:     schema.TypeMap,
@@ -593,7 +593,7 @@ func newClient() *schema.Resource {
 					validation.IsURLWithScheme([]string{"https"}),
 					internalValidation.IsURLWithNoFragment,
 				),
-				Description: "Initiate login uri, must be https.",
+				Description: "Initiate login URI, must be https.",
 			},
 			"native_social_login": {
 				Type:        schema.TypeList,
@@ -704,7 +704,7 @@ func newClient() *schema.Resource {
 				Computed:  true,
 				Sensitive: true,
 				Description: "List containing a map of the public cert of the signing key and the public cert " +
-					"of the signing key in pkcs7.",
+					"of the signing key in PKCS7.",
 			},
 		},
 	}

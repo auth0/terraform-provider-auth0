@@ -68,7 +68,7 @@ func newEmailTemplate() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				Description: "Subject line of the email. " +
-					"You can include [common variables](https://auth0.com/docs/email/templates#common-variables).",
+					"You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).",
 			},
 			"syntax": {
 				Type:        schema.TypeString,

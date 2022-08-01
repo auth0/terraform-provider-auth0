@@ -90,7 +90,7 @@ func newGuardian() *schema.Resource {
 							Optional: true,
 							Computed: true,
 							Description: "The Relying Party is the domain for which the WebAuthn keys will be issued," +
-								" set to true if you are customizing the identifier.",
+								" set to `true` if you are customizing the identifier.",
 						},
 						"relying_party_identifier": {
 							Type:         schema.TypeString,

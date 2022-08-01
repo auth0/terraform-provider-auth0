@@ -50,7 +50,7 @@ func newEmailTemplate() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				Description: "Body of the email template. " +
-					"You can include [common variables](https://auth0.com/docs/email/templates#common-variables).",
+					"You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).",
 			},
 			"from": {
 				Type:     schema.TypeString,

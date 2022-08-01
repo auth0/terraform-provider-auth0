@@ -233,7 +233,7 @@ func newTenant() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Indicates whether the public sign up process shows a user_exists error if the user already exists.",
+							Description: "Indicates whether the public sign up process shows a `user_exists` error if the user already exists.",
 						},
 						"use_scope_descriptions_for_consent": {
 							Type:        schema.TypeBool,

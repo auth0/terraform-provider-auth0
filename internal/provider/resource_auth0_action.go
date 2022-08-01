@@ -23,11 +23,14 @@ func newAction() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "Actions are secure, tenant-specific, versioned functions written in Node.js " +
+			"that execute at certain points during the Auth0 runtime. Actions are used to customize " +
+			"and extend Auth0's capabilities with custom logic.",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name of an action",
+				Description: "The name of the action.",
 			},
 			"supported_triggers": {
 				Type:     schema.TypeList,
@@ -39,18 +42,17 @@ func newAction() *schema.Resource {
 						"id": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Trigger ID",
+							Description: "The trigger ID.",
 						},
 						"version": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Trigger version",
+							Description: "The trigger version.",
 						},
 					},
 				},
-				Description: "List of triggers that this action supports. At " +
-					"this time, an action can only target a single trigger at" +
-					" a time",
+				Description: "List of triggers that this action supports. " +
+					"At this time, an action can only target a single trigger at a time.",
 			},
 			"code": {
 				Type:        schema.TypeString,
@@ -58,23 +60,23 @@ func newAction() *schema.Resource {
 				Description: "The source code of the action.",
 			},
 			"dependencies": {
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Description: "List of third party npm modules, and their versions, that this action depends on.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Dependency name. For example lodash",
+							Description: "Dependency name, e.g. lodash.",
 						},
 						"version": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Dependency version. For example `latest` or `4.17.21`",
+							Description: "Dependency version, e.g. `latest` or `4.17.21`.",
 						},
 					},
 				},
-				Description: "List of third party npm modules, and their versions, that this action depends on",
 			},
 			"runtime": {
 				Type:     schema.TypeString,
@@ -84,27 +86,27 @@ func newAction() *schema.Resource {
 					"node12",
 					"node16",
 				}, false),
-				Description: "The Node runtime. For example `node16`, defaults to `node12`",
+				Description: "The Node runtime, e.g. `node16`, defaults to `node12`.",
 			},
 			"secrets": {
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Description: "List of secrets that are included in an action or a version of an action.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Secret name",
+							Description: "Secret name.",
 						},
 						"value": {
 							Type:        schema.TypeString,
 							Required:    true,
 							Sensitive:   true,
-							Description: "Secret value",
+							Description: "Secret value.",
 						},
 					},
 				},
-				Description: "List of secrets that are included in an action or a version of an action",
 			},
 			"deploy": {
 				Type:     schema.TypeBool,
@@ -113,12 +115,12 @@ func newAction() *schema.Resource {
 				Description: "Deploying an action will create a new immutable" +
 					" version of the action. If the action is currently bound" +
 					" to a trigger, then the system will begin executing the " +
-					"newly deployed version of the action immediately",
+					"newly deployed version of the action immediately.",
 			},
 			"version_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Version ID of the action. This value is available if `deploy` is set to true",
+				Description: "Version ID of the action. This value is available if `deploy` is set to true.",
 			},
 		},
 	}

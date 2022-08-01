@@ -20,6 +20,10 @@ func newTriggerBinding() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With this resource, you can bind an action to a trigger. Once an action is created " +
+			"and deployed, it can be attached (i.e. bound) to a trigger so that it will be executed as " +
+			"part of a flow. The list of actions reflects the order in which they will be executed during " +
+			"the appropriate flow.",
 		Schema: map[string]*schema.Schema{
 			"trigger": {
 				Type:     schema.TypeString,
@@ -37,7 +41,7 @@ func newTriggerBinding() *schema.Resource {
 					"iga-fulfillment-assignment",
 					"iga-fulfillment-execution",
 				}, false),
-				Description: "The id of the trigger to bind with",
+				Description: "The ID of the trigger to bind with.",
 			},
 			"actions": {
 				Type:     schema.TypeList,
@@ -47,12 +51,12 @@ func newTriggerBinding() *schema.Resource {
 						"id": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Trigger ID",
+							Description: "Action ID.",
 						},
 						"display_name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "The name of an action",
+							Description: "The name of an action.",
 						},
 					},
 				},

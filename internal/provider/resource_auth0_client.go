@@ -24,28 +24,36 @@ func newClient() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
+			"and configure allowed callback URLs and secrets for these applications.",
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Name of the client.",
 			},
 			"description": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.StringLenBetween(0, 140),
+				Description:  "Description of the purpose of the client.",
 			},
 			"client_id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ID of the Client.",
 			},
 			"client_secret": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Sensitive:   true,
+				Description: "Secret for the client. Keep this private.",
 			},
 			"client_secret_rotation_trigger": {
 				Type:     schema.TypeMap,
 				Optional: true,
+				Description: "Custom metadata for the rotation. " +
+					"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).",
 			},
 			"app_type": {
 				Type:     schema.TypeString,
@@ -56,41 +64,52 @@ func newClient() *schema.Resource {
 					"egnyte", "newrelic", "office365", "salesforce", "sentry",
 					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
 				}, false),
+				Description: "Type of application the client represents.",
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Description: "URL of the logo for the client. Recommended size is 150px x 150px. " +
+					"If none is set, the default badge for the application type will be shown.",
 			},
 			"is_first_party": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether this client is a first-party client.",
 			},
 			"is_token_endpoint_ip_header_trusted": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether the token endpoint IP header is trusted.",
 			},
 			"oidc_conformant": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether this client will conform to strict OIDC specifications.",
 			},
 			"callbacks": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Description: "URLs that Auth0 may call back to after a user authenticates for the client. " +
+					"Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. " +
+					"With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.",
 			},
 			"allowed_logout_urls": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "URLs that Auth0 may redirect to after logout.",
 			},
 			"grant_types": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Computed: true,
-				Optional: true,
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Computed:    true,
+				Optional:    true,
+				Description: "Types of grants that this client is authorized to use.",
 			},
 			"organization_usage": {
 				Type:     schema.TypeString,
@@ -98,6 +117,8 @@ func newClient() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"deny", "allow", "require",
 				}, false),
+				Description: "Defines how to proceed during an authentication transaction with " +
+					"regards an organization. Can be `deny` (default), `allow` or `require`.",
 			},
 			"organization_require_behavior": {
 				Type:     schema.TypeString,
@@ -105,91 +126,115 @@ func newClient() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"no_prompt", "pre_login_prompt",
 				}, false),
+				Description: "Defines how to proceed during an authentication transaction when " +
+					"`organization_usage = \"require\"`. Can be `no_prompt` (default) or `pre_login_prompt`.",
 			},
 			"allowed_origins": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Description: "URLs that represent valid origins for cross-origin resource sharing. " +
+					"By default, all your callback URLs will be allowed.",
 			},
 			"allowed_clients": {
 				Type:     schema.TypeList,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				Description: "List of applications ID's that will be allowed to make delegation request. " +
+					"By default, all applications will be allowed.",
 			},
 			"web_origins": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "URLs that represent valid web origins for use with web message response mode.",
 			},
 			"jwt_configuration": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration settings for the JWTs issued for this client.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"lifetime_in_seconds": {
-							Type:     schema.TypeInt,
-							Optional: true,
-							Computed: true,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Computed:    true,
+							Description: "Number of seconds during which the JWT will be valid.",
 						},
 						"secret_encoded": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Computed: true,
-							ForceNew: true,
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							ForceNew:    true,
+							Description: "Indicates whether the client secret is base64 encoded.",
 						},
 						"scopes": {
-							Type:     schema.TypeMap,
-							Optional: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+							Type:        schema.TypeMap,
+							Optional:    true,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "Permissions (scopes) included in JWTs.",
 						},
 						"alg": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Algorithm used to sign JWTs.",
 						},
 					},
 				},
 			},
 			"encryption_key": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "Encryption used for WsFed responses with this client.",
 			},
 			"sso": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Description: "Applies only to SSO clients and determines whether Auth0 will handle " +
+					"Single Sign On (true) or whether the Identity Provider will (false).",
 			},
 			"sso_disabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether or not SSO is disabled.",
 			},
 			"cross_origin_auth": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Description: "Whether this client can be used to make cross-origin authentication requests (true) " +
+					"or it is not allowed to make such requests (false).",
 			},
 			"cross_origin_loc": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Description: "URL of the location in your site where the cross origin verification " +
+					"takes place for the cross-origin auth flow when performing Auth in your own " +
+					"domain instead of Auth0 hosted login page.",
 			},
 			"custom_login_page_on": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Indicates whether a custom login page is to be used.",
 			},
 			"custom_login_page": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The content (HTML, CSS, JS) of the custom login page.",
 			},
 			"form_template": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "HTML form template to be used for WS-Federation.",
 			},
 			"addons": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Addons enabled for this client and their associated configurations.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"aws": {
@@ -269,103 +314,150 @@ func newClient() *schema.Resource {
 							Optional: true,
 						},
 						"samlp": {
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Computed: true,
-							Optional: true,
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Computed:    true,
+							Optional:    true,
+							Description: "Configuration settings for a SAML add-on.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"audience": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "Audience of the SAML Assertion. " +
+											"Default will be the Issuer on SAMLRequest.",
 									},
 									"recipient": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
+											"Default is AssertionConsumerUrl on SAMLRequest or " +
+											"Callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
 										Type:     schema.TypeMap,
 										Optional: true,
 										Elem:     schema.TypeString,
+										Description: "Mappings between the Auth0 user profile property " +
+											"name (`name`) and the output attributes on the SAML " +
+											"attribute in the assertion (`value`).",
 									},
 									"create_upn_claim": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  true,
+										Description: "Indicates whether a UPN claim should be created. " +
+											"Defaults to `true`.",
 									},
 									"passthrough_claims_with_no_mapping": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  true,
+										Description: "Indicates whether or not to passthrough " +
+											"claims that are not mapped to the common profile " +
+											"in the output assertion. Defaults to `true`.",
 									},
 									"map_unknown_claims_as_is": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  false,
+										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
+											"to any claims that are not mapped to the common profile when passed " +
+											"through in the output assertion. Defaults to `false`.",
 									},
 									"map_identities": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  true,
+										Description: "Indicates whether or not to add additional identity " +
+											"information in the token, such as the provider used and the " +
+											"access_token, if available. Defaults to `true`.",
 									},
 									"signature_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
 										Default:  "rsa-sha1",
+										Description: "Algorithm used to sign the SAML Assertion or response. " +
+											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
 									},
 									"digest_algorithm": {
 										Type:     schema.TypeString,
 										Optional: true,
 										Default:  "sha1",
+										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
+											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
 									},
 									"destination": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "Destination of the SAML Response. If not specified, " +
+											"it will be AssertionConsumerUrl of SAMLRequest " +
+											"or Callback URL if there was no SAMLRequest.",
 									},
 									"lifetime_in_seconds": {
-										Type:     schema.TypeInt,
-										Optional: true,
-										Default:  3600,
+										Type:        schema.TypeInt,
+										Optional:    true,
+										Default:     3600,
+										Description: "Number of seconds during which the token is valid.",
 									},
 									"sign_response": {
 										Type:     schema.TypeBool,
 										Optional: true,
+										Description: "Indicates whether or not the SAML Response should be signed " +
+											"instead of the SAML Assertion.",
 									},
 									"name_identifier_format": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Default:     "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Description: "Format of the name identifier.",
 									},
 									"name_identifier_probes": {
 										Type:     schema.TypeList,
 										Elem:     &schema.Schema{Type: schema.TypeString},
 										Optional: true,
+										Description: "Attributes that can be used for Subject/NameID. " +
+											"Auth0 will try each of the attributes of this array in " +
+											"order and use the first value it finds.",
 									},
 									"authn_context_class_ref": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Class reference of the authentication context.",
 									},
 									"typed_attributes": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  true,
+										Description: "Indicates whether or not we should infer the `xs:type` " +
+											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
+											"and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. " +
+											"Defaults to `true`.",
 									},
 									"include_attribute_name_format": {
 										Type:     schema.TypeBool,
 										Optional: true,
 										Default:  true,
+										Description: "Indicates whether or not we should infer the NameFormat " +
+											"based on the attribute name. If set to false, the attribute " +
+											"NameFormat is not set in the assertion. Defaults to `true`.",
 									},
 									"logout": {
-										Type:     schema.TypeMap,
-										Optional: true,
+										Type:        schema.TypeMap,
+										Optional:    true,
+										Description: "Configuration settings for logout.",
 									},
 									"binding": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Protocol binding used for SAML logout responses.",
 									},
 									"signing_cert": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "Optionally indicates the public key certificate used to " +
+											"validate SAML requests. If set, SAML requests will be required to " +
+											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
 									},
 								},
 							},
@@ -393,6 +485,8 @@ func newClient() *schema.Resource {
 						"wsfed": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored " +
+								"in callback and client_aliases properties on the client.",
 						},
 						"zendesk": {
 							Type:     schema.TypeMap,
@@ -414,23 +508,33 @@ func newClient() *schema.Resource {
 					"client_secret_post",
 					"client_secret_basic",
 				}, false),
+				Description: "Defines the requested authentication method for the token endpoint. " +
+					"Options include `none` (public client without a client secret), " +
+					"`client_secret_post` (client uses HTTP POST parameters), " +
+					"`client_secret_basic` (client uses HTTP Basic).",
 			},
 			"client_metadata": {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Elem:     schema.TypeString,
+				Description: "Metadata associated with the client, in the form of an object with string values " +
+					"(max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are " +
+					"alphanumeric and may only include the following special characters: " +
+					":,-+=_*?\"/\\()<>@ [Tab] [Space]",
 			},
 			"mobile": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Additional configuration for native mobile apps.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"android": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration settings for Android native apps.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"app_package_name": {
@@ -454,9 +558,10 @@ func newClient() *schema.Resource {
 							},
 						},
 						"ios": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration settings for i0S native apps.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"team_id": {
@@ -488,12 +593,14 @@ func newClient() *schema.Resource {
 					validation.IsURLWithScheme([]string{"https"}),
 					internalValidation.IsURLWithNoFragment,
 				),
+				Description: "Initiate login uri, must be https.",
 			},
 			"native_social_login": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration settings to toggle native social login for mobile native applications.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"apple": {
@@ -526,11 +633,11 @@ func newClient() *schema.Resource {
 				},
 			},
 			"refresh_token": {
-				Type:     schema.TypeList,
-				Optional: true,
-				Computed: true,
-				MaxItems: 1,
-				MinItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration settings for the refresh tokens issued for this client.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"rotation_type": {
@@ -540,6 +647,10 @@ func newClient() *schema.Resource {
 								"rotating",
 								"non-rotating",
 							}, false),
+							Description: "Options include `rotating`, `non-rotating`. When `rotating`, exchanging " +
+								"a refresh token will cause a new refresh token to be issued and the existing " +
+								"token will be invalidated. This allows for automatic detection of token reuse " +
+								"if the token is leaked.",
 						},
 						"expiration_type": {
 							Type:     schema.TypeString,
@@ -548,31 +659,41 @@ func newClient() *schema.Resource {
 								"expiring",
 								"non-expiring",
 							}, false),
+							Description: "Options include `expiring`, `non-expiring`. Whether a refresh token " +
+								"will expire based on an absolute lifetime, after which the token can no " +
+								"longer be used. If rotation is `rotating`, this must be set to `expiring`.",
 						},
 						"leeway": {
 							Computed: true,
 							Type:     schema.TypeInt,
 							Optional: true,
+							Description: "The amount of time in seconds in which a refresh token may be " +
+								"reused without triggering reuse detection.",
 						},
 						"token_lifetime": {
-							Computed: true,
-							Type:     schema.TypeInt,
-							Optional: true,
+							Computed:    true,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Description: "The absolute lifetime of a refresh token in seconds.",
 						},
 						"infinite_token_lifetime": {
 							Computed: true,
 							Type:     schema.TypeBool,
 							Optional: true,
+							Description: "Whether refresh tokens should remain valid indefinitely. " +
+								"If false, `token_lifetime` should also be set.",
 						},
 						"infinite_idle_token_lifetime": {
-							Computed: true,
-							Type:     schema.TypeBool,
-							Optional: true,
+							Computed:    true,
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Whether inactive refresh tokens should remain valid indefinitely.",
 						},
 						"idle_token_lifetime": {
-							Computed: true,
-							Type:     schema.TypeInt,
-							Optional: true,
+							Computed:    true,
+							Type:        schema.TypeInt,
+							Optional:    true,
+							Description: "The time in seconds after which inactive refresh tokens will expire.",
 						},
 					},
 				},
@@ -582,6 +703,8 @@ func newClient() *schema.Resource {
 				Elem:      &schema.Schema{Type: schema.TypeMap},
 				Computed:  true,
 				Sensitive: true,
+				Description: "List containing a map of the public cert of the signing key and the public cert " +
+					"of the signing key in pkcs7.",
 			},
 		},
 	}

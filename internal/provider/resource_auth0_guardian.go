@@ -20,6 +20,8 @@ func newGuardian() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "Multi-Factor Authentication works by requiring additional factors during the login process " +
+			"to prevent unauthorized access. With this resource you can configure some options available for MFA.",
 		Schema: map[string]*schema.Schema{
 			"policy": {
 				Type:     schema.TypeString,
@@ -32,11 +34,15 @@ func newGuardian() *schema.Resource {
 					},
 					false,
 				),
+				Description: "Policy to use. Available options are `never`, `all-applications` and `confidence-score`.",
 			},
 			"webauthn_roaming": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
+				Description: "Configuration settings for the WebAuthn with FIDO Security Keys MFA. " +
+					"If this block is present, WebAuthn with FIDO Security Keys MFA will be enabled, " +
+					"and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"user_verification": {
@@ -51,17 +57,21 @@ func newGuardian() *schema.Resource {
 								},
 								false,
 							),
+							Description: "User verification, one of `discouraged`, `preferred` or `required`.",
 						},
 						"override_relying_party": {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Computed: true,
+							Description: "The Relying Party is the domain for which the WebAuthn keys will be issued," +
+								" set to true if you are customizing the identifier.",
 						},
 						"relying_party_identifier": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
 							RequiredWith: []string{"webauthn_roaming.0.override_relying_party"},
+							Description:  "The Relying Party should be a suffix of the custom domain.",
 						},
 					},
 				},
@@ -70,18 +80,24 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
+				Description: "Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. " +
+					"If this block is present, WebAuthn with FIDO Device Biometrics MFA will be enabled, " +
+					"and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"override_relying_party": {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Computed: true,
+							Description: "The Relying Party is the domain for which the WebAuthn keys will be issued," +
+								" set to true if you are customizing the identifier.",
 						},
 						"relying_party_identifier": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							Computed:     true,
 							RequiredWith: []string{"webauthn_platform.0.override_relying_party"},
+							Description:  "The Relying Party should be a suffix of the custom domain.",
 						},
 					},
 				},
@@ -90,6 +106,8 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
+				Description: "Configuration settings for the phone MFA. If this block is present, " +
+					"Phone MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"provider": {
@@ -103,6 +121,7 @@ func newGuardian() *schema.Resource {
 								},
 								false,
 							),
+							Description: "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`.",
 						},
 						"message_types": {
 							Type:     schema.TypeList,
@@ -110,38 +129,51 @@ func newGuardian() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+							Description: "Message types to use, array of `sms` and or `voice`. " +
+								"Adding both to array should enable the user to choose.",
 						},
 						"options": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Computed: true,
-							MaxItems: 1,
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Options for the various providers.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enrollment_message": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "This message will be sent whenever a user enrolls a new device " +
+											"for the first time using MFA. Supports liquid syntax, see " +
+											"[Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).",
 									},
 									"verification_message": {
 										Type:     schema.TypeString,
 										Optional: true,
+										Description: "This message will be sent whenever a user logs in after the " +
+											"enrollment. Supports liquid syntax, see " +
+											"[Auth0 docs](https://auth0.com/docs/mfa/customize-sms-or-voice-messages).",
 									},
 									"from": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Phone number to use as the sender.",
 									},
 									"messaging_service_sid": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Messaging service SID.",
 									},
 									"auth_token": {
-										Type:      schema.TypeString,
-										Sensitive: true,
-										Optional:  true,
+										Type:        schema.TypeString,
+										Sensitive:   true,
+										Optional:    true,
+										Description: "AuthToken for your Twilio account.",
 									},
 									"sid": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "SID for your Twilio account.",
 									},
 								},
 							},
@@ -150,38 +182,46 @@ func newGuardian() *schema.Resource {
 				},
 			},
 			"email": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Indicates whether email MFA is enabled.",
 			},
 			"otp": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Indicates whether one time password MFA is enabled.",
 			},
 			"recovery_code": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Indicates whether recovery code MFA is enabled.",
 			},
 			"duo": {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
+				Description: "Configuration settings for the Duo MFA. If this block is present, " +
+					"Duo MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"integration_key": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Duo client ID, see the Duo documentation for more details on Duo setup.",
 						},
 						"secret_key": {
-							Type:      schema.TypeString,
-							Required:  true,
-							Sensitive: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Sensitive:   true,
+							Description: "Duo client secret, see the Duo documentation for more details on Duo setup.",
 						},
 						"hostname": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Duo API Hostname, see the Duo documentation for more details on Duo setup.",
 						},
 					},
 				},
@@ -190,57 +230,69 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
+				Description: "Configuration settings for the Push MFA.\nIf this block is present, " +
+					"Push MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"amazon_sns": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for Amazon SNS.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"aws_access_key_id": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Your AWS Access Key ID.",
 									},
 									"aws_region": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Your AWS application's region.",
 									},
 									"aws_secret_access_key": {
-										Type:      schema.TypeString,
-										Required:  true,
-										Sensitive: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+										Description: "Your AWS Secret Access Key.",
 									},
 									"sns_apns_platform_application_arn": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The Amazon Resource Name for your Apple Push Notification Service.",
 									},
 									"sns_gcm_platform_application_arn": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The Amazon Resource Name for your Firebase Cloud Messaging Service.",
 									},
 								},
 							},
 						},
 						"custom_app": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configuration for the Guardian Custom App.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"app_name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Custom Application Name.",
 									},
 									"apple_app_link": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										ValidateFunc: validation.IsURLWithHTTPS,
+										Description:  "Apple App Store URL.",
 									},
 									"google_app_link": {
 										Type:         schema.TypeString,
 										Optional:     true,
 										ValidateFunc: validation.IsURLWithHTTPS,
+										Description:  "Google Store URL.",
 									},
 								},
 							},

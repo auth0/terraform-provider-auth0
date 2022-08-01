@@ -23,23 +23,27 @@ func newHook() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "Hooks are secure, self-contained functions that allow you to customize the behavior of " +
+			"Auth0 when executed for selected extensibility points of the Auth0 platform. Auth0 invokes Hooks " +
+			"during runtime to execute your custom Node.js code. Depending on the extensibility point, " +
+			"you can use Hooks with Database Connections and/or Passwordless Connections.",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateDiagFunc: validateHookName(),
-				Description:      "Name of this hook",
+				Description:      "Name of this hook.",
 			},
 			"dependencies": {
 				Type:        schema.TypeMap,
 				Elem:        schema.TypeString,
 				Optional:    true,
-				Description: "Dependencies of this hook used by webtask server",
+				Description: "Dependencies of this hook used by the WebTask server.",
 			},
 			"script": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Code to be executed when this hook runs",
+				Description: "Code to be executed when this hook runs.",
 			},
 			"trigger_id": {
 				Type:     schema.TypeString,
@@ -55,20 +59,20 @@ func newHook() *schema.Resource {
 				Description: "Execution stage of this rule. Can be " +
 					"credentials-exchange, pre-user-registration, " +
 					"post-user-registration, post-change-password" +
-					", or send-phone-message",
+					", or send-phone-message.",
 			},
 			"secrets": {
 				Type:        schema.TypeMap,
 				Elem:        schema.TypeString,
 				Sensitive:   true,
 				Optional:    true,
-				Description: "The secrets associated with the hook",
+				Description: "The secrets associated with the hook.",
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Computed:    true,
-				Description: "Whether the hook is enabled, or disabled",
+				Description: "Whether the hook is enabled, or disabled.",
 			},
 		},
 	}

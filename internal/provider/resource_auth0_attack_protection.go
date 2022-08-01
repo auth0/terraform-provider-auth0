@@ -21,20 +21,23 @@ func newAttackProtection() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "Auth0 can detect attacks and stop malicious attempts to access your " +
+			"application such as blocking traffic from certain IPs and displaying CAPTCHA.",
 		Schema: map[string]*schema.Schema{
 			"breached_password_detection": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Breached password detection protects your applications from bad actors logging in with stolen credentials.",
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Breached password detection protects your applications " +
+					"from bad actors logging in with stolen credentials.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Default:     false,
-							Description: "Whether or not breached password detection is active.",
+							Description: "Whether breached password detection is active.",
 						},
 						"shields": {
 							Type:     schema.TypeSet,
@@ -63,7 +66,9 @@ func newAttackProtection() *schema.Resource {
 									"monthly",
 								}, false),
 							},
-							Description: "When \"admin_notification\" is enabled, determines how often email notifications are sent.",
+							Description: "When \"admin_notification\" is enabled, " +
+								"determines how often email notifications are sent. " +
+								"Possible values: `immediately`, `daily`, `weekly`, `monthly`.",
 						},
 						"method": {
 							Type:     schema.TypeString,
@@ -72,24 +77,26 @@ func newAttackProtection() *schema.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								"standard", "enhanced",
 							}, false),
-							Description: "The subscription level for breached password detection methods. Use \"enhanced\" to enable Credential Guard.",
+							Description: "The subscription level for breached password detection methods. " +
+								"Use \"enhanced\" to enable Credential Guard. Possible values: `standard`, `enhanced`.",
 						},
 					},
 				},
 			},
 			"brute_force_protection": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Brute-force protection safeguards against a single IP address attacking a single user account.",
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Brute-force protection safeguards against a " +
+					"single IP address attacking a single user account.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Default:     false,
-							Description: "Whether or not brute force attack protections are active.",
+							Description: "Whether brute force attack protections are active.",
 						},
 						"shields": {
 							Type:     schema.TypeSet,
@@ -102,7 +109,8 @@ func newAttackProtection() *schema.Resource {
 									"user_notification",
 								}, false),
 							},
-							Description: "Action to take when a brute force protection threshold is violated.",
+							Description: "Action to take when a brute force protection threshold is violated. " +
+								"Possible values: `block`, `user_notification`",
 						},
 						"allowlist": {
 							Type:     schema.TypeSet,
@@ -111,7 +119,8 @@ func newAttackProtection() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "List of trusted IP addresses that will not have attack protection enforced against them.",
+							Description: "List of trusted IP addresses that will not " +
+								"have attack protection enforced against them.",
 						},
 						"mode": {
 							Type:     schema.TypeString,
@@ -120,31 +129,33 @@ func newAttackProtection() *schema.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								"count_per_identifier_and_ip", "count_per_identifier",
 							}, false),
-							Description: "Account Lockout: Determines whether or not IP address is used when counting failed attempts.",
+							Description: "Determines whether IP address is used when counting failed attempts. " +
+								"Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.",
 						},
 						"max_attempts": {
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validation.IntAtLeast(0),
-							Description:  "Maximum number of unsuccessful attempts.",
+							Description:  "Maximum number of unsuccessful attempts. Only available on public tenants.",
 						},
 					},
 				},
 			},
 			"suspicious_ip_throttling": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Suspicious IP throttling blocks traffic from any IP address that rapidly attempts too many logins or signups.",
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Suspicious IP throttling blocks traffic from any " +
+					"IP address that rapidly attempts too many logins or signups.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Default:     false,
-							Description: "Whether or not suspicious IP throttling attack protections are active.",
+							Description: "Whether suspicious IP throttling attack protections are active.",
 						},
 						"shields": {
 							Type:     schema.TypeSet,
@@ -157,7 +168,8 @@ func newAttackProtection() *schema.Resource {
 									"admin_notification",
 								}, false),
 							},
-							Description: "Action to take when a suspicious IP throttling threshold is violated.",
+							Description: "Action to take when a suspicious IP throttling threshold is violated. " +
+								"Possible values: `block`, `admin_notification`",
 						},
 						"allowlist": {
 							Type:     schema.TypeSet,
@@ -166,14 +178,16 @@ func newAttackProtection() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "List of trusted IP addresses that will not have attack protection enforced against them.",
+							Description: "List of trusted IP addresses that will not have " +
+								"attack protection enforced against them.",
 						},
 						"pre_login": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: "Configuration options that apply before every login attempt.",
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "Configuration options that apply before every login attempt. " +
+								"Only available on public tenants.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"max_attempts": {
@@ -188,17 +202,19 @@ func newAttackProtection() *schema.Resource {
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description:  "Interval of time, given in milliseconds, at which new attempts are granted.",
+										Description: "Interval of time, given in milliseconds, " +
+											"at which new attempts are granted.",
 									},
 								},
 							},
 						},
 						"pre_user_registration": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: "Configuration options that apply before every user registration attempt.",
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "Configuration options that apply before every user registration attempt. " +
+								"Only available on public tenants.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"max_attempts": {
@@ -213,7 +229,8 @@ func newAttackProtection() *schema.Resource {
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description:  "Interval of time, given in milliseconds, at which new attempts are granted.",
+										Description: "Interval of time, given in milliseconds, " +
+											"at which new attempts are granted.",
 									},
 								},
 							},

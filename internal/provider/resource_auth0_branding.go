@@ -20,60 +20,71 @@ func newBranding() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "This resource allows you to manage branding within your Auth0 tenant. Auth0 can be customized " +
+			"with a look and feel that aligns with your organization's brand requirements and user expectations.",
 		Schema: map[string]*schema.Schema{
 			"colors": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration settings for colors for branding.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"primary": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Primary button background color in hexadecimal.",
 						},
 						"page_background": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Background color of login pages in hexadecimal.",
 						},
 					},
 				},
 			},
 			"favicon_url": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "URL for the favicon.",
 			},
 			"logo_url": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "URL of logo for branding.",
 			},
 			"font": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration settings to customize the font.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"url": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "URL for the custom font.",
 						},
 					},
 				},
 			},
 			"universal_login": {
-				Type:     schema.TypeList,
-				Optional: true,
-				MaxItems: 1,
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration settings for Universal Login.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"body": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "The body of login pages.",
 						},
 					},
 				},

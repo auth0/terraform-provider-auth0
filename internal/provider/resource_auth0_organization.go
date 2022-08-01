@@ -21,33 +21,42 @@ func newOrganization() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "The Organizations feature represents a broad update to the Auth0 platform that allows our " +
+			"business-to-business (B2B) customers to better manage their partners and customers, and to " +
+			"customize the ways that end-users access their applications. Auth0 customers can use " +
+			"Organizations to:\n\n  - Represent their business customers and partners in Auth0 and manage their" +
+			"\n    membership.\n  - Configure branded, federated login flows for each business." +
+			"\n  - Build administration capabilities into their products, using Organizations" +
+			"\n    APIs, so that those businesses can manage their own organizations.",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name of this organization",
+				Description: "The name of this organization.",
 			},
 			"display_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Friendly name of this organization",
+				Description: "Friendly name of this organization.",
 			},
 			"branding": {
 				Type:        schema.TypeList,
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: "Defines how to style the login pages",
+				Description: "Defines how to style the login pages.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"logo_url": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "URL of logo to display on login page.",
 						},
 						"colors": {
-							Type:     schema.TypeMap,
-							Optional: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
+							Type:        schema.TypeMap,
+							Optional:    true,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "Color scheme used to customize the login pages.",
 						},
 					},
 				},
@@ -56,7 +65,7 @@ func newOrganization() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Metadata associated with the organization, Maximum of 10 metadata properties allowed",
+				Description: "Metadata associated with the organization. Maximum of 10 metadata properties allowed.",
 			},
 			"connections": {
 				Type:     schema.TypeSet,
@@ -68,13 +77,17 @@ func newOrganization() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"connection_id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The connection ID of the connection to add to the organization.",
 						},
 						"assign_membership_on_login": {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Default:  false,
+							Description: "When true, all users that log in with this connection will be " +
+								"automatically granted membership in the organization. When false, users must be " +
+								"granted membership in the organization before logging in with this connection.",
 						},
 					},
 				},

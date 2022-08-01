@@ -10,15 +10,18 @@ import (
 
 func newGlobalClient() *schema.Resource {
 	client := newClient()
+	client.Description = "Use a tenant's global Auth0 Application client."
 	client.CreateContext = createGlobalClient
 	client.DeleteContext = deleteGlobalClient
 
 	exclude := []string{"client_secret_rotation_trigger"}
 
-	// Mark all values computed and optional. This because the global client has
-	// already been created for all tenants.
+	// Mark all values computed and optional,
+	// because the global client has already
+	// been created for all tenants.
 	for key := range client.Schema {
-		// Exclude certain fields from being marked as computed.
+		// Exclude certain fields from
+		// being marked as computed.
 		if in(key, exclude) {
 			continue
 		}

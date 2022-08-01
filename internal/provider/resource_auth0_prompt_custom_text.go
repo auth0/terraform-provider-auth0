@@ -41,22 +41,36 @@ func newPromptCustomText() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importPromptCustomText,
 		},
+		Description: "With this resource, you can manage custom text on your Auth0 prompts. You can read more about " +
+			"custom texts [here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts).",
 		Schema: map[string]*schema.Schema{
 			"prompt": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(availablePrompts, false),
+				Description: "The term `prompt` is used to refer to a specific step in the login flow. " +
+					"Options include `login`, `login-id`, `login-password`, `login-email-verification`, `signup`, " +
+					"`signup-id`, `signup-password`, `reset-password`, `consent`, `mfa-push`, `mfa-otp`, `mfa-voice`," +
+					" `mfa-phone`, `mfa-webauthn`, `mfa-sms`, `mfa-email`, `mfa-recovery-code`, `mfa`, `status`, " +
+					"`device-flow`, `email-verification`, `email-otp-challenge`, `organizations`, " +
+					"`invitation`, `common`.",
 			},
 			"language": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(availableLanguages, false),
+				Description: "Language of the custom text. Options include `ar`, `bg`, `bs`, `cs`, `da`, `de`, `el`, " +
+					"`en`, `es`, `et`, `fi`, `fr`, `fr-CA`, `fr-FR`, `he`, `hi`, `hr`, `hu`, `id`, `is`, `it`, `ja`, " +
+					"`ko`, `lt`, `lv`, `nb`, `nl`, `pl`, `pt`, `pt-BR`, `pt-PT`, `ro`, `ru`, `sk`, `sl`, `sr`, `sv`, " +
+					"`th`, `tr`, `uk`, `vi`, `zh-CN`, `zh-TW`",
 			},
 			"body": {
 				Type:             schema.TypeString,
 				Required:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description: "JSON containing the custom texts. You can check the options for each prompt " +
+					"[here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts#prompt-values).",
 			},
 		},
 	}

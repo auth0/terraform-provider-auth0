@@ -22,36 +22,45 @@ func newResourceServer() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With this resource, you can set up APIs that can be consumed from your authorized applications.",
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Friendly name for the resource server. Cannot include `<` or `>` characters.",
 			},
 			"identifier": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
+				Description: "Unique identifier for the resource server. Used as the audience parameter " +
+					"for authorization calls. Can not be changed once set.",
 			},
 			"scopes": {
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Description: "List of permissions (scopes) used by this resource server.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"value": {
 							Type:     schema.TypeString,
 							Required: true,
+							Description: "Name of the permission (scope). Examples include " +
+								"`read:appointments` or `delete:appointments`.",
 						},
 						"description": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Description of the permission (scope).",
 						},
 					},
 				},
 			},
 			"signing_alg": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "Algorithm used to sign JWTs. Options include `HS256` and `RS256`.",
 			},
 			"signing_secret": {
 				Type:     schema.TypeString,
@@ -69,37 +78,46 @@ func newResourceServer() *schema.Resource {
 					}
 					return
 				},
+				Description: "Secret used to sign tokens when using symmetric algorithms (HS256).",
 			},
 			"allow_offline_access": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether refresh tokens can be issued for this resource server.",
 			},
 			"token_lifetime": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
+				Description: "Number of seconds during which access tokens issued for this resource server " +
+					"from the token endpoint remain valid.",
 			},
 			"token_lifetime_for_web": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
+				Description: "Number of seconds during which access tokens issued for this resource server via " +
+					"implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.",
 			},
 			"skip_consent_for_verifiable_first_party_clients": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether to skip user consent for applications flagged as first party.",
 			},
 			"verification_location": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"options": {
-				Type:     schema.TypeMap,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Optional: true,
+				Type:        schema.TypeMap,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "Used to store additional metadata.",
 			},
 			"enforce_policies": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether authorization polices are enforced.",
 			},
 			"token_dialect": {
 				Type:     schema.TypeString,
@@ -108,6 +126,8 @@ func newResourceServer() *schema.Resource {
 					"access_token",
 					"access_token_authz",
 				}, true),
+				Description: "Dialect of access tokens that should be issued for this resource server. " +
+					"Options include `access_token` or `access_token_authz` (includes permissions).",
 			},
 		},
 	}

@@ -25,7 +25,8 @@ func newUser() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-
+		Description: "With this resource, you can manage user identities, including resetting passwords, " +
+			"and creating, provisioning, blocking, and deleting users.",
 		Schema: map[string]*schema.Schema{
 			"user_id": {
 				Type:     schema.TypeString,
@@ -34,83 +35,105 @@ func newUser() *schema.Resource {
 				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 					return old == "auth0|"+new
 				},
+				Description: "ID of the user.",
 			},
 			"connection_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Name of the connection from which the user information was sourced.",
 			},
 			"username": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Username of the user. Only valid if the connection requires a username.",
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "Name of the user.",
 			},
 			"family_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Family name of the user.",
 			},
 			"given_name": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Given name of the user.",
 			},
 			"nickname": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "Preferred nickname or alias of the user.",
 			},
 			"password": {
-				Type:      schema.TypeString,
-				Optional:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				Description: "Initial password for this user. Required for non-passwordless connections (SMS and email).",
 			},
 			"email": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Email address of the user.",
 			},
 			"email_verified": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether the email address has been verified.",
 			},
 			"verify_email": {
 				Type:     schema.TypeBool,
 				Optional: true,
+				Description: "Indicates whether the user will receive a verification email after creation. " +
+					"Overrides behavior of `email_verified` parameter.",
 			},
 			"phone_number": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Phone number for the user; follows the E.164 recommendation. Used for SMS connections. ",
 			},
 			"phone_verified": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether the phone number has been verified.",
 			},
 			"user_metadata": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description: "Custom fields that store info about the user that does " +
+					"not impact a user's core functionality. Examples include work address, home address, and user preferences.",
 			},
 			"app_metadata": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
+				Description: "Custom fields that store info about the user that impact the user's core " +
+					"functionality, such as how an application functions or what the user can access. " +
+					"Examples include support plans and IDs for external accounts.",
 			},
 			"blocked": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether the user is blocked or not.",
 			},
 			"picture": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "Picture of the user.",
 			},
 			"roles": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "Set of IDs of roles assigned to the user.",
 			},
 		},
 	}

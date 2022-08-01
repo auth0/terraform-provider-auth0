@@ -20,11 +20,14 @@ func newCustomDomain() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can use a custom domain to maintain a consistent user experience. " +
+			"This resource allows you to create and manage a custom domain within your Auth0 tenant.",
 		Schema: map[string]*schema.Schema{
 			"domain": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Name of the custom domain.",
 			},
 			"type": {
 				Type:     schema.TypeString,
@@ -34,28 +37,37 @@ func newCustomDomain() *schema.Resource {
 					"auth0_managed_certs",
 					"self_managed_certs",
 				}, true),
+				Description: "Provisioning type for the custom domain. " +
+					"Options include `auth0_managed_certs` and `self_managed_certs`.",
 			},
 			"primary": {
-				Type:     schema.TypeBool,
-				Computed: true,
+				Type:        schema.TypeBool,
+				Computed:    true,
+				Description: "Indicates whether this is a primary domain.",
 			},
 			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: "Configuration status for the custom domain. " +
+					"Options include `disabled`, `pending`, `pending_verification`, and `ready`.",
 			},
 			"origin_domain_name": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: "Once the configuration status is `ready`, the DNS name " +
+					"of the Auth0 origin server that handles traffic for the custom domain.",
 			},
 			"verification": {
-				Type:     schema.TypeList,
-				Computed: true,
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "Configuration settings for verification.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"methods": {
-							Type:     schema.TypeList,
-							Elem:     schema.TypeMap,
-							Computed: true,
+							Type:        schema.TypeList,
+							Elem:        schema.TypeMap,
+							Computed:    true,
+							Description: "Verification methods for the domain.",
 						},
 					},
 				},

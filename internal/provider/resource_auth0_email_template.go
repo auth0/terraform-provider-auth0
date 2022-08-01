@@ -73,7 +73,7 @@ func newEmailTemplate() *schema.Resource {
 			"syntax": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Syntax of the template body. You can use either text or HTML + Liquid syntax.",
+				Description: "Syntax of the template body. You can use either text or HTML with Liquid syntax.",
 			},
 			"url_lifetime_in_seconds": {
 				Type:        schema.TypeInt,

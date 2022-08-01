@@ -230,7 +230,7 @@ func newGuardian() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				MaxItems: 1,
-				Description: "Configuration settings for the Push MFA.\nIf this block is present, " +
+				Description: "Configuration settings for the Push MFA. If this block is present, " +
 					"Push MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

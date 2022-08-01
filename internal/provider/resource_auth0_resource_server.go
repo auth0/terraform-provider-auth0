@@ -34,7 +34,7 @@ func newResourceServer() *schema.Resource {
 				Optional: true,
 				ForceNew: true,
 				Description: "Unique identifier for the resource server. Used as the audience parameter " +
-					"for authorization calls. Can not be changed once set.",
+					"for authorization calls. Cannot be changed once set.",
 			},
 			"scopes": {
 				Type:        schema.TypeSet,

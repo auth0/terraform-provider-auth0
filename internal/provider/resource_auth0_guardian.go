@@ -129,7 +129,7 @@ func newGuardian() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "Message types to use, array of `sms` and or `voice`. " +
+							Description: "Message types to use, array of `sms` and/or `voice`. " +
 								"Adding both to array should enable the user to choose.",
 						},
 						"options": {

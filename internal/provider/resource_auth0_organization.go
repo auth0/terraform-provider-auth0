@@ -86,7 +86,7 @@ func newOrganization() *schema.Resource {
 							Optional: true,
 							Default:  false,
 							Description: "When `true`, all users that log in with this connection will be " +
-								"automatically granted membership in the organization. When false, users must be " +
+								"automatically granted membership in the organization. When `false`, users must be " +
 								"granted membership in the organization before logging in with this connection.",
 						},
 					},

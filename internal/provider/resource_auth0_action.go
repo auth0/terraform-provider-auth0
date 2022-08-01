@@ -86,7 +86,7 @@ func newAction() *schema.Resource {
 					"node12",
 					"node16",
 				}, false),
-				Description: "The Node runtime, e.g. `node16`, defaults to `node12`.",
+				Description: "The Node runtime, e.g. `node16`. Defaults to `node12`.",
 			},
 			"secrets": {
 				Type:        schema.TypeList,

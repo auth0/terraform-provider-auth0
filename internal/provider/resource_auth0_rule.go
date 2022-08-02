@@ -24,6 +24,10 @@ func newRule() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox " +
+			"as part of your authentication pipeline, which are otherwise known as rules. This resource allows you " +
+			"to create and manage rules. You can create global variable for use with rules by using the " +
+			"`auth0_rule_config` resource.",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -31,20 +35,27 @@ func newRule() *schema.Resource {
 				ValidateFunc: validation.StringMatch(
 					ruleNameRegexp,
 					"Can only contain alphanumeric characters, spaces and '-'. "+
-						"Can neither start nor end with '-' or spaces."),
+						"Can neither start nor end with '-' or spaces.",
+				),
+				Description: "Name of the rule. May only contain alphanumeric characters, spaces, and hyphens. " +
+					"May neither start nor end with hyphens or spaces.",
 			},
 			"script": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Code to be executed when the rule runs.",
 			},
 			"order": {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
+				Description: "Order in which the rule executes relative to other rules. " +
+					"Lower-valued rules execute first.",
 			},
 			"enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether the rule is enabled.",
 			},
 		},
 	}

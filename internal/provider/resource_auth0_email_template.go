@@ -21,6 +21,10 @@ func newEmailTemplate() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can have standard welcome, password reset, and account verification " +
+			"email-based workflows built right into Auth0. This resource allows you to configure email templates " +
+			"to customize the look, feel, and sender identities of emails sent by Auth0. " +
+			"Used in conjunction with configured email providers.",
 		Schema: map[string]*schema.Schema{
 			"template": {
 				Type:     schema.TypeString,
@@ -38,40 +42,56 @@ func newEmailTemplate() *schema.Resource {
 					"mfa_oob_code",
 					"user_invitation",
 				}, true),
+				Description: "Template name. Options include `verify_email`, `verify_email_by_code`, `reset_email`, " +
+					"`welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, " +
+					"`user_invitation`, `change_password` (legacy), or `password_reset` (legacy).",
 			},
 			"body": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: "Body of the email template. " +
+					"You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).",
 			},
 			"from": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: "Email address to use as the sender. " +
+					"You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).",
 			},
 			"result_url": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Description: "URL to redirect the user to after a successful action. " +
+					"[Learn more](https://auth0.com/docs/customize/email/email-templates#configure-template-fields).",
 			},
 			"subject": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: "Subject line of the email. " +
+					"You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).",
 			},
 			"syntax": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Syntax of the template body. You can use either text or HTML with Liquid syntax.",
 			},
 			"url_lifetime_in_seconds": {
-				Type:     schema.TypeInt,
-				Optional: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Description: "Number of seconds during which the link within the email will be valid.",
 			},
 			"enabled": {
-				Type:     schema.TypeBool,
-				Required: true,
+				Type:        schema.TypeBool,
+				Required:    true,
+				Description: "Indicates whether the template is enabled.",
 			},
 			"include_email_in_redirect": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Whether the `reset_email` and `verify_email` templates should include the user's email address as the email parameter in the `returnUrl` (true) or whether no email address should be included in the redirect (false). Defaults to true.",
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Whether the `reset_email` and `verify_email` templates should include the user's " +
+					"email address as the email parameter in the `returnUrl` (true) or whether no email address " +
+					"should be included in the redirect (false). Defaults to `true`.",
 			},
 		},
 	}

@@ -22,20 +22,29 @@ func newCustomDomainVerification() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can use a custom domain to maintain a consistent user experience. " +
+			"This is a three-step process; you must configure the custom domain in Auth0, " +
+			"then create a DNS record for the domain, then verify the DNS record in Auth0. " +
+			"This resource allows for automating the verification part of the process.",
 		Schema: map[string]*schema.Schema{
 			"custom_domain_id": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "ID of the custom domain resource.",
 			},
 			"origin_domain_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The DNS name of the Auth0 origin server that handles traffic for the custom domain.",
 			},
 			"cname_api_key": {
 				Type:      schema.TypeString,
 				Computed:  true,
 				Sensitive: true,
+				Description: "The value of the `cname-api-key` header to send when forwarding requests. " +
+					"Only present if the type of the custom domain is `self_managed_certs` and " +
+					"Terraform originally managed the domain's verification.",
 			},
 		},
 		Timeouts: &schema.ResourceTimeout{

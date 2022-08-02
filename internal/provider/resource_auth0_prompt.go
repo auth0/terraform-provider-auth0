@@ -22,6 +22,8 @@ func newPrompt() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With this resource, you can manage your Auth0 prompts, " +
+			"including choosing the login experience version.",
 		Schema: map[string]*schema.Schema{
 			"universal_login_experience": {
 				Type:     schema.TypeString,
@@ -29,11 +31,13 @@ func newPrompt() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"new", "classic",
 				}, false),
+				Description: "Which login experience to use. Options include `classic` and `new`.",
 			},
 			"identifier_first": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: "Determines if the login screen prompts for just the identifier, identifier and password first.",
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "Indicates whether the identifier first is used when " +
+					"using the new Universal Login experience.",
 			},
 			"webauthn_platform_first_factor": {
 				Type:        schema.TypeBool,

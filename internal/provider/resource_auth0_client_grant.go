@@ -20,21 +20,28 @@ func newClientGrant() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "Auth0 uses various grant types, or methods by which you grant limited access to your " +
+			"resources to another entity without exposing credentials. The OAuth 2.0 protocol supports " +
+			"several types of grants, which allow different types of access. This resource allows " +
+			"you to create and manage client grants used with configured Auth0 clients.",
 		Schema: map[string]*schema.Schema{
 			"client_id": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "ID of the client for this grant.",
 			},
 			"audience": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Audience or API Identifier for this grant.",
 			},
 			"scope": {
-				Type:     schema.TypeList,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Required: true,
+				Type:        schema.TypeList,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Required:    true,
+				Description: "Permissions (scopes) included in this grant.",
 			},
 		},
 	}

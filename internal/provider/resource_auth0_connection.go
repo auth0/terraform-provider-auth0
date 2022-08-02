@@ -19,18 +19,18 @@ var connectionSchema = map[string]*schema.Schema{
 		Type:        schema.TypeString,
 		Required:    true,
 		ForceNew:    true,
-		Description: "Name of the connection",
+		Description: "Name of the connection.",
 	},
 	"display_name": {
 		Type:        schema.TypeString,
 		Optional:    true,
-		Description: "Name used in login screen",
+		Description: "Name used in login screen.",
 	},
 	"is_domain_connection": {
 		Type:        schema.TypeBool,
 		Optional:    true,
 		Computed:    true,
-		Description: "Indicates whether or not the connection is domain level",
+		Description: "Indicates whether the connection is domain level.",
 	},
 	"strategy": {
 		Type:     schema.TypeString,
@@ -52,31 +52,35 @@ var connectionSchema = map[string]*schema.Schema{
 			"yammer", "yandex", "line",
 		}, true),
 		ForceNew:    true,
-		Description: "Type of the connection, which indicates the identity provider",
+		Description: "Type of the connection, which indicates the identity provider.",
 	},
 	"metadata": {
 		Type:             schema.TypeMap,
 		Elem:             &schema.Schema{Type: schema.TypeString},
 		Optional:         true,
 		ValidateDiagFunc: validation.MapKeyLenBetween(0, 10),
-		Description:      "Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.",
+		Description: "Metadata associated with the connection, in the form of a map of string values " +
+			"(max 255 chars). Maximum of 10 metadata properties allowed.",
 	},
 	"options": {
-		Type:     schema.TypeList,
-		Computed: true,
-		Optional: true,
-		MaxItems: 1,
+		Type:        schema.TypeList,
+		Computed:    true,
+		Optional:    true,
+		MaxItems:    1,
+		Description: "Configuration settings for connection options.",
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"validation": {
-					Type:     schema.TypeList,
-					MaxItems: 1,
+					Type:        schema.TypeList,
+					MaxItems:    1,
+					Description: "Validation of the minimum and maximum values allowed for a user to have as username.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"username": {
-								Optional: true,
-								Type:     schema.TypeList,
-								MaxItems: 1,
+								Optional:    true,
+								Type:        schema.TypeList,
+								MaxItems:    1,
+								Description: "Specifies the `min` and `max` values of username length.",
 								Elem: &schema.Resource{
 									Schema: map[string]*schema.Schema{
 										"min": {
@@ -103,7 +107,10 @@ var connectionSchema = map[string]*schema.Schema{
 					ValidateFunc: validation.StringInSlice([]string{
 						"none", "low", "fair", "good", "excellent",
 					}, false),
-					Description: "Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`",
+					Description: "Indicates level of password strength to enforce during authentication. " +
+						"A strong password policy will make it difficult, if not improbable, for someone " +
+						"to guess a password through either manual or automated means. " +
+						"Options include `none`, `low`, `fair`, `good`, `excellent`.",
 				},
 				"password_history": {
 					Type:     schema.TypeList,
@@ -121,7 +128,8 @@ var connectionSchema = map[string]*schema.Schema{
 							},
 						},
 					},
-					Description: "Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords",
+					Description: "Configuration settings for the password history " +
+						"that is maintained for each user to prevent the reuse of passwords.",
 				},
 				"password_no_personal_info": {
 					Type:     schema.TypeList,
@@ -136,7 +144,11 @@ var connectionSchema = map[string]*schema.Schema{
 							},
 						},
 					},
-					Description: "Configuration settings for the password personal info check, which does not allow passwords that contain any part of the user's personal data, including user's name, username, nickname, user_metadata.name, user_metadata.first, user_metadata.last, user's email, or firstpart of the user's email",
+					Description: "Configuration settings for the password personal info check, " +
+						"which does not allow passwords that contain any part " +
+						"of the user's personal data, including user's `name`, `username`, `nickname`, " +
+						"`user_metadata.name`, `user_metadata.first`, `user_metadata.last`, user's `email`, " +
+						"or first part of the user's `email`.",
 				},
 				"password_dictionary": {
 					Type:     schema.TypeList,
@@ -148,15 +160,23 @@ var connectionSchema = map[string]*schema.Schema{
 							"enable": {
 								Type:     schema.TypeBool,
 								Optional: true,
+								Description: "Indicates whether the password dictionary check " +
+									"is enabled for this connection.",
 							},
 							"dictionary": {
 								Type:     schema.TypeSet,
 								Elem:     &schema.Schema{Type: schema.TypeString},
 								Optional: true,
+								Description: "Customized contents of the password dictionary. By default, " +
+									"the password dictionary contains a list of the " +
+									"[10,000 most common passwords](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10k-most-common.txt); " +
+									"your customized content is used in addition to the default password dictionary. " +
+									"Matching is not case-sensitive.",
 							},
 						},
 					},
-					Description: "Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary",
+					Description: "Configuration settings for the password dictionary check, " +
+						"which does not allow passwords that are part of the password dictionary.",
 				},
 				"password_complexity_options": {
 					Type:     schema.TypeList,
@@ -169,135 +189,143 @@ var connectionSchema = map[string]*schema.Schema{
 								Type:         schema.TypeInt,
 								Optional:     true,
 								ValidateFunc: validation.IntAtLeast(1),
+								Description:  "Minimum number of characters allowed in passwords.",
 							},
 						},
 					},
-					Description: "Configuration settings for password complexity",
+					Description: "Configuration settings for password complexity.",
 				},
 				"enabled_database_customization": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "",
+					Description: "Set to `true` to use a legacy user store.",
 				},
 				"brute_force_protection": {
-					Type:        schema.TypeBool,
-					Optional:    true,
-					Description: "Indicates whether or not to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address",
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Indicates whether to enable brute force protection, which will limit " +
+						"the number of signups and failed logins from a suspicious IP address.",
 				},
 				"import_mode": {
-					Type:        schema.TypeBool,
-					Optional:    true,
-					Description: "Indicates whether or not you have a legacy user store and want to gradually migrate those users to the Auth0 user store",
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Indicates whether you have a legacy user store and want to gradually migrate " +
+						"those users to the Auth0 user store.",
 				},
 				"disable_signup": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Indicates whether or not to allow user sign-ups to your application",
+					Description: "Indicates whether to allow user sign-ups to your application.",
 				},
 				"requires_username": {
-					Type:        schema.TypeBool,
-					Optional:    true,
-					Description: "Indicates whether or not the user is required to provide a username in addition to an email address",
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Indicates whether the user is required to provide a username " +
+						"in addition to an email address.",
 				},
 				"custom_scripts": {
 					Type:        schema.TypeMap,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
-					Description: "",
+					Description: "A map of scripts used to integrate with a custom database.",
 				},
 				"scripts": {
 					Type:        schema.TypeMap,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
-					Description: "",
+					Description: "A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.",
 				},
 				"configuration": {
-					Type:        schema.TypeMap,
-					Elem:        &schema.Schema{Type: schema.TypeString},
-					Sensitive:   true,
-					Optional:    true,
-					Description: "",
+					Type:      schema.TypeMap,
+					Elem:      &schema.Schema{Type: schema.TypeString},
+					Sensitive: true,
+					Optional:  true,
+					Description: "A case-sensitive map of key value pairs used as configuration variables " +
+						"for the `custom_script`.",
 				},
 				"client_id": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "The strategy's client ID.",
 				},
 				"client_secret": {
 					Type:        schema.TypeString,
 					Optional:    true,
 					Sensitive:   true,
-					Description: "",
+					Description: "The strategy's client secret.",
 				},
 				"allowed_audiences": {
 					Type:        schema.TypeSet,
 					Computed:    true,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
-					Description: "",
+					Description: "List of allowed audiences.",
 				},
 				"api_enable_users": {
-					Type:     schema.TypeBool,
-					Optional: true,
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Enable API Access to users.",
 				},
 				"app_id": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "App ID.",
 				},
 				"domain": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Domain name.",
 				},
 				"domain_aliases": {
-					Type:        schema.TypeSet,
-					Computed:    true,
-					Elem:        &schema.Schema{Type: schema.TypeString},
-					Optional:    true,
-					Description: "",
+					Type:     schema.TypeSet,
+					Computed: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Optional: true,
+					Description: "List of the domains that can be authenticated using the identity provider. " +
+						"Only needed for Identifier First authentication flows.",
 				},
 				"max_groups_to_retrieve": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Maximum number of groups to retrieve.",
 				},
 				"tenant_domain": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Tenant domain name.",
 				},
 				"use_wsfed": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "",
+					Description: "Whether to use WS-Fed.",
 				},
 				"waad_protocol": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Protocol to use.",
 				},
 				"waad_common_endpoint": {
-					Type:        schema.TypeBool,
-					Optional:    true,
-					Description: "",
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Indicates whether to use the common endpoint rather than the default endpoint. " +
+						"Typically enabled if you're using this for a multi-tenant application in Azure AD.",
 				},
 				"icon_url": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Icon URL.",
 				},
 				"identity_api": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Identity API.",
 				},
 				"ips": {
 					Type:        schema.TypeSet,
 					Elem:        &schema.Schema{Type: schema.TypeString},
 					Optional:    true,
 					Computed:    true,
-					Description: "",
+					Description: "A list of IPs.",
 				},
 				"use_cert_auth": {
 					Type:        schema.TypeBool,
@@ -322,34 +350,34 @@ var connectionSchema = map[string]*schema.Schema{
 				"twilio_sid": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "SID for your Twilio account.",
 				},
 				"twilio_token": {
 					Type:        schema.TypeString,
 					Optional:    true,
 					Sensitive:   true,
 					DefaultFunc: schema.EnvDefaultFunc("TWILIO_TOKEN", nil),
-					Description: "",
+					Description: "AuthToken for your Twilio account.",
 				},
 				"from": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Address to use as the sender.",
 				},
 				"syntax": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Syntax of the template body.",
 				},
 				"subject": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Subject line of the email.",
 				},
 				"template": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Body of the template.",
 				},
 				"totp": {
 					Type:     schema.TypeList,
@@ -358,44 +386,51 @@ var connectionSchema = map[string]*schema.Schema{
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"time_step": {
-								Type:     schema.TypeInt,
-								Optional: true,
+								Type:        schema.TypeInt,
+								Optional:    true,
+								Description: "Seconds between allowed generation of new passwords.",
 							},
 							"length": {
-								Type:     schema.TypeInt,
-								Optional: true,
+								Type:        schema.TypeInt,
+								Optional:    true,
+								Description: "Length of the one-time password.",
 							},
 						},
 					},
-					Description: "",
+					Description: "Configuration options for one-time passwords.",
 				},
 				"messaging_service_sid": {
-					Type:     schema.TypeString,
-					Optional: true,
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "SID for Copilot. Used when SMS Source is Copilot.",
 				},
 				"mfa": {
-					Type:     schema.TypeList,
-					MaxItems: 1,
-					Computed: true,
-					Optional: true,
+					Type:        schema.TypeList,
+					MaxItems:    1,
+					Computed:    true,
+					Optional:    true,
+					Description: "Configuration options for multifactor authentication.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"active": {
 								Type:     schema.TypeBool,
 								Optional: true,
+								Description: "Indicates whether multifactor authentication " +
+									"is enabled for this connection.",
 							},
 							"return_enroll_settings": {
 								Type:     schema.TypeBool,
 								Optional: true,
+								Description: "Indicates whether multifactor authentication " +
+									"enrollment settings will be returned.",
 							},
 						},
 					},
 				},
-				// custom sms gateway options
 				"provider": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Defines the custom sms_gateway provider",
+					Description: "Defines the custom `sms_gateway` provider.",
 					ValidateFunc: validation.StringInSlice([]string{
 						"sms_gateway",
 					}, false),
@@ -403,40 +438,40 @@ var connectionSchema = map[string]*schema.Schema{
 				"gateway_url": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Defines a custom sms gateway to use instead of twilio",
+					Description: "Defines a custom sms gateway to use instead of Twilio.",
 				},
 				"gateway_authentication": {
 					Type:        schema.TypeList,
 					MaxItems:    1,
 					Optional:    true,
-					Description: "Defines the parameters used to generate the auth token for the custom gateway",
+					Description: "Defines the parameters used to generate the auth token for the custom gateway.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"method": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Authentication method (default is bearer token)",
+								Description: "Authentication method (default is `bearer` token).",
 							},
 							"subject": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Subject claim for the HS256 token sent to gateway_url",
+								Description: "Subject claim for the HS256 token sent to `gateway_url`.",
 							},
 							"audience": {
 								Type:        schema.TypeString,
 								Optional:    true,
-								Description: "Audience claim for the HS256 token sent to gateway_url",
+								Description: "Audience claim for the HS256 token sent to `gateway_url`.",
 							},
 							"secret": {
 								Type:        schema.TypeString,
 								Optional:    true,
 								Sensitive:   true,
-								Description: "Secret used to sign the HS256 token sent to gateway_url",
+								Description: "Secret used to sign the HS256 token sent to `gateway_url`.",
 							},
 							"secret_base64_encoded": {
 								Type:        schema.TypeBool,
 								Optional:    true,
-								Description: "Specifies whether or not the secret is base64 encoded",
+								Description: "Specifies whether or not the secret is Base64-encoded.",
 							},
 						},
 					},
@@ -444,7 +479,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"forward_request_info": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Specifies whether or not request info should be forwarded to sms gateway",
+					Description: "Specifies whether or not request info should be forwarded to sms gateway.",
 				},
 
 				"set_user_root_attributes": {
@@ -454,14 +489,21 @@ var connectionSchema = map[string]*schema.Schema{
 					ValidateFunc: validation.StringInSlice([]string{
 						"on_each_login", "on_first_login",
 					}, false),
-					Description: "Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using an external IdP. Possible values are 'on_each_login' (default value, it configures the connection to automatically update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to only set the root attributes on first login, allowing them to be independently updated thereafter)",
+					Description: "Determines whether the 'name', 'given_name', 'family_name', 'nickname', " +
+						"and 'picture' attributes can be independently updated when using an external IdP. " +
+						"Possible values are 'on_each_login' (default value, it configures the connection to " +
+						"automatically update the root attributes from the external IdP with each user login. " +
+						"When this setting is used, root attributes cannot be independently updated), " +
+						"'on_first_login' (configures the connection to only set the root attributes on " +
+						"first login, allowing them to be independently updated thereafter).",
 				},
 				"non_persistent_attrs": {
-					Type:        schema.TypeSet,
-					Elem:        &schema.Schema{Type: schema.TypeString},
-					Optional:    true,
-					Computed:    true,
-					Description: "If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here",
+					Type:     schema.TypeSet,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Optional: true,
+					Computed: true,
+					Description: "If there are user fields that should not be stored in Auth0 databases due to " +
+						"privacy reasons, you can add them to the DenyList here.",
 				},
 				"should_trust_email_verified_connection": {
 					Type:     schema.TypeString,
@@ -471,89 +513,91 @@ var connectionSchema = map[string]*schema.Schema{
 					}, false),
 					Description: "Choose how Auth0 sets the email_verified field in the user profile.",
 				},
-				// apple options
 				"team_id": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Apple Team ID",
+					Description: "Apple Team ID.",
 				},
 				"key_id": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Apple Key ID",
+					Description: "Apple Key ID.",
 				},
-				// adfs options
 				"adfs_server": {
-					Type:     schema.TypeString,
-					Optional: true,
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "ADFS Metadata source.",
 				},
-				// salesforce options
 				"community_base_url": {
-					Type:     schema.TypeString,
-					Optional: true,
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Salesforce community base URL.",
 				},
 				"strategy_version": {
-					Type:     schema.TypeInt,
-					Optional: true,
-					Computed: true,
+					Type:        schema.TypeInt,
+					Optional:    true,
+					Computed:    true,
+					Description: "Version 1 is deprecated, use version 2.",
 				},
 				"scopes": {
-					Type:     schema.TypeSet,
-					Computed: true,
-					Optional: true,
-					Elem:     &schema.Schema{Type: schema.TypeString},
+					Type:        schema.TypeSet,
+					Computed:    true,
+					Optional:    true,
+					Elem:        &schema.Schema{Type: schema.TypeString},
+					Description: "Permissions to grant to the connection.",
 				},
-				// OIDC options
 				"type": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Value can be `back_channel` or `front_channel`.",
 				},
 				"issuer": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Issuer URL, e.g. `https://auth.example.com`.",
 				},
 				"jwks_uri": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "JWKS URI.",
 				},
 				"discovery_url": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.",
 				},
 				"token_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Token endpoint.",
 				},
 				"userinfo_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "User info endpoint.",
 				},
 				"authorization_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "",
+					Description: "Authorization endpoint.",
 				},
-				// SAML options
 				"debug": {
 					Type:        schema.TypeBool,
 					Optional:    true,
 					Description: "When enabled, additional debug information will be generated.",
 				},
 				"signing_cert": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "X.509 signing certificate (encoded in PEM or CER) you retrieved from the IdP, Base64-encoded",
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: "X.509 signing certificate (encoded in PEM or CER) you retrieved " +
+						"from the IdP, Base64-encoded.",
 				},
 				"signing_key": {
 					Type:     schema.TypeList,
 					Optional: true,
 					MaxItems: 1,
+					Description: "The key used to sign requests in the connection. Uses the `key` and `cert` " +
+						"properties to provide the private key and certificate respectively.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"key": {
@@ -570,7 +614,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"protocol_binding": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "The SAML Response Binding: how the SAML token is received by Auth0 from IdP",
+					Description: "The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.",
 					ValidateFunc: validation.StringInSlice([]string{
 						"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
 						"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
@@ -590,6 +634,8 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:     schema.TypeList,
 					MaxItems: 1,
 					Optional: true,
+					Description: "Configuration options for IDP Initiated Authentication. This is an object " +
+						"with the properties: `client_id`, `client_protocol`, and `client_authorize_query`.",
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"client_id": {
@@ -638,7 +684,8 @@ var connectionSchema = map[string]*schema.Schema{
 					Type:         schema.TypeString,
 					Optional:     true,
 					ValidateFunc: validation.StringIsJSON,
-					Description:  "If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.",
+					Description: "If you're configuring a SAML enterprise connection for a non-standard " +
+						"PingFederate Server, you must update the attribute mappings.",
 				},
 				"sign_saml_request": {
 					Type:        schema.TypeBool,
@@ -648,54 +695,56 @@ var connectionSchema = map[string]*schema.Schema{
 				"signature_algorithm": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Sign Request Algorithm",
+					Description: "Sign Request Algorithm.",
 				},
 				"digest_algorithm": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Sign Request Algorithm Digest",
+					Description: "Sign Request Algorithm Digest.",
 				},
 				"entity_id": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Custom Entity ID for the connection",
+					Description: "Custom Entity ID for the connection.",
 				},
 				"pkce_enabled": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Enables proof key for code exchange (PKCE) functionality for OAuth2 connections",
+					Description: "Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.",
 				},
 				"upstream_params": {
 					Type:         schema.TypeString,
 					Optional:     true,
 					ValidateFunc: validation.StringIsJSON,
-					Description:  "You can pass provider-specific parameters to an Identity Provider during authentication. The values can either be static per connection or dynamic per user.",
+					Description: "You can pass provider-specific parameters to an identity provider during " +
+						"authentication. The values can either be static per connection or dynamic per user.",
 				},
 				"auth_params": {
 					Type: schema.TypeMap,
 					Elem: &schema.Schema{
 						Type: schema.TypeString,
 					},
-					Optional:    true,
-					Description: "Query string parameters to be included as part of the generated passwordless email link.",
+					Optional: true,
+					Description: "Query string parameters to be included as part " +
+						"of the generated passwordless email link.",
 				},
 			},
 		},
-		Description: "Configuration settings for connection options",
 	},
 	"enabled_clients": {
 		Type:        schema.TypeSet,
 		Elem:        &schema.Schema{Type: schema.TypeString},
 		Optional:    true,
 		Computed:    true,
-		Description: "IDs of the clients for which the connection is enabled",
+		Description: "IDs of the clients for which the connection is enabled.",
 	},
 	"realms": {
-		Type:        schema.TypeList,
-		Elem:        &schema.Schema{Type: schema.TypeString},
-		Optional:    true,
-		Computed:    true,
-		Description: "Defines the realms for which the connection will be used (i.e., email domains). If not specified, the connection name is added as the realm",
+		Type:     schema.TypeList,
+		Elem:     &schema.Schema{Type: schema.TypeString},
+		Optional: true,
+		Computed: true,
+		Description: "Defines the realms for which the connection will be used (e.g., email domains). " +
+			"If not specified, the connection name is added as the realm.",
 	},
 	"show_as_button": {
 		Type:        schema.TypeBool,
@@ -713,6 +762,10 @@ func newConnection() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can define sources of users, otherwise known as connections, " +
+			"which may include identity providers (such as Google or LinkedIn), databases, or " +
+			"passwordless authentication methods. This resource allows you to configure " +
+			"and manage connections to be used with your clients and users.",
 		Schema:        connectionSchema,
 		SchemaVersion: 2,
 		StateUpgraders: []schema.StateUpgrader{

@@ -19,16 +19,22 @@ func newRuleConfig() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
+		Description: "With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox " +
+			"as part of your authentication pipeline, which are otherwise known as rules. This resource allows you " +
+			"to create and manage variables that are available to all rules via Auth0's global configuration object. " +
+			"Used in conjunction with configured rules.",
 		Schema: map[string]*schema.Schema{
 			"key": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Key for a rules configuration variable.",
 			},
 			"value": {
-				Type:      schema.TypeString,
-				Required:  true,
-				Sensitive: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Sensitive:   true,
+				Description: "Value for a rules configuration variable.",
 			},
 		},
 	}

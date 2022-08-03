@@ -12,8 +12,8 @@ resource "auth0_connection" "oauth2" {
     pkce_enabled           = true
     scripts = {
       fetchUserProfile = <<EOF
-        function function(accessToken, ctx, cb) {
-          return callback(new Error("Whoops!"))
+        function function(accessToken, context, callback) {
+          return callback(new Error("Whoops!"));
         }
       EOF
     }

@@ -2,7 +2,7 @@ resource "auth0_action" "action_foo" {
   name   = "Test Trigger Binding Foo"
   code   = <<-EOT
     exports.onContinuePostLogin = async (event, api) => {
-      console.log("foo")
+      console.log("foo");
     };"
 	EOT
   deploy = true

@@ -17,7 +17,7 @@ resource "auth0_action" "action_bar" {
   name   = "Test Trigger Binding Bar"
   code   = <<-EOT
     exports.onContinuePostLogin = async (event, api) => {
-      console.log("bar")
+      console.log("bar");
     };"
 	EOT
   deploy = true

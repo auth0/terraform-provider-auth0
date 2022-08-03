@@ -18,7 +18,7 @@ resource "auth0_connection" "my_connection" {
     disable_signup                 = false
     custom_scripts = {
       get_user = <<EOF
-        function getByEmail (email, callback) {
+        function getByEmail(email, callback) {
           return callback(new Error("Whoops!"))
         }
       EOF

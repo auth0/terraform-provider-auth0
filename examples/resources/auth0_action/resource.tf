@@ -10,7 +10,7 @@ resource "auth0_action" "my_action" {
 	 * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
 	 */
 	 exports.onExecutePostLogin = async (event, api) => {
-		 console.log(event)
+		 console.log(event);
 	 };
 	EOT
 

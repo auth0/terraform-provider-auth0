@@ -49,7 +49,7 @@ func New() *schema.Provider {
 				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_API_TOKEN", nil),
 				ConflictsWith: []string{"client_id", "client_secret"},
 				Description: "Your Auth0 [management api access token]" +
-					"(https://auth0.com/docs/security/tokens/access-tokens/management-api-access-tokens). " +
+					"(https://auth0.com/docs/secure/tokens/access-tokens/management-api-access-tokens). " +
 					"It can also be sourced from the `AUTH0_API_TOKEN` environment variable. " +
 					"It can be used instead of `client_id` + `client_secret`. " +
 					"If both are specified, `api_token` will be used over `client_id` + `client_secret` fields.",

@@ -44,10 +44,12 @@ func newClient() *schema.Resource {
 				Description: "The ID of the client.",
 			},
 			"client_secret": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Sensitive:   true,
-				Description: "Secret for the client. Keep this private.",
+				Type:      schema.TypeString,
+				Computed:  true,
+				Sensitive: true,
+				Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
+					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
+					"empty string.",
 			},
 			"client_secret_rotation_trigger": {
 				Type:     schema.TypeMap,
@@ -596,11 +598,12 @@ func newClient() *schema.Resource {
 				Description: "Initiate login URI, must be https.",
 			},
 			"native_social_login": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Configuration settings to toggle native social login for mobile native applications.",
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Configuration settings to toggle native social login for mobile native applications. " +
+					"Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"apple": {

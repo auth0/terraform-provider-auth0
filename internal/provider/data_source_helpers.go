@@ -51,7 +51,7 @@ func dataSourceSchemaFromResourceSchema(resourceSchema map[string]*schema.Schema
 	return dataSourceSchema
 }
 
-// fixDatasourceSchemaFlags is a convenience func that toggles the Computed,
+// fixDatasourceSchemaFlags is a convenience function that toggles the Computed,
 // Optional + Required flags on a schema element. This is useful when the schema
 // has been generated (using `dataSourceSchemaFromResourceSchema` above for
 // example) and therefore the attribute flags were not set appropriately when

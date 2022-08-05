@@ -11,6 +11,7 @@ func newDataGlobalClient() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readDataGlobalClient,
 		Schema:      newClientSchema(),
+		Description: "Retrieves a tenant's global Auth0 Application client.",
 	}
 }
 

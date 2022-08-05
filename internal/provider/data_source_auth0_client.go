@@ -10,16 +10,22 @@ import (
 )
 
 func newDataClient() *schema.Resource {
-	return &schema.Resource{
+	clientDataSource := &schema.Resource{
 		ReadContext: readDataClient,
 		Schema:      newClientSchema(),
+		Description: "Data source to retrieve a specific Auth0 Application client by 'client_id' or 'name'.",
 	}
+
+	addOptionalFieldsToSchema(clientDataSource.Schema, "name", "client_id")
+	clientDataSource.Schema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
+	clientDataSource.Schema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
+
+	return clientDataSource
 }
 
 func newClientSchema() map[string]*schema.Schema {
-	clientSchema := datasourceSchemaFromResourceSchema(newClient().Schema)
+	clientSchema := dataSourceSchemaFromResourceSchema(newClient().Schema)
 	delete(clientSchema, "client_secret_rotation_trigger")
-	addOptionalFieldsToSchema(clientSchema, "name", "client_id")
 	return clientSchema
 }
 

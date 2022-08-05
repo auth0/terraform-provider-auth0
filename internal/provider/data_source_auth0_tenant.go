@@ -15,14 +15,18 @@ import (
 func newDataTenant() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readDataTenant,
+		Description: "Use this data source to access information about the tenant this provider is configured to access.",
 		Schema: map[string]*schema.Schema{
 			"domain": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Your Auth0 domain name.",
 			},
 			"management_api_identifier": {
 				Type:     schema.TypeString,
 				Computed: true,
+				Description: "The identifier value of the built-in Management API resource server, " +
+					"which can be used as an audience when configuring client grants.",
 			},
 		},
 	}

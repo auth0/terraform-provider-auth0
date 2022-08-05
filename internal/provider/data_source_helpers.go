@@ -4,7 +4,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// dataSourceSchemaFromResourceSchema is a recursive func that converts an existing
+// dataSourceSchemaFromResourceSchema is a recursive function that converts an existing
 // Resource schema to a Datasource schema.
 //
 // All schema properties are copied, but some are ignored or changed:

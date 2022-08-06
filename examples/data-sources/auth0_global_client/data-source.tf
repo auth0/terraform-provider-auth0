@@ -1,3 +1,1 @@
-data "auth0_global_client" "global" {
-
-}
+data "auth0_global_client" "global" {}

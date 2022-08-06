@@ -4,53 +4,56 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// datasourceSchemaFromResourceSchema is a recursive func that
-// converts an existing Resource schema to a Datasource schema.
-// All schema elements are copied, but certain attributes are ignored or changed:
-// - all attributes have Computed = true.
-// - all attributes have ForceNew, Required = false.
-// - Validation funcs and attributes (e.g. MaxItems) are not copied.
-func datasourceSchemaFromResourceSchema(rs map[string]*schema.Schema) map[string]*schema.Schema {
-	ds := make(map[string]*schema.Schema, len(rs))
-	for k, v := range rs {
-		dv := &schema.Schema{
+// dataSourceSchemaFromResourceSchema is a recursive function that converts an existing
+// Resource schema to a Datasource schema.
+//
+// All schema properties are copied, but some are ignored or changed:
+// - All fields have Computed = true.
+// - All fields have ForceNew, Required = false.
+// - Validation and attributes (e.g. MaxItems) are not copied.
+func dataSourceSchemaFromResourceSchema(resourceSchema map[string]*schema.Schema) map[string]*schema.Schema {
+	dataSourceSchema := make(map[string]*schema.Schema, len(resourceSchema))
+
+	for key, definition := range resourceSchema {
+		dataSourceKeyDefinition := &schema.Schema{
 			Computed:    true,
 			ForceNew:    false,
 			Required:    false,
-			Description: v.Description,
-			Type:        v.Type,
+			Description: definition.Description,
+			Type:        definition.Type,
 		}
 
-		switch v.Type {
+		switch definition.Type {
 		case schema.TypeSet:
-			dv.Set = v.Set
+			dataSourceKeyDefinition.Set = definition.Set
 			fallthrough
 		case schema.TypeList:
 			// List & Set types are generally used for 2 cases:
 			// - a list/set of simple primitive values (e.g. list of strings)
 			// - a sub resource
-			if elem, ok := v.Elem.(*schema.Resource); ok {
-				// handle the case where the Element is a sub-resource
-				dv.Elem = &schema.Resource{
-					Schema: datasourceSchemaFromResourceSchema(elem.Schema),
+			if elem, ok := definition.Elem.(*schema.Resource); ok {
+				// Handle the case where the Element is a sub-resource.
+				dataSourceKeyDefinition.Elem = &schema.Resource{
+					Schema: dataSourceSchemaFromResourceSchema(elem.Schema),
 				}
 			} else {
-				// handle simple primitive case
-				dv.Elem = v.Elem
+				// Handle simple primitive case.
+				dataSourceKeyDefinition.Elem = definition.Elem
 			}
-
 		default:
-			// Elem of all other types are copied as-is
-			dv.Elem = v.Elem
+			// Elem of all other types are copied as-is.
+			dataSourceKeyDefinition.Elem = definition.Elem
 		}
-		ds[k] = dv
+
+		dataSourceSchema[key] = dataSourceKeyDefinition
 	}
-	return ds
+
+	return dataSourceSchema
 }
 
-// fixDatasourceSchemaFlags is a convenience func that toggles the Computed,
+// fixDatasourceSchemaFlags is a convenience function that toggles the Computed,
 // Optional + Required flags on a schema element. This is useful when the schema
-// has been generated (using `datasourceSchemaFromResourceSchema` above for
+// has been generated (using `dataSourceSchemaFromResourceSchema` above for
 // example) and therefore the attribute flags were not set appropriately when
 // first added to the schema definition. Currently only supports top-level
 // schema elements.

@@ -1,3 +1,1 @@
-data "auth0_tenant" "my_tenant" {
-
-}
+data "auth0_tenant" "my_tenant" {}

@@ -1,0 +1,82 @@
+---
+page_title: "{{.Type}}: {{.Name}}"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Type}}: {{.Name}}
+
+{{ .Description | trimspace }}
+
+~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allows the
+creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
+
+
+{{ if .HasExample -}}
+
+## Example Usage
+
+### Auth0 Connection
+
+{{ tffile .ExampleFile }}
+
+### Google OAuth2 Connection
+
+~> Your Auth0 account may be pre-configured with a `google-oauth2` connection.
+
+{{ tffile "examples/resources/auth0_connection/resource_with_google_oauth2.tf" }}
+
+### Facebook Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_facebook.tf" }}
+
+### Apple Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_apple.tf" }}
+
+### LinkedIn Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_linkedin.tf" }}
+
+### GitHub Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_github.tf" }}
+
+### SalesForce Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_salesforce.tf" }}
+
+### OAuth2 Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_oauth2.tf" }}
+
+### SMS Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_sms.tf" }}
+
+### Email Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_email.tf" }}
+
+### SAML Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_saml.tf" }}
+
+### WindowsLive Connection
+
+{{ tffile "examples/resources/auth0_connection/resource_with_windowslive.tf" }}
+
+
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+{{ if .HasImport -}}
+
+## Import
+
+Import is supported using the following syntax:
+
+{{ codefile "shell" .ImportFile }}
+
+{{- end }}

@@ -190,13 +190,13 @@ func newClient() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Encryption used for Ws-Fed responses with this client.",
+				Description: "Encryption used for WS-Fed responses with this client.",
 			},
 			"sso": {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Description: "Applies only to SSO clients and determines whether Auth0 will handle " +
-					"Single Sign On (true) or whether the identity provider will (false).",
+					"Single Sign-On (true) or whether the identity provider will (false).",
 			},
 			"sso_disabled": {
 				Type:        schema.TypeBool,
@@ -213,8 +213,8 @@ func newClient() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Description: "URL of the location in your site where the cross-origin verification " +
-					"takes place for the cross-origin auth flow when performing Auth in your own " +
-					"domain instead of Auth0 hosted login page.",
+					"takes place for the cross-origin auth flow when performing authentication in your own " +
+					"domain instead of Auth0 Universal Login page.",
 			},
 			"custom_login_page_on": {
 				Type:        schema.TypeBool,
@@ -522,7 +522,7 @@ func newClient() *schema.Resource {
 				Description: "Metadata associated with the client, in the form of an object with string values " +
 					"(max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are " +
 					"alphanumeric and may only include the following special characters: " +
-					":,-+=_*?\"/\\()<>@ [Tab] [Space]",
+					"`:,-+=_*?\"/\\()<>@ [Tab] [Space]`.",
 			},
 			"mobile": {
 				Type:        schema.TypeList,
@@ -595,7 +595,7 @@ func newClient() *schema.Resource {
 					validation.IsURLWithScheme([]string{"https"}),
 					internalValidation.IsURLWithNoFragment,
 				),
-				Description: "Initiate login URI, must be https.",
+				Description: "Initiate login URI, must be HTTPS.",
 			},
 			"native_social_login": {
 				Type:     schema.TypeList,

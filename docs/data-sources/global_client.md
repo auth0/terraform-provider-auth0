@@ -26,18 +26,18 @@ data "auth0_global_client" "global" {}
 - `app_type` (String) Type of application the client represents.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_id` (String) The ID of the client.
-- `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: :,-+=_*?"/\()<>@ [Tab] [Space]
+- `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false).
-- `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page.
+- `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
 - `custom_login_page_on` (Boolean) Indicates whether a custom login page is to be used.
 - `description` (String) Description of the purpose of the client.
-- `encryption_key` (Map of String) Encryption used for Ws-Fed responses with this client.
+- `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
-- `initiate_login_uri` (String) Initiate login URI, must be https.
+- `initiate_login_uri` (String) Initiate login URI, must be HTTPS.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted.
 - `jwt_configuration` (List of Object) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedatt--jwt_configuration))
@@ -50,7 +50,7 @@ data "auth0_global_client" "global" {}
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
-- `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the identity provider will (false).
+- `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.

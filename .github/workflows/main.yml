@@ -19,6 +19,20 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v3
 
+      - name: Check that files were correctly generated
+        run: |
+          go generate  ./...
+          files=$(git status --porcelain)
+          if [[ -n ${files}  ]]; then
+            >&2 echo "Go generate resulted in changed files:"
+            >&2 echo ""
+            >&2 echo "${files}"
+            >&2 echo ""
+            >&2 echo "Please run \`go generate ./...\` to regenerate code."
+            >&2 git diff
+            exit 1
+          fi
+
       - name: Check for linting errors
         uses: golangci/golangci-lint-action@v3
         with:

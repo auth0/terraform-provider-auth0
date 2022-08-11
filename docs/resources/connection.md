@@ -479,7 +479,7 @@ Optional:
 - `type` (String) Value can be `back_channel` or `front_channel`.
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
-- `use_kerberos` (Boolean) Indicates whether to use kerberos or not.
+- `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
 - `user_id_attribute` (String) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
 - `userinfo_endpoint` (String) User info endpoint.

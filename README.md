@@ -1,48 +1,44 @@
-# Auth0 Terraform Provider
+<h1 align="center">Auth0 Terraform Provider</h1>
+
+<div align="center">
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/auth0/terraform-provider-auth0.svg)](https://pkg.go.dev/github.com/auth0/terraform-provider-auth0)
-[![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
-[![Release](https://img.shields.io/github/v/release/auth0/terraform-provider-auth0?include_prereleases&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/releases)
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fauth0%2Fterraform-provider-auth0%2Fbadge%3Fref%3Dmain&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
-[![Codecov](https://img.shields.io/codecov/c/github/auth0/terraform-provider-auth0?style=flat-square)](https://codecov.io/gh/auth0/terraform-provider-auth0)
+[![Go Report Card](https://goreportcard.com/badge/github.com/auth0/terraform-provider-auth0?style=flat-square)](https://goreportcard.com/report/github.com/auth0/terraform-provider-auth0)
+[![Release](https://img.shields.io/github/v/release/auth0/terraform-provider-auth0?logo=terraform&include_prereleases&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/releases)
+[![Codecov](https://img.shields.io/codecov/c/github/auth0/terraform-provider-auth0?logo=codecov&style=flat-square)](https://codecov.io/gh/auth0/terraform-provider-auth0)
+[![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?logo=fossa&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/auth0/terraform-provider-auth0/Main%20Workflow/main?logo=github&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
+
+The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
+[Terraform](https://www.terraform.io/) tool.
+
+</div>
 
 ---
 
-Terraform Provider for the [Auth0](https://auth0.com/) platform.
+## 📚 Documentation
 
-_Note: This Provider was previously maintained under
-[alexkappa/terraform-provider-auth0](https://github.com/alexkappa/terraform-provider-auth0)._
+- [Quickstart Guide](./docs/guides/quickstart.md)
+- [Official Docs](https://registry.terraform.io/providers/auth0/auth0/latest/docs)
 
--------------------------------------
+## 🎻 Getting Started
 
-## Table of Contents
+### Requirements
 
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [What is Auth0?](#what-is-auth0)
-- [Create a free Auth0 Account](#create-a-free-auth0-account)
-- [Issue Reporting](#issue-reporting)
-- [Author](#author)
-- [License](#license)
+- [Terraform](https://www.terraform.io/downloads)
+- An [Auth0](https://auth0.com) account
 
--------------------------------------
+### Installation
 
-## Installation
+Terraform uses the [Terraform Registry](https://registry.terraform.io/) to download and install providers. To install
+this provider, copy and paste the following code into your Terraform configuration. Then, run `terraform init`.
 
-**Terraform 0.13+**
-
-Terraform 0.13 and higher uses the [Terraform Registry](https://registry.terraform.io/) to download and install
-providers. To install this provider, copy and paste this code into your Terraform configuration.
-Then, run `terraform init`.
-
-```tf
+```terraform
 terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "0.29.0"
+      version = ">= 0.34" # Refer to docs for latest version
     }
   }
 }
@@ -54,77 +50,46 @@ provider "auth0" {}
 $ terraform init
 ```
 
-**Terraform 0.12.x**
+## 👋 Contributing
 
-For older versions of Terraform, binaries are available at the
-[releases](https://github.com/alexkappa/terraform-provider-auth0/releases) page. Download one that corresponds to your
-operating system / architecture, and move it to the `~/.terraform.d/plugins/` directory. Finally, run terraform init.
+Feedback and contributions to this project are welcome! Before you get started, please review the following:
 
-```tf
-provider "auth0" {}
-```
+- [Auth0 Contribution Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md)
+- [Auth0 Contributor Code of Conduct](https://github.com/auth0/open-source-template/blob/master/CODE-OF-CONDUCT.md)
+- [Contribution Guide](CONTRIBUTING.md)
 
-```sh
-$ terraform init
-```
+## 🙇 Support & Feedback
 
-[[table of contents]](#table-of-contents)
+### Raise an Issue
 
-## Documentation
+If you have found a bug or if you have a feature request, please raise an issue on our
+[issue tracker](https://github.com/auth0/terraform-provider-auth0/issues).
 
-See the [Auth0 Provider Documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs) for all the
-available resources.
+### Vulnerability Reporting
 
-## Usage
-
-You can find examples on usage under the [examples](examples) folder.
-
-[[table of contents]](#table-of-contents)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-[[table of contents]](#table-of-contents)
-
-## What is Auth0?
-
-Auth0 helps you to:
-
-- Add authentication with [multiple authentication sources](https://docs.auth0.com/identityproviders), either social like **Google, Facebook, Microsoft Account, LinkedIn, GitHub, Twitter, Box, Salesforce, amont others**, or enterprise identity systems like **Windows Azure AD, Google Apps, Active Directory, ADFS or any SAML Identity Provider**.
-- Add authentication through more traditional **[username/password databases](https://docs.auth0.com/mysql-connection-tutorial)**.
-- Add support for **[linking different user accounts](https://docs.auth0.com/link-accounts)** with the same user.
-- Support for generating signed [Json Web Tokens](https://docs.auth0.com/jwt) to call your APIs and **flow the user identity** securely.
-- Analytics of how, when and where users are logging in.
-- Pull data from other sources and add it to the user profile, through [JavaScript rules](https://docs.auth0.com/rules).
-
-[[table of contents]](#table-of-contents)
-
-## Create a free Auth0 Account
-
-1.  Go to [Auth0](https://auth0.com) and click "Try Auth0 for Free".
-2.  Use Google, GitHub or Microsoft Account to login.
-
-[[table of contents]](#table-of-contents)
-
-## Issue Reporting
-
-If you have found a bug or if you have a feature request, please report them at this repository issues section.
 Please do not report security vulnerabilities on the public GitHub issue tracker.
 The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
 
-[[table of contents]](#table-of-contents)
 
-## Author
+---
 
-[Auth0](https://auth0.com/)
+<div align="center">
 
-[[table of contents]](#table-of-contents)
+<img alt="Auth0 logo and word-mark in black on transparent background" src="https://user-images.githubusercontent.com/28300158/183676042-b9d92893-8fff-408f-9a36-63e77b14be30.png#gh-light-mode-only"  width="20%" height="20%">
 
-## License
+<img alt="Auth0 logo and word-mark in white on transparent background" src="https://user-images.githubusercontent.com/28300158/183676141-bea463f9-af82-40ce-b18c-3a1030183d58.png#gh-dark-mode-only"  width="20%" height="20%">
+
+</div>
+
+<br/>
+
+<div align="center">
+
+Auth0 is an easy to implement, adaptable authentication and authorization platform. To learn more checkout
+[Why Auth0?](https://auth0.com/why-auth0)
 
 This project is licensed under the MPL-2.0 license. See the [LICENSE](LICENSE) file for more info or
 [auth0-terraform-provider.pdf](https://www.okta.com/sites/default/files/2022-03/auth0-terraform-provider.pdf) for a full
 report.
 
-[[table of contents]](#table-of-contents)
+</div>

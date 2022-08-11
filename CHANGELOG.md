@@ -1,13 +1,24 @@
+## 0.35.0
+
+FEATURES:
+
+- `resource/auth0_action`: Throw error when encountering untracked action secrets ([#248](https://github.com/auth0/terraform-provider-auth0/pull/248))
+
+NOTES:
+
+- Reorganized project layout ([#262](https://github.com/auth0/terraform-provider-auth0/pull/262))
+- Updated documentation and examples
+
+
 ## 0.34.0
 
 FEATURES:
 
-- `resource/auth0_prompt`:  Added `webauthn_platform_first_factor` field ([#237](https://github.com/auth0/terraform-provider-auth0/pull/237))
-- `resource/auth0_connection`:  Added `auth_params` for passwordless email connections ([#235](https://github.com/auth0/terraform-provider-auth0/pull/235), [#240](https://github.com/auth0/terraform-provider-auth0/pull/240), [#241](https://github.com/auth0/terraform-provider-auth0/pull/241))
-- `resource/auth0_connection`:  Added support for multiple OAuth2 compatible strategies ([#239](https://github.com/auth0/terraform-provider-auth0/pull/235))
-- `resource/auth0_organization_member`:  Added new resource to manage organization members and their roles ([#256](https://github.com/auth0/terraform-provider-auth0/pull/256))
-- `resource/auth0_organization_connection`:  Added new resource to manage organization connections ([#253](https://github.com/auth0/terraform-provider-auth0/pull/253))
-
+- `resource/auth0_prompt`: Added `webauthn_platform_first_factor` field ([#237](https://github.com/auth0/terraform-provider-auth0/pull/237))
+- `resource/auth0_connection`: Added `auth_params` for passwordless email connections ([#235](https://github.com/auth0/terraform-provider-auth0/pull/235), [#240](https://github.com/auth0/terraform-provider-auth0/pull/240), [#241](https://github.com/auth0/terraform-provider-auth0/pull/241))
+- `resource/auth0_connection`: Added support for multiple OAuth2 compatible strategies ([#239](https://github.com/auth0/terraform-provider-auth0/pull/235))
+- `resource/auth0_organization_member`: Added new resource to manage organization members and their roles ([#256](https://github.com/auth0/terraform-provider-auth0/pull/256))
+- `resource/auth0_organization_connection`: Added new resource to manage organization connections ([#253](https://github.com/auth0/terraform-provider-auth0/pull/253))
 
 BUG FIXES:
 

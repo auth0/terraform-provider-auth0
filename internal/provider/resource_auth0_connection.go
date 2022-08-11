@@ -330,22 +330,23 @@ var connectionSchema = map[string]*schema.Schema{
 				"use_cert_auth": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "",
+					Description: "Indicates whether to use cert auth or not.",
 				},
 				"use_kerberos": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "",
+					Description: "Indicates whether to use Kerberos or not.",
 				},
 				"disable_cache": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "",
+					Description: "Indicates whether to disable the cache or not.",
 				},
 				"name": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "",
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: "The public name of the email or SMS Connection. " +
+						"In most cases this is the same name as the connection name.",
 				},
 				"twilio_sid": {
 					Type:        schema.TypeString,

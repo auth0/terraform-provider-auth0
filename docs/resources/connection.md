@@ -227,6 +227,8 @@ resource "auth0_connection" "oauth2" {
 
 ### SMS Connection
 
+~> To be able to see this in the management dashboard as well, the name of the connection must be set to "sms".
+
 ```terraform
 # This is an example of an SMS connection.
 
@@ -287,6 +289,8 @@ resource "auth0_connection" "sms" {
 ```
 
 ### Email Connection
+
+~> To be able to see this in the management dashboard as well, the name of the connection must be set to "email".
 
 ```terraform
 # This is an example of an Email connection.
@@ -414,7 +418,7 @@ Optional:
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
-- `disable_cache` (Boolean)
+- `disable_cache` (Boolean) Indicates whether to disable the cache or not.
 - `disable_sign_out` (Boolean) When enabled, will disable sign out.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
@@ -440,7 +444,7 @@ Optional:
 - `metadata_url` (String) The URL of the SAML metadata document.
 - `metadata_xml` (String) The XML content for the SAML metadata document.
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
-- `name` (String)
+- `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))
@@ -474,8 +478,8 @@ Optional:
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.
 - `type` (String) Value can be `back_channel` or `front_channel`.
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
-- `use_cert_auth` (Boolean)
-- `use_kerberos` (Boolean)
+- `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
+- `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
 - `user_id_attribute` (String) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
 - `userinfo_endpoint` (String) User info endpoint.

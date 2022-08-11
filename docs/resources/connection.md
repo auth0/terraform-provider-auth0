@@ -444,7 +444,7 @@ Optional:
 - `metadata_url` (String) The URL of the SAML metadata document.
 - `metadata_xml` (String) The XML content for the SAML metadata document.
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
-- `name` (String) The public name of the Email or SMS Connection. In most cases this is the same name as the connection name.
+- `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))

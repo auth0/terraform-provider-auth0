@@ -345,7 +345,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"name": {
 					Type:     schema.TypeString,
 					Optional: true,
-					Description: "The public name of the Email or SMS Connection. " +
+					Description: "The public name of the email or SMS Connection. " +
 						"In most cases this is the same name as the connection name.",
 				},
 				"twilio_sid": {

@@ -335,7 +335,7 @@ var connectionSchema = map[string]*schema.Schema{
 				"use_kerberos": {
 					Type:        schema.TypeBool,
 					Optional:    true,
-					Description: "Indicates whether to use kerberos or not.",
+					Description: "Indicates whether to use Kerberos or not.",
 				},
 				"disable_cache": {
 					Type:        schema.TypeBool,

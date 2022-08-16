@@ -340,10 +340,8 @@ resource "auth0_client" "my_client" {
 `
 
 func TestAccClientInitiateLoginUri(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
-
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: testProviders(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      template.ParseTestName(testAccClientConfigInitiateLoginURIHTTP, t.Name()),
@@ -533,10 +531,8 @@ resource "auth0_client" "my_client" {
 `
 
 func TestAccClientMobileValidationError(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
-
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: testProviders(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      template.ParseTestName(testAccClientConfigMobileUpdateError, t.Name()),

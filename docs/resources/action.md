@@ -81,7 +81,7 @@ resource "auth0_action" "my_action" {
 Required:
 
 - `id` (String) The trigger ID.
-- `version` (String) The trigger version.
+- `version` (String) The trigger version. This regulates which `runtime` versions are supported.
 
 
 <a id="nestedblock--dependencies"></a>

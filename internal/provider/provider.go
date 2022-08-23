@@ -94,6 +94,7 @@ func New() *schema.Provider {
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),
 			"auth0_attack_protection":          newAttackProtection(),
+			"auth0_branding_theme":             newBrandingTheme(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_client":        newDataClient(),

@@ -177,8 +177,6 @@ resource "auth0_branding_theme" "my_theme" {
 `
 
 func TestAccBrandingTheme(t *testing.T) {
-	t.Skip("Not yet implemented.")
-
 	httpRecorder := configureHTTPRecorder(t)
 
 	resource.Test(t, resource.TestCase{

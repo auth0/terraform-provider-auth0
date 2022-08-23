@@ -25,6 +25,13 @@ func New() *schema.Provider {
 				Description: "Your Auth0 domain name. " +
 					"It can also be sourced from the `AUTH0_DOMAIN` environment variable.",
 			},
+			"audience": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("AUTH0_AUDIENCE", nil),
+				Description: "Your Auth0 audience when using a custom domain. " +
+					"It can also be sourced from the `AUTH0_AUDIENCE` environment variable.",
+			},
 			"client_id": {
 				Type:          schema.TypeString,
 				Optional:      true,
@@ -126,16 +133,24 @@ func configureProvider(
 		)
 
 		domain := data.Get("domain").(string)
+		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
 		apiToken := data.Get("api_token").(string)
 
 		authenticationOption := management.WithStaticToken(apiToken)
-		// if api_token is not specified, authenticate with client ID and client secret.
-		// This is safe because of the provider schema.
+		// If api_token is not specified, authenticate with client ID and client secret.
 		if apiToken == "" {
 			authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+
+			if audience != "" {
+				authenticationOption = management.WithClientCredentialsAndAudience(
+					clientID,
+					clientSecret,
+					audience,
+				)
+			}
 		}
 
 		apiClient, err := management.New(domain,

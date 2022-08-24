@@ -55,10 +55,19 @@ func configureTestProvider(
 			clientID := data.Get("client_id").(string)
 			clientSecret := data.Get("client_secret").(string)
 			apiToken := data.Get("api_token").(string)
+			audience := data.Get("audience").(string)
 
 			authenticationOption := management.WithStaticToken(apiToken)
 			if apiToken == "" {
 				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+
+				if audience != "" {
+					authenticationOption = management.WithClientCredentialsAndAudience(
+						clientID,
+						clientSecret,
+						audience,
+					)
+				}
 			}
 
 			apiClient, err = management.New(

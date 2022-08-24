@@ -456,7 +456,7 @@ Optional:
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `request_template` (String) Template that formats the SAML request.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
-- `scopes` (Set of String) Permissions to grant to the connection.
+- `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
 - `set_user_root_attributes` (String) Determines whether the 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes can be independently updated when using an external IdP. Possible values are 'on_each_login' (default value, it configures the connection to automatically update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to only set the root attributes on first login, allowing them to be independently updated thereafter).
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.

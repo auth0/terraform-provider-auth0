@@ -541,11 +541,13 @@ var connectionSchema = map[string]*schema.Schema{
 					Description: "Version 1 is deprecated, use version 2.",
 				},
 				"scopes": {
-					Type:        schema.TypeSet,
-					Computed:    true,
-					Optional:    true,
-					Elem:        &schema.Schema{Type: schema.TypeString},
-					Description: "Permissions to grant to the connection.",
+					Type:     schema.TypeSet,
+					Computed: true,
+					Optional: true,
+					Elem:     &schema.Schema{Type: schema.TypeString},
+					Description: "Permissions to grant to the connection. Within the Auth0 dashboard these appear " +
+						"under the \"Attributes\" and \"Extended Attributes\" sections. Some examples: " +
+						"`basic_profile`, `ext_profile`, `ext_nested_groups`, etc.",
 				},
 				"type": {
 					Type:        schema.TypeString,

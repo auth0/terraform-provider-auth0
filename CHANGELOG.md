@@ -1,3 +1,16 @@
+## 0.36.0
+
+FEATURES:
+
+- `resource/auth0_branding_theme`: Add new resource to manage branding themes ([#292](https://github.com/auth0/terraform-provider-auth0/pull/292))
+- `provider`: Add ability to pass a custom audience when using client credentials flow ([#295](https://github.com/auth0/terraform-provider-auth0/pull/295))
+
+NOTES:
+
+- `auth0_action`: Improve `supported_triggers.version` description ([#287](https://github.com/auth0/terraform-provider-auth0/pull/287))
+- `auth0_connection`: Improve `options.scopes` description ([#297](https://github.com/auth0/terraform-provider-auth0/pull/297))
+
+
 ## 0.35.0
 
 FEATURES:

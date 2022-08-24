@@ -47,7 +47,7 @@ func newAction() *schema.Resource {
 						"version": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "The trigger version.",
+							Description: "The trigger version. This regulates which `runtime` versions are supported.",
 						},
 					},
 				},

@@ -145,7 +145,7 @@ func newBrandingTheme() *schema.Resource {
 						"primary_button": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Primary button",
+							Description: "Primary button.",
 						},
 						"primary_button_label": {
 							Type:        schema.TypeString,

@@ -6,7 +6,7 @@ description: |-
 
 # Resource: auth0_branding_theme
 
-This resource allows you to manage branding themes for your universal login page within your Auth0 tenant.
+This resource allows you to manage branding themes for your Universal Login page within your Auth0 tenant.
 
 ## Example Usage
 

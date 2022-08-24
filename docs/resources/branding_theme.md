@@ -144,7 +144,7 @@ Required:
 - `input_filled_text` (String) Input filled text.
 - `input_labels_placeholders` (String) Input labels & placeholders.
 - `links_focused_components` (String) Links & focused components.
-- `primary_button` (String) Primary button
+- `primary_button` (String) Primary button.
 - `primary_button_label` (String) Primary button label.
 - `secondary_button_border` (String) Secondary button border.
 - `secondary_button_label` (String) Secondary button label.

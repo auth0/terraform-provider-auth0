@@ -4,12 +4,18 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+)
+
+var (
+	errEmptyOrganizationMemberID         = fmt.Errorf("ID cannot be empty")
+	errInvalidOrganizationMemberIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<userID>")
 )
 
 func newOrganizationMember() *schema.Resource {
@@ -20,7 +26,7 @@ func newOrganizationMember() *schema.Resource {
 		UpdateContext: updateOrganizationMember,
 		DeleteContext: deleteOrganizationMember,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: importOrganizationMember,
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -41,6 +47,35 @@ func newOrganizationMember() *schema.Resource {
 			},
 		},
 	}
+}
+
+func importOrganizationMember(
+	_ context.Context,
+	data *schema.ResourceData,
+	_ interface{},
+) ([]*schema.ResourceData, error) {
+	rawID := data.Id()
+	if rawID == "" {
+		return nil, errEmptyOrganizationMemberID
+	}
+
+	if !strings.Contains(rawID, ":") {
+		return nil, errInvalidOrganizationMemberIDFormat
+	}
+
+	idPair := strings.Split(rawID, ":")
+	if len(idPair) != 2 {
+		return nil, errInvalidOrganizationMemberIDFormat
+	}
+
+	result := multierror.Append(
+		data.Set("organization_id", idPair[0]),
+		data.Set("user_id", idPair[1]),
+	)
+
+	data.SetId(resource.UniqueId())
+
+	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }
 
 func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -106,7 +141,7 @@ func removeMemberRoles(orgID string, userID string, roles []interface{}, m inter
 func addMemberRoles(orgID string, userID string, roles []interface{}, m interface{}) error {
 	api := m.(*management.Management)
 
-	rolesToAssign := []string{}
+	var rolesToAssign []string
 	for _, r := range roles {
 		rolesToAssign = append(rolesToAssign, r.(string))
 	}
@@ -133,7 +168,7 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	rolesToSet := []interface{}{}
+	var rolesToSet []interface{}
 	for _, role := range roles.Roles {
 		rolesToSet = append(rolesToSet, role.ID)
 	}

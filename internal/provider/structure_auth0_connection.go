@@ -105,6 +105,7 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 		"custom_scripts":                 options.CustomScripts,
 		"configuration":                  Map(d, "options.0.configuration"), // does not get read back
 		"non_persistent_attrs":           options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":       options.GetSetUserAttributes(),
 	}
 
 	if options.PasswordComplexityOptions != nil {
@@ -649,6 +650,7 @@ func expandConnectionOptionsAuth0(d ResourceData) (*management.ConnectionOptions
 	options := &management.ConnectionOptions{
 		PasswordPolicy:     String(d, "password_policy"),
 		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		SetUserAttributes:  String(d, "set_user_root_attributes"),
 	}
 
 	List(d, "validation").Elem(func(d ResourceData) {

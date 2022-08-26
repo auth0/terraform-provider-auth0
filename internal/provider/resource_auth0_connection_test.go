@@ -96,6 +96,8 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enabled_database_customization", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
 				),
 			},
 		},
@@ -175,7 +177,8 @@ resource "auth0_connection" "my_connection" {
 		password_no_personal_info {
 			enable = true
 		}
-		enabled_database_customization = false
+		enabled_database_customization = true
+		set_user_root_attributes = "on_first_login"
 		brute_force_protection = false
 		import_mode = false
 		disable_signup = false

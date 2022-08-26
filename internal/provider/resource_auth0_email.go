@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -57,21 +57,18 @@ func newEmail() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							ForceNew:    true,
 							Description: "API Key for your email service. Will always be encrypted in our database.",
 						},
 						"access_key_id": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							ForceNew:    true,
 							Description: "AWS Access Key ID. Used only for AWS.",
 						},
 						"secret_access_key": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							ForceNew:    true,
 							Description: "AWS Secret Key. Will always be encrypted in our database. Used only for AWS.",
 						},
 						"region": {
@@ -104,7 +101,6 @@ func newEmail() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							ForceNew:    true,
 							Description: "SMTP password. Used only for SMTP.",
 						},
 					},
@@ -115,59 +111,45 @@ func newEmail() *schema.Resource {
 }
 
 func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := buildEmail(d)
 	api := m.(*management.Management)
+
+	email := expandEmail(d)
 	if err := api.Email.Create(email); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(email.Name))
+	d.SetId(resource.UniqueId())
 
 	return readEmail(ctx, d, m)
 }
 
 func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	email, err := api.Email.Read()
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(email.Name))
-
 	result := multierror.Append(
-		d.Set("name", email.Name),
-		d.Set("enabled", email.Enabled),
-		d.Set("default_from_address", email.DefaultFromAddress),
+		d.Set("name", email.GetName()),
+		d.Set("enabled", email.GetEnabled()),
+		d.Set("default_from_address", email.GetDefaultFromAddress()),
+		d.Set("credentials", flattenCredentials(email.GetCredentials(), d)),
 	)
-
-	if credentials := email.Credentials; credentials != nil {
-		credentialsMap := make(map[string]interface{})
-		credentialsMap["api_user"] = credentials.APIUser
-		credentialsMap["api_key"] = d.Get("credentials.0.api_key")
-		credentialsMap["access_key_id"] = d.Get("credentials.0.access_key_id")
-		credentialsMap["secret_access_key"] = d.Get("credentials.0.secret_access_key")
-		credentialsMap["region"] = credentials.Region
-		credentialsMap["domain"] = credentials.Domain
-		credentialsMap["smtp_host"] = credentials.SMTPHost
-		credentialsMap["smtp_port"] = credentials.SMTPPort
-		credentialsMap["smtp_user"] = credentials.SMTPUser
-		credentialsMap["smtp_pass"] = d.Get("credentials.0.smtp_pass")
-		result = multierror.Append(result, d.Set("credentials", []map[string]interface{}{credentialsMap}))
-	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := buildEmail(d)
 	api := m.(*management.Management)
+
+	email := expandEmail(d)
 	if err := api.Email.Update(email); err != nil {
 		return diag.FromErr(err)
 	}
@@ -177,19 +159,17 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 
 func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Email.Delete(); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
+		return diag.FromErr(err)
 	}
+
+	d.SetId("")
 
 	return nil
 }
 
-func buildEmail(d *schema.ResourceData) *management.Email {
+func expandEmail(d *schema.ResourceData) *management.Email {
 	email := &management.Email{
 		Name:               String(d, "name"),
 		Enabled:            Bool(d, "enabled"),
@@ -212,4 +192,25 @@ func buildEmail(d *schema.ResourceData) *management.Email {
 	})
 
 	return email
+}
+
+func flattenCredentials(credentials *management.EmailCredentials, d *schema.ResourceData) []interface{} {
+	if credentials == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{
+		"api_user":          credentials.GetAPIUser(),
+		"api_key":           d.Get("credentials.0.api_key").(string),
+		"access_key_id":     d.Get("credentials.0.access_key_id").(string),
+		"secret_access_key": d.Get("credentials.0.secret_access_key").(string),
+		"region":            credentials.GetRegion(),
+		"domain":            credentials.GetDomain(),
+		"smtp_host":         credentials.GetSMTPHost(),
+		"smtp_port":         credentials.GetSMTPPort(),
+		"smtp_user":         credentials.GetSMTPUser(),
+		"smtp_pass":         d.Get("credentials.0.smtp_pass").(string),
+	}
+
+	return []interface{}{m}
 }

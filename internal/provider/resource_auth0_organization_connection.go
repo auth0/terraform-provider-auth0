@@ -2,13 +2,20 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+)
+
+var (
+	errEmptyOrganizationConnectionID         = fmt.Errorf("ID cannot be empty")
+	errInvalidOrganizationConnectionIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<connectionID>")
 )
 
 func newOrganizationConnection() *schema.Resource {
@@ -19,7 +26,7 @@ func newOrganizationConnection() *schema.Resource {
 		UpdateContext: updateOrganizationConnection,
 		DeleteContext: deleteOrganizationConnection,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: importOrganizationConnection,
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -52,6 +59,35 @@ func newOrganizationConnection() *schema.Resource {
 			},
 		},
 	}
+}
+
+func importOrganizationConnection(
+	_ context.Context,
+	data *schema.ResourceData,
+	_ interface{},
+) ([]*schema.ResourceData, error) {
+	rawID := data.Id()
+	if rawID == "" {
+		return nil, errEmptyOrganizationConnectionID
+	}
+
+	if !strings.Contains(rawID, ":") {
+		return nil, errInvalidOrganizationConnectionIDFormat
+	}
+
+	idPair := strings.Split(rawID, ":")
+	if len(idPair) != 2 {
+		return nil, errInvalidOrganizationConnectionIDFormat
+	}
+
+	result := multierror.Append(
+		data.Set("organization_id", idPair[0]),
+		data.Set("connection_id", idPair[1]),
+	)
+
+	data.SetId(resource.UniqueId())
+
+	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

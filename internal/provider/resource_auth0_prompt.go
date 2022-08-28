@@ -2,9 +2,7 @@ package provider
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -55,29 +53,25 @@ func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	prompt, err := api.Prompt.Read()
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
 		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
-		d.Set("identifier_first", prompt.IdentifierFirst),
-		d.Set("webauthn_platform_first_factor", prompt.WebAuthnPlatformFirstFactor),
+		d.Set("identifier_first", prompt.GetIdentifierFirst()),
+		d.Set("webauthn_platform_first_factor", prompt.GetWebAuthnPlatformFirstFactor()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	prompt := buildPrompt(d)
 	api := m.(*management.Management)
+
+	prompt := expandPrompt(d)
 	if err := api.Prompt.Update(prompt); err != nil {
 		return diag.FromErr(err)
 	}
@@ -90,9 +84,9 @@ func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return nil
 }
 
-func buildPrompt(d *schema.ResourceData) *management.Prompt {
+func expandPrompt(d *schema.ResourceData) *management.Prompt {
 	return &management.Prompt{
-		UniversalLoginExperience:    auth0.StringValue(String(d, "universal_login_experience")),
+		UniversalLoginExperience:    d.Get("universal_login_experience").(string),
 		IdentifierFirst:             Bool(d, "identifier_first"),
 		WebAuthnPlatformFirstFactor: Bool(d, "webauthn_platform_first_factor"),
 	}

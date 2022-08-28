@@ -1,136 +1,212 @@
 ---
 version: 1
 interactions:
-- request:
-    body: |
-      {"universal_login_experience":"classic","identifier_first":false}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: PATCH
-  response:
-    body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: GET
-  response:
-    body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: GET
-  response:
-    body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: GET
-  response:
-    body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      {"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: PATCH
-  response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: GET
-  response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.6.3
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
-    method: GET
-  response:
-    body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":true}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
+    - request:
+        body: |
+            {"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: PATCH
+      response:
+        body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"classic","identifier_first":false,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            {"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: PATCH
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":true,"webauthn_platform_first_factor":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            {"universal_login_experience":"new","identifier_first":false,"webauthn_platform_first_factor":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: PATCH
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":false,"webauthn_platform_first_factor":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":false,"webauthn_platform_first_factor":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - request:
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/prompts
+        method: GET
+      response:
+        body: '{"universal_login_experience":"new","identifier_first":false,"webauthn_platform_first_factor":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms

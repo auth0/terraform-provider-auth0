@@ -103,7 +103,7 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 		"disable_signup":                 options.GetDisableSignup(),
 		"requires_username":              options.GetRequiresUsername(),
 		"custom_scripts":                 options.CustomScripts,
-		"configuration":                  Map(d, "options.0.configuration"), // does not get read back
+		"configuration":                  Map(d, "options.0.configuration"), // Values do not get read back.
 		"non_persistent_attrs":           options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":       options.GetSetUserAttributes(),
 	}
@@ -139,7 +139,35 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 	}
 	m["upstream_params"] = upstreamParams
 
-	return m, nil
+	diags := checkForUnmanagedConfigurationSecrets(
+		Map(d, "options.0.configuration"),
+		options.Configuration,
+	)
+
+	return m, diags
+}
+
+// checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.
+func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[string]interface{}) diag.Diagnostics {
+	var warnings diag.Diagnostics
+
+	for key := range configFromAPI {
+		if _, ok := configFromTF[key]; !ok {
+			warnings = append(warnings, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Unmanaged Configuration Secret",
+				Detail: fmt.Sprintf("Detected a configuration secret not managed though terraform: %q. "+
+					"If you proceed, this configuration secret will get deleted. It is required to "+
+					"add this configuration secret to your custom database settings to "+
+					"prevent unintentionally destructive results.",
+					key,
+				),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.configuration"}},
+			})
+		}
+	}
+
+	return warnings
 }
 
 func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) (interface{}, diag.Diagnostics) {

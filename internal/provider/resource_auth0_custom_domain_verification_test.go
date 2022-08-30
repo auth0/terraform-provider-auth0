@@ -1,13 +1,20 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
 func TestAccCustomDomainVerificationWithAuth0ManagedCerts(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+		t.Skip()
+	}
+
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -58,7 +65,11 @@ resource "auth0_custom_domain_verification" "my_custom_domain_verification" {
 `
 
 func TestAccCustomDomainVerificationWithSelfManagedCerts(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+		t.Skip()
+	}
+
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

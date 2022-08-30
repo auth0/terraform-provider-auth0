@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -58,7 +59,7 @@ func init() {
 }
 
 func TestAccConnection(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -198,7 +199,7 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestAccConnectionAD(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -251,7 +252,7 @@ resource "auth0_connection" "ad" {
 `
 
 func TestAccConnectionAzureAD(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -317,7 +318,7 @@ resource "auth0_connection" "azure_ad" {
 `
 
 func TestAccConnectionOIDC(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -434,7 +435,7 @@ resource "auth0_connection" "oidc" {
 `
 
 func TestAccConnectionOAuth2(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -527,7 +528,7 @@ resource "auth0_connection" "oauth2" {
 `
 
 func TestAccConnectionWithEnabledClients(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -586,7 +587,7 @@ resource "auth0_connection" "my_connection" {
 `
 
 func TestAccConnectionSMS(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -637,7 +638,7 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionCustomSMS(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -699,7 +700,7 @@ resource "auth0_connection" "sms" {
 `
 
 func TestAccConnectionEmail(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -817,7 +818,7 @@ resource "auth0_connection" "email" {
 `
 
 func TestAccConnectionSalesforce(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -854,7 +855,7 @@ resource "auth0_connection" "salesforce_community" {
 `
 
 func TestAccConnectionGoogleOAuth2(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -901,7 +902,7 @@ resource "auth0_connection" "google_oauth2" {
 `
 
 func TestAccConnectionGoogleApps(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -954,7 +955,7 @@ resource "auth0_connection" "google_apps" {
 `
 
 func TestAccConnectionFacebook(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1021,7 +1022,7 @@ resource "auth0_connection" "facebook" {
 `
 
 func TestAccConnectionApple(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1095,7 +1096,7 @@ resource "auth0_connection" "apple" {
 `
 
 func TestAccConnectionLinkedin(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1162,7 +1163,7 @@ resource "auth0_connection" "linkedin" {
 `
 
 func TestAccConnectionGitHub(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1223,7 +1224,7 @@ resource "auth0_connection" "github" {
 `
 
 func TestAccConnectionWindowslive(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1293,7 +1294,7 @@ resource "auth0_connection" "windowslive" {
 `
 
 func TestAccConnectionConfiguration(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1467,7 +1468,7 @@ func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
 }
 
 func TestAccConnectionSAML(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -1645,7 +1646,7 @@ EOF
 `
 
 func TestAccConnectionTwitter(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

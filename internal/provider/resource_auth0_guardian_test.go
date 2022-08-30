@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
 const testAccGuardianEmailCreate = `
@@ -49,7 +51,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardian(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -202,7 +204,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianPhone(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -322,7 +324,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianWebAuthnRoaming(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -388,7 +390,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianWebAuthnPlatform(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -443,7 +445,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianDUO(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -532,7 +534,7 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianPush(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

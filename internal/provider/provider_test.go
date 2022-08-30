@@ -10,11 +10,12 @@ import (
 	"testing"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/dnaeon/go-vcr/v2/recorder"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
 func testProviders(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
@@ -36,9 +37,9 @@ func configureTestProvider(
 		domain := data.Get("domain").(string)
 		debug := data.Get("debug").(bool)
 
-		testClient := &http.Client{}
+		testClient := http.DefaultClient
 		if httpRecorder != nil {
-			testClient.Transport = httpRecorder
+			testClient = httpRecorder.GetDefaultClient()
 		}
 
 		apiClient, err := management.New(
@@ -51,7 +52,7 @@ func configureTestProvider(
 			return nil, diag.FromErr(err)
 		}
 
-		if domain != recordingsDomain {
+		if domain != recorder.RecordingsDomain {
 			clientID := data.Get("client_id").(string)
 			clientSecret := data.Get("client_secret").(string)
 			apiToken := data.Get("api_token").(string)

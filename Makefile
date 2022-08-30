@@ -102,7 +102,7 @@ test-acc-e2e: ## Run acceptance tests end to end
 
 test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
-	@go test ./auth0 -v -sweep="phony" $(SWEEPARGS)
+	@go test ./internal/provider -v -sweep="phony" $(SWEEPARGS)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helpers

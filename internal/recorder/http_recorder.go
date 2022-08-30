@@ -58,39 +58,22 @@ func New(t *testing.T) *Recorder {
 }
 
 func removeSensitiveDataFromRecordings(t *testing.T, recorderTransport *recorder.Recorder) {
-	requestHeaders := []string{"Authorization"}
-	responseHeaders := []string{
-		"Alt-Svc",
-		"Cache-Control",
-		"Cf-Cache-Status",
-		"Cf-Ray",
-		"Date",
-		"Expect-Ct",
-		"Link",
-		"Ot-Baggage-Auth0",
-		"Ot-Baggage-Auth0-Request-Id",
-		"Ot-Tracer-Sampled",
-		"Ot-Tracer-Spanid",
-		"Ot-Tracer-Traceid",
-		"Server",
-		"Set-Cookie",
-		"Strict-Transport-Security",
-		"Traceparent",
-		"Tracestate",
-		"Vary",
-		"X-Content-Type-Options",
-		"X-Ratelimit-Limit",
-		"X-Ratelimit-Remaining",
-		"X-Ratelimit-Reset",
+	allowedHeaders := map[string]bool{
+		"Content-Type": true,
+		"User-Agent":   true,
 	}
 
 	recorderTransport.AddHook(
 		func(i *cassette.Interaction) error {
-			for _, header := range requestHeaders {
-				delete(i.Request.Headers, header)
+			for header := range i.Request.Headers {
+				if _, ok := allowedHeaders[header]; !ok {
+					delete(i.Request.Headers, header)
+				}
 			}
-			for _, header := range responseHeaders {
-				delete(i.Response.Headers, header)
+			for header := range i.Response.Headers {
+				if _, ok := allowedHeaders[header]; !ok {
+					delete(i.Response.Headers, header)
+				}
 			}
 
 			domain := os.Getenv("AUTH0_DOMAIN")

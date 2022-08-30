@@ -1,3 +1,24 @@
+## 0.37.0
+
+FEATURES:
+
+- `resource/auth0_connection`: Prevented erasing `options.configuration` by mistake ([#307](https://github.com/auth0/terraform-provider-auth0/pull/307))
+
+BUG FIXES:
+
+- `resource/auth0_organization_connection`: Fixed issue with importing ([#301](https://github.com/auth0/terraform-provider-auth0/pull/301))
+- `resource/auth0_organization_member`: Fixed issue with importing ([#302](https://github.com/auth0/terraform-provider-auth0/pull/302))
+- `resource/auth0_connection`: Added missing field `set_user_root_attributes` to the auth0 connection ([#303](https://github.com/auth0/terraform-provider-auth0/pull/303))
+- `data-source/auth0_client`: Fixed search by name through all available clients ([#306](https://github.com/auth0/terraform-provider-auth0/pull/306))
+- `resource/auth0_email`: Refactored and removed `ForceNew` on secret fields ([#304](https://github.com/auth0/terraform-provider-auth0/pull/304))
+
+NOTES:
+
+- `resource/auth0_prompt`: Refactored and added additional test cases ([#305](https://github.com/auth0/terraform-provider-auth0/pull/305))
+- Upgraded test recordings to go-vcr v3 ([#309](https://github.com/auth0/terraform-provider-auth0/pull/309))
+- Removed unnecessary `MapData` struct from resource data helpers ([#310](https://github.com/auth0/terraform-provider-auth0/pull/310))
+
+
 ## 0.36.0
 
 FEATURES:

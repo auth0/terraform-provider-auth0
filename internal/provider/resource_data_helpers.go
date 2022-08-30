@@ -1,7 +1,6 @@
 package provider
 
 import (
-	"reflect"
 	"strconv"
 
 	"github.com/auth0/go-auth0"
@@ -99,67 +98,6 @@ func (d *resourceData) Set(key string, value interface{}) error {
 	return d.ResourceData.Set(d.prefix+"."+key, value)
 }
 
-// MapData wraps a map satisfying the Data interface, so it can be used in the
-// accessor methods defined below.
-type MapData map[string]interface{}
-
-// IsNewResource reports whether the resource is seen for the first time.
-func (md MapData) IsNewResource() bool {
-	return false
-}
-
-// HasChange reports whether the given key has been changed.
-func (md MapData) HasChange(key string) bool {
-	_, ok := md[key]
-	return ok
-}
-
-// GetChange returns the old and new value for a given key.
-func (md MapData) GetChange(key string) (interface{}, interface{}) {
-	return md[key], md[key]
-}
-
-// Get returns the data for the given key, or nil
-// if the key doesn't exist in the schema.
-func (md MapData) Get(key string) interface{} {
-	return md[key]
-}
-
-// GetOk returns the data for the given key and whether the
-// key has been set to a non-zero value at some point.
-func (md MapData) GetOk(key string) (interface{}, bool) {
-	v, ok := md[key]
-	return v, ok && !isNil(v) && !isZero(v)
-}
-
-// GetOkExists can check if TypeBool attributes that are
-// Optional with no Default value have been set.
-func (md MapData) GetOkExists(key string) (interface{}, bool) {
-	v, ok := md[key]
-	return v, ok && !isNil(v)
-}
-
-// Set sets the value for the given key.
-func (md MapData) Set(key string, value interface{}) error {
-	if !isNil(value) {
-		md[key] = value
-	}
-	return nil
-}
-
-func isNil(v interface{}) bool {
-	rv := reflect.ValueOf(v)
-	switch rv.Kind() {
-	case reflect.Ptr, reflect.Slice, reflect.Map:
-		return rv.IsNil()
-	}
-	return v == nil
-}
-
-func isZero(v interface{}) bool {
-	return reflect.DeepEqual(v, reflect.Zero(reflect.TypeOf(v)).Interface())
-}
-
 var _ ResourceData = (*schema.ResourceData)(nil)
 
 // Condition is a function that checks whether a condition holds true for a
@@ -201,19 +139,6 @@ func Any(conditions ...Condition) Condition {
 			}
 		}
 		return len(conditions) == 0
-	}
-}
-
-// All is a condition that evaluates to true if all of its child conditions
-// evaluate to true.
-func All(conditions ...Condition) Condition {
-	return func(d ResourceData, key string) bool {
-		for _, condition := range conditions {
-			if !condition.Eval(d, key) {
-				return false
-			}
-		}
-		return true
 	}
 }
 

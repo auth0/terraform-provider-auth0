@@ -714,16 +714,15 @@ func newClient() *schema.Resource {
 }
 
 func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	client, err := expandClient(d)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
 	api := m.(*management.Management)
+
+	client := expandClient(d)
 	if err := api.Client.Create(client); err != nil {
 		return diag.FromErr(err)
 	}
+
 	d.SetId(auth0.StringValue(client.ClientID))
+
 	return readClient(ctx, d, m)
 }
 
@@ -781,12 +780,9 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	client, err := expandClient(d)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
 	api := m.(*management.Management)
+
+	client := expandClient(d)
 	if clientHasChange(client) {
 		if err := api.Client.Update(d.Id(), client); err != nil {
 			return diag.FromErr(err)
@@ -816,7 +812,7 @@ func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return nil
 }
 
-func expandClient(d *schema.ResourceData) (*management.Client, error) {
+func expandClient(d *schema.ResourceData) *management.Client {
 	client := &management.Client{
 		Name:                           String(d, "name"),
 		Description:                    String(d, "description"),
@@ -872,49 +868,46 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 		}
 	}
 
-	var result *multierror.Error
 	List(d, "addons").Elem(func(d ResourceData) {
 		client.Addons = make(map[string]interface{})
 
-		for _, name := range []string{
+		var allowedAddons = []string{
 			"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
 			"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
 			"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
 			"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
 			"springcm", "wams", "wsfed", "zendesk", "zoom",
-		} {
+		}
+
+		for _, name := range allowedAddons {
 			if _, ok := d.GetOk(name); ok {
 				client.Addons[name] = mapFromState(Map(d, name))
 			}
 		}
 
 		List(d, "samlp").Elem(func(d ResourceData) {
-			m := make(MapData)
-
-			result = multierror.Append(
-				m.Set("audience", String(d, "audience")),
-				m.Set("authnContextClassRef", String(d, "authn_context_class_ref")),
-				m.Set("binding", String(d, "binding")),
-				m.Set("signingCert", String(d, "signing_cert")),
-				m.Set("createUpnClaim", Bool(d, "create_upn_claim")),
-				m.Set("destination", String(d, "destination")),
-				m.Set("digestAlgorithm", String(d, "digest_algorithm")),
-				m.Set("includeAttributeNameFormat", Bool(d, "include_attribute_name_format")),
-				m.Set("lifetimeInSeconds", Int(d, "lifetime_in_seconds")),
-				m.Set("mapIdentities", Bool(d, "map_identities")),
-				m.Set("mappings", Map(d, "mappings")),
-				m.Set("mapUnknownClaimsAsIs", Bool(d, "map_unknown_claims_as_is")),
-				m.Set("nameIdentifierFormat", String(d, "name_identifier_format")),
-				m.Set("nameIdentifierProbes", Slice(d, "name_identifier_probes")),
-				m.Set("passthroughClaimsWithNoMapping", Bool(d, "passthrough_claims_with_no_mapping")),
-				m.Set("recipient", String(d, "recipient")),
-				m.Set("signatureAlgorithm", String(d, "signature_algorithm")),
-				m.Set("signResponse", Bool(d, "sign_response")),
-				m.Set("typedAttributes", Bool(d, "typed_attributes")),
-				m.Set("logout", mapFromState(Map(d, "logout"))),
-			)
-
-			client.Addons["samlp"] = m
+			client.Addons["samlp"] = map[string]interface{}{
+				"audience":                       String(d, "audience"),
+				"authnContextClassRef":           String(d, "authn_context_class_ref"),
+				"binding":                        String(d, "binding"),
+				"signingCert":                    String(d, "signing_cert"),
+				"createUpnClaim":                 Bool(d, "create_upn_claim"),
+				"destination":                    String(d, "destination"),
+				"digestAlgorithm":                String(d, "digest_algorithm"),
+				"includeAttributeNameFormat":     Bool(d, "include_attribute_name_format"),
+				"lifetimeInSeconds":              Int(d, "lifetime_in_seconds"),
+				"mapIdentities":                  Bool(d, "map_identities"),
+				"mappings":                       Map(d, "mappings"),
+				"mapUnknownClaimsAsIs":           Bool(d, "map_unknown_claims_as_is"),
+				"nameIdentifierFormat":           String(d, "name_identifier_format"),
+				"nameIdentifierProbes":           Slice(d, "name_identifier_probes"),
+				"passthroughClaimsWithNoMapping": Bool(d, "passthrough_claims_with_no_mapping"),
+				"recipient":                      String(d, "recipient"),
+				"signatureAlgorithm":             String(d, "signature_algorithm"),
+				"signResponse":                   Bool(d, "sign_response"),
+				"typedAttributes":                Bool(d, "typed_attributes"),
+				"logout":                         mapFromState(Map(d, "logout")),
+			}
 		})
 	})
 
@@ -929,17 +922,15 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 		client.NativeSocialLogin = &management.ClientNativeSocialLogin{}
 
 		List(d, "apple").Elem(func(d ResourceData) {
-			m := make(MapData)
-			result = multierror.Append(result, m.Set("enabled", Bool(d, "enabled")))
-
-			client.NativeSocialLogin.Apple = m
+			client.NativeSocialLogin.Apple = map[string]interface{}{
+				"enabled": Bool(d, "enabled"),
+			}
 		})
 
 		List(d, "facebook").Elem(func(d ResourceData) {
-			m := make(MapData)
-			result = multierror.Append(result, m.Set("enabled", Bool(d, "enabled")))
-
-			client.NativeSocialLogin.Facebook = m
+			client.NativeSocialLogin.Facebook = map[string]interface{}{
+				"enabled": Bool(d, "enabled"),
+			}
 		})
 	})
 
@@ -947,30 +938,21 @@ func expandClient(d *schema.ResourceData) (*management.Client, error) {
 		client.Mobile = make(map[string]interface{})
 
 		List(d, "android").Elem(func(d ResourceData) {
-			m := make(MapData)
-			result = multierror.Append(
-				result,
-				m.Set("app_package_name", String(d, "app_package_name")),
-				m.Set("sha256_cert_fingerprints", Slice(d, "sha256_cert_fingerprints")),
-			)
-
-			client.Mobile["android"] = m
+			client.Mobile["android"] = map[string]interface{}{
+				"app_package_name":         String(d, "app_package_name"),
+				"sha256_cert_fingerprints": Slice(d, "sha256_cert_fingerprints"),
+			}
 		})
 
 		List(d, "ios").Elem(func(d ResourceData) {
-			m := make(MapData)
-
-			result = multierror.Append(
-				result,
-				m.Set("team_id", String(d, "team_id")),
-				m.Set("app_bundle_identifier", String(d, "app_bundle_identifier")),
-			)
-
-			client.Mobile["ios"] = m
+			client.Mobile["ios"] = map[string]interface{}{
+				"team_id":               String(d, "team_id"),
+				"app_bundle_identifier": String(d, "app_bundle_identifier"),
+			}
 		})
 	})
 
-	return client, result.ErrorOrNil()
+	return client
 }
 
 func mapFromState(input map[string]interface{}) map[string]interface{} {

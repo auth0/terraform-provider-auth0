@@ -237,7 +237,7 @@ var connectionSchema = map[string]*schema.Schema{
 				},
 				"configuration": {
 					Type:      schema.TypeMap,
-					Elem:      &schema.Schema{Type: schema.TypeString},
+					Elem:      schema.TypeString,
 					Sensitive: true,
 					Optional:  true,
 					Description: "A case-sensitive map of key value pairs used as configuration variables " +

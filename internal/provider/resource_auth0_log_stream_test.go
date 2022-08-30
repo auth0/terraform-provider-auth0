@@ -3,6 +3,7 @@ package provider
 import (
 	"fmt"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 	"testing"
@@ -10,6 +11,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -47,7 +49,7 @@ func init() {
 }
 
 func TestAccLogStreamHTTP(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -194,7 +196,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamEventBridge(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -265,9 +267,11 @@ resource "auth0_log_stream" "my_log_stream" {
 // This test fails it subscription key is not valid, or EventGrid
 // Resource Provider is not registered in the subscription.
 func TestAccLogStreamEventGrid(t *testing.T) {
-	t.Skip("this test requires an active subscription")
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+		t.Skip()
+	}
 
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -288,7 +292,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-azure-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventgrid"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_subscription_id", "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_region", "northeurope"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_region", "westeurope"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.azure_resource_group", "azure-logs-rg"),
 				),
 			},
@@ -347,7 +351,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamDatadog(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -415,7 +419,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamSplunk(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -472,7 +476,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamSumo(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

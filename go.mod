@@ -4,12 +4,12 @@ go 1.18
 
 require (
 	github.com/auth0/go-auth0 v0.10.0
-	github.com/dnaeon/go-vcr/v2 v2.1.0
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/terraform-plugin-docs v0.13.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.21.0
 	github.com/stretchr/testify v1.8.0
+	gopkg.in/dnaeon/go-vcr.v3 v3.1.0
 )
 
 require (

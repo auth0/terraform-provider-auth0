@@ -1,81 +1,182 @@
 ---
-version: 1
+version: 2
 interactions:
-- request:
-    body: |
-      {"name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16"}
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
-    method: POST
-  response:
-    body: '{"id":"a9074e14-5a9f-4ef9-9b9b-035abeac18e4","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-07-18T16:16:20.085202535Z","updated_at":"2022-07-18T16:16:20.095334339Z","code":"exports.onContinuePostLogin
-      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 201 Created
-    code: 201
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a9074e14-5a9f-4ef9-9b9b-035abeac18e4
-    method: GET
-  response:
-    body: '{"id":"a9074e14-5a9f-4ef9-9b9b-035abeac18e4","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-07-18T16:16:20.085202535Z","updated_at":"2022-07-18T16:16:20.095334339Z","code":"exports.onContinuePostLogin
-      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"building","secrets":[],"all_changes_deployed":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: |
-      null
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a9074e14-5a9f-4ef9-9b9b-035abeac18e4
-    method: GET
-  response:
-    body: '{"id":"a9074e14-5a9f-4ef9-9b9b-035abeac18e4","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-07-18T16:16:20.085202535Z","updated_at":"2022-07-18T16:16:20.095334339Z","code":"exports.onContinuePostLogin
-      = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"failed","secrets":[],"all_changes_deployed":false}'
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 200 OK
-    code: 200
-    duration: 1ms
-- request:
-    body: ""
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-      User-Agent:
-      - Go-Auth0-SDK/0.9.2
-    url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a9074e14-5a9f-4ef9-9b9b-035abeac18e4
-    method: DELETE
-  response:
-    body: ""
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-    status: 204 No Content
-    code: 204
-    duration: 1ms
+  - id: 0
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 278
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16"}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"a0d81042-7ed3-4e78-b647-438ffe45ecfe","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-08-30T08:56:49.272839364Z","updated_at":"2022-08-30T08:56:49.286750680Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a0d81042-7ed3-4e78-b647-438ffe45ecfe
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"a0d81042-7ed3-4e78-b647-438ffe45ecfe","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-08-30T08:56:49.272839364Z","updated_at":"2022-08-30T08:56:49.286750680Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"building","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 2
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a0d81042-7ed3-4e78-b647-438ffe45ecfe
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"a0d81042-7ed3-4e78-b647-438ffe45ecfe","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-08-30T08:56:49.272839364Z","updated_at":"2022-08-30T08:56:49.286750680Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"building","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a0d81042-7ed3-4e78-b647-438ffe45ecfe
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"a0d81042-7ed3-4e78-b647-438ffe45ecfe","name":"Test Action TestAccAction_FailedBuild","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2022-08-30T08:56:49.272839364Z","updated_at":"2022-08-30T08:56:49.286750680Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n","dependencies":[{"name":"crypto","version":"17.7.1"}],"runtime":"node16","status":"failed","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 4
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a0d81042-7ed3-4e78-b647-438ffe45ecfe
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms

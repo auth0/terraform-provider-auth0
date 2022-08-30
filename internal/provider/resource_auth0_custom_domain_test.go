@@ -3,12 +3,14 @@ package provider
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -46,7 +48,11 @@ func init() {
 }
 
 func TestAccCustomDomain(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+		t.Skip()
+	}
+
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

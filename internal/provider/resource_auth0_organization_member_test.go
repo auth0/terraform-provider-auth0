@@ -10,11 +10,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccOrganizationMember(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	testName := strings.ToLower(t.Name())
 
@@ -113,6 +114,7 @@ resource auth0_role admin {
 }
 
 resource auth0_user user {
+	username = "testusername"
 	email = "{{.testName}}@auth0.com"
 	connection_name = "Username-Password-Authentication"
 	email_verified = true

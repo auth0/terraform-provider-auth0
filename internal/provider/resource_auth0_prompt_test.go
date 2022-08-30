@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
 const testAccPromptCreate = `
@@ -31,7 +33,7 @@ resource "auth0_prompt" "prompt" {
 `
 
 func TestAccPrompt(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

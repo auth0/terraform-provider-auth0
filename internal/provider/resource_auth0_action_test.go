@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/stretchr/testify/assert"
 
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -84,7 +85,7 @@ resource auth0_action my_action {
 `
 
 func TestAccAction(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -149,7 +150,7 @@ func TestAccAction(t *testing.T) {
 }
 
 func TestAccAction_FailedBuild(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

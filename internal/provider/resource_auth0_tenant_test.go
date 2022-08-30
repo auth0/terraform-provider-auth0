@@ -5,10 +5,12 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
 func TestAccTenant(t *testing.T) {
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -168,13 +170,13 @@ resource "auth0_tenant" "my_tenant" {
 `
 
 func TestAccTenantDefaults(t *testing.T) {
-	if os.Getenv("AUTH0_DOMAIN") != recordingsDomain {
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
 		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant
 		// and this test will only pass when the tenant has not been configured yet (aka "fresh" tenants).
 		t.Skip()
 	}
 
-	httpRecorder := configureHTTPRecorder(t)
+	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),

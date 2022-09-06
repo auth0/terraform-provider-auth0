@@ -42,8 +42,8 @@ terraform {
 ## Running tests
 
 To run the tests use the `make test` command. This will make use of the pre-recorded http interactions found in the
-[recordings](./auth0/testdata/recordings) folder. To add new recordings run the tests against an Auth0 tenant
-individually using the following env var `AUTH0_HTTP_RECORDINGS=on`.
+[recordings](./test/data/recordings) folder. To add new recordings run the tests against an Auth0 tenant
+individually using the following env vars `AUTH0_HTTP_RECORDINGS=on TF_ACC=true`.
 
 To run the tests against an Auth0 tenant, use the `make test-acc-e2e` command. Start by creating an
 [M2M app](https://auth0.com/docs/applications/set-up-an-application/register-machine-to-machine-applications) in the
@@ -68,9 +68,10 @@ require a paid Auth0 subscription to be able to run successfully, e.g. `TestAccC
 
 ## Documentation
 
-To make it easier to document new resources a handy script is available. The script can output documentation of a
-resource in Markdown format, using the schema of the resource itself.
+The documentation found in the [docs](./docs) folder is generated using
+[terraform-plugin-docs](https://github.com/hashicorp/terraform-plugin-docs). Please run `make docs` to regenerate
+documentation for newly added resources or schema attributes.
 
 ```sh
-go run scripts/gendocs.go -resource auth0_action
+make docs
 ```

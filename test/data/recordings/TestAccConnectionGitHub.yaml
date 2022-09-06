@@ -1,0 +1,146 @@
+---
+version: 2
+interactions:
+  - id: 0
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 604
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","strategy":"github","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"con_bwAeHiZw0hraDq4R","options":{"client_id":"client-id","client_secret":"client-secret","email":true,"read_user":true,"follow":true,"public_repo":true,"repo":true,"repo_deployment":true,"repo_status":true,"delete_repo":true,"notifications":true,"gist":true,"read_repo_hook":true,"write_repo_hook":true,"admin_repo_hook":true,"read_org":true,"admin_org":true,"read_public_key":true,"write_public_key":true,"admin_public_key":true,"write_org":true,"profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"]},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bwAeHiZw0hraDq4R
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_bwAeHiZw0hraDq4R","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 2
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bwAeHiZw0hraDq4R
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_bwAeHiZw0hraDq4R","options":{"gist":true,"repo":true,"email":true,"scope":["user:email","read:user","user:follow","public_repo","repo","repo_deployment","repo:status","delete_repo","notifications","gist","read:repo_hook","write:repo_hook","admin:repo_hook","read:org","admin:org","read:public_key","write:public_key","admin:public_key","write:org"],"follow":true,"profile":true,"read_org":true,"admin_org":true,"client_id":"client-id","read_user":true,"write_org":true,"delete_repo":true,"public_repo":true,"repo_status":true,"client_secret":"client-secret","notifications":true,"read_repo_hook":true,"admin_repo_hook":true,"read_public_key":true,"repo_deployment":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"write_repo_hook":true,"admin_public_key":true,"write_public_key":true,"non_persistent_attrs":null},"strategy":"github","name":"Acceptance-Test-GitHub-TestAccConnectionGitHub","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-GitHub-TestAccConnectionGitHub"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bwAeHiZw0hraDq4R
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms

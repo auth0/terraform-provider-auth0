@@ -1,0 +1,865 @@
+---
+version: 2
+interactions:
+  - id: 0
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 216
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {\n\tconsole.log(\"foo\")\n};\"\n"}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 2
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77/deploy
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.026968137Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}],"action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","all_changes_deployed":false}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 4
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 216
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"code":"exports.onContinuePostLogin = async (event, api) =\u003e {\n\tconsole.log(\"bar\")\n};\"\n"}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 5
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"all_changes_deployed":false}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 6
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e/deploy
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.790723122Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}],"action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","all_changes_deployed":false}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 7
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 8
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 295
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"bindings":[{"display_name":"Test Trigger Binding Foo TestAccTriggerBinding","ref":{"type":"action_id","value":"82037cb2-798b-4611-8b05-95005ececa77"}},{"display_name":"Test Trigger Binding Bar TestAccTriggerBinding","ref":{"type":"action_id","value":"06983eec-e3a8-48be-9fe8-c68da376476e"}}]}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"bef9ee81-4fde-4d65-8f60-c3fec277b5e8","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.170444369Z","updated_at":"2022-08-30T09:06:50.170444369Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"},{"id":"8f95514b-706d-4cfa-9279-262d7441dd93","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.174961265Z","updated_at":"2022-08-30T09:06:50.174961265Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"}]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 9
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"bef9ee81-4fde-4d65-8f60-c3fec277b5e8","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.170444369Z","updated_at":"2022-08-30T09:06:50.170444369Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"},{"id":"8f95514b-706d-4cfa-9279-262d7441dd93","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.174961265Z","updated_at":"2022-08-30T09:06:50.174961265Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"}],"total":2,"per_page":50}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 10
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 11
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 12
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"bef9ee81-4fde-4d65-8f60-c3fec277b5e8","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.170444369Z","updated_at":"2022-08-30T09:06:50.170444369Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"},{"id":"8f95514b-706d-4cfa-9279-262d7441dd93","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.174961265Z","updated_at":"2022-08-30T09:06:50.174961265Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"}],"total":2,"per_page":50}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 13
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 14
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 15
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"bef9ee81-4fde-4d65-8f60-c3fec277b5e8","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.170444369Z","updated_at":"2022-08-30T09:06:50.170444369Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"},{"id":"8f95514b-706d-4cfa-9279-262d7441dd93","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:50.174961265Z","updated_at":"2022-08-30T09:06:50.174961265Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"}],"total":2,"per_page":50}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 16
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 295
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"bindings":[{"display_name":"Test Trigger Binding Bar TestAccTriggerBinding","ref":{"type":"action_id","value":"06983eec-e3a8-48be-9fe8-c68da376476e"}},{"display_name":"Test Trigger Binding Foo TestAccTriggerBinding","ref":{"type":"action_id","value":"82037cb2-798b-4611-8b05-95005ececa77"}}]}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"37cbb790-d4ef-4fd5-95c9-63d2e41ccf1e","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.364592970Z","updated_at":"2022-08-30T09:06:53.364592970Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"},{"id":"9d1fcbd2-27f5-4386-a2d6-8d76890958ec","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.366068470Z","updated_at":"2022-08-30T09:06:53.366068470Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"}]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 17
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"37cbb790-d4ef-4fd5-95c9-63d2e41ccf1e","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.364592970Z","updated_at":"2022-08-30T09:06:53.364592970Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"},{"id":"9d1fcbd2-27f5-4386-a2d6-8d76890958ec","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.366068470Z","updated_at":"2022-08-30T09:06:53.366068470Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"}],"total":2,"per_page":50}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 18
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.775545147Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 19
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.524397775Z","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 20
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[{"id":"37cbb790-d4ef-4fd5-95c9-63d2e41ccf1e","trigger_id":"post-login","action":{"id":"06983eec-e3a8-48be-9fe8-c68da376476e","name":"Test Trigger Binding Bar TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:49.503083196Z","updated_at":"2022-08-30T09:06:49.503083196Z","current_version":{"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.881286876Z","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"bar\")\n};\"\n","dependencies":[],"id":"c4744fed-9c0d-423e-9e89-c7c7ba06f7db","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.881286876Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.790723122Z","updated_at":"2022-08-30T09:06:49.881557925Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.364592970Z","updated_at":"2022-08-30T09:06:53.364592970Z","display_name":"Test Trigger Binding Bar TestAccTriggerBinding"},{"id":"9d1fcbd2-27f5-4386-a2d6-8d76890958ec","trigger_id":"post-login","action":{"id":"82037cb2-798b-4611-8b05-95005ececa77","name":"Test Trigger Binding Foo TestAccTriggerBinding","supported_triggers":[{"id":"post-login","version":"v2"}],"created_at":"2022-08-30T09:06:48.760439017Z","updated_at":"2022-08-30T09:06:48.760439017Z","current_version":{"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2022-08-30T09:06:49.154987512Z","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z"},"deployed_version":{"code":"exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(\"foo\")\n};\"\n","dependencies":[],"id":"4a19f44a-07a5-40bf-a740-b7ac0b9653a2","deployed":true,"number":1,"built_at":"2022-08-30T09:06:49.154987512Z","secrets":[],"status":"built","created_at":"2022-08-30T09:06:49.026968137Z","updated_at":"2022-08-30T09:06:49.156684192Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v2"}]},"all_changes_deployed":false},"created_at":"2022-08-30T09:06:53.366068470Z","updated_at":"2022-08-30T09:06:53.366068470Z","display_name":"Test Trigger Binding Foo TestAccTriggerBinding"}],"total":2,"per_page":50}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 21
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 16
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"bindings":[]}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"bindings":[]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 22
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/06983eec-e3a8-48be-9fe8-c68da376476e
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms
+  - id: 23
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/82037cb2-798b-4611-8b05-95005ececa77
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms

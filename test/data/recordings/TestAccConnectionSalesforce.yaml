@@ -1,0 +1,146 @@
+---
+version: 2
+interactions:
+  - id: 0
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 347
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce","strategy":"salesforce-community","is_domain_connection":false,"options":{"client_id":"client-id","client_secret":"client-secret","community_base_url":"https://salesforce.example.com","non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"con_hfKpDqIIEwRalp3R","options":{"client_id":"client-id","client_secret":"client-secret","community_base_url":"https://salesforce.example.com","non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":[]},"strategy":"salesforce-community","name":"Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hfKpDqIIEwRalp3R
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_hfKpDqIIEwRalp3R","options":{"scope":[],"client_id":"client-id","client_secret":"client-secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"community_base_url":"https://salesforce.example.com","non_persistent_attrs":null},"strategy":"salesforce-community","name":"Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 2
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hfKpDqIIEwRalp3R
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_hfKpDqIIEwRalp3R","options":{"scope":[],"client_id":"client-id","client_secret":"client-secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"community_base_url":"https://salesforce.example.com","non_persistent_attrs":null},"strategy":"salesforce-community","name":"Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Salesforce-Connection-TestAccConnectionSalesforce"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hfKpDqIIEwRalp3R
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"deleted_at":"2022-08-30T08:59:42.957Z"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 202 Accepted
+      code: 202
+      duration: 1ms

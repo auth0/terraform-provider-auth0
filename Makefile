@@ -27,18 +27,14 @@ TEXT_INVERSE = $(shell tput smso)
 #-----------------------------------------------------------------------------------------------------------------------
 # Rules (https://www.gnu.org/software/make/manual/html_node/Rule-Introduction.html#Rule-Introduction)
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: help docs-gen
+.PHONY: help docs
 
 help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-docs-gen: ## Generate docs for a specific resource. Usage: "make docs-gen RESOURCE=client
-	@if [ -z "$(RESOURCE)" ]; \
-	then \
-	  echo "Please provide a resource. Example: make docs-gen RESOURCE=client" && exit 1; \
- 	fi
-	${call print, "Generating docs for resource: $(RESOURCE)"}
-	@go run scripts/gendocs.go -resource "auth0_$(RESOURCE)"
+docs: ## Generate docs
+	${call print, "Generating docs"}
+	@go generate
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Dependencies
@@ -106,7 +102,7 @@ test-acc-e2e: ## Run acceptance tests end to end
 
 test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
-	@go test ./auth0 -v -sweep="phony" $(SWEEPARGS)
+	@go test ./internal/provider -v -sweep="phony" $(SWEEPARGS)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helpers

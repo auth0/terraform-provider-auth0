@@ -1,0 +1,290 @@
+---
+version: 2
+interactions:
+  - id: 0
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 540
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","strategy":"oauth2","is_domain_connection":false,"options":{"client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: false
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"client_id":"123456","client_secret":"123456","authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 201 Created
+      code: 201
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 2
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid profile","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 4
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 441
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"is_domain_connection":false,"options":{"client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","tokenURL":"https://api.paypal.com/v1/oauth2/token","scope":"email openid","set_user_root_attributes":"on_first_login","non_persistent_attrs":null,"icon_url":"https://cdn.paypal.com/assets/logo.png","pkce_enabled":false,"scripts":{"fetchUserProfile":"function( { return callback(null) }"}}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 5
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 6
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"con_t8udzYupJjK4OccE","options":{"scope":"email openid","scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","non_persistent_attrs":null,"set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 7
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.10.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_t8udzYupJjK4OccE
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms

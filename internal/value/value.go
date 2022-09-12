@@ -4,9 +4,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 )
 
-// Bool evaluates the typed value of the value and coerces to a pointer of a boolean
+// Bool evaluates the typed value of the value and coerces to a pointer of a boolean.
 func Bool(rawValue cty.Value) *bool {
-
 	if rawValue.IsNull() {
 		return nil
 	}
@@ -15,9 +14,8 @@ func Bool(rawValue cty.Value) *bool {
 	return &r
 }
 
-// String evaluates the typed value of the value and coerces to a pointer of a string
+// String evaluates the typed value of the value and coerces to a pointer of a string.
 func String(rawValue cty.Value) *string {
-
 	if rawValue.IsNull() {
 		return nil
 	}
@@ -26,9 +24,8 @@ func String(rawValue cty.Value) *string {
 	return &r
 }
 
-// Int evaluates the typed value of the value and coerces to a pointer of an int
+// Int evaluates the typed value of the value and coerces to a pointer of an int.
 func Int(rawValue cty.Value) *int {
-
 	if rawValue.IsNull() {
 		return nil
 	}
@@ -40,9 +37,8 @@ func Int(rawValue cty.Value) *int {
 	return &i
 }
 
-// Strings evaluates the typed value of the value and coerces to a pointer of a slice of strings
+// Strings evaluates the typed value of the value and coerces to a pointer of a slice of strings.
 func Strings(rawValue cty.Value) *[]string {
-
 	if rawValue.IsNull() {
 		return nil
 	}
@@ -55,9 +51,8 @@ func Strings(rawValue cty.Value) *[]string {
 	return &s
 }
 
-// MapOfStrings evaluates the typed value of the value and coerces to a pointer of a map of strings
+// MapOfStrings evaluates the typed value of the value and coerces to a pointer of a map of strings.
 func MapOfStrings(rawValue cty.Value) *map[string]string {
-
 	if rawValue.IsNull() {
 		return nil
 	}

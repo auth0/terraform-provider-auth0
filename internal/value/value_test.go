@@ -10,7 +10,6 @@ import (
 )
 
 func TestBool(t *testing.T) {
-
 	v := Bool(cty.NullVal(cty.Bool))
 	if v != nil {
 		t.Errorf("Expected to be null, got %t", *v)
@@ -67,7 +66,6 @@ func TestInt(t *testing.T) {
 }
 
 func TestStrings(t *testing.T) {
-
 	mockSliceVals := []string{"localhost/logout", "https://app.domain.com/logout"}
 	var mockSlice []cty.Value
 	for _, v := range mockSliceVals {

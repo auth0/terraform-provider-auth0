@@ -66,6 +66,21 @@ func Strings(rawValues cty.Value) *[]string {
 	return &value
 }
 
+// Map evaluates the typed value of the value
+// and coerces to a map[string]interface{}.
+func Map(rawValue cty.Value) map[string]interface{} {
+	if rawValue.IsNull() {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	for key, value := range rawValue.AsValueMap() {
+		m[key] = value.AsString()
+	}
+
+	return m
+}
+
 // MapOfStrings evaluates the typed value of the value
 // and coerces to a pointer of a map of strings.
 func MapOfStrings(rawValue cty.Value) *map[string]string {
@@ -86,12 +101,11 @@ func StringToJSON(rawValue cty.Value) (*interface{}, error) {
 		return nil, nil
 	}
 
-	var d interface{}
-
-	err := json.Unmarshal([]byte(rawValue.AsString()), &d)
+	var value interface{}
+	err := json.Unmarshal([]byte(rawValue.AsString()), &value)
 	if err != nil {
 		return nil, err
 	}
 
-	return &d, err
+	return &value, err
 }

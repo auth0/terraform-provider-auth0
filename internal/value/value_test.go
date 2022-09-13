@@ -96,6 +96,28 @@ func TestStrings(t *testing.T) {
 	assert.Equal(t, expected, *actual)
 }
 
+func TestMap(t *testing.T) {
+	actual := Map(cty.NilVal)
+	assert.Nil(t, actual)
+
+	actual = Map(cty.MapValEmpty(cty.String))
+	require.NotNil(t, actual)
+	assert.Empty(t, actual)
+
+	expected := map[string]interface{}{
+		"logout": "http://app.domain.com/logout",
+		"login":  "http://app.domain.com/login",
+	}
+	testInput := make(map[string]cty.Value)
+	for key, value := range expected {
+		testInput[key] = cty.StringVal(value.(string))
+	}
+
+	actual = Map(cty.MapVal(testInput))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, actual)
+}
+
 func TestMapOfStrings(t *testing.T) {
 	actual := MapOfStrings(cty.NilVal)
 	assert.Nil(t, actual)

@@ -1,6 +1,8 @@
 package value
 
 import (
+	"encoding/json"
+
 	"github.com/hashicorp/go-cty/cty"
 )
 
@@ -63,4 +65,19 @@ func MapOfStrings(rawValue cty.Value) *map[string]string {
 	}
 
 	return &m
+}
+
+func StringToJSON(rawValue cty.Value) (*interface{}, error) {
+	if rawValue.IsNull() {
+		return nil, nil
+	}
+
+	var d interface{}
+
+	err := json.Unmarshal([]byte(rawValue.AsString()), &d)
+	if err != nil {
+		return nil, err
+	}
+
+	return &d, err
 }

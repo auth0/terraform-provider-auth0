@@ -1,10 +1,7 @@
 package value
 
 import (
-	"log"
-
 	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-cty/cty/gocty"
 )
 
 // Bool evaluates the typed value of the value
@@ -67,22 +64,6 @@ func Strings(rawValues cty.Value) *[]string {
 	return &value
 }
 
-// Map evaluates the typed value of the value
-// and coerces to a map[string]interface{}.
-func Map(rawValue cty.Value) map[string]interface{} {
-	if rawValue.IsNull() {
-		return nil
-	}
-
-	var value map[string]interface{}
-	if err := gocty.FromCtyValue(rawValue, &value); err != nil {
-		log.Printf("[WARN]: value.Map(): Failed to convert rawValue to map[string]interface{}: %v", err)
-		return nil
-	}
-
-	return value
-}
-
 // MapOfStrings evaluates the typed value of the value
 // and coerces to a pointer of a map of strings.
 func MapOfStrings(rawValue cty.Value) *map[string]string {
@@ -91,8 +72,8 @@ func MapOfStrings(rawValue cty.Value) *map[string]string {
 	}
 
 	m := make(map[string]string)
-	for key, val := range rawValue.AsValueMap() {
-		m[key] = val.AsString()
+	for key, value := range rawValue.AsValueMap() {
+		m[key] = value.AsString()
 	}
 
 	return &m

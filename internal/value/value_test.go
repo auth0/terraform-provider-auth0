@@ -2,161 +2,117 @@ package value
 
 import (
 	"math"
-	"reflect"
-	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestBool(t *testing.T) {
-	v := Bool(cty.NullVal(cty.Bool))
-	if v != nil {
-		t.Errorf("Expected to be null, got %t", *v)
-	}
+	actual := Bool(cty.NullVal(cty.Bool))
+	assert.Nil(t, actual)
 
-	v = Bool(cty.BoolVal(true))
-	if *v != true {
-		t.Errorf("expected to be true, got %t", *v)
-	}
+	actual = Bool(cty.BoolVal(true))
+	require.NotNil(t, actual)
+	assert.True(t, *actual)
 
-	v = Bool(cty.BoolVal(false))
-	if *v != false {
-		t.Errorf("expected to be false, got %t", *v)
-	}
+	actual = Bool(cty.BoolVal(false))
+	require.NotNil(t, actual)
+	assert.False(t, *actual)
 }
 
 func TestString(t *testing.T) {
-	v := String(cty.NullVal(cty.String))
-	if v != nil {
-		t.Errorf("Expected to be null, got %s", *v)
-	}
+	actual := String(cty.NullVal(cty.String))
+	assert.Nil(t, actual)
 
-	v = String(cty.StringVal(""))
-	if *v != "" {
-		t.Errorf("expected to be empty string, got %s", *v)
-	}
+	actual = String(cty.StringVal(""))
+	require.NotNil(t, actual)
+	assert.Empty(t, *actual)
 
-	v = String(cty.StringVal("foo bar"))
-	if *v != "foo bar" {
-		t.Errorf("expected to be \"foo bar\", got %s", *v)
-	}
+	expected := "foo bar"
+	actual = String(cty.StringVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 }
 
 func TestInt(t *testing.T) {
-	v := Int(cty.NullVal(cty.Number))
-	if v != nil {
-		t.Errorf("Expected to be null, got %d", *v)
-	}
+	actual := Int(cty.NullVal(cty.Number))
+	assert.Nil(t, actual)
 
-	v = Int(cty.NumberIntVal(0))
-	if *v != 0 {
-		t.Errorf("expected to be 0, got %d", *v)
-	}
+	var expected int64
+	actual = Int(cty.NumberIntVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, int(expected), *actual)
 
-	v = Int(cty.NumberIntVal(-math.MaxInt64))
-	if *v != -math.MaxInt64 {
-		t.Errorf("Expected to be %d, got %d", -math.MaxInt64, *v)
-	}
+	expected = -math.MaxInt64
+	actual = Int(cty.NumberIntVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, int(expected), *actual)
 
-	v = Int(cty.NumberIntVal(math.MaxInt64))
-	if *v != math.MaxInt64 {
-		t.Errorf("Expected to be %d, got %d", math.MaxInt64, *v)
-	}
+	expected = math.MaxInt64
+	actual = Int(cty.NumberIntVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, int(expected), *actual)
 }
 
 func TestFloat64(t *testing.T) {
-	v := Float64(cty.NullVal(cty.Number))
-	assert.Nil(t, v)
+	actual := Float64(cty.NullVal(cty.Number))
+	assert.Nil(t, actual)
 
-	v = Float64(cty.NumberFloatVal(0))
-	assert.Equal(t, float64(0), *v)
+	var expected float64
+	actual = Float64(cty.NumberFloatVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 
-	v = Float64(cty.NumberFloatVal(-math.MaxFloat64))
-	if *v != -math.MaxFloat64 {
-		t.Errorf("Expected to be %v, got %v", -math.MaxFloat64, *v)
-	}
+	expected = -math.MaxFloat64
+	actual = Float64(cty.NumberFloatVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 
-	v = Float64(cty.NumberFloatVal(math.MaxFloat64))
-	if *v != math.MaxFloat64 {
-		t.Errorf("Expected to be %v, got %v", math.MaxFloat64, *v)
-	}
+	expected = math.MaxFloat64
+	actual = Float64(cty.NumberFloatVal(expected))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 }
 
 func TestStrings(t *testing.T) {
-	mockSliceVals := []string{"localhost/logout", "https://app.domain.com/logout"}
-	var mockSlice []cty.Value
-	for _, v := range mockSliceVals {
-		mockSlice = append(mockSlice, cty.StringVal(v))
-	}
-	r := Strings(cty.ListVal(mockSlice))
-	if !reflect.DeepEqual(mockSliceVals, *r) {
-		t.Errorf("expected to be %s, got %s", strings.Join(mockSliceVals, ", "), *r)
-	}
+	actual := Strings(cty.NilVal)
+	assert.Nil(t, actual)
 
-	r = Strings(cty.ListValEmpty(cty.String))
-	if len(*r) != 0 {
-		t.Errorf("expected to be empty slice, got %s", *r)
+	actual = Strings(cty.ListValEmpty(cty.String))
+	require.NotNil(t, actual)
+	assert.Empty(t, *actual)
+
+	expected := []string{"localhost/logout", "https://app.domain.com/logout"}
+	var testInput []cty.Value
+	for _, value := range expected {
+		testInput = append(testInput, cty.StringVal(value))
 	}
 
-	r = Strings(cty.NilVal)
-	if r != nil {
-		t.Errorf("expected to be nil, got %s", *r)
-	}
-}
-
-func TestMap(t *testing.T) {
-	v := Map(cty.MapValEmpty(cty.String))
-	if len(v) != 0 {
-		t.Errorf("expected to be empty map, got %v", v)
-	}
-
-	v = Map(cty.NilVal)
-	if v != nil {
-		t.Errorf("expected to be nil, got %v", v)
-	}
-
-	mockMap := cty.ObjectVal(map[string]cty.Value{
-		"logout": cty.StringVal("http://app.domain.com/logout"),
-		"login":  cty.StringVal("http://app.domain.com/login"),
-		"metadata": cty.ListVal([]cty.Value{
-			cty.StringVal("one"),
-			cty.StringVal("two"),
-		}),
-	})
-
-	v = Map(mockMap)
-	assert.Equal(
-		t,
-		map[string]interface{}{
-			"logout":   "http://app.domain.com/logout",
-			"login":    "http://app.domain.com/login",
-			"metadata": []string{"one", "two"},
-		},
-		v,
-	)
+	actual = Strings(cty.ListVal(testInput))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 }
 
 func TestMapOfStrings(t *testing.T) {
-	r := MapOfStrings(cty.MapValEmpty(cty.String))
-	if len(*r) != 0 {
-		t.Errorf("expected to be empty map, got %s", *r)
+	actual := MapOfStrings(cty.NilVal)
+	assert.Nil(t, actual)
+
+	actual = MapOfStrings(cty.MapValEmpty(cty.String))
+	require.NotNil(t, actual)
+	assert.Empty(t, actual)
+
+	expected := map[string]string{
+		"logout": "http://app.domain.com/logout",
+		"login":  "http://app.domain.com/login",
+	}
+	testInput := make(map[string]cty.Value)
+	for key, value := range expected {
+		testInput[key] = cty.StringVal(value)
 	}
 
-	r = MapOfStrings(cty.NilVal)
-	if r != nil {
-		t.Errorf("expected to be nil, got %s", *r)
-	}
-
-	mockMapVals := map[string]string{"logout": "http://app.domain.com/logout", "login": "http://app.domain.com/login"}
-	mockMap := make(map[string]cty.Value)
-	for key, v := range mockMapVals {
-		mockMap[key] = cty.StringVal(v)
-	}
-
-	r = MapOfStrings(cty.MapVal(mockMap))
-	if !reflect.DeepEqual(mockMapVals, *r) {
-		t.Errorf("expected to be %s, got %s", mockMapVals, *r)
-	}
+	actual = MapOfStrings(cty.MapVal(testInput))
+	require.NotNil(t, actual)
+	assert.Equal(t, expected, *actual)
 }

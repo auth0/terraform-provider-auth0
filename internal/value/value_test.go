@@ -140,19 +140,38 @@ func TestMapOfStrings(t *testing.T) {
 	assert.Equal(t, expected, *actual)
 }
 
-func TestStringToJSON(t *testing.T) {
-	v, err := StringToJSON(cty.NullVal(cty.String))
+func TestMapFromJSON(t *testing.T) {
+	actual, err := MapFromJSON(cty.NilVal)
 	assert.NoError(t, err)
-	assert.Nil(t, v)
+	assert.Nil(t, actual)
 
-	mockJSON := "{\"bool\":true,\"int\":5,\"map\":{\"nested\":true},\"slice\":[1,2,3],\"string\":\"foo\"}"
-	v, err = StringToJSON(cty.StringVal(mockJSON))
+	actual, err = MapFromJSON(cty.NullVal(cty.String))
 	assert.NoError(t, err)
-	byte, _ := json.Marshal(v)
-	assert.Equal(t, string(byte), mockJSON)
+	assert.Empty(t, actual)
+
+	payload := map[string]interface{}{
+		"bool": true,
+		"int":  5,
+		"map": map[string]interface{}{
+			"nested": true,
+			"slice":  []interface{}{1, 2, 3},
+			"string": "foo",
+		},
+	}
+	expected, err := json.Marshal(&payload)
+	require.NoError(t, err)
+
+	actual, err = MapFromJSON(cty.StringVal(string(expected)))
+	assert.NoError(t, err)
+	assert.NotEmpty(t, actual)
+
+	actualString, err := json.Marshal(&actual)
+	require.NoError(t, err)
+
+	assert.JSONEq(t, string(expected), string(actualString))
 
 	invalidJSON := "[not valid json"
-	v, err = StringToJSON(cty.StringVal(invalidJSON))
+	actual, err = MapFromJSON(cty.StringVal(invalidJSON))
 	assert.Error(t, err)
-	assert.Nil(t, v)
+	assert.Nil(t, actual)
 }

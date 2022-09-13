@@ -1,9 +1,8 @@
 package value
 
 import (
-	"encoding/json"
-
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 // Bool evaluates the typed value of the value
@@ -96,16 +95,12 @@ func MapOfStrings(rawValue cty.Value) *map[string]string {
 	return &m
 }
 
-func StringToJSON(rawValue cty.Value) (*interface{}, error) {
+// MapFromJSON evaluates the typed value of the value
+// and coerces to a map[string]interface{}.
+func MapFromJSON(rawValue cty.Value) (map[string]interface{}, error) {
 	if rawValue.IsNull() {
 		return nil, nil
 	}
 
-	var value interface{}
-	err := json.Unmarshal([]byte(rawValue.AsString()), &value)
-	if err != nil {
-		return nil, err
-	}
-
-	return &value, err
+	return structure.ExpandJsonFromString(rawValue.AsString())
 }

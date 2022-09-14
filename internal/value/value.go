@@ -58,7 +58,7 @@ func Strings(rawValues cty.Value) *[]string {
 		return nil
 	}
 
-	var value []string
+	value := make([]string, 0)
 	for _, rawValue := range rawValues.AsValueSlice() {
 		value = append(value, rawValue.AsString())
 	}

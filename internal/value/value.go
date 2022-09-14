@@ -1,3 +1,9 @@
+// Package value contains helper functions to convert from cty.Value to Go types.
+//
+// The input value must still conform to the implied type of the given schema,
+// or else these functions may produce garbage results or panic. This is usually
+// okay because type consistency is enforced when deserializing the value
+// returned from the provider over the RPC wire protocol anyway.
 package value
 
 import (

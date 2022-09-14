@@ -1,9 +1,14 @@
+// Package value contains helper functions to convert from cty.Value to Go types.
+//
+// The input value must still conform to the implied type of the given schema,
+// or else these functions may produce garbage results or panic. This is usually
+// okay because type consistency is enforced when deserializing the value
+// returned from the provider over the RPC wire protocol anyway.
 package value
 
 import (
-	"encoding/json"
-
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
 // Bool evaluates the typed value of the value
@@ -66,6 +71,21 @@ func Strings(rawValues cty.Value) *[]string {
 	return &value
 }
 
+// Map evaluates the typed value of the value
+// and coerces to a map[string]interface{}.
+func Map(rawValue cty.Value) map[string]interface{} {
+	if rawValue.IsNull() {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+	for key, value := range rawValue.AsValueMap() {
+		m[key] = value.AsString()
+	}
+
+	return m
+}
+
 // MapOfStrings evaluates the typed value of the value
 // and coerces to a pointer of a map of strings.
 func MapOfStrings(rawValue cty.Value) *map[string]string {
@@ -81,17 +101,12 @@ func MapOfStrings(rawValue cty.Value) *map[string]string {
 	return &m
 }
 
-func StringToJSON(rawValue cty.Value) (*interface{}, error) {
+// MapFromJSON evaluates the typed value of the value
+// and coerces to a map[string]interface{}.
+func MapFromJSON(rawValue cty.Value) (map[string]interface{}, error) {
 	if rawValue.IsNull() {
 		return nil, nil
 	}
 
-	var d interface{}
-
-	err := json.Unmarshal([]byte(rawValue.AsString()), &d)
-	if err != nil {
-		return nil, err
-	}
-
-	return &d, err
+	return structure.ExpandJsonFromString(rawValue.AsString())
 }

@@ -154,7 +154,7 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 	for key := range configFromAPI {
 		if _, ok := configFromTF[key]; !ok {
 			warnings = append(warnings, diag.Diagnostic{
-				Severity: diag.Error,
+				Severity: diag.Warning,
 				Summary:  "Unmanaged Configuration Secret",
 				Detail: fmt.Sprintf("Detected a configuration secret not managed though terraform: %q. "+
 					"If you proceed, this configuration secret will get deleted. It is required to "+

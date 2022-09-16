@@ -87,7 +87,7 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 			},
 			expectedDiagnostics: diag.Diagnostics{
 				diag.Diagnostic{
-					Severity:      diag.Error,
+					Severity:      diag.Warning,
 					Summary:       "Unmanaged Configuration Secret",
 					Detail:        "Detected a configuration secret not managed though terraform: \"anotherFoo\". If you proceed, this configuration secret will get deleted. It is required to add this configuration secret to your custom database settings to prevent unintentionally destructive results.",
 					AttributePath: cty.Path{cty.GetAttrStep{Name: "options.configuration"}},

@@ -1,3 +1,14 @@
+## 0.37.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Fix how we expand `addons.samlp` ([#322](https://github.com/auth0/terraform-provider-auth0/pull/322))
+
+NOTES:
+
+- `resource/auth0_client`: Improve description of `app_type` attribute ([#325](https://github.com/auth0/terraform-provider-auth0/pull/325))
+
+
 ## 0.37.0
 
 FEATURES:

@@ -66,7 +66,11 @@ func newClient() *schema.Resource {
 					"egnyte", "newrelic", "office365", "salesforce", "sentry",
 					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
 				}, false),
-				Description: "Type of application the client represents.",
+				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
+					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
+					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
+					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
+					"`zoom`.",
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,

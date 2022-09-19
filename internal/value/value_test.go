@@ -114,7 +114,7 @@ func TestStrings(t *testing.T) {
 	t.Run("it returns an empty slice when given an empty list value", func(t *testing.T) {
 		actual := Strings(cty.ListValEmpty(cty.String))
 		require.NotNil(t, actual)
-		assert.Equal(t, []string(nil), *actual)
+		assert.Equal(t, []string{}, *actual)
 	})
 
 	t.Run("it returns a slice of strings when given a string list value", func(t *testing.T) {

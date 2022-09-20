@@ -66,7 +66,11 @@ func newClient() *schema.Resource {
 					"egnyte", "newrelic", "office365", "salesforce", "sentry",
 					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
 				}, false),
-				Description: "Type of application the client represents.",
+				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
+					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
+					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
+					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
+					"`zoom`.",
 			},
 			"logo_uri": {
 				Type:     schema.TypeString,
@@ -886,28 +890,70 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		}
 
 		List(d, "samlp").Elem(func(d ResourceData) {
-			client.Addons["samlp"] = map[string]interface{}{
-				"audience":                       String(d, "audience"),
-				"authnContextClassRef":           String(d, "authn_context_class_ref"),
-				"binding":                        String(d, "binding"),
-				"signingCert":                    String(d, "signing_cert"),
-				"createUpnClaim":                 Bool(d, "create_upn_claim"),
-				"destination":                    String(d, "destination"),
-				"digestAlgorithm":                String(d, "digest_algorithm"),
-				"includeAttributeNameFormat":     Bool(d, "include_attribute_name_format"),
-				"lifetimeInSeconds":              Int(d, "lifetime_in_seconds"),
-				"mapIdentities":                  Bool(d, "map_identities"),
-				"mappings":                       Map(d, "mappings"),
-				"mapUnknownClaimsAsIs":           Bool(d, "map_unknown_claims_as_is"),
-				"nameIdentifierFormat":           String(d, "name_identifier_format"),
-				"nameIdentifierProbes":           Slice(d, "name_identifier_probes"),
-				"passthroughClaimsWithNoMapping": Bool(d, "passthrough_claims_with_no_mapping"),
-				"recipient":                      String(d, "recipient"),
-				"signatureAlgorithm":             String(d, "signature_algorithm"),
-				"signResponse":                   Bool(d, "sign_response"),
-				"typedAttributes":                Bool(d, "typed_attributes"),
-				"logout":                         mapFromState(Map(d, "logout")),
+			samlp := make(map[string]interface{})
+
+			if audience := String(d, "audience"); audience != nil && *audience != "" {
+				samlp["audience"] = audience
 			}
+			if authnContextClassRef := String(d, "authn_context_class_ref"); authnContextClassRef != nil && *authnContextClassRef != "" {
+				samlp["authnContextClassRef"] = authnContextClassRef
+			}
+			if binding := String(d, "binding"); binding != nil && *binding != "" {
+				samlp["binding"] = binding
+			}
+			if signingCert := String(d, "signing_cert"); signingCert != nil && *signingCert != "" {
+				samlp["signingCert"] = signingCert
+			}
+			if destination := String(d, "destination"); destination != nil && *destination != "" {
+				samlp["destination"] = destination
+			}
+			if digestAlgorithm := String(d, "digest_algorithm"); digestAlgorithm != nil && *digestAlgorithm != "" {
+				samlp["digestAlgorithm"] = digestAlgorithm
+			}
+			if nameIdentifierFormat := String(d, "name_identifier_format"); nameIdentifierFormat != nil && *nameIdentifierFormat != "" {
+				samlp["nameIdentifierFormat"] = nameIdentifierFormat
+			}
+			if recipient := String(d, "recipient"); recipient != nil && *recipient != "" {
+				samlp["recipient"] = recipient
+			}
+			if signatureAlgorithm := String(d, "signature_algorithm"); signatureAlgorithm != nil && *signatureAlgorithm != "" {
+				samlp["signatureAlgorithm"] = signatureAlgorithm
+			}
+			if createUpnClaim := Bool(d, "create_upn_claim"); createUpnClaim != nil {
+				samlp["createUpnClaim"] = createUpnClaim
+			}
+			if includeAttributeNameFormat := Bool(d, "include_attribute_name_format"); includeAttributeNameFormat != nil {
+				samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
+			}
+			if mapIdentities := Bool(d, "map_identities"); mapIdentities != nil {
+				samlp["mapIdentities"] = mapIdentities
+			}
+			if mapUnknownClaimsAsIs := Bool(d, "map_unknown_claims_as_is"); mapUnknownClaimsAsIs != nil {
+				samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
+			}
+			if passthroughClaimsWithNoMapping := Bool(d, "passthrough_claims_with_no_mapping"); passthroughClaimsWithNoMapping != nil {
+				samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
+			}
+			if signResponse := Bool(d, "sign_response"); signResponse != nil {
+				samlp["signResponse"] = signResponse
+			}
+			if typedAttributes := Bool(d, "typed_attributes"); typedAttributes != nil {
+				samlp["typedAttributes"] = typedAttributes
+			}
+			if lifetimeInSeconds := Int(d, "lifetime_in_seconds"); lifetimeInSeconds != nil {
+				samlp["lifetimeInSeconds"] = lifetimeInSeconds
+			}
+			if mappings := Map(d, "mappings"); mappings != nil {
+				samlp["mappings"] = mappings
+			}
+			if nameIdentifierProbes := Slice(d, "name_identifier_probes"); nameIdentifierProbes != nil {
+				samlp["nameIdentifierProbes"] = nameIdentifierProbes
+			}
+			if logout := mapFromState(Map(d, "logout")); logout != nil {
+				samlp["logout"] = logout
+			}
+
+			client.Addons["samlp"] = samlp
 		})
 	})
 

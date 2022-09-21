@@ -163,7 +163,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("name", action.Name),
 		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
 		d.Set("code", action.Code),
-		d.Set("dependencies", flattenActionDependencies(action.Dependencies)),
+		d.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
 		d.Set("runtime", action.Runtime),
 	)
 
@@ -278,12 +278,12 @@ func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Mana
 	oldSecrets, newSecrets := d.GetChange("secrets")
 	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
-	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.Secrets)
+	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
 }
 
 func checkForUnmanagedActionSecrets(
 	secretsFromConfig []interface{},
-	secretsFromAPI []*management.ActionSecret,
+	secretsFromAPI []management.ActionSecret,
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
@@ -346,38 +346,38 @@ func expandActionDependencies(dependencies cty.Value) *[]management.ActionDepend
 		return nil
 	}
 
-	actionDependencies := make([]*management.ActionDependency, 0)
+	actionDependencies := make([]management.ActionDependency, 0)
 
 	dependencies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
-		actionDependencies = append(actionDependencies, &management.ActionDependency{
+		actionDependencies = append(actionDependencies, management.ActionDependency{
 			Name:    value.String(dep.GetAttr("name")),
 			Version: value.String(dep.GetAttr("version")),
 		})
 		return true
 	})
 
-	return actionDependencies
+	return &actionDependencies
 }
 
-func expandActionSecrets(secrets cty.Value) []*management.ActionSecret {
+func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
 	if secrets.IsNull() {
 		return nil
 	}
 
-	actionSecrets := make([]*management.ActionSecret, 0)
+	actionSecrets := make([]management.ActionSecret, 0)
 
 	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
-		actionSecrets = append(actionSecrets, &management.ActionSecret{
+		actionSecrets = append(actionSecrets, management.ActionSecret{
 			Name:  value.String(secret.GetAttr("name")),
 			Value: value.String(secret.GetAttr("value")),
 		})
 		return true
 	})
 
-	return actionSecrets
+	return &actionSecrets
 }
 
-func flattenActionTriggers(triggers []*management.ActionTrigger) []interface{} {
+func flattenActionTriggers(triggers []management.ActionTrigger) []interface{} {
 	var result []interface{}
 
 	for _, trigger := range triggers {
@@ -390,7 +390,7 @@ func flattenActionTriggers(triggers []*management.ActionTrigger) []interface{} {
 	return result
 }
 
-func flattenActionDependencies(dependencies []*management.ActionDependency) []interface{} {
+func flattenActionDependencies(dependencies []management.ActionDependency) []interface{} {
 	var result []interface{}
 
 	for _, dependency := range dependencies {

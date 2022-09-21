@@ -380,7 +380,13 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 	}
 
 	var ipt *management.SuspiciousIPThrottling
-	d.GetRawConfig().GetAttr("suspicious_ip_throttling").ForEachElement(
+	var iptConfig = d.GetRawConfig().GetAttr("suspicious_ip_throttling")
+
+	if iptConfig.IsNull() {
+		return nil
+	}
+
+	iptConfig.ForEachElement(
 		func(_ cty.Value, ipThrottling cty.Value) (stop bool) {
 			ipt = &management.SuspiciousIPThrottling{
 				Enabled:   value.Bool(ipThrottling.GetAttr("enabled")),
@@ -388,37 +394,43 @@ func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.Suspicious
 				AllowList: value.Strings(ipThrottling.GetAttr("allowlist")),
 			}
 
-			ipThrottling.GetAttr("pre_login").ForEachElement(
-				func(_ cty.Value, preLogin cty.Value) (stop bool) {
-					ipt.Stage = &management.Stage{
-						PreLogin: &management.PreLogin{
-							MaxAttempts: value.Int(preLogin.GetAttr("max_attempts")),
-							Rate:        value.Int(preLogin.GetAttr("rate")),
-						},
-					}
-
-					return stop
-				},
-			)
-
-			ipThrottling.GetAttr("pre_user_registration").ForEachElement(
-				func(_ cty.Value, preUserReg cty.Value) (stop bool) {
-					preUserRegistration := &management.PreUserRegistration{
-						MaxAttempts: value.Int(preUserReg.GetAttr("max_attempts")),
-						Rate:        value.Int(preUserReg.GetAttr("rate")),
-					}
-
-					if ipt.Stage != nil {
-						ipt.Stage.PreUserRegistration = preUserRegistration
-					} else {
+			pl := ipThrottling.GetAttr("pre_login")
+			if !pl.IsNull() {
+				pl.ForEachElement(
+					func(_ cty.Value, preLogin cty.Value) (stop bool) {
 						ipt.Stage = &management.Stage{
-							PreUserRegistration: preUserRegistration,
+							PreLogin: &management.PreLogin{
+								MaxAttempts: value.Int(preLogin.GetAttr("max_attempts")),
+								Rate:        value.Int(preLogin.GetAttr("rate")),
+							},
 						}
-					}
 
-					return stop
-				},
-			)
+						return stop
+					},
+				)
+			}
+
+			pur := ipThrottling.GetAttr("pre_user_registration")
+			if !pur.IsNull() {
+				pur.ForEachElement(
+					func(_ cty.Value, preUserReg cty.Value) (stop bool) {
+						preUserRegistration := &management.PreUserRegistration{
+							MaxAttempts: value.Int(preUserReg.GetAttr("max_attempts")),
+							Rate:        value.Int(preUserReg.GetAttr("rate")),
+						}
+
+						if ipt.Stage != nil {
+							ipt.Stage.PreUserRegistration = preUserRegistration
+						} else {
+							ipt.Stage = &management.Stage{
+								PreUserRegistration: preUserRegistration,
+							}
+						}
+
+						return stop
+					},
+				)
+			}
 
 			return stop
 		},
@@ -433,7 +445,14 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 	}
 
 	var bfp *management.BruteForceProtection
-	d.GetRawConfig().GetAttr("brute_force_protection").ForEachElement(
+
+	bfpConfig := d.GetRawConfig().GetAttr("brute_force_protection")
+
+	if bfpConfig.IsNull() {
+		return nil
+	}
+
+	bfpConfig.ForEachElement(
 		func(_ cty.Value, bruteForce cty.Value) (stop bool) {
 			bfp = &management.BruteForceProtection{
 				Enabled:     value.Bool(bruteForce.GetAttr("enabled")),
@@ -456,7 +475,13 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 	}
 
 	var bpd *management.BreachedPasswordDetection
-	d.GetRawConfig().GetAttr("breached_password_detection").ForEachElement(
+	bpdConfig := d.GetRawConfig().GetAttr("breached_password_detection")
+
+	if bpdConfig.IsNull() {
+		return nil
+	}
+
+	bpdConfig.ForEachElement(
 		func(_ cty.Value, breach cty.Value) (stop bool) {
 			bpd = &management.BreachedPasswordDetection{
 				Enabled:                    value.Bool(breach.GetAttr("enabled")),

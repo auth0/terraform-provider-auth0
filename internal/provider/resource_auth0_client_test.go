@@ -262,18 +262,23 @@ func TestAccClientZeroValueCheck(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Zero Value Check - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", "<html>Login Page!</html>"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Zero value check test"),
 				),
 			},
 			{
 				Config: template.ParseTestName(testAccClientConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", ""),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "description", ""),
 				),
 			},
 			{
 				Config: template.ParseTestName(testAccClientConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", ""),
 				),
 			},
 		},
@@ -283,14 +288,19 @@ func TestAccClientZeroValueCheck(t *testing.T) {
 const testAccClientConfigCreate = `
 resource "auth0_client" "my_client" {
   name = "Acceptance Test - Zero Value Check - {{.testName}}"
+  description = "Zero value check test"
   is_first_party = false
+  custom_login_page_on = true
+  custom_login_page = "<html>Login Page!</html>"
 }
 `
 
 const testAccClientConfigUpdate = `
 resource "auth0_client" "my_client" {
   name = "Acceptance Test - Zero Value Check - {{.testName}}"
+  description = ""
   is_first_party = true
+  custom_login_page = ""
 }
 `
 

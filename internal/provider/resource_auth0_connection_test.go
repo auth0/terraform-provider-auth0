@@ -99,6 +99,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enabled_database_customization", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "0"),
 				),
 			},
 		},
@@ -156,6 +157,7 @@ resource "auth0_connection" "my_connection" {
 				"alias": "login_hint"
 			}
 		})
+		non_persistent_attrs = ["gender","hair_color"]
 	}
 }
 `
@@ -194,6 +196,7 @@ resource "auth0_connection" "my_connection" {
 			active                 = true
 			return_enroll_settings = false
 		}
+		non_persistent_attrs = []
 	}
 }
 `
@@ -541,6 +544,12 @@ func TestAccConnectionWithEnabledClients(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"), // Gets computed with defaults by the API.
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccConnectionWithEmptyEnabledClientsConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "enabled_clients.#", "0"),
+				),
+			},
 		},
 	})
 }
@@ -583,6 +592,15 @@ resource "auth0_connection" "my_connection" {
 		auth0_client.my_client_3.id,
 		auth0_client.my_client_4.id,
 	]
+}
+`
+
+const testAccConnectionWithEmptyEnabledClientsConfig = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-Connection-{{.testName}}"
+	is_domain_connection = true
+	strategy = "auth0"
+	enabled_clients = []
 }
 `
 

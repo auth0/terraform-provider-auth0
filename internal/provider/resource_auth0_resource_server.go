@@ -7,10 +7,13 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newResourceServer() *schema.Resource {
@@ -134,8 +137,9 @@ func newResourceServer() *schema.Resource {
 }
 
 func createResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	resourceServer := expandResourceServer(d)
 	api := m.(*management.Management)
+
+	resourceServer := expandResourceServer(d)
 	if err := api.ResourceServer.Create(resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
@@ -147,53 +151,42 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 
 func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	resourceServer, err := api.ResourceServer.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("name", resourceServer.Name),
-		d.Set("identifier", resourceServer.Identifier),
-		d.Set("scopes", func() []map[string]interface{} {
-			scopes := make([]map[string]interface{}, len(resourceServer.Scopes))
-			for index, scope := range resourceServer.Scopes {
-				scopes[index] = map[string]interface{}{
-					"value":       scope.Value,
-					"description": scope.Description,
-				}
-			}
-			return scopes
-		}()),
-		d.Set("signing_alg", resourceServer.SigningAlgorithm),
-		d.Set("signing_secret", resourceServer.SigningSecret),
-		d.Set("allow_offline_access", resourceServer.AllowOfflineAccess),
-		d.Set("token_lifetime", resourceServer.TokenLifetime),
-		d.Set("token_lifetime_for_web", resourceServer.TokenLifetimeForWeb),
+		d.Set("name", resourceServer.GetName()),
+		d.Set("identifier", resourceServer.GetIdentifier()),
+		d.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
+		d.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
+		d.Set("signing_secret", resourceServer.GetSigningSecret()),
+		d.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
+		d.Set("token_lifetime", resourceServer.GetTokenLifetime()),
+		d.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
 		d.Set(
 			"skip_consent_for_verifiable_first_party_clients",
-			resourceServer.SkipConsentForVerifiableFirstPartyClients,
+			resourceServer.GetSkipConsentForVerifiableFirstPartyClients(),
 		),
-		d.Set("verification_location", resourceServer.VerificationLocation),
-		d.Set("options", resourceServer.Options),
-		d.Set("enforce_policies", resourceServer.EnforcePolicies),
-		d.Set("token_dialect", resourceServer.TokenDialect),
+		d.Set("verification_location", resourceServer.GetVerificationLocation()),
+		d.Set("options", resourceServer.GetOptions()),
+		d.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
+		d.Set("token_dialect", resourceServer.GetTokenDialect()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	resourceServer := expandResourceServer(d)
-	resourceServer.Identifier = nil
-
 	api := m.(*management.Management)
+
+	resourceServer := expandResourceServer(d)
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
@@ -203,40 +196,76 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 
 func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.ResourceServer.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
 
 func expandResourceServer(d *schema.ResourceData) *management.ResourceServer {
+	config := d.GetRawConfig()
+
 	resourceServer := &management.ResourceServer{
-		Name:                 String(d, "name"),
-		Identifier:           String(d, "identifier"),
-		SigningAlgorithm:     String(d, "signing_alg"),
-		SigningSecret:        String(d, "signing_secret", IsNewResource(), HasChange()),
-		AllowOfflineAccess:   Bool(d, "allow_offline_access"),
-		TokenLifetime:        Int(d, "token_lifetime"),
-		TokenLifetimeForWeb:  Int(d, "token_lifetime_for_web"),
-		VerificationLocation: String(d, "verification_location"),
-		Options:              Map(d, "options"),
-		EnforcePolicies:      Bool(d, "enforce_policies"),
-		TokenDialect:         String(d, "token_dialect", IsNewResource(), HasChange()),
-		SkipConsentForVerifiableFirstPartyClients: Bool(d, "skip_consent_for_verifiable_first_party_clients"),
+		Name:                 value.String(config.GetAttr("name")),
+		SigningAlgorithm:     value.String(config.GetAttr("signing_alg")),
+		AllowOfflineAccess:   value.Bool(config.GetAttr("allow_offline_access")),
+		TokenLifetime:        value.Int(config.GetAttr("token_lifetime")),
+		TokenLifetimeForWeb:  value.Int(config.GetAttr("token_lifetime_for_web")),
+		VerificationLocation: value.String(config.GetAttr("verification_location")),
+		EnforcePolicies:      value.Bool(config.GetAttr("enforce_policies")),
+		Options:              value.MapOfStrings(config.GetAttr("options")),
+		SkipConsentForVerifiableFirstPartyClients: value.Bool(
+			config.GetAttr("skip_consent_for_verifiable_first_party_clients"),
+		),
+		Scopes: expandResourceServerScopes(config.GetAttr("scopes")),
 	}
 
-	Set(d, "scopes").Elem(func(d ResourceData) {
-		resourceServer.Scopes = append(resourceServer.Scopes, &management.ResourceServerScope{
-			Value:       String(d, "value"),
-			Description: String(d, "description"),
-		})
-	})
+	if d.IsNewResource() {
+		resourceServer.Identifier = value.String(config.GetAttr("identifier"))
+	}
+
+	if d.IsNewResource() || d.HasChange("signing_secret") {
+		resourceServer.SigningSecret = value.String(config.GetAttr("signing_secret"))
+	}
+
+	if d.IsNewResource() || d.HasChange("token_dialect") {
+		resourceServer.TokenDialect = value.String(config.GetAttr("token_dialect"))
+	}
 
 	return resourceServer
+}
+
+func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {
+	resourceServerScopes := make([]management.ResourceServerScope, 0)
+
+	scopes.ForEachElement(func(_ cty.Value, scope cty.Value) (stop bool) {
+		resourceServerScopes = append(resourceServerScopes, management.ResourceServerScope{
+			Value:       value.String(scope.GetAttr("value")),
+			Description: value.String(scope.GetAttr("description")),
+		})
+
+		return stop
+	})
+
+	return &resourceServerScopes
+}
+
+func flattenResourceServerScopes(resourceServerScopes []management.ResourceServerScope) []map[string]interface{} {
+	scopes := make([]map[string]interface{}, len(resourceServerScopes))
+
+	for index, scope := range resourceServerScopes {
+		scopes[index] = map[string]interface{}{
+			"value":       scope.Value,
+			"description": scope.Description,
+		}
+	}
+
+	return scopes
 }

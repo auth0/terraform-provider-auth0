@@ -52,17 +52,24 @@ func createGlobalClient(ctx context.Context, d *schema.ResourceData, m interface
 
 func readGlobalClientID(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
-	clients, err := api.Client.List(management.Parameter("is_global", "true"), management.IncludeFields("client_id"))
+
+	clients, err := api.Client.List(
+		management.Parameter("is_global", "true"),
+		management.IncludeFields("client_id"),
+	)
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
 	if len(clients.Clients) == 0 {
-		return diag.Errorf("no auth0 global client found")
+		return diag.Errorf("No auth0 global client found.")
 	}
+
 	d.SetId(clients.Clients[0].GetClientID())
 	return nil
 }
 
 func deleteGlobalClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	d.SetId("")
 	return nil
 }

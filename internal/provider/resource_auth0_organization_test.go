@@ -160,6 +160,7 @@ const testAccOrganizationRemoveAllOptionalParams = `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
+	metadata = {}
 }
 `
 

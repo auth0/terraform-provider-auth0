@@ -2,13 +2,15 @@ package provider
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newBranding() *schema.Resource {
@@ -100,26 +102,21 @@ func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 
 func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	branding, err := api.Branding.Read()
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("favicon_url", branding.FaviconURL),
-		d.Set("logo_url", branding.LogoURL),
+		d.Set("favicon_url", branding.GetFaviconURL()),
+		d.Set("logo_url", branding.GetLogoURL()),
 	)
 	if _, ok := d.GetOk("colors"); ok {
-		result = multierror.Append(result, d.Set("colors", flattenBrandingColors(branding.Colors)))
+		result = multierror.Append(result, d.Set("colors", flattenBrandingColors(branding.GetColors())))
 	}
 	if _, ok := d.GetOk("font"); ok {
-		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.Font)))
+		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.GetFont())))
 	}
 
 	tenant, err := api.Tenant.Read()
@@ -127,9 +124,8 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	if tenant.Flags.EnableCustomDomainInEmails != nil && *tenant.Flags.EnableCustomDomainInEmails {
-		if err := setUniversalLogin(d, m); err != nil {
-			d.SetId("")
+	if tenant.Flags.GetEnableCustomDomainInEmails() {
+		if err := setUniversalLogin(d, api); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -140,13 +136,12 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	branding := buildBranding(d)
+	branding := buildBranding(d.GetRawConfig())
 	if err := api.Branding.Update(branding); err != nil {
 		return diag.FromErr(err)
 	}
 
-	universalLogin := buildBrandingUniversalLogin(d)
-	if universalLogin.GetBody() != "" {
+	if universalLogin := buildBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
 		if err := api.Branding.SetUniversalLogin(universalLogin); err != nil {
 			return diag.FromErr(err)
 		}
@@ -157,66 +152,65 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 
 func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	tenant, err := api.Tenant.Read()
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	if tenant.Flags.EnableCustomDomainInEmails != nil && *tenant.Flags.EnableCustomDomainInEmails {
+	if tenant.Flags.GetEnableCustomDomainInEmails() {
 		if err = api.Branding.DeleteUniversalLogin(); err != nil {
-			if mErr, ok := err.(management.Error); ok {
-				if mErr.Status() == http.StatusNotFound {
-					d.SetId("")
-					return nil
-				}
-			}
+			return diag.FromErr(err)
 		}
 	}
 
-	return diag.FromErr(err)
+	d.SetId("")
+	return nil
 }
 
-func buildBranding(d *schema.ResourceData) *management.Branding {
+func buildBranding(config cty.Value) *management.Branding {
 	branding := &management.Branding{
-		FaviconURL: String(d, "favicon_url"),
-		LogoURL:    String(d, "logo_url"),
+		FaviconURL: value.String(config.GetAttr("favicon_url")),
+		LogoURL:    value.String(config.GetAttr("logo_url")),
 	}
 
-	List(d, "colors").Elem(func(d ResourceData) {
+	config.GetAttr("colors").ForEachElement(func(_ cty.Value, colors cty.Value) (stop bool) {
 		branding.Colors = &management.BrandingColors{
-			PageBackground: String(d, "page_background"),
-			Primary:        String(d, "primary"),
+			PageBackground: value.String(colors.GetAttr("page_background")),
+			Primary:        value.String(colors.GetAttr("primary")),
 		}
+
+		return stop
 	})
 
-	List(d, "font").Elem(func(d ResourceData) {
+	config.GetAttr("font").ForEachElement(func(_ cty.Value, font cty.Value) (stop bool) {
 		branding.Font = &management.BrandingFont{
-			URL: String(d, "url"),
+			URL: value.String(font.GetAttr("url")),
 		}
+
+		return stop
 	})
 
 	return branding
 }
 
-func buildBrandingUniversalLogin(d *schema.ResourceData) *management.BrandingUniversalLogin {
-	universalLogin := &management.BrandingUniversalLogin{}
+func buildBrandingUniversalLogin(config cty.Value) *management.BrandingUniversalLogin {
+	var universalLogin *management.BrandingUniversalLogin
 
-	List(d, "universal_login").Elem(func(d ResourceData) {
-		universalLogin.Body = String(d, "body")
+	config.GetAttr("universal_login").ForEachElement(func(_ cty.Value, ul cty.Value) (stop bool) {
+		universalLogin = &management.BrandingUniversalLogin{
+			Body: value.String(ul.GetAttr("body")),
+		}
+
+		return stop
 	})
 
 	return universalLogin
 }
 
-func setUniversalLogin(d *schema.ResourceData, m interface{}) error {
-	api := m.(*management.Management)
+func setUniversalLogin(d *schema.ResourceData, api *management.Management) error {
 	universalLogin, err := api.Branding.UniversalLogin()
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				return nil
-			}
-		}
 		return err
 	}
 
@@ -229,8 +223,8 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 	}
 	return []interface{}{
 		map[string]interface{}{
-			"page_background": brandingColors.PageBackground,
-			"primary":         brandingColors.Primary,
+			"page_background": brandingColors.GetPageBackground(),
+			"primary":         brandingColors.GetPrimary(),
 		},
 	}
 }
@@ -241,7 +235,7 @@ func flattenBrandingUniversalLogin(brandingUniversalLogin *management.BrandingUn
 	}
 	return []interface{}{
 		map[string]interface{}{
-			"body": brandingUniversalLogin.Body,
+			"body": brandingUniversalLogin.GetBody(),
 		},
 	}
 }
@@ -252,7 +246,7 @@ func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
 	}
 	return []interface{}{
 		map[string]interface{}{
-			"url": brandingFont.URL,
+			"url": brandingFont.GetURL(),
 		},
 	}
 }

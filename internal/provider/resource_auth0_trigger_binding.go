@@ -4,11 +4,13 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newTriggerBinding() *schema.Resource {
@@ -123,14 +125,16 @@ func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 func expandTriggerBindings(d *schema.ResourceData) []*management.ActionBinding {
 	var triggerBindings []*management.ActionBinding
 
-	List(d, "actions").Elem(func(d ResourceData) {
+	d.GetRawConfig().GetAttr("actions").ForEachElement(func(_ cty.Value, action cty.Value) (stop bool) {
+		t := "action_id"
 		triggerBindings = append(triggerBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
-				Type:  auth0.String("action_id"),
-				Value: String(d, "id"),
+				Type:  &t,
+				Value: value.String(d.GetRawConfig().GetAttr("id")),
 			},
-			DisplayName: String(d, "display_name"),
+			DisplayName: value.String(action.GetAttr("display_name")),
 		})
+		return stop
 	})
 
 	return triggerBindings

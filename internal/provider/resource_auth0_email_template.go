@@ -6,10 +6,13 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newEmailTemplate() *schema.Resource {
@@ -98,19 +101,20 @@ func newEmailTemplate() *schema.Resource {
 }
 
 func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := expandEmailTemplate(d)
 	api := m.(*management.Management)
+
+	email := expandEmailTemplate(d.GetRawConfig())
 
 	// The email template resource doesn't allow deleting templates, so in order
 	// to avoid conflicts, we first attempt to read the template. If it exists
 	// we'll try to update it, if not we'll try to create it.
-	if _, err := api.EmailTemplate.Read(auth0.StringValue(email.Template)); err == nil {
+	if _, err := api.EmailTemplate.Read(email.GetTemplate()); err == nil {
 		// We succeeded in reading the template, this means it was created previously.
-		if err := api.EmailTemplate.Update(auth0.StringValue(email.Template), email); err != nil {
+		if err := api.EmailTemplate.Update(email.GetTemplate(), email); err != nil {
 			return diag.FromErr(err)
 		}
 
-		d.SetId(auth0.StringValue(email.Template))
+		d.SetId(email.GetTemplate())
 
 		return nil
 	}
@@ -121,35 +125,34 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(email.Template))
+	d.SetId(email.GetTemplate())
 
-	return nil
+	return readEmailTemplate(ctx, d, m)
 }
 
 func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	email, err := api.EmailTemplate.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(email.Template))
+	d.SetId(email.GetTemplate())
 
 	result := multierror.Append(
-		d.Set("template", email.Template),
-		d.Set("body", email.Body),
-		d.Set("from", email.From),
-		d.Set("result_url", email.ResultURL),
-		d.Set("subject", email.Subject),
-		d.Set("syntax", email.Syntax),
-		d.Set("url_lifetime_in_seconds", email.URLLifetimeInSecoonds),
-		d.Set("enabled", email.Enabled),
+		d.Set("template", email.GetTemplate()),
+		d.Set("body", email.GetBody()),
+		d.Set("from", email.GetFrom()),
+		d.Set("result_url", email.GetResultURL()),
+		d.Set("subject", email.GetSubject()),
+		d.Set("syntax", email.GetSyntax()),
+		d.Set("url_lifetime_in_seconds", email.GetURLLifetimeInSecoonds()),
+		d.Set("enabled", email.GetEnabled()),
 		d.Set("include_email_in_redirect", email.GetIncludeEmailInRedirect()),
 	)
 
@@ -157,8 +160,9 @@ func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{
 }
 
 func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	email := expandEmailTemplate(d)
 	api := m.(*management.Management)
+
+	email := expandEmailTemplate(d.GetRawConfig())
 	if err := api.EmailTemplate.Update(d.Id(), email); err != nil {
 		return diag.FromErr(err)
 	}
@@ -184,17 +188,17 @@ func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	return nil
 }
 
-func expandEmailTemplate(d *schema.ResourceData) *management.EmailTemplate {
+func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	emailTemplate := &management.EmailTemplate{
-		Template:               String(d, "template"),
-		Body:                   String(d, "body"),
-		From:                   String(d, "from"),
-		ResultURL:              String(d, "result_url"),
-		Subject:                String(d, "subject"),
-		Syntax:                 String(d, "syntax"),
-		URLLifetimeInSecoonds:  Int(d, "url_lifetime_in_seconds"),
-		Enabled:                Bool(d, "enabled"),
-		IncludeEmailInRedirect: Bool(d, "include_email_in_redirect"),
+		Template:               value.String(config.GetAttr("template")),
+		Body:                   value.String(config.GetAttr("body")),
+		From:                   value.String(config.GetAttr("from")),
+		ResultURL:              value.String(config.GetAttr("result_url")),
+		Subject:                value.String(config.GetAttr("subject")),
+		Syntax:                 value.String(config.GetAttr("syntax")),
+		URLLifetimeInSecoonds:  value.Int(config.GetAttr("url_lifetime_in_seconds")),
+		Enabled:                value.Bool(config.GetAttr("enabled")),
+		IncludeEmailInRedirect: value.Bool(config.GetAttr("include_email_in_redirect")),
 	}
 
 	return emailTemplate

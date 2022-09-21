@@ -57,13 +57,13 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 	var testCases = []struct {
 		name                string
 		givenConfigFromTF   map[string]interface{}
-		givenConfigFromAPI  map[string]interface{}
+		givenConfigFromAPI  map[string]string
 		expectedDiagnostics diag.Diagnostics
 	}{
 		{
 			name:                "custom database has no configuration",
 			givenConfigFromTF:   map[string]interface{}{},
-			givenConfigFromAPI:  map[string]interface{}{},
+			givenConfigFromAPI:  map[string]string{},
 			expectedDiagnostics: diag.Diagnostics(nil),
 		},
 		{
@@ -71,7 +71,7 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 			givenConfigFromTF: map[string]interface{}{
 				"foo": "bar",
 			},
-			givenConfigFromAPI: map[string]interface{}{
+			givenConfigFromAPI: map[string]string{
 				"foo": "bar",
 			},
 			expectedDiagnostics: diag.Diagnostics(nil),
@@ -81,7 +81,7 @@ func TestCheckForUnmanagedConfigurationSecrets(t *testing.T) {
 			givenConfigFromTF: map[string]interface{}{
 				"foo": "bar",
 			},
-			givenConfigFromAPI: map[string]interface{}{
+			givenConfigFromAPI: map[string]string{
 				"foo":        "bar",
 				"anotherFoo": "anotherBar",
 			},

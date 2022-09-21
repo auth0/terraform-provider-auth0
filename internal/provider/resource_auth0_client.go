@@ -5,14 +5,15 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newClient() *schema.Resource {
@@ -725,7 +726,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(client.ClientID))
+	d.SetId(client.GetClientID())
 
 	return readClient(ctx, d, m)
 }
@@ -817,195 +818,252 @@ func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func expandClient(d *schema.ResourceData) *management.Client {
+	config := d.GetRawConfig()
+
 	client := &management.Client{
-		Name:                           String(d, "name"),
-		Description:                    String(d, "description"),
-		AppType:                        String(d, "app_type"),
-		LogoURI:                        String(d, "logo_uri"),
-		IsFirstParty:                   Bool(d, "is_first_party"),
-		IsTokenEndpointIPHeaderTrusted: Bool(d, "is_token_endpoint_ip_header_trusted"),
-		OIDCConformant:                 Bool(d, "oidc_conformant"),
-		Callbacks:                      Slice(d, "callbacks"),
-		AllowedLogoutURLs:              Slice(d, "allowed_logout_urls"),
-		AllowedOrigins:                 Slice(d, "allowed_origins"),
-		AllowedClients:                 Slice(d, "allowed_clients"),
-		GrantTypes:                     Slice(d, "grant_types"),
-		OrganizationUsage:              String(d, "organization_usage"),
-		OrganizationRequireBehavior:    String(d, "organization_require_behavior"),
-		WebOrigins:                     Slice(d, "web_origins"),
-		SSO:                            Bool(d, "sso"),
-		SSODisabled:                    Bool(d, "sso_disabled"),
-		CrossOriginAuth:                Bool(d, "cross_origin_auth"),
-		CrossOriginLocation:            String(d, "cross_origin_loc"),
-		CustomLoginPageOn:              Bool(d, "custom_login_page_on"),
-		CustomLoginPage:                String(d, "custom_login_page"),
-		FormTemplate:                   String(d, "form_template"),
-		TokenEndpointAuthMethod:        String(d, "token_endpoint_auth_method"),
-		InitiateLoginURI:               String(d, "initiate_login_uri"),
+		Name:                           value.String(config.GetAttr("name")),
+		Description:                    value.String(config.GetAttr("description")),
+		AppType:                        value.String(config.GetAttr("app_type")),
+		LogoURI:                        value.String(config.GetAttr("logo_uri")),
+		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
+		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
+		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
+		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
+		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
+		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
+		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
+		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
+		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
+		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
+		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
+		SSO:                            value.Bool(config.GetAttr("sso")),
+		SSODisabled:                    value.Bool(config.GetAttr("sso_disabled")),
+		CrossOriginAuth:                value.Bool(config.GetAttr("cross_origin_auth")),
+		CrossOriginLocation:            value.String(config.GetAttr("cross_origin_loc")),
+		CustomLoginPageOn:              value.Bool(config.GetAttr("custom_login_page_on")),
+		CustomLoginPage:                value.String(config.GetAttr("custom_login_page")),
+		FormTemplate:                   value.String(config.GetAttr("form_template")),
+		TokenEndpointAuthMethod:        value.String(config.GetAttr("token_endpoint_auth_method")),
+		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
+		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
+		ClientMetadata:                 value.MapOfStrings(config.GetAttr("client_metadata")),
 	}
 
-	List(d, "refresh_token", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		client.RefreshToken = &management.ClientRefreshToken{
-			RotationType:              String(d, "rotation_type"),
-			ExpirationType:            String(d, "expiration_type"),
-			Leeway:                    Int(d, "leeway"),
-			TokenLifetime:             Int(d, "token_lifetime"),
-			InfiniteTokenLifetime:     Bool(d, "infinite_token_lifetime"),
-			InfiniteIdleTokenLifetime: Bool(d, "infinite_idle_token_lifetime"),
-			IdleTokenLifetime:         Int(d, "idle_token_lifetime"),
-		}
-	})
+	if d.IsNewResource() || d.HasChange("refresh_token") {
+		config.GetAttr("refresh_token").ForEachElement(func(_ cty.Value, refreshToken cty.Value) (stop bool) {
+			client.RefreshToken = &management.ClientRefreshToken{
+				RotationType:              value.String(refreshToken.GetAttr("rotation_type")),
+				ExpirationType:            value.String(refreshToken.GetAttr("expiration_type")),
+				Leeway:                    value.Int(refreshToken.GetAttr("leeway")),
+				TokenLifetime:             value.Int(refreshToken.GetAttr("token_lifetime")),
+				InfiniteTokenLifetime:     value.Bool(refreshToken.GetAttr("infinite_token_lifetime")),
+				InfiniteIdleTokenLifetime: value.Bool(refreshToken.GetAttr("infinite_idle_token_lifetime")),
+				IdleTokenLifetime:         value.Int(refreshToken.GetAttr("idle_token_lifetime")),
+			}
 
-	List(d, "jwt_configuration").Elem(func(d ResourceData) {
+			return stop
+		})
+	}
+
+	config.GetAttr("jwt_configuration").ForEachElement(func(_ cty.Value, jwtConfig cty.Value) (stop bool) {
 		client.JWTConfiguration = &management.ClientJWTConfiguration{
-			LifetimeInSeconds: Int(d, "lifetime_in_seconds"),
-			SecretEncoded:     Bool(d, "secret_encoded", IsNewResource()),
-			Algorithm:         String(d, "alg"),
-			Scopes:            Map(d, "scopes"),
+			LifetimeInSeconds: value.Int(jwtConfig.GetAttr("lifetime_in_seconds")),
+			Algorithm:         value.String(jwtConfig.GetAttr("alg")),
+			Scopes:            value.Map(jwtConfig.GetAttr("scopes")),
 		}
+
+		if d.IsNewResource() {
+			client.JWTConfiguration.SecretEncoded = value.Bool(jwtConfig.GetAttr("secret_encoded"))
+		}
+
+		return stop
 	})
 
-	if encryptionKeyMap := Map(d, "encryption_key"); encryptionKeyMap != nil {
-		client.EncryptionKey = map[string]string{}
-		for key, value := range encryptionKeyMap {
-			client.EncryptionKey[key] = value.(string)
-		}
+	if addons := expandClientAddons(d); addons != nil {
+		client.Addons = addons
 	}
 
-	List(d, "addons").Elem(func(d ResourceData) {
-		client.Addons = make(map[string]interface{})
-
-		var allowedAddons = []string{
-			"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-			"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-			"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-			"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-			"springcm", "wams", "wsfed", "zendesk", "zoom",
-		}
-
-		for _, name := range allowedAddons {
-			if _, ok := d.GetOk(name); ok {
-				client.Addons[name] = mapFromState(Map(d, name))
-			}
-		}
-
-		List(d, "samlp").Elem(func(d ResourceData) {
-			samlp := make(map[string]interface{})
-
-			if audience := String(d, "audience"); audience != nil && *audience != "" {
-				samlp["audience"] = audience
-			}
-			if authnContextClassRef := String(d, "authn_context_class_ref"); authnContextClassRef != nil && *authnContextClassRef != "" {
-				samlp["authnContextClassRef"] = authnContextClassRef
-			}
-			if binding := String(d, "binding"); binding != nil && *binding != "" {
-				samlp["binding"] = binding
-			}
-			if signingCert := String(d, "signing_cert"); signingCert != nil && *signingCert != "" {
-				samlp["signingCert"] = signingCert
-			}
-			if destination := String(d, "destination"); destination != nil && *destination != "" {
-				samlp["destination"] = destination
-			}
-			if digestAlgorithm := String(d, "digest_algorithm"); digestAlgorithm != nil && *digestAlgorithm != "" {
-				samlp["digestAlgorithm"] = digestAlgorithm
-			}
-			if nameIdentifierFormat := String(d, "name_identifier_format"); nameIdentifierFormat != nil && *nameIdentifierFormat != "" {
-				samlp["nameIdentifierFormat"] = nameIdentifierFormat
-			}
-			if recipient := String(d, "recipient"); recipient != nil && *recipient != "" {
-				samlp["recipient"] = recipient
-			}
-			if signatureAlgorithm := String(d, "signature_algorithm"); signatureAlgorithm != nil && *signatureAlgorithm != "" {
-				samlp["signatureAlgorithm"] = signatureAlgorithm
-			}
-			if createUpnClaim := Bool(d, "create_upn_claim"); createUpnClaim != nil {
-				samlp["createUpnClaim"] = createUpnClaim
-			}
-			if includeAttributeNameFormat := Bool(d, "include_attribute_name_format"); includeAttributeNameFormat != nil {
-				samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
-			}
-			if mapIdentities := Bool(d, "map_identities"); mapIdentities != nil {
-				samlp["mapIdentities"] = mapIdentities
-			}
-			if mapUnknownClaimsAsIs := Bool(d, "map_unknown_claims_as_is"); mapUnknownClaimsAsIs != nil {
-				samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
-			}
-			if passthroughClaimsWithNoMapping := Bool(d, "passthrough_claims_with_no_mapping"); passthroughClaimsWithNoMapping != nil {
-				samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
-			}
-			if signResponse := Bool(d, "sign_response"); signResponse != nil {
-				samlp["signResponse"] = signResponse
-			}
-			if typedAttributes := Bool(d, "typed_attributes"); typedAttributes != nil {
-				samlp["typedAttributes"] = typedAttributes
-			}
-			if lifetimeInSeconds := Int(d, "lifetime_in_seconds"); lifetimeInSeconds != nil {
-				samlp["lifetimeInSeconds"] = lifetimeInSeconds
-			}
-			if mappings := Map(d, "mappings"); mappings != nil {
-				samlp["mappings"] = mappings
-			}
-			if nameIdentifierProbes := Slice(d, "name_identifier_probes"); nameIdentifierProbes != nil {
-				samlp["nameIdentifierProbes"] = nameIdentifierProbes
-			}
-			if logout := mapFromState(Map(d, "logout")); logout != nil {
-				samlp["logout"] = logout
+	config.GetAttr("native_social_login").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		config.GetAttr("apple").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+			if enabled := value.Bool(config.GetAttr("enabled")); enabled != nil {
+				client.NativeSocialLogin = &management.ClientNativeSocialLogin{
+					Apple: map[string]interface{}{
+						"enabled": enabled,
+					},
+				}
 			}
 
-			client.Addons["samlp"] = samlp
+			return stop
 		})
+
+		config.GetAttr("facebook").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+			facebook := make(map[string]interface{})
+			if enabled := value.Bool(config.GetAttr("enabled")); enabled != nil {
+				facebook["enabled"] = enabled
+			}
+
+			if client.NativeSocialLogin != nil {
+				client.NativeSocialLogin.Facebook = facebook
+			} else {
+				client.NativeSocialLogin = &management.ClientNativeSocialLogin{
+					Facebook: facebook,
+				}
+			}
+
+			return stop
+		})
+
+		return stop
 	})
 
-	if clientMetadata, ok := d.GetOk("client_metadata"); ok {
-		client.ClientMetadata = make(map[string]string)
-		for key, value := range clientMetadata.(map[string]interface{}) {
-			client.ClientMetadata[key] = value.(string)
+	config.GetAttr("mobile").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		mobile := make(map[string]interface{})
+
+		config.GetAttr("android").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+			android := make(map[string]interface{})
+
+			if appPackageName := value.String(config.GetAttr("app_package_name")); appPackageName != nil {
+				android["app_package_name"] = appPackageName
+			}
+			if cert := value.Strings(config.GetAttr("sha256_cert_fingerprints")); cert != nil {
+				android["sha256_cert_fingerprints"] = cert
+			}
+
+			if len(android) > 0 {
+				mobile["android"] = android
+			}
+
+			return stop
+		})
+
+		config.GetAttr("ios").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+			ios := make(map[string]interface{})
+
+			if teamID := value.String(config.GetAttr("team_id")); teamID != nil {
+				ios["team_id"] = teamID
+			}
+			if appBundleIdentifier := value.String(config.GetAttr("app_bundle_identifier")); appBundleIdentifier != nil {
+				ios["app_bundle_identifier"] = appBundleIdentifier
+			}
+
+			if len(ios) > 0 {
+				mobile["ios"] = ios
+			}
+
+			return stop
+		})
+
+		if len(mobile) > 0 {
+			client.Mobile = mobile
 		}
-	}
 
-	List(d, "native_social_login").Elem(func(d ResourceData) {
-		client.NativeSocialLogin = &management.ClientNativeSocialLogin{}
-
-		List(d, "apple").Elem(func(d ResourceData) {
-			client.NativeSocialLogin.Apple = map[string]interface{}{
-				"enabled": Bool(d, "enabled"),
-			}
-		})
-
-		List(d, "facebook").Elem(func(d ResourceData) {
-			client.NativeSocialLogin.Facebook = map[string]interface{}{
-				"enabled": Bool(d, "enabled"),
-			}
-		})
-	})
-
-	List(d, "mobile").Elem(func(d ResourceData) {
-		client.Mobile = make(map[string]interface{})
-
-		List(d, "android").Elem(func(d ResourceData) {
-			client.Mobile["android"] = map[string]interface{}{
-				"app_package_name":         String(d, "app_package_name"),
-				"sha256_cert_fingerprints": Slice(d, "sha256_cert_fingerprints"),
-			}
-		})
-
-		List(d, "ios").Elem(func(d ResourceData) {
-			client.Mobile["ios"] = map[string]interface{}{
-				"team_id":               String(d, "team_id"),
-				"app_bundle_identifier": String(d, "app_bundle_identifier"),
-			}
-		})
+		return stop
 	})
 
 	return client
 }
 
+func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
+	if !d.HasChange("addons") {
+		return nil
+	}
+
+	addons := make(map[string]interface{})
+	var allowedAddons = []string{
+		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
+		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
+		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
+		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
+		"springcm", "wams", "wsfed", "zendesk", "zoom",
+	}
+	for _, name := range allowedAddons {
+		if _, ok := d.GetOk("addons.0." + name); ok {
+			addons[name] = mapFromState(d.Get("addons.0." + name).(map[string]interface{}))
+		}
+	}
+
+	samlpConfig := d.GetRawConfig().
+		GetAttr("addons").Index(cty.NumberIntVal(0)).
+		GetAttr("samlp").Index(cty.NumberIntVal(0))
+	samlp := make(map[string]interface{})
+
+	if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
+		samlp["audience"] = audience
+	}
+	if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
+		samlp["authnContextClassRef"] = authnContextClassRef
+	}
+	if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
+		samlp["binding"] = binding
+	}
+	if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
+		samlp["signingCert"] = signingCert
+	}
+	if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
+		samlp["destination"] = destination
+	}
+	if digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm")); digestAlgorithm != nil {
+		samlp["digestAlgorithm"] = digestAlgorithm
+	}
+	if nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format")); nameIdentifierFormat != nil {
+		samlp["nameIdentifierFormat"] = nameIdentifierFormat
+	}
+	if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
+		samlp["recipient"] = recipient
+	}
+	if signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm")); signatureAlgorithm != nil {
+		samlp["signatureAlgorithm"] = signatureAlgorithm
+	}
+	if createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim")); createUpnClaim != nil {
+		samlp["createUpnClaim"] = createUpnClaim
+	}
+	if includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format")); includeAttributeNameFormat != nil {
+		samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
+	}
+	if mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities")); mapIdentities != nil {
+		samlp["mapIdentities"] = mapIdentities
+	}
+	if mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is")); mapUnknownClaimsAsIs != nil {
+		samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
+	}
+	if passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping")); passthroughClaimsWithNoMapping != nil {
+		samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
+	}
+	if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
+		samlp["signResponse"] = signResponse
+	}
+	if typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes")); typedAttributes != nil {
+		samlp["typedAttributes"] = typedAttributes
+	}
+	if lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds")); lifetimeInSeconds != nil {
+		samlp["lifetimeInSeconds"] = lifetimeInSeconds
+	}
+	if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
+		samlp["mappings"] = mappings
+	}
+	if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
+		samlp["nameIdentifierProbes"] = nameIdentifierProbes
+	}
+	if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); logout != nil {
+		samlp["logout"] = logout
+	}
+
+	if len(samlp) > 0 {
+		addons["samlp"] = samlp
+	}
+
+	if len(addons) > 0 {
+		return addons
+	}
+
+	return nil
+}
+
 func mapFromState(input map[string]interface{}) map[string]interface{} {
 	output := make(map[string]interface{})
 
-	for key, value := range input {
-		switch v := value.(type) {
+	for key, val := range input {
+		switch v := val.(type) {
 		case string:
 			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
 				output[key] = i
@@ -1032,19 +1090,19 @@ func mapToState(input map[string]interface{}) map[string]interface{} {
 	output := make(map[string]interface{})
 
 	for key, v := range input {
-		switch value := v.(type) {
+		switch val := v.(type) {
 		case bool:
-			if value {
+			if val {
 				output[key] = "true"
 			} else {
 				output[key] = "false"
 			}
 		case float64:
-			output[key] = strconv.Itoa(int(value))
+			output[key] = strconv.Itoa(int(val))
 		case int:
-			output[key] = strconv.Itoa(value)
+			output[key] = strconv.Itoa(val)
 		default:
-			output[key] = value
+			output[key] = val
 		}
 	}
 

@@ -4,11 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newClientGrant() *schema.Resource {
@@ -48,46 +49,47 @@ func newClientGrant() *schema.Resource {
 }
 
 func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	clientGrant := buildClientGrant(d)
 	api := m.(*management.Management)
+
+	clientGrant := expandClientGrant(d)
 	if err := api.ClientGrant.Create(clientGrant); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(clientGrant.ID))
+	d.SetId(clientGrant.GetID())
 
 	return readClientGrant(ctx, d, m)
 }
 
 func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	clientGrant, err := api.ClientGrant.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("client_id", clientGrant.ClientID),
-		d.Set("audience", clientGrant.Audience),
-		d.Set("scope", clientGrant.Scope),
+		d.Set("client_id", clientGrant.GetClientID()),
+		d.Set("audience", clientGrant.GetAudience()),
+		d.Set("scope", clientGrant.GetScope()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	clientGrant := buildClientGrant(d)
-	clientGrant.Audience = nil
-	clientGrant.ClientID = nil
 	api := m.(*management.Management)
-	if err := api.ClientGrant.Update(d.Id(), clientGrant); err != nil {
-		return diag.FromErr(err)
+
+	clientGrant := expandClientGrant(d)
+	if clientGrantHasChange(clientGrant) {
+		if err := api.ClientGrant.Update(d.Id(), clientGrant); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readClientGrant(ctx, d, m)
@@ -95,29 +97,38 @@ func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 
 func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.ClientGrant.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
 
-func buildClientGrant(d *schema.ResourceData) *management.ClientGrant {
-	clientGrant := &management.ClientGrant{
-		ClientID: String(d, "client_id"),
-		Audience: String(d, "audience"),
+func expandClientGrant(d *schema.ResourceData) *management.ClientGrant {
+	config := d.GetRawConfig()
+
+	clientGrant := &management.ClientGrant{}
+
+	if d.IsNewResource() {
+		clientGrant.ClientID = value.String(config.GetAttr("client_id"))
+		clientGrant.Audience = value.String(config.GetAttr("audience"))
 	}
 
-	clientGrant.Scope = []interface{}{}
-	if scope, ok := d.GetOk("scope"); ok {
-		clientGrant.Scope = scope.([]interface{})
+	if d.IsNewResource() || d.HasChange("scope") {
+		clientGrant.Scope = value.Strings(config.GetAttr("scope"))
 	}
 
 	return clientGrant
+}
+
+func clientGrantHasChange(clientGrant *management.ClientGrant) bool {
+	// Hacky but we need to tell if an
+	// empty json is sent to the api.
+	return clientGrant.String() != "{}"
 }

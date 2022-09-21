@@ -5,9 +5,12 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newBrandingTheme() *schema.Resource {
@@ -459,110 +462,92 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		DisplayName: String(data, "display_name"),
 	}
 
-	List(data, "borders").Elem(func(d ResourceData) {
-		brandingTheme.Borders = management.BrandingThemeBorders{
-			ButtonBorderRadius: d.Get("button_border_radius").(int),
-			ButtonBorderWeight: d.Get("button_border_weight").(int),
-			ButtonsStyle:       d.Get("buttons_style").(string),
-			InputBorderRadius:  d.Get("input_border_radius").(int),
-			InputBorderWeight:  d.Get("input_border_weight").(int),
-			InputsStyle:        d.Get("inputs_style").(string),
-			ShowWidgetShadow:   d.Get("show_widget_shadow").(bool),
-			WidgetBorderWeight: d.Get("widget_border_weight").(int),
-			WidgetCornerRadius: d.Get("widget_corner_radius").(int),
-		}
-	})
+	brandingTheme.Borders = management.BrandingThemeBorders{
+		ButtonBorderRadius: data.Get("borders.0.button_border_radius").(int),
+		ButtonBorderWeight: data.Get("borders.0.button_border_weight").(int),
+		ButtonsStyle:       data.Get("borders.0.buttons_style").(string),
+		InputBorderRadius:  data.Get("borders.0.input_border_radius").(int),
+		InputBorderWeight:  data.Get("borders.0.input_border_weight").(int),
+		InputsStyle:        data.Get("borders.0.inputs_style").(string),
+		ShowWidgetShadow:   data.Get("borders.0.show_widget_shadow").(bool),
+		WidgetBorderWeight: data.Get("borders.0.widget_border_weight").(int),
+		WidgetCornerRadius: data.Get("borders.0.widget_corner_radius").(int),
+	}
 
-	List(data, "colors").Elem(func(d ResourceData) {
-		brandingTheme.Colors = management.BrandingThemeColors{
-			BaseFocusColor:          String(d, "base_focus_color"),
-			BaseHoverColor:          String(d, "base_hover_color"),
-			BodyText:                d.Get("body_text").(string),
-			Error:                   d.Get("error").(string),
-			Header:                  d.Get("header").(string),
-			Icons:                   d.Get("icons").(string),
-			InputBackground:         d.Get("input_background").(string),
-			InputBorder:             d.Get("input_border").(string),
-			InputFilledText:         d.Get("input_filled_text").(string),
-			InputLabelsPlaceholders: d.Get("input_labels_placeholders").(string),
-			LinksFocusedComponents:  d.Get("links_focused_components").(string),
-			PrimaryButton:           d.Get("primary_button").(string),
-			PrimaryButtonLabel:      d.Get("primary_button_label").(string),
-			SecondaryButtonBorder:   d.Get("secondary_button_border").(string),
-			SecondaryButtonLabel:    d.Get("secondary_button_label").(string),
-			Success:                 d.Get("success").(string),
-			WidgetBackground:        d.Get("widget_background").(string),
-			WidgetBorder:            d.Get("widget_border").(string),
-		}
-	})
+	brandingTheme.Colors = management.BrandingThemeColors{
+		BaseFocusColor: value.String(
+			data.GetRawConfig().GetAttr("colors").Index(cty.NumberIntVal(0)).GetAttr("base_focus_color"),
+		),
+		BaseHoverColor: value.String(
+			data.GetRawConfig().GetAttr("colors").Index(cty.NumberIntVal(0)).GetAttr("base_hover_color"),
+		),
+		BodyText:                data.Get("colors.0.body_text").(string),
+		Error:                   data.Get("colors.0.error").(string),
+		Header:                  data.Get("colors.0.header").(string),
+		Icons:                   data.Get("colors.0.icons").(string),
+		InputBackground:         data.Get("colors.0.input_background").(string),
+		InputBorder:             data.Get("colors.0.input_border").(string),
+		InputFilledText:         data.Get("colors.0.input_filled_text").(string),
+		InputLabelsPlaceholders: data.Get("colors.0.input_labels_placeholders").(string),
+		LinksFocusedComponents:  data.Get("colors.0.links_focused_components").(string),
+		PrimaryButton:           data.Get("colors.0.primary_button").(string),
+		PrimaryButtonLabel:      data.Get("colors.0.primary_button_label").(string),
+		SecondaryButtonBorder:   data.Get("colors.0.secondary_button_border").(string),
+		SecondaryButtonLabel:    data.Get("colors.0.secondary_button_label").(string),
+		Success:                 data.Get("colors.0.success").(string),
+		WidgetBackground:        data.Get("colors.0.widget_background").(string),
+		WidgetBorder:            data.Get("colors.0.widget_border").(string),
+	}
 
-	List(data, "fonts").Elem(func(d ResourceData) {
-		brandingTheme.Fonts = management.BrandingThemeFonts{
-			FontURL:           d.Get("font_url").(string),
-			LinksStyle:        d.Get("links_style").(string),
-			ReferenceTextSize: d.Get("reference_text_size").(int),
-		}
+	brandingTheme.Fonts = management.BrandingThemeFonts{
+		FontURL:           data.Get("fonts.0.font_url").(string),
+		LinksStyle:        data.Get("fonts.0.links_style").(string),
+		ReferenceTextSize: data.Get("fonts.0.reference_text_size").(int),
+	}
 
-		List(d, "body_text").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.BodyText = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
+	brandingTheme.Fonts.BodyText = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.body_text.0.bold").(bool),
+		Size: data.Get("fonts.0.body_text.0.size").(int),
+	}
 
-		List(d, "buttons_text").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.ButtonsText = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
+	brandingTheme.Fonts.ButtonsText = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.buttons_text.0.bold").(bool),
+		Size: data.Get("fonts.0.buttons_text.0.size").(int),
+	}
 
-		List(d, "input_labels").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.InputLabels = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
+	brandingTheme.Fonts.InputLabels = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.input_labels.0.bold").(bool),
+		Size: data.Get("fonts.0.input_labels.0.size").(int),
+	}
 
-		List(d, "links").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.Links = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
+	brandingTheme.Fonts.Links = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.links.0.bold").(bool),
+		Size: data.Get("fonts.0.links.0.size").(int),
+	}
 
-		List(d, "subtitle").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.Subtitle = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
+	brandingTheme.Fonts.Subtitle = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.subtitle.0.bold").(bool),
+		Size: data.Get("fonts.0.subtitle.0.size").(int),
+	}
 
-		List(d, "title").Elem(func(d ResourceData) {
-			brandingTheme.Fonts.Title = management.BrandingThemeText{
-				Bold: d.Get("bold").(bool),
-				Size: d.Get("size").(int),
-			}
-		})
-	})
+	brandingTheme.Fonts.Title = management.BrandingThemeText{
+		Bold: data.Get("fonts.0.title.0.bold").(bool),
+		Size: data.Get("fonts.0.title.0.size").(int),
+	}
 
-	List(data, "page_background").Elem(func(d ResourceData) {
-		brandingTheme.PageBackground = management.BrandingThemePageBackground{
-			BackgroundColor:    d.Get("background_color").(string),
-			BackgroundImageURL: d.Get("background_image_url").(string),
-			PageLayout:         d.Get("page_layout").(string),
-		}
-	})
+	brandingTheme.PageBackground = management.BrandingThemePageBackground{
+		BackgroundColor:    data.Get("page_background.0.background_color").(string),
+		BackgroundImageURL: data.Get("page_background.0.background_image_url").(string),
+		PageLayout:         data.Get("page_background.0.page_layout").(string),
+	}
 
-	List(data, "widget").Elem(func(d ResourceData) {
-		brandingTheme.Widget = management.BrandingThemeWidget{
-			HeaderTextAlignment: d.Get("header_text_alignment").(string),
-			LogoHeight:          d.Get("logo_height").(int),
-			LogoPosition:        d.Get("logo_position").(string),
-			LogoURL:             d.Get("logo_url").(string),
-			SocialButtonsLayout: d.Get("social_buttons_layout").(string),
-		}
-	})
+	brandingTheme.Widget = management.BrandingThemeWidget{
+		HeaderTextAlignment: data.Get("widget.0.header_text_alignment").(string),
+		LogoHeight:          data.Get("widget.0.logo_height").(int),
+		LogoPosition:        data.Get("widget.0.logo_position").(string),
+		LogoURL:             data.Get("widget.0.logo_url").(string),
+		SocialButtonsLayout: data.Get("widget.0.social_buttons_layout").(string),
+	}
 
 	return brandingTheme
 }

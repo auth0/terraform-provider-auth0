@@ -88,6 +88,12 @@ func TestAccResourceServer(t *testing.T) {
 					),
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccResourceServerConfigUpdateRemoveScopes, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "0"),
+				),
+			},
 		},
 	})
 }
@@ -126,6 +132,19 @@ resource "auth0_resource_server" "my_resource_server" {
 		value = "create:bar"
 		description = "Create bars for bar reasons"
 	}
+	allow_offline_access = false # <--- set to false
+	token_lifetime = 7200
+	token_lifetime_for_web = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies = true
+}
+`
+
+const testAccResourceServerConfigUpdateRemoveScopes = `
+resource "auth0_resource_server" "my_resource_server" {
+	name = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg = "RS256"
 	allow_offline_access = false # <--- set to false
 	token_lifetime = 7200
 	token_lifetime_for_web = 3600

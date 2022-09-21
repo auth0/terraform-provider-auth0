@@ -312,61 +312,93 @@ func checkForUnmanagedActionSecrets(
 
 func expandAction(config cty.Value) *management.Action {
 	action := &management.Action{
-		Name:    value.String(config.GetAttr("name")),
-		Code:    value.String(config.GetAttr("code")),
-		Runtime: value.String(config.GetAttr("runtime")),
+		Name:              value.String(config.GetAttr("name")),
+		Code:              value.String(config.GetAttr("code")),
+		Runtime:           value.String(config.GetAttr("runtime")),
+		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
+		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
+		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
 	}
-
-	config.GetAttr("supported_triggers").ForEachElement(func(_ cty.Value, triggers cty.Value) (stop bool) {
-		action.SupportedTriggers = []*management.ActionTrigger{
-			{
-				ID:      value.String(triggers.GetAttr("id")),
-				Version: value.String(triggers.GetAttr("version")),
-			},
-		}
-
-		return stop
-	})
-
-	config.GetAttr("dependencies").ForEachElement(func(_ cty.Value, deps cty.Value) (stop bool) {
-		action.Dependencies = append(action.Dependencies, &management.ActionDependency{
-			Name:    value.String(deps.GetAttr("name")),
-			Version: value.String(deps.GetAttr("version")),
-		})
-
-		return true
-	})
-
-	config.GetAttr("secrets").ForEachElement(func(_ cty.Value, secrets cty.Value) (stop bool) {
-		action.Secrets = append(action.Secrets, &management.ActionSecret{
-			Name:  value.String(secrets.GetAttr("name")),
-			Value: value.String(secrets.GetAttr("value")),
-		})
-
-		return true
-	})
 
 	return action
 }
 
+func expandActionTriggers(triggers cty.Value) []management.ActionTrigger {
+	if triggers.IsNull() {
+		return nil
+	}
+
+	supportedTriggers := make([]management.ActionTrigger, 0)
+
+	triggers.ForEachElement(func(_ cty.Value, triggers cty.Value) (stop bool) {
+		supportedTriggers = append(supportedTriggers, management.ActionTrigger{
+			ID:      value.String(triggers.GetAttr("id")),
+			Version: value.String(triggers.GetAttr("version")),
+		})
+		return stop
+	})
+
+	return supportedTriggers
+}
+
+func expandActionDependencies(dependencies cty.Value) *[]management.ActionDependency {
+	if dependencies.IsNull() {
+		return nil
+	}
+
+	actionDependencies := make([]*management.ActionDependency, 0)
+
+	dependencies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
+		actionDependencies = append(actionDependencies, &management.ActionDependency{
+			Name:    value.String(dep.GetAttr("name")),
+			Version: value.String(dep.GetAttr("version")),
+		})
+		return true
+	})
+
+	return actionDependencies
+}
+
+func expandActionSecrets(secrets cty.Value) []*management.ActionSecret {
+	if secrets.IsNull() {
+		return nil
+	}
+
+	actionSecrets := make([]*management.ActionSecret, 0)
+
+	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
+		actionSecrets = append(actionSecrets, &management.ActionSecret{
+			Name:  value.String(secret.GetAttr("name")),
+			Value: value.String(secret.GetAttr("value")),
+		})
+		return true
+	})
+
+	return actionSecrets
+}
+
 func flattenActionTriggers(triggers []*management.ActionTrigger) []interface{} {
 	var result []interface{}
+
 	for _, trigger := range triggers {
 		result = append(result, map[string]interface{}{
 			"id":      trigger.GetID(),
 			"version": trigger.GetVersion(),
 		})
 	}
+
 	return result
 }
 
 func flattenActionDependencies(dependencies []*management.ActionDependency) []interface{} {
 	var result []interface{}
+
 	for _, dependency := range dependencies {
 		result = append(result, map[string]interface{}{
 			"name":    dependency.GetName(),
 			"version": dependency.GetVersion(),
 		})
 	}
+
 	return result
 }

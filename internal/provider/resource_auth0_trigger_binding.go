@@ -70,7 +70,7 @@ func newTriggerBinding() *schema.Resource {
 
 func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	id := d.Get("trigger").(string)
-	triggerBindings := expandTriggerBindings(d)
+	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
 		return diag.FromErr(err)
@@ -98,7 +98,7 @@ func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	triggerBindings := expandTriggerBindings(d)
+	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
 		return diag.FromErr(err)
@@ -122,15 +122,15 @@ func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	return nil
 }
 
-func expandTriggerBindings(d *schema.ResourceData) []*management.ActionBinding {
+func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	var triggerBindings []*management.ActionBinding
 
-	d.GetRawConfig().GetAttr("actions").ForEachElement(func(_ cty.Value, action cty.Value) (stop bool) {
+	config.ForEachElement(func(_ cty.Value, action cty.Value) (stop bool) {
 		t := "action_id"
 		triggerBindings = append(triggerBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
 				Type:  &t,
-				Value: value.String(d.GetRawConfig().GetAttr("id")),
+				Value: value.String(action.GetAttr("id")),
 			},
 			DisplayName: value.String(action.GetAttr("display_name")),
 		})

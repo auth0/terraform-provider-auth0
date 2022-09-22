@@ -58,6 +58,7 @@ func newRule() *schema.Resource {
 			"enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Indicates whether the rule is enabled.",
 			},
 		},

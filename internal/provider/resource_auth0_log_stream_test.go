@@ -10,6 +10,7 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
@@ -57,6 +58,10 @@ func TestAccLogStreamHTTP(t *testing.T) {
 			{
 				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
+					func(state *terraform.State) error {
+						log.Printf("%+v", state)
+						return nil
+					},
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "status", "paused"),

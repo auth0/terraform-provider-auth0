@@ -76,14 +76,6 @@ func TestAccTenant(t *testing.T) {
 
 const testAccTenantConfigCreate = `
 resource "auth0_tenant" "my_tenant" {
-	change_password {
-		enabled = true
-		html = "<html>Change Password</html>"
-	}
-	guardian_mfa_page {
-		enabled = true
-		html = "<html>MFA</html>"
-	}
 	default_audience = "https://%s/api/v2/"
 	default_directory = ""
 	error_page {

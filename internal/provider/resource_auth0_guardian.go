@@ -433,6 +433,5 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	d.SetId("")
-
 	return nil
 }

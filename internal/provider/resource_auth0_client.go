@@ -3,17 +3,14 @@ package provider
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newClient() *schema.Resource {
@@ -733,51 +730,50 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	client, err := api.Client.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("client_id", client.ClientID),
-		d.Set("client_secret", client.ClientSecret),
-		d.Set("name", client.Name),
-		d.Set("description", client.Description),
-		d.Set("app_type", client.AppType),
-		d.Set("logo_uri", client.LogoURI),
-		d.Set("is_first_party", client.IsFirstParty),
-		d.Set("is_token_endpoint_ip_header_trusted", client.IsTokenEndpointIPHeaderTrusted),
-		d.Set("oidc_conformant", client.OIDCConformant),
-		d.Set("callbacks", client.Callbacks),
-		d.Set("allowed_logout_urls", client.AllowedLogoutURLs),
-		d.Set("allowed_origins", client.AllowedOrigins),
-		d.Set("allowed_clients", client.AllowedClients),
-		d.Set("grant_types", client.GrantTypes),
-		d.Set("organization_usage", client.OrganizationUsage),
-		d.Set("organization_require_behavior", client.OrganizationRequireBehavior),
-		d.Set("web_origins", client.WebOrigins),
-		d.Set("sso", client.SSO),
-		d.Set("sso_disabled", client.SSODisabled),
-		d.Set("cross_origin_auth", client.CrossOriginAuth),
-		d.Set("cross_origin_loc", client.CrossOriginLocation),
-		d.Set("custom_login_page_on", client.CustomLoginPageOn),
-		d.Set("custom_login_page", client.CustomLoginPage),
-		d.Set("form_template", client.FormTemplate),
-		d.Set("token_endpoint_auth_method", client.TokenEndpointAuthMethod),
-		d.Set("native_social_login", flattenCustomSocialConfiguration(client.NativeSocialLogin)),
-		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.JWTConfiguration)),
-		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.RefreshToken)),
-		d.Set("encryption_key", client.EncryptionKey),
+		d.Set("client_id", client.GetClientID()),
+		d.Set("client_secret", client.GetClientSecret()),
+		d.Set("name", client.GetName()),
+		d.Set("description", client.GetDescription()),
+		d.Set("app_type", client.GetAppType()),
+		d.Set("logo_uri", client.GetLogoURI()),
+		d.Set("is_first_party", client.GetIsFirstParty()),
+		d.Set("is_token_endpoint_ip_header_trusted", client.GetIsTokenEndpointIPHeaderTrusted()),
+		d.Set("oidc_conformant", client.GetOIDCConformant()),
+		d.Set("callbacks", client.GetCallbacks()),
+		d.Set("allowed_logout_urls", client.GetAllowedLogoutURLs()),
+		d.Set("allowed_origins", client.GetAllowedOrigins()),
+		d.Set("allowed_clients", client.GetAllowedClients()),
+		d.Set("grant_types", client.GetGrantTypes()),
+		d.Set("organization_usage", client.GetOrganizationUsage()),
+		d.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
+		d.Set("web_origins", client.GetWebOrigins()),
+		d.Set("sso", client.GetSSO()),
+		d.Set("sso_disabled", client.GetSSODisabled()),
+		d.Set("cross_origin_auth", client.GetCrossOriginAuth()),
+		d.Set("cross_origin_loc", client.GetCrossOriginLocation()),
+		d.Set("custom_login_page_on", client.GetCustomLoginPageOn()),
+		d.Set("custom_login_page", client.GetCustomLoginPage()),
+		d.Set("form_template", client.GetFormTemplate()),
+		d.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
+		d.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
+		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
+		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
+		d.Set("encryption_key", client.GetEncryptionKey()),
 		d.Set("addons", flattenClientAddons(client.Addons)),
-		d.Set("client_metadata", client.ClientMetadata),
+		d.Set("client_metadata", client.GetClientMetadata()),
 		d.Set("mobile", flattenClientMobile(client.Mobile)),
-		d.Set("initiate_login_uri", client.InitiateLoginURI),
+		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
 	)
 
@@ -805,467 +801,33 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Client.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 	}
 
+	d.SetId("")
 	return nil
-}
-
-func expandClient(d *schema.ResourceData) *management.Client {
-	config := d.GetRawConfig()
-
-	client := &management.Client{
-		Name:                           value.String(config.GetAttr("name")),
-		Description:                    value.String(config.GetAttr("description")),
-		AppType:                        value.String(config.GetAttr("app_type")),
-		LogoURI:                        value.String(config.GetAttr("logo_uri")),
-		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
-		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
-		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
-		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
-		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
-		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
-		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
-		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
-		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
-		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
-		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
-		SSO:                            value.Bool(config.GetAttr("sso")),
-		SSODisabled:                    value.Bool(config.GetAttr("sso_disabled")),
-		CrossOriginAuth:                value.Bool(config.GetAttr("cross_origin_auth")),
-		CrossOriginLocation:            value.String(config.GetAttr("cross_origin_loc")),
-		CustomLoginPageOn:              value.Bool(config.GetAttr("custom_login_page_on")),
-		CustomLoginPage:                value.String(config.GetAttr("custom_login_page")),
-		FormTemplate:                   value.String(config.GetAttr("form_template")),
-		TokenEndpointAuthMethod:        value.String(config.GetAttr("token_endpoint_auth_method")),
-		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
-		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
-		ClientMetadata:                 value.MapOfStrings(config.GetAttr("client_metadata")),
-	}
-
-	if d.IsNewResource() || d.HasChange("refresh_token") {
-		config.GetAttr("refresh_token").ForEachElement(func(_ cty.Value, refreshToken cty.Value) (stop bool) {
-			client.RefreshToken = &management.ClientRefreshToken{
-				RotationType:              value.String(refreshToken.GetAttr("rotation_type")),
-				ExpirationType:            value.String(refreshToken.GetAttr("expiration_type")),
-				Leeway:                    value.Int(refreshToken.GetAttr("leeway")),
-				TokenLifetime:             value.Int(refreshToken.GetAttr("token_lifetime")),
-				InfiniteTokenLifetime:     value.Bool(refreshToken.GetAttr("infinite_token_lifetime")),
-				InfiniteIdleTokenLifetime: value.Bool(refreshToken.GetAttr("infinite_idle_token_lifetime")),
-				IdleTokenLifetime:         value.Int(refreshToken.GetAttr("idle_token_lifetime")),
-			}
-
-			return stop
-		})
-	}
-
-	config.GetAttr("jwt_configuration").ForEachElement(func(_ cty.Value, jwtConfig cty.Value) (stop bool) {
-		client.JWTConfiguration = &management.ClientJWTConfiguration{
-			LifetimeInSeconds: value.Int(jwtConfig.GetAttr("lifetime_in_seconds")),
-			Algorithm:         value.String(jwtConfig.GetAttr("alg")),
-			Scopes:            value.Map(jwtConfig.GetAttr("scopes")),
-		}
-
-		if d.IsNewResource() {
-			client.JWTConfiguration.SecretEncoded = value.Bool(jwtConfig.GetAttr("secret_encoded"))
-		}
-
-		return stop
-	})
-
-	if addons := expandClientAddons(d); addons != nil {
-		client.Addons = addons
-	}
-
-	config.GetAttr("native_social_login").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		config.GetAttr("apple").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			if enabled := value.Bool(config.GetAttr("enabled")); enabled != nil {
-				client.NativeSocialLogin = &management.ClientNativeSocialLogin{
-					Apple: map[string]interface{}{
-						"enabled": enabled,
-					},
-				}
-			}
-
-			return stop
-		})
-
-		config.GetAttr("facebook").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			facebook := make(map[string]interface{})
-			if enabled := value.Bool(config.GetAttr("enabled")); enabled != nil {
-				facebook["enabled"] = enabled
-			}
-
-			if client.NativeSocialLogin != nil {
-				client.NativeSocialLogin.Facebook = facebook
-			} else {
-				client.NativeSocialLogin = &management.ClientNativeSocialLogin{
-					Facebook: facebook,
-				}
-			}
-
-			return stop
-		})
-
-		return stop
-	})
-
-	config.GetAttr("mobile").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		mobile := make(map[string]interface{})
-
-		config.GetAttr("android").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			android := make(map[string]interface{})
-
-			if appPackageName := value.String(config.GetAttr("app_package_name")); appPackageName != nil {
-				android["app_package_name"] = appPackageName
-			}
-			if cert := value.Strings(config.GetAttr("sha256_cert_fingerprints")); cert != nil {
-				android["sha256_cert_fingerprints"] = cert
-			}
-
-			if len(android) > 0 {
-				mobile["android"] = android
-			}
-
-			return stop
-		})
-
-		config.GetAttr("ios").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			ios := make(map[string]interface{})
-
-			if teamID := value.String(config.GetAttr("team_id")); teamID != nil {
-				ios["team_id"] = teamID
-			}
-			if appBundleIdentifier := value.String(config.GetAttr("app_bundle_identifier")); appBundleIdentifier != nil {
-				ios["app_bundle_identifier"] = appBundleIdentifier
-			}
-
-			if len(ios) > 0 {
-				mobile["ios"] = ios
-			}
-
-			return stop
-		})
-
-		if len(mobile) > 0 {
-			client.Mobile = mobile
-		}
-
-		return stop
-	})
-
-	return client
-}
-
-func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
-	if !d.HasChange("addons") {
-		return nil
-	}
-
-	addons := make(map[string]interface{})
-	var allowedAddons = []string{
-		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-		"springcm", "wams", "wsfed", "zendesk", "zoom",
-	}
-	for _, name := range allowedAddons {
-		if _, ok := d.GetOk("addons.0." + name); ok {
-			addons[name] = mapFromState(d.Get("addons.0." + name).(map[string]interface{}))
-		}
-	}
-
-	samlpConfig := d.GetRawConfig().
-		GetAttr("addons").Index(cty.NumberIntVal(0)).
-		GetAttr("samlp").Index(cty.NumberIntVal(0))
-	samlp := make(map[string]interface{})
-
-	if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
-		samlp["audience"] = audience
-	}
-	if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
-		samlp["authnContextClassRef"] = authnContextClassRef
-	}
-	if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
-		samlp["binding"] = binding
-	}
-	if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
-		samlp["signingCert"] = signingCert
-	}
-	if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
-		samlp["destination"] = destination
-	}
-	if digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm")); digestAlgorithm != nil {
-		samlp["digestAlgorithm"] = digestAlgorithm
-	}
-	if nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format")); nameIdentifierFormat != nil {
-		samlp["nameIdentifierFormat"] = nameIdentifierFormat
-	}
-	if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
-		samlp["recipient"] = recipient
-	}
-	if signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm")); signatureAlgorithm != nil {
-		samlp["signatureAlgorithm"] = signatureAlgorithm
-	}
-	if createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim")); createUpnClaim != nil {
-		samlp["createUpnClaim"] = createUpnClaim
-	}
-	if includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format")); includeAttributeNameFormat != nil {
-		samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
-	}
-	if mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities")); mapIdentities != nil {
-		samlp["mapIdentities"] = mapIdentities
-	}
-	if mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is")); mapUnknownClaimsAsIs != nil {
-		samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
-	}
-	if passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping")); passthroughClaimsWithNoMapping != nil {
-		samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
-	}
-	if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
-		samlp["signResponse"] = signResponse
-	}
-	if typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes")); typedAttributes != nil {
-		samlp["typedAttributes"] = typedAttributes
-	}
-	if lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds")); lifetimeInSeconds != nil {
-		samlp["lifetimeInSeconds"] = lifetimeInSeconds
-	}
-	if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
-		samlp["mappings"] = mappings
-	}
-	if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
-		samlp["nameIdentifierProbes"] = nameIdentifierProbes
-	}
-	if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); logout != nil {
-		samlp["logout"] = logout
-	}
-
-	if len(samlp) > 0 {
-		addons["samlp"] = samlp
-	}
-
-	if len(addons) > 0 {
-		return addons
-	}
-
-	return nil
-}
-
-func mapFromState(input map[string]interface{}) map[string]interface{} {
-	output := make(map[string]interface{})
-
-	for key, val := range input {
-		switch v := val.(type) {
-		case string:
-			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
-				output[key] = i
-			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
-				output[key] = f
-			} else if b, err := strconv.ParseBool(v); err == nil {
-				output[key] = b
-			} else {
-				output[key] = v
-			}
-		case map[string]interface{}:
-			output[key] = mapFromState(v)
-		case []interface{}:
-			output[key] = v
-		default:
-			output[key] = v
-		}
-	}
-
-	return output
-}
-
-func mapToState(input map[string]interface{}) map[string]interface{} {
-	output := make(map[string]interface{})
-
-	for key, v := range input {
-		switch val := v.(type) {
-		case bool:
-			if val {
-				output[key] = "true"
-			} else {
-				output[key] = "false"
-			}
-		case float64:
-			output[key] = strconv.Itoa(int(val))
-		case int:
-			output[key] = strconv.Itoa(val)
-		default:
-			output[key] = val
-		}
-	}
-
-	return output
 }
 
 func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
-	if d.HasChange("client_secret_rotation_trigger") {
-		api := m.(*management.Management)
-		client, err := api.Client.RotateSecret(d.Id())
-		if err != nil {
-			return err
-		}
-
-		if err := d.Set("client_secret", client.ClientSecret); err != nil {
-			return err
-		}
+	if !d.HasChange("client_secret_rotation_trigger") {
+		return nil
 	}
-	return nil
+
+	api := m.(*management.Management)
+
+	client, err := api.Client.RotateSecret(d.Id())
+	if err != nil {
+		return err
+	}
+
+	return d.Set("client_secret", client.GetClientSecret())
 }
 
 func clientHasChange(c *management.Client) bool {
 	return c.String() != "{}"
-}
-
-func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
-	if customSocial == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	if customSocial.Apple != nil {
-		m["apple"] = []interface{}{
-			map[string]interface{}{
-				"enabled": customSocial.Apple["enabled"],
-			},
-		}
-	}
-	if customSocial.Facebook != nil {
-		m["facebook"] = []interface{}{
-			map[string]interface{}{
-				"enabled": customSocial.Facebook["enabled"],
-			},
-		}
-	}
-
-	return []interface{}{m}
-}
-
-func flattenClientJwtConfiguration(jwt *management.ClientJWTConfiguration) []interface{} {
-	m := make(map[string]interface{})
-	if jwt != nil {
-		m["lifetime_in_seconds"] = jwt.LifetimeInSeconds
-		m["secret_encoded"] = jwt.SecretEncoded
-		m["scopes"] = jwt.Scopes
-		m["alg"] = jwt.Algorithm
-	}
-	return []interface{}{m}
-}
-
-func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefreshToken) []interface{} {
-	if refreshToken == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	m["rotation_type"] = refreshToken.RotationType
-	m["expiration_type"] = refreshToken.ExpirationType
-	m["leeway"] = refreshToken.Leeway
-	m["token_lifetime"] = refreshToken.TokenLifetime
-	m["infinite_token_lifetime"] = refreshToken.InfiniteTokenLifetime
-	m["infinite_idle_token_lifetime"] = refreshToken.InfiniteIdleTokenLifetime
-	m["idle_token_lifetime"] = refreshToken.IdleTokenLifetime
-
-	return []interface{}{m}
-}
-
-func flattenClientAddons(addons map[string]interface{}) []interface{} {
-	if addons == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	if value, ok := addons["samlp"]; ok {
-		samlp := value.(map[string]interface{})
-
-		samlpMap := map[string]interface{}{
-			"audience":                           samlp["audience"],
-			"recipient":                          samlp["recipient"],
-			"mappings":                           samlp["mappings"],
-			"create_upn_claim":                   samlp["createUpnClaim"],
-			"passthrough_claims_with_no_mapping": samlp["passthroughClaimsWithNoMapping"],
-			"map_unknown_claims_as_is":           samlp["mapUnknownClaimsAsIs"],
-			"map_identities":                     samlp["mapIdentities"],
-			"signature_algorithm":                samlp["signatureAlgorithm"],
-			"digest_algorithm":                   samlp["digestAlgorithm"],
-			"destination":                        samlp["destination"],
-			"lifetime_in_seconds":                samlp["lifetimeInSeconds"],
-			"sign_response":                      samlp["signResponse"],
-			"name_identifier_format":             samlp["nameIdentifierFormat"],
-			"name_identifier_probes":             samlp["nameIdentifierProbes"],
-			"authn_context_class_ref":            samlp["authnContextClassRef"],
-			"typed_attributes":                   samlp["typedAttributes"],
-			"include_attribute_name_format":      samlp["includeAttributeNameFormat"],
-			"binding":                            samlp["binding"],
-			"signing_cert":                       samlp["signingCert"],
-		}
-
-		if logout, ok := samlp["logout"].(map[string]interface{}); ok {
-			samlpMap["logout"] = mapToState(logout)
-		}
-
-		m["samlp"] = []interface{}{samlpMap}
-	}
-
-	for _, name := range []string{
-		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-		"springcm", "wams", "wsfed", "zendesk", "zoom",
-	} {
-		if value, ok := addons[name]; ok {
-			if addonType, ok := value.(map[string]interface{}); ok {
-				m[name] = mapToState(addonType)
-			}
-		}
-	}
-
-	return []interface{}{m}
-}
-
-func flattenClientMobile(mobile map[string]interface{}) []interface{} {
-	if mobile == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	if value, ok := mobile["android"]; ok {
-		android := value.(map[string]interface{})
-
-		m["android"] = []interface{}{
-			map[string]interface{}{
-				"app_package_name":         android["app_package_name"],
-				"sha256_cert_fingerprints": android["sha256_cert_fingerprints"],
-			},
-		}
-	}
-
-	if value, ok := mobile["ios"]; ok {
-		ios := value.(map[string]interface{})
-
-		m["ios"] = []interface{}{
-			map[string]interface{}{
-				"team_id":               ios["team_id"],
-				"app_bundle_identifier": ios["app_bundle_identifier"],
-			},
-		}
-	}
-
-	return []interface{}{m}
 }

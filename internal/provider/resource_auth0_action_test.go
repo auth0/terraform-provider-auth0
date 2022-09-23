@@ -16,7 +16,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
-const testAccActionConfigCreate = `
+const testAccActionConfigCreateWithOnlyRequiredFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = "exports.onExecutePostLogin = async (event, api) => {};"
@@ -28,7 +28,7 @@ resource auth0_action my_action {
 }
 `
 
-const testAccActionConfigUpdate = `
+const testAccActionConfigUpdateAllFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = "exports.onContinuePostLogin = async (event, api) => {};"
@@ -84,7 +84,7 @@ resource auth0_action my_action {
 }
 `
 
-const testAccActionConfigEmpty = `
+const testAccActionConfigResetToRequiredFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = <<-EOT
@@ -107,7 +107,7 @@ func TestAccAction(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccActionConfigCreate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigCreateWithOnlyRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
@@ -122,7 +122,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigUpdate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigUpdateAllFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
@@ -162,7 +162,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigEmpty, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigResetToRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
@@ -173,28 +173,6 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.version", "v3"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
-				),
-			},
-		},
-	})
-}
-
-func TestAccAction_FailedBuild(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
-			{
-				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
-				),
-				ExpectError: regexp.MustCompile(
-					fmt.Sprintf(
-						`action "Test Action %s" failed to build, check the Auth0 UI for errors`,
-						t.Name(),
-					),
 				),
 			},
 		},
@@ -229,6 +207,28 @@ resource auth0_action my_action {
 	}
 }
 `
+
+func TestAccAction_FailedBuild(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+				),
+				ExpectError: regexp.MustCompile(
+					fmt.Sprintf(
+						`action "Test Action %s" failed to build, check the Auth0 UI for errors`,
+						t.Name(),
+					),
+				),
+			},
+		},
+	})
+}
 
 func TestCheckForUntrackedActionSecrets(t *testing.T) {
 	var testCases = []struct {

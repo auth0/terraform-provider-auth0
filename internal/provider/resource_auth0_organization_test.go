@@ -67,6 +67,13 @@ resource auth0_connection acmeinc {
 }
 `
 
+const testAccOrganizationEmpty = `
+resource auth0_organization acme {
+	name = "test-{{.testName}}"
+	display_name = "Acme Inc. {{.testName}}"
+}
+`
+
 const testAccOrganizationCreate = testAccOrganizationGiven2Connections + `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
@@ -171,6 +178,16 @@ func TestAccOrganization(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
+				Config: template.ParseTestName(testAccOrganizationEmpty, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
+				),
+			},
+			{
 				Config: template.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
@@ -241,6 +258,7 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
 				),
 			},
 		},

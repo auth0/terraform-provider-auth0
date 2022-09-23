@@ -73,7 +73,7 @@ func newOrganization() *schema.Resource {
 			"connections": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				Computed: true,
+				// Computed: true, # By having this computed, we are unable to empty-out connections
 				Deprecated: "Management of organizations through this property has been deprecated in favor of the " +
 					"`auth0_organization_connection` resource and will be deleted in future versions. It is " +
 					"advised to migrate all managed organization connections to the new resource type.",

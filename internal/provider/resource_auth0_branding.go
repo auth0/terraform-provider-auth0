@@ -136,12 +136,12 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	branding := buildBranding(d.GetRawConfig())
+	branding := expandBranding(d.GetRawConfig())
 	if err := api.Branding.Update(branding); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if universalLogin := buildBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
+	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
 		if err := api.Branding.SetUniversalLogin(universalLogin); err != nil {
 			return diag.FromErr(err)
 		}
@@ -168,44 +168,61 @@ func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return nil
 }
 
-func buildBranding(config cty.Value) *management.Branding {
+func expandBranding(config cty.Value) *management.Branding {
 	branding := &management.Branding{
 		FaviconURL: value.String(config.GetAttr("favicon_url")),
 		LogoURL:    value.String(config.GetAttr("logo_url")),
+		Colors:     expandBrandingColors(config.GetAttr("colors")),
+		Font:       expandBrandingFont(config.GetAttr("font")),
 	}
-
-	config.GetAttr("colors").ForEachElement(func(_ cty.Value, colors cty.Value) (stop bool) {
-		branding.Colors = &management.BrandingColors{
-			PageBackground: value.String(colors.GetAttr("page_background")),
-			Primary:        value.String(colors.GetAttr("primary")),
-		}
-
-		return stop
-	})
-
-	config.GetAttr("font").ForEachElement(func(_ cty.Value, font cty.Value) (stop bool) {
-		branding.Font = &management.BrandingFont{
-			URL: value.String(font.GetAttr("url")),
-		}
-
-		return stop
-	})
 
 	return branding
 }
 
-func buildBrandingUniversalLogin(config cty.Value) *management.BrandingUniversalLogin {
-	var universalLogin *management.BrandingUniversalLogin
+func expandBrandingColors(config cty.Value) *management.BrandingColors {
+	var brandingColors management.BrandingColors
 
-	config.GetAttr("universal_login").ForEachElement(func(_ cty.Value, ul cty.Value) (stop bool) {
-		universalLogin = &management.BrandingUniversalLogin{
-			Body: value.String(ul.GetAttr("body")),
-		}
-
+	config.ForEachElement(func(_ cty.Value, colors cty.Value) (stop bool) {
+		brandingColors.PageBackground = value.String(colors.GetAttr("page_background"))
+		brandingColors.Primary = value.String(colors.GetAttr("primary"))
 		return stop
 	})
 
-	return universalLogin
+	if brandingColors == (management.BrandingColors{}) {
+		return nil
+	}
+
+	return &brandingColors
+}
+
+func expandBrandingFont(config cty.Value) *management.BrandingFont {
+	var brandingFont management.BrandingFont
+
+	config.ForEachElement(func(_ cty.Value, font cty.Value) (stop bool) {
+		brandingFont.URL = value.String(font.GetAttr("url"))
+		return stop
+	})
+
+	if brandingFont == (management.BrandingFont{}) {
+		return nil
+	}
+
+	return &brandingFont
+}
+
+func expandBrandingUniversalLogin(config cty.Value) *management.BrandingUniversalLogin {
+	var universalLogin management.BrandingUniversalLogin
+
+	config.GetAttr("universal_login").ForEachElement(func(_ cty.Value, ul cty.Value) (stop bool) {
+		universalLogin.Body = value.String(ul.GetAttr("body"))
+		return stop
+	})
+
+	if universalLogin == (management.BrandingUniversalLogin{}) {
+		return nil
+	}
+
+	return &universalLogin
 }
 
 func setUniversalLogin(d *schema.ResourceData, api *management.Management) error {

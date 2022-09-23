@@ -31,7 +31,7 @@ const testAccBreachedPasswordDetectionUpdateFull = `
 resource "auth0_attack_protection" "my_protection" {
 	breached_password_detection {
 		enabled = true
-		shields = ["user_notification","block", "admin_notification"]
+		shields = ["user_notification", "block", "admin_notification"]
 		admin_notification_frequency = ["daily", "monthly", "immediately", "weekly"]
 		method = "standard"
 	}

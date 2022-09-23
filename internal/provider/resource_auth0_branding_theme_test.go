@@ -95,6 +95,8 @@ resource "auth0_branding_theme" "my_theme" {
 
 const testAccBrandingThemeUpdate = `
 resource "auth0_branding_theme" "my_theme" {
+	display_name = "My branding"
+
 	borders {
 		button_border_radius = 2
 		button_border_weight = 2
@@ -108,6 +110,9 @@ resource "auth0_branding_theme" "my_theme" {
 	}
 
 	colors {
+		base_focus_color = "#BBBBBB"
+		base_hover_color = "#CCCCCC"
+
 		body_text = "#00FF00"
 		error = "#00FF00"
 		header = "#00FF00"
@@ -250,6 +255,7 @@ func TestAccBrandingTheme(t *testing.T) {
 			{
 				Config: testAccBrandingThemeUpdate,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "display_name", "My branding"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.#", "1"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.button_border_radius", "2"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.button_border_weight", "2"),
@@ -261,6 +267,8 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.widget_border_weight", "2"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.widget_corner_radius", "2"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_focus_color", "#BBBBBB"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_hover_color", "#CCCCCC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.body_text", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.error", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.header", "#00FF00"),

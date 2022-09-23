@@ -34,7 +34,7 @@ func newResourceServer() *schema.Resource {
 			},
 			"identifier": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 				ForceNew: true,
 				Description: "Unique identifier for the resource server. Used as the audience parameter " +
 					"for authorization calls. Cannot be changed once set.",
@@ -105,6 +105,7 @@ func newResourceServer() *schema.Resource {
 			"skip_consent_for_verifiable_first_party_clients": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Indicates whether to skip user consent for applications flagged as first party.",
 			},
 			"verification_location": {
@@ -119,6 +120,7 @@ func newResourceServer() *schema.Resource {
 			},
 			"enforce_policies": {
 				Type:        schema.TypeBool,
+				Computed:    true,
 				Optional:    true,
 				Description: "Indicates whether authorization polices are enforced.",
 			},

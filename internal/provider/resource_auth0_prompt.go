@@ -29,6 +29,7 @@ func newPrompt() *schema.Resource {
 			"universal_login_experience": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"new", "classic",
 				}, false),
@@ -43,6 +44,7 @@ func newPrompt() *schema.Resource {
 			"webauthn_platform_first_factor": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Determines if the login screen uses identifier and biometrics first.",
 			},
 		},
@@ -88,9 +90,16 @@ func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func expandPrompt(d cty.Value) *management.Prompt {
-	return &management.Prompt{
-		UniversalLoginExperience:    d.GetAttr("universal_login_experience").AsString(),
+
+	prompt := management.Prompt{
 		IdentifierFirst:             value.Bool(d.GetAttr("identifier_first")),
 		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),
 	}
+
+	ule := d.GetAttr("universal_login_experience")
+	if !ule.IsNull() {
+		prompt.UniversalLoginExperience = ule.AsString()
+	}
+
+	return &prompt
 }

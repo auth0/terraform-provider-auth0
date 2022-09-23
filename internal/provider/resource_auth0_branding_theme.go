@@ -458,8 +458,10 @@ func deleteBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 }
 
 func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
+	config := data.GetRawConfig()
+
 	brandingTheme := management.BrandingTheme{
-		DisplayName: String(data, "display_name"),
+		DisplayName: value.String(config.GetAttr("display_name")),
 	}
 
 	brandingTheme.Borders = management.BrandingThemeBorders{
@@ -474,13 +476,11 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		WidgetCornerRadius: data.Get("borders.0.widget_corner_radius").(int),
 	}
 
+	colorsConfig := config.GetAttr("colors").Index(cty.NumberIntVal(0))
+
 	brandingTheme.Colors = management.BrandingThemeColors{
-		BaseFocusColor: value.String(
-			data.GetRawConfig().GetAttr("colors").Index(cty.NumberIntVal(0)).GetAttr("base_focus_color"),
-		),
-		BaseHoverColor: value.String(
-			data.GetRawConfig().GetAttr("colors").Index(cty.NumberIntVal(0)).GetAttr("base_hover_color"),
-		),
+		BaseFocusColor:          value.String(colorsConfig.GetAttr("base_focus_color")),
+		BaseHoverColor:          value.String(colorsConfig.GetAttr("base_hover_color")),
 		BodyText:                data.Get("colors.0.body_text").(string),
 		Error:                   data.Get("colors.0.error").(string),
 		Header:                  data.Get("colors.0.header").(string),

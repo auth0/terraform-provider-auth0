@@ -369,12 +369,14 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 func expandLogStream(d *schema.ResourceData) *management.LogStream {
 	config := d.GetRawConfig()
 
+	logStreamType := value.String(config.GetAttr("type"))
+
 	logStream := &management.LogStream{
 		Name: value.String(config.GetAttr("name")),
 	}
 
 	if d.IsNewResource() {
-		logStream.Type = value.String(config.GetAttr("type"))
+		logStream.Type = logStreamType
 	}
 
 	if !d.IsNewResource() {
@@ -396,7 +398,7 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 	}
 
 	config.GetAttr("sink").ForEachElement(func(_ cty.Value, sink cty.Value) (stop bool) {
-		switch logStream.GetType() {
+		switch *logStreamType {
 		case management.LogStreamTypeAmazonEventBridge:
 			// LogStreamTypeAmazonEventBridge cannot be updated.
 			if d.IsNewResource() {
@@ -453,16 +455,14 @@ func expandLogStreamSinkHTTP(config cty.Value) *management.LogStreamSinkHTTP {
 
 	customHeadersConfig := config.GetAttr("http_custom_headers")
 	if !customHeadersConfig.IsNull() {
-		var customHeaders []map[string]string
+		customHeaders := make([]map[string]string, 0)
 
 		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
 			customHeaders = append(customHeaders, *value.MapOfStrings(httpHeader))
-			return true
+			return stop
 		})
 
-		if len(customHeaders) > 0 {
-			httpSink.CustomHeaders = &customHeaders
-		}
+		httpSink.CustomHeaders = &customHeaders
 	}
 
 	return httpSink

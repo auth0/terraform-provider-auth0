@@ -120,6 +120,18 @@ func TestAccLogStreamHTTP(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.1.value", "foo"),
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccLogStreamHTTPConfigEmptyCustomHTTPHeaders, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/logs"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_format", "JSONLINES"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_authorization", "AKIAXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_custom_headers.#", "0"),
+				),
+			},
 		},
 	})
 }
@@ -196,6 +208,20 @@ resource "auth0_log_stream" "my_log_stream" {
           value  = "foo"
         }
       ]
+	}
+}
+`
+
+const testAccLogStreamHTTPConfigEmptyCustomHTTPHeaders = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-http-new-{{.testName}}"
+	type = "http"
+	sink {
+	  http_endpoint = "https://example.com/logs"
+	  http_content_type = "application/json"
+	  http_content_format = "JSONLINES"
+	  http_authorization = "AKIAXXXXXXXXXXXXXXXX"
+	  http_custom_headers = []
 	}
 }
 `

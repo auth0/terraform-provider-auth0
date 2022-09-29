@@ -1,758 +1,902 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 248
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"active","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 20
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"status":"paused"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 267
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","status":"paused","sink":{"httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 8
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 9
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 268
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","status":"paused","sink":{"httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 10
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 11
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 12
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 13
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 248
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","status":"paused","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 14
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 15
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 16
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 17
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 332
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","status":"paused","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 18
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 19
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"lst_0000000000010031","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 20
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000010031
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 248
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"active","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 20
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"status":"paused"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 249
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 250
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 230
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 314
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 253
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpCustomHeaders":[]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"lst_0000000000007100","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000007100
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 1ms

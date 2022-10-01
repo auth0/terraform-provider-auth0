@@ -813,6 +813,7 @@ resource "auth0_client" "my_client" {
 		}
 
 		samlp {
+			issuer = "https://tableau-server-test.domain.eu.com/api/v1"
 			audience = "https://tableau-server-test.domain.eu.com/audience-different"
 			destination = "https://tableau-server-test.domain.eu.com/destination"
 			digest_algorithm = "sha256"
@@ -854,6 +855,7 @@ resource "auth0_client" "my_client" {
 		}
 
 		samlp {
+			issuer = "https://tableau-server-test.domain.eu.com/api/v3"
 			audience = "https://tableau-server-test.domain.eu.com/audience-different"
 			destination = "https://tableau-server-test.domain.eu.com/destination"
 			digest_algorithm = "sha256"
@@ -904,6 +906,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key", "wer"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key_id", "qwreerwerwe"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://tableau-server-test.domain.eu.com/api/v1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://tableau-server-test.domain.eu.com/audience-different"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "https://tableau-server-test.domain.eu.com/destination"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha256"),
@@ -937,6 +940,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key", "wer"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key_id", "qwreerwerwe"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://tableau-server-test.domain.eu.com/api/v3"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://tableau-server-test.domain.eu.com/audience-different"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "https://tableau-server-test.domain.eu.com/destination"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha256"),

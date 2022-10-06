@@ -90,7 +90,6 @@ func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func expandPrompt(d cty.Value) *management.Prompt {
-
 	prompt := management.Prompt{
 		IdentifierFirst:             value.Bool(d.GetAttr("identifier_first")),
 		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),

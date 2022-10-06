@@ -327,7 +327,7 @@ func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
 			if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
 				samlp["nameIdentifierProbes"] = nameIdentifierProbes
 			}
-			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); logout != nil && len(logout) != 0 {
+			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); len(logout) != 0 {
 				samlp["logout"] = logout
 			}
 

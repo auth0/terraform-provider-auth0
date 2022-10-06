@@ -237,6 +237,7 @@ func newClient() *schema.Resource {
 			"addons": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Addons enabled for this client and their associated configurations.",
 				Elem: &schema.Resource{
@@ -320,7 +321,6 @@ func newClient() *schema.Resource {
 						"samlp": {
 							Type:        schema.TypeList,
 							MaxItems:    1,
-							Computed:    true,
 							Optional:    true,
 							Description: "Configuration settings for a SAML add-on.",
 							Elem: &schema.Resource{
@@ -537,6 +537,7 @@ func newClient() *schema.Resource {
 						"android": {
 							Type:        schema.TypeList,
 							Optional:    true,
+							Computed:    true,
 							MaxItems:    1,
 							Description: "Configuration settings for Android native apps.",
 							Elem: &schema.Resource{
@@ -564,6 +565,7 @@ func newClient() *schema.Resource {
 						"ios": {
 							Type:        schema.TypeList,
 							Optional:    true,
+							Computed:    true,
 							MaxItems:    1,
 							Description: "Configuration settings for i0S native apps.",
 							Elem: &schema.Resource{
@@ -611,6 +613,7 @@ func newClient() *schema.Resource {
 						"apple": {
 							Type:     schema.TypeList,
 							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -624,6 +627,7 @@ func newClient() *schema.Resource {
 						"facebook": {
 							Type:     schema.TypeList,
 							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -772,7 +776,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("encryption_key", client.GetEncryptionKey()),
 		d.Set("addons", flattenClientAddons(client.Addons)),
 		d.Set("client_metadata", client.GetClientMetadata()),
-		d.Set("mobile", flattenClientMobile(client.Mobile)),
+		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
 	)

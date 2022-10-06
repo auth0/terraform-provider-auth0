@@ -51,10 +51,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 }
 
 func expandClientRefreshToken(d *schema.ResourceData) *management.ClientRefreshToken {
-	if !d.IsNewResource() || !d.HasChange("refresh_token") {
-		return nil
-	}
-
 	refreshTokenConfig := d.GetRawConfig().GetAttr("refresh_token")
 	if refreshTokenConfig.IsNull() {
 		return nil
@@ -140,66 +136,72 @@ func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.C
 		return stop
 	})
 
+	if support == (management.ClientNativeSocialLoginSupportEnabled{}) {
+		return nil
+	}
+
 	return &support
 }
 
-func expandClientMobile(d *schema.ResourceData) map[string]interface{} {
+func expandClientMobile(d *schema.ResourceData) *management.ClientMobile {
 	mobileConfig := d.GetRawConfig().GetAttr("mobile")
 	if mobileConfig.IsNull() {
 		return nil
 	}
 
-	mobile := make(map[string]interface{})
+	var mobile management.ClientMobile
 
 	mobileConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		androidConfig := config.GetAttr("android")
-		if !androidConfig.IsNull() {
-			config.GetAttr("android").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-				android := make(map[string]interface{})
-
-				if appPackageName := value.String(config.GetAttr("app_package_name")); appPackageName != nil {
-					android["app_package_name"] = appPackageName
-				}
-				if cert := value.Strings(config.GetAttr("sha256_cert_fingerprints")); cert != nil {
-					android["sha256_cert_fingerprints"] = cert
-				}
-
-				if len(android) > 0 {
-					mobile["android"] = android
-				}
-
-				return stop
-			})
-		}
-
-		iosConfig := config.GetAttr("ios")
-		if !iosConfig.IsNull() {
-			config.GetAttr("ios").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-				ios := make(map[string]interface{})
-
-				if teamID := value.String(config.GetAttr("team_id")); teamID != nil {
-					ios["team_id"] = teamID
-				}
-				if appBundleIdentifier := value.String(config.GetAttr("app_bundle_identifier")); appBundleIdentifier != nil {
-					ios["app_bundle_identifier"] = appBundleIdentifier
-				}
-
-				if len(ios) > 0 {
-					mobile["ios"] = ios
-				}
-
-				return stop
-			})
-		}
-
+		mobile.Android = expandClientMobileAndroid(config.GetAttr("android"))
+		mobile.IOS = expandClientMobileIOS(config.GetAttr("ios"))
 		return stop
 	})
 
-	if len(mobile) > 0 {
-		return mobile
+	if mobile == (management.ClientMobile{}) {
+		return nil
 	}
 
-	return nil
+	return &mobile
+}
+
+func expandClientMobileAndroid(androidConfig cty.Value) *management.ClientMobileAndroid {
+	if androidConfig.IsNull() {
+		return nil
+	}
+
+	var android management.ClientMobileAndroid
+
+	androidConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		android.AppPackageName = value.String(config.GetAttr("app_package_name"))
+		android.KeyHashes = value.Strings(config.GetAttr("sha256_cert_fingerprints"))
+		return stop
+	})
+
+	if android == (management.ClientMobileAndroid{}) {
+		return nil
+	}
+
+	return &android
+}
+
+func expandClientMobileIOS(iosConfig cty.Value) *management.ClientMobileIOS {
+	if iosConfig.IsNull() {
+		return nil
+	}
+
+	var ios management.ClientMobileIOS
+
+	iosConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		ios.TeamID = value.String(config.GetAttr("team_id"))
+		ios.AppID = value.String(config.GetAttr("app_bundle_identifier"))
+		return stop
+	})
+
+	if ios == (management.ClientMobileIOS{}) {
+		return nil
+	}
+
+	return &ios
 }
 
 func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
@@ -221,81 +223,125 @@ func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
 		}
 	}
 
-	samlpConfig := d.GetRawConfig().
-		GetAttr("addons").Index(cty.NumberIntVal(0)).
-		GetAttr("samlp").Index(cty.NumberIntVal(0))
-	samlp := make(map[string]interface{})
-
-	if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
-		samlp["audience"] = audience
-	}
-	if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
-		samlp["authnContextClassRef"] = authnContextClassRef
-	}
-	if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
-		samlp["binding"] = binding
-	}
-	if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
-		samlp["signingCert"] = signingCert
-	}
-	if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
-		samlp["destination"] = destination
-	}
-	if digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm")); digestAlgorithm != nil {
-		samlp["digestAlgorithm"] = digestAlgorithm
-	}
-	if nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format")); nameIdentifierFormat != nil {
-		samlp["nameIdentifierFormat"] = nameIdentifierFormat
-	}
-	if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
-		samlp["recipient"] = recipient
-	}
-	if signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm")); signatureAlgorithm != nil {
-		samlp["signatureAlgorithm"] = signatureAlgorithm
-	}
-	if createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim")); createUpnClaim != nil {
-		samlp["createUpnClaim"] = createUpnClaim
-	}
-	if includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format")); includeAttributeNameFormat != nil {
-		samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
-	}
-	if mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities")); mapIdentities != nil {
-		samlp["mapIdentities"] = mapIdentities
-	}
-	if mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is")); mapUnknownClaimsAsIs != nil {
-		samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
-	}
-	if passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping")); passthroughClaimsWithNoMapping != nil {
-		samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
-	}
-	if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
-		samlp["signResponse"] = signResponse
-	}
-	if typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes")); typedAttributes != nil {
-		samlp["typedAttributes"] = typedAttributes
-	}
-	if lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds")); lifetimeInSeconds != nil {
-		samlp["lifetimeInSeconds"] = lifetimeInSeconds
-	}
-	if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
-		samlp["mappings"] = mappings
-	}
-	if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
-		samlp["nameIdentifierProbes"] = nameIdentifierProbes
-	}
-	if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); logout != nil {
-		samlp["logout"] = logout
-	}
-
-	if len(samlp) > 0 {
-		addons["samlp"] = samlp
-	}
-
-	if len(addons) > 0 {
+	addonsConfig := d.GetRawConfig().GetAttr("addons")
+	if addonsConfig.IsNull() {
 		return addons
 	}
 
-	return nil
+	addonsConfig.ForEachElement(func(_ cty.Value, addonsConfig cty.Value) (stop bool) {
+		samlpConfig := addonsConfig.GetAttr("samlp")
+		if samlpConfig.IsNull() {
+			return stop
+		}
+
+		samlp := make(map[string]interface{})
+
+		samlpConfig.ForEachElement(func(_ cty.Value, samlpConfig cty.Value) (stop bool) {
+			if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
+				samlp["audience"] = audience
+			}
+			if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
+				samlp["authnContextClassRef"] = authnContextClassRef
+			}
+			if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
+				samlp["binding"] = binding
+			}
+			if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
+				samlp["signingCert"] = signingCert
+			}
+			if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
+				samlp["destination"] = destination
+			}
+
+			digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm"))
+			samlp["digestAlgorithm"] = digestAlgorithm
+			if digestAlgorithm == nil {
+				samlp["digestAlgorithm"] = "sha1"
+			}
+
+			nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format"))
+			samlp["nameIdentifierFormat"] = nameIdentifierFormat
+			if nameIdentifierFormat == nil {
+				samlp["nameIdentifierFormat"] = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+			}
+
+			if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
+				samlp["recipient"] = recipient
+			}
+
+			signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm"))
+			samlp["signatureAlgorithm"] = signatureAlgorithm
+			if signatureAlgorithm == nil {
+				samlp["signatureAlgorithm"] = "rsa-sha1"
+			}
+
+			createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim"))
+			samlp["createUpnClaim"] = createUpnClaim
+			if createUpnClaim == nil {
+				samlp["createUpnClaim"] = true
+			}
+
+			includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format"))
+			samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
+			if includeAttributeNameFormat == nil {
+				samlp["includeAttributeNameFormat"] = true
+			}
+
+			mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities"))
+			samlp["mapIdentities"] = mapIdentities
+			if mapIdentities == nil {
+				samlp["mapIdentities"] = true
+			}
+
+			mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is"))
+			samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
+			if mapUnknownClaimsAsIs == nil {
+				samlp["mapUnknownClaimsAsIs"] = false
+			}
+
+			passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping"))
+			samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
+			if passthroughClaimsWithNoMapping == nil {
+				samlp["passthroughClaimsWithNoMapping"] = true
+			}
+
+			if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
+				samlp["signResponse"] = signResponse
+			}
+
+			typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes"))
+			samlp["typedAttributes"] = typedAttributes
+			if typedAttributes == nil {
+				samlp["typedAttributes"] = true
+			}
+
+			lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds"))
+			samlp["lifetimeInSeconds"] = lifetimeInSeconds
+			if lifetimeInSeconds == nil {
+				samlp["lifetimeInSeconds"] = 3600
+			}
+
+			if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
+				samlp["mappings"] = mappings
+			}
+			if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
+				samlp["nameIdentifierProbes"] = nameIdentifierProbes
+			}
+			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); logout != nil && len(logout) != 0 {
+				samlp["logout"] = logout
+			}
+
+			return stop
+		})
+
+		if len(samlp) > 0 {
+			addons["samlp"] = samlp
+		}
+
+		return stop
+	})
+
+	return addons
 }
 
 func mapFromState(input map[string]interface{}) map[string]interface{} {
@@ -330,16 +376,16 @@ func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocia
 		return nil
 	}
 
-	m := make(map[string]interface{})
-
-	m["apple"] = []interface{}{
-		map[string]interface{}{
-			"enabled": customSocial.GetApple().GetEnabled(),
+	m := map[string]interface{}{
+		"apple": []interface{}{
+			map[string]interface{}{
+				"enabled": customSocial.GetApple().GetEnabled(),
+			},
 		},
-	}
-	m["facebook"] = []interface{}{
-		map[string]interface{}{
-			"enabled": customSocial.GetFacebook().GetEnabled(),
+		"facebook": []interface{}{
+			map[string]interface{}{
+				"enabled": customSocial.GetFacebook().GetEnabled(),
+			},
 		},
 	}
 
@@ -435,31 +481,30 @@ func flattenClientAddons(addons map[string]interface{}) []interface{} {
 	return []interface{}{m}
 }
 
-func flattenClientMobile(mobile map[string]interface{}) []interface{} {
+func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
 	if mobile == nil {
 		return nil
 	}
 
-	m := make(map[string]interface{})
+	m := map[string]interface{}{
+		"android": nil,
+		"ios":     nil,
+	}
 
-	if value, ok := mobile["android"]; ok {
-		android := value.(map[string]interface{})
-
+	if mobile.GetAndroid() != nil {
 		m["android"] = []interface{}{
 			map[string]interface{}{
-				"app_package_name":         android["app_package_name"],
-				"sha256_cert_fingerprints": android["sha256_cert_fingerprints"],
+				"app_package_name":         mobile.GetAndroid().GetAppPackageName(),
+				"sha256_cert_fingerprints": mobile.GetAndroid().GetKeyHashes(),
 			},
 		}
 	}
 
-	if value, ok := mobile["ios"]; ok {
-		ios := value.(map[string]interface{})
-
+	if mobile.GetIOS() != nil {
 		m["ios"] = []interface{}{
 			map[string]interface{}{
-				"team_id":               ios["team_id"],
-				"app_bundle_identifier": ios["app_bundle_identifier"],
+				"team_id":               mobile.GetIOS().GetTeamID(),
+				"app_bundle_identifier": mobile.GetIOS().GetAppID(),
 			},
 		}
 	}

@@ -2,10 +2,8 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -70,31 +68,6 @@ func newOrganization() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Metadata associated with the organization. Maximum of 10 metadata properties allowed.",
 			},
-			"connections": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				// Computed: true, # By having this computed, we are unable to empty-out connections
-				Deprecated: "Management of organizations through this property has been deprecated in favor of the " +
-					"`auth0_organization_connection` resource and will be deleted in future versions. It is " +
-					"advised to migrate all managed organization connections to the new resource type.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"connection_id": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "The connection ID of the connection to add to the organization.",
-						},
-						"assign_membership_on_login": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Default:  false,
-							Description: "When `true`, all users that log in with this connection will be " +
-								"automatically granted membership in the organization. When `false`, users must be " +
-								"granted membership in the organization before logging in with this connection.",
-						},
-					},
-				},
-			},
 		},
 	}
 }
@@ -108,10 +81,6 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	}
 
 	d.SetId(organization.GetID())
-
-	if err := updateOrganizationConnections(d, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to update organization connections: %w", err))
-	}
 
 	return readOrganization(ctx, d, m)
 }
@@ -128,17 +97,11 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	organizationConnectionList, err := api.Organization.Connections(d.Id())
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
 	result := multierror.Append(
 		d.Set("name", organization.GetName()),
 		d.Set("display_name", organization.GetDisplayName()),
 		d.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
 		d.Set("metadata", organization.GetMetadata()),
-		d.Set("connections", flattenOrganizationConnections(organizationConnectionList)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -150,10 +113,6 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	organization := expandOrganization(d)
 	if err := api.Organization.Update(d.Id(), organization); err != nil {
 		return diag.FromErr(err)
-	}
-
-	if err := updateOrganizationConnections(d, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to update organization connections: %w", err))
 	}
 
 	return readOrganization(ctx, d, m)
@@ -172,62 +131,6 @@ func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface
 
 	d.SetId("")
 	return nil
-}
-
-func updateOrganizationConnections(d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("connections") {
-		return nil
-	}
-
-	toAdd, toRemove := Diff(d, "connections")
-
-	connectionOperations := make(map[string]string)
-	toRemove.Elem(func(data ResourceData) {
-		oldConnectionID, _ := data.GetChange("connection_id")
-		connectionOperations[oldConnectionID.(string)] = "deleteConnection"
-	})
-
-	toAdd.Elem(func(data ResourceData) {
-		newConnectionID := data.Get("connection_id").(string)
-
-		if _, ok := connectionOperations[newConnectionID]; ok {
-			delete(connectionOperations, newConnectionID)
-		} else {
-			connectionOperations[newConnectionID] = "addConnection"
-		}
-	})
-
-	for connectionID, operation := range connectionOperations {
-		if operation == "deleteConnection" {
-			if err := api.Organization.DeleteConnection(d.Id(), connectionID); err != nil {
-				return err
-			}
-		}
-		if operation == "addConnection" {
-			organizationConnection := &management.OrganizationConnection{
-				ConnectionID: auth0.String(connectionID),
-			}
-			if err := api.Organization.AddConnection(d.Id(), organizationConnection); err != nil {
-				return err
-			}
-		}
-	}
-
-	var err error
-	Set(d, "connections").Elem(func(data ResourceData) {
-		connectionID := data.Get("connection_id").(string)
-		assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
-		organizationConnection := &management.OrganizationConnection{
-			AssignMembershipOnLogin: &assignMembershipOnLogin,
-		}
-
-		err = api.Organization.UpdateConnection(d.Id(), connectionID, organizationConnection)
-		if err != nil {
-			return
-		}
-	})
-
-	return err
 }
 
 func expandOrganization(d *schema.ResourceData) *management.Organization {
@@ -272,20 +175,4 @@ func flattenOrganizationBranding(organizationBranding *management.OrganizationBr
 			"colors":   organizationBranding.GetColors(),
 		},
 	}
-}
-
-func flattenOrganizationConnections(connectionList *management.OrganizationConnectionList) []interface{} {
-	if connectionList == nil {
-		return nil
-	}
-
-	connections := make([]interface{}, len(connectionList.OrganizationConnections))
-	for index, connection := range connectionList.OrganizationConnections {
-		connections[index] = map[string]interface{}{
-			"connection_id":              connection.GetConnectionID(),
-			"assign_membership_on_login": connection.GetAssignMembershipOnLogin(),
-		}
-	}
-
-	return connections
 }

@@ -78,10 +78,6 @@ const testAccOrganizationCreate = testAccOrganizationGiven2Connections + `
 resource auth0_organization acme {
 	name = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
-
-	connections {
-		connection_id = auth0_connection.acme.id
-	}
 }
 `
 
@@ -100,16 +96,6 @@ resource auth0_organization acme {
 			primary = "#e3e2f0"
 			page_background = "#e3e2ff"
 		}
-	}
-
-	connections {
-		connection_id = auth0_connection.acme.id
-		assign_membership_on_login = false
-	}
-
-	connections {
-		connection_id = auth0_connection.acmeinc.id
-		assign_membership_on_login = true
 	}
 }
 `
@@ -131,11 +117,6 @@ resource auth0_organization acme {
 			page_background = "#e3e2ff"
 		}
 	}
-
-	connections {
-		connection_id = auth0_connection.acmeinc.id
-		assign_membership_on_login = false
-	}
 }
 `
 
@@ -154,11 +135,6 @@ resource auth0_organization acme {
 			primary = "#e3e2f0"
 			page_background = "#e3e2ff"
 		}
-	}
-
-	connections {
-		connection_id = auth0_connection.acmeinc.id
-		assign_membership_on_login = true
 	}
 }
 `
@@ -184,7 +160,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "0"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
 				),
 			},
 			{
@@ -194,9 +169,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.#", "0"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
-					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
 				),
 			},
 			{
@@ -210,11 +182,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.primary", "#e3e2f0"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "1"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "2"),
-					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
-					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.1.connection_id"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.1.assign_membership_on_login", "true"),
 				),
 			},
 			{
@@ -230,9 +197,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "2"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.some_key", "some_value"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.another_key", "another_value"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
-					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "false"),
 				),
 			},
 			{
@@ -247,9 +211,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "branding.0.colors.page_background", "#e3e2ff"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "1"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.some_key", "some_value"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "1"),
-					resource.TestCheckResourceAttrSet("auth0_organization.acme", "connections.0.connection_id"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.0.assign_membership_on_login", "true"),
 				),
 			},
 			{
@@ -258,7 +219,6 @@ func TestAccOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "metadata.%", "0"),
-					resource.TestCheckResourceAttr("auth0_organization.acme", "connections.#", "0"),
 				),
 			},
 		},

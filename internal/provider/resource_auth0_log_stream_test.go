@@ -10,7 +10,6 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
@@ -58,10 +57,6 @@ func TestAccLogStreamHTTP(t *testing.T) {
 			{
 				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					func(state *terraform.State) error {
-						log.Printf("%+v", state)
-						return nil
-					},
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "status", "paused"),
@@ -542,6 +537,15 @@ func TestAccLogStreamSumo(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "prod.sumo.com"),
 				),
 			},
+			{
+				Config: template.ParseTestName(logStreamSumoConfigUpdateWithEmptyFilters, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.sumo_source_address", "prod.sumo.com"),
+				),
+			},
 		},
 	})
 }
@@ -564,10 +568,12 @@ resource "auth0_log_stream" "my_log_stream" {
 	}
 }
 `
+
 const logStreamSumoConfigUpdateWithFilters = `
 resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-sumo-{{.testName}}"
 	type = "sumo"
+
 	filters = [
 		{
 			type = "category"
@@ -578,8 +584,22 @@ resource "auth0_log_stream" "my_log_stream" {
 			name = "auth.signup.fail"
 		}
 	]
+
 	sink {
-	  sumo_source_address = "prod.sumo.com"
+		sumo_source_address = "prod.sumo.com"
+	}
+}
+`
+
+const logStreamSumoConfigUpdateWithEmptyFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-sumo-{{.testName}}"
+	type = "sumo"
+
+	filters = [ ]
+
+	sink {
+		sumo_source_address = "prod.sumo.com"
 	}
 }
 `

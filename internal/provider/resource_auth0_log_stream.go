@@ -235,12 +235,12 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 
 	d.SetId(logStream.GetID())
 
-	// The Management API only allows updating a log stream's status. Therefore,
-	// if the status field was present in the configuration, we perform an
-	// additional operation to modify it.
-	status := String(d, "status")
-	if status != nil && *status != logStream.GetStatus() {
-		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: status}); err != nil {
+	// The Management API only allows updating a log stream's status.
+	// Therefore, if the status field was present in the configuration,
+	// we perform an additional operation to modify it.
+	status := d.Get("status").(string)
+	if status != "" && status != logStream.GetStatus() {
+		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: &status}); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -369,12 +369,11 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 func expandLogStream(d *schema.ResourceData) *management.LogStream {
 	config := d.GetRawConfig()
 
-	logStreamType := value.String(config.GetAttr("type"))
-
 	logStream := &management.LogStream{
 		Name: value.String(config.GetAttr("name")),
 	}
 
+	logStreamType := value.String(config.GetAttr("type"))
 	if d.IsNewResource() {
 		logStream.Type = logStreamType
 	}
@@ -385,16 +384,14 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 
 	filtersConfig := config.GetAttr("filters")
 	if !filtersConfig.IsNull() {
-		var filters []map[string]string
+		filters := make([]map[string]string, 0)
 
 		filtersConfig.ForEachElement(func(_ cty.Value, filter cty.Value) (stop bool) {
 			filters = append(filters, *value.MapOfStrings(filter))
-			return true
+			return stop
 		})
 
-		if len(filters) > 0 {
-			logStream.Filters = &filters
-		}
+		logStream.Filters = &filters
 	}
 
 	config.GetAttr("sink").ForEachElement(func(_ cty.Value, sink cty.Value) (stop bool) {

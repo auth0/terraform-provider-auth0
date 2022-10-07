@@ -6,20 +6,20 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 135
+      content_length: 120
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"name":"acceptance-test-TestAccRule","script":"function (user, context, callback) { callback(null, user, context); }","enabled":true}
+        {"name":"acceptance-test-TestAccRule","script":"function (user, context, callback) { callback(null, user, context); }"}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
+          - Go-Auth0-SDK/latest
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules
       method: POST
     response:
@@ -28,9 +28,9 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
+      content_length: 196
       uncompressed: false
-      body: '{"id":"rul_1yQAfKAs8K06Yyuo","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -55,8 +55,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_1yQAfKAs8K06Yyuo
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
       method: GET
     response:
       proto: HTTP/2.0
@@ -66,7 +66,7 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rul_1yQAfKAs8K06Yyuo","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -91,8 +91,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_1yQAfKAs8K06Yyuo
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
       method: GET
     response:
       proto: HTTP/2.0
@@ -102,7 +102,7 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rul_1yQAfKAs8K06Yyuo","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -110,6 +110,294 @@ interactions:
       code: 200
       duration: 1ms
   - id: 3
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 4
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 169
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"acceptance-test-TestAccRule","script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","order":1,"enabled":true}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 5
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 6
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 7
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":true,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 8
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 160
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"acceptance-test-TestAccRule","script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","enabled":false}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":false,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 9
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":false,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 10
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rul_MZb3AutLa4QMC8iZ","enabled":false,"script":"function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }","name":"acceptance-test-TestAccRule","order":1,"stage":"login_success"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 11
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -126,8 +414,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_1yQAfKAs8K06Yyuo
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/rules/rul_MZb3AutLa4QMC8iZ
       method: DELETE
     response:
       proto: HTTP/2.0

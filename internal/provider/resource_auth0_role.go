@@ -9,6 +9,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newRole() *schema.Resource {
@@ -58,25 +60,19 @@ func newRole() *schema.Resource {
 }
 
 func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	role := expandRole(d)
 	api := m.(*management.Management)
+
+	role := expandRole(d)
 	if err := api.Role.Create(role); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(role.ID))
+	d.SetId(role.GetID())
 
-	// Enable partial state mode. Sub-resources can potentially cause partial
-	// state. Therefore, we must explicitly tell Terraform what is safe to
-	// persist and what is not.
-	//
-	// See: https://www.terraform.io/docs/extend/writing-custom-providers.html
 	d.Partial(true)
 	if err := assignRolePermissions(d, m); err != nil {
 		return diag.FromErr(err)
 	}
-	// We succeeded, disable partial mode.
-	// This causes Terraform to save all fields again.
 	d.Partial(false)
 
 	return readRole(ctx, d, m)
@@ -84,22 +80,19 @@ func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	role, err := api.Role.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	d.SetId(role.GetID())
-
 	result := multierror.Append(
-		d.Set("name", role.Name),
-		d.Set("description", role.Description),
+		d.Set("name", role.GetName()),
+		d.Set("description", role.GetDescription()),
 	)
 
 	var permissions []*management.Permission
@@ -115,17 +108,22 @@ func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		if !permissionList.HasNext() {
 			break
 		}
+
 		page++
 	}
 
-	result = multierror.Append(result, d.Set("permissions", flattenRolePermissions(permissions)))
+	result = multierror.Append(
+		result,
+		d.Set("permissions", flattenRolePermissions(permissions)),
+	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	role := expandRole(d)
 	api := m.(*management.Management)
+
+	role := expandRole(d)
 	if err := api.Role.Update(d.Id(), role); err != nil {
 		return diag.FromErr(err)
 	}
@@ -141,22 +139,25 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Role.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
 
 func expandRole(d *schema.ResourceData) *management.Role {
+	config := d.GetRawConfig()
+
 	return &management.Role{
-		Name:        String(d, "name"),
-		Description: String(d, "description"),
+		Name:        value.String(config.GetAttr("name")),
+		Description: value.String(config.GetAttr("description")),
 	}
 }
 
@@ -202,8 +203,8 @@ func flattenRolePermissions(permissions []*management.Permission) []interface{} 
 	var result []interface{}
 	for _, permission := range permissions {
 		result = append(result, map[string]interface{}{
-			"name":                       permission.Name,
-			"resource_server_identifier": permission.ResourceServerIdentifier,
+			"name":                       permission.GetName(),
+			"resource_server_identifier": permission.GetResourceServerIdentifier(),
 		})
 	}
 	return result

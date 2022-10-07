@@ -89,6 +89,9 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "true"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.configuration.foo"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "hair_color"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "gender"),
 				),
 			},
 			{

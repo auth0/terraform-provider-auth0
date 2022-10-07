@@ -259,11 +259,11 @@ func configurePhone(config cty.Value, api *management.Management) error {
 		switch mfaProvider.GetProvider() {
 		case "twilio":
 			if err = updateTwilioOptions(options, api); err != nil {
-				return stop
+				return true
 			}
 		case "auth0":
 			if err = updateAuth0Options(options, api); err != nil {
-				return stop
+				return true
 			}
 		}
 

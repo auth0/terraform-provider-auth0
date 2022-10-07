@@ -12,6 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 type validateUserFunc func(*management.User) error
@@ -141,6 +143,7 @@ func newUser() *schema.Resource {
 
 func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	user, err := api.User.Read(d.Id())
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
@@ -151,19 +154,19 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 	}
 
 	result := multierror.Append(
-		d.Set("user_id", user.ID),
-		d.Set("username", user.Username),
-		d.Set("name", user.Name),
-		d.Set("family_name", user.FamilyName),
-		d.Set("given_name", user.GivenName),
-		d.Set("nickname", user.Nickname),
-		d.Set("email", user.Email),
-		d.Set("email_verified", user.EmailVerified),
-		d.Set("verify_email", user.VerifyEmail),
-		d.Set("phone_number", user.PhoneNumber),
-		d.Set("phone_verified", user.PhoneVerified),
-		d.Set("blocked", user.Blocked),
-		d.Set("picture", user.Picture),
+		d.Set("user_id", user.GetID()),
+		d.Set("username", user.GetUsername()),
+		d.Set("name", user.GetName()),
+		d.Set("family_name", user.GetFamilyName()),
+		d.Set("given_name", user.GetGivenName()),
+		d.Set("nickname", user.GetNickname()),
+		d.Set("email", user.GetEmail()),
+		d.Set("email_verified", user.GetEmailVerified()),
+		d.Set("verify_email", user.GetVerifyEmail()),
+		d.Set("phone_number", user.GetPhoneNumber()),
+		d.Set("phone_verified", user.GetPhoneVerified()),
+		d.Set("blocked", user.GetBlocked()),
+		d.Set("picture", user.GetPicture()),
 	)
 
 	var userMeta string
@@ -194,17 +197,18 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 }
 
 func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
 	user, err := expandUser(d)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	api := m.(*management.Management)
 	if err := api.User.Create(user); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(user.ID))
+	d.SetId(user.GetID())
 
 	if err = updateUserRoles(d, api); err != nil {
 		return diag.FromErr(err)
@@ -253,22 +257,41 @@ func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func expandUser(d *schema.ResourceData) (*management.User, error) {
+	config := d.GetRawConfig()
+
 	user := &management.User{
-		ID:            String(d, "user_id", IsNewResource()),
-		Connection:    String(d, "connection_name"),
-		Email:         String(d, "email", IsNewResource(), HasChange()),
-		Name:          String(d, "name"),
-		GivenName:     String(d, "given_name"),
-		FamilyName:    String(d, "family_name"),
-		Username:      String(d, "username", IsNewResource(), HasChange()),
-		Nickname:      String(d, "nickname"),
-		Password:      String(d, "password", IsNewResource(), HasChange()),
-		PhoneNumber:   String(d, "phone_number", IsNewResource(), HasChange()),
-		EmailVerified: Bool(d, "email_verified", IsNewResource(), HasChange()),
-		VerifyEmail:   Bool(d, "verify_email", IsNewResource(), HasChange()),
-		PhoneVerified: Bool(d, "phone_verified", IsNewResource(), HasChange()),
-		Picture:       String(d, "picture"),
-		Blocked:       Bool(d, "blocked"),
+		Connection: value.String(config.GetAttr("connection_name")),
+		Name:       value.String(config.GetAttr("name")),
+		GivenName:  value.String(config.GetAttr("given_name")),
+		FamilyName: value.String(config.GetAttr("family_name")),
+		Nickname:   value.String(config.GetAttr("nickname")),
+		Picture:    value.String(config.GetAttr("picture")),
+		Blocked:    value.Bool(config.GetAttr("blocked")),
+	}
+
+	if d.IsNewResource() {
+		user.ID = value.String(config.GetAttr("user_id"))
+	}
+	if d.IsNewResource() || d.HasChange("email") {
+		user.Email = value.String(config.GetAttr("email"))
+	}
+	if d.IsNewResource() || d.HasChange("username") {
+		user.Username = value.String(config.GetAttr("username"))
+	}
+	if d.IsNewResource() || d.HasChange("password") {
+		user.Password = value.String(config.GetAttr("password"))
+	}
+	if d.IsNewResource() || d.HasChange("phone_number") {
+		user.PhoneNumber = value.String(config.GetAttr("phone_number"))
+	}
+	if d.IsNewResource() || d.HasChange("email_verified") {
+		user.EmailVerified = value.Bool(config.GetAttr("email_verified"))
+	}
+	if d.IsNewResource() || d.HasChange("verify_email") {
+		user.VerifyEmail = value.Bool(config.GetAttr("verify_email"))
+	}
+	if d.IsNewResource() || d.HasChange("phone_verified") {
+		user.PhoneVerified = value.Bool(config.GetAttr("phone_verified"))
 	}
 
 	if d.HasChange("user_metadata") {
@@ -293,7 +316,7 @@ func expandUser(d *schema.ResourceData) (*management.User, error) {
 func expandMetadata(d *schema.ResourceData, metadataType string) (map[string]interface{}, error) {
 	oldMetadata, newMetadata := d.GetChange(metadataType + "_metadata")
 	if oldMetadata == "" {
-		return JSON(d, metadataType+"_metadata")
+		return value.MapFromJSON(d.GetRawConfig().GetAttr(metadataType + "_metadata"))
 	}
 
 	if newMetadata == "" {
@@ -322,7 +345,7 @@ func expandMetadata(d *schema.ResourceData, metadataType string) (map[string]int
 func flattenUserRoles(roleList *management.RoleList) []interface{} {
 	var roles []interface{}
 	for _, role := range roleList.Roles {
-		roles = append(roles, auth0.StringValue(role.ID))
+		roles = append(roles, role.GetID())
 	}
 	return roles
 }
@@ -372,30 +395,36 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 }
 
 func updateUserRoles(d *schema.ResourceData, api *management.Management) error {
-	toAdd, toRemove := Diff(d, "roles")
+	if !d.HasChange("roles") {
+		return nil
+	}
 
-	if err := removeUserRoles(api, d.Id(), toRemove.List()); err != nil {
+	oldValue, newValue := d.GetChange("roles")
+
+	rolesToAdd := newValue.(*schema.Set).Difference(oldValue.(*schema.Set))
+	rolesToRemove := oldValue.(*schema.Set).Difference(newValue.(*schema.Set))
+
+	if err := removeUserRoles(api, d.Id(), rolesToRemove.List()); err != nil {
 		return err
 	}
 
-	return assignUserRoles(api, d.Id(), toAdd.List())
+	return assignUserRoles(api, d.Id(), rolesToAdd.List())
 }
 
 func removeUserRoles(api *management.Management, userID string, userRolesToRemove []interface{}) error {
+	if len(userRolesToRemove) == 0 {
+		return nil
+	}
+
 	var rmRoles []*management.Role
 	for _, rmRole := range userRolesToRemove {
 		role := &management.Role{ID: auth0.String(rmRole.(string))}
 		rmRoles = append(rmRoles, role)
 	}
 
-	if len(rmRoles) == 0 {
-		return nil
-	}
-
 	err := api.User.RemoveRoles(userID, rmRoles)
 	if err != nil {
-		// Ignore 404 errors as the role may have been deleted
-		// prior to un-assigning them from the user.
+		// Ignore 404 errors as the role may have been deleted prior to un-assigning them from the user.
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
 		}
@@ -405,14 +434,15 @@ func removeUserRoles(api *management.Management, userID string, userRolesToRemov
 }
 
 func assignUserRoles(api *management.Management, userID string, userRolesToAdd []interface{}) error {
-	var addRoles []*management.Role
-	for _, addRole := range userRolesToAdd {
-		role := &management.Role{ID: auth0.String(addRole.(string))}
-		addRoles = append(addRoles, role)
+	if len(userRolesToAdd) == 0 {
+		return nil
 	}
 
-	if len(addRoles) == 0 {
-		return nil
+	var addRoles []*management.Role
+	for _, addRole := range userRolesToAdd {
+		roleID := addRole.(string)
+		role := &management.Role{ID: &roleID}
+		addRoles = append(addRoles, role)
 	}
 
 	return api.User.AssignRoles(userID, addRoles)

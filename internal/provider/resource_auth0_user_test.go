@@ -64,11 +64,19 @@ func TestAccUserMissingRequiredParams(t *testing.T) {
 	})
 }
 
-const testAccUserCreate = `
+const testAccUserEmpty = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.testName}}"
-	user_id = "{{.testName}}"
+	password = "passpass$12$12"
+	email = "{{.testName}}@acceptance.test.com"
+}
+`
+
+const testAccUserUpdate = `
+resource auth0_user user {
+	connection_name = "Username-Password-Authentication"
+	username = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
@@ -84,7 +92,6 @@ resource auth0_user user {
 	depends_on = [auth0_role.owner, auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
 	username = "{{.testName}}"
-	user_id = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
@@ -120,7 +127,6 @@ resource auth0_user user {
 	depends_on = [auth0_role.admin]
 	connection_name = "Username-Password-Authentication"
 	username = "{{.testName}}"
-	user_id = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
@@ -147,7 +153,6 @@ const testAccUserUpdateRemovingAllRolesAndUpdatingMetadata = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.testName}}"
-	user_id = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
@@ -170,7 +175,6 @@ const testAccUserUpdateRemovingMetadata = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
 	username = "{{.testName}}"
-	user_id = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
 	name = "Firstname Lastname"
@@ -188,11 +192,19 @@ func TestAccUser(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserCreate, strings.ToLower(t.Name())),
+				Config: template.ParseTestName(testAccUserEmpty, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
+					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttrSet("auth0_user.user", "user_id"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccUserUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "username", strings.ToLower(t.Name())),
-					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttrSet("auth0_user.user", "user_id"),
 					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),

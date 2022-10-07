@@ -6,10 +6,13 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newLogStream() *schema.Resource {
@@ -223,9 +226,9 @@ func newLogStream() *schema.Resource {
 }
 
 func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	logStream := expandLogStream(d)
-
 	api := m.(*management.Management)
+
+	logStream := expandLogStream(d)
 	if err := api.LogStream.Create(logStream); err != nil {
 		return diag.FromErr(err)
 	}
@@ -236,7 +239,7 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	// if the status field was present in the configuration, we perform an
 	// additional operation to modify it.
 	status := String(d, "status")
-	if status != nil && status != logStream.Status {
+	if status != nil && *status != logStream.GetStatus() {
 		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: status}); err != nil {
 			return diag.FromErr(err)
 		}
@@ -247,21 +250,20 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 
 func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	logStream, err := api.LogStream.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("name", logStream.Name),
-		d.Set("status", logStream.Status),
-		d.Set("type", logStream.Type),
+		d.Set("name", logStream.GetName()),
+		d.Set("status", logStream.GetStatus()),
+		d.Set("type", logStream.GetType()),
 		d.Set("filters", logStream.Filters),
 		d.Set("sink", flattenLogStreamSink(logStream.Sink)),
 	)
@@ -270,8 +272,9 @@ func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) d
 }
 
 func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	logStream := expandLogStream(d)
 	api := m.(*management.Management)
+
+	logStream := expandLogStream(d)
 	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
 		return diag.FromErr(err)
 	}
@@ -281,15 +284,15 @@ func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 
 func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.LogStream.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 	}
 
+	d.SetId("")
 	return nil
 }
 
@@ -363,86 +366,123 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 	}
 }
 
-func expandLogStream(d ResourceData) *management.LogStream {
+func expandLogStream(d *schema.ResourceData) *management.LogStream {
+	config := d.GetRawConfig()
+
+	logStreamType := value.String(config.GetAttr("type"))
+
 	logStream := &management.LogStream{
-		Name:    String(d, "name"),
-		Type:    String(d, "type", IsNewResource()),
-		Status:  String(d, "status", Not(IsNewResource())),
-		Filters: List(d, "filters").List(),
+		Name: value.String(config.GetAttr("name")),
 	}
 
-	streamType := d.Get("type").(string)
-	List(d, "sink").Elem(func(d ResourceData) {
-		switch streamType {
+	if d.IsNewResource() {
+		logStream.Type = logStreamType
+	}
+
+	if !d.IsNewResource() {
+		logStream.Status = value.String(config.GetAttr("status"))
+	}
+
+	filtersConfig := config.GetAttr("filters")
+	if !filtersConfig.IsNull() {
+		var filters []map[string]string
+
+		filtersConfig.ForEachElement(func(_ cty.Value, filter cty.Value) (stop bool) {
+			filters = append(filters, *value.MapOfStrings(filter))
+			return true
+		})
+
+		if len(filters) > 0 {
+			logStream.Filters = &filters
+		}
+	}
+
+	config.GetAttr("sink").ForEachElement(func(_ cty.Value, sink cty.Value) (stop bool) {
+		switch *logStreamType {
 		case management.LogStreamTypeAmazonEventBridge:
 			// LogStreamTypeAmazonEventBridge cannot be updated.
 			if d.IsNewResource() {
-				logStream.Sink = expandLogStreamSinkAmazonEventBridge(d)
+				logStream.Sink = expandLogStreamSinkAmazonEventBridge(sink)
 			}
 		case management.LogStreamTypeAzureEventGrid:
 			// LogStreamTypeAzureEventGrid cannot be updated.
 			if d.IsNewResource() {
-				logStream.Sink = expandLogStreamSinkAzureEventGrid(d)
+				logStream.Sink = expandLogStreamSinkAzureEventGrid(sink)
 			}
 		case management.LogStreamTypeHTTP:
-			logStream.Sink = expandLogStreamSinkHTTP(d)
+			logStream.Sink = expandLogStreamSinkHTTP(sink)
 		case management.LogStreamTypeDatadog:
-			logStream.Sink = expandLogStreamSinkDatadog(d)
+			logStream.Sink = expandLogStreamSinkDatadog(sink)
 		case management.LogStreamTypeSplunk:
-			logStream.Sink = expandLogStreamSinkSplunk(d)
+			logStream.Sink = expandLogStreamSinkSplunk(sink)
 		case management.LogStreamTypeSumo:
-			logStream.Sink = expandLogStreamSinkSumo(d)
+			logStream.Sink = expandLogStreamSinkSumo(sink)
 		default:
-			log.Printf("[WARN]: Unsupported log stream sink %s", streamType)
+			log.Printf("[WARN]: Unsupported log stream sink %s", logStream.GetType())
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
 			log.Printf("[WARN]: 	https://github.com/auth0/terraform-provider-auth0/issues/new")
 		}
+
+		return stop
 	})
 
 	return logStream
 }
 
-func expandLogStreamSinkAmazonEventBridge(d ResourceData) *management.LogStreamSinkAmazonEventBridge {
+func expandLogStreamSinkAmazonEventBridge(config cty.Value) *management.LogStreamSinkAmazonEventBridge {
 	return &management.LogStreamSinkAmazonEventBridge{
-		AccountID: String(d, "aws_account_id"),
-		Region:    String(d, "aws_region"),
+		AccountID: value.String(config.GetAttr("aws_account_id")),
+		Region:    value.String(config.GetAttr("aws_region")),
 	}
 }
 
-func expandLogStreamSinkAzureEventGrid(d ResourceData) *management.LogStreamSinkAzureEventGrid {
+func expandLogStreamSinkAzureEventGrid(config cty.Value) *management.LogStreamSinkAzureEventGrid {
 	return &management.LogStreamSinkAzureEventGrid{
-		SubscriptionID: String(d, "azure_subscription_id"),
-		ResourceGroup:  String(d, "azure_resource_group"),
-		Region:         String(d, "azure_region"),
-		PartnerTopic:   String(d, "azure_partner_topic"),
+		SubscriptionID: value.String(config.GetAttr("azure_subscription_id")),
+		ResourceGroup:  value.String(config.GetAttr("azure_resource_group")),
+		Region:         value.String(config.GetAttr("azure_region")),
+		PartnerTopic:   value.String(config.GetAttr("azure_partner_topic")),
 	}
 }
 
-func expandLogStreamSinkHTTP(d ResourceData) *management.LogStreamSinkHTTP {
-	return &management.LogStreamSinkHTTP{
-		ContentFormat: String(d, "http_content_format"),
-		ContentType:   String(d, "http_content_type"),
-		Endpoint:      String(d, "http_endpoint"),
-		Authorization: String(d, "http_authorization"),
-		CustomHeaders: List(d, "http_custom_headers").List(),
+func expandLogStreamSinkHTTP(config cty.Value) *management.LogStreamSinkHTTP {
+	httpSink := &management.LogStreamSinkHTTP{
+		ContentFormat: value.String(config.GetAttr("http_content_format")),
+		ContentType:   value.String(config.GetAttr("http_content_type")),
+		Endpoint:      value.String(config.GetAttr("http_endpoint")),
+		Authorization: value.String(config.GetAttr("http_authorization")),
 	}
+
+	customHeadersConfig := config.GetAttr("http_custom_headers")
+	if !customHeadersConfig.IsNull() {
+		customHeaders := make([]map[string]string, 0)
+
+		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
+			customHeaders = append(customHeaders, *value.MapOfStrings(httpHeader))
+			return stop
+		})
+
+		httpSink.CustomHeaders = &customHeaders
+	}
+
+	return httpSink
 }
-func expandLogStreamSinkDatadog(d ResourceData) *management.LogStreamSinkDatadog {
+func expandLogStreamSinkDatadog(config cty.Value) *management.LogStreamSinkDatadog {
 	return &management.LogStreamSinkDatadog{
-		Region: String(d, "datadog_region"),
-		APIKey: String(d, "datadog_api_key"),
+		Region: value.String(config.GetAttr("datadog_region")),
+		APIKey: value.String(config.GetAttr("datadog_api_key")),
 	}
 }
-func expandLogStreamSinkSplunk(d ResourceData) *management.LogStreamSinkSplunk {
+func expandLogStreamSinkSplunk(config cty.Value) *management.LogStreamSinkSplunk {
 	return &management.LogStreamSinkSplunk{
-		Domain: String(d, "splunk_domain"),
-		Token:  String(d, "splunk_token"),
-		Port:   String(d, "splunk_port"),
-		Secure: Bool(d, "splunk_secure"),
+		Domain: value.String(config.GetAttr("splunk_domain")),
+		Token:  value.String(config.GetAttr("splunk_token")),
+		Port:   value.String(config.GetAttr("splunk_port")),
+		Secure: value.Bool(config.GetAttr("splunk_secure")),
 	}
 }
-func expandLogStreamSinkSumo(d ResourceData) *management.LogStreamSinkSumo {
+func expandLogStreamSinkSumo(config cty.Value) *management.LogStreamSinkSumo {
 	return &management.LogStreamSinkSumo{
-		SourceAddress: String(d, "sumo_source_address"),
+		SourceAddress: value.String(config.GetAttr("sumo_source_address")),
 	}
 }

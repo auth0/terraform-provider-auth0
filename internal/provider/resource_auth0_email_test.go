@@ -92,6 +92,27 @@ func TestAccEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "eu"),
 				),
 			},
+			{
+				Config: `
+				resource "auth0_email" "my_email_provider" {
+					name = "mailgun"
+					enabled = false
+					default_from_address = ""
+					credentials {
+						api_key = "MAILGUNXXXXXXXXXXXXXXX"
+						domain = "example.com"
+						region = "eu"
+					}
+				}
+				`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mailgun"),
+					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "eu"),
+				),
+			},
 		},
 	})
 }

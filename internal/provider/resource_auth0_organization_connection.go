@@ -94,9 +94,12 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*management.Management)
 
 	organizationID := data.Get("organization_id").(string)
+	connectionID := data.Get("connection_id").(string)
+	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
+
 	organizationConnection := &management.OrganizationConnection{
-		ConnectionID:            String(data, "connection_id"),
-		AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
+		ConnectionID:            &connectionID,
+		AssignMembershipOnLogin: &assignMembershipOnLogin,
 	}
 
 	if err := api.Organization.AddConnection(organizationID, organizationConnection); err != nil {
@@ -113,6 +116,7 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
+
 	organizationConnection, err := api.Organization.Connection(organizationID, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
@@ -132,9 +136,12 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
+	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
+
 	organizationConnection := &management.OrganizationConnection{
-		AssignMembershipOnLogin: Bool(data, "assign_membership_on_login"),
+		AssignMembershipOnLogin: &assignMembershipOnLogin,
 	}
+
 	if err := api.Organization.UpdateConnection(organizationID, connectionID, organizationConnection); err != nil {
 		return diag.FromErr(err)
 	}
@@ -157,6 +164,5 @@ func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	}
 
 	data.SetId("")
-
 	return nil
 }

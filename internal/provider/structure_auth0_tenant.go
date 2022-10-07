@@ -196,10 +196,6 @@ func expandTenantUniversalLogin(config cty.Value) *management.TenantUniversalLog
 func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie {
 	var sessionCookie management.TenantSessionCookie
 
-	if config.LengthInt() == 0 {
-		return nil
-	}
-
 	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
 		sessionCookie.Mode = value.String(d.GetAttr("mode"))
 		return stop

@@ -252,7 +252,7 @@ func configurePhone(config cty.Value, api *management.Management) error {
 			Provider: value.String(phone.GetAttr("provider")),
 		}
 		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(mfaProvider); err != nil {
-			return stop
+			return true
 		}
 
 		options := phone.GetAttr("options")
@@ -271,7 +271,7 @@ func configurePhone(config cty.Value, api *management.Management) error {
 			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
 		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(messageTypes); err != nil {
-			return stop
+			return true
 		}
 
 		return stop
@@ -309,7 +309,7 @@ func updateTwilioOptions(options cty.Value, api *management.Management) error {
 				SID:                 value.String(config.GetAttr("sid")),
 			},
 		); err != nil {
-			return stop
+			return true
 		}
 
 		if err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
@@ -318,7 +318,7 @@ func updateTwilioOptions(options cty.Value, api *management.Management) error {
 				VerificationMessage: value.String(config.GetAttr("verification_message")),
 			},
 		); err != nil {
-			return stop
+			return true
 		}
 
 		return stop
@@ -429,7 +429,7 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 				})
 				if amazonSNS != nil {
 					if err = api.Guardian.MultiFactor.Push.UpdateAmazonSNS(amazonSNS); err != nil {
-						return stop
+						return true
 					}
 				}
 			}
@@ -446,7 +446,7 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 				})
 				if customApp != nil {
 					if err = api.Guardian.MultiFactor.Push.UpdateCustomApp(customApp); err != nil {
-						return stop
+						return true
 					}
 				}
 			}

@@ -67,6 +67,7 @@ func TestAccUserMissingRequiredParams(t *testing.T) {
 const testAccUserEmpty = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
+	user_id = "{{.testName}}"
 	username = "{{.testName}}"
 	password = "passpass$12$12"
 	email = "{{.testName}}@acceptance.test.com"
@@ -76,6 +77,7 @@ resource auth0_user user {
 const testAccUserUpdate = `
 resource auth0_user user {
 	connection_name = "Username-Password-Authentication"
+	user_id = "{{.testName}}"
 	username = "{{.testName}}"
 	email = "{{.testName}}@acceptance.test.com"
 	password = "passpass$12$12"
@@ -196,7 +198,7 @@ func TestAccUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
-					resource.TestCheckResourceAttrSet("auth0_user.user", "user_id"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
 				),
 			},
 			{
@@ -204,7 +206,7 @@ func TestAccUser(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "username", strings.ToLower(t.Name())),
-					resource.TestCheckResourceAttrSet("auth0_user.user", "user_id"),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_id", fmt.Sprintf("auth0|%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_user.user", "name", "Firstname Lastname"),
 					resource.TestCheckResourceAttr("auth0_user.user", "given_name", "Firstname"),

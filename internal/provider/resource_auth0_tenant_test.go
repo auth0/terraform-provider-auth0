@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -12,17 +13,24 @@ import (
 func TestAccTenant(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
+	domain := os.Getenv("AUTH0_DOMAIN")
+
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccTenantConfigCreate,
+				Config: testAccEmptyTenant,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "change_password.0.enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "change_password.0.html", "<html>Change Password</html>"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "guardian_mfa_page.0.enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "guardian_mfa_page.0.html", "<html>MFA</html>"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", ""),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(testAccTenantConfigCreate, domain),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_tenant.my_tenant", "change_password.0.enabled"),
+					resource.TestCheckResourceAttrSet("auth0_tenant.my_tenant", "guardian_mfa_page.0.enabled"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", fmt.Sprintf("https://%s/api/v2/", domain)),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_directory", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html>Error Page</html>"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
@@ -53,15 +61,24 @@ func TestAccTenant(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.0", "de"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.1", "fr"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 				),
 			},
 			{
-				Config: `resource "auth0_tenant" "my_tenant" {}`,
+				Config: testAccEmptyTenant,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.0", "de"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.1", "fr"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", ""),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 				),
 			},
@@ -71,15 +88,7 @@ func TestAccTenant(t *testing.T) {
 
 const testAccTenantConfigCreate = `
 resource "auth0_tenant" "my_tenant" {
-	change_password {
-		enabled = true
-		html = "<html>Change Password</html>"
-	}
-	guardian_mfa_page {
-		enabled = true
-		html = "<html>MFA</html>"
-	}
-	default_audience = ""
+	default_audience = "https://%s/api/v2/"
 	default_directory = ""
 	error_page {
 		html = "<html>Error Page</html>"
@@ -140,9 +149,7 @@ resource "auth0_tenant" "my_tenant" {
 	picture_url = "https://mycompany.org/logo.png"
 	support_email = "support@mycompany.org"
 	support_url = "https://mycompany.org/support"
-	allowed_logout_urls = [
-		"https://mycompany.org/logoutCallback"
-	]
+	allowed_logout_urls = []
 	session_lifetime = 720
 	sandbox_version = "12"
 	idle_session_lifetime = 72
@@ -168,6 +175,8 @@ resource "auth0_tenant" "my_tenant" {
 	}
 }
 `
+
+const testAccEmptyTenant = `resource "auth0_tenant" "my_tenant" {}`
 
 func TestAccTenantDefaults(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
@@ -197,5 +206,3 @@ func TestAccTenantDefaults(t *testing.T) {
 		},
 	})
 }
-
-const testAccEmptyTenant = `resource "auth0_tenant" "my_tenant" {}`

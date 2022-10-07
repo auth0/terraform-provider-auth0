@@ -1,7 +1,6 @@
 package provider
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -12,8 +11,6 @@ import (
 
 func TestAccTenant(t *testing.T) {
 	httpRecorder := recorder.New(t)
-
-	domain := os.Getenv("AUTH0_DOMAIN")
 
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(httpRecorder),
@@ -26,11 +23,11 @@ func TestAccTenant(t *testing.T) {
 				),
 			},
 			{
-				Config: fmt.Sprintf(testAccTenantConfigCreate, domain),
+				Config: testAccTenantConfigCreate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_tenant.my_tenant", "change_password.0.enabled"),
 					resource.TestCheckResourceAttrSet("auth0_tenant.my_tenant", "guardian_mfa_page.0.enabled"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", fmt.Sprintf("https://%s/api/v2/", domain)),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_audience", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_directory", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html>Error Page</html>"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
@@ -88,8 +85,8 @@ func TestAccTenant(t *testing.T) {
 
 const testAccTenantConfigCreate = `
 resource "auth0_tenant" "my_tenant" {
-	default_audience = "https://%s/api/v2/"
 	default_directory = ""
+	default_audience = ""
 	error_page {
 		html = "<html>Error Page</html>"
 		show_log_link = false
@@ -138,7 +135,6 @@ resource "auth0_tenant" "my_tenant" {
 		enabled = true
 		html = "<html>MFA</html>"
 	}
-	default_audience = ""
 	default_directory = ""
 	error_page {
 		html = "<html>Error Page</html>"

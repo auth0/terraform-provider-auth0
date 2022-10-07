@@ -6,20 +6,20 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 156
+      content_length: 141
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","triggerId":"pre-user-registration","enabled":true}
+        {"name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","triggerId":"pre-user-registration"}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
+          - Go-Auth0-SDK/latest
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks
       method: POST
     response:
@@ -28,9 +28,9 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
+      content_length: 208
       uncompressed: false
-      body: '{"id":"01GBPZWEFDT9RFR6PN6939RZZE","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"triggerId":"pre-user-registration","enabled":true}'
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"triggerId":"pre-user-registration","enabled":false}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -55,8 +55,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE/secrets
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
       method: GET
     response:
       proto: HTTP/2.0
@@ -66,7 +66,7 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{}'
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":false,"triggerId":"pre-user-registration"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -91,8 +91,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N/secrets
       method: GET
     response:
       proto: HTTP/2.0
@@ -100,9 +100,9 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"01GBPZWEFDT9RFR6PN6939RZZE","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":true,"triggerId":"pre-user-registration"}'
+      content_length: 2
+      uncompressed: false
+      body: '{}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -127,8 +127,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE/secrets
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
       method: GET
     response:
       proto: HTTP/2.0
@@ -138,7 +138,7 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{}'
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":false,"triggerId":"pre-user-registration"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -163,8 +163,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N/secrets
       method: GET
     response:
       proto: HTTP/2.0
@@ -172,9 +172,9 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"01GBPZWEFDT9RFR6PN6939RZZE","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":true,"triggerId":"pre-user-registration"}'
+      content_length: 2
+      uncompressed: false
+      body: '{}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -199,8 +199,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE/secrets
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
       method: GET
     response:
       proto: HTTP/2.0
@@ -210,7 +210,7 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{}'
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":false,"triggerId":"pre-user-registration"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
@@ -218,6 +218,222 @@ interactions:
       code: 200
       duration: 1ms
   - id: 6
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N/secrets
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 2
+      uncompressed: false
+      body: '{}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 7
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 120
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","enabled":true}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"triggerId":"pre-user-registration","enabled":true}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 8
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":true,"triggerId":"pre-user-registration"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 9
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N/secrets
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 2
+      uncompressed: false
+      body: '{}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 10
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"01GEPVQEH9SX3RSTYY561TR92N","name":"pre-user-reg-hook","script":"function (user, context, callback) { callback(null, { user }); }","dependencies":{},"enabled":true,"triggerId":"pre-user-registration"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 11
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N/secrets
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 2
+      uncompressed: false
+      body: '{}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 12
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -234,8 +450,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GBPZWEFDT9RFR6PN6939RZZE
+          - Go-Auth0-SDK/latest
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/hooks/01GEPVQEH9SX3RSTYY561TR92N
       method: DELETE
     response:
       proto: HTTP/2.0

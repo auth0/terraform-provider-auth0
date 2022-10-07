@@ -74,6 +74,14 @@ func TestAccRuleConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", "foo"),
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccRuleConfigEmptyValue, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_key_%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_key_%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_rule_config.foo", "value", ""),
+				),
+			},
 		},
 	})
 }
@@ -96,5 +104,12 @@ const testAccRuleConfigUpdateKey = `
 resource "auth0_rule_config" "foo" {
   key = "acc_test_key_{{.testName}}"
   value = "foo"
+}
+`
+
+const testAccRuleConfigEmptyValue = `
+resource "auth0_rule_config" "foo" {
+  key = "acc_test_key_{{.testName}}"
+  value = ""
 }
 `

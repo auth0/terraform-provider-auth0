@@ -4,12 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newCustomDomain() *schema.Resource {
@@ -77,36 +79,36 @@ func newCustomDomain() *schema.Resource {
 }
 
 func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	customDomain := expandCustomDomain(d)
 	api := m.(*management.Management)
+
+	customDomain := expandCustomDomain(d.GetRawConfig())
 	if err := api.CustomDomain.Create(customDomain); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(customDomain.ID))
+	d.SetId(customDomain.GetID())
 
 	return readCustomDomain(ctx, d, m)
 }
 
 func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("domain", customDomain.Domain),
-		d.Set("type", customDomain.Type),
-		d.Set("primary", customDomain.Primary),
-		d.Set("status", customDomain.Status),
-		d.Set("origin_domain_name", customDomain.OriginDomainName),
+		d.Set("domain", customDomain.GetDomain()),
+		d.Set("type", customDomain.GetType()),
+		d.Set("primary", customDomain.GetPrimary()),
+		d.Set("status", customDomain.GetStatus()),
+		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
 	)
 
 	if customDomain.Verification != nil {
@@ -120,21 +122,22 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 
 func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.CustomDomain.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
 
-func expandCustomDomain(d *schema.ResourceData) *management.CustomDomain {
+func expandCustomDomain(config cty.Value) *management.CustomDomain {
 	return &management.CustomDomain{
-		Domain: String(d, "domain"),
-		Type:   String(d, "type"),
+		Domain: value.String(config.GetAttr("domain")),
+		Type:   value.String(config.GetAttr("type")),
 	}
 }

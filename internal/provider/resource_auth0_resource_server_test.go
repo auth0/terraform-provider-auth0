@@ -44,6 +44,16 @@ func TestAccResourceServer(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
+				Config: template.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", ""),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "0"),
+					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "signing_alg"),
+					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_lifetime_for_web"),
+				),
+			},
+			{
 				Config: template.ParseTestName(testAccResourceServerConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -88,9 +98,28 @@ func TestAccResourceServer(t *testing.T) {
 					),
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccResourceServerConfigEmptyAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "0"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_web", "3600"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
+				),
+			},
 		},
 	})
 }
+
+const testAccResourceServerConfigEmpty = `
+resource "auth0_resource_server" "my_resource_server" {
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
 
 const testAccResourceServerConfigCreate = `
 resource "auth0_resource_server" "my_resource_server" {
@@ -131,5 +160,12 @@ resource "auth0_resource_server" "my_resource_server" {
 	token_lifetime_for_web = 3600
 	skip_consent_for_verifiable_first_party_clients = true
 	enforce_policies = true
+}
+`
+
+const testAccResourceServerConfigEmptyAgain = `
+resource "auth0_resource_server" "my_resource_server" {
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	name = "Acceptance Test - {{.testName}}"
 }
 `

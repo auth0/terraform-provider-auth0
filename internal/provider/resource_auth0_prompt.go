@@ -4,11 +4,14 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newPrompt() *schema.Resource {
@@ -26,6 +29,7 @@ func newPrompt() *schema.Resource {
 			"universal_login_experience": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"new", "classic",
 				}, false),
@@ -40,6 +44,7 @@ func newPrompt() *schema.Resource {
 			"webauthn_platform_first_factor": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Determines if the login screen uses identifier and biometrics first.",
 			},
 		},
@@ -71,7 +76,7 @@ func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	prompt := expandPrompt(d)
+	prompt := expandPrompt(d.GetRawConfig())
 	if err := api.Prompt.Update(prompt); err != nil {
 		return diag.FromErr(err)
 	}
@@ -84,10 +89,16 @@ func deletePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return nil
 }
 
-func expandPrompt(d *schema.ResourceData) *management.Prompt {
-	return &management.Prompt{
-		UniversalLoginExperience:    d.Get("universal_login_experience").(string),
-		IdentifierFirst:             Bool(d, "identifier_first"),
-		WebAuthnPlatformFirstFactor: Bool(d, "webauthn_platform_first_factor"),
+func expandPrompt(d cty.Value) *management.Prompt {
+	prompt := management.Prompt{
+		IdentifierFirst:             value.Bool(d.GetAttr("identifier_first")),
+		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),
 	}
+
+	ule := d.GetAttr("universal_login_experience")
+	if !ule.IsNull() {
+		prompt.UniversalLoginExperience = ule.AsString()
+	}
+
+	return &prompt
 }

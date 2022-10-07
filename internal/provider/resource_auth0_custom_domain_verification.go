@@ -55,6 +55,7 @@ func newCustomDomainVerification() *schema.Resource {
 
 func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
 		if err != nil {
@@ -74,7 +75,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 		// The cname_api_key field is only given once: when verification
 		// succeeds for the first time. Therefore, we set it on the resource in
 		// the creation routine only, and never touch it again.
-		if err := d.Set("cname_api_key", customDomainVerification.CNAMEAPIKey); err != nil {
+		if err := d.Set("cname_api_key", customDomainVerification.GetCNAMEAPIKey()); err != nil {
 			return resource.NonRetryableError(err)
 		}
 
@@ -89,20 +90,19 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 
 func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
 		d.Set("custom_domain_id", customDomain.GetID()),
-		d.Set("origin_domain_name", customDomain.OriginDomainName),
+		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

@@ -12,6 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newHook() *schema.Resource {
@@ -79,8 +81,9 @@ func newHook() *schema.Resource {
 }
 
 func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	hook := expandHook(d)
 	api := m.(*management.Management)
+
+	hook := expandHook(d)
 	if err := api.Hook.Create(hook); err != nil {
 		return diag.FromErr(err)
 	}
@@ -181,40 +184,34 @@ func checkForUntrackedHookSecrets(ctx context.Context, d *schema.ResourceData, m
 
 func upsertHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	if d.IsNewResource() || d.HasChange("secrets") {
-		hookSecrets := expandHookSecrets(d)
 		api := m.(*management.Management)
-		return api.Hook.ReplaceSecrets(d.Id(), hookSecrets)
+
+		hookSecrets := value.MapOfStrings(d.GetRawConfig().GetAttr("secrets"))
+		if hookSecrets == nil {
+			return nil
+		}
+
+		return api.Hook.ReplaceSecrets(d.Id(), *hookSecrets)
 	}
 
 	return nil
 }
 
 func expandHook(d *schema.ResourceData) *management.Hook {
+	config := d.GetRawConfig()
+
 	hook := &management.Hook{
-		Name:      String(d, "name"),
-		Script:    String(d, "script"),
-		TriggerID: String(d, "trigger_id", IsNewResource()),
-		Enabled:   Bool(d, "enabled"),
+		Name:         value.String(config.GetAttr("name")),
+		Script:       value.String(config.GetAttr("script")),
+		Enabled:      value.Bool(config.GetAttr("enabled")),
+		Dependencies: value.MapOfStrings(config.GetAttr("dependencies")),
 	}
 
-	if deps := Map(d, "dependencies"); deps != nil {
-		hook.Dependencies = &deps
+	if d.IsNewResource() {
+		hook.TriggerID = value.String(config.GetAttr("trigger_id"))
 	}
 
 	return hook
-}
-
-func expandHookSecrets(d *schema.ResourceData) management.HookSecrets {
-	hookSecrets := management.HookSecrets{}
-	secrets := Map(d, "secrets")
-
-	for key, value := range secrets {
-		if strVal, ok := value.(string); ok {
-			hookSecrets[key] = strVal
-		}
-	}
-
-	return hookSecrets
 }
 
 func validateHookName() schema.SchemaValidateDiagFunc {

@@ -59,6 +59,14 @@ func TestAccRole(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
+				Config: template.ParseTestName(testAccRoleEmpty, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "description", ""),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "0"),
+				),
+			},
+			{
 				Config: template.ParseTestName(testAccRoleCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
@@ -73,9 +81,23 @@ func TestAccRole(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "2"),
 				),
 			},
+			{
+				Config: template.ParseTestName(testAccRoleEmptyAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "description", " "), // #Management API ignores empty strings for role descriptions
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "0"),
+				),
+			},
 		},
 	})
 }
+
+const testAccRoleEmpty = `
+resource auth0_role the_one {
+  name = "The One - Acceptance Test - {{.testName}}"
+}
+`
 
 const testAccRoleAux = `
 resource auth0_resource_server matrix {
@@ -114,6 +136,13 @@ resource auth0_role the_one {
     name = "bring:peace"
     resource_server_identifier = auth0_resource_server.matrix.identifier
   }
+}
+`
+
+const testAccRoleEmptyAgain = `
+resource auth0_role the_one {
+  name = "The One - Acceptance Test - {{.testName}}"
+  description = " "
 }
 `
 

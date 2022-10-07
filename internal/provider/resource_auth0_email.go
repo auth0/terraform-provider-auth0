@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newEmail() *schema.Resource {
@@ -113,7 +116,7 @@ func newEmail() *schema.Resource {
 func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	email := expandEmail(d)
+	email := expandEmail(d.GetRawConfig())
 	if err := api.Email.Create(email); err != nil {
 		return diag.FromErr(err)
 	}
@@ -149,7 +152,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	email := expandEmail(d)
+	email := expandEmail(d.GetRawConfig())
 	if err := api.Email.Update(email); err != nil {
 		return diag.FromErr(err)
 	}
@@ -165,30 +168,31 @@ func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	}
 
 	d.SetId("")
-
 	return nil
 }
 
-func expandEmail(d *schema.ResourceData) *management.Email {
+func expandEmail(config cty.Value) *management.Email {
 	email := &management.Email{
-		Name:               String(d, "name"),
-		Enabled:            Bool(d, "enabled"),
-		DefaultFromAddress: String(d, "default_from_address"),
+		Name:               value.String(config.GetAttr("name")),
+		Enabled:            value.Bool(config.GetAttr("enabled")),
+		DefaultFromAddress: value.String(config.GetAttr("default_from_address")),
 	}
 
-	List(d, "credentials").Elem(func(d ResourceData) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		email.Credentials = &management.EmailCredentials{
-			APIUser:         String(d, "api_user"),
-			APIKey:          String(d, "api_key"),
-			AccessKeyID:     String(d, "access_key_id"),
-			SecretAccessKey: String(d, "secret_access_key"),
-			Region:          String(d, "region"),
-			Domain:          String(d, "domain"),
-			SMTPHost:        String(d, "smtp_host"),
-			SMTPPort:        Int(d, "smtp_port"),
-			SMTPUser:        String(d, "smtp_user"),
-			SMTPPass:        String(d, "smtp_pass"),
+			APIUser:         value.String(config.GetAttr("api_user")),
+			APIKey:          value.String(config.GetAttr("api_key")),
+			AccessKeyID:     value.String(config.GetAttr("access_key_id")),
+			SecretAccessKey: value.String(config.GetAttr("secret_access_key")),
+			Region:          value.String(config.GetAttr("region")),
+			Domain:          value.String(config.GetAttr("domain")),
+			SMTPHost:        value.String(config.GetAttr("smtp_host")),
+			SMTPPort:        value.Int(config.GetAttr("smtp_port")),
+			SMTPUser:        value.String(config.GetAttr("smtp_user")),
+			SMTPPass:        value.String(config.GetAttr("smtp_pass")),
 		}
+
+		return stop
 	})
 
 	return email

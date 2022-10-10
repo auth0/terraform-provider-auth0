@@ -1,3 +1,27 @@
+## 0.38.0
+
+This release focuses primarily on setting fields to empty values consistently across all resources.
+For an in depth explanation please check: [#14](https://github.com/auth0/terraform-provider-auth0/issues/14#issuecomment-1271345897)
+
+BUG FIXES:
+
+- Allowed setting fields to empty consistently across all resources ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+- Correctly destroy resources by setting the ID to blank ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+- Stop ignoring non 404 errors when deleting resources ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+- `resource/auth0_prompt`: Set `universal_login_experience` and `webauthn_platform_first_factor` to `Computed` ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+- `resource/auth0_resource_server`: Set `skip_consent_for_verifiable_first_party_clients` and `enforce_policies` to `Computed` ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+- `resource/auth0_rule`: Set `enabled` to `Computed` ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+
+BREAKING CHANGES:
+
+- `resource/auth0_organization`: Removed deprecated `connections` field ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+  - Please migrate all managed `connections` through the `auth0_organization` resource to the `auth0_organization_connection` resource.
+
+NOTES:
+
+- `resource/auth0_resource_server`: Changed `identifier` from `Optional` to `Required` ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
+
+
 ## 0.37.1
 
 BUG FIXES:

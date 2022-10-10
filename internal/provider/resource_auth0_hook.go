@@ -157,7 +157,7 @@ func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func checkForUntrackedHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	secretsFromConfig := Map(d, "secrets")
+	secretsFromConfig := d.Get("secrets").(map[string]interface{})
 
 	api := m.(*management.Management)
 	secretsFromAPI, err := api.Hook.Secrets(d.Id())

@@ -399,16 +399,13 @@ func updateUserRoles(d *schema.ResourceData, api *management.Management) error {
 		return nil
 	}
 
-	oldValue, newValue := d.GetChange("roles")
+	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
 
-	rolesToAdd := newValue.(*schema.Set).Difference(oldValue.(*schema.Set))
-	rolesToRemove := oldValue.(*schema.Set).Difference(newValue.(*schema.Set))
-
-	if err := removeUserRoles(api, d.Id(), rolesToRemove.List()); err != nil {
+	if err := removeUserRoles(api, d.Id(), rolesToRemove); err != nil {
 		return err
 	}
 
-	return assignUserRoles(api, d.Id(), rolesToAdd.List())
+	return assignUserRoles(api, d.Id(), rolesToAdd)
 }
 
 func removeUserRoles(api *management.Management, userID string, userRolesToRemove []interface{}) error {

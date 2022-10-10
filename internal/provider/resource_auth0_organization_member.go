@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 var (
@@ -105,13 +107,13 @@ func assignRoles(d *schema.ResourceData, api *management.Management) error {
 	orgID := d.Get("organization_id").(string)
 	userID := d.Get("user_id").(string)
 
-	add, rm := Diff(d, "roles")
+	toAdd, toRemove := value.Difference(d, "roles")
 
-	if err := addMemberRoles(orgID, userID, add.List(), api); err != nil {
+	if err := addMemberRoles(orgID, userID, toAdd, api); err != nil {
 		return err
 	}
 
-	return removeMemberRoles(orgID, userID, rm.List(), api)
+	return removeMemberRoles(orgID, userID, toRemove, api)
 }
 
 func removeMemberRoles(orgID string, userID string, roles []interface{}, api *management.Management) error {

@@ -12,6 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newAction() *schema.Resource {
@@ -127,9 +129,9 @@ func newAction() *schema.Resource {
 }
 
 func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	action := expandAction(d)
-
 	api := m.(*management.Management)
+
+	action := expandAction(d.GetRawConfig())
 	if err := api.Action.Create(action); err != nil {
 		return diag.FromErr(err)
 	}
@@ -145,6 +147,7 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	action, err := api.Action.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -160,7 +163,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("name", action.Name),
 		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
 		d.Set("code", action.Code),
-		d.Set("dependencies", flattenActionDependencies(action.Dependencies)),
+		d.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
 		d.Set("runtime", action.Runtime),
 	)
 
@@ -172,8 +175,6 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	action := expandAction(d)
-
 	api := m.(*management.Management)
 
 	diagnostics := preventErasingUnmanagedSecrets(d, api)
@@ -181,6 +182,7 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diagnostics
 	}
 
+	action := expandAction(d.GetRawConfig())
 	if err := api.Action.Update(d.Id(), action); err != nil {
 		return diag.FromErr(err)
 	}
@@ -194,16 +196,16 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Action.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
 
@@ -276,12 +278,12 @@ func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Mana
 	oldSecrets, newSecrets := d.GetChange("secrets")
 	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
-	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.Secrets)
+	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
 }
 
 func checkForUnmanagedActionSecrets(
 	secretsFromConfig []interface{},
-	secretsFromAPI []*management.ActionSecret,
+	secretsFromAPI []management.ActionSecret,
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
@@ -308,57 +310,95 @@ func checkForUnmanagedActionSecrets(
 	return diagnostics
 }
 
-func expandAction(d *schema.ResourceData) *management.Action {
+func expandAction(config cty.Value) *management.Action {
 	action := &management.Action{
-		Name:    String(d, "name"),
-		Code:    String(d, "code"),
-		Runtime: String(d, "runtime"),
+		Name:              value.String(config.GetAttr("name")),
+		Code:              value.String(config.GetAttr("code")),
+		Runtime:           value.String(config.GetAttr("runtime")),
+		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
+		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
+		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
 	}
-
-	List(d, "supported_triggers").Elem(func(d ResourceData) {
-		action.SupportedTriggers = []*management.ActionTrigger{
-			{
-				ID:      String(d, "id"),
-				Version: String(d, "version"),
-			},
-		}
-	})
-
-	Set(d, "dependencies").Elem(func(d ResourceData) {
-		action.Dependencies = append(action.Dependencies, &management.ActionDependency{
-			Name:    String(d, "name"),
-			Version: String(d, "version"),
-		})
-	})
-
-	List(d, "secrets").Elem(func(d ResourceData) {
-		action.Secrets = append(action.Secrets, &management.ActionSecret{
-			Name:  String(d, "name"),
-			Value: String(d, "value"),
-		})
-	})
 
 	return action
 }
 
-func flattenActionTriggers(triggers []*management.ActionTrigger) []interface{} {
+func expandActionTriggers(triggers cty.Value) []management.ActionTrigger {
+	if triggers.IsNull() {
+		return nil
+	}
+
+	supportedTriggers := make([]management.ActionTrigger, 0)
+
+	triggers.ForEachElement(func(_ cty.Value, triggers cty.Value) (stop bool) {
+		supportedTriggers = append(supportedTriggers, management.ActionTrigger{
+			ID:      value.String(triggers.GetAttr("id")),
+			Version: value.String(triggers.GetAttr("version")),
+		})
+		return stop
+	})
+
+	return supportedTriggers
+}
+
+func expandActionDependencies(dependencies cty.Value) *[]management.ActionDependency {
+	if dependencies.IsNull() {
+		return nil
+	}
+
+	actionDependencies := make([]management.ActionDependency, 0)
+
+	dependencies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
+		actionDependencies = append(actionDependencies, management.ActionDependency{
+			Name:    value.String(dep.GetAttr("name")),
+			Version: value.String(dep.GetAttr("version")),
+		})
+		return stop
+	})
+
+	return &actionDependencies
+}
+
+func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
+	if secrets.IsNull() {
+		return nil
+	}
+
+	actionSecrets := make([]management.ActionSecret, 0)
+
+	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {
+		actionSecrets = append(actionSecrets, management.ActionSecret{
+			Name:  value.String(secret.GetAttr("name")),
+			Value: value.String(secret.GetAttr("value")),
+		})
+		return stop
+	})
+
+	return &actionSecrets
+}
+
+func flattenActionTriggers(triggers []management.ActionTrigger) []interface{} {
 	var result []interface{}
+
 	for _, trigger := range triggers {
 		result = append(result, map[string]interface{}{
-			"id":      trigger.ID,
-			"version": trigger.Version,
+			"id":      trigger.GetID(),
+			"version": trigger.GetVersion(),
 		})
 	}
+
 	return result
 }
 
-func flattenActionDependencies(dependencies []*management.ActionDependency) []interface{} {
+func flattenActionDependencies(dependencies []management.ActionDependency) []interface{} {
 	var result []interface{}
+
 	for _, dependency := range dependencies {
 		result = append(result, map[string]interface{}{
-			"name":    dependency.Name,
-			"version": dependency.Version,
+			"name":    dependency.GetName(),
+			"version": dependency.GetVersion(),
 		})
 	}
+
 	return result
 }

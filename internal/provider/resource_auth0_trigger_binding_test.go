@@ -21,9 +21,8 @@ func TestAccTriggerBinding(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 				),
 			},
 			{
@@ -32,8 +31,27 @@ func TestAccTriggerBinding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccTriggerBindingConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccTriggerBindingConfigRemoveAction, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 				),
 			},
 		},
@@ -78,6 +96,16 @@ resource auth0_trigger_binding login_flow {
 		id = auth0_action.action_foo.id
 		display_name = auth0_action.action_foo.name
 	}
+}
+`
+
+const testAccTriggerBindingConfigUpdate = testAccTriggerBindingAction + `
+resource auth0_trigger_binding login_flow {
+	trigger = "post-login"
+	actions {
+		id = auth0_action.action_foo.id
+		display_name = auth0_action.action_foo.name
+	}
 	actions {
 		id = auth0_action.action_bar.id
 		display_name = auth0_action.action_bar.name
@@ -85,7 +113,7 @@ resource auth0_trigger_binding login_flow {
 }
 `
 
-const testAccTriggerBindingConfigUpdate = testAccTriggerBindingAction + `
+const testAccTriggerBindingConfigUpdateAgain = testAccTriggerBindingAction + `
 resource auth0_trigger_binding login_flow {
 	trigger = "post-login"
 	actions {
@@ -95,6 +123,16 @@ resource auth0_trigger_binding login_flow {
 	actions {
 		id = auth0_action.action_foo.id
 		display_name = auth0_action.action_foo.name
+	}
+}
+`
+
+const testAccTriggerBindingConfigRemoveAction = testAccTriggerBindingAction + `
+resource auth0_trigger_binding login_flow {
+	trigger = "post-login"
+	actions {
+		id = auth0_action.action_bar.id
+		display_name = auth0_action.action_bar.name
 	}
 }
 `

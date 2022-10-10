@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -879,18 +878,19 @@ func connectionSchemaUpgradeV1(
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
 	connection, diagnostics := expandConnection(d)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	api := m.(*management.Management)
 	if err := api.Connection.Create(connection); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 		return diagnostics
 	}
 
-	d.SetId(auth0.StringValue(connection.ID))
+	d.SetId(connection.GetID())
 
 	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
 	return diagnostics
@@ -898,13 +898,12 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 
 func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	connection, err := api.Connection.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
@@ -915,24 +914,24 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	result := multierror.Append(
-		d.Set("name", connection.Name),
-		d.Set("display_name", connection.DisplayName),
-		d.Set("is_domain_connection", connection.IsDomainConnection),
-		d.Set("strategy", connection.Strategy),
+		d.Set("name", connection.GetName()),
+		d.Set("display_name", connection.GetDisplayName()),
+		d.Set("is_domain_connection", connection.GetIsDomainConnection()),
+		d.Set("strategy", connection.GetStrategy()),
 		d.Set("options", connectionOptions),
-		d.Set("enabled_clients", connection.EnabledClients),
-		d.Set("realms", connection.Realms),
-		d.Set("metadata", connection.Metadata),
+		d.Set("enabled_clients", connection.GetEnabledClients()),
+		d.Set("realms", connection.GetRealms()),
+		d.Set("metadata", connection.GetMetadata()),
 	)
 
-	switch *connection.Strategy {
+	switch connection.GetStrategy() {
 	case management.ConnectionStrategyGoogleApps,
 		management.ConnectionStrategyOIDC,
 		management.ConnectionStrategyAD,
 		management.ConnectionStrategyAzureAD,
 		management.ConnectionStrategySAML,
 		management.ConnectionStrategyADFS:
-		result = multierror.Append(result, d.Set("show_as_button", connection.ShowAsButton))
+		result = multierror.Append(result, d.Set("show_as_button", connection.GetShowAsButton()))
 	}
 
 	diags = append(diags, diag.FromErr(result.ErrorOrNil())...)
@@ -940,12 +939,13 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
 	connection, diagnostics := expandConnection(d)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	api := m.(*management.Management)
 	if err := api.Connection.Update(d.Id(), connection); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 		return diagnostics
@@ -957,14 +957,15 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 
 func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	if err := api.Connection.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }

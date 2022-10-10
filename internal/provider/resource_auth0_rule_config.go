@@ -6,8 +6,11 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newRuleConfig() *schema.Resource {
@@ -41,7 +44,7 @@ func newRuleConfig() *schema.Resource {
 }
 
 func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	ruleConfig := buildRuleConfig(d)
+	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	key := auth0.StringValue(ruleConfig.Key)
 	ruleConfig.Key = nil
 	api := m.(*management.Management)
@@ -71,7 +74,7 @@ func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	ruleConfig := buildRuleConfig(d)
+	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	ruleConfig.Key = nil
 	api := m.(*management.Management)
 	if err := api.RuleConfig.Upsert(d.Id(), ruleConfig); err != nil {
@@ -95,9 +98,9 @@ func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	return nil
 }
 
-func buildRuleConfig(d *schema.ResourceData) *management.RuleConfig {
+func expandRuleConfig(d cty.Value) *management.RuleConfig {
 	return &management.RuleConfig{
-		Key:   String(d, "key"),
-		Value: String(d, "value"),
+		Key:   value.String(d.GetAttr("key")),
+		Value: value.String(d.GetAttr("value")),
 	}
 }

@@ -8,6 +8,12 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
+const testAccPromptEmpty = `
+resource "auth0_prompt" "prompt" {
+	identifier_first = false # Required by API to include at least one property
+}
+`
+
 const testAccPromptCreate = `
 resource "auth0_prompt" "prompt" {
   universal_login_experience = "classic"
@@ -39,6 +45,14 @@ func TestAccPrompt(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
+				Config: testAccPromptEmpty,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttrSet("auth0_prompt.prompt", "universal_login_experience"),
+					resource.TestCheckResourceAttr("auth0_prompt.prompt", "identifier_first", "false"),
+					resource.TestCheckResourceAttrSet("auth0_prompt.prompt", "webauthn_platform_first_factor"),
+				),
+			},
+			{
 				Config: testAccPromptCreate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt.prompt", "universal_login_experience", "classic"),
@@ -56,6 +70,14 @@ func TestAccPrompt(t *testing.T) {
 			},
 			{
 				Config: testAccPromptUpdateAgain,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt.prompt", "universal_login_experience", "new"),
+					resource.TestCheckResourceAttr("auth0_prompt.prompt", "identifier_first", "false"),
+					resource.TestCheckResourceAttr("auth0_prompt.prompt", "webauthn_platform_first_factor", "true"),
+				),
+			},
+			{
+				Config: testAccPromptEmpty,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt.prompt", "universal_login_experience", "new"),
 					resource.TestCheckResourceAttr("auth0_prompt.prompt", "identifier_first", "false"),

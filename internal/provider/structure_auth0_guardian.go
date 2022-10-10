@@ -2,7 +2,10 @@ package provider
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func flattenMultiFactorPolicy(api *management.Management) (string, error) {
@@ -217,7 +220,7 @@ func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error
 			return err
 		}
 
-		return configurePhone(d, api)
+		return configurePhone(d.GetRawConfig(), api)
 	}
 
 	return api.Guardian.MultiFactor.Phone.Enable(false)
@@ -241,101 +244,87 @@ func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
 	return false
 }
 
-func configurePhone(d *schema.ResourceData, api *management.Management) error {
-	m := make(map[string]interface{})
-	List(d, "phone").Elem(func(d ResourceData) {
-		m["provider"] = String(d, "provider")
-		m["message_types"] = Slice(d, "message_types")
-		m["options"] = List(d, "options")
-	})
+func configurePhone(config cty.Value, api *management.Management) error {
+	var err error
 
-	if p, ok := m["provider"]; ok && p != nil {
-		provider := p.(*string)
-		switch *provider {
+	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
+		mfaProvider := &management.MultiFactorProvider{
+			Provider: value.String(phone.GetAttr("provider")),
+		}
+		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(mfaProvider); err != nil {
+			return true
+		}
+
+		options := phone.GetAttr("options")
+		switch mfaProvider.GetProvider() {
 		case "twilio":
-			if err := updateTwilioOptions(m["options"].(Iterator), api); err != nil {
-				return err
+			if err = updateTwilioOptions(options, api); err != nil {
+				return true
 			}
 		case "auth0":
-			if err := updateAuth0Options(m["options"].(Iterator), api); err != nil {
-				return err
+			if err = updateAuth0Options(options, api); err != nil {
+				return true
 			}
 		}
 
-		multiFactorProvider := &management.MultiFactorProvider{Provider: provider}
-		if err := api.Guardian.MultiFactor.Phone.UpdateProvider(multiFactorProvider); err != nil {
-			return err
+		messageTypes := &management.PhoneMessageTypes{
+			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
-	}
+		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(messageTypes); err != nil {
+			return true
+		}
 
-	messageTypes := fromInterfaceSliceToStringSlice(m["message_types"].([]interface{}))
-	if len(messageTypes) == 0 {
-		return nil
-	}
-
-	return api.Guardian.MultiFactor.Phone.UpdateMessageTypes(
-		&management.PhoneMessageTypes{MessageTypes: &messageTypes},
-	)
-}
-
-func updateAuth0Options(opts Iterator, api *management.Management) error {
-	var err error
-	opts.Elem(func(d ResourceData) {
-		err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
-			&management.MultiFactorSMSTemplate{
-				EnrollmentMessage:   String(d, "enrollment_message"),
-				VerificationMessage: String(d, "verification_message"),
-			},
-		)
+		return stop
 	})
 
 	return err
 }
 
-func updateTwilioOptions(opts Iterator, api *management.Management) error {
-	m := make(map[string]*string)
+func updateAuth0Options(options cty.Value, api *management.Management) error {
+	var err error
 
-	opts.Elem(func(d ResourceData) {
-		m["sid"] = String(d, "sid")
-		m["auth_token"] = String(d, "auth_token")
-		m["from"] = String(d, "from")
-		m["messaging_service_sid"] = String(d, "messaging_service_sid")
-		m["enrollment_message"] = String(d, "enrollment_message")
-		m["verification_message"] = String(d, "verification_message")
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
+			&management.MultiFactorSMSTemplate{
+				EnrollmentMessage:   value.String(config.GetAttr("enrollment_message")),
+				VerificationMessage: value.String(config.GetAttr("verification_message")),
+			},
+		)
+
+		return stop
 	})
 
-	err := api.Guardian.MultiFactor.SMS.UpdateTwilio(
-		&management.MultiFactorProviderTwilio{
-			From:                m["from"],
-			MessagingServiceSid: m["messaging_service_sid"],
-			AuthToken:           m["auth_token"],
-			SID:                 m["sid"],
-		},
-	)
-	if err != nil {
-		return err
-	}
-
-	return api.Guardian.MultiFactor.SMS.UpdateTemplate(
-		&management.MultiFactorSMSTemplate{
-			EnrollmentMessage:   m["enrollment_message"],
-			VerificationMessage: m["verification_message"],
-		},
-	)
+	return err
 }
 
-func fromInterfaceSliceToStringSlice(from []interface{}) []string {
-	length := len(from)
-	if length == 0 {
-		return nil
-	}
+func updateTwilioOptions(options cty.Value, api *management.Management) error {
+	var err error
 
-	stringArray := make([]string, length)
-	for i, v := range from {
-		stringArray[i] = v.(string)
-	}
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		if err = api.Guardian.MultiFactor.SMS.UpdateTwilio(
+			&management.MultiFactorProviderTwilio{
+				From:                value.String(config.GetAttr("from")),
+				MessagingServiceSid: value.String(config.GetAttr("messaging_service_sid")),
+				AuthToken:           value.String(config.GetAttr("auth_token")),
+				SID:                 value.String(config.GetAttr("sid")),
+			},
+		); err != nil {
+			return true
+		}
 
-	return stringArray
+		if err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
+			&management.MultiFactorSMSTemplate{
+				EnrollmentMessage:   value.String(config.GetAttr("enrollment_message")),
+				VerificationMessage: value.String(config.GetAttr("verification_message")),
+			},
+		); err != nil {
+			return true
+		}
+
+		return stop
+	})
+
+	return err
 }
 
 func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) error {
@@ -346,11 +335,14 @@ func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) e
 
 		var webAuthnSettings management.MultiFactorWebAuthnSettings
 
-		List(d, "webauthn_roaming").Elem(func(d ResourceData) {
-			webAuthnSettings.OverrideRelyingParty = Bool(d, "override_relying_party")
-			webAuthnSettings.RelyingPartyIdentifier = String(d, "relying_party_identifier")
-			webAuthnSettings.UserVerification = String(d, "user_verification")
-		})
+		d.GetRawConfig().GetAttr("webauthn_roaming").ForEachElement(
+			func(_ cty.Value, config cty.Value) (stop bool) {
+				webAuthnSettings.OverrideRelyingParty = value.Bool(config.GetAttr("override_relying_party"))
+				webAuthnSettings.RelyingPartyIdentifier = value.String(config.GetAttr("relying_party_identifier"))
+				webAuthnSettings.UserVerification = value.String(config.GetAttr("user_verification"))
+				return stop
+			},
+		)
 
 		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
 			return nil
@@ -370,10 +362,13 @@ func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) 
 
 		var webAuthnSettings management.MultiFactorWebAuthnSettings
 
-		List(d, "webauthn_platform").Elem(func(d ResourceData) {
-			webAuthnSettings.OverrideRelyingParty = Bool(d, "override_relying_party")
-			webAuthnSettings.RelyingPartyIdentifier = String(d, "relying_party_identifier")
-		})
+		d.GetRawConfig().GetAttr("webauthn_platform").ForEachElement(
+			func(_ cty.Value, config cty.Value) (stop bool) {
+				webAuthnSettings.OverrideRelyingParty = value.Bool(config.GetAttr("override_relying_party"))
+				webAuthnSettings.RelyingPartyIdentifier = value.String(config.GetAttr("relying_party_identifier"))
+				return stop
+			},
+		)
 
 		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
 			return nil
@@ -393,11 +388,18 @@ func updateDUO(d *schema.ResourceData, api *management.Management) error {
 
 		var duoSettings management.MultiFactorDUOSettings
 
-		List(d, "duo").Elem(func(d ResourceData) {
-			duoSettings.SecretKey = String(d, "secret_key")
-			duoSettings.Hostname = String(d, "hostname")
-			duoSettings.IntegrationKey = String(d, "integration_key")
-		})
+		d.GetRawConfig().GetAttr("duo").ForEachElement(
+			func(_ cty.Value, config cty.Value) (stop bool) {
+				duoSettings.SecretKey = value.String(config.GetAttr("secret_key"))
+				duoSettings.Hostname = value.String(config.GetAttr("hostname"))
+				duoSettings.IntegrationKey = value.String(config.GetAttr("integration_key"))
+				return stop
+			},
+		)
+
+		if duoSettings == (management.MultiFactorDUOSettings{}) {
+			return nil
+		}
 
 		return api.Guardian.MultiFactor.DUO.Update(&duoSettings)
 	}
@@ -411,37 +413,48 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 			return err
 		}
 
-		var amazonSNS *management.MultiFactorProviderAmazonSNS
-		List(d, "amazon_sns", HasChange()).Elem(func(d ResourceData) {
-			amazonSNS = &management.MultiFactorProviderAmazonSNS{
-				AccessKeyID:                String(d, "aws_access_key_id"),
-				SecretAccessKeyID:          String(d, "aws_secret_access_key"),
-				Region:                     String(d, "aws_region"),
-				APNSPlatformApplicationARN: String(d, "sns_apns_platform_application_arn"),
-				GCMPlatformApplicationARN:  String(d, "sns_gcm_platform_application_arn"),
+		var err error
+		d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
+			if d.HasChange("push.0.amazon_sns") {
+				var amazonSNS *management.MultiFactorProviderAmazonSNS
+				push.GetAttr("amazon_sns").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+					amazonSNS = &management.MultiFactorProviderAmazonSNS{
+						AccessKeyID:                value.String(config.GetAttr("aws_access_key_id")),
+						SecretAccessKeyID:          value.String(config.GetAttr("aws_secret_access_key")),
+						Region:                     value.String(config.GetAttr("aws_region")),
+						APNSPlatformApplicationARN: value.String(config.GetAttr("sns_apns_platform_application_arn")),
+						GCMPlatformApplicationARN:  value.String(config.GetAttr("sns_gcm_platform_application_arn")),
+					}
+					return stop
+				})
+				if amazonSNS != nil {
+					if err = api.Guardian.MultiFactor.Push.UpdateAmazonSNS(amazonSNS); err != nil {
+						return true
+					}
+				}
 			}
-		})
-		if amazonSNS != nil {
-			if err := api.Guardian.MultiFactor.Push.UpdateAmazonSNS(amazonSNS); err != nil {
-				return err
-			}
-		}
 
-		var customApp *management.MultiFactorPushCustomApp
-		List(d, "custom_app", HasChange()).Elem(func(d ResourceData) {
-			customApp = &management.MultiFactorPushCustomApp{
-				AppName:       String(d, "app_name"),
-				AppleAppLink:  String(d, "apple_app_link"),
-				GoogleAppLink: String(d, "google_app_link"),
+			if d.HasChange("push.0.custom_app") {
+				var customApp *management.MultiFactorPushCustomApp
+				push.GetAttr("custom_app").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+					customApp = &management.MultiFactorPushCustomApp{
+						AppName:       value.String(config.GetAttr("app_name")),
+						AppleAppLink:  value.String(config.GetAttr("apple_app_link")),
+						GoogleAppLink: value.String(config.GetAttr("google_app_link")),
+					}
+					return stop
+				})
+				if customApp != nil {
+					if err = api.Guardian.MultiFactor.Push.UpdateCustomApp(customApp); err != nil {
+						return true
+					}
+				}
 			}
-		})
-		if customApp != nil {
-			if err := api.Guardian.MultiFactor.Push.UpdateCustomApp(customApp); err != nil {
-				return err
-			}
-		}
 
-		return nil
+			return stop
+		})
+
+		return err
 	}
 
 	return api.Guardian.MultiFactor.Push.Enable(false)

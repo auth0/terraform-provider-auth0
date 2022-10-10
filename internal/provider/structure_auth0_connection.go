@@ -3,14 +3,16 @@ package provider
 import (
 	"fmt"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func flattenConnectionOptions(d ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
+func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
 	if options == nil {
 		return nil, nil
 	}
@@ -94,7 +96,15 @@ func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWi
 	return m, nil
 }
 
-func flattenConnectionOptionsAuth0(d ResourceData, options *management.ConnectionOptions) (interface{}, diag.Diagnostics) {
+func flattenConnectionOptionsAuth0(
+	d *schema.ResourceData,
+	options *management.ConnectionOptions,
+) (interface{}, diag.Diagnostics) {
+	dbSecretConfig, ok := d.GetOk("options.0.configuration")
+	if !ok {
+		dbSecretConfig = make(map[string]interface{})
+	}
+
 	m := map[string]interface{}{
 		"password_policy":                options.GetPasswordPolicy(),
 		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
@@ -102,8 +112,8 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 		"import_mode":                    options.GetImportMode(),
 		"disable_signup":                 options.GetDisableSignup(),
 		"requires_username":              options.GetRequiresUsername(),
-		"custom_scripts":                 options.CustomScripts,
-		"configuration":                  Map(d, "options.0.configuration"), // Values do not get read back.
+		"custom_scripts":                 options.GetCustomScripts(),
+		"configuration":                  dbSecretConfig, // Values do not get read back.
 		"non_persistent_attrs":           options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":       options.GetSetUserAttributes(),
 	}
@@ -140,15 +150,15 @@ func flattenConnectionOptionsAuth0(d ResourceData, options *management.Connectio
 	m["upstream_params"] = upstreamParams
 
 	diags := checkForUnmanagedConfigurationSecrets(
-		Map(d, "options.0.configuration"),
-		options.Configuration,
+		dbSecretConfig.(map[string]interface{}),
+		options.GetConfiguration(),
 	)
 
 	return m, diags
 }
 
 // checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.
-func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[string]interface{}) diag.Diagnostics {
+func checkForUnmanagedConfigurationSecrets(configFromTF map[string]interface{}, configFromAPI map[string]string) diag.Diagnostics {
 	var warnings diag.Diagnostics
 
 	for key := range configFromAPI {
@@ -170,11 +180,13 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 	return warnings
 }
 
-func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsGoogleOAuth2) (interface{}, diag.Diagnostics) {
+func flattenConnectionOptionsGoogleOAuth2(
+	options *management.ConnectionOptionsGoogleOAuth2,
+) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
-		"allowed_audiences":        options.AllowedAudiences,
+		"allowed_audiences":        options.GetAllowedAudiences(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
@@ -189,7 +201,9 @@ func flattenConnectionOptionsGoogleOAuth2(options *management.ConnectionOptionsG
 	return m, nil
 }
 
-func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoogleApps) (interface{}, diag.Diagnostics) {
+func flattenConnectionOptionsGoogleApps(
+	options *management.ConnectionOptionsGoogleApps,
+) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -199,7 +213,7 @@ func flattenConnectionOptionsGoogleApps(options *management.ConnectionOptionsGoo
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"domain_aliases":           options.DomainAliases,
+		"domain_aliases":           options.GetDomainAliases(),
 		"icon_url":                 options.GetLogoURL(),
 	}
 
@@ -219,7 +233,7 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 		"scopes":                   options.Scopes(),
 		"token_endpoint":           options.GetTokenURL(),
 		"authorization_endpoint":   options.GetAuthorizationURL(),
-		"scripts":                  options.Scripts,
+		"scripts":                  options.GetScripts(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
@@ -363,7 +377,7 @@ func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (in
 		"client_secret":            options.GetClientSecret(),
 		"icon_url":                 options.GetLogoURL(),
 		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.DomainAliases,
+		"domain_aliases":           options.GetDomainAliases(),
 		"type":                     options.GetType(),
 		"scopes":                   options.Scopes(),
 		"issuer":                   options.GetIssuer(),
@@ -432,9 +446,9 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.DomainAliases,
+		"domain_aliases":           options.GetDomainAliases(),
 		"icon_url":                 options.GetLogoURL(),
-		"ips":                      options.IPs,
+		"ips":                      options.GetIPs(),
 		"use_cert_auth":            options.GetCertAuth(),
 		"use_kerberos":             options.GetKerberos(),
 		"disable_cache":            options.GetDisableCache(),
@@ -459,7 +473,7 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 		"app_id":                                 options.GetAppID(),
 		"tenant_domain":                          options.GetTenantDomain(),
 		"domain":                                 options.GetDomain(),
-		"domain_aliases":                         options.DomainAliases,
+		"domain_aliases":                         options.GetDomainAliases(),
 		"icon_url":                               options.GetLogoURL(),
 		"identity_api":                           options.GetIdentityAPI(),
 		"waad_protocol":                          options.GetWAADProtocol(),
@@ -485,7 +499,7 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.DomainAliases,
+		"domain_aliases":           options.GetDomainAliases(),
 		"icon_url":                 options.GetLogoURL(),
 		"adfs_server":              options.GetADFSServer(),
 		"api_enable_users":         options.GetEnableUsersAPI(),
@@ -502,13 +516,16 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (in
 	return m, nil
 }
 
-func flattenConnectionOptionsSAML(d ResourceData, options *management.ConnectionOptionsSAML) (interface{}, diag.Diagnostics) {
+func flattenConnectionOptionsSAML(
+	d *schema.ResourceData,
+	options *management.ConnectionOptionsSAML,
+) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"signing_cert":             options.GetSigningCert(),
 		"protocol_binding":         options.GetProtocolBinding(),
 		"debug":                    options.GetDebug(),
 		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.DomainAliases,
+		"domain_aliases":           options.GetDomainAliases(),
 		"sign_in_endpoint":         options.GetSignInEndpoint(),
 		"sign_out_endpoint":        options.GetSignOutEndpoint(),
 		"disable_sign_out":         options.GetDisableSignOut(),
@@ -522,7 +539,7 @@ func flattenConnectionOptionsSAML(d ResourceData, options *management.Connection
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"entity_id":                options.GetEntityID(),
 		"metadata_url":             options.GetMetadataURL(),
-		"metadata_xml":             String(d, "options.0.metadata_xml"), // Does not get read back.
+		"metadata_xml":             d.Get("options.0.metadata_xml").(string), // Does not get read back.
 	}
 
 	if options.IdpInitiated != nil {
@@ -559,35 +576,38 @@ func flattenConnectionOptionsSAML(d ResourceData, options *management.Connection
 	return m, nil
 }
 
-func expandConnection(d ResourceData) (*management.Connection, diag.Diagnostics) {
+func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diagnostics) {
+	config := d.GetRawConfig()
+
 	connection := &management.Connection{
-		Name:               String(d, "name", IsNewResource()),
-		DisplayName:        String(d, "display_name"),
-		Strategy:           String(d, "strategy", IsNewResource()),
-		IsDomainConnection: Bool(d, "is_domain_connection"),
-		EnabledClients:     Set(d, "enabled_clients").List(),
-		Realms:             Slice(d, "realms", IsNewResource(), HasChange()),
+		DisplayName:        value.String(config.GetAttr("display_name")),
+		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
+		EnabledClients:     value.Strings(config.GetAttr("enabled_clients")),
+		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
 	}
 
-	if metadataKeyMap := Map(d, "metadata"); metadataKeyMap != nil {
-		connection.Metadata = map[string]string{}
-		for key, value := range metadataKeyMap {
-			connection.Metadata[key] = value.(string)
-		}
+	if d.IsNewResource() {
+		connection.Name = value.String(config.GetAttr("name"))
+		connection.Strategy = value.String(config.GetAttr("strategy"))
+	}
+
+	if d.IsNewResource() || d.HasChange("realms") {
+		connection.Realms = value.Strings(config.GetAttr("realms"))
 	}
 
 	var diagnostics diag.Diagnostics
 	strategy := d.Get("strategy").(string)
-	showAsButton := Bool(d, "show_as_button")
-	List(d, "options").Elem(func(d ResourceData) {
+	showAsButton := value.Bool(config.GetAttr("show_as_button"))
+
+	config.GetAttr("options").ForEachElement(func(_ cty.Value, options cty.Value) (stop bool) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			connection.Options, diagnostics = expandConnectionOptionsAuth0(d)
+			connection.Options, diagnostics = expandConnectionOptionsAuth0(options)
 		case management.ConnectionStrategyGoogleOAuth2:
-			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(d)
+			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(d, options)
 		case management.ConnectionStrategyGoogleApps:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsGoogleApps(d)
+			connection.Options, diagnostics = expandConnectionOptionsGoogleApps(d, options)
 		case management.ConnectionStrategyOAuth2,
 			management.ConnectionStrategyDropbox,
 			management.ConnectionStrategyBitBucket,
@@ -607,40 +627,40 @@ func expandConnection(d ResourceData) (*management.Connection, diag.Diagnostics)
 			management.ConnectionStrategyTwitch,
 			management.ConnectionStrategyVimeo,
 			management.ConnectionStrategyCustom:
-			connection.Options, diagnostics = expandConnectionOptionsOAuth2(d)
+			connection.Options, diagnostics = expandConnectionOptionsOAuth2(d, options)
 		case management.ConnectionStrategyFacebook:
-			connection.Options, diagnostics = expandConnectionOptionsFacebook(d)
+			connection.Options, diagnostics = expandConnectionOptionsFacebook(d, options)
 		case management.ConnectionStrategyApple:
-			connection.Options, diagnostics = expandConnectionOptionsApple(d)
+			connection.Options, diagnostics = expandConnectionOptionsApple(d, options)
 		case management.ConnectionStrategyLinkedin:
-			connection.Options, diagnostics = expandConnectionOptionsLinkedin(d)
+			connection.Options, diagnostics = expandConnectionOptionsLinkedin(d, options)
 		case management.ConnectionStrategyGitHub:
-			connection.Options, diagnostics = expandConnectionOptionsGitHub(d)
+			connection.Options, diagnostics = expandConnectionOptionsGitHub(d, options)
 		case management.ConnectionStrategyWindowsLive:
-			connection.Options, diagnostics = expandConnectionOptionsWindowsLive(d)
+			connection.Options, diagnostics = expandConnectionOptionsWindowsLive(d, options)
 		case management.ConnectionStrategySalesforce,
 			management.ConnectionStrategySalesforceCommunity,
 			management.ConnectionStrategySalesforceSandbox:
-			connection.Options, diagnostics = expandConnectionOptionsSalesforce(d)
+			connection.Options, diagnostics = expandConnectionOptionsSalesforce(d, options)
 		case management.ConnectionStrategySMS:
-			connection.Options, diagnostics = expandConnectionOptionsSMS(d)
+			connection.Options, diagnostics = expandConnectionOptionsSMS(options)
 		case management.ConnectionStrategyOIDC:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsOIDC(d)
+			connection.Options, diagnostics = expandConnectionOptionsOIDC(d, options)
 		case management.ConnectionStrategyAD:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAD(d)
+			connection.Options, diagnostics = expandConnectionOptionsAD(options)
 		case management.ConnectionStrategyAzureAD:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAzureAD(d)
+			connection.Options, diagnostics = expandConnectionOptionsAzureAD(d, options)
 		case management.ConnectionStrategyEmail:
-			connection.Options, diagnostics = expandConnectionOptionsEmail(d)
+			connection.Options, diagnostics = expandConnectionOptionsEmail(options)
 		case management.ConnectionStrategySAML:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsSAML(d)
+			connection.Options, diagnostics = expandConnectionOptionsSAML(options)
 		case management.ConnectionStrategyADFS:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsADFS(d)
+			connection.Options, diagnostics = expandConnectionOptionsADFS(options)
 		default:
 			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
@@ -653,440 +673,556 @@ func expandConnection(d ResourceData) (*management.Connection, diag.Diagnostics)
 				AttributePath: cty.Path{cty.GetAttrStep{Name: "strategy"}},
 			})
 		}
+
+		return stop
 	})
 
 	return connection, diagnostics
 }
 
-func expandConnectionOptionsGitHub(d ResourceData) (*management.ConnectionOptionsGitHub, diag.Diagnostics) {
+func expandConnectionOptionsGitHub(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsGitHub, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGitHub{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
 	expandConnectionOptionsScopes(d, options)
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAuth0(d ResourceData) (*management.ConnectionOptions, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(config cty.Value) (*management.ConnectionOptions, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
-		PasswordPolicy:     String(d, "password_policy"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
+		PasswordPolicy:               value.String(config.GetAttr("password_policy")),
+		NonPersistentAttrs:           value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:            value.String(config.GetAttr("set_user_root_attributes")),
+		EnabledDatabaseCustomization: value.Bool(config.GetAttr("enabled_database_customization")),
+		BruteForceProtection:         value.Bool(config.GetAttr("brute_force_protection")),
+		ImportMode:                   value.Bool(config.GetAttr("import_mode")),
+		DisableSignup:                value.Bool(config.GetAttr("disable_signup")),
+		RequiresUsername:             value.Bool(config.GetAttr("requires_username")),
+		CustomScripts:                value.MapOfStrings(config.GetAttr("custom_scripts")),
+		Configuration:                value.MapOfStrings(config.GetAttr("configuration")),
 	}
 
-	List(d, "validation").Elem(func(d ResourceData) {
-		options.Validation = make(map[string]interface{})
-		List(d, "username").Elem(func(d ResourceData) {
-			usernameValidation := make(map[string]*int)
-			usernameValidation["min"] = Int(d, "min")
-			usernameValidation["max"] = Int(d, "max")
-			options.Validation["username"] = usernameValidation
-		})
-	})
+	config.GetAttr("validation").ForEachElement(
+		func(_ cty.Value, validation cty.Value) (stop bool) {
+			validationOption := make(map[string]interface{})
 
-	List(d, "password_history").Elem(func(d ResourceData) {
-		options.PasswordHistory = make(map[string]interface{})
-		options.PasswordHistory["enable"] = Bool(d, "enable")
+			validation.GetAttr("username").ForEachElement(
+				func(_ cty.Value, username cty.Value) (stop bool) {
+					usernameValidation := make(map[string]*int)
 
-		if size, ok := d.GetOk("size"); ok {
-			options.PasswordHistory["size"] = auth0.Int(size.(int))
-		}
-	})
+					if min := value.Int(username.GetAttr("min")); min != nil {
+						usernameValidation["min"] = min
+					}
+					if max := value.Int(username.GetAttr("max")); max != nil {
+						usernameValidation["max"] = max
+					}
 
-	List(d, "password_no_personal_info").Elem(func(d ResourceData) {
-		options.PasswordNoPersonalInfo = make(map[string]interface{})
-		options.PasswordNoPersonalInfo["enable"] = Bool(d, "enable")
-	})
+					if len(usernameValidation) > 0 {
+						validationOption["username"] = usernameValidation
+					}
 
-	List(d, "password_dictionary").Elem(func(d ResourceData) {
-		options.PasswordDictionary = make(map[string]interface{})
-		options.PasswordDictionary["enable"] = Bool(d, "enable")
-		options.PasswordDictionary["dictionary"] = Set(d, "dictionary").List()
-	})
+					return stop
+				},
+			)
 
-	List(d, "password_complexity_options").Elem(func(d ResourceData) {
-		options.PasswordComplexityOptions = make(map[string]interface{})
-		options.PasswordComplexityOptions["min_length"] = Int(d, "min_length")
-	})
+			if len(validationOption) > 0 {
+				options.Validation = validationOption
+			}
 
-	List(d, "mfa").Elem(func(d ResourceData) {
-		options.MFA = make(map[string]interface{})
-		options.MFA["active"] = Bool(d, "active")
-		options.MFA["return_enroll_settings"] = Bool(d, "return_enroll_settings")
-	})
-
-	options.EnabledDatabaseCustomization = Bool(d, "enabled_database_customization")
-	options.BruteForceProtection = Bool(d, "brute_force_protection")
-	options.ImportMode = Bool(d, "import_mode")
-	options.DisableSignup = Bool(d, "disable_signup")
-	options.RequiresUsername = Bool(d, "requires_username")
-	options.CustomScripts = Map(d, "custom_scripts")
-	options.Configuration = Map(d, "configuration")
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsGoogleOAuth2(d ResourceData) (*management.ConnectionOptionsGoogleOAuth2, diag.Diagnostics) {
-	options := &management.ConnectionOptionsGoogleOAuth2{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		AllowedAudiences:   Set(d, "allowed_audiences").List(),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsGoogleApps(d ResourceData) (*management.ConnectionOptionsGoogleApps, diag.Diagnostics) {
-	options := &management.ConnectionOptionsGoogleApps{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		Domain:             String(d, "domain"),
-		TenantDomain:       String(d, "tenant_domain"),
-		EnableUsersAPI:     Bool(d, "api_enable_users"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		DomainAliases:      Set(d, "domain_aliases").List(),
-		LogoURL:            String(d, "icon_url"),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsOAuth2(d ResourceData) (*management.ConnectionOptionsOAuth2, diag.Diagnostics) {
-	options := &management.ConnectionOptionsOAuth2{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		AuthorizationURL:   String(d, "authorization_endpoint"),
-		TokenURL:           String(d, "token_endpoint"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		LogoURL:            String(d, "icon_url"),
-		PKCEEnabled:        Bool(d, "pkce_enabled"),
-	}
-	options.Scripts = Map(d, "scripts")
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsFacebook(d ResourceData) (*management.ConnectionOptionsFacebook, diag.Diagnostics) {
-	options := &management.ConnectionOptionsFacebook{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsApple(d ResourceData) (*management.ConnectionOptionsApple, diag.Diagnostics) {
-	options := &management.ConnectionOptionsApple{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		TeamID:             String(d, "team_id"),
-		KeyID:              String(d, "key_id"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsLinkedin(d ResourceData) (*management.ConnectionOptionsLinkedin, diag.Diagnostics) {
-	options := &management.ConnectionOptionsLinkedin{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		StrategyVersion:    Int(d, "strategy_version"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsSalesforce(d ResourceData) (*management.ConnectionOptionsSalesforce, diag.Diagnostics) {
-	options := &management.ConnectionOptionsSalesforce{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		CommunityBaseURL:   String(d, "community_base_url"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsWindowsLive(d ResourceData) (*management.ConnectionOptionsWindowsLive, diag.Diagnostics) {
-	options := &management.ConnectionOptionsWindowsLive{
-		ClientID:           String(d, "client_id"),
-		ClientSecret:       String(d, "client_secret"),
-		StrategyVersion:    Int(d, "strategy_version"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-	}
-
-	expandConnectionOptionsScopes(d, options)
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsSMS(d ResourceData) (*management.ConnectionOptionsSMS, diag.Diagnostics) {
-	options := &management.ConnectionOptionsSMS{
-		Name:                 String(d, "name"),
-		From:                 String(d, "from"),
-		Syntax:               String(d, "syntax"),
-		Template:             String(d, "template"),
-		TwilioSID:            String(d, "twilio_sid"),
-		TwilioToken:          String(d, "twilio_token"),
-		MessagingServiceSID:  String(d, "messaging_service_sid"),
-		Provider:             String(d, "provider"),
-		GatewayURL:           String(d, "gateway_url"),
-		ForwardRequestInfo:   Bool(d, "forward_request_info"),
-		DisableSignup:        Bool(d, "disable_signup"),
-		BruteForceProtection: Bool(d, "brute_force_protection"),
-	}
-
-	List(d, "totp").Elem(func(d ResourceData) {
-		options.OTP = &management.ConnectionOptionsOTP{
-			TimeStep: Int(d, "time_step"),
-			Length:   Int(d, "length"),
-		}
-	})
-
-	List(d, "gateway_authentication").Elem(func(d ResourceData) {
-		options.GatewayAuthentication = &management.ConnectionGatewayAuthentication{
-			Method:              String(d, "method"),
-			Subject:             String(d, "subject"),
-			Audience:            String(d, "audience"),
-			Secret:              String(d, "secret"),
-			SecretBase64Encoded: Bool(d, "secret_base64_encoded"),
-		}
-	})
-
-	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
-
-	return options, diag.FromErr(err)
-}
-
-func expandConnectionOptionsEmail(d ResourceData) (*management.ConnectionOptionsEmail, diag.Diagnostics) {
-	options := &management.ConnectionOptionsEmail{
-		Name:          String(d, "name"),
-		DisableSignup: Bool(d, "disable_signup"),
-		Email: &management.ConnectionOptionsEmailSettings{
-			Syntax:  String(d, "syntax"),
-			From:    String(d, "from"),
-			Subject: String(d, "subject"),
-			Body:    String(d, "template"),
+			return stop
 		},
-		BruteForceProtection: Bool(d, "brute_force_protection"),
-		SetUserAttributes:    String(d, "set_user_root_attributes"),
-		NonPersistentAttrs:   castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+	)
+
+	config.GetAttr("password_history").ForEachElement(
+		func(_ cty.Value, passwordHistory cty.Value) (stop bool) {
+			passwordHistoryOption := make(map[string]interface{})
+
+			if enable := value.Bool(passwordHistory.GetAttr("enable")); enable != nil {
+				passwordHistoryOption["enable"] = enable
+			}
+
+			if size := value.Int(passwordHistory.GetAttr("size")); size != nil && *size != 0 {
+				passwordHistoryOption["size"] = size
+			}
+
+			if len(passwordHistoryOption) > 0 {
+				options.PasswordHistory = passwordHistoryOption
+			}
+
+			return stop
+		},
+	)
+
+	config.GetAttr("password_no_personal_info").ForEachElement(
+		func(_ cty.Value, passwordNoPersonalInfo cty.Value) (stop bool) {
+			if enable := value.Bool(passwordNoPersonalInfo.GetAttr("enable")); enable != nil {
+				options.PasswordNoPersonalInfo = map[string]interface{}{
+					"enable": enable,
+				}
+			}
+
+			return stop
+		},
+	)
+
+	config.GetAttr("password_dictionary").ForEachElement(
+		func(_ cty.Value, passwordDictionary cty.Value) (stop bool) {
+			passwordDictionaryOption := make(map[string]interface{})
+
+			if enable := value.Bool(passwordDictionary.GetAttr("enable")); enable != nil {
+				passwordDictionaryOption["enable"] = enable
+			}
+			if dictionary := value.Strings(passwordDictionary.GetAttr("dictionary")); dictionary != nil {
+				passwordDictionaryOption["dictionary"] = dictionary
+			}
+
+			if len(passwordDictionaryOption) > 0 {
+				options.PasswordDictionary = passwordDictionaryOption
+			}
+
+			return stop
+		},
+	)
+
+	config.GetAttr("password_complexity_options").ForEachElement(
+		func(_ cty.Value, passwordComplexity cty.Value) (stop bool) {
+			if minLength := value.Int(passwordComplexity.GetAttr("min_length")); minLength != nil {
+				options.PasswordComplexityOptions = map[string]interface{}{
+					"min_length": minLength,
+				}
+			}
+
+			return stop
+		},
+	)
+
+	config.GetAttr("mfa").ForEachElement(
+		func(_ cty.Value, mfa cty.Value) (stop bool) {
+			mfaOption := make(map[string]interface{})
+
+			if active := value.Bool(mfa.GetAttr("active")); active != nil {
+				mfaOption["active"] = active
+			}
+			if returnEnrollSettings := value.Bool(mfa.GetAttr("return_enroll_settings")); returnEnrollSettings != nil {
+				mfaOption["return_enroll_settings"] = returnEnrollSettings
+			}
+
+			if len(mfaOption) > 0 {
+				options.MFA = mfaOption
+			}
+
+			return stop
+		},
+	)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsGoogleOAuth2(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsGoogleOAuth2, diag.Diagnostics) {
+	options := &management.ConnectionOptionsGoogleOAuth2{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		AllowedAudiences:   value.Strings(config.GetAttr("allowed_audiences")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	List(d, "totp").Elem(func(d ResourceData) {
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsGoogleApps(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsGoogleApps, diag.Diagnostics) {
+	options := &management.ConnectionOptionsGoogleApps{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		Domain:             value.String(config.GetAttr("domain")),
+		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
+		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
+		LogoURL:            value.String(config.GetAttr("icon_url")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsOAuth2(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsOAuth2, diag.Diagnostics) {
+	options := &management.ConnectionOptionsOAuth2{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		AuthorizationURL:   value.String(config.GetAttr("authorization_endpoint")),
+		TokenURL:           value.String(config.GetAttr("token_endpoint")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		LogoURL:            value.String(config.GetAttr("icon_url")),
+		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
+		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsFacebook(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsFacebook, diag.Diagnostics) {
+	options := &management.ConnectionOptionsFacebook{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsApple(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsApple, diag.Diagnostics) {
+	options := &management.ConnectionOptionsApple{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		TeamID:             value.String(config.GetAttr("team_id")),
+		KeyID:              value.String(config.GetAttr("key_id")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsLinkedin(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsLinkedin, diag.Diagnostics) {
+	options := &management.ConnectionOptionsLinkedin{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsSalesforce(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsSalesforce, diag.Diagnostics) {
+	options := &management.ConnectionOptionsSalesforce{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		CommunityBaseURL:   value.String(config.GetAttr("community_base_url")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsWindowsLive(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsWindowsLive, diag.Diagnostics) {
+	options := &management.ConnectionOptionsWindowsLive{
+		ClientID:           value.String(config.GetAttr("client_id")),
+		ClientSecret:       value.String(config.GetAttr("client_secret")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsSMS(config cty.Value) (*management.ConnectionOptionsSMS, diag.Diagnostics) {
+	options := &management.ConnectionOptionsSMS{
+		Name:                 value.String(config.GetAttr("name")),
+		From:                 value.String(config.GetAttr("from")),
+		Syntax:               value.String(config.GetAttr("syntax")),
+		Template:             value.String(config.GetAttr("template")),
+		TwilioSID:            value.String(config.GetAttr("twilio_sid")),
+		TwilioToken:          value.String(config.GetAttr("twilio_token")),
+		MessagingServiceSID:  value.String(config.GetAttr("messaging_service_sid")),
+		Provider:             value.String(config.GetAttr("provider")),
+		GatewayURL:           value.String(config.GetAttr("gateway_url")),
+		ForwardRequestInfo:   value.Bool(config.GetAttr("forward_request_info")),
+		DisableSignup:        value.Bool(config.GetAttr("disable_signup")),
+		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
+	}
+
+	config.GetAttr("totp").ForEachElement(func(_ cty.Value, totp cty.Value) (stop bool) {
 		options.OTP = &management.ConnectionOptionsOTP{
-			TimeStep: Int(d, "time_step"),
-			Length:   Int(d, "length"),
+			TimeStep: value.Int(totp.GetAttr("time_step")),
+			Length:   value.Int(totp.GetAttr("length")),
 		}
+
+		return stop
 	})
 
-	if authParamsMap := Map(d, "auth_params"); authParamsMap != nil {
+	config.GetAttr("gateway_authentication").ForEachElement(func(_ cty.Value, auth cty.Value) (stop bool) {
+		options.GatewayAuthentication = &management.ConnectionGatewayAuthentication{
+			Method:              value.String(auth.GetAttr("method")),
+			Subject:             value.String(auth.GetAttr("subject")),
+			Audience:            value.String(auth.GetAttr("audience")),
+			Secret:              value.String(auth.GetAttr("secret")),
+			SecretBase64Encoded: value.Bool(auth.GetAttr("secret_base64_encoded")),
+		}
+
+		return stop
+	})
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsEmail(config cty.Value) (*management.ConnectionOptionsEmail, diag.Diagnostics) {
+	options := &management.ConnectionOptionsEmail{
+		Name:          value.String(config.GetAttr("name")),
+		DisableSignup: value.Bool(config.GetAttr("disable_signup")),
+		Email: &management.ConnectionOptionsEmailSettings{
+			Syntax:  value.String(config.GetAttr("syntax")),
+			From:    value.String(config.GetAttr("from")),
+			Subject: value.String(config.GetAttr("subject")),
+			Body:    value.String(config.GetAttr("template")),
+		},
+		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
+		SetUserAttributes:    value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	config.GetAttr("totp").ForEachElement(func(_ cty.Value, totp cty.Value) (stop bool) {
+		options.OTP = &management.ConnectionOptionsOTP{
+			TimeStep: value.Int(totp.GetAttr("time_step")),
+			Length:   value.Int(totp.GetAttr("length")),
+		}
+
+		return stop
+	})
+
+	if authParamsMap := value.MapOfStrings(config.GetAttr("auth_params")); authParamsMap != nil {
 		options.AuthParams = authParamsMap
 	}
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAD(d ResourceData) (*management.ConnectionOptionsAD, diag.Diagnostics) {
+func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsAD, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAD{
-		DomainAliases:        Set(d, "domain_aliases").List(),
-		TenantDomain:         String(d, "tenant_domain"),
-		LogoURL:              String(d, "icon_url"),
-		IPs:                  Set(d, "ips").List(),
-		CertAuth:             Bool(d, "use_cert_auth"),
-		Kerberos:             Bool(d, "use_kerberos"),
-		DisableCache:         Bool(d, "disable_cache"),
-		SetUserAttributes:    String(d, "set_user_root_attributes"),
-		NonPersistentAttrs:   castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		BruteForceProtection: Bool(d, "brute_force_protection"),
+		DomainAliases:        value.Strings(config.GetAttr("domain_aliases")),
+		TenantDomain:         value.String(config.GetAttr("tenant_domain")),
+		LogoURL:              value.String(config.GetAttr("icon_url")),
+		IPs:                  value.Strings(config.GetAttr("ips")),
+		CertAuth:             value.Bool(config.GetAttr("use_cert_auth")),
+		Kerberos:             value.Bool(config.GetAttr("use_kerberos")),
+		DisableCache:         value.Bool(config.GetAttr("disable_cache")),
+		SetUserAttributes:    value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
+		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
 	}
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAzureAD(d ResourceData) (*management.ConnectionOptionsAzureAD, diag.Diagnostics) {
+func expandConnectionOptionsAzureAD(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsAzureAD, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAzureAD{
-		ClientID:            String(d, "client_id"),
-		ClientSecret:        String(d, "client_secret"),
-		AppID:               String(d, "app_id"),
-		Domain:              String(d, "domain"),
-		DomainAliases:       Set(d, "domain_aliases").List(),
-		TenantDomain:        String(d, "tenant_domain"),
-		MaxGroupsToRetrieve: String(d, "max_groups_to_retrieve"),
-		UseWSFederation:     Bool(d, "use_wsfed"),
-		WAADProtocol:        String(d, "waad_protocol"),
-		UseCommonEndpoint:   Bool(d, "waad_common_endpoint"),
-		EnableUsersAPI:      Bool(d, "api_enable_users"),
-		LogoURL:             String(d, "icon_url"),
-		IdentityAPI:         String(d, "identity_api"),
-		SetUserAttributes:   String(d, "set_user_root_attributes"),
-		NonPersistentAttrs:  castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		TrustEmailVerified:  String(d, "should_trust_email_verified_connection"),
+		ClientID:            value.String(config.GetAttr("client_id")),
+		ClientSecret:        value.String(config.GetAttr("client_secret")),
+		AppID:               value.String(config.GetAttr("app_id")),
+		Domain:              value.String(config.GetAttr("domain")),
+		DomainAliases:       value.Strings(config.GetAttr("domain_aliases")),
+		TenantDomain:        value.String(config.GetAttr("tenant_domain")),
+		MaxGroupsToRetrieve: value.String(config.GetAttr("max_groups_to_retrieve")),
+		UseWSFederation:     value.Bool(config.GetAttr("use_wsfed")),
+		WAADProtocol:        value.String(config.GetAttr("waad_protocol")),
+		UseCommonEndpoint:   value.Bool(config.GetAttr("waad_common_endpoint")),
+		EnableUsersAPI:      value.Bool(config.GetAttr("api_enable_users")),
+		LogoURL:             value.String(config.GetAttr("icon_url")),
+		IdentityAPI:         value.String(config.GetAttr("identity_api")),
+		SetUserAttributes:   value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
+		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
 	}
 
 	expandConnectionOptionsScopes(d, options)
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsOIDC(d ResourceData) (*management.ConnectionOptionsOIDC, diag.Diagnostics) {
+func expandConnectionOptionsOIDC(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsOIDC, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
-		ClientID:              String(d, "client_id"),
-		ClientSecret:          String(d, "client_secret"),
-		TenantDomain:          String(d, "tenant_domain"),
-		DomainAliases:         Set(d, "domain_aliases").List(),
-		LogoURL:               String(d, "icon_url"),
-		DiscoveryURL:          String(d, "discovery_url"),
-		AuthorizationEndpoint: String(d, "authorization_endpoint"),
-		Issuer:                String(d, "issuer"),
-		JWKSURI:               String(d, "jwks_uri"),
-		Type:                  String(d, "type"),
-		UserInfoEndpoint:      String(d, "userinfo_endpoint"),
-		TokenEndpoint:         String(d, "token_endpoint"),
-		SetUserAttributes:     String(d, "set_user_root_attributes"),
-		NonPersistentAttrs:    castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		ClientID:              value.String(config.GetAttr("client_id")),
+		ClientSecret:          value.String(config.GetAttr("client_secret")),
+		TenantDomain:          value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:         value.Strings(config.GetAttr("domain_aliases")),
+		LogoURL:               value.String(config.GetAttr("icon_url")),
+		DiscoveryURL:          value.String(config.GetAttr("discovery_url")),
+		AuthorizationEndpoint: value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                value.String(config.GetAttr("issuer")),
+		JWKSURI:               value.String(config.GetAttr("jwks_uri")),
+		Type:                  value.String(config.GetAttr("type")),
+		UserInfoEndpoint:      value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
+		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
 	expandConnectionOptionsScopes(d, options)
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsSAML(d ResourceData) (*management.ConnectionOptionsSAML, diag.Diagnostics) {
+func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOptionsSAML, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
-		Debug:              Bool(d, "debug"),
-		SigningCert:        String(d, "signing_cert"),
-		ProtocolBinding:    String(d, "protocol_binding"),
-		TenantDomain:       String(d, "tenant_domain"),
-		DomainAliases:      Set(d, "domain_aliases").List(),
-		SignInEndpoint:     String(d, "sign_in_endpoint"),
-		SignOutEndpoint:    String(d, "sign_out_endpoint"),
-		DisableSignOut:     Bool(d, "disable_sign_out"),
-		SignatureAlgorithm: String(d, "signature_algorithm"),
-		DigestAglorithm:    String(d, "digest_algorithm"),
-		SignSAMLRequest:    Bool(d, "sign_saml_request"),
-		RequestTemplate:    String(d, "request_template"),
-		UserIDAttribute:    String(d, "user_id_attribute"),
-		LogoURL:            String(d, "icon_url"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
-		EntityID:           String(d, "entity_id"),
-		MetadataXML:        String(d, "metadata_xml"),
-		MetadataURL:        String(d, "metadata_url"),
+		Debug:              value.Bool(config.GetAttr("debug")),
+		SigningCert:        value.String(config.GetAttr("signing_cert")),
+		ProtocolBinding:    value.String(config.GetAttr("protocol_binding")),
+		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
+		SignInEndpoint:     value.String(config.GetAttr("sign_in_endpoint")),
+		SignOutEndpoint:    value.String(config.GetAttr("sign_out_endpoint")),
+		DisableSignOut:     value.Bool(config.GetAttr("disable_sign_out")),
+		SignatureAlgorithm: value.String(config.GetAttr("signature_algorithm")),
+		DigestAglorithm:    value.String(config.GetAttr("digest_algorithm")),
+		SignSAMLRequest:    value.Bool(config.GetAttr("sign_saml_request")),
+		RequestTemplate:    value.String(config.GetAttr("request_template")),
+		UserIDAttribute:    value.String(config.GetAttr("user_id_attribute")),
+		LogoURL:            value.String(config.GetAttr("icon_url")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		EntityID:           value.String(config.GetAttr("entity_id")),
+		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
+		MetadataURL:        value.String(config.GetAttr("metadata_url")),
 	}
 
-	List(d, "idp_initiated").Elem(func(d ResourceData) {
+	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
-			ClientID:             String(d, "client_id"),
-			ClientProtocol:       String(d, "client_protocol"),
-			ClientAuthorizeQuery: String(d, "client_authorize_query"),
+			ClientID:             value.String(idp.GetAttr("client_id")),
+			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
+			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
 		}
+
+		return stop
 	})
 
-	List(d, "signing_key").Elem(func(d ResourceData) {
+	config.GetAttr("signing_key").ForEachElement(func(_ cty.Value, key cty.Value) (stop bool) {
 		options.SigningKey = &management.ConnectionOptionsSAMLSigningKey{
-			Cert: String(d, "cert"),
-			Key:  String(d, "key"),
+			Cert: value.String(key.GetAttr("cert")),
+			Key:  value.String(key.GetAttr("key")),
 		}
+
+		return stop
 	})
 
 	var err error
 
-	options.FieldsMap, err = JSON(d, "fields_map")
+	options.FieldsMap, err = value.MapFromJSON(config.GetAttr("fields_map"))
 	diagnostics := diag.FromErr(err)
 
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 	diagnostics = append(diagnostics, diag.FromErr(err)...)
 
 	return options, diagnostics
 }
 
-func expandConnectionOptionsADFS(d ResourceData) (*management.ConnectionOptionsADFS, diag.Diagnostics) {
+func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOptionsADFS, diag.Diagnostics) {
 	options := &management.ConnectionOptionsADFS{
-		TenantDomain:       String(d, "tenant_domain"),
-		DomainAliases:      Set(d, "domain_aliases").List(),
-		LogoURL:            String(d, "icon_url"),
-		ADFSServer:         String(d, "adfs_server"),
-		EnableUsersAPI:     Bool(d, "api_enable_users"),
-		SetUserAttributes:  String(d, "set_user_root_attributes"),
-		NonPersistentAttrs: castToListOfStrings(Set(d, "non_persistent_attrs").List()),
+		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
+		LogoURL:            value.String(config.GetAttr("icon_url")),
+		ADFSServer:         value.String(config.GetAttr("adfs_server")),
+		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
+		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
 	var err error
-	options.UpstreamParams, err = JSON(d, "upstream_params")
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
 }
@@ -1096,21 +1232,13 @@ type scoper interface {
 	SetScopes(enable bool, scopes ...string)
 }
 
-func expandConnectionOptionsScopes(d ResourceData, s scoper) {
-	scopesList := Set(d, "scopes").List()
-	_, scopesDiff := Diff(d, "scopes")
+func expandConnectionOptionsScopes(d *schema.ResourceData, s scoper) {
+	scopesList := Set(d, "options.0.scopes").List()
+	_, scopesToDisable := Diff(d, "options.0.scopes")
 	for _, scope := range scopesList {
 		s.SetScopes(true, scope.(string))
 	}
-	for _, scope := range scopesDiff.List() {
+	for _, scope := range scopesToDisable.List() {
 		s.SetScopes(false, scope.(string))
 	}
-}
-
-func castToListOfStrings(interfaces []interface{}) *[]string {
-	var strings []string
-	for _, v := range interfaces {
-		strings = append(strings, v.(string))
-	}
-	return &strings
 }

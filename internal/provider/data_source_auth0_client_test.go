@@ -10,17 +10,24 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
+const testAccGivenAClient = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - {{.testName}}"
+	app_type = "non_interactive"
+}
+`
+
 const testAccDataClientConfigByName = `
-%v
-data auth0_client test {
-  name = "Acceptance Test - {{.testName}}"
+data "auth0_client" "test" {
+	depends_on = [ auth0_client.my_client ]
+
+	name = "Acceptance Test - {{.testName}}"
 }
 `
 
 const testAccDataClientConfigByID = `
-%v
-data auth0_client test {
-  client_id = auth0_client.my_client.client_id
+data "auth0_client" "test" {
+	client_id = auth0_client.my_client.client_id
 }
 `
 
@@ -32,18 +39,12 @@ func TestAccDataClientByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccClientConfig, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
-				), // check that the client got created correctly before using the data source
-			},
-			{
-				Config: template.ParseTestName(fmt.Sprintf(testAccDataClientConfigByName, testAccClientConfig), t.Name()),
+				Config: template.ParseTestName(testAccGivenAClient+testAccDataClientConfigByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "client_id"),
-					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
+					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "name", fmt.Sprintf("Acceptance Test - %v", t.Name())),
-					resource.TestCheckResourceAttr("data.auth0_client.test", "app_type", "non_interactive"), // Arbitrary property selection
+					resource.TestCheckResourceAttr("data.auth0_client.test", "app_type", "non_interactive"),
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
 				),
 			},
@@ -59,17 +60,11 @@ func TestAccDataClientById(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccClientConfig, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %v", t.Name())),
-				), // check that the client got created correctly before using the data source
-			},
-			{
-				Config: template.ParseTestName(fmt.Sprintf(testAccDataClientConfigByID, testAccClientConfig), t.Name()),
+				Config: template.ParseTestName(testAccGivenAClient+testAccDataClientConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "id"),
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),
-					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"), // checks that signing_keys is set, and it includes 1 element
+					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"),
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
 				),
 			},

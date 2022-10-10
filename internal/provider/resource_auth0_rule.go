@@ -7,10 +7,13 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
@@ -55,6 +58,7 @@ func newRule() *schema.Resource {
 			"enabled": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Computed:    true,
 				Description: "Indicates whether the rule is enabled.",
 			},
 		},
@@ -62,7 +66,7 @@ func newRule() *schema.Resource {
 }
 
 func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	rule := buildRule(d)
+	rule := expandRule(d.GetRawConfig())
 	api := m.(*management.Management)
 	if err := api.Rule.Create(rule); err != nil {
 		return diag.FromErr(err)
@@ -97,7 +101,7 @@ func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 }
 
 func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	rule := buildRule(d)
+	rule := expandRule(d.GetRawConfig())
 	api := m.(*management.Management)
 	if err := api.Rule.Update(d.Id(), rule); err != nil {
 		return diag.FromErr(err)
@@ -121,11 +125,11 @@ func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func buildRule(d *schema.ResourceData) *management.Rule {
+func expandRule(d cty.Value) *management.Rule {
 	return &management.Rule{
-		Name:    String(d, "name"),
-		Script:  String(d, "script"),
-		Order:   Int(d, "order"),
-		Enabled: Bool(d, "enabled"),
+		Name:    value.String(d.GetAttr("name")),
+		Script:  value.String(d.GetAttr("script")),
+		Order:   value.Int(d.GetAttr("order")),
+		Enabled: value.Bool(d.GetAttr("enabled")),
 	}
 }

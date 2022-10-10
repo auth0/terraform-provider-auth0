@@ -4,11 +4,13 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newTriggerBinding() *schema.Resource {
@@ -68,7 +70,7 @@ func newTriggerBinding() *schema.Resource {
 
 func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	id := d.Get("trigger").(string)
-	triggerBindings := expandTriggerBindings(d)
+	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
 		return diag.FromErr(err)
@@ -96,7 +98,7 @@ func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	triggerBindings := expandTriggerBindings(d)
+	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	api := m.(*management.Management)
 	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
 		return diag.FromErr(err)
@@ -120,17 +122,19 @@ func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	return nil
 }
 
-func expandTriggerBindings(d *schema.ResourceData) []*management.ActionBinding {
+func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	var triggerBindings []*management.ActionBinding
 
-	List(d, "actions").Elem(func(d ResourceData) {
+	config.ForEachElement(func(_ cty.Value, action cty.Value) (stop bool) {
+		t := "action_id"
 		triggerBindings = append(triggerBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
-				Type:  auth0.String("action_id"),
-				Value: String(d, "id"),
+				Type:  &t,
+				Value: value.String(action.GetAttr("id")),
 			},
-			DisplayName: String(d, "display_name"),
+			DisplayName: value.String(action.GetAttr("display_name")),
 		})
+		return stop
 	})
 
 	return triggerBindings

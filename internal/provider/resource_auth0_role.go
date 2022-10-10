@@ -162,10 +162,10 @@ func expandRole(d *schema.ResourceData) *management.Role {
 }
 
 func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
-	add, rm := Diff(d, "permissions")
+	toAdd, toRemove := value.Difference(d, "permissions")
 
 	var addPermissions []*management.Permission
-	for _, addPermission := range add.List() {
+	for _, addPermission := range toAdd {
 		permission := addPermission.(map[string]interface{})
 		addPermissions = append(addPermissions, &management.Permission{
 			Name:                     auth0.String(permission["name"].(string)),
@@ -174,7 +174,7 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 	}
 
 	var rmPermissions []*management.Permission
-	for _, rmPermission := range rm.List() {
+	for _, rmPermission := range toRemove {
 		permission := rmPermission.(map[string]interface{})
 		rmPermissions = append(rmPermissions, &management.Permission{
 			Name:                     auth0.String(permission["name"].(string)),

@@ -1233,12 +1233,14 @@ type scoper interface {
 }
 
 func expandConnectionOptionsScopes(d *schema.ResourceData, s scoper) {
-	scopesList := Set(d, "options.0.scopes").List()
-	_, scopesToDisable := Diff(d, "options.0.scopes")
+	scopesList := d.Get("options.0.scopes").(*schema.Set).List()
+
+	_, scopesToDisable := value.Difference(d, "options.0.scopes")
 	for _, scope := range scopesList {
 		s.SetScopes(true, scope.(string))
 	}
-	for _, scope := range scopesToDisable.List() {
+
+	for _, scope := range scopesToDisable {
 		s.SetScopes(false, scope.(string))
 	}
 }

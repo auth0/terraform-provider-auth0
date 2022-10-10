@@ -81,6 +81,11 @@ resource auth0_action my_action {
 		name    = "auth0"
 		version = "2.42.0"
 	}
+
+	dependencies {
+		name    = "moment"
+		version = "2.29.4"
+	}
 }
 `
 
@@ -151,9 +156,11 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.id", "post-login"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.version", "v3"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "2"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.name", "auth0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.version", "2.42.0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.1.name", "moment"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.1.version", "2.29.4"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "2"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "123456"),

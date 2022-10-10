@@ -353,7 +353,7 @@ func expandActionDependencies(dependencies cty.Value) *[]management.ActionDepend
 			Name:    value.String(dep.GetAttr("name")),
 			Version: value.String(dep.GetAttr("version")),
 		})
-		return true
+		return stop
 	})
 
 	return &actionDependencies

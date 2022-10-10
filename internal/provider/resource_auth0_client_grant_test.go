@@ -10,42 +10,6 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
-func TestAccClientGrant(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
-			{
-				Config: template.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", fmt.Sprintf("https://uat.tf.terraform-provider-auth0.com/client-grant/%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.0", "create:foo"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
-				),
-			},
-		},
-	})
-}
-
 const testAccClientGrantAuxConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Client Grant - {{.testName}}"
@@ -104,3 +68,39 @@ resource "auth0_client_grant" "my_client_grant" {
 	scope = [ ]
 }
 `
+
+func TestAccClientGrant(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", fmt.Sprintf("https://uat.tf.terraform-provider-auth0.com/client-grant/%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccClientGrantConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.0", "create:foo"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+				),
+			},
+		},
+	})
+}

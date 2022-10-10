@@ -371,7 +371,7 @@ func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
 			Name:  value.String(secret.GetAttr("name")),
 			Value: value.String(secret.GetAttr("value")),
 		})
-		return true
+		return stop
 	})
 
 	return &actionSecrets

@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newTenant() *schema.Resource {
@@ -154,8 +155,8 @@ func newTenant() *schema.Resource {
 			"session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				ValidateFunc: validation.FloatAtLeast(0.01),
 				Default:      168,
+				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session will stay valid.",
 			},
 			"idle_session_lifetime": {
@@ -402,24 +403,24 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	}
 
 	result := multierror.Append(
-		d.Set("change_password", flattenTenantChangePassword(tenant.ChangePassword)),
-		d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GuardianMFAPage)),
-		d.Set("default_audience", tenant.DefaultAudience),
-		d.Set("default_directory", tenant.DefaultDirectory),
-		d.Set("default_redirection_uri", tenant.DefaultRedirectionURI),
-		d.Set("friendly_name", tenant.FriendlyName),
-		d.Set("picture_url", tenant.PictureURL),
-		d.Set("support_email", tenant.SupportEmail),
-		d.Set("support_url", tenant.SupportURL),
-		d.Set("allowed_logout_urls", tenant.AllowedLogoutURLs),
-		d.Set("session_lifetime", tenant.SessionLifetime),
-		d.Set("idle_session_lifetime", tenant.IdleSessionLifetime),
-		d.Set("sandbox_version", tenant.SandboxVersion),
-		d.Set("enabled_locales", tenant.EnabledLocales),
-		d.Set("error_page", flattenTenantErrorPage(tenant.ErrorPage)),
-		d.Set("flags", flattenTenantFlags(tenant.Flags)),
-		d.Set("universal_login", flattenTenantUniversalLogin(tenant.UniversalLogin)),
-		d.Set("session_cookie", flattenTenantSessionCookie(tenant.SessionCookie)),
+		d.Set("change_password", flattenTenantChangePassword(tenant.GetChangePassword())),
+		d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GetGuardianMFAPage())),
+		d.Set("default_audience", tenant.GetDefaultAudience()),
+		d.Set("default_directory", tenant.GetDefaultDirectory()),
+		d.Set("default_redirection_uri", tenant.GetDefaultRedirectionURI()),
+		d.Set("friendly_name", tenant.GetFriendlyName()),
+		d.Set("picture_url", tenant.GetPictureURL()),
+		d.Set("support_email", tenant.GetSupportEmail()),
+		d.Set("support_url", tenant.GetSupportURL()),
+		d.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
+		d.Set("session_lifetime", tenant.GetSessionLifetime()),
+		d.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
+		d.Set("sandbox_version", tenant.GetSandboxVersion()),
+		d.Set("enabled_locales", tenant.GetEnabledLocales()),
+		d.Set("error_page", flattenTenantErrorPage(tenant.GetErrorPage())),
+		d.Set("flags", flattenTenantFlags(tenant.GetFlags())),
+		d.Set("universal_login", flattenTenantUniversalLogin(tenant.GetUniversalLogin())),
+		d.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -441,25 +442,33 @@ func deleteTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func expandTenant(d *schema.ResourceData) *management.Tenant {
+	config := d.GetRawConfig()
+
+	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`
+	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`
+
 	tenant := &management.Tenant{
-		DefaultAudience:       String(d, "default_audience"),
-		DefaultDirectory:      String(d, "default_directory"),
-		DefaultRedirectionURI: String(d, "default_redirection_uri"),
-		FriendlyName:          String(d, "friendly_name"),
-		PictureURL:            String(d, "picture_url"),
-		SupportEmail:          String(d, "support_email"),
-		SupportURL:            String(d, "support_url"),
-		AllowedLogoutURLs:     Slice(d, "allowed_logout_urls"),
-		SessionLifetime:       Float64(d, "session_lifetime"),
-		SandboxVersion:        String(d, "sandbox_version"),
-		IdleSessionLifetime:   Float64(d, "idle_session_lifetime", IsNewResource(), HasChange()),
-		EnabledLocales:        List(d, "enabled_locales").List(),
-		ChangePassword:        expandTenantChangePassword(d),
-		GuardianMFAPage:       expandTenantGuardianMFAPage(d),
-		ErrorPage:             expandTenantErrorPage(d),
-		Flags:                 expandTenantFlags(d.GetRawConfig().GetAttr("flags")),
-		UniversalLogin:        expandTenantUniversalLogin(d),
-		SessionCookie:         expandTenantSessionCookie(d),
+		DefaultAudience:       value.String(config.GetAttr("default_audience")),
+		DefaultDirectory:      value.String(config.GetAttr("default_directory")),
+		DefaultRedirectionURI: value.String(config.GetAttr("default_redirection_uri")),
+		FriendlyName:          value.String(config.GetAttr("friendly_name")),
+		PictureURL:            value.String(config.GetAttr("picture_url")),
+		SupportEmail:          value.String(config.GetAttr("support_email")),
+		SupportURL:            value.String(config.GetAttr("support_url")),
+		AllowedLogoutURLs:     value.Strings(config.GetAttr("allowed_logout_urls")),
+		SessionLifetime:       &sessionLifetime,
+		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
+		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
+		ChangePassword:        expandTenantChangePassword(config.GetAttr("change_password")),
+		GuardianMFAPage:       expandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
+		ErrorPage:             expandTenantErrorPage(config.GetAttr("error_page")),
+		Flags:                 expandTenantFlags(config.GetAttr("flags")),
+		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
+		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
+	}
+
+	if d.IsNewResource() || d.HasChange("idle_session_lifetime") {
+		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
 
 	return tenant

@@ -44,7 +44,6 @@ resource "auth0_organization" "my_organization" {
 ### Optional
 
 - `branding` (Block List, Max: 1) Defines how to style the login pages. (see [below for nested schema](#nestedblock--branding))
-- `connections` (Block Set, Deprecated) (see [below for nested schema](#nestedblock--connections))
 - `display_name` (String) Friendly name of this organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
 
@@ -59,18 +58,6 @@ Optional:
 
 - `colors` (Map of String) Color scheme used to customize the login pages.
 - `logo_url` (String) URL of logo to display on login page.
-
-
-<a id="nestedblock--connections"></a>
-### Nested Schema for `connections`
-
-Required:
-
-- `connection_id` (String) The connection ID of the connection to add to the organization.
-
-Optional:
-
-- `assign_membership_on_login` (Boolean) When `true`, all users that log in with this connection will be automatically granted membership in the organization. When `false`, users must be granted membership in the organization before logging in with this connection.
 
 ## Import
 

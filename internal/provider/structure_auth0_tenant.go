@@ -111,6 +111,10 @@ func expandTenantChangePassword(config cty.Value) *management.TenantChangePasswo
 		return stop
 	})
 
+	if changePassword == (management.TenantChangePassword{}) {
+		return nil
+	}
+
 	return &changePassword
 }
 
@@ -122,6 +126,10 @@ func expandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFA
 		mfa.HTML = value.String(d.GetAttr("html"))
 		return stop
 	})
+
+	if mfa == (management.TenantGuardianMFAPage{}) {
+		return nil
+	}
 
 	return &mfa
 }
@@ -135,6 +143,10 @@ func expandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
 		errorPage.URL = value.String(d.GetAttr("url"))
 		return stop
 	})
+
+	if errorPage == (management.TenantErrorPage{}) {
+		return nil
+	}
 
 	return &errorPage
 }
@@ -190,6 +202,10 @@ func expandTenantUniversalLogin(config cty.Value) *management.TenantUniversalLog
 		return stop
 	})
 
+	if universalLogin == (management.TenantUniversalLogin{}) {
+		return nil
+	}
+
 	return &universalLogin
 }
 
@@ -200,6 +216,10 @@ func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie
 		sessionCookie.Mode = value.String(d.GetAttr("mode"))
 		return stop
 	})
+
+	if sessionCookie == (management.TenantSessionCookie{}) {
+		return nil
+	}
 
 	return &sessionCookie
 }

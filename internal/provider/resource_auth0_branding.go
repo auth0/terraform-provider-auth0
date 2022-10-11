@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -118,16 +119,13 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	if _, ok := d.GetOk("font"); ok {
 		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.GetFont())))
 	}
-
-	tenant, err := api.Tenant.Read()
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	if tenant.Flags.GetEnableCustomDomainInEmails() {
-		if err := setUniversalLogin(d, api); err != nil {
+	if _, ok := d.GetOk("universal_login"); ok {
+		brandingUniversalLogin, err := flattenBrandingUniversalLogin(api)
+		if err != nil {
 			return diag.FromErr(err)
 		}
+
+		result = multierror.Append(result, d.Set("universal_login", brandingUniversalLogin))
 	}
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -225,15 +223,6 @@ func expandBrandingUniversalLogin(config cty.Value) *management.BrandingUniversa
 	return &universalLogin
 }
 
-func setUniversalLogin(d *schema.ResourceData, api *management.Management) error {
-	universalLogin, err := api.Branding.UniversalLogin()
-	if err != nil {
-		return err
-	}
-
-	return d.Set("universal_login", flattenBrandingUniversalLogin(universalLogin))
-}
-
 func flattenBrandingColors(brandingColors *management.BrandingColors) []interface{} {
 	if brandingColors == nil {
 		return nil
@@ -246,15 +235,35 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 	}
 }
 
-func flattenBrandingUniversalLogin(brandingUniversalLogin *management.BrandingUniversalLogin) []interface{} {
-	if brandingUniversalLogin == nil {
-		return nil
+func flattenBrandingUniversalLogin(api *management.Management) ([]interface{}, error) {
+	tenant, err := api.Tenant.Read()
+	if err != nil {
+		return nil, err
 	}
-	return []interface{}{
+
+	if !tenant.GetFlags().GetEnableCustomDomainInEmails() {
+		return nil, nil
+	}
+
+	universalLogin, err := api.Branding.UniversalLogin()
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	if universalLogin == nil {
+		return nil, nil
+	}
+
+	flattenedUniversalLogin := []interface{}{
 		map[string]interface{}{
-			"body": brandingUniversalLogin.GetBody(),
+			"body": universalLogin.GetBody(),
 		},
 	}
+
+	return flattenedUniversalLogin, nil
 }
 
 func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {

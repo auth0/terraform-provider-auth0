@@ -463,6 +463,11 @@ func newClient() *schema.Resource {
 											"validate SAML requests. If set, SAML requests will be required to " +
 											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
 									},
+									"issuer": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Issuer of the SAML Assertion.",
+									},
 								},
 							},
 						},

@@ -117,6 +117,7 @@ Optional:
 - `destination` (String) Destination of the SAML Response. If not specified, it will be `AssertionConsumerUrl` of SAMLRequest or callback URL if there was no SAMLRequest.
 - `digest_algorithm` (String) Algorithm used to calculate the digest of the SAML Assertion or response. Options include `sha1` and `sha256`. Defaults to `sha1`.
 - `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to false, the attribute NameFormat is not set in the assertion. Defaults to `true`.
+- `issuer` (String) Issuer of the SAML Assertion.
 - `lifetime_in_seconds` (Number) Number of seconds during which the token is valid.
 - `logout` (Map of String) Configuration settings for logout.
 - `map_identities` (Boolean) Indicates whether or not to add additional identity information in the token, such as the provider used and the `access_token`, if available. Defaults to `true`.

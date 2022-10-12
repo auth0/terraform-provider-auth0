@@ -237,6 +237,9 @@ func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
 		samlp := make(map[string]interface{})
 
 		samlpConfig.ForEachElement(func(_ cty.Value, samlpConfig cty.Value) (stop bool) {
+			if issuer := value.String(samlpConfig.GetAttr("issuer")); issuer != nil {
+				samlp["issuer"] = issuer
+			}
 			if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
 				samlp["audience"] = audience
 			}
@@ -436,6 +439,7 @@ func flattenClientAddons(addons map[string]interface{}) []interface{} {
 		samlp := v.(map[string]interface{})
 
 		samlpMap := map[string]interface{}{
+			"issuer":                             samlp["issuer"],
 			"audience":                           samlp["audience"],
 			"recipient":                          samlp["recipient"],
 			"mappings":                           samlp["mappings"],

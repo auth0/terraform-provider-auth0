@@ -976,3 +976,70 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 		},
 	})
 }
+
+func TestAccClientMetadataBehavior(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(`
+					resource "auth0_client" "my_client" {
+						name = "Acceptance Test - Metadata - {{.testName}}"
+						client_metadata = {
+							foo = "zoo"
+							bar = "baz"
+						}
+					}`, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Metadata - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.bar", "baz"),
+				),
+			},
+			{
+				Config: template.ParseTestName(`
+					resource "auth0_client" "my_client" {
+						name = "Acceptance Test - Metadata - {{.testName}}"
+						client_metadata = {
+							foo = "newZooButOldFoo"
+							newBar = "newBaz"
+						}
+					}`, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Metadata - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "newZooButOldFoo"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.newBar", "newBaz"),
+				),
+			},
+			{
+				Config: template.ParseTestName(`
+					resource "auth0_client" "my_client" {
+						name = "Acceptance Test - Metadata - {{.testName}}"
+						client_metadata = {
+							bar = "baz"
+						}
+					}`, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Metadata - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.bar", "baz"),
+				),
+			},
+			{
+				Config: template.ParseTestName(`
+					resource "auth0_client" "my_client" {
+						name = "Acceptance Test - Metadata - {{.testName}}"
+						client_metadata = { }
+					}`, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Metadata - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
+				),
+			},
+		},
+	})
+}

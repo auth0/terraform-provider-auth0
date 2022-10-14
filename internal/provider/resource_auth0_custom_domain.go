@@ -4,18 +4,20 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newCustomDomain() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createCustomDomain,
 		ReadContext:   readCustomDomain,
+		UpdateContext: updateCustomDomain,
 		DeleteContext: deleteCustomDomain,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -72,41 +74,63 @@ func newCustomDomain() *schema.Resource {
 					},
 				},
 			},
+			"custom_client_ip_header": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"cf-connecting-ip", "x-forwarded-for", "true-client-ip", "",
+				}, false),
+				Description: "The HTTP header to fetch the client's IP address. " +
+					"Cannot be set on auth0_managed domains.",
+			},
+			"tls_policy": {
+				Type:     schema.TypeString,
+				Computed: true,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"compatible", "recommended",
+				}, false),
+				Description: "TLS policy for the custom domain. Available options are: `compatible` or `recommended`. " +
+					"Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. " +
+					"Cannot be set on self_managed domains.",
+			},
 		},
 	}
 }
 
 func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	customDomain := expandCustomDomain(d)
 	api := m.(*management.Management)
+
+	customDomain := expandCustomDomain(d)
 	if err := api.CustomDomain.Create(customDomain); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(customDomain.ID))
+	d.SetId(customDomain.GetID())
 
 	return readCustomDomain(ctx, d, m)
 }
 
 func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("domain", customDomain.Domain),
-		d.Set("type", customDomain.Type),
-		d.Set("primary", customDomain.Primary),
-		d.Set("status", customDomain.Status),
-		d.Set("origin_domain_name", customDomain.OriginDomainName),
+		d.Set("domain", customDomain.GetDomain()),
+		d.Set("type", customDomain.GetType()),
+		d.Set("primary", customDomain.GetPrimary()),
+		d.Set("status", customDomain.GetStatus()),
+		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
+		d.Set("custom_client_ip_header", customDomain.GetCustomClientIPHeader()),
+		d.Set("tls_policy", customDomain.GetTLSPolicy()),
 	)
 
 	if customDomain.Verification != nil {
@@ -118,23 +142,48 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
-	if err := api.CustomDomain.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+
+	customDomain := expandCustomDomain(d)
+	if err := api.CustomDomain.Update(d.Id(), customDomain); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
+		return diag.FromErr(err)
 	}
 
+	return readCustomDomain(ctx, d, m)
+}
+
+func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
+	if err := api.CustomDomain.Delete(d.Id()); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	d.SetId("")
 	return nil
 }
 
 func expandCustomDomain(d *schema.ResourceData) *management.CustomDomain {
-	return &management.CustomDomain{
-		Domain: String(d, "domain"),
-		Type:   String(d, "type"),
+	config := d.GetRawConfig()
+
+	customDomain := &management.CustomDomain{
+		TLSPolicy:            value.String(config.GetAttr("tls_policy")),
+		CustomClientIPHeader: value.String(config.GetAttr("custom_client_ip_header")),
 	}
+
+	if d.IsNewResource() {
+		customDomain.Domain = value.String(config.GetAttr("domain"))
+		customDomain.Type = value.String(config.GetAttr("type"))
+	}
+
+	return customDomain
 }

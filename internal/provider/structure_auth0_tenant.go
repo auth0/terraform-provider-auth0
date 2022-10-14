@@ -3,6 +3,8 @@ package provider
 import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func flattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
@@ -100,67 +102,82 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 	return []interface{}{m}
 }
 
-func expandTenantChangePassword(d ResourceData) *management.TenantChangePassword {
+func expandTenantChangePassword(config cty.Value) *management.TenantChangePassword {
 	var changePassword management.TenantChangePassword
 
-	List(d, "change_password").Elem(func(d ResourceData) {
-		changePassword.Enabled = Bool(d, "enabled")
-		changePassword.HTML = String(d, "html")
+	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
+		changePassword.Enabled = value.Bool(d.GetAttr("enabled"))
+		changePassword.HTML = value.String(d.GetAttr("html"))
+		return stop
 	})
+
+	if changePassword == (management.TenantChangePassword{}) {
+		return nil
+	}
 
 	return &changePassword
 }
 
-func expandTenantGuardianMFAPage(d ResourceData) *management.TenantGuardianMFAPage {
+func expandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFAPage {
 	var mfa management.TenantGuardianMFAPage
 
-	List(d, "guardian_mfa_page").Elem(func(d ResourceData) {
-		mfa.Enabled = Bool(d, "enabled")
-		mfa.HTML = String(d, "html")
+	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
+		mfa.Enabled = value.Bool(d.GetAttr("enabled"))
+		mfa.HTML = value.String(d.GetAttr("html"))
+		return stop
 	})
+
+	if mfa == (management.TenantGuardianMFAPage{}) {
+		return nil
+	}
 
 	return &mfa
 }
 
-func expandTenantErrorPage(d ResourceData) *management.TenantErrorPage {
+func expandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
 	var errorPage management.TenantErrorPage
 
-	List(d, "error_page").Elem(func(d ResourceData) {
-		errorPage.HTML = String(d, "html")
-		errorPage.ShowLogLink = Bool(d, "show_log_link")
-		errorPage.URL = String(d, "url")
+	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
+		errorPage.HTML = value.String(d.GetAttr("html"))
+		errorPage.ShowLogLink = value.Bool(d.GetAttr("show_log_link"))
+		errorPage.URL = value.String(d.GetAttr("url"))
+		return stop
 	})
+
+	if errorPage == (management.TenantErrorPage{}) {
+		return nil
+	}
 
 	return &errorPage
 }
 
-func expandTenantFlags(flagsList cty.Value) *management.TenantFlags {
+func expandTenantFlags(config cty.Value) *management.TenantFlags {
 	var tenantFlags *management.TenantFlags
 
-	flagsList.ForEachElement(func(_ cty.Value, flags cty.Value) (stop bool) {
+	config.ForEachElement(func(_ cty.Value, flags cty.Value) (stop bool) {
 		tenantFlags = &management.TenantFlags{
-			EnableClientConnections:            Flag(flags, "enable_client_connections"),
-			EnableAPIsSection:                  Flag(flags, "enable_apis_section"),
-			EnablePipeline2:                    Flag(flags, "enable_pipeline2"),
-			EnableDynamicClientRegistration:    Flag(flags, "enable_dynamic_client_registration"),
-			EnableCustomDomainInEmails:         Flag(flags, "enable_custom_domain_in_emails"),
-			UniversalLogin:                     Flag(flags, "universal_login"),
-			EnableLegacyLogsSearchV2:           Flag(flags, "enable_legacy_logs_search_v2"),
-			DisableClickjackProtectionHeaders:  Flag(flags, "disable_clickjack_protection_headers"),
-			EnablePublicSignupUserExistsError:  Flag(flags, "enable_public_signup_user_exists_error"),
-			UseScopeDescriptionsForConsent:     Flag(flags, "use_scope_descriptions_for_consent"),
-			AllowLegacyDelegationGrantTypes:    Flag(flags, "allow_legacy_delegation_grant_types"),
-			AllowLegacyROGrantTypes:            Flag(flags, "allow_legacy_ro_grant_types"),
-			AllowLegacyTokenInfoEndpoint:       Flag(flags, "allow_legacy_tokeninfo_endpoint"),
-			EnableLegacyProfile:                Flag(flags, "enable_legacy_profile"),
-			EnableIDTokenAPI2:                  Flag(flags, "enable_idtoken_api2"),
-			NoDisclosureEnterpriseConnections:  Flag(flags, "no_disclose_enterprise_connections"),
-			DisableManagementAPISMSObfuscation: Flag(flags, "disable_management_api_sms_obfuscation"),
-			EnableADFSWAADEmailVerification:    Flag(flags, "enable_adfs_waad_email_verification"),
-			RevokeRefreshTokenGrant:            Flag(flags, "revoke_refresh_token_grant"),
-			DashboardLogStreams:                Flag(flags, "dashboard_log_streams_next"),
-			DashboardInsightsView:              Flag(flags, "dashboard_insights_view"),
-			DisableFieldsMapFix:                Flag(flags, "disable_fields_map_fix"),
+			EnableClientConnections:            value.Bool(flags.GetAttr("enable_client_connections")),
+			EnableAPIsSection:                  value.Bool(flags.GetAttr("enable_apis_section")),
+			EnablePipeline2:                    value.Bool(flags.GetAttr("enable_pipeline2")),
+			EnableDynamicClientRegistration:    value.Bool(flags.GetAttr("enable_dynamic_client_registration")),
+			EnableCustomDomainInEmails:         value.Bool(flags.GetAttr("enable_custom_domain_in_emails")),
+			UniversalLogin:                     value.Bool(flags.GetAttr("universal_login")),
+			EnableLegacyLogsSearchV2:           value.Bool(flags.GetAttr("enable_legacy_logs_search_v2")),
+			DisableClickjackProtectionHeaders:  value.Bool(flags.GetAttr("disable_clickjack_protection_headers")),
+			EnablePublicSignupUserExistsError:  value.Bool(flags.GetAttr("enable_public_signup_user_exists_error")),
+			UseScopeDescriptionsForConsent:     value.Bool(flags.GetAttr("use_scope_descriptions_for_consent")),
+			AllowLegacyDelegationGrantTypes:    value.Bool(flags.GetAttr("allow_legacy_delegation_grant_types")),
+			AllowLegacyROGrantTypes:            value.Bool(flags.GetAttr("allow_legacy_ro_grant_types")),
+			AllowLegacyTokenInfoEndpoint:       value.Bool(flags.GetAttr("allow_legacy_tokeninfo_endpoint")),
+			EnableLegacyProfile:                value.Bool(flags.GetAttr("enable_legacy_profile")),
+			EnableIDTokenAPI2:                  value.Bool(flags.GetAttr("enable_idtoken_api2")),
+			NoDisclosureEnterpriseConnections:  value.Bool(flags.GetAttr("no_disclose_enterprise_connections")),
+			DisableManagementAPISMSObfuscation: value.Bool(flags.GetAttr("disable_management_api_sms_obfuscation")),
+			EnableADFSWAADEmailVerification:    value.Bool(flags.GetAttr("enable_adfs_waad_email_verification")),
+			RevokeRefreshTokenGrant:            value.Bool(flags.GetAttr("revoke_refresh_token_grant")),
+			DashboardLogStreams:                value.Bool(flags.GetAttr("dashboard_log_streams_next")),
+			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
+			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 		}
 
 		return stop
@@ -169,27 +186,40 @@ func expandTenantFlags(flagsList cty.Value) *management.TenantFlags {
 	return tenantFlags
 }
 
-func expandTenantUniversalLogin(d ResourceData) *management.TenantUniversalLogin {
+func expandTenantUniversalLogin(config cty.Value) *management.TenantUniversalLogin {
 	var universalLogin management.TenantUniversalLogin
 
-	List(d, "universal_login").Elem(func(d ResourceData) {
-		List(d, "colors").Elem(func(d ResourceData) {
+	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
+		colors := d.GetAttr("colors")
+
+		colors.ForEachElement(func(_ cty.Value, color cty.Value) (stop bool) {
 			universalLogin.Colors = &management.TenantUniversalLoginColors{
-				Primary:        String(d, "primary"),
-				PageBackground: String(d, "page_background"),
+				Primary:        value.String(color.GetAttr("primary")),
+				PageBackground: value.String(color.GetAttr("page_background")),
 			}
+			return stop
 		})
+		return stop
 	})
+
+	if universalLogin == (management.TenantUniversalLogin{}) {
+		return nil
+	}
 
 	return &universalLogin
 }
 
-func expandTenantSessionCookie(d ResourceData) *management.TenantSessionCookie {
+func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie {
 	var sessionCookie management.TenantSessionCookie
 
-	List(d, "session_cookie").Elem(func(d ResourceData) {
-		sessionCookie.Mode = String(d, "mode")
+	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
+		sessionCookie.Mode = value.String(d.GetAttr("mode"))
+		return stop
 	})
+
+	if sessionCookie == (management.TenantSessionCookie{}) {
+		return nil
+	}
 
 	return &sessionCookie
 }

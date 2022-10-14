@@ -25,6 +25,11 @@ resource "auth0_custom_domain" "my_custom_domain" {
 - `domain` (String) Name of the custom domain.
 - `type` (String) Provisioning type for the custom domain. Options include `auth0_managed_certs` and `self_managed_certs`.
 
+### Optional
+
+- `custom_client_ip_header` (String) The HTTP header to fetch the client's IP address. Cannot be set on auth0_managed domains.
+- `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
+
 ### Read-Only
 
 - `id` (String) The ID of this resource.

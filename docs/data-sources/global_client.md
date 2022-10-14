@@ -101,6 +101,7 @@ Read-Only:
 - `destination` (String)
 - `digest_algorithm` (String)
 - `include_attribute_name_format` (Boolean)
+- `issuer` (String)
 - `lifetime_in_seconds` (Number)
 - `logout` (Map of String)
 - `map_identities` (Boolean)

@@ -3,13 +3,15 @@ package provider
 import (
 	"context"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func newAttackProtection() *schema.Resource {
@@ -301,20 +303,22 @@ func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
+	enabled := false
+
 	result := multierror.Append(
 		api.AttackProtection.UpdateBreachedPasswordDetection(
 			&management.BreachedPasswordDetection{
-				Enabled: auth0.Bool(false),
+				Enabled: &enabled,
 			},
 		),
 		api.AttackProtection.UpdateBruteForceProtection(
 			&management.BruteForceProtection{
-				Enabled: auth0.Bool(false),
+				Enabled: &enabled,
 			},
 		),
 		api.AttackProtection.UpdateSuspiciousIPThrottling(
 			&management.SuspiciousIPThrottling{
-				Enabled: auth0.Bool(false),
+				Enabled: &enabled,
 			},
 		),
 	)
@@ -323,26 +327,15 @@ func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 	}
 
 	d.SetId("")
-
 	return nil
 }
 
 func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []interface{} {
-	var allowList []interface{}
-	for _, ip := range ipt.GetAllowList() {
-		allowList = append(allowList, ip)
-	}
-
-	var shields []interface{}
-	for _, shield := range ipt.GetShields() {
-		shields = append(shields, shield)
-	}
-
 	return []interface{}{
 		map[string]interface{}{
 			"enabled":   ipt.GetEnabled(),
-			"allowlist": allowList,
-			"shields":   shields,
+			"allowlist": ipt.GetAllowList(),
+			"shields":   ipt.GetShields(),
 			"pre_login": []interface{}{
 				map[string]int{
 					"max_attempts": ipt.GetStage().GetPreLogin().GetMaxAttempts(),
@@ -360,155 +353,146 @@ func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []int
 }
 
 func flattenBruteForceProtection(bfp *management.BruteForceProtection) []interface{} {
-	var allowList []interface{}
-	for _, ip := range bfp.GetAllowList() {
-		allowList = append(allowList, ip)
-	}
-
-	var shields []interface{}
-	for _, shield := range bfp.GetShields() {
-		shields = append(shields, shield)
-	}
-
 	return []interface{}{
 		map[string]interface{}{
 			"enabled":      bfp.GetEnabled(),
 			"mode":         bfp.GetMode(),
 			"max_attempts": bfp.GetMaxAttempts(),
-			"shields":      shields,
-			"allowlist":    allowList,
+			"shields":      bfp.GetShields(),
+			"allowlist":    bfp.GetAllowList(),
 		},
 	}
 }
 
 func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection) []interface{} {
-	var adminNotificationFrequency []interface{}
-	for _, frequency := range bpd.GetAdminNotificationFrequency() {
-		adminNotificationFrequency = append(adminNotificationFrequency, frequency)
-	}
-
-	var shields []interface{}
-	for _, shield := range bpd.GetShields() {
-		shields = append(shields, shield)
-	}
-
 	return []interface{}{
 		map[string]interface{}{
 			"enabled":                      bpd.GetEnabled(),
 			"method":                       bpd.GetMethod(),
-			"admin_notification_frequency": adminNotificationFrequency,
-			"shields":                      shields,
+			"admin_notification_frequency": bpd.GetAdminNotificationFrequency(),
+			"shields":                      bpd.GetShields(),
 		},
 	}
 }
 
 func expandSuspiciousIPThrottling(d *schema.ResourceData) *management.SuspiciousIPThrottling {
+	if !d.HasChange("suspicious_ip_throttling") {
+		return nil
+	}
+
+	var iptConfig = d.GetRawConfig().GetAttr("suspicious_ip_throttling")
+	if iptConfig.IsNull() {
+		return nil
+	}
+
 	var ipt *management.SuspiciousIPThrottling
 
-	List(d, "suspicious_ip_throttling", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		ipt = &management.SuspiciousIPThrottling{
-			Enabled: Bool(d, "enabled"),
-		}
-
-		var shields []string
-		for _, shield := range Set(d, "shields", IsNewResource(), HasChange()).List() {
-			shields = append(shields, shield.(string))
-		}
-		if len(shields) > 0 {
-			ipt.Shields = &shields
-		}
-
-		var allowList []string
-		for _, ip := range Set(d, "allowlist", IsNewResource(), HasChange()).List() {
-			allowList = append(allowList, ip.(string))
-		}
-		if len(allowList) > 0 {
-			ipt.AllowList = &allowList
-		}
-
-		List(d, "pre_login", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-			ipt.Stage = &management.Stage{
-				PreLogin: &management.PreLogin{
-					MaxAttempts: Int(d, "max_attempts"),
-					Rate:        Int(d, "rate"),
-				},
-			}
-		})
-
-		List(d, "pre_user_registration", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-			preUserRegistration := &management.PreUserRegistration{
-				MaxAttempts: Int(d, "max_attempts"),
-				Rate:        Int(d, "rate"),
+	iptConfig.ForEachElement(
+		func(_ cty.Value, ipThrottling cty.Value) (stop bool) {
+			ipt = &management.SuspiciousIPThrottling{
+				Enabled:   value.Bool(ipThrottling.GetAttr("enabled")),
+				Shields:   value.Strings(ipThrottling.GetAttr("shields")),
+				AllowList: value.Strings(ipThrottling.GetAttr("allowlist")),
 			}
 
-			if ipt.Stage != nil {
-				ipt.Stage.PreUserRegistration = preUserRegistration
-			} else {
-				ipt.Stage = &management.Stage{
-					PreUserRegistration: preUserRegistration,
-				}
+			pl := ipThrottling.GetAttr("pre_login")
+			if !pl.IsNull() {
+				pl.ForEachElement(
+					func(_ cty.Value, preLogin cty.Value) (stop bool) {
+						ipt.Stage = &management.Stage{
+							PreLogin: &management.PreLogin{
+								MaxAttempts: value.Int(preLogin.GetAttr("max_attempts")),
+								Rate:        value.Int(preLogin.GetAttr("rate")),
+							},
+						}
+
+						return stop
+					},
+				)
 			}
-		})
-	})
+
+			pur := ipThrottling.GetAttr("pre_user_registration")
+			if !pur.IsNull() {
+				pur.ForEachElement(
+					func(_ cty.Value, preUserReg cty.Value) (stop bool) {
+						preUserRegistration := &management.PreUserRegistration{
+							MaxAttempts: value.Int(preUserReg.GetAttr("max_attempts")),
+							Rate:        value.Int(preUserReg.GetAttr("rate")),
+						}
+
+						if ipt.Stage != nil {
+							ipt.Stage.PreUserRegistration = preUserRegistration
+						} else {
+							ipt.Stage = &management.Stage{
+								PreUserRegistration: preUserRegistration,
+							}
+						}
+
+						return stop
+					},
+				)
+			}
+
+			return stop
+		},
+	)
 
 	return ipt
 }
 
 func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForceProtection {
+	if !d.HasChange("brute_force_protection") {
+		return nil
+	}
+
+	bfpConfig := d.GetRawConfig().GetAttr("brute_force_protection")
+	if bfpConfig.IsNull() {
+		return nil
+	}
+
 	var bfp *management.BruteForceProtection
 
-	List(d, "brute_force_protection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		bfp = &management.BruteForceProtection{
-			Enabled:     Bool(d, "enabled"),
-			Mode:        String(d, "mode"),
-			MaxAttempts: Int(d, "max_attempts"),
-		}
+	bfpConfig.ForEachElement(
+		func(_ cty.Value, bruteForce cty.Value) (stop bool) {
+			bfp = &management.BruteForceProtection{
+				Enabled:     value.Bool(bruteForce.GetAttr("enabled")),
+				Mode:        value.String(bruteForce.GetAttr("mode")),
+				MaxAttempts: value.Int(bruteForce.GetAttr("max_attempts")),
+				Shields:     value.Strings(bruteForce.GetAttr("shields")),
+				AllowList:   value.Strings(bruteForce.GetAttr("allowlist")),
+			}
 
-		var shields []string
-		for _, shield := range Set(d, "shields", IsNewResource(), HasChange()).List() {
-			shields = append(shields, shield.(string))
-		}
-		if len(shields) > 0 {
-			bfp.Shields = &shields
-		}
-
-		var allowList []string
-		for _, ip := range Set(d, "allowlist", IsNewResource(), HasChange()).List() {
-			allowList = append(allowList, ip.(string))
-		}
-		if len(allowList) > 0 {
-			bfp.AllowList = &allowList
-		}
-	})
+			return stop
+		},
+	)
 
 	return bfp
 }
 
 func expandBreachedPasswordDetection(d *schema.ResourceData) *management.BreachedPasswordDetection {
+	if !d.HasChange("breached_password_detection") {
+		return nil
+	}
+
+	bpdConfig := d.GetRawConfig().GetAttr("breached_password_detection")
+	if bpdConfig.IsNull() {
+		return nil
+	}
+
 	var bpd *management.BreachedPasswordDetection
 
-	List(d, "breached_password_detection", IsNewResource(), HasChange()).Elem(func(d ResourceData) {
-		bpd = &management.BreachedPasswordDetection{
-			Enabled: Bool(d, "enabled"),
-			Method:  String(d, "method"),
-		}
+	bpdConfig.ForEachElement(
+		func(_ cty.Value, breach cty.Value) (stop bool) {
+			bpd = &management.BreachedPasswordDetection{
+				Enabled:                    value.Bool(breach.GetAttr("enabled")),
+				Method:                     value.String(breach.GetAttr("method")),
+				Shields:                    value.Strings(breach.GetAttr("shields")),
+				AdminNotificationFrequency: value.Strings(breach.GetAttr("admin_notification_frequency")),
+			}
 
-		var shields []string
-		for _, shield := range Set(d, "shields", IsNewResource(), HasChange()).List() {
-			shields = append(shields, shield.(string))
-		}
-		if len(shields) > 0 {
-			bpd.Shields = &shields
-		}
-
-		var adminNotificationFrequency []string
-		for _, frequency := range Set(d, "admin_notification_frequency", IsNewResource(), HasChange()).List() {
-			adminNotificationFrequency = append(adminNotificationFrequency, frequency.(string))
-		}
-		if len(adminNotificationFrequency) > 0 {
-			bpd.AdminNotificationFrequency = &adminNotificationFrequency
-		}
-	})
+			return stop
+		},
+	)
 
 	return bpd
 }

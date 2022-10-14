@@ -16,7 +16,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
-const testAccActionConfigCreate = `
+const testAccActionConfigCreateWithOnlyRequiredFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = "exports.onExecutePostLogin = async (event, api) => {};"
@@ -25,15 +25,10 @@ resource auth0_action my_action {
 		id = "post-login"
 		version = "v3"
 	}
-
-	secrets {
-		name = "foo"
-		value = "111111"
-	}
 }
 `
 
-const testAccActionConfigUpdate = `
+const testAccActionConfigUpdateAllFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = "exports.onContinuePostLogin = async (event, api) => {};"
@@ -52,12 +47,7 @@ resource auth0_action my_action {
 
 	secrets {
 		name = "foo"
-		value = "123456"
-	}
-
-	secrets {
-		name = "bar"
-		value = "654321"
+		value = "111111"
 	}
 }
 `
@@ -77,9 +67,40 @@ resource auth0_action my_action {
 		version = "v3"
 	}
 
+	secrets {
+		name = "foo"
+		value = "123456"
+	}
+
+	secrets {
+		name = "bar"
+		value = "654321"
+	}
+
 	dependencies {
 		name    = "auth0"
 		version = "2.42.0"
+	}
+
+	dependencies {
+		name    = "moment"
+		version = "2.29.4"
+	}
+}
+`
+
+const testAccActionConfigResetToRequiredFields = `
+resource auth0_action my_action {
+	name = "Test Action {{.testName}}"
+	code = <<-EOT
+		exports.onContinuePostLogin = async (event, api) => {
+			console.log(event)
+		};"
+	EOT
+
+	supported_triggers {
+		id = "post-login"
+		version = "v3"
 	}
 }
 `
@@ -91,13 +112,11 @@ func TestAccAction(t *testing.T) {
 		ProviderFactories: testProviders(httpRecorder),
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccActionConfigCreate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigCreateWithOnlyRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "111111"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "false"),
@@ -108,7 +127,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigUpdate, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigUpdateAllFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
@@ -121,11 +140,9 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.name", "auth0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.version", "2.41.0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "2"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "123456"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.name", "bar"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.value", "654321"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "111111"),
 				),
 			},
 			{
@@ -139,32 +156,30 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.id", "post-login"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.version", "v3"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "2"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.name", "auth0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.0.version", "2.42.0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.1.name", "moment"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.1.version", "2.29.4"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "2"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.name", "foo"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.0.value", "123456"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.name", "bar"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.1.value", "654321"),
 				),
 			},
-		},
-	})
-}
-
-func TestAccAction_FailedBuild(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
+				Config: template.ParseTestName(testAccActionConfigResetToRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
-				),
-				ExpectError: regexp.MustCompile(
-					fmt.Sprintf(
-						`action "Test Action %s" failed to build, check the Auth0 UI for errors`,
-						t.Name(),
-					),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
+					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.id", "post-login"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.version", "v3"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 				),
 			},
 		},
@@ -200,17 +215,39 @@ resource auth0_action my_action {
 }
 `
 
+func TestAccAction_FailedBuild(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
+				),
+				ExpectError: regexp.MustCompile(
+					fmt.Sprintf(
+						`action "Test Action %s" failed to build, check the Auth0 UI for errors`,
+						t.Name(),
+					),
+				),
+			},
+		},
+	})
+}
+
 func TestCheckForUntrackedActionSecrets(t *testing.T) {
 	var testCases = []struct {
 		name                 string
 		givenSecretsInConfig []interface{}
-		givenActionSecrets   []*management.ActionSecret
+		givenActionSecrets   []management.ActionSecret
 		expectedDiagnostics  diag.Diagnostics
 	}{
 		{
 			name:                 "action has no secrets",
 			givenSecretsInConfig: []interface{}{},
-			givenActionSecrets:   []*management.ActionSecret{},
+			givenActionSecrets:   []management.ActionSecret{},
 			expectedDiagnostics:  diag.Diagnostics(nil),
 		},
 		{
@@ -220,7 +257,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 					"name": "secretName",
 				},
 			},
-			givenActionSecrets: []*management.ActionSecret{
+			givenActionSecrets: []management.ActionSecret{
 				{
 					Name: auth0.String("secretName"),
 				},
@@ -234,7 +271,7 @@ func TestCheckForUntrackedActionSecrets(t *testing.T) {
 					"name": "secretName",
 				},
 			},
-			givenActionSecrets: []*management.ActionSecret{
+			givenActionSecrets: []management.ActionSecret{
 				{
 					Name: auth0.String("secretName"),
 				},

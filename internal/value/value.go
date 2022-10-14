@@ -8,6 +8,7 @@ package value
 
 import (
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
@@ -109,4 +110,21 @@ func MapFromJSON(rawValue cty.Value) (map[string]interface{}, error) {
 	}
 
 	return structure.ExpandJsonFromString(rawValue.AsString())
+}
+
+// Difference accesses the value held by key and type asserts it to a set. It then
+// compares its changes if any and returns what needs to be added and what
+// needs to be removed.
+func Difference(d *schema.ResourceData, key string) ([]interface{}, []interface{}) {
+	// Zero the add and rm sets. These may be modified if the diff observed any changes.
+	toAdd := d.Get(key).(*schema.Set)
+	toRemove := &schema.Set{}
+
+	if d.HasChange(key) {
+		oldValue, newValue := d.GetChange(key)
+		toAdd = newValue.(*schema.Set).Difference(oldValue.(*schema.Set))
+		toRemove = oldValue.(*schema.Set).Difference(newValue.(*schema.Set))
+	}
+
+	return toAdd.List(), toRemove.List()
 }

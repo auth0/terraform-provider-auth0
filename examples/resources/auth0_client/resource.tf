@@ -48,6 +48,7 @@ resource "auth0_client" "my_client" {
   addons {
     samlp {
       audience = "https://example.com/saml"
+      issuer   = "https://example.com"
       mappings = {
         email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         name  = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"

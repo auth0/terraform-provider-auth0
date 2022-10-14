@@ -22,7 +22,7 @@ func TestAccPromptCustomText(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_prompt_custom_text.prompt_custom_text",
 						"body",
-						"{\n    \"login\": {\n        \"alertListTitle\": \"Alerts\",\n        \"buttonText\": \"Continue\",\n        \"emailPlaceholder\": \"Email address\"\n    }\n}",
+						"{\n    \"login\": {\n        \"alertListTitle\": \"Alerts\",\n        \"buttonText\": \"Continue\",\n        \"emailPlaceholder\": \"Email address\",\n        \"title\": \"Welcome to ${companyName}\"\n    }\n}",
 					),
 				),
 			},
@@ -34,7 +34,7 @@ func TestAccPromptCustomText(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_prompt_custom_text.prompt_custom_text",
 						"body",
-						"{\n    \"login\": {\n        \"alertListTitle\": \"Alerts\",\n        \"buttonText\": \"Proceed\",\n        \"emailPlaceholder\": \"Email Address\"\n    }\n}",
+						"{\n    \"login\": {\n        \"alertListTitle\": \"Alerts\",\n        \"buttonText\": \"Proceed\",\n        \"emailPlaceholder\": \"Email Address\",\n        \"title\": \"Welcome to ${companyName}\"\n    }\n}",
 					),
 				),
 			},
@@ -49,9 +49,10 @@ resource "auth0_prompt_custom_text" "prompt_custom_text" {
   body = jsonencode(
     {
       "login" : {
-        "alertListTitle" : "Alerts",
-        "buttonText" : "Continue",
-        "emailPlaceholder" : "Email address"
+		"alertListTitle" : "Alerts",
+		"buttonText" : "Continue",
+		"emailPlaceholder" : "Email address",
+		"title" : "Welcome to $${companyName}"
       }
     }
   )
@@ -65,9 +66,10 @@ resource "auth0_prompt_custom_text" "prompt_custom_text" {
   body = jsonencode(
     {
       "login" : {
-        "alertListTitle" : "Alerts",
-        "buttonText" : "Proceed",
-        "emailPlaceholder" : "Email Address"
+		"alertListTitle" : "Alerts",
+		"buttonText" : "Proceed",
+		"emailPlaceholder" : "Email Address",
+		"title" : "Welcome to $${companyName}"
       }
     }
   )

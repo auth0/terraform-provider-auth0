@@ -573,6 +573,7 @@ resource "auth0_client" "my_client" {
 	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
 	cross_origin_auth = false
+	client_aliases = [ "https://example.com/audience" ]
 	callbacks = [ "https://example.com/callback" ]
 	allowed_origins = [ "https://example.com" ]
 	allowed_clients = [ "https://allowed.example.com" ]
@@ -605,6 +606,7 @@ resource "auth0_client" "my_client" {
 	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
 	cross_origin_auth = true
+	client_aliases = [ ]
 	callbacks = [ ]
 	allowed_origins = [ ]
 	allowed_clients = [ ]
@@ -669,6 +671,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
+					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_aliases"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "callbacks"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "allowed_logout_urls"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "allowed_origins"),
@@ -727,6 +730,8 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.0", "https://example.com/audience"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.0", "https://example.com/callback"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_logout_urls.#", "1"),
@@ -786,6 +791,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_origins.#", "0"),

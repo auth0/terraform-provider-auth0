@@ -21,6 +21,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
 		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
+		ClientAliases:                  value.Strings(config.GetAttr("client_aliases")),
 		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
 		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
 		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),

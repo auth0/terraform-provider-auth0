@@ -55,7 +55,7 @@ func newAction() *schema.Resource {
 				},
 				Description: "List of triggers that this action supports. " +
 					"At this time, an action can only target a single trigger at a time. " +
-					"Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers)" +
+					"Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers) " +
 					"to retrieve the latest trigger versions supported.",
 			},
 			"code": {

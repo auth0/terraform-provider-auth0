@@ -36,8 +36,6 @@ Retrieve the set of triggers available within actions by clicking on the **Try**
 [https://auth0.com/docs/api/management/v2#!/Actions/get_triggers](https://auth0.com/docs/api/management/v2#!/Actions/get_triggers).
 
 <img alt="get_api_explorer_token_5" src="https://user-images.githubusercontent.com/28300158/196166349-8e4414ab-a110-4cf6-9343-dcc75a46146d.png">
-
-
 At the time of writing (_2022-10-17_) the available triggers are the following:
 
 ```json

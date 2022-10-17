@@ -119,10 +119,11 @@ func newResourceServer() *schema.Resource {
 				Description: "Used to store additional metadata.",
 			},
 			"enforce_policies": {
-				Type:        schema.TypeBool,
-				Computed:    true,
-				Optional:    true,
-				Description: "Indicates whether authorization polices are enforced.",
+				Type:     schema.TypeBool,
+				Computed: true,
+				Optional: true,
+				Description: "If this setting is enabled, RBAC authorization policies will be enforced for this API. " +
+					"Role and permission assignments will be evaluated during the login transaction.",
 			},
 			"token_dialect": {
 				Type:     schema.TypeString,
@@ -132,7 +133,9 @@ func newResourceServer() *schema.Resource {
 					"access_token_authz",
 				}, true),
 				Description: "Dialect of access tokens that should be issued for this resource server. " +
-					"Options include `access_token` or `access_token_authz` (includes permissions).",
+					"Options include `access_token` or `access_token_authz`. " +
+					"If this setting is set to `access_token_authz`, the Permissions claim will be added to the access token. " +
+					"Only available if RBAC (`enforce_policies`) is enabled for this API.",
 			},
 		},
 	}

@@ -61,7 +61,7 @@ resource "auth0_action" "my_action" {
 
 - `code` (String) The source code of the action.
 - `name` (String) The name of the action.
-- `supported_triggers` (Block List, Min: 1, Max: 1) List of triggers that this action supports. At this time, an action can only target a single trigger at a time. (see [below for nested schema](#nestedblock--supported_triggers))
+- `supported_triggers` (Block List, Min: 1, Max: 1) List of triggers that this action supports. At this time, an action can only target a single trigger at a time. Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers)to retrieve the latest trigger versions supported. (see [below for nested schema](#nestedblock--supported_triggers))
 
 ### Optional
 

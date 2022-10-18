@@ -11,12 +11,11 @@ A trigger is an extensibility point to which actions can be bound.
 
 ## Get an API Explorer Token
 
-Head to the APIs section of your [Auth0 Dashboard](https://manage.auth0.com/#/apis) and click on the 
-**Auth0 Management API**.
+Head to the APIs section of your [Auth0 Dashboard](https://manage.auth0.com/#/apis) and select **Auth0 Management API**.
 
 <img alt="get_api_explorer_token_1" src="https://user-images.githubusercontent.com/28300158/196163108-1a871ae9-7d98-4c4b-bb9f-a1fbf2e3fe8f.png">
 
-Click on the **Create & Authorize Test Application** within the **API Explorer** tab.
+Select **Create & Authorize Test Application** within the **API Explorer** tab.
 
 <img alt="get_api_explorer_token_2" src="https://user-images.githubusercontent.com/28300158/196164274-785a39bf-e774-4d3d-a56b-c9b2b5c9149c.png">
 
@@ -24,15 +23,15 @@ Copy the **Token** contents and go to the [Management API Explorer](https://auth
 
 <img alt="get_api_explorer_token_3" src="https://user-images.githubusercontent.com/28300158/196165167-e0e4b86d-8536-4613-9c61-7faec6dec8f9.png">
 
-Click the **Set API Token** button at the top left.
+Select **Set API Token** button at the top left.
 
 Set the **API Token** by pasting the **Token** that you copied above.
 
-Click the **Set Token** button.
+Select **Set Token** button.
 
 <img alt="get_api_explorer_token_4" src="https://user-images.githubusercontent.com/28300158/196165357-6a2c3b69-2219-46eb-af2b-66665945bc75.png">
 
-Retrieve the set of triggers available within actions by clicking on the **Try** button at 
+Retrieve the set of triggers available within actions by selecting the **Try** button at 
 [https://auth0.com/docs/api/management/v2#!/Actions/get_triggers](https://auth0.com/docs/api/management/v2#!/Actions/get_triggers).
 
 <img alt="get_api_explorer_token_5" src="https://user-images.githubusercontent.com/28300158/196166349-8e4414ab-a110-4cf6-9343-dcc75a46146d.png">

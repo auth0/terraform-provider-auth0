@@ -287,5 +287,9 @@ func flattenResourceServerScopes(resourceServerScopes []management.ResourceServe
 }
 
 func isManagementAPI(state cty.Value) bool {
+	if state.IsNull() {
+		return false
+	}
+
 	return state.GetAttr("name").AsString() == auth0ManagementAPI
 }

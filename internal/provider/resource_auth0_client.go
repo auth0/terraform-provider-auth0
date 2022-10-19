@@ -789,10 +789,10 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
 		d.Set("addons", flattenClientAddons(client.Addons)),
-		d.Set("client_metadata", client.GetClientMetadata()),
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
+		d.Set("client_metadata", client.ClientMetadata),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

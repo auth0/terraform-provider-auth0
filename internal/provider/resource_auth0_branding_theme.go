@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -37,34 +38,40 @@ func newBrandingTheme() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"buttons_style": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Buttons style.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"pill", "rounded", "sharp"}, false),
+							Required:     true,
+							Description:  "Buttons style. Available options: `pill`, `rounded`, `sharp`.",
 						},
 						"button_border_radius": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Button border radius.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(1, 10),
+							Required:     true,
+							Description:  "Button border radius. Value needs to be between `1` and `10`.",
 						},
 						"button_border_weight": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Button border weight.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(0, 10),
+							Required:     true,
+							Description:  "Button border weight. Value needs to be between `0` and `10`.",
 						},
 						"inputs_style": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Inputs style.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"pill", "rounded", "sharp"}, false),
+							Required:     true,
+							Description:  "Inputs style. Available options: `pill`, `rounded`, `sharp`.",
 						},
 						"input_border_radius": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Input border radius.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(0, 10),
+							Required:     true,
+							Description:  "Input border radius. Value needs to be between `0` and `10`.",
 						},
 						"input_border_weight": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Input border weight.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(0, 3),
+							Required:     true,
+							Description:  "Input border weight. Value needs to be between `0` and `3`.",
 						},
 						"show_widget_shadow": {
 							Type:        schema.TypeBool,
@@ -72,14 +79,16 @@ func newBrandingTheme() *schema.Resource {
 							Description: "Show widget shadow.",
 						},
 						"widget_corner_radius": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Widget corner radius.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(0, 50),
+							Required:     true,
+							Description:  "Widget corner radius. Value needs to be between `0` and `50`.",
 						},
 						"widget_border_weight": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Widget border weight.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(0, 10),
+							Required:     true,
+							Description:  "Widget border weight. Value needs to be between `0` and `10`.",
 						},
 					},
 				},
@@ -202,9 +211,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Body text bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Body text size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(0, 150),
+										Required:     true,
+										Description:  "Body text size. Value needs to be between `0` and `150`.",
 									},
 								},
 							},
@@ -222,9 +232,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Buttons text bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Buttons text size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(0, 150),
+										Required:     true,
+										Description:  "Buttons text size. Value needs to be between `0` and `150`.",
 									},
 								},
 							},
@@ -247,9 +258,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Input labels bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Input labels size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(0, 150),
+										Required:     true,
+										Description:  "Input labels size. Value needs to be between `0` and `150`.",
 									},
 								},
 							},
@@ -267,9 +279,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Links bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Links size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(0, 150),
+										Required:     true,
+										Description:  "Links size. Value needs to be between `0` and `150`.",
 									},
 								},
 							},
@@ -280,9 +293,10 @@ func newBrandingTheme() *schema.Resource {
 							Description: "Links style.",
 						},
 						"reference_text_size": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Reference text size.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(12, 24),
+							Required:     true,
+							Description:  "Reference text size. Value needs to be between `12` and `24`.",
 						},
 						"subtitle": {
 							Type:        schema.TypeList,
@@ -297,9 +311,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Subtitle bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Subtitle size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(0, 150),
+										Required:     true,
+										Description:  "Subtitle size. Value needs to be between `0` and `150`.",
 									},
 								},
 							},
@@ -317,9 +332,10 @@ func newBrandingTheme() *schema.Resource {
 										Description: "Title bold.",
 									},
 									"size": {
-										Type:        schema.TypeInt,
-										Required:    true,
-										Description: "Title size.",
+										Type:         schema.TypeFloat,
+										ValidateFunc: validation.FloatBetween(75, 150),
+										Required:     true,
+										Description:  "Title size. Value needs to be between `75` and `150`.",
 									},
 								},
 							},
@@ -344,9 +360,10 @@ func newBrandingTheme() *schema.Resource {
 							Description: "Background image url.",
 						},
 						"page_layout": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Page layout.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"center", "left", "right"}, false),
+							Required:     true,
+							Description:  "Page layout. Available options: `center`, `left`, `right`.",
 						},
 					},
 				},
@@ -358,19 +375,22 @@ func newBrandingTheme() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"header_text_alignment": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Header text alignment.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"center", "left", "right"}, false),
+							Required:     true,
+							Description:  "Header text alignment. Available options: `center`, `left`, `right`.",
 						},
 						"logo_height": {
-							Type:        schema.TypeInt,
-							Required:    true,
-							Description: "Logo height.",
+							Type:         schema.TypeFloat,
+							ValidateFunc: validation.FloatBetween(1, 100),
+							Required:     true,
+							Description:  "Logo height. Value needs to be between `1` and `100`.",
 						},
 						"logo_position": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Logo position.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"center", "left", "right", "none"}, false),
+							Required:     true,
+							Description:  "Logo position. Available options: `center`, `left`, `right`, `none`.",
 						},
 						"logo_url": {
 							Type:        schema.TypeString,
@@ -378,9 +398,10 @@ func newBrandingTheme() *schema.Resource {
 							Description: "Logo url.",
 						},
 						"social_buttons_layout": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Social buttons layout.",
+							Type:         schema.TypeString,
+							ValidateFunc: validation.StringInSlice([]string{"bottom", "top"}, false),
+							Required:     true,
+							Description:  "Social buttons layout.  Available options: `bottom`, `top`.",
 						},
 					},
 				},
@@ -465,15 +486,15 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 	}
 
 	brandingTheme.Borders = management.BrandingThemeBorders{
-		ButtonBorderRadius: data.Get("borders.0.button_border_radius").(int),
-		ButtonBorderWeight: data.Get("borders.0.button_border_weight").(int),
+		ButtonBorderRadius: data.Get("borders.0.button_border_radius").(float64),
+		ButtonBorderWeight: data.Get("borders.0.button_border_weight").(float64),
 		ButtonsStyle:       data.Get("borders.0.buttons_style").(string),
-		InputBorderRadius:  data.Get("borders.0.input_border_radius").(int),
-		InputBorderWeight:  data.Get("borders.0.input_border_weight").(int),
+		InputBorderRadius:  data.Get("borders.0.input_border_radius").(float64),
+		InputBorderWeight:  data.Get("borders.0.input_border_weight").(float64),
 		InputsStyle:        data.Get("borders.0.inputs_style").(string),
 		ShowWidgetShadow:   data.Get("borders.0.show_widget_shadow").(bool),
-		WidgetBorderWeight: data.Get("borders.0.widget_border_weight").(int),
-		WidgetCornerRadius: data.Get("borders.0.widget_corner_radius").(int),
+		WidgetBorderWeight: data.Get("borders.0.widget_border_weight").(float64),
+		WidgetCornerRadius: data.Get("borders.0.widget_corner_radius").(float64),
 	}
 
 	colorsConfig := config.GetAttr("colors").Index(cty.NumberIntVal(0))
@@ -502,37 +523,37 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 	brandingTheme.Fonts = management.BrandingThemeFonts{
 		FontURL:           data.Get("fonts.0.font_url").(string),
 		LinksStyle:        data.Get("fonts.0.links_style").(string),
-		ReferenceTextSize: data.Get("fonts.0.reference_text_size").(int),
+		ReferenceTextSize: data.Get("fonts.0.reference_text_size").(float64),
 	}
 
 	brandingTheme.Fonts.BodyText = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.body_text.0.bold").(bool),
-		Size: data.Get("fonts.0.body_text.0.size").(int),
+		Size: data.Get("fonts.0.body_text.0.size").(float64),
 	}
 
 	brandingTheme.Fonts.ButtonsText = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.buttons_text.0.bold").(bool),
-		Size: data.Get("fonts.0.buttons_text.0.size").(int),
+		Size: data.Get("fonts.0.buttons_text.0.size").(float64),
 	}
 
 	brandingTheme.Fonts.InputLabels = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.input_labels.0.bold").(bool),
-		Size: data.Get("fonts.0.input_labels.0.size").(int),
+		Size: data.Get("fonts.0.input_labels.0.size").(float64),
 	}
 
 	brandingTheme.Fonts.Links = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.links.0.bold").(bool),
-		Size: data.Get("fonts.0.links.0.size").(int),
+		Size: data.Get("fonts.0.links.0.size").(float64),
 	}
 
 	brandingTheme.Fonts.Subtitle = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.subtitle.0.bold").(bool),
-		Size: data.Get("fonts.0.subtitle.0.size").(int),
+		Size: data.Get("fonts.0.subtitle.0.size").(float64),
 	}
 
 	brandingTheme.Fonts.Title = management.BrandingThemeText{
 		Bold: data.Get("fonts.0.title.0.bold").(bool),
-		Size: data.Get("fonts.0.title.0.size").(int),
+		Size: data.Get("fonts.0.title.0.size").(float64),
 	}
 
 	brandingTheme.PageBackground = management.BrandingThemePageBackground{
@@ -543,7 +564,7 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 
 	brandingTheme.Widget = management.BrandingThemeWidget{
 		HeaderTextAlignment: data.Get("widget.0.header_text_alignment").(string),
-		LogoHeight:          data.Get("widget.0.logo_height").(int),
+		LogoHeight:          data.Get("widget.0.logo_height").(float64),
 		LogoPosition:        data.Get("widget.0.logo_position").(string),
 		LogoURL:             data.Get("widget.0.logo_url").(string),
 		SocialButtonsLayout: data.Get("widget.0.social_buttons_layout").(string),

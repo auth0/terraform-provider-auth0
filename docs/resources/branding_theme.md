@@ -119,15 +119,15 @@ resource "auth0_branding_theme" "my_theme" {
 
 Required:
 
-- `button_border_radius` (Number) Button border radius.
-- `button_border_weight` (Number) Button border weight.
-- `buttons_style` (String) Buttons style.
-- `input_border_radius` (Number) Input border radius.
-- `input_border_weight` (Number) Input border weight.
-- `inputs_style` (String) Inputs style.
+- `button_border_radius` (Number) Button border radius. Value needs to be between `1` and `10`.
+- `button_border_weight` (Number) Button border weight. Value needs to be between `0` and `10`.
+- `buttons_style` (String) Buttons style. Available options: `pill`, `rounded`, `sharp`.
+- `input_border_radius` (Number) Input border radius. Value needs to be between `0` and `10`.
+- `input_border_weight` (Number) Input border weight. Value needs to be between `0` and `3`.
+- `inputs_style` (String) Inputs style. Available options: `pill`, `rounded`, `sharp`.
 - `show_widget_shadow` (Boolean) Show widget shadow.
-- `widget_border_weight` (Number) Widget border weight.
-- `widget_corner_radius` (Number) Widget corner radius.
+- `widget_border_weight` (Number) Widget border weight. Value needs to be between `0` and `10`.
+- `widget_corner_radius` (Number) Widget corner radius. Value needs to be between `0` and `50`.
 
 
 <a id="nestedblock--colors"></a>
@@ -169,7 +169,7 @@ Required:
 - `input_labels` (Block List, Min: 1, Max: 1) Input labels. (see [below for nested schema](#nestedblock--fonts--input_labels))
 - `links` (Block List, Min: 1, Max: 1) Links. (see [below for nested schema](#nestedblock--fonts--links))
 - `links_style` (String) Links style.
-- `reference_text_size` (Number) Reference text size.
+- `reference_text_size` (Number) Reference text size. Value needs to be between `12` and `24`.
 - `subtitle` (Block List, Min: 1, Max: 1) Subtitle. (see [below for nested schema](#nestedblock--fonts--subtitle))
 - `title` (Block List, Min: 1, Max: 1) Title. (see [below for nested schema](#nestedblock--fonts--title))
 
@@ -179,7 +179,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Body text bold.
-- `size` (Number) Body text size.
+- `size` (Number) Body text size. Value needs to be between `0` and `150`.
 
 
 <a id="nestedblock--fonts--buttons_text"></a>
@@ -188,7 +188,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Buttons text bold.
-- `size` (Number) Buttons text size.
+- `size` (Number) Buttons text size. Value needs to be between `0` and `150`.
 
 
 <a id="nestedblock--fonts--input_labels"></a>
@@ -197,7 +197,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Input labels bold.
-- `size` (Number) Input labels size.
+- `size` (Number) Input labels size. Value needs to be between `0` and `150`.
 
 
 <a id="nestedblock--fonts--links"></a>
@@ -206,7 +206,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Links bold.
-- `size` (Number) Links size.
+- `size` (Number) Links size. Value needs to be between `0` and `150`.
 
 
 <a id="nestedblock--fonts--subtitle"></a>
@@ -215,7 +215,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Subtitle bold.
-- `size` (Number) Subtitle size.
+- `size` (Number) Subtitle size. Value needs to be between `0` and `150`.
 
 
 <a id="nestedblock--fonts--title"></a>
@@ -224,7 +224,7 @@ Required:
 Required:
 
 - `bold` (Boolean) Title bold.
-- `size` (Number) Title size.
+- `size` (Number) Title size. Value needs to be between `75` and `150`.
 
 
 
@@ -235,7 +235,7 @@ Required:
 
 - `background_color` (String) Background color.
 - `background_image_url` (String) Background image url.
-- `page_layout` (String) Page layout.
+- `page_layout` (String) Page layout. Available options: `center`, `left`, `right`.
 
 
 <a id="nestedblock--widget"></a>
@@ -243,11 +243,11 @@ Required:
 
 Required:
 
-- `header_text_alignment` (String) Header text alignment.
-- `logo_height` (Number) Logo height.
-- `logo_position` (String) Logo position.
+- `header_text_alignment` (String) Header text alignment. Available options: `center`, `left`, `right`.
+- `logo_height` (Number) Logo height. Value needs to be between `1` and `100`.
+- `logo_position` (String) Logo position. Available options: `center`, `left`, `right`, `none`.
 - `logo_url` (String) Logo url.
-- `social_buttons_layout` (String) Social buttons layout.
+- `social_buttons_layout` (String) Social buttons layout.  Available options: `bottom`, `top`.
 
 ## Import
 

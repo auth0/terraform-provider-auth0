@@ -315,9 +315,14 @@ var connectionSchema = map[string]*schema.Schema{
 					Description: "Icon URL.",
 				},
 				"identity_api": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "Identity API.",
+					Type:     schema.TypeString,
+					Optional: true,
+					ValidateFunc: validation.StringInSlice([]string{
+						"microsoft-identity-platform-v2.0",
+						"azure-active-directory-v1.0",
+					}, false),
+					Description: "Azure AD Identity API. Available options are: " +
+						"`microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.",
 				},
 				"ips": {
 					Type:        schema.TypeSet,

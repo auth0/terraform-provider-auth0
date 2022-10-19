@@ -3,6 +3,7 @@ package provider
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"testing"
 
@@ -169,3 +170,55 @@ resource "auth0_resource_server" "my_resource_server" {
 	name = "Acceptance Test - {{.testName}}"
 }
 `
+
+func TestAccResourceServerAuth0APIManagement(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+		t.Skip()
+	}
+
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_resource_server" "auth0" {
+	name = "Auth0 Management API"
+	identifier = "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"
+	token_lifetime = 86400
+	skip_consent_for_verifiable_first_party_clients = false
+}
+`,
+				ResourceName:       "auth0_resource_server.auth0",
+				ImportState:        true,
+				ImportStateId:      "xxxxxxxxxxxxxxxxxxxx",
+				ImportStatePersist: true,
+			},
+			{
+				Config: `
+resource "auth0_resource_server" "auth0" {
+	name = "Auth0 Management API"
+	identifier = "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"
+	token_lifetime = 86400
+	skip_consent_for_verifiable_first_party_clients = false
+}
+`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "name", "Auth0 Management API"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "identifier", "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "token_lifetime", "86400"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "skip_consent_for_verifiable_first_party_clients", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "allow_offline_access", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "token_lifetime_for_web", "7200"),
+					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "scopes.#", "0"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "verification_location"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "options"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "enforce_policies"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "token_dialect"),
+				),
+			},
+		},
+	})
+}

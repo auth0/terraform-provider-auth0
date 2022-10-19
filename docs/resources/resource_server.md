@@ -52,7 +52,7 @@ resource "auth0_resource_server" "my_resource_server" {
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token` or `access_token_authz`. If this setting is set to `access_token_authz`, the Permissions claim will be added to the access token. Only available if RBAC (`enforce_policies`) is enabled for this API.
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
-- `verification_location` (String)
+- `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
 
 ### Read-Only
 

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -15,6 +14,8 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
+
+const auth0ManagementAPI = "Auth0 Management API"
 
 func newResourceServer() *schema.Resource {
 	return &schema.Resource{
@@ -111,6 +112,8 @@ func newResourceServer() *schema.Resource {
 			"verification_location": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Description: "URL from which to retrieve JWKs for this resource server. " +
+					"Used for verifying the JWT sent to Auth0 for token introspection.",
 			},
 			"options": {
 				Type:        schema.TypeMap,
@@ -149,7 +152,7 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(resourceServer.ID))
+	d.SetId(resourceServer.GetID())
 
 	return readResourceServer(ctx, d, m)
 }
@@ -169,21 +172,27 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 	result := multierror.Append(
 		d.Set("name", resourceServer.GetName()),
 		d.Set("identifier", resourceServer.GetIdentifier()),
-		d.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
+		d.Set("token_lifetime", resourceServer.GetTokenLifetime()),
+		d.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
+		d.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
 		d.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
 		d.Set("signing_secret", resourceServer.GetSigningSecret()),
-		d.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
-		d.Set("token_lifetime", resourceServer.GetTokenLifetime()),
-		d.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
 		d.Set(
 			"skip_consent_for_verifiable_first_party_clients",
 			resourceServer.GetSkipConsentForVerifiableFirstPartyClients(),
 		),
-		d.Set("verification_location", resourceServer.GetVerificationLocation()),
-		d.Set("options", resourceServer.GetOptions()),
-		d.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
-		d.Set("token_dialect", resourceServer.GetTokenDialect()),
 	)
+
+	if resourceServer.GetName() != auth0ManagementAPI {
+		result = multierror.Append(
+			result,
+			d.Set("verification_location", resourceServer.GetVerificationLocation()),
+			d.Set("options", resourceServer.GetOptions()),
+			d.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
+			d.Set("token_dialect", resourceServer.GetTokenDialect()),
+			d.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
+		)
+	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }
@@ -200,6 +209,11 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	if isManagementAPI(d.GetRawState()) {
+		d.SetId("")
+		return nil
+	}
+
 	api := m.(*management.Management)
 
 	if err := api.ResourceServer.Delete(d.Id()); err != nil {
@@ -218,30 +232,27 @@ func expandResourceServer(d *schema.ResourceData) *management.ResourceServer {
 	config := d.GetRawConfig()
 
 	resourceServer := &management.ResourceServer{
-		Name:                 value.String(config.GetAttr("name")),
-		SigningAlgorithm:     value.String(config.GetAttr("signing_alg")),
-		AllowOfflineAccess:   value.Bool(config.GetAttr("allow_offline_access")),
-		TokenLifetime:        value.Int(config.GetAttr("token_lifetime")),
-		TokenLifetimeForWeb:  value.Int(config.GetAttr("token_lifetime_for_web")),
-		VerificationLocation: value.String(config.GetAttr("verification_location")),
-		EnforcePolicies:      value.Bool(config.GetAttr("enforce_policies")),
-		Options:              value.MapOfStrings(config.GetAttr("options")),
+		TokenLifetime: value.Int(config.GetAttr("token_lifetime")),
 		SkipConsentForVerifiableFirstPartyClients: value.Bool(
 			config.GetAttr("skip_consent_for_verifiable_first_party_clients"),
 		),
-		Scopes: expandResourceServerScopes(config.GetAttr("scopes")),
 	}
 
 	if d.IsNewResource() {
 		resourceServer.Identifier = value.String(config.GetAttr("identifier"))
 	}
 
-	if d.IsNewResource() || d.HasChange("signing_secret") {
+	if !isManagementAPI(d.GetRawState()) {
+		resourceServer.Name = value.String(config.GetAttr("name"))
+		resourceServer.Scopes = expandResourceServerScopes(config.GetAttr("scopes"))
+		resourceServer.SigningAlgorithm = value.String(config.GetAttr("signing_alg"))
 		resourceServer.SigningSecret = value.String(config.GetAttr("signing_secret"))
-	}
-
-	if d.IsNewResource() || d.HasChange("token_dialect") {
+		resourceServer.AllowOfflineAccess = value.Bool(config.GetAttr("allow_offline_access"))
+		resourceServer.TokenLifetimeForWeb = value.Int(config.GetAttr("token_lifetime_for_web"))
+		resourceServer.EnforcePolicies = value.Bool(config.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(config.GetAttr("token_dialect"))
+		resourceServer.VerificationLocation = value.String(config.GetAttr("verification_location"))
+		resourceServer.Options = value.MapOfStrings(config.GetAttr("options"))
 	}
 
 	return resourceServer
@@ -273,4 +284,12 @@ func flattenResourceServerScopes(resourceServerScopes []management.ResourceServe
 	}
 
 	return scopes
+}
+
+func isManagementAPI(state cty.Value) bool {
+	if state.IsNull() {
+		return false
+	}
+
+	return state.GetAttr("name").AsString() == auth0ManagementAPI
 }

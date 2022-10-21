@@ -116,12 +116,16 @@ func newEmail() *schema.Resource {
 func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
+	d.SetId(resource.UniqueId())
+
+	if emailProviderIsConfigured(api) {
+		return updateEmail(ctx, d, m)
+	}
+
 	email := expandEmail(d.GetRawConfig())
 	if err := api.Email.Create(email); err != nil {
 		return diag.FromErr(err)
 	}
-
-	d.SetId(resource.UniqueId())
 
 	return readEmail(ctx, d, m)
 }
@@ -169,6 +173,15 @@ func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 
 	d.SetId("")
 	return nil
+}
+
+func emailProviderIsConfigured(api *management.Management) bool {
+	_, err := api.Email.Read()
+	if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+		return false
+	}
+
+	return true
 }
 
 func expandEmail(config cty.Value) *management.Email {

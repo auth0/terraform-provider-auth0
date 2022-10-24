@@ -106,6 +106,31 @@ resource "auth0_connection" "google_oauth2" {
 }
 ```
 
+### Google Apps
+
+```terraform
+resource "auth0_connection" "google_apps" {
+  name                 = "connection-google-apps"
+  is_domain_connection = false
+  strategy             = "google-apps"
+  show_as_button       = false
+  options {
+    client_id        = ""
+    client_secret    = ""
+    domain           = "example.com"
+    tenant_domain    = "example.com"
+    domain_aliases   = ["example.com", "api.example.com"]
+    api_enable_users = true
+    scopes           = ["ext_profile", "ext_groups"]
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
+  }
+}
+```
+
 ### Facebook Connection
 
 ```terraform
@@ -221,6 +246,69 @@ resource "auth0_connection" "oauth2" {
         }
       EOF
     }
+  }
+}
+```
+
+### Active Directory (AD)
+
+```terraform
+resource "auth0_connection" "ad" {
+  name           = "connection-active-directory"
+  strategy       = "ad"
+  show_as_button = true
+  options {
+    brute_force_protection = true
+    tenant_domain          = "example.com"
+    domain_aliases = [
+      "example.com",
+      "api.example.com"
+    ]
+    ips                      = ["192.168.1.1", "192.168.1.2"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
+  }
+}
+```
+
+### Azure AD Connection
+
+```terraform
+resource "auth0_connection" "azure_ad" {
+  name           = "connection-azure-ad"
+  strategy       = "waad"
+  show_as_button = true
+  options {
+    identity_api  = "azure-active-directory-v1.0"
+    client_id     = "123456"
+    client_secret = "123456"
+    tenant_domain = "example.onmicrosoft.com"
+    domain        = "example.onmicrosoft.com"
+    domain_aliases = [
+      "example.com",
+      "api.example.com"
+    ]
+    use_wsfed            = false
+    waad_protocol        = "openid-connect"
+    waad_common_endpoint = false
+    api_enable_users     = true
+    scopes = [
+      "basic_profile",
+      "ext_groups",
+      "ext_profile"
+    ]
+    set_user_root_attributes               = "on_each_login"
+    should_trust_email_verified_connection = "never_set_emails_as_verified"
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
   }
 }
 ```
@@ -371,6 +459,36 @@ resource "auth0_connection" "windowslive" {
     client_secret    = "<client-secret>"
     strategy_version = 2
     scopes           = ["signin", "graph_user"]
+  }
+}
+```
+
+### OIDC Connection
+
+```terraform
+# This is an example of an OIDC connection.
+
+resource "auth0_connection" "oidc" {
+  name           = "oidc-connection"
+  display_name   = "OIDC Connection"
+  strategy       = "oidc"
+  show_as_button = false
+
+  options {
+    client_id     = "1234567"
+    client_secret = "1234567"
+    domain_aliases = [
+      "example.com"
+    ]
+    type                     = "front_channel"
+    issuer                   = "https://www.paypalobjects.com"
+    jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
+    discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"
+    token_endpoint           = "https://api.paypal.com/v1/oauth2/token"
+    userinfo_endpoint        = "https://api.paypal.com/v1/oauth2/token/userinfo"
+    authorization_endpoint   = "https://www.paypal.com/signin/authorize"
+    scopes                   = ["openid", "email"]
+    set_user_root_attributes = "on_first_login"
   }
 }
 ```

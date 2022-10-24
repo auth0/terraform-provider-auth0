@@ -1,5 +1,5 @@
 ---
-page_title: "Getting Started"
+page_title: Quickstart
 description: |-
 Quickly get started with the Auth0 Provider.
 ---

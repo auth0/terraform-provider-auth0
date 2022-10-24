@@ -1,3 +1,25 @@
+## 0.39.0
+
+FEATURES:
+
+- `resource/auth0_client`: Added `addons.samlp.issuer` ([#334](https://github.com/auth0/terraform-provider-auth0/pull/334))
+- `resource/auth0_client`: Added `client_aliases` ([#367](https://github.com/auth0/terraform-provider-auth0/pull/367))
+- `resource/auth0_custom_domain`: Added `custom_client_ip_header` and `tls_policy` ([#335](https://github.com/auth0/terraform-provider-auth0/pull/335))
+
+BUG FIXES:
+
+- `resource/auth0_branding`: Ignored 404 error when fetching universal login content ([#359](https://github.com/auth0/terraform-provider-auth0/pull/359))
+- `resource/auth0_branding_theme`: Improved precision of fields with `float64` instead of `int` ([#369](https://github.com/auth0/terraform-provider-auth0/pull/369))
+- `resource/auth0_resource_server`: Fixed managing auth0 management api ([#374](https://github.com/auth0/terraform-provider-auth0/pull/374))
+- `resource/auth0_client`: Fixed update behavior of `client_metadata` ([#362](https://github.com/auth0/terraform-provider-auth0/pull/362))
+- `resource/auth0_connection`: Added validation on `identity_api` for `waad` connections ([#361](https://github.com/auth0/terraform-provider-auth0/pull/361))
+
+NOTES:
+
+- `resource/auth0_resource_server`: Improved RBAC docs ([#371](https://github.com/auth0/terraform-provider-auth0/pull/371))
+- `resource/auth0_action`: Added guide on how to retrieve available action triggers ([#370](https://github.com/auth0/terraform-provider-auth0/pull/370))
+- `resource/auth0_prompt_custom_text`: Escaped dollar sign references in docs ([#366](https://github.com/auth0/terraform-provider-auth0/pull/366))
+
 ## 0.38.0
 
 This release focuses primarily on setting fields to empty values consistently across all resources.

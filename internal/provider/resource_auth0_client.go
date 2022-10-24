@@ -55,6 +55,14 @@ func newClient() *schema.Resource {
 				Description: "Custom metadata for the rotation. " +
 					"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).",
 			},
+			"client_aliases": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional:    true,
+				Description: "List of audiences/realms for SAML protocol. Used by the wsfed addon.",
+			},
 			"app_type": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -752,6 +760,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	result := multierror.Append(
 		d.Set("client_id", client.GetClientID()),
 		d.Set("client_secret", client.GetClientSecret()),
+		d.Set("client_aliases", client.GetClientAliases()),
 		d.Set("name", client.GetName()),
 		d.Set("description", client.GetDescription()),
 		d.Set("app_type", client.GetAppType()),
@@ -780,10 +789,10 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
 		d.Set("addons", flattenClientAddons(client.Addons)),
-		d.Set("client_metadata", client.GetClientMetadata()),
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
+		d.Set("client_metadata", client.ClientMetadata),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

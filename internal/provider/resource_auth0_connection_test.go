@@ -269,6 +269,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "name", fmt.Sprintf("Acceptance-Test-Azure-AD-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "strategy", "waad"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.identity_api", "azure-active-directory-v1.0"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
@@ -295,6 +296,7 @@ resource "auth0_connection" "azure_ad" {
 	strategy = "waad"
 	show_as_button = true
 	options {
+		identity_api  = "azure-active-directory-v1.0"
 		client_id     = "123456"
 		client_secret = "123456"
 		tenant_domain = "example.onmicrosoft.com"

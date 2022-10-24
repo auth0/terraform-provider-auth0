@@ -21,6 +21,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
 		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
+		ClientAliases:                  value.Strings(config.GetAttr("client_aliases")),
 		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
 		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
 		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
@@ -39,7 +40,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		TokenEndpointAuthMethod:        value.String(config.GetAttr("token_endpoint_auth_method")),
 		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
-		ClientMetadata:                 value.MapOfStrings(config.GetAttr("client_metadata")),
+		ClientMetadata:                 expandClientMetadata(d),
 		RefreshToken:                   expandClientRefreshToken(d),
 		JWTConfiguration:               expandClientJWTConfiguration(d),
 		Addons:                         expandClientAddons(d),
@@ -202,6 +203,24 @@ func expandClientMobileIOS(iosConfig cty.Value) *management.ClientMobileIOS {
 	}
 
 	return &ios
+}
+
+func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
+	if !d.HasChange("client_metadata") {
+		return nil
+	}
+
+	oldMetadata, newMetadata := d.GetChange("client_metadata")
+	oldMetadataMap := oldMetadata.(map[string]interface{})
+	newMetadataMap := newMetadata.(map[string]interface{})
+
+	for key := range oldMetadataMap {
+		if _, ok := newMetadataMap[key]; !ok {
+			newMetadataMap[key] = nil
+		}
+	}
+
+	return &newMetadataMap
 }
 
 func expandClientAddons(d *schema.ResourceData) map[string]interface{} {

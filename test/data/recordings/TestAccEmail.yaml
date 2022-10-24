@@ -6,6 +6,42 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"statusCode":404,"error":"Not Found","message":"There is not a configured email provider","errorCode":"inexistent_email_provider"}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 404 Not Found
+      code: 404
+      duration: 1ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
       content_length: 211
       transfer_encoding: [ ]
       trailer: { }
@@ -19,7 +55,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
       method: POST
     response:
@@ -36,42 +72,6 @@ interactions:
           - application/json; charset=utf-8
       status: 201 Created
       code: 201
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"ses","enabled":true,"default_from_address":"accounts@example.com","credentials":{"region":"us-east-1"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
       duration: 1ms
   - id: 2
     request:
@@ -91,7 +91,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -127,7 +127,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -150,22 +150,22 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 211
+      content_length: 5
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"name":"ses","enabled":true,"default_from_address":"accounts@example.com","credentials":{"accessKeyId":"AKIAXXXXXXXXXXXXXXXY","secretAccessKey":"7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","region":"us-east-1"}}
+        null
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
-      method: PATCH
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
     response:
       proto: HTTP/2.0
       proto_major: 2
@@ -186,22 +186,22 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 5
+      content_length: 211
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        null
+        {"name":"ses","enabled":true,"default_from_address":"accounts@example.com","credentials":{"accessKeyId":"AKIAXXXXXXXXXXXXXXXY","secretAccessKey":"7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","region":"us-east-1"}}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
-      method: GET
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
+      method: PATCH
     response:
       proto: HTTP/2.0
       proto_major: 2
@@ -235,7 +235,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -271,7 +271,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -294,42 +294,6 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 168
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"mailgun","enabled":true,"default_from_address":"accounts@example.com","credentials":{"api_key":"MAILGUNXXXXXXXXXXXXXXX","region":"eu","domain":"example.com"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"mailgun","enabled":true,"default_from_address":"accounts@example.com","credentials":{"domain":"example.com","region":"eu"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 9
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
       content_length: 5
       transfer_encoding: [ ]
       trailer: { }
@@ -343,9 +307,45 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"ses","enabled":true,"default_from_address":"accounts@example.com","credentials":{"region":"us-east-1"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 9
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 168
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"mailgun","enabled":true,"default_from_address":"accounts@example.com","credentials":{"api_key":"MAILGUNXXXXXXXXXXXXXXX","region":"eu","domain":"example.com"}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
+      method: PATCH
     response:
       proto: HTTP/2.0
       proto_major: 2
@@ -379,7 +379,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -415,7 +415,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -438,42 +438,6 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 149
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"api_key":"MAILGUNXXXXXXXXXXXXXXX","region":"eu","domain":"example.com"}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 13
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
       content_length: 5
       transfer_encoding: [ ]
       trailer: { }
@@ -487,9 +451,45 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":true,"default_from_address":"accounts@example.com","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 13
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 149
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"api_key":"MAILGUNXXXXXXXXXXXXXXX","region":"eu","domain":"example.com"}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
+      method: PATCH
     response:
       proto: HTTP/2.0
       proto_major: 2
@@ -523,7 +523,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
       method: GET
     response:
@@ -546,6 +546,258 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 16
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 17
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 18
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 149
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"api_key":"MAILGUNXXXXXXXXXXXXXXX","region":"eu","domain":"example.com"}}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
+      method: PATCH
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 19
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 20
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 21
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider?fields=name%2Cenabled%2Cdefault_from_address%2Ccredentials%2Csettings&include_fields=true
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"name":"mailgun","enabled":false,"default_from_address":"","credentials":{"domain":"example.com","region":"eu"}}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 1ms
+  - id: 22
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
       content_length: 0
       transfer_encoding: [ ]
       trailer: { }
@@ -558,7 +810,42 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/latest
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 1ms
+  - id: 23
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/emails/provider
       method: DELETE
     response:

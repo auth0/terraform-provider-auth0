@@ -6,9 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
@@ -58,42 +56,55 @@ func New(t *testing.T) *Recorder {
 }
 
 func removeSensitiveDataFromRecordings(t *testing.T, recorderTransport *recorder.Recorder) {
-	allowedHeaders := map[string]bool{
-		"Content-Type": true,
-		"User-Agent":   true,
-	}
-
 	recorderTransport.AddHook(
 		func(i *cassette.Interaction) error {
-			for header := range i.Request.Headers {
-				if _, ok := allowedHeaders[header]; !ok {
-					delete(i.Request.Headers, header)
-				}
-			}
-			for header := range i.Response.Headers {
-				if _, ok := allowedHeaders[header]; !ok {
-					delete(i.Response.Headers, header)
-				}
-			}
+			skip429Response(i)
+			redactHeaders(i)
 
 			domain := os.Getenv("AUTH0_DOMAIN")
 			require.NotEmpty(t, domain, "removeSensitiveDataFromRecordings(): AUTH0_DOMAIN is empty")
 
 			redactSensitiveDataInClient(t, i, domain)
-
-			i.Request.Host = strings.Replace(i.Request.Host, domain, RecordingsDomain, -1)
-			i.Request.URL = strings.Replace(i.Request.URL, domain, RecordingsDomain, -1)
-
-			i.Response.Duration = time.Millisecond
-
-			domainParts := strings.Split(domain, ".")
-			i.Response.Body = strings.Replace(i.Response.Body, domainParts[0], recordingsTenant, -1)
-			i.Request.Body = strings.Replace(i.Request.Body, domainParts[0], recordingsTenant, -1)
+			redactDomain(i, domain)
 
 			return nil
 		},
 		recorder.BeforeSaveHook,
 	)
+}
+
+func skip429Response(i *cassette.Interaction) {
+	if i.Response.Code == http.StatusTooManyRequests {
+		i.DiscardOnSave = true
+	}
+}
+
+func redactHeaders(i *cassette.Interaction) {
+	allowedHeaders := map[string]bool{
+		"Content-Type": true,
+		"User-Agent":   true,
+	}
+
+	for header := range i.Request.Headers {
+		if _, ok := allowedHeaders[header]; !ok {
+			delete(i.Request.Headers, header)
+		}
+	}
+	for header := range i.Response.Headers {
+		if _, ok := allowedHeaders[header]; !ok {
+			delete(i.Response.Headers, header)
+		}
+	}
+}
+
+func redactDomain(i *cassette.Interaction, domain string) {
+	i.Request.Host = strings.Replace(i.Request.Host, domain, RecordingsDomain, -1)
+	i.Request.URL = strings.Replace(i.Request.URL, domain, RecordingsDomain, -1)
+
+	domainParts := strings.Split(domain, ".")
+
+	i.Response.Body = strings.Replace(i.Response.Body, domainParts[0], recordingsTenant, -1)
+	i.Request.Body = strings.Replace(i.Request.Body, domainParts[0], recordingsTenant, -1)
 }
 
 func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain string) {
@@ -107,10 +118,11 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 		err := json.Unmarshal([]byte(i.Response.Body), &client)
 		require.NoError(t, err)
 
+		redacted := "[REDACTED]"
 		client.SigningKeys = []map[string]string{
-			{"cert": "[REDACTED]"},
+			{"cert": redacted},
 		}
-		client.ClientSecret = auth0.String("[REDACTED]")
+		client.ClientSecret = &redacted
 
 		clientBody, err := json.Marshal(client)
 		require.NoError(t, err)

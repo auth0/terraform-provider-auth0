@@ -10,9 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
-
-	"github.com/auth0/terraform-provider-auth0/version"
 )
+
+var version = "dev"
 
 // New returns a *schema.Provider.
 func New() *schema.Provider {
@@ -121,13 +121,12 @@ func configureProvider(
 	terraformVersion *string,
 ) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		providerVersion := version.ProviderVersion
 		sdkVersion := auth0.Version
 		terraformSDKVersion := meta.SDKVersionString()
 
 		userAgent := fmt.Sprintf(
 			"Terraform-Provider-Auth0/%s (Go-Auth0-SDK/%s; Terraform-SDK/%s; Terraform/%s)",
-			providerVersion,
+			version,
 			sdkVersion,
 			terraformSDKVersion,
 			*terraformVersion,

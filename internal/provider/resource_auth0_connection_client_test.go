@@ -19,13 +19,28 @@ resource "auth0_connection" "my_conn" {
 	strategy = "auth0"
 }
 
-resource "auth0_client" "my_client" {
-	name = "Acceptance-Test-Client-{{.testName}}"
+resource "auth0_client" "my_client-1" {
+	depends_on = [ auth0_connection.my_conn ]
+
+	name = "Acceptance-Test-Client-1-{{.testName}}"
 }
 
-resource "auth0_connection_client" "my_conn_client_assoc" {
+resource "auth0_client" "my_client-2" {
+	depends_on = [ auth0_client.my_client-1 ]
+
+	name = "Acceptance-Test-Client-2-{{.testName}}"
+}
+
+resource "auth0_connection_client" "my_conn_client_assoc-1" {
 	connection_id = auth0_connection.my_conn.id
-	client_id     = auth0_client.my_client.id
+	client_id     = auth0_client.my_client-1.id
+}
+
+resource "auth0_connection_client" "my_conn_client_assoc-2" {
+	depends_on = [ auth0_connection_client.my_conn_client_assoc-1 ]
+
+	connection_id = auth0_connection.my_conn.id
+	client_id     = auth0_client.my_client-2.id
 }
 `
 
@@ -35,8 +50,17 @@ resource "auth0_connection" "my_conn" {
 	strategy = "auth0"
 }
 
-resource "auth0_client" "my_client" {
-	name = "Acceptance-Test-Client-{{.testName}}"
+resource "auth0_client" "my_client-1" {
+	name = "Acceptance-Test-Client-1-{{.testName}}"
+}
+
+resource "auth0_client" "my_client-2" {
+	name = "Acceptance-Test-Client-2-{{.testName}}"
+}
+
+resource "auth0_connection_client" "my_conn_client_assoc-2" {
+	connection_id = auth0_connection.my_conn.id
+	client_id     = auth0_client.my_client-2.id
 }
 `
 
@@ -51,17 +75,22 @@ func TestAccConnectionClient(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance-Test-Client-%s", t.Name())),
-					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "connection_id"),
-					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "client_id"),
-					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client-1", "name", fmt.Sprintf("Acceptance-Test-Client-1-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client-2", "name", fmt.Sprintf("Acceptance-Test-Client-2-%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-1", "connection_id"),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-1", "client_id"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-1", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-1", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-2", "connection_id"),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-2", "client_id"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 				),
 			},
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "2"),
 				),
 			},
 			{
@@ -69,13 +98,18 @@ func TestAccConnectionClient(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance-Test-Client-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client-1", "name", fmt.Sprintf("Acceptance-Test-Client-1-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client-2", "name", fmt.Sprintf("Acceptance-Test-Client-2-%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-2", "connection_id"),
+					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-2", "client_id"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 				),
 			},
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "1"),
 				),
 			},
 		},

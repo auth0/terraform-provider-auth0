@@ -9,5 +9,7 @@ resource "auth0_connection" "windowslive" {
     client_secret    = "<client-secret>"
     strategy_version = 2
     scopes           = ["signin", "graph_user"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs = ["ethnicity","gender"]
   }
 }

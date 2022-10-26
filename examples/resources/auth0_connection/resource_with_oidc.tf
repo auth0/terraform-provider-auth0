@@ -12,6 +12,8 @@ resource "auth0_connection" "oidc" {
     domain_aliases = [
       "example.com"
     ]
+    tenant_domain = ""
+    icon_url                 = "http://example.com/assets/logo.png"
     type                     = "front_channel"
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
@@ -21,5 +23,6 @@ resource "auth0_connection" "oidc" {
     authorization_endpoint   = "https://www.paypal.com/signin/authorize"
     scopes                   = ["openid", "email"]
     set_user_root_attributes = "on_first_login"
+    non_persistent_attrs = ["ethnicity","gender"]
   }
 }

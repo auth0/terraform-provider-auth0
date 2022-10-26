@@ -8,5 +8,7 @@ resource "auth0_connection" "github" {
     client_id     = "<client-id>"
     client_secret = "<client-secret>"
     scopes        = ["email", "profile", "public_repo", "repo"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs = ["ethnicity","gender"]
   }
 }

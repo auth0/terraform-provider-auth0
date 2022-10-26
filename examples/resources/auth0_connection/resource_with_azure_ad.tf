@@ -6,19 +6,19 @@ resource "auth0_connection" "azure_ad" {
     identity_api  = "azure-active-directory-v1.0"
     client_id     = "123456"
     client_secret = "123456"
-    app_id = "app-id-123"
+    app_id        = "app-id-123"
     tenant_domain = "example.onmicrosoft.com"
     domain        = "example.onmicrosoft.com"
     domain_aliases = [
       "example.com",
       "api.example.com"
     ]
-    icon_url = "http://example.onmicrosoft.com/assets/logo.png"
-    use_wsfed            = false
-    waad_protocol        = "openid-connect"
-    waad_common_endpoint = false
+    icon_url               = "http://example.onmicrosoft.com/assets/logo.png"
+    use_wsfed              = false
+    waad_protocol          = "openid-connect"
+    waad_common_endpoint   = false
     max_groups_to_retrieve = 250
-    api_enable_users     = true
+    api_enable_users       = true
     scopes = [
       "basic_profile",
       "ext_groups",

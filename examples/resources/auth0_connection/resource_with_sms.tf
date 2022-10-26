@@ -14,22 +14,22 @@ resource "auth0_connection" "sms" {
     messaging_service_sid  = "<messaging-service-sid>"
     disable_signup         = false
     brute_force_protection = true
-    forward_request_info = true
+    forward_request_info   = true
 
     totp {
       time_step = 300
       length    = 6
     }
 
-    provider = "sms_gateway"
-		gateway_url = "https://somewhere.com/sms-gateway"
-		gateway_authentication {
-			method = "bearer"
-			subject = "test.us.auth0.com:sms"
-			audience = "https://somewhere.com/sms-gateway"
-			secret = "4e2680bb72ec2ae24836476dd37ed6c2"
-			secret_base64_encoded = false
-		}
+    provider    = "sms_gateway"
+    gateway_url = "https://somewhere.com/sms-gateway"
+    gateway_authentication {
+      method                = "bearer"
+      subject               = "test.us.auth0.com:sms"
+      audience              = "https://somewhere.com/sms-gateway"
+      secret                = "4e2680bb72ec2ae24836476dd37ed6c2"
+      secret_base64_encoded = false
+    }
   }
 }
 

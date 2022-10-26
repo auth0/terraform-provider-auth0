@@ -1,13 +1,13 @@
 resource "auth0_connection" "ad" {
   name           = "connection-active-directory"
-  display_name = "Active Directory Connection"
+  display_name   = "Active Directory Connection"
   strategy       = "ad"
   show_as_button = true
 
   options {
     brute_force_protection = true
     tenant_domain          = "example.com"
-    icon_url = "https://example.com/assets/logo.png"
+    icon_url               = "https://example.com/assets/logo.png"
     domain_aliases = [
       "example.com",
       "api.example.com"
@@ -21,7 +21,7 @@ resource "auth0_connection" "ad" {
       }
     })
     use_cert_auth = false
-    use_kerberos = false
+    use_kerberos  = false
     disable_cache = false
   }
 }

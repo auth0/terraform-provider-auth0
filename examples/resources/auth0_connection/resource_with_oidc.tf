@@ -12,7 +12,7 @@ resource "auth0_connection" "oidc" {
     domain_aliases = [
       "example.com"
     ]
-    tenant_domain = ""
+    tenant_domain            = ""
     icon_url                 = "http://example.com/assets/logo.png"
     type                     = "front_channel"
     issuer                   = "https://www.paypalobjects.com"
@@ -23,6 +23,6 @@ resource "auth0_connection" "oidc" {
     authorization_endpoint   = "https://www.paypal.com/signin/authorize"
     scopes                   = ["openid", "email"]
     set_user_root_attributes = "on_first_login"
-    non_persistent_attrs = ["ethnicity","gender"]
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }

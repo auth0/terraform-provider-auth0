@@ -11,7 +11,7 @@ resource "auth0_connection" "oauth2" {
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
     pkce_enabled           = true
-    icon_url = "https://auth.example.com/assets/logo.png"
+    icon_url               = "https://auth.example.com/assets/logo.png"
     scripts = {
       fetchUserProfile = <<EOF
         function fetchUserProfile(accessToken, context, callback) {
@@ -20,6 +20,6 @@ resource "auth0_connection" "oauth2" {
       EOF
     }
     set_user_root_attributes = "on_each_login"
-    non_persistent_attrs = ["ethnicity","gender"]
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }

@@ -5,7 +5,7 @@ resource "auth0_connection" "samlp" {
   strategy = "samlp"
 
   options {
-    debug = false
+    debug               = false
     signing_cert        = "<signing-certificate>"
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
@@ -17,9 +17,9 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
-    logo_url = "https://saml.provider/assets/logo.png"
-    entity_id = "<entity_id>"
-    metadata_xml = <<EOF
+    logo_url            = "https://saml.provider/assets/logo.png"
+    entity_id           = "<entity_id>"
+    metadata_xml        = <<EOF
     <?xml version="1.0"?>
     <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
       <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -39,9 +39,9 @@ resource "auth0_connection" "samlp" {
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
     }
     idp_initiated {
-			client_id = "client_id"
-			client_protocol = "samlp"
-			client_authorize_query = "type=code&timeout=30"
-		}
+      client_id              = "client_id"
+      client_protocol        = "samlp"
+      client_authorize_query = "type=code&timeout=30"
+    }
   }
 }

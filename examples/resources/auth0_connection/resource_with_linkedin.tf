@@ -9,5 +9,7 @@ resource "auth0_connection" "linkedin" {
     client_secret    = "<client-secret>"
     strategy_version = 2
     scopes           = ["basic_profile", "profile", "email"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs = ["ethnicity","gender"]
   }
 }

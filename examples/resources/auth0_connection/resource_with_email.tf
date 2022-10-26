@@ -5,6 +5,7 @@ resource "auth0_connection" "passwordless_email" {
   name     = "email"
 
   options {
+    name                     = "email"
     from                     = "{{ application.name }} \u003croot@auth0.com\u003e"
     subject                  = "Welcome to {{ application.name }}"
     syntax                   = "liquid"

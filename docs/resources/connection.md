@@ -241,7 +241,7 @@ resource "auth0_connection" "salesforce" {
 
 ### OAuth2 Connection
 
-Also applies to following connection strategies: `dropbox`,`bitbucket`,`paypal`,`twitter`,`amazon`,`yahoo`,`box`,`wordpress`,`discord`,`imgur`,`spotify`,`shopify`,`figma`,`slack-oauth-2`,`digitalocean`,`twitch`,`vimeo`,`custom`
+Also applies to following connection strategies: `dropbox`, `bitbucket`, `paypal`, `twitter`, `amazon`, `yahoo`, `box`, `wordpress`, `discord`, `imgur`, `spotify`, `shopify`, `figma`, `slack-oauth-2`, `digitalocean`, `twitch`, `vimeo`, `custom`
 
 ```terraform
 # This is an example of an OAuth2 connection.
@@ -485,7 +485,7 @@ resource "auth0_connection" "samlp" {
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
     EOF 
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml"
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultanteously 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
       "email" : ["emailaddress", "nameidentifier"]

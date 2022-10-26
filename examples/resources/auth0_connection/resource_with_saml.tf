@@ -19,7 +19,7 @@ resource "auth0_connection" "samlp" {
     digest_algorithm    = "sha256"
     icon_url            = "https://saml.provider/assets/logo.png"
     entity_id           = "<entity_id>"
-    metadata_xml        = <<EOF 
+    metadata_xml        = <<EOF
     <?xml version="1.0"?>
     <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
       <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -27,8 +27,8 @@ resource "auth0_connection" "samlp" {
         <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_in"/>
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
-    EOF
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultaneously
+    EOF 
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultanteously 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
       "email" : ["emailaddress", "nameidentifier"]

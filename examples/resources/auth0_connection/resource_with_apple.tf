@@ -6,7 +6,7 @@ resource "auth0_connection" "apple" {
 
   options {
     client_id                = "<client-id>"
-    client_secret            = "<private-key>"
+    client_secret            = "-----BEGIN PRIVATE KEY-----\nMIHBAgEAMA0GCSqGSIb3DQEBAQUABIGsMIGpAgEAA\n-----END PRIVATE KEY-----"
     team_id                  = "<team-id>"
     key_id                   = "<key-id>"
     scopes                   = ["email", "name"]

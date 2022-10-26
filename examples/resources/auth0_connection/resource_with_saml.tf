@@ -17,7 +17,7 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
-    logo_url            = "https://saml.provider/assets/logo.png"
+    icon_url            = "https://saml.provider/assets/logo.png"
     entity_id           = "<entity_id>"
     metadata_xml        = <<EOF
     <?xml version="1.0"?>

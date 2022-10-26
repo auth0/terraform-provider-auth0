@@ -13,7 +13,7 @@ resource "auth0_connection" "azure_ad" {
       "example.com",
       "api.example.com"
     ]
-    icon_url               = "http://example.onmicrosoft.com/assets/logo.png"
+    icon_url               = "https://example.onmicrosoft.com/assets/logo.png"
     use_wsfed              = false
     waad_protocol          = "openid-connect"
     waad_common_endpoint   = false

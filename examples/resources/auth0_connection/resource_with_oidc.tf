@@ -13,7 +13,7 @@ resource "auth0_connection" "oidc" {
       "example.com"
     ]
     tenant_domain            = ""
-    icon_url                 = "http://example.com/assets/logo.png"
+    icon_url                 = "https://example.com/assets/logo.png"
     type                     = "front_channel"
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"

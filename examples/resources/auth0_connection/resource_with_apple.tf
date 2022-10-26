@@ -10,5 +10,7 @@ resource "auth0_connection" "apple" {
     team_id       = "<team-id>"
     key_id        = "<key-id>"
     scopes        = ["email", "name"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs = ["ethnicity", "gender"]
   }
 }

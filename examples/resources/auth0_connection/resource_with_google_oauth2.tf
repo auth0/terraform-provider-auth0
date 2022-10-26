@@ -10,5 +10,6 @@ resource "auth0_connection" "google_oauth2" {
     allowed_audiences        = ["example.com", "api.example.com"]
     scopes                   = ["email", "profile", "gmail", "youtube"]
     set_user_root_attributes = "on_each_login"
+    non_persistent_attrs = ["ethnicity","gender"]
   }
 }

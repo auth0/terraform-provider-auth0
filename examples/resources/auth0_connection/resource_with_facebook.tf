@@ -13,5 +13,7 @@ resource "auth0_connection" "facebook" {
       "groups_access_member_info",
       "user_birthday"
     ]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }

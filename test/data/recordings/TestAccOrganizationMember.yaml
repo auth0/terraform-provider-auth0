@@ -6,42 +6,6 @@ interactions:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 46
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Reader - testaccorganizationmember"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
       content_length: 89
       transfer_encoding: [ ]
       trailer: { }
@@ -55,7 +19,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
       method: POST
     response:
@@ -64,15 +28,51 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
+      content_length: 116
       uncompressed: false
-      body: '{"name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember","id":"org_aq5gsLrpnLKrVr7m"}'
+      body: '{"name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember","id":"org_QnNZ26V0Bfrn9rMt"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 201 Created
       code: 201
-      duration: 1ms
+      duration: 140.822772ms
+  - id: 1
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 46
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"name":"Reader - testaccorganizationmember"}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 144.347572ms
   - id: 2
     request:
       proto: HTTP/1.1
@@ -91,8 +91,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -102,13 +102,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 143.557054ms
   - id: 3
     request:
       proto: HTTP/1.1
@@ -127,8 +127,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -138,50 +138,14 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 147.794132ms
   - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -199,7 +163,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
       method: POST
     response:
@@ -208,15 +172,51 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
+      content_length: 575
       uncompressed: false
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 201 Created
       code: 201
-      duration: 1ms
+      duration: 385.069875ms
+  - id: 5
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 5
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        null
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
+      method: GET
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: -1
+      uncompressed: true
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 200 OK
+      code: 200
+      duration: 156.474052ms
   - id: 6
     request:
       proto: HTTP/1.1
@@ -235,8 +235,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -246,13 +246,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 102.965299ms
   - id: 7
     request:
       proto: HTTP/1.1
@@ -271,7 +271,7 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
+          - Go-Auth0-SDK/0.12.0
       url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
       method: POST
     response:
@@ -282,13 +282,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 132.547568ms
   - id: 8
     request:
       proto: HTTP/1.1
@@ -307,8 +307,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -318,13 +318,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 131.209693ms
   - id: 9
     request:
       proto: HTTP/1.1
@@ -343,8 +343,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -354,14 +354,50 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 104.758094ms
   - id: 10
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 47
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: |
+        {"members":["auth0|63580f0344d2f1f163da90a4"]}
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members
+      method: POST
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 123.221968ms
+  - id: 11
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -379,8 +415,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -390,49 +426,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
-  - id: 11
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 47
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"members":["auth0|630dd2bb0ddd809ceee0510b"]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+      duration: 161.847686ms
   - id: 12
     request:
       proto: HTTP/1.1
@@ -451,8 +451,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -462,13 +462,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 126.801961ms
   - id: 13
     request:
       proto: HTTP/1.1
@@ -487,8 +487,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -498,13 +498,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 112.267779ms
   - id: 14
     request:
       proto: HTTP/1.1
@@ -523,8 +523,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 130.007472ms
   - id: 15
     request:
       proto: HTTP/1.1
@@ -559,8 +559,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -570,13 +570,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 175.433095ms
   - id: 16
     request:
       proto: HTTP/1.1
@@ -595,8 +595,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -606,13 +606,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 121.640836ms
   - id: 17
     request:
       proto: HTTP/1.1
@@ -631,8 +631,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -642,13 +642,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 158.012267ms
   - id: 18
     request:
       proto: HTTP/1.1
@@ -667,8 +667,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -684,7 +684,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 141.491359ms
   - id: 19
     request:
       proto: HTTP/1.1
@@ -703,8 +703,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -714,13 +714,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 138.58546ms
   - id: 20
     request:
       proto: HTTP/1.1
@@ -739,8 +739,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -750,13 +750,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 136.332129ms
   - id: 21
     request:
       proto: HTTP/1.1
@@ -775,8 +775,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -786,13 +786,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 122.794523ms
   - id: 22
     request:
       proto: HTTP/1.1
@@ -811,8 +811,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -821,14 +821,14 @@ interactions:
       transfer_encoding: [ ]
       trailer: { }
       content_length: -1
-      uncompressed: false
-      body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has been reached","errorCode":"too_many_requests"}'
+      uncompressed: true
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 429 Too Many Requests
-      code: 429
-      duration: 1ms
+      status: 200 OK
+      code: 200
+      duration: 190.827504ms
   - id: 23
     request:
       proto: HTTP/1.1
@@ -847,8 +847,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -864,7 +864,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 116.232543ms
   - id: 24
     request:
       proto: HTTP/1.1
@@ -883,8 +883,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -894,13 +894,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 240.424197ms
   - id: 25
     request:
       proto: HTTP/1.1
@@ -919,8 +919,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -930,13 +930,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 108.446353ms
   - id: 26
     request:
       proto: HTTP/1.1
@@ -955,8 +955,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -966,13 +966,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 103.327952ms
   - id: 27
     request:
       proto: HTTP/1.1
@@ -991,8 +991,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1002,13 +1002,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 158.792451ms
   - id: 28
     request:
       proto: HTTP/1.1
@@ -1027,8 +1027,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1044,43 +1044,43 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 118.839169ms
   - id: 29
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 5
+      content_length: 35
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        null
+        {"roles":["rol_HZ0ddDDbA4GpG8Um"]}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
-      method: GET
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles
+      method: POST
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      content_length: 0
+      uncompressed: false
+      body: ""
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+      status: 204 No Content
+      code: 204
+      duration: 225.207042ms
   - id: 30
     request:
       proto: HTTP/1.1
@@ -1099,8 +1099,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1110,13 +1110,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 127.199775ms
   - id: 31
     request:
       proto: HTTP/1.1
@@ -1135,8 +1135,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -1146,13 +1146,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 126.073645ms
   - id: 32
     request:
       proto: HTTP/1.1
@@ -1171,8 +1171,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -1182,49 +1182,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 130.564083ms
   - id: 33
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 35
+      content_length: 5
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"roles":["rol_gxneNjunUq0w8Ey9"]}
+        null
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles
-      method: POST
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
+      method: GET
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
+      content_length: -1
+      uncompressed: true
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+      status: 200 OK
+      code: 200
+      duration: 179.351819ms
   - id: 34
     request:
       proto: HTTP/1.1
@@ -1243,8 +1243,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1254,13 +1254,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 126.763226ms
   - id: 35
     request:
       proto: HTTP/1.1
@@ -1279,8 +1279,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1290,13 +1290,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 107.395159ms
   - id: 36
     request:
       proto: HTTP/1.1
@@ -1315,8 +1315,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -1326,13 +1326,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 120.063932ms
   - id: 37
     request:
       proto: HTTP/1.1
@@ -1351,8 +1351,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1362,13 +1362,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 120.028448ms
   - id: 38
     request:
       proto: HTTP/1.1
@@ -1387,8 +1387,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1398,13 +1398,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 126.746171ms
   - id: 39
     request:
       proto: HTTP/1.1
@@ -1423,8 +1423,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -1434,13 +1434,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 102.37938ms
   - id: 40
     request:
       proto: HTTP/1.1
@@ -1459,8 +1459,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -1470,13 +1470,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 111.662222ms
   - id: 41
     request:
       proto: HTTP/1.1
@@ -1495,8 +1495,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -1506,13 +1506,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 111.68748ms
   - id: 42
     request:
       proto: HTTP/1.1
@@ -1531,8 +1531,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1548,7 +1548,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 120.870597ms
   - id: 43
     request:
       proto: HTTP/1.1
@@ -1567,8 +1567,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -1578,13 +1578,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 136.031332ms
   - id: 44
     request:
       proto: HTTP/1.1
@@ -1603,8 +1603,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1614,13 +1614,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 185.999525ms
   - id: 45
     request:
       proto: HTTP/1.1
@@ -1639,8 +1639,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1650,13 +1650,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 103.405522ms
   - id: 46
     request:
       proto: HTTP/1.1
@@ -1675,8 +1675,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1686,49 +1686,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 119.953008ms
   - id: 47
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 5
+      content_length: 35
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        null
+        {"roles":["rol_eDqerngMZ7JdFuGI"]}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
-      method: GET
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles
+      method: POST
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      content_length: 0
+      uncompressed: false
+      body: ""
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+      status: 204 No Content
+      code: 204
+      duration: 114.068995ms
   - id: 48
     request:
       proto: HTTP/1.1
@@ -1747,8 +1747,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1758,13 +1758,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 105.635487ms
   - id: 49
     request:
       proto: HTTP/1.1
@@ -1783,8 +1783,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -1794,13 +1794,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 122.16081ms
   - id: 50
     request:
       proto: HTTP/1.1
@@ -1819,8 +1819,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -1830,13 +1830,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 127.80696ms
   - id: 51
     request:
       proto: HTTP/1.1
@@ -1855,8 +1855,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -1866,13 +1866,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 213.2258ms
   - id: 52
     request:
       proto: HTTP/1.1
@@ -1891,8 +1891,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -1902,49 +1902,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 98.051047ms
   - id: 53
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 35
+      content_length: 5
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"roles":["rol_UKA30keNSTlVSvYA"]}
+        null
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles
-      method: POST
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
+      method: GET
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
+      content_length: -1
+      uncompressed: true
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+      status: 200 OK
+      code: 200
+      duration: 161.703505ms
   - id: 54
     request:
       proto: HTTP/1.1
@@ -1963,8 +1963,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -1974,13 +1974,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 112.600083ms
   - id: 55
     request:
       proto: HTTP/1.1
@@ -1999,8 +1999,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2010,13 +2010,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 266.63715ms
   - id: 56
     request:
       proto: HTTP/1.1
@@ -2035,8 +2035,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2046,13 +2046,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 201.090093ms
   - id: 57
     request:
       proto: HTTP/1.1
@@ -2071,8 +2071,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -2082,13 +2082,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 104.057532ms
   - id: 58
     request:
       proto: HTTP/1.1
@@ -2107,8 +2107,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -2118,13 +2118,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 115.150512ms
   - id: 59
     request:
       proto: HTTP/1.1
@@ -2143,8 +2143,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -2154,13 +2154,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 117.593925ms
   - id: 60
     request:
       proto: HTTP/1.1
@@ -2179,8 +2179,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2196,7 +2196,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 116.876568ms
   - id: 61
     request:
       proto: HTTP/1.1
@@ -2215,8 +2215,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2226,13 +2226,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 111.622641ms
   - id: 62
     request:
       proto: HTTP/1.1
@@ -2251,8 +2251,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -2261,14 +2261,14 @@ interactions:
       transfer_encoding: [ ]
       trailer: { }
       content_length: -1
-      uncompressed: false
-      body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has been reached","errorCode":"too_many_requests"}'
+      uncompressed: true
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 429 Too Many Requests
-      code: 429
-      duration: 1ms
+      status: 200 OK
+      code: 200
+      duration: 144.580311ms
   - id: 63
     request:
       proto: HTTP/1.1
@@ -2287,8 +2287,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2304,7 +2304,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 116.589584ms
   - id: 64
     request:
       proto: HTTP/1.1
@@ -2323,8 +2323,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2334,49 +2334,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
+      body: '{"roles":[{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 164.01555ms
   - id: 65
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 5
+      content_length: 35
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        null
+        {"roles":["rol_HZ0ddDDbA4GpG8Um"]}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
-      method: GET
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles
+      method: DELETE
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      content_length: 0
+      uncompressed: false
+      body: ""
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+      status: 204 No Content
+      code: 204
+      duration: 126.266148ms
   - id: 66
     request:
       proto: HTTP/1.1
@@ -2395,8 +2395,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2406,13 +2406,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"roles":[{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 174.676117ms
   - id: 67
     request:
       proto: HTTP/1.1
@@ -2431,8 +2431,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -2442,13 +2442,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 110.676406ms
   - id: 68
     request:
       proto: HTTP/1.1
@@ -2467,8 +2467,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -2478,13 +2478,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 112.15452ms
   - id: 69
     request:
       proto: HTTP/1.1
@@ -2503,8 +2503,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -2514,13 +2514,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 143.670695ms
   - id: 70
     request:
       proto: HTTP/1.1
@@ -2539,8 +2539,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2550,13 +2550,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 95.338592ms
   - id: 71
     request:
       proto: HTTP/1.1
@@ -2575,8 +2575,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2586,13 +2586,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 106.308227ms
   - id: 72
     request:
       proto: HTTP/1.1
@@ -2611,8 +2611,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -2622,13 +2622,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 119.934604ms
   - id: 73
     request:
       proto: HTTP/1.1
@@ -2647,8 +2647,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2658,49 +2658,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null},{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":2}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 147.422386ms
   - id: 74
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 35
+      content_length: 5
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        {"roles":["rol_gxneNjunUq0w8Ey9"]}
+        null
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles
-      method: DELETE
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
+      method: GET
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
+      content_length: -1
+      uncompressed: true
+      body: '{"roles":[{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+      status: 200 OK
+      code: 200
+      duration: 121.222337ms
   - id: 75
     request:
       proto: HTTP/1.1
@@ -2719,8 +2719,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -2730,13 +2730,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 118.631327ms
   - id: 76
     request:
       proto: HTTP/1.1
@@ -2755,8 +2755,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -2766,13 +2766,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 122.323576ms
   - id: 77
     request:
       proto: HTTP/1.1
@@ -2791,8 +2791,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -2802,13 +2802,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 149.332561ms
   - id: 78
     request:
       proto: HTTP/1.1
@@ -2827,8 +2827,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2844,7 +2844,7 @@ interactions:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 112.770449ms
   - id: 79
     request:
       proto: HTTP/1.1
@@ -2863,8 +2863,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2874,13 +2874,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 112.115095ms
   - id: 80
     request:
       proto: HTTP/1.1
@@ -2899,8 +2899,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -2910,13 +2910,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 156.926899ms
   - id: 81
     request:
       proto: HTTP/1.1
@@ -2935,8 +2935,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2946,13 +2946,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 146.700223ms
   - id: 82
     request:
       proto: HTTP/1.1
@@ -2971,8 +2971,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -2982,49 +2982,49 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"roles":[{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 169.580343ms
   - id: 83
     request:
       proto: HTTP/1.1
       proto_major: 1
       proto_minor: 1
-      content_length: 5
+      content_length: 35
       transfer_encoding: [ ]
       trailer: { }
       host: terraform-provider-auth0-dev.eu.auth0.com
       remote_addr: ""
       request_uri: ""
       body: |
-        null
+        {"roles":["rol_eDqerngMZ7JdFuGI"]}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
-      method: GET
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles
+      method: DELETE
     response:
       proto: HTTP/2.0
       proto_major: 2
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      content_length: 0
+      uncompressed: false
+      body: ""
       headers:
         Content-Type:
           - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+      status: 204 No Content
+      code: 204
+      duration: 180.680865ms
   - id: 84
     request:
       proto: HTTP/1.1
@@ -3043,8 +3043,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -3054,13 +3054,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 133.576687ms
   - id: 85
     request:
       proto: HTTP/1.1
@@ -3079,8 +3079,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
       method: GET
     response:
       proto: HTTP/2.0
@@ -3090,13 +3090,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
+      body: '{"id":"org_QnNZ26V0Bfrn9rMt","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 118.610422ms
   - id: 86
     request:
       proto: HTTP/1.1
@@ -3115,8 +3115,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: GET
     response:
       proto: HTTP/2.0
@@ -3126,13 +3126,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
+      body: '{"id":"rol_HZ0ddDDbA4GpG8Um","name":"Reader - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 118.570791ms
   - id: 87
     request:
       proto: HTTP/1.1
@@ -3151,8 +3151,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: GET
     response:
       proto: HTTP/2.0
@@ -3162,13 +3162,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
+      body: '{"created_at":"2022-10-25T16:29:55.283Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"63580f0344d2f1f163da90a4","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-10-25T16:29:55.283Z","user_id":"auth0|63580f0344d2f1f163da90a4","username":"testusername"}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 120.250972ms
   - id: 88
     request:
       proto: HTTP/1.1
@@ -3187,8 +3187,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -3198,13 +3198,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 99.576806ms
   - id: 89
     request:
       proto: HTTP/1.1
@@ -3223,8 +3223,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -3234,13 +3234,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 143.481705ms
   - id: 90
     request:
       proto: HTTP/1.1
@@ -3259,8 +3259,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: GET
     response:
       proto: HTTP/2.0
@@ -3270,13 +3270,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
+      body: '{"id":"rol_eDqerngMZ7JdFuGI","name":"Admin - testaccorganizationmember","description":null}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 104.03195ms
   - id: 91
     request:
       proto: HTTP/1.1
@@ -3295,8 +3295,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI/permissions?include_totals=true&page=0&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -3306,13 +3306,13 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
+      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 119.619606ms
   - id: 92
     request:
       proto: HTTP/1.1
@@ -3331,8 +3331,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members/auth0%7C63580f0344d2f1f163da90a4/roles?include_totals=true&per_page=50
       method: GET
     response:
       proto: HTTP/2.0
@@ -3342,482 +3342,14 @@ interactions:
       trailer: { }
       content_length: -1
       uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+      body: '{"roles":[],"start":0,"limit":50,"total":0}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 236.950592ms
   - id: 93
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"roles":[{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}],"start":0,"limit":50,"total":1}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 94
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 35
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"roles":["rol_UKA30keNSTlVSvYA"]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 95
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 96
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_gxneNjunUq0w8Ey9","name":"Reader - testaccorganizationmember","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 97
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"org_aq5gsLrpnLKrVr7m","name":"some-org-testaccorganizationmember","display_name":"testaccorganizationmember"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 98
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"created_at":"2022-08-30T09:04:59.867Z","email":"testaccorganizationmember@auth0.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"630dd2bb0ddd809ceee0510b","provider":"auth0","isSocial":false}],"name":"testaccorganizationmember@auth0.com","nickname":"testaccorganizationmember","picture":"https://s.gravatar.com/avatar/fa2823a2ce146138c5a913a9963f6e45?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2022-08-30T09:04:59.867Z","user_id":"auth0|630dd2bb0ddd809ceee0510b","username":"testusername"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 99
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/enabled_connections?include_totals=true&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"enabled_connections":[],"start":0,"limit":0,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 100
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 101
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 102
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_UKA30keNSTlVSvYA","name":"Admin - testaccorganizationmember","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 103
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"statusCode":429,"error":"Too Many Requests","message":"Global limit has been reached","errorCode":"too_many_requests"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 429 Too Many Requests
-      code: 429
-      duration: 1ms
-  - id: 104
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 105
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members/auth0%7C630dd2bb0ddd809ceee0510b/roles?include_totals=true&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"roles":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 106
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -3829,14 +3361,14 @@ interactions:
       remote_addr: ""
       request_uri: ""
       body: |
-        {"members":["auth0|630dd2bb0ddd809ceee0510b"]}
+        {"members":["auth0|63580f0344d2f1f163da90a4"]}
       form: { }
       headers:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m/members
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt/members
       method: DELETE
     response:
       proto: HTTP/2.0
@@ -3852,8 +3384,43 @@ interactions:
           - application/json; charset=utf-8
       status: 204 No Content
       code: 204
-      duration: 1ms
-  - id: 107
+      duration: 299.117904ms
+  - id: 94
+    request:
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      content_length: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      host: terraform-provider-auth0-dev.eu.auth0.com
+      remote_addr: ""
+      request_uri: ""
+      body: ""
+      form: { }
+      headers:
+        Content-Type:
+          - application/json
+        User-Agent:
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_QnNZ26V0Bfrn9rMt
+      method: DELETE
+    response:
+      proto: HTTP/2.0
+      proto_major: 2
+      proto_minor: 0
+      transfer_encoding: [ ]
+      trailer: { }
+      content_length: 0
+      uncompressed: false
+      body: ""
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+      status: 204 No Content
+      code: 204
+      duration: 105.685023ms
+  - id: 95
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -3871,8 +3438,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_UKA30keNSTlVSvYA
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_eDqerngMZ7JdFuGI
       method: DELETE
     response:
       proto: HTTP/2.0
@@ -3880,16 +3447,16 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
+      content_length: 2
+      uncompressed: false
       body: '{}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
-  - id: 108
+      duration: 120.826226ms
+  - id: 96
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -3906,8 +3473,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_aq5gsLrpnLKrVr7m
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C63580f0344d2f1f163da90a4
       method: DELETE
     response:
       proto: HTTP/2.0
@@ -3923,43 +3490,8 @@ interactions:
           - application/json; charset=utf-8
       status: 204 No Content
       code: 204
-      duration: 1ms
-  - id: 109
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C630dd2bb0ddd809ceee0510b
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 110
+      duration: 243.036484ms
+  - id: 97
     request:
       proto: HTTP/1.1
       proto_major: 1
@@ -3977,8 +3509,8 @@ interactions:
         Content-Type:
           - application/json
         User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_gxneNjunUq0w8Ey9
+          - Go-Auth0-SDK/0.12.0
+      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_HZ0ddDDbA4GpG8Um
       method: DELETE
     response:
       proto: HTTP/2.0
@@ -3986,12 +3518,12 @@ interactions:
       proto_minor: 0
       transfer_encoding: [ ]
       trailer: { }
-      content_length: -1
-      uncompressed: true
+      content_length: 2
+      uncompressed: false
       body: '{}'
       headers:
         Content-Type:
           - application/json; charset=utf-8
       status: 200 OK
       code: 200
-      duration: 1ms
+      duration: 109.530622ms

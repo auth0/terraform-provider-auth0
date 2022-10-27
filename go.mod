@@ -1,6 +1,6 @@
 module github.com/auth0/terraform-provider-auth0
 
-go 1.18
+go 1.19
 
 require (
 	github.com/auth0/go-auth0 v0.12.0
@@ -8,8 +8,8 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/terraform-plugin-docs v0.13.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.0
-	github.com/stretchr/testify v1.8.0
-	gopkg.in/dnaeon/go-vcr.v3 v3.1.1
+	github.com/stretchr/testify v1.8.1
+	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
 )
 
 require (

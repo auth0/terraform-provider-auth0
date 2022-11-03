@@ -9,8 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 func newClient() *schema.Resource {
@@ -610,7 +608,6 @@ func newClient() *schema.Resource {
 				Optional: true,
 				ValidateFunc: validation.All(
 					validation.IsURLWithScheme([]string{"https"}),
-					internalValidation.IsURLWithNoFragment,
 				),
 				Description: "Initiate login URI, must be HTTPS.",
 			},

@@ -62,6 +62,7 @@ resource "auth0_email" "sendgrid_email_provider" {
 ### Optional
 
 - `enabled` (Boolean) Indicates whether the email provider is enabled.
+- `settings` (Block List, Max: 1) Specific email provider settings. (see [below for nested schema](#nestedblock--settings))
 
 ### Read-Only
 
@@ -82,6 +83,32 @@ Optional:
 - `smtp_pass` (String, Sensitive) SMTP password. Used only for SMTP.
 - `smtp_port` (Number) Port used by your SMTP server. Please avoid using port 25 if possible because many providers have limitations on this port. Used only for SMTP.
 - `smtp_user` (String) SMTP username. Used only for SMTP.
+
+
+<a id="nestedblock--settings"></a>
+### Nested Schema for `settings`
+
+Optional:
+
+- `headers` (Block List, Max: 1) Headers settings for the `smtp` email provider. (see [below for nested schema](#nestedblock--settings--headers))
+- `message` (Block List, Max: 1) Message settings for the `mandrill` or `ses` email provider. (see [below for nested schema](#nestedblock--settings--message))
+
+<a id="nestedblock--settings--headers"></a>
+### Nested Schema for `settings.headers`
+
+Optional:
+
+- `x_mc_view_content_link` (String) Disable or enable the default View Content Link for sensitive emails.
+- `x_ses_configuration_set` (String) SES Configuration set to include when sending emails.
+
+
+<a id="nestedblock--settings--message"></a>
+### Nested Schema for `settings.message`
+
+Optional:
+
+- `configuration_set_name` (String) Setting for the `ses` email provider. The name of the configuration set to apply to the sent emails.
+- `view_content_link` (Boolean) Setting for the `mandrill` email provider. Set to `true` to see the content of individual emails sent to users.
 
 ## Import
 

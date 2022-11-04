@@ -124,6 +124,64 @@ func newEmail() *schema.Resource {
 					},
 				},
 			},
+			"settings": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Computed:    true,
+				Description: "Specific email provider settings.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"message": {
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Optional:    true,
+							Description: "Message settings for the `mandrill` or `ses` email provider.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"view_content_link": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Description: "Setting for the `mandrill` email provider. " +
+											"Set to `true` to see the content of individual emails sent to users.",
+									},
+									"configuration_set_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Setting for the `ses` email provider. " +
+											"The name of the configuration set to apply to the sent emails.",
+									},
+								},
+							},
+						},
+						"headers": {
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Optional:    true,
+							Description: "Headers settings for the `smtp` email provider.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"x_mc_view_content_link": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice(
+											[]string{"true", "false"},
+											false,
+										),
+										Description: "Disable or enable the default View Content Link " +
+											"for sensitive emails.",
+									},
+									"x_ses_configuration_set": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "SES Configuration set to include when sending emails.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -163,6 +221,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 		d.Set("enabled", email.GetEnabled()),
 		d.Set("default_from_address", email.GetDefaultFromAddress()),
 		d.Set("credentials", flattenEmailProviderCredentials(d, email)),
+		d.Set("settings", flattenEmailProviderSettings(email)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -231,6 +290,18 @@ func expandEmailProviderMandrill(config cty.Value, emailProvider *management.Ema
 		}
 		return stop
 	})
+
+	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
+		settings.GetAttr("message").ForEachElement(func(_ cty.Value, message cty.Value) (stop bool) {
+			emailProvider.Settings = &management.EmailProviderSettingsMandrill{
+				Message: &management.EmailProviderSettingsMandrillMessage{
+					ViewContentLink: value.Bool(message.GetAttr("view_content_link")),
+				},
+			}
+			return stop
+		})
+		return stop
+	})
 }
 
 func expandEmailProviderSES(config cty.Value, emailProvider *management.EmailProvider) {
@@ -240,6 +311,18 @@ func expandEmailProviderSES(config cty.Value, emailProvider *management.EmailPro
 			SecretAccessKey: value.String(credentials.GetAttr("secret_access_key")),
 			Region:          value.String(credentials.GetAttr("region")),
 		}
+		return stop
+	})
+
+	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
+		settings.GetAttr("message").ForEachElement(func(_ cty.Value, message cty.Value) (stop bool) {
+			emailProvider.Settings = &management.EmailProviderSettingsSES{
+				Message: &management.EmailProviderSettingsSESMessage{
+					ConfigurationSetName: value.String(message.GetAttr("configuration_set_name")),
+				},
+			}
+			return stop
+		})
 		return stop
 	})
 }
@@ -282,6 +365,19 @@ func expandEmailProviderSmtp(config cty.Value, emailProvider *management.EmailPr
 			SMTPUser: value.String(credentials.GetAttr("smtp_user")),
 			SMTPPass: value.String(credentials.GetAttr("smtp_pass")),
 		}
+		return stop
+	})
+
+	config.GetAttr("settings").ForEachElement(func(_ cty.Value, settings cty.Value) (stop bool) {
+		settings.GetAttr("headers").ForEachElement(func(_ cty.Value, headers cty.Value) (stop bool) {
+			emailProvider.Settings = management.EmailProviderSettingsSMTP{
+				Headers: &management.EmailProviderSettingsSMTPHeaders{
+					XMCViewContentLink:   value.String(headers.GetAttr("x_mc_view_content_link")),
+					XSESConfigurationSet: value.String(headers.GetAttr("x_ses_configuration_set")),
+				},
+			}
+			return stop
+		})
 		return stop
 	})
 }
@@ -328,4 +424,43 @@ func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *mana
 	}
 
 	return []interface{}{credentials}
+}
+
+func flattenEmailProviderSettings(emailProvider *management.EmailProvider) []interface{} {
+	if emailProvider.Settings == nil {
+		return nil
+	}
+
+	var settings interface{}
+	switch settingsType := emailProvider.Settings.(type) {
+	case *management.EmailProviderSettingsMandrill:
+		settings = map[string]interface{}{
+			"message": []map[string]interface{}{
+				{
+					"view_content_link": settingsType.GetMessage().GetViewContentLink(),
+				},
+			},
+		}
+	case *management.EmailProviderSettingsSES:
+		settings = map[string]interface{}{
+			"message": []map[string]interface{}{
+				{
+					"configuration_set_name": settingsType.GetMessage().GetConfigurationSetName(),
+				},
+			},
+		}
+	case *management.EmailProviderSettingsSMTP:
+		settings = map[string]interface{}{
+			"headers": []map[string]interface{}{
+				{
+					"x_mc_view_content_link":  settingsType.GetHeaders().GetXMCViewContentLink(),
+					"x_ses_configuration_set": settingsType.GetHeaders().GetXSESConfigurationSet(),
+				},
+			},
+		}
+	default:
+		settings = nil
+	}
+
+	return []interface{}{settings}
 }

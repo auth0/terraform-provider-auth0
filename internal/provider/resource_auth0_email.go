@@ -137,8 +137,8 @@ func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 		return updateEmail(ctx, d, m)
 	}
 
-	email := expandEmail(d.GetRawConfig())
-	if err := api.Email.Create(email); err != nil {
+	email := expandEmailProvider(d.GetRawConfig())
+	if err := api.EmailProvider.Create(email); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -148,7 +148,7 @@ func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	email, err := api.Email.Read()
+	email, err := api.EmailProvider.Read()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -162,7 +162,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 		d.Set("name", email.GetName()),
 		d.Set("enabled", email.GetEnabled()),
 		d.Set("default_from_address", email.GetDefaultFromAddress()),
-		d.Set("credentials", flattenCredentials(email.GetCredentials(), d)),
+		d.Set("credentials", flattenEmailProviderCredentials(d, email)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -171,8 +171,8 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	email := expandEmail(d.GetRawConfig())
-	if err := api.Email.Update(email); err != nil {
+	email := expandEmailProvider(d.GetRawConfig())
+	if err := api.EmailProvider.Update(email); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -182,7 +182,7 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	if err := api.Email.Delete(); err != nil {
+	if err := api.EmailProvider.Delete(); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -191,7 +191,7 @@ func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 }
 
 func emailProviderIsConfigured(api *management.Management) bool {
-	_, err := api.Email.Read()
+	_, err := api.EmailProvider.Read()
 	if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 		return false
 	}
@@ -199,50 +199,133 @@ func emailProviderIsConfigured(api *management.Management) bool {
 	return true
 }
 
-func expandEmail(config cty.Value) *management.Email {
-	email := &management.Email{
+func expandEmailProvider(config cty.Value) *management.EmailProvider {
+	emailProvider := &management.EmailProvider{
 		Name:               value.String(config.GetAttr("name")),
 		Enabled:            value.Bool(config.GetAttr("enabled")),
 		DefaultFromAddress: value.String(config.GetAttr("default_from_address")),
 	}
 
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		email.Credentials = &management.EmailCredentials{
-			APIUser:         value.String(config.GetAttr("api_user")),
-			APIKey:          value.String(config.GetAttr("api_key")),
-			AccessKeyID:     value.String(config.GetAttr("access_key_id")),
-			SecretAccessKey: value.String(config.GetAttr("secret_access_key")),
-			Region:          value.String(config.GetAttr("region")),
-			Domain:          value.String(config.GetAttr("domain")),
-			SMTPHost:        value.String(config.GetAttr("smtp_host")),
-			SMTPPort:        value.Int(config.GetAttr("smtp_port")),
-			SMTPUser:        value.String(config.GetAttr("smtp_user")),
-			SMTPPass:        value.String(config.GetAttr("smtp_pass")),
-		}
+	switch emailProvider.GetName() {
+	case management.EmailProviderMandrill:
+		expandEmailProviderMandrill(config, emailProvider)
+	case management.EmailProviderSES:
+		expandEmailProviderSES(config, emailProvider)
+	case management.EmailProviderSendGrid:
+		expandEmailProviderSendGrid(config, emailProvider)
+	case management.EmailProviderSparkPost:
+		expandEmailProviderSparkPost(config, emailProvider)
+	case management.EmailProviderMailgun:
+		expandEmailProviderMailgun(config, emailProvider)
+	case management.EmailProviderSMTP:
+		expandEmailProviderSmtp(config, emailProvider)
+	}
 
-		return stop
-	})
-
-	return email
+	return emailProvider
 }
 
-func flattenCredentials(credentials *management.EmailCredentials, d *schema.ResourceData) []interface{} {
-	if credentials == nil {
+func expandEmailProviderMandrill(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsMandrill{
+			APIKey: value.String(credentials.GetAttr("api_key")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderSES(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsSES{
+			AccessKeyID:     value.String(credentials.GetAttr("access_key_id")),
+			SecretAccessKey: value.String(credentials.GetAttr("secret_access_key")),
+			Region:          value.String(credentials.GetAttr("region")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderSendGrid(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsSendGrid{
+			APIKey: value.String(credentials.GetAttr("api_key")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderSparkPost(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsSparkPost{
+			APIKey: value.String(credentials.GetAttr("api_key")),
+			Region: value.String(credentials.GetAttr("region")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderMailgun(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsMailgun{
+			APIKey: value.String(credentials.GetAttr("api_key")),
+			Domain: value.String(credentials.GetAttr("domain")),
+			Region: value.String(credentials.GetAttr("region")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderSmtp(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsSMTP{
+			SMTPHost: value.String(credentials.GetAttr("smtp_host")),
+			SMTPPort: value.Int(credentials.GetAttr("smtp_port")),
+			SMTPUser: value.String(credentials.GetAttr("smtp_user")),
+			SMTPPass: value.String(credentials.GetAttr("smtp_pass")),
+		}
+		return stop
+	})
+}
+
+func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *management.EmailProvider) []interface{} {
+	if emailProvider.Credentials == nil {
 		return nil
 	}
 
-	m := map[string]interface{}{
-		"api_user":          credentials.GetAPIUser(),
-		"api_key":           d.Get("credentials.0.api_key").(string),
-		"access_key_id":     d.Get("credentials.0.access_key_id").(string),
-		"secret_access_key": d.Get("credentials.0.secret_access_key").(string),
-		"region":            credentials.GetRegion(),
-		"domain":            credentials.GetDomain(),
-		"smtp_host":         credentials.GetSMTPHost(),
-		"smtp_port":         credentials.GetSMTPPort(),
-		"smtp_user":         credentials.GetSMTPUser(),
-		"smtp_pass":         d.Get("credentials.0.smtp_pass").(string),
+	var credentials interface{}
+	switch credentialsType := emailProvider.Credentials.(type) {
+	case *management.EmailProviderCredentialsMandrill:
+		credentials = map[string]interface{}{
+			"api_key": d.Get("credentials.0.api_key").(string),
+		}
+	case *management.EmailProviderCredentialsSES:
+		credentials = map[string]interface{}{
+			"access_key_id":     d.Get("credentials.0.access_key_id").(string),
+			"secret_access_key": d.Get("credentials.0.secret_access_key").(string),
+			"region":            credentialsType.GetRegion(),
+		}
+	case *management.EmailProviderCredentialsSendGrid:
+		credentials = map[string]interface{}{
+			"api_key": d.Get("credentials.0.api_key").(string),
+		}
+	case *management.EmailProviderCredentialsSparkPost:
+		credentials = map[string]interface{}{
+			"api_key": d.Get("credentials.0.api_key").(string),
+			"region":  credentialsType.GetRegion(),
+		}
+	case *management.EmailProviderCredentialsMailgun:
+		credentials = map[string]interface{}{
+			"api_key": d.Get("credentials.0.api_key").(string),
+			"domain":  credentialsType.GetDomain(),
+			"region":  credentialsType.GetRegion(),
+		}
+	case *management.EmailProviderCredentialsSMTP:
+		credentials = map[string]interface{}{
+			"smtp_host": credentialsType.GetSMTPHost(),
+			"smtp_port": credentialsType.GetSMTPPort(),
+			"smtp_user": credentialsType.GetSMTPUser(),
+			"smtp_pass": d.Get("credentials.0.smtp_pass").(string),
+		}
 	}
 
-	return []interface{}{m}
+	return []interface{}{credentials}
 }

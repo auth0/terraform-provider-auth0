@@ -46,6 +46,8 @@ func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]in
 		m, diags = flattenConnectionOptionsSMS(connectionOptions)
 	case *management.ConnectionOptionsOIDC:
 		m, diags = flattenConnectionOptionsOIDC(connectionOptions)
+	case *management.ConnectionOptionsOkta:
+		m, diags = flattenConnectionOptionsOkta(connectionOptions)
 	case *management.ConnectionOptionsAD:
 		m, diags = flattenConnectionOptionsAD(connectionOptions)
 	case *management.ConnectionOptionsAzureAD:
@@ -399,6 +401,31 @@ func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (in
 	return m, nil
 }
 
+func flattenConnectionOptionsOkta(options *management.ConnectionOptionsOkta) (interface{}, diag.Diagnostics) {
+	m := map[string]interface{}{
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"domain":                   options.GetDomain(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"scopes":                   options.Scopes(),
+		"issuer":                   options.GetIssuer(),
+		"jwks_uri":                 options.GetJWKSURI(),
+		"token_endpoint":           options.GetTokenEndpoint(),
+		"userinfo_endpoint":        options.GetUserInfoEndpoint(),
+		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
+}
+
 func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
 		"name":                     options.GetName(),
@@ -647,6 +674,9 @@ func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diag
 		case management.ConnectionStrategyOIDC:
 			connection.ShowAsButton = showAsButton
 			connection.Options, diagnostics = expandConnectionOptionsOIDC(d, options)
+		case management.ConnectionStrategyOkta:
+			connection.ShowAsButton = showAsButton
+			connection.Options, diagnostics = expandConnectionOptionsOkta(d, options)
 		case management.ConnectionStrategyAD:
 			connection.ShowAsButton = showAsButton
 			connection.Options, diagnostics = expandConnectionOptionsAD(options)
@@ -1147,6 +1177,32 @@ func expandConnectionOptionsOIDC(
 		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
 		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	expandConnectionOptionsScopes(d, options)
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsOkta(
+	d *schema.ResourceData,
+	config cty.Value,
+) (*management.ConnectionOptionsOkta, diag.Diagnostics) {
+	options := &management.ConnectionOptionsOkta{
+		ClientID:              value.String(config.GetAttr("client_id")),
+		ClientSecret:          value.String(config.GetAttr("client_secret")),
+		Domain:                value.String(config.GetAttr("domain")),
+		DomainAliases:         value.Strings(config.GetAttr("domain_aliases")),
+		AuthorizationEndpoint: value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                value.String(config.GetAttr("issuer")),
+		JWKSURI:               value.String(config.GetAttr("jwks_uri")),
+		UserInfoEndpoint:      value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
+		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
 	}
 
 	expandConnectionOptionsScopes(d, options)

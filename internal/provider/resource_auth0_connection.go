@@ -41,7 +41,7 @@ var connectionSchema = map[string]*schema.Schema{
 			"evernote-sandbox", "evernote", "exact", "facebook",
 			"fitbit", "flickr", "github", "google-apps",
 			"google-oauth2", "guardian", "instagram", "ip", "linkedin",
-			"miicard", "oauth1", "oauth2", "office365", "oidc", "paypal",
+			"miicard", "oauth1", "oauth2", "office365", "oidc", "okta", "paypal",
 			"paypal-sandbox", "pingfederate", "planningcenter",
 			"renren", "salesforce-community", "salesforce-sandbox",
 			"salesforce", "samlp", "sharepoint", "shopify", "sms",

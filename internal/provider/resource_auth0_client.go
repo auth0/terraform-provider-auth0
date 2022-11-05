@@ -606,9 +606,7 @@ func newClient() *schema.Resource {
 			"initiate_login_uri": {
 				Type:     schema.TypeString,
 				Optional: true,
-				ValidateFunc: validation.All(
-					validation.IsURLWithScheme([]string{"https"}),
-				),
+				ValidateFunc: validation.IsURLWithHTTPS,
 				Description: "Initiate login URI, must be HTTPS.",
 			},
 			"native_social_login": {

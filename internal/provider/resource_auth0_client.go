@@ -604,10 +604,10 @@ func newClient() *schema.Resource {
 				},
 			},
 			"initiate_login_uri": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:         schema.TypeString,
+				Optional:     true,
 				ValidateFunc: validation.IsURLWithHTTPS,
-				Description: "Initiate login URI, must be HTTPS.",
+				Description:  "Initiate login URI, must be HTTPS.",
 			},
 			"native_social_login": {
 				Type:     schema.TypeList,

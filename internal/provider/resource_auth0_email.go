@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"math"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -10,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -31,6 +33,10 @@ func newEmail() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ValidateFunc: validation.StringInSlice(
+					[]string{"mailgun", "mandrill", "sendgrid", "ses", "smtp", "sparkpost"},
+					false,
+				),
 				Description: "Name of the email provider. " +
 					"Options include `mailgun`, `mandrill`, `sendgrid`, `ses`, `smtp`, and `sparkpost`.",
 			},
@@ -57,37 +63,43 @@ func newEmail() *schema.Resource {
 							Description: "API User for your email service.",
 						},
 						"api_key": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Sensitive:   true,
-							Description: "API Key for your email service. Will always be encrypted in our database.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Sensitive:    true,
+							Description:  "API Key for your email service. Will always be encrypted in our database.",
 						},
 						"access_key_id": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Sensitive:   true,
-							Description: "AWS Access Key ID. Used only for AWS.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "AWS Access Key ID. Used only for AWS.",
 						},
 						"secret_access_key": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Sensitive:   true,
-							Description: "AWS Secret Key. Will always be encrypted in our database. Used only for AWS.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "AWS Secret Key. Will always be encrypted in our database. Used only for AWS.",
 						},
 						"region": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Default region. Used only for AWS, Mailgun, and SparkPost.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Default region. Used only for AWS, Mailgun, and SparkPost.",
 						},
 						"domain": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Domain name.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringLenBetween(4, math.MaxInt),
+							Description:  "Domain name.",
 						},
 						"smtp_host": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Hostname or IP address of your SMTP server. Used only for SMTP.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Hostname or IP address of your SMTP server. Used only for SMTP.",
 						},
 						"smtp_port": {
 							Type:     schema.TypeInt,
@@ -96,15 +108,17 @@ func newEmail() *schema.Resource {
 								"possible because many providers have limitations on this port. Used only for SMTP.",
 						},
 						"smtp_user": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "SMTP username. Used only for SMTP.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "SMTP username. Used only for SMTP.",
 						},
 						"smtp_pass": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Sensitive:   true,
-							Description: "SMTP password. Used only for SMTP.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "SMTP password. Used only for SMTP.",
 						},
 					},
 				},

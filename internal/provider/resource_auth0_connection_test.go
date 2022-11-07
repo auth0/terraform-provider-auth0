@@ -442,6 +442,116 @@ resource "auth0_connection" "oidc" {
 }
 `
 
+func TestAccConnectionOkta(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccConnectionOktaConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_id", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "api.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v1/keys"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v1/token"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.userinfo_endpoint", "https://domain.okta.com/oauth2/v1/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.authorization_endpoint", "https://domain.okta.com/oauth2/v1/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.scopes.#", "3"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionOktaConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_id", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v2/keys"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v2/token"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.userinfo_endpoint", "https://domain.okta.com/oauth2/v2/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.authorization_endpoint", "https://domain.okta.com/oauth2/v2/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionOktaConfig = `
+resource "auth0_connection" "okta" {
+	name           = "Acceptance-Test-Okta-{{.testName}}"
+	display_name   = "Acceptance-Test-Okta-{{.testName}}"
+	strategy       = "okta"
+	show_as_button = true
+	options {
+		client_id                = "123456"
+		client_secret            = "123456"
+		domain                   = "domain.okta.com"
+		domain_aliases           = [ "example.com", "api.example.com" ]
+		issuer                   = "https://domain.okta.com"
+		jwks_uri                 = "https://domain.okta.com/oauth2/v1/keys"
+		token_endpoint           = "https://domain.okta.com/oauth2/v1/token"
+		userinfo_endpoint        = "https://domain.okta.com/oauth2/v1/userinfo"
+		authorization_endpoint   = "https://domain.okta.com/oauth2/v1/authorize"
+		scopes                   = [ "openid", "profile", "email" ]
+		non_persistent_attrs     = [ "gender", "hair_color" ]
+		set_user_root_attributes = "on_each_login"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionOktaConfigUpdate = `
+resource "auth0_connection" "okta" {
+	name           = "Acceptance-Test-Okta-{{.testName}}"
+	display_name   = "Acceptance-Test-Okta-{{.testName}}"
+	strategy       = "okta"
+	show_as_button = false
+	options {
+		client_id                = "123456"
+		client_secret            = "123456"
+		domain                   = "domain.okta.com"
+		domain_aliases           = [ "example.com" ]
+		issuer                   = "https://domain.okta.com"
+		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
+		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
+		userinfo_endpoint        = "https://domain.okta.com/oauth2/v2/userinfo"
+		authorization_endpoint   = "https://domain.okta.com/oauth2/v2/authorize"
+		scopes                   = [ "openid", "profile"]
+		non_persistent_attrs     = [ "gender" ]
+		set_user_root_attributes = "on_first_login"
+	}
+}
+`
+
 func TestAccConnectionOAuth2(t *testing.T) {
 	httpRecorder := recorder.New(t)
 

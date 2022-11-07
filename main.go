@@ -19,8 +19,6 @@ func main() {
 	schema.DescriptionKind = schema.StringMarkdown
 
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderFunc: func() *schema.Provider {
-			return provider.New()
-		},
+		ProviderFunc: provider.New,
 	})
 }

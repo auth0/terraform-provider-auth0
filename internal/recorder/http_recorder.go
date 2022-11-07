@@ -98,13 +98,13 @@ func redactHeaders(i *cassette.Interaction) {
 }
 
 func redactDomain(i *cassette.Interaction, domain string) {
-	i.Request.Host = strings.Replace(i.Request.Host, domain, RecordingsDomain, -1)
-	i.Request.URL = strings.Replace(i.Request.URL, domain, RecordingsDomain, -1)
+	i.Request.Host = strings.ReplaceAll(i.Request.Host, domain, RecordingsDomain)
+	i.Request.URL = strings.ReplaceAll(i.Request.URL, domain, RecordingsDomain)
 
 	domainParts := strings.Split(domain, ".")
 
-	i.Response.Body = strings.Replace(i.Response.Body, domainParts[0], recordingsTenant, -1)
-	i.Request.Body = strings.Replace(i.Request.Body, domainParts[0], recordingsTenant, -1)
+	i.Response.Body = strings.ReplaceAll(i.Response.Body, domainParts[0], recordingsTenant)
+	i.Request.Body = strings.ReplaceAll(i.Request.Body, domainParts[0], recordingsTenant)
 }
 
 func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain string) {

@@ -19,25 +19,17 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v3
 
-      - name: Check that files were correctly generated
-        run: |
-          go generate  ./...
-          files=$(git status --porcelain)
-          if [[ -n ${files}  ]]; then
-            >&2 echo "Go generate resulted in changed files:"
-            >&2 echo ""
-            >&2 echo "${files}"
-            >&2 echo ""
-            >&2 echo "Please run \`go generate ./...\` to regenerate code."
-            >&2 git diff
-            exit 1
-          fi
+      - name: Check that docs were generated
+        run: make check-docs
+
+      - name: Check for go vulnerabilities
+        run: make check-vuln
 
       - name: Check for linting errors
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.50.1
-          args: -c .golangci.yml --allow-parallel-runners
+          version: latest
+          args: -v -c .golangci.yml
 
   tests:
     name: Tests

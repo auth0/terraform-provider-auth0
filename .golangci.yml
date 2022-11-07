@@ -1,5 +1,7 @@
 run:
-  go: "1.19"
+  go: 1.19
+  timeout: 2m
+  allow-parallel-runners: true
 
 linters:
   disable-all: true
@@ -14,6 +16,9 @@ linters:
     - gosimple
     - errcheck
     - unconvert
+    - gocritic
+    - gosec
+    - gocyclo
 
 linters-settings:
   gofmt:
@@ -30,6 +35,15 @@ linters-settings:
       - name: package-comments
         severity: warning
         disabled: true
+  gosec:
+    excludes:
+      # G101 is "Potential hardcoded credentials"
+      # We exclude it as we need to set dummy
+      # credentials within our tests.
+      - G101
+  gocyclo:
+    min-complexity: 30 # This is the default but our goal is to take this down to 15.
 
 issues:
   exclude-use-default: false
+  fix: true

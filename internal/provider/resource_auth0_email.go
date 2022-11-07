@@ -60,6 +60,7 @@ func newEmail() *schema.Resource {
 						"api_user": {
 							Type:        schema.TypeString,
 							Optional:    true,
+							Deprecated:  "This field is not accepted by the API any more so it will be removed soon.",
 							Description: "API User for your email service.",
 						},
 						"api_key": {

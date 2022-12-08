@@ -161,6 +161,21 @@ func TestMap(t *testing.T) {
 		require.NotNil(t, actual)
 		assert.Equal(t, expected, actual)
 	})
+
+	t.Run("it ignores null values", func(t *testing.T) {
+		expected := map[string]interface{}{
+			"logout": "https://app.domain.com/logout",
+		}
+
+		testInput := map[string]cty.Value{
+			"logout": cty.StringVal("https://app.domain.com/logout"),
+			"login":  cty.NullVal(cty.String),
+		}
+
+		actual := Map(cty.MapVal(testInput))
+		require.NotNil(t, actual)
+		assert.Equal(t, expected, actual)
+	})
 }
 
 func TestMapOfStrings(t *testing.T) {
@@ -183,6 +198,21 @@ func TestMapOfStrings(t *testing.T) {
 		testInput := make(map[string]cty.Value)
 		for key, value := range expected {
 			testInput[key] = cty.StringVal(value)
+		}
+
+		actual := MapOfStrings(cty.MapVal(testInput))
+		require.NotNil(t, actual)
+		assert.Equal(t, expected, *actual)
+	})
+
+	t.Run("it ignores null values", func(t *testing.T) {
+		expected := map[string]string{
+			"logout": "https://app.domain.com/logout",
+		}
+
+		testInput := map[string]cty.Value{
+			"logout": cty.StringVal("https://app.domain.com/logout"),
+			"login":  cty.NullVal(cty.String),
 		}
 
 		actual := MapOfStrings(cty.MapVal(testInput))

@@ -415,7 +415,7 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 
 		var err error
 		d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
-			if d.HasChange("push.0.amazon_sns") {
+			if d.HasChange("push.0.amazon_sns.0") {
 				var amazonSNS *management.MultiFactorProviderAmazonSNS
 				push.GetAttr("amazon_sns").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 					amazonSNS = &management.MultiFactorProviderAmazonSNS{
@@ -434,7 +434,7 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 				}
 			}
 
-			if d.HasChange("push.0.custom_app") {
+			if d.HasChange("push.0.custom_app.0") {
 				var customApp *management.MultiFactorPushCustomApp
 				push.GetAttr("custom_app").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 					customApp = &management.MultiFactorPushCustomApp{

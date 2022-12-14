@@ -41,6 +41,7 @@ func newLogStream() *schema.Resource {
 					"datadog",
 					"splunk",
 					"sumo",
+					"mixpanel",
 				}, true),
 				ForceNew:    true,
 				Description: "Type of the log stream, which indicates the sink provider.",
@@ -218,6 +219,32 @@ func newLogStream() *schema.Resource {
 							Description: "Generated URL for your defined HTTP source in " +
 								"Sumo Logic for collecting streaming data from Auth0.",
 						},
+						"mixpanel_region": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							RequiredWith: []string{"sink.0.mixpanel_service_account_password", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_username"},
+							Description: "The Mixpanel region. Options are [\"us\", \"eu\"]. " +
+								"EU is required for customers with EU data residency requirements.",
+						},
+						"mixpanel_project_id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_service_account_username", "sink.0.mixpanel_service_account_password"},
+							Description:  "The Mixpanel project ID, found on the Project Settings page.",
+						},
+						"mixpanel_service_account_username": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_password"},
+							Description:  "The Mixpanel Service Account username. Services Accounts can be created in the Project Settings page.",
+						},
+						"mixpanel_service_account_password": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_username"},
+							Description:  "The Mixpanel Service Account password.",
+						},
 					},
 				},
 			},
@@ -265,7 +292,7 @@ func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) d
 		d.Set("status", logStream.GetStatus()),
 		d.Set("type", logStream.GetType()),
 		d.Set("filters", logStream.Filters),
-		d.Set("sink", flattenLogStreamSink(logStream.Sink)),
+		d.Set("sink", flattenLogStreamSink(d, logStream.Sink)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -296,7 +323,7 @@ func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	return nil
 }
 
-func flattenLogStreamSink(sink interface{}) []interface{} {
+func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{} {
 	var m interface{}
 
 	switch sinkType := sink.(type) {
@@ -312,6 +339,8 @@ func flattenLogStreamSink(sink interface{}) []interface{} {
 		m = flattenLogStreamSinkSplunk(sinkType)
 	case *management.LogStreamSinkSumo:
 		m = flattenLogStreamSinkSumo(sinkType)
+	case *management.LogStreamSinkMixpanel:
+		m = flattenLogStreamSinkMixpanel(d, sinkType)
 	}
 
 	return []interface{}{m}
@@ -366,6 +395,15 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 	}
 }
 
+func flattenLogStreamSinkMixpanel(d *schema.ResourceData, o *management.LogStreamSinkMixpanel) interface{} {
+	return map[string]interface{}{
+		"mixpanel_region":                   o.GetRegion(),
+		"mixpanel_project_id":               o.GetProjectID(),
+		"mixpanel_service_account_username": o.GetServiceAccountUsername(),
+		"mixpanel_service_account_password": d.Get("sink.0.mixpanel_service_account_password").(string), // Value does not get read back.
+	}
+}
+
 func expandLogStream(d *schema.ResourceData) *management.LogStream {
 	config := d.GetRawConfig()
 
@@ -414,6 +452,8 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 			logStream.Sink = expandLogStreamSinkSplunk(sink)
 		case management.LogStreamTypeSumo:
 			logStream.Sink = expandLogStreamSinkSumo(sink)
+		case management.LogStreamTypeMixpanel:
+			logStream.Sink = expandLogStreamSinkMixpanel(sink)
 		default:
 			log.Printf("[WARN]: Unsupported log stream sink %s", logStream.GetType())
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
@@ -481,5 +521,13 @@ func expandLogStreamSinkSplunk(config cty.Value) *management.LogStreamSinkSplunk
 func expandLogStreamSinkSumo(config cty.Value) *management.LogStreamSinkSumo {
 	return &management.LogStreamSinkSumo{
 		SourceAddress: value.String(config.GetAttr("sumo_source_address")),
+	}
+}
+func expandLogStreamSinkMixpanel(config cty.Value) *management.LogStreamSinkMixpanel {
+	return &management.LogStreamSinkMixpanel{
+		Region:                 value.String(config.GetAttr("mixpanel_region")),
+		ProjectID:              value.String(config.GetAttr("mixpanel_project_id")),
+		ServiceAccountUsername: value.String(config.GetAttr("mixpanel_service_account_username")),
+		ServiceAccountPassword: value.String(config.GetAttr("mixpanel_service_account_password")),
 	}
 }

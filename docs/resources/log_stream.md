@@ -90,6 +90,10 @@ Optional:
 - `http_content_type` (String) The "Content-Type" header to send over HTTP. Common value is "application/json".
 - `http_custom_headers` (List of Map of String) Additional HTTP headers to be included as part of the HTTP request.
 - `http_endpoint` (String) The HTTP endpoint to send streaming logs.
+- `mixpanel_project_id` (String) The Mixpanel project ID, found on the Project Settings page.
+- `mixpanel_region` (String) The Mixpanel region. Options are ["us", "eu"]. EU is required for customers with EU data residency requirements.
+- `mixpanel_service_account_password` (String, Sensitive) The Mixpanel Service Account password.
+- `mixpanel_service_account_username` (String) The Mixpanel Service Account username. Services Accounts can be created in the Project Settings page.
 - `splunk_domain` (String) The Splunk domain name.
 - `splunk_port` (String) The Splunk port.
 - `splunk_secure` (Boolean) This toggle should be turned off when using self-signed certificates.

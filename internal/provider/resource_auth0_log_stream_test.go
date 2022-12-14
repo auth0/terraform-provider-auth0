@@ -603,3 +603,130 @@ resource "auth0_log_stream" "my_log_stream" {
 	}
 }
 `
+
+func TestAccLogStreamMixpanel(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(logStreamMixpanelConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_region", "us"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_project_id", "123456789"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_username", "fake-account.123abc.mp-service-account"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_password", "8iwyKSzwV2brfakepassGGKhsZ3INozo"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamMixpanelConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_region", "us"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_project_id", "987654321"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_username", "fake-account.123abc.mp-service-account"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_password", "8iwyKSzwV2brfakepassGGKhsZ3INozo"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamMixpanelConfigUpdateWithFilters, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.name", "auth.login.fail"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.name", "auth.signup.fail"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_region", "us"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_project_id", "987654321"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_username", "fake-account.123abc.mp-service-account"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_password", "8iwyKSzwV2brfakepassGGKhsZ3INozo"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamMixpanelConfigUpdateWithEmptyFilters, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_region", "us"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_project_id", "987654321"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_username", "fake-account.123abc.mp-service-account"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.mixpanel_service_account_password", "8iwyKSzwV2brfakepassGGKhsZ3INozo"),
+				),
+			},
+		},
+	})
+}
+
+const logStreamMixpanelConfig = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-mixpanel-{{.testName}}"
+	type = "mixpanel"
+	sink {
+		mixpanel_region = "us"
+		mixpanel_project_id = "123456789"
+		mixpanel_service_account_username = "fake-account.123abc.mp-service-account"
+		mixpanel_service_account_password = "8iwyKSzwV2brfakepassGGKhsZ3INozo"
+	}
+}
+`
+const logStreamMixpanelConfigUpdate = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-mixpanel-{{.testName}}"
+	type = "mixpanel"
+	sink {
+		mixpanel_region = "us"
+		mixpanel_project_id = "987654321"
+		mixpanel_service_account_username = "fake-account.123abc.mp-service-account"
+		mixpanel_service_account_password = "8iwyKSzwV2brfakepassGGKhsZ3INozo"
+	}
+}
+`
+
+const logStreamMixpanelConfigUpdateWithFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-mixpanel-{{.testName}}"
+	type = "mixpanel"
+
+	filters = [
+		{
+			type = "category"
+			name = "auth.login.fail"
+		},
+		{
+			type = "category"
+			name = "auth.signup.fail"
+		}
+	]
+
+	sink {
+		mixpanel_region = "us"
+		mixpanel_project_id = "987654321"
+		mixpanel_service_account_username = "fake-account.123abc.mp-service-account"
+		mixpanel_service_account_password = "8iwyKSzwV2brfakepassGGKhsZ3INozo"
+	}
+}
+`
+
+const logStreamMixpanelConfigUpdateWithEmptyFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-mixpanel-{{.testName}}"
+	type = "mixpanel"
+
+	filters = [ ]
+
+	sink {
+		mixpanel_region = "us"
+		mixpanel_project_id = "987654321"
+		mixpanel_service_account_username = "fake-account.123abc.mp-service-account"
+		mixpanel_service_account_password = "8iwyKSzwV2brfakepassGGKhsZ3INozo"
+	}
+}
+`

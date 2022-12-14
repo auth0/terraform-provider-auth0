@@ -1,3 +1,15 @@
+## 0.40.1
+
+FEATURES:
+
+- `resource/auth0_log_stream`: Added support for Mixpanel log streams ([#408](https://github.com/auth0/terraform-provider-auth0/pull/408))
+
+BUG FIXES:
+
+- `resource/auth0_guardian`: Added `provider` to `push` mfa to fix `sns` settings not getting propagated ([#415](https://github.com/auth0/terraform-provider-auth0/pull/415))
+- Prevent panic on null values when iterating over map elements ([#413](https://github.com/auth0/terraform-provider-auth0/pull/413))
+
+
 ## 0.40.0
 
 FEATURES:

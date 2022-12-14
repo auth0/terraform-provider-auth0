@@ -415,6 +415,13 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 
 		var err error
 		d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
+			mfaProvider := &management.MultiFactorProvider{
+				Provider: value.String(push.GetAttr("provider")),
+			}
+			if err = api.Guardian.MultiFactor.Push.UpdateProvider(mfaProvider); err != nil {
+				return true
+			}
+
 			if d.HasChange("push.0.amazon_sns.0") {
 				var amazonSNS *management.MultiFactorProviderAmazonSNS
 				push.GetAttr("amazon_sns").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {

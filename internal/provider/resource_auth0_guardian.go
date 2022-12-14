@@ -234,6 +234,12 @@ func newGuardian() *schema.Resource {
 					"Push MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"provider": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"guardian", "sns"}, false),
+							Description:  "Provider to use, one of `guardian`, `sns`.",
+						},
 						"amazon_sns": {
 							Type:        schema.TypeList,
 							Optional:    true,

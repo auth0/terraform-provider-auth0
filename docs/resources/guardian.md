@@ -118,6 +118,10 @@ Optional:
 <a id="nestedblock--push"></a>
 ### Nested Schema for `push`
 
+Required:
+
+- `provider` (String) Provider to use, one of `guardian`, `sns`.
+
 Optional:
 
 - `amazon_sns` (Block List, Max: 1) Configuration for Amazon SNS. (see [below for nested schema](#nestedblock--push--amazon_sns))

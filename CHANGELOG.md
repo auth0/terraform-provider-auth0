@@ -2,7 +2,7 @@
 
 FEATURES:
 
-- `resource/auth0_log_stream`: Added support for Mixpanel `LogStream` ([#408](https://github.com/auth0/terraform-provider-auth0/pull/408))
+- `resource/auth0_log_stream`: Added support for Mixpanel log streams ([#408](https://github.com/auth0/terraform-provider-auth0/pull/408))
 
 BUG FIXES:
 

@@ -7,7 +7,7 @@
 [![Release](https://img.shields.io/github/v/release/auth0/terraform-provider-auth0?logo=terraform&include_prereleases&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/releases)
 [![Codecov](https://img.shields.io/codecov/c/github/auth0/terraform-provider-auth0?logo=codecov&style=flat-square)](https://codecov.io/gh/auth0/terraform-provider-auth0)
 [![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?logo=fossa&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/auth0/terraform-provider-auth0/Main%20Workflow/main?logo=github&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/terraform-provider-auth0/main.yml?branch=main)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
 
 The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
 [Terraform](https://www.terraform.io/) tool.
@@ -69,7 +69,6 @@ If you have found a bug or if you have a feature request, please raise an issue 
 
 Please do not report security vulnerabilities on the public GitHub issue tracker.
 The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
-
 
 ---
 

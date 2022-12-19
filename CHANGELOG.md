@@ -1,3 +1,35 @@
+## 0.40.1
+
+FEATURES:
+
+- `resource/auth0_log_stream`: Added support for Mixpanel log streams ([#408](https://github.com/auth0/terraform-provider-auth0/pull/408))
+
+BUG FIXES:
+
+- `resource/auth0_guardian`: Added `provider` to `push` mfa to fix `sns` settings not getting propagated ([#415](https://github.com/auth0/terraform-provider-auth0/pull/415))
+- Prevent panic on null values when iterating over map elements ([#413](https://github.com/auth0/terraform-provider-auth0/pull/413))
+
+
+## 0.40.0
+
+FEATURES:
+
+- `resource/auth0_connection_client`: Added new resource to manage enabled clients on a connection ([#379](https://github.com/auth0/terraform-provider-auth0/pull/379))
+- `resource/auth0_connection`: Added support for `okta` connection type ([#395](https://github.com/auth0/terraform-provider-auth0/pull/395))
+- `resource/auth0_email`: Added `settings` field ([#394](https://github.com/auth0/terraform-provider-auth0/pull/394))
+
+ENHANCEMENTS:
+
+- `resource/auth0_connection`: Added documentation for connection options for all strategy types ([#383](https://github.com/auth0/terraform-provider-auth0/pull/383))
+- `resource/auth0_client`: Relaxed validation rules on initiate_login_uri to match API ([#389](https://github.com/auth0/terraform-provider-auth0/pull/389))
+- `resource/auth0_email`: Update email provider if already existing when creating it ([#377](https://github.com/auth0/terraform-provider-auth0/pull/377))
+- `resource/auth0_email`: Added validation to all attributes ([#391](https://github.com/auth0/terraform-provider-auth0/pull/391))
+
+NOTES:
+
+- `resource/auth0_email`: Deprecated `api_user` field ([#392](https://github.com/auth0/terraform-provider-auth0/pull/392))
+
+
 ## 0.39.0
 
 FEATURES:

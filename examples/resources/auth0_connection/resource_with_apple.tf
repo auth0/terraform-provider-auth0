@@ -5,10 +5,12 @@ resource "auth0_connection" "apple" {
   strategy = "apple"
 
   options {
-    client_id     = "<client-id>"
-    client_secret = "<private-key>"
-    team_id       = "<team-id>"
-    key_id        = "<key-id>"
-    scopes        = ["email", "name"]
+    client_id                = "<client-id>"
+    client_secret            = "-----BEGIN PRIVATE KEY-----\nMIHBAgEAMA0GCSqGSIb3DQEBAQUABIGsMIGpAgEAA\n-----END PRIVATE KEY-----"
+    team_id                  = "<team-id>"
+    key_id                   = "<key-id>"
+    scopes                   = ["email", "name"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }

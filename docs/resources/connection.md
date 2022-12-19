@@ -102,6 +102,35 @@ resource "auth0_connection" "google_oauth2" {
     allowed_audiences        = ["example.com", "api.example.com"]
     scopes                   = ["email", "profile", "gmail", "youtube"]
     set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+  }
+}
+```
+
+### Google Apps
+
+```terraform
+resource "auth0_connection" "google_apps" {
+  name                 = "connection-google-apps"
+  is_domain_connection = false
+  strategy             = "google-apps"
+  show_as_button       = false
+  options {
+    client_id        = ""
+    client_secret    = ""
+    domain           = "example.com"
+    tenant_domain    = "example.com"
+    domain_aliases   = ["example.com", "api.example.com"]
+    api_enable_users = true
+    scopes           = ["ext_profile", "ext_groups"]
+    icon_url         = "https://example.com/assets/logo.png"
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
@@ -124,6 +153,8 @@ resource "auth0_connection" "facebook" {
       "groups_access_member_info",
       "user_birthday"
     ]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
@@ -138,11 +169,13 @@ resource "auth0_connection" "apple" {
   strategy = "apple"
 
   options {
-    client_id     = "<client-id>"
-    client_secret = "<private-key>"
-    team_id       = "<team-id>"
-    key_id        = "<key-id>"
-    scopes        = ["email", "name"]
+    client_id                = "<client-id>"
+    client_secret            = "-----BEGIN PRIVATE KEY-----\nMIHBAgEAMA0GCSqGSIb3DQEBAQUABIGsMIGpAgEAA\n-----END PRIVATE KEY-----"
+    team_id                  = "<team-id>"
+    key_id                   = "<key-id>"
+    scopes                   = ["email", "name"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
@@ -157,10 +190,12 @@ resource "auth0_connection" "linkedin" {
   strategy = "linkedin"
 
   options {
-    client_id        = "<client-id>"
-    client_secret    = "<client-secret>"
-    strategy_version = 2
-    scopes           = ["basic_profile", "profile", "email"]
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    strategy_version         = 2
+    scopes                   = ["basic_profile", "profile", "email"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
@@ -175,9 +210,11 @@ resource "auth0_connection" "github" {
   strategy = "github"
 
   options {
-    client_id     = "<client-id>"
-    client_secret = "<client-secret>"
-    scopes        = ["email", "profile", "public_repo", "repo"]
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    scopes                   = ["email", "profile", "public_repo", "repo"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
@@ -192,14 +229,19 @@ resource "auth0_connection" "salesforce" {
   strategy = "salesforce"
 
   options {
-    client_id          = "<client-id>"
-    client_secret      = "<client-secret>"
-    community_base_url = "https://salesforce.example.com"
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    community_base_url       = "https://salesforce.example.com"
+    scopes                   = ["openid", "email"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }
 ```
 
 ### OAuth2 Connection
+
+Also applies to following connection strategies: `dropbox`, `bitbucket`, `paypal`, `twitter`, `amazon`, `yahoo`, `box`, `wordpress`, `discord`, `imgur`, `spotify`, `shopify`, `figma`, `slack-oauth-2`, `digitalocean`, `twitch`, `vimeo`, `custom`
 
 ```terraform
 # This is an example of an OAuth2 connection.
@@ -211,9 +253,11 @@ resource "auth0_connection" "oauth2" {
   options {
     client_id              = "<client-id>"
     client_secret          = "<client-secret>"
+    scopes                 = ["basic_profile", "profile", "email"]
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
     pkce_enabled           = true
+    icon_url               = "https://auth.example.com/assets/logo.png"
     scripts = {
       fetchUserProfile = <<EOF
         function fetchUserProfile(accessToken, context, callback) {
@@ -221,6 +265,81 @@ resource "auth0_connection" "oauth2" {
         }
       EOF
     }
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+  }
+}
+```
+
+### Active Directory (AD)
+
+```terraform
+resource "auth0_connection" "ad" {
+  name           = "connection-active-directory"
+  display_name   = "Active Directory Connection"
+  strategy       = "ad"
+  show_as_button = true
+
+  options {
+    brute_force_protection = true
+    tenant_domain          = "example.com"
+    icon_url               = "https://example.com/assets/logo.png"
+    domain_aliases = [
+      "example.com",
+      "api.example.com"
+    ]
+    ips                      = ["192.168.1.1", "192.168.1.2"]
+    set_user_root_attributes = "on_each_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
+    use_cert_auth = false
+    use_kerberos  = false
+    disable_cache = false
+  }
+}
+```
+
+### Azure AD Connection
+
+```terraform
+resource "auth0_connection" "azure_ad" {
+  name           = "connection-azure-ad"
+  strategy       = "waad"
+  show_as_button = true
+  options {
+    identity_api  = "azure-active-directory-v1.0"
+    client_id     = "123456"
+    client_secret = "123456"
+    app_id        = "app-id-123"
+    tenant_domain = "example.onmicrosoft.com"
+    domain        = "example.onmicrosoft.com"
+    domain_aliases = [
+      "example.com",
+      "api.example.com"
+    ]
+    icon_url               = "https://example.onmicrosoft.com/assets/logo.png"
+    use_wsfed              = false
+    waad_protocol          = "openid-connect"
+    waad_common_endpoint   = false
+    max_groups_to_retrieve = 250
+    api_enable_users       = true
+    scopes = [
+      "basic_profile",
+      "ext_groups",
+      "ext_profile"
+    ]
+    set_user_root_attributes               = "on_each_login"
+    should_trust_email_verified_connection = "never_set_emails_as_verified"
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
+    non_persistent_attrs = ["ethnicity", "gender"]
   }
 }
 ```
@@ -246,10 +365,21 @@ resource "auth0_connection" "sms" {
     messaging_service_sid  = "<messaging-service-sid>"
     disable_signup         = false
     brute_force_protection = true
+    forward_request_info   = true
 
     totp {
       time_step = 300
       length    = 6
+    }
+
+    provider    = "sms_gateway"
+    gateway_url = "https://somewhere.com/sms-gateway"
+    gateway_authentication {
+      method                = "bearer"
+      subject               = "test.us.auth0.com:sms"
+      audience              = "https://somewhere.com/sms-gateway"
+      secret                = "4e2680bb72ec2ae24836476dd37ed6c2"
+      secret_base64_encoded = false
     }
   }
 }
@@ -300,13 +430,14 @@ resource "auth0_connection" "passwordless_email" {
   name     = "email"
 
   options {
+    name                     = "email"
     from                     = "{{ application.name }} \u003croot@auth0.com\u003e"
     subject                  = "Welcome to {{ application.name }}"
     syntax                   = "liquid"
     template                 = "<html>This is the body of the email</html>"
     disable_signup           = false
     brute_force_protection   = true
-    set_user_root_attributes = []
+    set_user_root_attributes = "on_each_login"
     non_persistent_attrs     = []
     auth_params = {
       scope         = "openid email profile offline_access"
@@ -331,6 +462,7 @@ resource "auth0_connection" "samlp" {
   strategy = "samlp"
 
   options {
+    debug               = false
     signing_cert        = "<signing-certificate>"
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
@@ -342,16 +474,31 @@ resource "auth0_connection" "samlp" {
     user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
     signature_algorithm = "rsa-sha256"
     digest_algorithm    = "sha256"
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml"
+    icon_url            = "https://saml.provider/assets/logo.png"
+    entity_id           = "<entity_id>"
+    metadata_xml        = <<EOF
+    <?xml version="1.0"?>
+    <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
+      <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_out"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_in"/>
+      </md:IDPSSODescriptor>
+    </md:EntityDescriptor>
+    EOF 
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultanteously 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
       "email" : ["emailaddress", "nameidentifier"]
       "family_name" : "surname"
     })
-
     signing_key {
       key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+    }
+    idp_initiated {
+      client_id              = "client_id"
+      client_protocol        = "samlp"
+      client_authorize_query = "type=code&timeout=30"
     }
   }
 }
@@ -367,10 +514,78 @@ resource "auth0_connection" "windowslive" {
   strategy = "windowslive"
 
   options {
-    client_id        = "<client-id>"
-    client_secret    = "<client-secret>"
-    strategy_version = 2
-    scopes           = ["signin", "graph_user"]
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    strategy_version         = 2
+    scopes                   = ["signin", "graph_user"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+  }
+}
+```
+
+### OIDC Connection
+
+```terraform
+# This is an example of an OIDC connection.
+
+resource "auth0_connection" "oidc" {
+  name           = "oidc-connection"
+  display_name   = "OIDC Connection"
+  strategy       = "oidc"
+  show_as_button = false
+
+  options {
+    client_id     = "1234567"
+    client_secret = "1234567"
+    domain_aliases = [
+      "example.com"
+    ]
+    tenant_domain            = ""
+    icon_url                 = "https://example.com/assets/logo.png"
+    type                     = "front_channel"
+    issuer                   = "https://www.paypalobjects.com"
+    jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
+    discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"
+    token_endpoint           = "https://api.paypal.com/v1/oauth2/token"
+    userinfo_endpoint        = "https://api.paypal.com/v1/oauth2/token/userinfo"
+    authorization_endpoint   = "https://www.paypal.com/signin/authorize"
+    scopes                   = ["openid", "email"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+  }
+}
+```
+
+### Okta Connection
+
+```terraform
+# This is an example of an Okta Workforce connection.
+
+resource "auth0_connection" "okta" {
+  name           = "okta-connection"
+  display_name   = "Okta Workforce Connection"
+  strategy       = "okta"
+  show_as_button = false
+
+  options {
+    client_id                = "1234567"
+    client_secret            = "1234567"
+    domain                   = "example.okta.com"
+    domain_aliases           = ["example.com"]
+    issuer                   = "https://example.okta.com"
+    jwks_uri                 = "https://example.okta.com/v1/oauth2/certs"
+    token_endpoint           = "https://example.okta.com/v1/oauth2/token"
+    userinfo_endpoint        = "https://example.okta.com/v1/oauth2/token/userinfo"
+    authorization_endpoint   = "https://example.okta.com/signin/authorize"
+    scopes                   = ["openid", "email"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
+    upstream_params = jsonencode({
+      "screen_name" : {
+        "alias" : "login_hint"
+      }
+    })
   }
 }
 ```

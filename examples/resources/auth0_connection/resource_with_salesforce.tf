@@ -5,8 +5,11 @@ resource "auth0_connection" "salesforce" {
   strategy = "salesforce"
 
   options {
-    client_id          = "<client-id>"
-    client_secret      = "<client-secret>"
-    community_base_url = "https://salesforce.example.com"
+    client_id                = "<client-id>"
+    client_secret            = "<client-secret>"
+    community_base_url       = "https://salesforce.example.com"
+    scopes                   = ["openid", "email"]
+    set_user_root_attributes = "on_first_login"
+    non_persistent_attrs     = ["ethnicity", "gender"]
   }
 }

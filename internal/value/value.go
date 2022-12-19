@@ -81,6 +81,9 @@ func Map(rawValue cty.Value) map[string]interface{} {
 
 	m := make(map[string]interface{})
 	for key, value := range rawValue.AsValueMap() {
+		if value.IsNull() {
+			continue
+		}
 		m[key] = value.AsString()
 	}
 
@@ -96,6 +99,9 @@ func MapOfStrings(rawValue cty.Value) *map[string]string {
 
 	m := make(map[string]string)
 	for key, value := range rawValue.AsValueMap() {
+		if value.IsNull() {
+			continue
+		}
 		m[key] = value.AsString()
 	}
 

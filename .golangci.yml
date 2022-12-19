@@ -1,13 +1,12 @@
 run:
-  # Some linters are disabled because of go1.18.
-  # We can track the evolution of go1.18 support at
-  # https://github.com/golangci/golangci-lint/issues/2649.
-  go: "1.17"
+  go: 1.19
+  timeout: 2m
+  allow-parallel-runners: true
 
 linters:
   disable-all: true
   enable:
-    - deadcode
+    - unused
     - gofmt
     - staticcheck
     - revive
@@ -15,10 +14,11 @@ linters:
     - whitespace
     - goimports
     - gosimple
-    - structcheck
-    - unused
     - errcheck
     - unconvert
+    - gocritic
+    - gosec
+    - gocyclo
 
 linters-settings:
   gofmt:
@@ -30,6 +30,20 @@ linters-settings:
     capital: true
   goimports:
     local-prefixes: "github.com/auth0/terraform-provider-auth0"
+  revive:
+    rules:
+      - name: package-comments
+        severity: warning
+        disabled: true
+  gosec:
+    excludes:
+      # G101 is "Potential hardcoded credentials"
+      # We exclude it as we need to set dummy
+      # credentials within our tests.
+      - G101
+  gocyclo:
+    min-complexity: 30 # This is the default but our goal is to take this down to 15.
 
 issues:
   exclude-use-default: false
+  fix: true

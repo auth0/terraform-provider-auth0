@@ -187,8 +187,8 @@ func TestAccAction(t *testing.T) {
 }
 
 // This config makes use of a crypto dependency definition that causes the
-// action build to fail.  This is presumably because the crypto package has been
-// deprecated: https://www.npmjs.com/package/crypto
+// action build to fail.  This is because the crypto package has been
+// deprecated https://www.npmjs.com/package/crypto.
 //
 // If this is ever fixed in the API, another means of failing the build will
 // need to be used here.

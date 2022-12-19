@@ -61,13 +61,6 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccClientValidationOnInitiateLoginURIWithFragment = `
-resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Initiate Login URI - {{.testName}}"
-	initiate_login_uri = "https://example.com/login#fragment"
-}
-`
-
 func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		ProviderFactories: testProviders(nil),
@@ -75,10 +68,6 @@ func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 			{
 				Config:      template.ParseTestName(testAccClientValidationOnInitiateLoginURIWithHTTP, t.Name()),
 				ExpectError: regexp.MustCompile("to have a url with schema"),
-			},
-			{
-				Config:      template.ParseTestName(testAccClientValidationOnInitiateLoginURIWithFragment, t.Name()),
-				ExpectError: regexp.MustCompile("to have a url with an empty fragment"),
 			},
 		},
 	})

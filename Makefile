@@ -39,11 +39,17 @@ docs: ## Generate docs
 #-----------------------------------------------------------------------------------------------------------------------
 # Dependencies
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: deps deps-rm
+.PHONY: deps deps-dev deps-rm
 
 deps: ## Download dependencies
 	${call print, "Downloading dependencies"}
 	@go mod vendor -v
+
+deps-dev: ## Download development dependencies
+	${call print, "Installing golangci-lint"}
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	${call print, "Installing go vulnerability checker"}
+	@go install golang.org/x/vuln/cmd/govulncheck@latest
 
 deps-rm: ## Remove the dependencies folder
 	${call print, "Removing the dependencies folder"}
@@ -60,24 +66,48 @@ build: ## Build the provider binary. Usage: "make build VERSION=0.2.0"
 	then \
 	  echo "Please provide a version. Example: make build VERSION=0.2.0" && exit 1; \
  	fi
-	@go build -v -o "${BUILD_DIR}/${BINARY}_v$(VERSION)"
+	@go build -v -ldflags "-X github.com/auth0/terraform-provider-auth0/internal/provider.version=${VERSION}" -o "${BUILD_DIR}/${BINARY}_v$(VERSION)"
 
 install: build ## Install the provider as a terraform plugin. Usage: "make install VERSION=0.2.0"
 	@mkdir -p "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)/${GO_OS}_${GO_ARCH}"
 	@mv "${BUILD_DIR}/${BINARY}_v$(VERSION)" "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)/${GO_OS}_${GO_ARCH}"
 
-clean: ## Clean up locally installed provider binaries."
+clean: ## Clean up locally installed provider binaries
 	${call print_warning, "Cleaning locally installed provider binaries"}
 	@rm -rf "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}"
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Code Style
+# Checks
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: lint
+.PHONY: lint check-docs check-vuln
 
 lint: ## Run go linter checks
+	@if ! command -v golangci-lint &> /dev/null; \
+	then \
+		make deps-dev; \
+ 	fi
 	${call print, "Running golangci-lint over project"}
-	@sh -c "${GO_LINT_SCRIPT}"
+	@golangci-lint run -v -c .golangci.yml ./...
+
+check-docs: ## Check that documentation was generated correctly
+	${call print, "Checking that documentation was generated correctly"}
+	@go generate
+	@if [ -n "$$(git status --porcelain)" ]; \
+	then \
+		echo "Go generate resulted in changed files:"; \
+		echo "$$(git diff)"; \
+		echo "Please run \`make docs\` to regenerate docs."; \
+		exit 1; \
+	fi
+	@echo "Documentation is generated correctly."
+
+check-vuln: ## Check go vulnerabilities
+	@if ! command -v govulncheck &> /dev/null; \
+	then \
+		make deps-dev; \
+ 	fi
+	${call print, "Running govulncheck over project"}
+	@govulncheck -v ./...
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing

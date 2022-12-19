@@ -488,7 +488,9 @@ func TestAccGuardianDUO(t *testing.T) {
 const testAccConfigurePushCreate = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
-	push {}
+	push {
+		provider = "guardian"
+	}
 }
 `
 
@@ -496,6 +498,8 @@ const testAccConfigurePushUpdateAmazonSNS = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	push {
+		provider = "sns"
+
 		amazon_sns {
 			aws_access_key_id = "test1"
 			aws_region = "us-west-1"
@@ -511,6 +515,8 @@ const testAccConfigurePushUpdateCustomApp = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
 	push {
+		provider = "sns"
+
 		amazon_sns {
 			aws_access_key_id = "test1"
 			aws_region = "us-west-1"
@@ -518,6 +524,7 @@ resource "auth0_guardian" "foo" {
 			sns_apns_platform_application_arn = "test_arn"
 			sns_gcm_platform_application_arn = "test_arn"
 		}
+
 		custom_app {
 			app_name = "CustomApp"
 			apple_app_link = "https://itunes.apple.com/us/app/my-app/id123121"
@@ -551,6 +558,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.provider", "guardian"),
 				),
 			},
 			{
@@ -565,6 +573,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.provider", "sns"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_access_key_id", "test1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.amazon_sns.0.aws_region", "us-west-1"),
@@ -585,6 +594,7 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "webauthn_platform.#", "0"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "recovery_code", "false"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.provider", "sns"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.#", "1"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.app_name", "CustomApp"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.apple_app_link", "https://itunes.apple.com/us/app/my-app/id123121"),

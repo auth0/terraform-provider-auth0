@@ -601,7 +601,6 @@ resource "auth0_connection" "okta" {
 ### Optional
 
 - `display_name` (String) Name used in login screen.
-- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))

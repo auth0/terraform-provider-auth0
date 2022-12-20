@@ -88,12 +88,6 @@ func TestAccConnectionClient(t *testing.T) {
 				),
 			},
 			{
-				RefreshState: true,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "2"),
-				),
-			},
-			{
 				Config: template.ParseTestName(testAccDeleteConnectionClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
@@ -104,12 +98,6 @@ func TestAccConnectionClient(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc-2", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc-2", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-				),
-			},
-			{
-				RefreshState: true,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "1"),
 				),
 			},
 		},

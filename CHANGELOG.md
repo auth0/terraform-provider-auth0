@@ -1,3 +1,11 @@
+## 0.41.0
+
+BREAKING CHANGES:
+
+- `resource/auth0_connection`: Removed `enabled_clients` field ([#421](https://github.com/auth0/terraform-provider-auth0/pull/421))
+  - It is necessary to migrate all `enabled_clients` on the `auth0_connection` resource to the [auth0_connection_client](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/connection_client) resource.
+
+
 ## 0.40.1
 
 FEATURES:

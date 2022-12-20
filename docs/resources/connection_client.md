@@ -2,14 +2,11 @@
 page_title: "Resource: auth0_connection_client"
 description: |-
   With this resource, you can manage enabled clients on a connection.
-  ~> Avoid using the enabledclients property on the "auth0connection" if making use of this resource, to avoid unexpected behavior.
 ---
 
 # Resource: auth0_connection_client
 
 With this resource, you can manage enabled clients on a connection.
-
-~> Avoid using the enabled_clients property on the "auth0_connection" if making use of this resource, to avoid unexpected behavior.
 
 ## Example Usage
 

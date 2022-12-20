@@ -50,9 +50,7 @@ func newConnectionClient() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importConnectionClient,
 		},
-		Description: `With this resource, you can manage enabled clients on a connection.
-
-~> Avoid using the enabled_clients property on the "auth0_connection" if making use of this resource, to avoid unexpected behavior.`,
+		Description: "With this resource, you can manage enabled clients on a connection.",
 	}
 }
 

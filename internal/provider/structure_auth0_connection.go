@@ -609,7 +609,6 @@ func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diag
 	connection := &management.Connection{
 		DisplayName:        value.String(config.GetAttr("display_name")),
 		IsDomainConnection: value.Bool(config.GetAttr("is_domain_connection")),
-		EnabledClients:     value.Strings(config.GetAttr("enabled_clients")),
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
 	}
 

@@ -159,6 +159,10 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 
 	roles, err := api.Organization.MemberRoles(orgID, userID)
 	if err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
+		}
 		return diag.FromErr(err)
 	}
 

@@ -39,12 +39,18 @@ func newGuardian() *schema.Resource {
 			"webauthn_roaming": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Description: "Configuration settings for the WebAuthn with FIDO Security Keys MFA. " +
 					"If this block is present, WebAuthn with FIDO Security Keys MFA will be enabled, " +
 					"and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Indicates whether WebAuthn with FIDO Security Keys MFA is enabled.",
+						},
 						"user_verification": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -79,12 +85,18 @@ func newGuardian() *schema.Resource {
 			"webauthn_platform": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Description: "Configuration settings for the WebAuthn with FIDO Device Biometrics MFA. " +
 					"If this block is present, WebAuthn with FIDO Device Biometrics MFA will be enabled, " +
 					"and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Indicates whether WebAuthn with FIDO Device Biometrics MFA is enabled.",
+						},
 						"override_relying_party": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -105,14 +117,20 @@ func newGuardian() *schema.Resource {
 			"phone": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Description: "Configuration settings for the phone MFA. If this block is present, " +
 					"Phone MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Indicates whether Phone MFA is enabled.",
+						},
 						"provider": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 							ValidateFunc: validation.StringInSlice(
 								[]string{
 									"auth0",
@@ -121,14 +139,16 @@ func newGuardian() *schema.Resource {
 								},
 								false,
 							),
-							Description: "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`.",
+							RequiredWith: []string{"phone.0.message_types"},
+							Description:  "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`.",
 						},
 						"message_types": {
 							Type:     schema.TypeList,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+							RequiredWith: []string{"phone.0.provider"},
 							Description: "Message types to use, array of `sms` and/or `voice`. " +
 								"Adding both to the array should enable the user to choose.",
 						},
@@ -202,26 +222,35 @@ func newGuardian() *schema.Resource {
 			"duo": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Description: "Configuration settings for the Duo MFA. If this block is present, " +
 					"Duo MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"integration_key": {
-							Type:        schema.TypeString,
+						"enabled": {
+							Type:        schema.TypeBool,
 							Required:    true,
-							Description: "Duo client ID, see the Duo documentation for more details on Duo setup.",
+							Description: "Indicates whether Duo MFA is enabled.",
+						},
+						"integration_key": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							RequiredWith: []string{"duo.0.secret_key", "duo.0.hostname"},
+							Description:  "Duo client ID, see the Duo documentation for more details on Duo setup.",
 						},
 						"secret_key": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Sensitive:   true,
-							Description: "Duo client secret, see the Duo documentation for more details on Duo setup.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							RequiredWith: []string{"duo.0.integration_key", "duo.0.hostname"},
+							Description:  "Duo client secret, see the Duo documentation for more details on Duo setup.",
 						},
 						"hostname": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Duo API Hostname, see the Duo documentation for more details on Duo setup.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							RequiredWith: []string{"duo.0.integration_key", "duo.0.secret_key"},
+							Description:  "Duo API Hostname, see the Duo documentation for more details on Duo setup.",
 						},
 					},
 				},
@@ -229,22 +258,30 @@ func newGuardian() *schema.Resource {
 			"push": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				MaxItems: 1,
 				Description: "Configuration settings for the Push MFA. If this block is present, " +
 					"Push MFA will be enabled, and disabled otherwise.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Indicates whether Push MFA is enabled.",
+						},
 						"provider": {
 							Type:         schema.TypeString,
-							Required:     true,
+							Optional:     true,
 							ValidateFunc: validation.StringInSlice([]string{"guardian", "sns"}, false),
 							Description:  "Provider to use, one of `guardian`, `sns`.",
 						},
 						"amazon_sns": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: "Configuration for Amazon SNS.",
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							RequiredWith: []string{"push.0.provider"},
+							Description:  "Configuration for Amazon SNS.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"aws_access_key_id": {
@@ -277,10 +314,12 @@ func newGuardian() *schema.Resource {
 							},
 						},
 						"custom_app": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: "Configuration for the Guardian Custom App.",
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							RequiredWith: []string{"push.0.provider"},
+							Description:  "Configuration for the Guardian Custom App.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"app_name": {
@@ -339,60 +378,40 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		case "recovery-code":
 			result = multierror.Append(result, d.Set("recovery_code", factor.GetEnabled()))
 		case "sms":
-			result = multierror.Append(result, d.Set("phone", nil))
-
-			if factor.GetEnabled() {
-				phone, err := flattenPhone(api)
-				if err != nil {
-					return diag.FromErr(err)
-				}
-
-				result = multierror.Append(result, d.Set("phone", phone))
+			phone, err := flattenPhone(factor.GetEnabled(), api)
+			if err != nil {
+				return diag.FromErr(err)
 			}
+
+			result = multierror.Append(result, d.Set("phone", phone))
 		case "webauthn-roaming":
-			result = multierror.Append(result, d.Set("webauthn_roaming", nil))
-
-			if factor.GetEnabled() {
-				webAuthnRoaming, err := flattenWebAuthnRoaming(api)
-				if err != nil {
-					return diag.FromErr(err)
-				}
-
-				result = multierror.Append(result, d.Set("webauthn_roaming", webAuthnRoaming))
+			webAuthnRoaming, err := flattenWebAuthnRoaming(factor.GetEnabled(), api)
+			if err != nil {
+				return diag.FromErr(err)
 			}
+
+			result = multierror.Append(result, d.Set("webauthn_roaming", webAuthnRoaming))
 		case "webauthn-platform":
-			result = multierror.Append(result, d.Set("webauthn_platform", nil))
-
-			if factor.GetEnabled() {
-				webAuthnPlatform, err := flattenWebAuthnPlatform(api)
-				if err != nil {
-					return diag.FromErr(err)
-				}
-
-				result = multierror.Append(result, d.Set("webauthn_platform", webAuthnPlatform))
+			webAuthnPlatform, err := flattenWebAuthnPlatform(factor.GetEnabled(), api)
+			if err != nil {
+				return diag.FromErr(err)
 			}
+
+			result = multierror.Append(result, d.Set("webauthn_platform", webAuthnPlatform))
 		case "duo":
-			result = multierror.Append(result, d.Set("duo", nil))
-
-			if factor.GetEnabled() {
-				duo, err := flattenDUO(api)
-				if err != nil {
-					return diag.FromErr(err)
-				}
-
-				result = multierror.Append(result, d.Set("duo", duo))
+			duo, err := flattenDUO(factor.GetEnabled(), api)
+			if err != nil {
+				return diag.FromErr(err)
 			}
-		case "push":
-			result = multierror.Append(result, d.Set("push", nil))
 
-			if factor.GetEnabled() {
-				push, err := flattenPush(api)
-				if err != nil {
-					return diag.FromErr(err)
-				}
-
-				result = multierror.Append(result, d.Set("push", push))
+			result = multierror.Append(result, d.Set("duo", duo))
+		case "push-notification":
+			push, err := flattenPush(d, factor.GetEnabled(), api)
+			if err != nil {
+				return diag.FromErr(err)
 			}
+
+			result = multierror.Append(result, d.Set("push", push))
 		}
 	}
 

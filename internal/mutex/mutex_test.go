@@ -23,7 +23,7 @@ func TestKeyValueLock(t *testing.T) {
 	}
 }
 
-func TestMutexKVUnlock(t *testing.T) {
+func TestKeyValueUnlock(t *testing.T) {
 	keyValueMutex := New()
 	keyValueMutex.Lock("foo")
 	keyValueMutex.Unlock("foo")
@@ -42,7 +42,7 @@ func TestMutexKVUnlock(t *testing.T) {
 	}
 }
 
-func TestMutexKVDifferentKeys(t *testing.T) {
+func TestKeyValueDifferentKeys(t *testing.T) {
 	keyValueMutex := New()
 	keyValueMutex.Lock("foo")
 

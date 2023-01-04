@@ -233,6 +233,7 @@ func newClient() *schema.Resource {
 			"custom_login_page": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "The content (HTML, CSS, JS) of the custom login page.",
 			},
 			"form_template": {

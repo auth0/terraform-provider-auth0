@@ -1,3 +1,16 @@
+## 0.42.0
+
+BUG FIXES:
+
+- `resource/auth0_connection_client`, `resource/auth0_organization_connection`, `resource/auth0_organization_member`:
+Fixed concurrency issue ([#425](https://github.com/auth0/terraform-provider-auth0/pull/425))
+
+BREAKING CHANGES:
+
+- `resource/auth0_guardian`: Redesigned how mfa types get enabled ([#423](https://github.com/auth0/terraform-provider-auth0/pull/423))
+  - It is now necessary to explicitly set the enabled attribute on all mfa types. Please check the [auth0_guardian](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/guardian) docs for more info.
+
+
 ## 0.41.0
 
 BREAKING CHANGES:

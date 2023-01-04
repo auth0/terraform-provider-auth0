@@ -22,13 +22,18 @@ func flattenMultiFactorPolicy(api *management.Management) (string, error) {
 	return flattenedPolicy, nil
 }
 
-func flattenPhone(api *management.Management) ([]interface{}, error) {
+func flattenPhone(enabled bool, api *management.Management) ([]interface{}, error) {
+	phoneData := make(map[string]interface{})
+	phoneData["enabled"] = enabled
+
+	if !enabled {
+		return []interface{}{phoneData}, nil
+	}
+
 	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
 	if err != nil {
 		return nil, err
 	}
-
-	phoneData := make(map[string]interface{})
 	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
 
 	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
@@ -52,7 +57,6 @@ func flattenPhone(api *management.Management) ([]interface{}, error) {
 	case "phone-message-hook":
 		phoneProviderOptions = []interface{}{nil}
 	}
-
 	phoneData["options"] = phoneProviderOptions
 
 	return []interface{}{phoneData}, nil
@@ -96,66 +100,78 @@ func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
 	return []interface{}{m}, nil
 }
 
-func flattenWebAuthnRoaming(api *management.Management) ([]interface{}, error) {
+func flattenWebAuthnRoaming(enabled bool, api *management.Management) ([]interface{}, error) {
+	webAuthnRoamingData := make(map[string]interface{})
+	webAuthnRoamingData["enabled"] = enabled
+
+	if !enabled {
+		return []interface{}{webAuthnRoamingData}, nil
+	}
+
 	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnRoaming.Read()
 	if err != nil {
 		return nil, err
 	}
 
-	m := map[string]interface{}{
-		"user_verification":        webAuthnSettings.GetUserVerification(),
-		"override_relying_party":   webAuthnSettings.GetOverrideRelyingParty(),
-		"relying_party_identifier": webAuthnSettings.GetRelyingPartyIdentifier(),
-	}
+	webAuthnRoamingData["user_verification"] = webAuthnSettings.GetUserVerification()
+	webAuthnRoamingData["override_relying_party"] = webAuthnSettings.GetOverrideRelyingParty()
+	webAuthnRoamingData["relying_party_identifier"] = webAuthnSettings.GetRelyingPartyIdentifier()
 
-	return []interface{}{m}, nil
+	return []interface{}{webAuthnRoamingData}, nil
 }
 
-func flattenWebAuthnPlatform(api *management.Management) ([]interface{}, error) {
+func flattenWebAuthnPlatform(enabled bool, api *management.Management) ([]interface{}, error) {
+	webAuthnPlatformData := make(map[string]interface{})
+	webAuthnPlatformData["enabled"] = enabled
+
+	if !enabled {
+		return []interface{}{webAuthnPlatformData}, nil
+	}
+
 	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnPlatform.Read()
 	if err != nil {
 		return nil, err
 	}
 
-	m := map[string]interface{}{
-		"override_relying_party":   webAuthnSettings.GetOverrideRelyingParty(),
-		"relying_party_identifier": webAuthnSettings.GetRelyingPartyIdentifier(),
-	}
+	webAuthnPlatformData["override_relying_party"] = webAuthnSettings.GetOverrideRelyingParty()
+	webAuthnPlatformData["relying_party_identifier"] = webAuthnSettings.GetRelyingPartyIdentifier()
 
-	return []interface{}{m}, nil
+	return []interface{}{webAuthnPlatformData}, nil
 }
 
-func flattenDUO(api *management.Management) ([]interface{}, error) {
+func flattenDUO(enabled bool, api *management.Management) ([]interface{}, error) {
+	duoData := make(map[string]interface{})
+	duoData["enabled"] = enabled
+
+	if !enabled {
+		return []interface{}{duoData}, nil
+	}
+
 	duoSettings, err := api.Guardian.MultiFactor.DUO.Read()
 	if err != nil {
 		return nil, err
 	}
 
-	m := map[string]interface{}{
-		"integration_key": duoSettings.GetIntegrationKey(),
-		"secret_key":      duoSettings.GetSecretKey(),
-		"hostname":        duoSettings.GetHostname(),
-	}
+	duoData["integration_key"] = duoSettings.GetIntegrationKey()
+	duoData["secret_key"] = duoSettings.GetSecretKey()
+	duoData["hostname"] = duoSettings.GetHostname()
 
-	return []interface{}{m}, nil
+	return []interface{}{duoData}, nil
 }
 
-func flattenPush(api *management.Management) ([]interface{}, error) {
-	amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS()
+func flattenPush(d *schema.ResourceData, enabled bool, api *management.Management) ([]interface{}, error) {
+	pushData := make(map[string]interface{})
+	pushData["enabled"] = enabled
+
+	if !enabled {
+		return []interface{}{pushData}, nil
+	}
+
+	pushProvider, err := api.Guardian.MultiFactor.Push.Provider()
 	if err != nil {
 		return nil, err
 	}
-
-	pushData := make(map[string]interface{})
-	pushData["amazon_sns"] = []interface{}{
-		map[string]interface{}{
-			"aws_access_key_id":                 amazonSNS.GetAccessKeyID(),
-			"aws_region":                        amazonSNS.GetRegion(),
-			"aws_secret_access_key":             amazonSNS.GetSecretAccessKeyID(),
-			"sns_apns_platform_application_arn": amazonSNS.GetAPNSPlatformApplicationARN(),
-			"sns_gcm_platform_application_arn":  amazonSNS.GetGCMPlatformApplicationARN(),
-		},
-	}
+	pushData["provider"] = pushProvider.GetProvider()
 
 	customApp, err := api.Guardian.MultiFactor.Push.CustomApp()
 	if err != nil {
@@ -170,78 +186,86 @@ func flattenPush(api *management.Management) ([]interface{}, error) {
 		},
 	}
 
+	if pushProvider.GetProvider() == "sns" {
+		amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS()
+		if err != nil {
+			return nil, err
+		}
+
+		pushData["amazon_sns"] = []interface{}{
+			map[string]interface{}{
+				"aws_access_key_id":                 amazonSNS.GetAccessKeyID(),
+				"aws_region":                        amazonSNS.GetRegion(),
+				"aws_secret_access_key":             d.Get("push.0.amazon_sns.0.aws_secret_access_key"), // Does not get read back.
+				"sns_apns_platform_application_arn": amazonSNS.GetAPNSPlatformApplicationARN(),
+				"sns_gcm_platform_application_arn":  amazonSNS.GetGCMPlatformApplicationARN(),
+			},
+		}
+	}
+
 	return []interface{}{pushData}, nil
 }
 
 func updatePolicy(d *schema.ResourceData, api *management.Management) error {
-	if d.HasChange("policy") {
-		multiFactorPolicies := management.MultiFactorPolicies{}
-
-		policy := d.Get("policy").(string)
-		if policy != "never" {
-			multiFactorPolicies = append(multiFactorPolicies, policy)
-		}
-
-		// If the policy is "never" then the slice needs to be empty.
-		return api.Guardian.MultiFactor.UpdatePolicy(&multiFactorPolicies)
+	if !d.HasChange("policy") {
+		return nil
 	}
-	return nil
+
+	multiFactorPolicies := management.MultiFactorPolicies{}
+
+	policy := d.Get("policy").(string)
+	if policy != "never" {
+		multiFactorPolicies = append(multiFactorPolicies, policy)
+	}
+
+	// If the policy is "never" then the slice needs to be empty.
+	return api.Guardian.MultiFactor.UpdatePolicy(&multiFactorPolicies)
 }
 
 func updateEmailFactor(d *schema.ResourceData, api *management.Management) error {
-	if d.HasChange("email") {
-		enabled := d.Get("email").(bool)
-		return api.Guardian.MultiFactor.Email.Enable(enabled)
+	if !d.HasChange("email") {
+		return nil
 	}
-	return nil
+
+	enabled := d.Get("email").(bool)
+	return api.Guardian.MultiFactor.Email.Enable(enabled)
 }
 
 func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
-	if d.HasChange("otp") {
-		enabled := d.Get("otp").(bool)
-		return api.Guardian.MultiFactor.OTP.Enable(enabled)
+	if !d.HasChange("otp") {
+		return nil
 	}
-	return nil
+
+	enabled := d.Get("otp").(bool)
+	return api.Guardian.MultiFactor.OTP.Enable(enabled)
 }
 
 func updateRecoveryCodeFactor(d *schema.ResourceData, api *management.Management) error {
-	if d.HasChange("recovery_code") {
-		enabled := d.Get("recovery_code").(bool)
-		return api.Guardian.MultiFactor.RecoveryCode.Enable(enabled)
+	if !d.HasChange("recovery_code") {
+		return nil
 	}
-	return nil
+
+	enabled := d.Get("recovery_code").(bool)
+	return api.Guardian.MultiFactor.RecoveryCode.Enable(enabled)
 }
 
 func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error {
-	if factorShouldBeUpdated(d, "phone") {
-		// Always enable phone factor before configuring it.
-		// Otherwise, we encounter an error with message_types.
-		if err := api.Guardian.MultiFactor.Phone.Enable(true); err != nil {
-			return err
-		}
-
-		return configurePhone(d.GetRawConfig(), api)
+	if !d.HasChange("phone") {
+		return nil
 	}
 
-	return api.Guardian.MultiFactor.Phone.Enable(false)
-}
+	enabled := d.Get("phone.0.enabled").(bool)
 
-// Determines if the factor should be updated.
-// This depends on if it is in the state,
-// if it is about to be added to the state.
-func factorShouldBeUpdated(d *schema.ResourceData, factor string) bool {
-	_, ok := d.GetOk(factor)
-	return ok || hasBlockPresentInNewState(d, factor)
-}
-
-func hasBlockPresentInNewState(d *schema.ResourceData, factor string) bool {
-	if d.HasChange(factor) {
-		_, n := d.GetChange(factor)
-		newState := n.([]interface{})
-		return len(newState) > 0
+	// Always enable phone factor before configuring it.
+	// Otherwise, we encounter an error with message_types.
+	if err := api.Guardian.MultiFactor.Phone.Enable(enabled); err != nil {
+		return err
+	}
+	if !enabled {
+		return nil
 	}
 
-	return false
+	return configurePhone(d.GetRawConfig(), api)
 }
 
 func configurePhone(config cty.Value, api *management.Management) error {
@@ -328,141 +352,172 @@ func updateTwilioOptions(options cty.Value, api *management.Management) error {
 }
 
 func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) error {
-	if factorShouldBeUpdated(d, "webauthn_roaming") {
-		if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(true); err != nil {
-			return err
-		}
-
-		var webAuthnSettings management.MultiFactorWebAuthnSettings
-
-		d.GetRawConfig().GetAttr("webauthn_roaming").ForEachElement(
-			func(_ cty.Value, config cty.Value) (stop bool) {
-				webAuthnSettings.OverrideRelyingParty = value.Bool(config.GetAttr("override_relying_party"))
-				webAuthnSettings.RelyingPartyIdentifier = value.String(config.GetAttr("relying_party_identifier"))
-				webAuthnSettings.UserVerification = value.String(config.GetAttr("user_verification"))
-				return stop
-			},
-		)
-
-		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
-			return nil
-		}
-
-		return api.Guardian.MultiFactor.WebAuthnRoaming.Update(&webAuthnSettings)
+	if !d.HasChange("webauthn_roaming") {
+		return nil
 	}
 
-	return api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false)
+	enabled := d.Get("webauthn_roaming.0.enabled").(bool)
+	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(enabled); err != nil {
+		return err
+	}
+	if !enabled {
+		return nil
+	}
+
+	var err error
+	d.GetRawConfig().GetAttr("webauthn_roaming").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		webAuthnSettings := &management.MultiFactorWebAuthnSettings{
+			UserVerification:       value.String(config.GetAttr("user_verification")),
+			OverrideRelyingParty:   value.Bool(config.GetAttr("override_relying_party")),
+			RelyingPartyIdentifier: value.String(config.GetAttr("relying_party_identifier")),
+		}
+
+		if webAuthnSettings.String() != "{}" {
+			err = api.Guardian.MultiFactor.WebAuthnRoaming.Update(webAuthnSettings)
+		}
+
+		return stop
+	})
+
+	return err
 }
 
 func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) error {
-	if factorShouldBeUpdated(d, "webauthn_platform") {
-		if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(true); err != nil {
-			return err
-		}
-
-		var webAuthnSettings management.MultiFactorWebAuthnSettings
-
-		d.GetRawConfig().GetAttr("webauthn_platform").ForEachElement(
-			func(_ cty.Value, config cty.Value) (stop bool) {
-				webAuthnSettings.OverrideRelyingParty = value.Bool(config.GetAttr("override_relying_party"))
-				webAuthnSettings.RelyingPartyIdentifier = value.String(config.GetAttr("relying_party_identifier"))
-				return stop
-			},
-		)
-
-		if webAuthnSettings == (management.MultiFactorWebAuthnSettings{}) {
-			return nil
-		}
-
-		return api.Guardian.MultiFactor.WebAuthnPlatform.Update(&webAuthnSettings)
+	if !d.HasChange("webauthn_platform") {
+		return nil
 	}
 
-	return api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false)
+	enabled := d.Get("webauthn_platform.0.enabled").(bool)
+	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(enabled); err != nil {
+		return err
+	}
+	if !enabled {
+		return nil
+	}
+
+	var err error
+	d.GetRawConfig().GetAttr("webauthn_platform").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		webAuthnSettings := &management.MultiFactorWebAuthnSettings{
+			OverrideRelyingParty:   value.Bool(config.GetAttr("override_relying_party")),
+			RelyingPartyIdentifier: value.String(config.GetAttr("relying_party_identifier")),
+		}
+
+		if webAuthnSettings.String() != "{}" {
+			err = api.Guardian.MultiFactor.WebAuthnPlatform.Update(webAuthnSettings)
+		}
+
+		return stop
+	})
+
+	return err
 }
 
 func updateDUO(d *schema.ResourceData, api *management.Management) error {
-	if factorShouldBeUpdated(d, "duo") {
-		if err := api.Guardian.MultiFactor.DUO.Enable(true); err != nil {
-			return err
-		}
-
-		var duoSettings management.MultiFactorDUOSettings
-
-		d.GetRawConfig().GetAttr("duo").ForEachElement(
-			func(_ cty.Value, config cty.Value) (stop bool) {
-				duoSettings.SecretKey = value.String(config.GetAttr("secret_key"))
-				duoSettings.Hostname = value.String(config.GetAttr("hostname"))
-				duoSettings.IntegrationKey = value.String(config.GetAttr("integration_key"))
-				return stop
-			},
-		)
-
-		if duoSettings == (management.MultiFactorDUOSettings{}) {
-			return nil
-		}
-
-		return api.Guardian.MultiFactor.DUO.Update(&duoSettings)
+	if !d.HasChange("duo") {
+		return nil
 	}
 
-	return api.Guardian.MultiFactor.DUO.Enable(false)
-}
+	enabled := d.Get("duo.0.enabled").(bool)
+	if err := api.Guardian.MultiFactor.DUO.Enable(enabled); err != nil {
+		return err
+	}
+	if !enabled {
+		return nil
+	}
 
-func updatePush(d *schema.ResourceData, api *management.Management) error {
-	if factorShouldBeUpdated(d, "push") {
-		if err := api.Guardian.MultiFactor.Push.Enable(true); err != nil {
-			return err
-		}
-
-		var err error
-		d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
-			mfaProvider := &management.MultiFactorProvider{
-				Provider: value.String(push.GetAttr("provider")),
-			}
-			if err = api.Guardian.MultiFactor.Push.UpdateProvider(mfaProvider); err != nil {
-				return true
-			}
-
-			if d.HasChange("push.0.amazon_sns.0") {
-				var amazonSNS *management.MultiFactorProviderAmazonSNS
-				push.GetAttr("amazon_sns").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-					amazonSNS = &management.MultiFactorProviderAmazonSNS{
-						AccessKeyID:                value.String(config.GetAttr("aws_access_key_id")),
-						SecretAccessKeyID:          value.String(config.GetAttr("aws_secret_access_key")),
-						Region:                     value.String(config.GetAttr("aws_region")),
-						APNSPlatformApplicationARN: value.String(config.GetAttr("sns_apns_platform_application_arn")),
-						GCMPlatformApplicationARN:  value.String(config.GetAttr("sns_gcm_platform_application_arn")),
-					}
-					return stop
-				})
-				if amazonSNS != nil {
-					if err = api.Guardian.MultiFactor.Push.UpdateAmazonSNS(amazonSNS); err != nil {
-						return true
-					}
-				}
+	var err error
+	d.GetRawConfig().GetAttr("duo").ForEachElement(
+		func(_ cty.Value, config cty.Value) (stop bool) {
+			duoSettings := &management.MultiFactorDUOSettings{
+				SecretKey:      value.String(config.GetAttr("secret_key")),
+				Hostname:       value.String(config.GetAttr("hostname")),
+				IntegrationKey: value.String(config.GetAttr("integration_key")),
 			}
 
-			if d.HasChange("push.0.custom_app.0") {
-				var customApp *management.MultiFactorPushCustomApp
-				push.GetAttr("custom_app").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-					customApp = &management.MultiFactorPushCustomApp{
-						AppName:       value.String(config.GetAttr("app_name")),
-						AppleAppLink:  value.String(config.GetAttr("apple_app_link")),
-						GoogleAppLink: value.String(config.GetAttr("google_app_link")),
-					}
-					return stop
-				})
-				if customApp != nil {
-					if err = api.Guardian.MultiFactor.Push.UpdateCustomApp(customApp); err != nil {
-						return true
-					}
-				}
+			if duoSettings.String() != "{}" {
+				err = api.Guardian.MultiFactor.DUO.Update(duoSettings)
 			}
 
 			return stop
-		})
+		},
+	)
 
-		return err
+	return err
+}
+
+func updatePush(d *schema.ResourceData, api *management.Management) error {
+	if !d.HasChange("push") {
+		return nil
 	}
 
-	return api.Guardian.MultiFactor.Push.Enable(false)
+	enabled := d.Get("push.0.enabled").(bool)
+	if err := api.Guardian.MultiFactor.Push.Enable(enabled); err != nil {
+		return err
+	}
+	if !enabled {
+		return nil
+	}
+
+	var err error
+	d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
+		mfaProvider := &management.MultiFactorProvider{
+			Provider: value.String(push.GetAttr("provider")),
+		}
+		if err = api.Guardian.MultiFactor.Push.UpdateProvider(mfaProvider); err != nil {
+			return true
+		}
+
+		if d.HasChange("push.0.custom_app") {
+			if err = updateCustomApp(push.GetAttr("custom_app"), api); err != nil {
+				return true
+			}
+		}
+
+		if d.HasChange("push.0.amazon_sns") {
+			if err = updateAmazonSNS(push.GetAttr("amazon_sns"), api); err != nil {
+				return true
+			}
+		}
+
+		return stop
+	})
+	return err
+}
+
+func updateAmazonSNS(options cty.Value, api *management.Management) error {
+	var err error
+
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		err = api.Guardian.MultiFactor.Push.UpdateAmazonSNS(
+			&management.MultiFactorProviderAmazonSNS{
+				AccessKeyID:                value.String(config.GetAttr("aws_access_key_id")),
+				SecretAccessKeyID:          value.String(config.GetAttr("aws_secret_access_key")),
+				Region:                     value.String(config.GetAttr("aws_region")),
+				APNSPlatformApplicationARN: value.String(config.GetAttr("sns_apns_platform_application_arn")),
+				GCMPlatformApplicationARN:  value.String(config.GetAttr("sns_gcm_platform_application_arn")),
+			},
+		)
+
+		return stop
+	})
+
+	return err
+}
+
+func updateCustomApp(options cty.Value, api *management.Management) error {
+	var err error
+
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		err = api.Guardian.MultiFactor.Push.UpdateCustomApp(
+			&management.MultiFactorPushCustomApp{
+				AppName:       value.String(config.GetAttr("app_name")),
+				AppleAppLink:  value.String(config.GetAttr("apple_app_link")),
+				GoogleAppLink: value.String(config.GetAttr("google_app_link")),
+			},
+		)
+
+		return stop
+	})
+
+	return err
 }

@@ -87,12 +87,12 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	api := meta.(*management.Management)
 
 	connectionID := data.Get("connection_id").(string)
+
+	globalMutex.Lock(connectionID)
+	defer globalMutex.Unlock(connectionID)
+
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -103,10 +103,6 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 		connectionID,
 		&management.Connection{EnabledClients: &enabledClients},
 	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -153,6 +149,10 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 	api := meta.(*management.Management)
 
 	connectionID := data.Get("connection_id").(string)
+
+	globalMutex.Lock(connectionID)
+	defer globalMutex.Unlock(connectionID)
+
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

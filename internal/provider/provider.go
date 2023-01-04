@@ -10,9 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 var version = "dev"
+
+var globalMutex = mutex.New()
 
 // New returns a *schema.Provider.
 func New() *schema.Provider {

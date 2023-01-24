@@ -501,6 +501,109 @@ resource "auth0_log_stream" "my_log_stream" {
 }
 `
 
+func TestAccLogStreamSegment(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(logStreamSegmentConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "121233123455"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamSumoConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamSumoConfigUpdateWithFilters, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "2"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.name", "auth.login.fail"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.type", "category"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.name", "auth.signup.fail"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+				),
+			},
+			{
+				Config: template.ParseTestName(logStreamSumoConfigUpdateWithEmptyFilters, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+				),
+			},
+		},
+	})
+}
+
+const logStreamSegmentConfig = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
+	type = "segment"
+	sink {
+		segment_api_key = "121233123455"
+	}
+}
+`
+const logStreamSegmentConfigUpdate = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
+	type = "segment"
+	sink {
+		segment_api_key = "12120908909089"
+	}
+}
+`
+
+const logStreamSegmentConfigUpdateWithFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
+	type = "segment"
+
+	filters = [
+		{
+			type = "category"
+			name = "auth.login.fail"
+		},
+		{
+			type = "category"
+			name = "auth.signup.fail"
+		}
+	]
+
+	sink {
+		segment_api_key = "12120908909089"
+	}
+}
+`
+
+const logStreamSegmentConfigUpdateWithEmptyFilters = `
+resource "auth0_log_stream" "my_log_stream" {
+	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
+	type = "segment"
+
+	filters = [ ]
+
+	sink {
+		segment_api_key = "12120908909089"
+	}
+}
+`
+
 func TestAccLogStreamSumo(t *testing.T) {
 	httpRecorder := recorder.New(t)
 

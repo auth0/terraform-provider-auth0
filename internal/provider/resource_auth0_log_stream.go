@@ -245,6 +245,12 @@ func newLogStream() *schema.Resource {
 							RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_username"},
 							Description:  "The Mixpanel Service Account password.",
 						},
+						"segment_api_key": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							Description: "The Segment API key.",
+						},
 					},
 				},
 			},
@@ -341,6 +347,8 @@ func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{
 		m = flattenLogStreamSinkSumo(sinkType)
 	case *management.LogStreamSinkMixpanel:
 		m = flattenLogStreamSinkMixpanel(d, sinkType)
+	case *management.LogStreamSinkSegment:
+		m = flattenLogStreamSinkSegment(d, sinkType)
 	}
 
 	return []interface{}{m}
@@ -377,6 +385,12 @@ func flattenLogStreamSinkDatadog(o *management.LogStreamSinkDatadog) interface{}
 	return map[string]interface{}{
 		"datadog_region":  o.GetRegion(),
 		"datadog_api_key": o.GetAPIKey(),
+	}
+}
+
+func flattenLogStreamSinkSegment(o *management.LogStreamSinkSegment) interface{} {
+	return map[string]interface{}{
+		"segment_api_key": o.GetAPIKey(),
 	}
 }
 
@@ -454,6 +468,8 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 			logStream.Sink = expandLogStreamSinkSumo(sink)
 		case management.LogStreamTypeMixpanel:
 			logStream.Sink = expandLogStreamSinkMixpanel(sink)
+		case management.LogStreamTypeSegment:
+			logStream.Sink = expandLogStreamSinkSegment(sink)
 		default:
 			log.Printf("[WARN]: Unsupported log stream sink %s", logStream.GetType())
 			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
@@ -507,6 +523,11 @@ func expandLogStreamSinkHTTP(config cty.Value) *management.LogStreamSinkHTTP {
 func expandLogStreamSinkDatadog(config cty.Value) *management.LogStreamSinkDatadog {
 	return &management.LogStreamSinkDatadog{
 		Region: value.String(config.GetAttr("datadog_region")),
+		APIKey: value.String(config.GetAttr("datadog_api_key")),
+	}
+}
+func expandLogStreamSinkSegment(config cty.Value) *management.LogStreamSinkSegment {
+	return &management.LogStreamSinkSegment{
 		APIKey: value.String(config.GetAttr("datadog_api_key")),
 	}
 }

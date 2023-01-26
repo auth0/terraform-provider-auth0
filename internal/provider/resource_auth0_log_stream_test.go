@@ -512,20 +512,20 @@ func TestAccLogStreamSegment(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "121233123455"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_write_key", "121233123455"),
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdate, t.Name()),
+				Config: template.ParseTestName(logStreamSegmentConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_write_key", "12120908909089"),
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdateWithFilters, t.Name()),
+				Config: template.ParseTestName(logStreamSegmentConfigUpdateWithFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
@@ -534,16 +534,16 @@ func TestAccLogStreamSegment(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.0.name", "auth.login.fail"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.type", "category"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.1.name", "auth.signup.fail"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_write_key", "12120908909089"),
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdateWithEmptyFilters, t.Name()),
+				Config: template.ParseTestName(logStreamSegmentConfigUpdateWithEmptyFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "filters.#", "0"),
-					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_api_key", "12120908909089"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.segment_write_key", "12120908909089"),
 				),
 			},
 		},
@@ -555,7 +555,7 @@ resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
 	type = "segment"
 	sink {
-		segment_api_key = "121233123455"
+		segment_write_key = "121233123455"
 	}
 }
 `
@@ -564,7 +564,7 @@ resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-segment-{{.testName}}"
 	type = "segment"
 	sink {
-		segment_api_key = "12120908909089"
+		segment_write_key = "12120908909089"
 	}
 }
 `
@@ -586,7 +586,7 @@ resource "auth0_log_stream" "my_log_stream" {
 	]
 
 	sink {
-		segment_api_key = "12120908909089"
+		segment_write_key = "12120908909089"
 	}
 }
 `
@@ -599,7 +599,7 @@ resource "auth0_log_stream" "my_log_stream" {
 	filters = [ ]
 
 	sink {
-		segment_api_key = "12120908909089"
+		segment_write_key = "12120908909089"
 	}
 }
 `

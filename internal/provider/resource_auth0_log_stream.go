@@ -42,6 +42,7 @@ func newLogStream() *schema.Resource {
 					"splunk",
 					"sumo",
 					"mixpanel",
+					"segment",
 				}, true),
 				ForceNew:    true,
 				Description: "Type of the log stream, which indicates the sink provider.",
@@ -245,11 +246,11 @@ func newLogStream() *schema.Resource {
 							RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_username"},
 							Description:  "The Mixpanel Service Account password.",
 						},
-						"segment_api_key": {
+						"segment_write_key": {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Sensitive:   true,
-							Description: "The Segment API key.",
+							Description: "The [Segment Write Key](https://segment.com/docs/connections/find-writekey/).",
 						},
 					},
 				},
@@ -348,7 +349,7 @@ func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{
 	case *management.LogStreamSinkMixpanel:
 		m = flattenLogStreamSinkMixpanel(d, sinkType)
 	case *management.LogStreamSinkSegment:
-		m = flattenLogStreamSinkSegment(d, sinkType)
+		m = flattenLogStreamSinkSegment(sinkType)
 	}
 
 	return []interface{}{m}
@@ -390,7 +391,7 @@ func flattenLogStreamSinkDatadog(o *management.LogStreamSinkDatadog) interface{}
 
 func flattenLogStreamSinkSegment(o *management.LogStreamSinkSegment) interface{} {
 	return map[string]interface{}{
-		"segment_api_key": o.GetAPIKey(),
+		"segment_write_key": o.GetWriteKey(),
 	}
 }
 
@@ -528,7 +529,7 @@ func expandLogStreamSinkDatadog(config cty.Value) *management.LogStreamSinkDatad
 }
 func expandLogStreamSinkSegment(config cty.Value) *management.LogStreamSinkSegment {
 	return &management.LogStreamSinkSegment{
-		APIKey: value.String(config.GetAttr("datadog_api_key")),
+		WriteKey: value.String(config.GetAttr("segment_write_key")),
 	}
 }
 func expandLogStreamSinkSplunk(config cty.Value) *management.LogStreamSinkSplunk {

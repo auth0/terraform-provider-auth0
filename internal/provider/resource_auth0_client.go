@@ -51,7 +51,9 @@ func newClient() *schema.Resource {
 				Type:     schema.TypeMap,
 				Optional: true,
 				Description: "Custom metadata for the rotation. " +
-					"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).",
+				"The contents of this map are arbitrary and are hashed by the provider. When the hash changes, a rotation is triggered. " +
+				"For example, the map could contain the user making the change, the date of the change, and a text reason for the change. " +
+				"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).",
 			},
 			"client_aliases": {
 				Type: schema.TypeList,

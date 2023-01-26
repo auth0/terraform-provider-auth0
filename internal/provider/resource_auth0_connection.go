@@ -561,11 +561,13 @@ var connectionSchema = map[string]*schema.Schema{
 				"issuer": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Issuer URL, e.g. `https://auth.example.com`.",
 				},
 				"jwks_uri": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "JWKS URI.",
 				},
 				"discovery_url": {
@@ -576,16 +578,19 @@ var connectionSchema = map[string]*schema.Schema{
 				"token_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Token endpoint.",
 				},
 				"userinfo_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "User info endpoint.",
 				},
 				"authorization_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Authorization endpoint.",
 				},
 				"debug": {

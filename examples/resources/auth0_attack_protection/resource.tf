@@ -28,5 +28,9 @@ resource "auth0_attack_protection" "my_protection" {
     enabled                      = true
     method                       = "standard"
     shields                      = ["admin_notification", "block"]
+
+    pre_user_registration {
+      shields = ["block"]
+    }
   }
 }

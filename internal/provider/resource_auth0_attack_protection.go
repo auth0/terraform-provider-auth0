@@ -82,6 +82,32 @@ func newAttackProtection() *schema.Resource {
 							Description: "The subscription level for breached password detection methods. " +
 								"Use \"enhanced\" to enable Credential Guard. Possible values: `standard`, `enhanced`.",
 						},
+						"pre_user_registration": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "Configuration options that apply before every user registration attempt. " +
+								"Only available on public tenants.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"shields": {
+										Type:     schema.TypeSet,
+										Optional: true,
+										Computed: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+											ValidateFunc: validation.StringInSlice([]string{
+												"block",
+												"admin_notification",
+											}, false),
+										},
+										Description: "Action to take when a breached password is detected during " +
+											"a signup. Possible values: `block`, `admin_notification`.",
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -371,6 +397,11 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 			"method":                       bpd.GetMethod(),
 			"admin_notification_frequency": bpd.GetAdminNotificationFrequency(),
 			"shields":                      bpd.GetShields(),
+			"pre_user_registration": []interface{}{
+				map[string][]string{
+					"shields": bpd.GetStage().GetPreUserRegistration().GetShields(),
+				},
+			},
 		},
 	}
 }
@@ -488,6 +519,27 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 				Method:                     value.String(breach.GetAttr("method")),
 				Shields:                    value.Strings(breach.GetAttr("shields")),
 				AdminNotificationFrequency: value.Strings(breach.GetAttr("admin_notification_frequency")),
+			}
+
+			pur := breach.GetAttr("pre_user_registration")
+			if !pur.IsNull() {
+				pur.ForEachElement(
+					func(_ cty.Value, preUserReg cty.Value) (stop bool) {
+						preUserRegistration := &management.BreachedPasswordDetectionPreUserRegistration{
+							Shields: value.Strings(preUserReg.GetAttr("shields")),
+						}
+
+						if bpd.Stage != nil {
+							bpd.Stage.PreUserRegistration = preUserRegistration
+						} else {
+							bpd.Stage = &management.BreachedPasswordDetectionStage{
+								PreUserRegistration: preUserRegistration,
+							}
+						}
+
+						return stop
+					},
+				)
 			}
 
 			return stop

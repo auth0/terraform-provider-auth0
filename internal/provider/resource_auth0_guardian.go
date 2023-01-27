@@ -143,7 +143,7 @@ func newGuardian() *schema.Resource {
 							Description: "Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. " +
 								"Selecting `phone-message-hook` will require a " +
 								"Phone Message Action to be created before. " +
-								"[Learn how.](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow)",
+								"[Learn how].(https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow)",
 						},
 						"message_types": {
 							Type:     schema.TypeList,

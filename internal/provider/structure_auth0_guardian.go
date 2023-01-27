@@ -49,13 +49,11 @@ func flattenPhone(enabled bool, api *management.Management) ([]interface{}, erro
 		if err != nil {
 			return nil, err
 		}
-	case "auth0":
+	case "auth0", "phone-message-hook":
 		phoneProviderOptions, err = flattenAuth0Options(api)
 		if err != nil {
 			return nil, err
 		}
-	case "phone-message-hook":
-		phoneProviderOptions = []interface{}{nil}
 	}
 	phoneData["options"] = phoneProviderOptions
 
@@ -285,7 +283,7 @@ func configurePhone(config cty.Value, api *management.Management) error {
 			if err = updateTwilioOptions(options, api); err != nil {
 				return true
 			}
-		case "auth0":
+		case "auth0", "phone-message-hook":
 			if err = updateAuth0Options(options, api); err != nil {
 				return true
 			}

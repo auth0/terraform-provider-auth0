@@ -42,10 +42,8 @@ resource "auth0_attack_protection" "my_protection" {
     method                       = "standard"
     shields                      = ["admin_notification", "block"]
 
-    stage {
-      pre_user_registration = {
-        shields = ["block"]
-      }
+    pre_user_registration = {
+      shields = ["block"]
     }
   }
 }
@@ -72,26 +70,15 @@ Optional:
 - `admin_notification_frequency` (Set of String) When "admin_notification" is enabled, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
 - `enabled` (Boolean) Whether breached password detection is active.
 - `method` (String) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
+- `pre_user_registration` (Block List, Max: 1) Configuration options that apply before every user registration attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--breached_password_detection--pre_user_registration))
 - `shields` (Set of String) Action to take when a breached password is detected.
 
-Read-Only:
+<a id="nestedblock--breached_password_detection--pre_user_registration"></a>
+### Nested Schema for `breached_password_detection.pre_user_registration`
 
-- `stage` (Block List) (see [below for nested schema](#nestedblock--breached_password_detection--stage))
+Optional:
 
-<a id="nestedblock--breached_password_detection--stage"></a>
-### Nested Schema for `breached_password_detection.stage`
-
-Read-Only:
-
-- `pre_user_registration` (List of Object) (see [below for nested schema](#nestedatt--breached_password_detection--stage--pre_user_registration))
-
-<a id="nestedatt--breached_password_detection--stage--pre_user_registration"></a>
-### Nested Schema for `breached_password_detection.stage.pre_user_registration`
-
-Read-Only:
-
-- `shields` (Set of String)
-
+- `shields` (Set of String) Action to take when a breached password is detected during a signup.
 
 
 

@@ -29,10 +29,8 @@ resource "auth0_attack_protection" "my_protection" {
     method                       = "standard"
     shields                      = ["admin_notification", "block"]
 
-    stage {
-      pre_user_registration = {
-        shields = ["block"]
-      }
+    pre_user_registration = {
+      shields = ["block"]
     }
   }
 }

@@ -396,6 +396,7 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 			"enabled":                      bpd.GetEnabled(),
 			"method":                       bpd.GetMethod(),
 			"admin_notification_frequency": bpd.GetAdminNotificationFrequency(),
+			"shields":                      bpd.GetShields(),
 			"pre_user_registration": []interface{}{
 				map[string][]string{
 					"shields": bpd.GetStage().GetPreUserRegistration().GetShields(),

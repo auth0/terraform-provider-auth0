@@ -94,6 +94,7 @@ Optional:
 - `mixpanel_region` (String) The Mixpanel region. Options are ["us", "eu"]. EU is required for customers with EU data residency requirements.
 - `mixpanel_service_account_password` (String, Sensitive) The Mixpanel Service Account password.
 - `mixpanel_service_account_username` (String) The Mixpanel Service Account username. Services Accounts can be created in the Project Settings page.
+- `segment_write_key` (String, Sensitive) The [Segment Write Key](https://segment.com/docs/connections/find-writekey/).
 - `splunk_domain` (String) The Splunk domain name.
 - `splunk_port` (String) The Splunk port.
 - `splunk_secure` (Boolean) This toggle should be turned off when using self-signed certificates.

@@ -112,7 +112,7 @@ Optional:
 
 - `message_types` (List of String) Message types to use, array of `sms` and/or `voice`. Adding both to the array should enable the user to choose.
 - `options` (Block List, Max: 1) Options for the various providers. (see [below for nested schema](#nestedblock--phone--options))
-- `provider` (String) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`.
+- `provider` (String) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. Selecting `phone-message-hook` will require a Phone Message Action to be created before. [Learn how.](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow)
 
 <a id="nestedblock--phone--options"></a>
 ### Nested Schema for `phone.options`

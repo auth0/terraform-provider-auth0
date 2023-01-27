@@ -82,6 +82,36 @@ func newAttackProtection() *schema.Resource {
 							Description: "The subscription level for breached password detection methods. " +
 								"Use \"enhanced\" to enable Credential Guard. Possible values: `standard`, `enhanced`.",
 						},
+						"stage": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"pre_user_registration": {
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"shields": {
+													Type:     schema.TypeSet,
+													Optional: true,
+													Computed: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+														ValidateFunc: validation.StringInSlice([]string{
+															"block",
+															"admin_notification",
+														}, false),
+													},
+													Description: "Action to take when a breached password is detected during a signup.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -371,6 +401,21 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 			"method":                       bpd.GetMethod(),
 			"admin_notification_frequency": bpd.GetAdminNotificationFrequency(),
 			"shields":                      bpd.GetShields(),
+			"stage":                        flattenBreachedPasswordProtectionStage(bpd.GetStage()),
+		},
+	}
+}
+
+func flattenBreachedPasswordProtectionStage(breachedPasswordDetectionStage *management.BreachedPasswordDetectionStage) []interface{} {
+	if breachedPasswordDetectionStage == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"pre-user-registration": map[string]interface{}{
+				"shields": breachedPasswordDetectionStage.GetPreUserRegistration().GetShields(),
+			},
 		},
 	}
 }
@@ -488,6 +533,7 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 				Method:                     value.String(breach.GetAttr("method")),
 				Shields:                    value.Strings(breach.GetAttr("shields")),
 				AdminNotificationFrequency: value.Strings(breach.GetAttr("admin_notification_frequency")),
+				Stage:                      expandBreachedPasswordDetectionStage(breach.GetAttr("stage")),
 			}
 
 			return stop
@@ -495,4 +541,32 @@ func expandBreachedPasswordDetection(d *schema.ResourceData) *management.Breache
 	)
 
 	return bpd
+}
+
+func expandBreachedPasswordDetectionStage(stageMap cty.Value) *management.BreachedPasswordDetectionStage {
+	var breachedPasswordDetectionStage *management.BreachedPasswordDetectionStage
+
+	stageMap.ForEachElement(func(_ cty.Value, stage cty.Value) (stop bool) {
+		breachedPasswordDetectionStage = &management.BreachedPasswordDetectionStage{
+			PreUserRegistration: expandBreachedPasswordDetectionPreUserRegistration(stage.GetAttr("pre-user-registration")),
+		}
+
+		return stop
+	})
+
+	return breachedPasswordDetectionStage
+}
+
+func expandBreachedPasswordDetectionPreUserRegistration(preUserRegistrationMap cty.Value) *management.BreachedPasswordDetectionPreUserRegistration {
+	var breachedPasswordDetectionStagePreUserRegistration *management.BreachedPasswordDetectionPreUserRegistration
+
+	preUserRegistrationMap.ForEachElement(func(_ cty.Value, preUserRegistration cty.Value) (stop bool) {
+		breachedPasswordDetectionStagePreUserRegistration = &management.BreachedPasswordDetectionPreUserRegistration{
+			Shields: value.Strings(preUserRegistration.GetAttr("shields")),
+		}
+
+		return stop
+	})
+
+	return breachedPasswordDetectionStagePreUserRegistration
 }

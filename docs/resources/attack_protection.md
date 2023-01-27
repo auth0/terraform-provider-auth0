@@ -41,6 +41,11 @@ resource "auth0_attack_protection" "my_protection" {
     enabled                      = true
     method                       = "standard"
     shields                      = ["admin_notification", "block"]
+    stage {
+      pre_user_registration {
+        shields = ["block"]
+      }
+    }
   }
 }
 ```
@@ -67,6 +72,23 @@ Optional:
 - `enabled` (Boolean) Whether breached password detection is active.
 - `method` (String) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
 - `shields` (Set of String) Action to take when a breached password is detected.
+- `stage` (Block List) (see [below for nested schema](#nestedblock--breached_password_detection--stage))
+
+<a id="nestedblock--breached_password_detection--stage"></a>
+### Nested Schema for `breached_password_detection.stage`
+
+Read-Only:
+
+- `pre_user_registration` (List of Object) (see [below for nested schema](#nestedatt--breached_password_detection--stage--pre_user_registration))
+
+<a id="nestedatt--breached_password_detection--stage--pre_user_registration"></a>
+### Nested Schema for `breached_password_detection.stage.pre_user_registration`
+
+Read-Only:
+
+- `shields` (Set of String) Action to take when a breached password is detected during a signup. Possible values: `block`, `admin_notification`.
+
+
 
 
 <a id="nestedblock--brute_force_protection"></a>

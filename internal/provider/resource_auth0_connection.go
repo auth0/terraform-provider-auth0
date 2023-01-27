@@ -23,6 +23,7 @@ var connectionSchema = map[string]*schema.Schema{
 	"display_name": {
 		Type:        schema.TypeString,
 		Optional:    true,
+		Computed:    true,
 		Description: "Name used in login screen.",
 	},
 	"is_domain_connection": {

@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -120,6 +121,10 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.GetFont())))
 	}
 	if _, ok := d.GetOk("universal_login"); ok {
+		if err := checkForCustomDomains(api); err != nil {
+			return diag.FromErr(err)
+		}
+
 		brandingUniversalLogin, err := flattenBrandingUniversalLogin(api)
 		if err != nil {
 			return diag.FromErr(err)
@@ -140,6 +145,10 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
+		if err := checkForCustomDomains(api); err != nil {
+			return diag.FromErr(err)
+		}
+
 		if err := api.Branding.SetUniversalLogin(universalLogin); err != nil {
 			return diag.FromErr(err)
 		}
@@ -151,15 +160,26 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	tenant, err := api.Tenant.Read()
-	if err != nil {
-		return diag.FromErr(err)
+	if _, ok := d.GetOk("universal_login"); !ok {
+		d.SetId("")
+		return nil
 	}
 
-	if tenant.Flags.GetEnableCustomDomainInEmails() {
-		if err = api.Branding.DeleteUniversalLogin(); err != nil {
-			return diag.FromErr(err)
+	if err := checkForCustomDomains(api); err != nil {
+		d.SetId("")
+		return diag.Diagnostics{
+			{
+				Severity: diag.Warning,
+				Summary:  "No custom domains configured",
+				Detail: "Failed to properly destroy the 'auth0_branding' resource " +
+					"because no custom domains are available on the tenant.",
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "universal_login"}},
+			},
 		}
+	}
+
+	if err := api.Branding.DeleteUniversalLogin(); err != nil {
+		return diag.FromErr(err)
 	}
 
 	d.SetId("")
@@ -236,15 +256,6 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 }
 
 func flattenBrandingUniversalLogin(api *management.Management) ([]interface{}, error) {
-	tenant, err := api.Tenant.Read()
-	if err != nil {
-		return nil, err
-	}
-
-	if !tenant.GetFlags().GetEnableCustomDomainInEmails() {
-		return nil, nil
-	}
-
 	universalLogin, err := api.Branding.UniversalLogin()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -275,4 +286,21 @@ func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
 			"url": brandingFont.GetURL(),
 		},
 	}
+}
+
+func checkForCustomDomains(api *management.Management) error {
+	customDomains, err := api.CustomDomain.List()
+	if err != nil {
+		return err
+	}
+
+	if len(customDomains) < 1 {
+		return fmt.Errorf(
+			"managing the universal login body through the 'auth0_branding' resource requires at least " +
+				"one custom domain to be configured for the tenant.\n\n" +
+				"Use the 'auth0_custom_domain' resource to set one up.",
+		)
+	}
+
+	return nil
 }

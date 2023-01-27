@@ -413,7 +413,7 @@ func flattenBreachedPasswordProtectionStage(breachedPasswordDetectionStage *mana
 
 	return []interface{}{
 		map[string]interface{}{
-			"pre-user-registration": map[string]interface{}{
+			"pre_user_registration": map[string]interface{}{
 				"shields": breachedPasswordDetectionStage.GetPreUserRegistration().GetShields(),
 			},
 		},
@@ -548,7 +548,7 @@ func expandBreachedPasswordDetectionStage(stageMap cty.Value) *management.Breach
 
 	stageMap.ForEachElement(func(_ cty.Value, stage cty.Value) (stop bool) {
 		breachedPasswordDetectionStage = &management.BreachedPasswordDetectionStage{
-			PreUserRegistration: expandBreachedPasswordDetectionPreUserRegistration(stage.GetAttr("pre-user-registration")),
+			PreUserRegistration: expandBreachedPasswordDetectionPreUserRegistration(stage.GetAttr("pre_user_registration")),
 		}
 
 		return stop

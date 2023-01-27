@@ -40,7 +40,7 @@ resource "auth0_attack_protection" "my_protection" {
 		method = "standard"
 
 		pre_user_registration {
-			shields = ["block", "admin_notification"]
+			shields = ["admin_notification"]
 		}
 	}
 }
@@ -83,6 +83,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.admin_notification_frequency.*", "daily"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.admin_notification_frequency.*", "monthly"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.method", "standard"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_user_registration.0.%", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_user_registration.0.shields.*", "block"),
 				),
 			},

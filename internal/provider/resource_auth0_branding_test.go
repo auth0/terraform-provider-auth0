@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -9,24 +10,27 @@ import (
 )
 
 const testAccTenantAllowsUniversalLoginCustomization = `
-resource "auth0_tenant" "my_tenant" {
-	flags {
-		enable_custom_domain_in_emails = true
-	}
+resource "auth0_custom_domain" "my_custom_domain" {
+	domain = "auth.terraform-provider-auth0.com"
+	type = "auth0_managed_certs"
 }
+
 `
 
 const testAccTenantDisallowsUniversalLoginCustomization = `
-resource "auth0_tenant" "my_tenant" {
-	flags {
-		enable_custom_domain_in_emails = false
+resource "auth0_branding" "my_custom_domain" {
+	logo_url = "https://mycompany.org/v1/logo.png"
+	favicon_url = "https://mycompany.org/favicon.ico"
+
+	universal_login {
+		body = "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"
 	}
 }
 `
 
 const testAccBrandingConfigCreate = `
 resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_tenant.my_tenant ]
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
 
 	logo_url = "https://mycompany.org/v1/logo.png"
 	favicon_url = "https://mycompany.org/favicon.ico"
@@ -35,7 +39,7 @@ resource "auth0_branding" "my_brand" {
 
 const testAccBrandingConfigUpdateAllFields = `
 resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_tenant.my_tenant ]
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
 
 	logo_url = "https://mycompany.org/v2/logo.png"
 	favicon_url = "https://mycompany.org/favicon.ico"
@@ -57,29 +61,7 @@ resource "auth0_branding" "my_brand" {
 
 const testAccBrandingConfigUpdateAgain = `
 resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_tenant.my_tenant ]
-
-	logo_url = "https://mycompany.org/v2/logo.png"
-	favicon_url = "https://mycompany.org/favicon.ico"
-
-	colors {
-		primary = "#0059d6"
-		page_background = "#00FF00"
-	}
-
-	font {
-		url = "https://example.com/font/myfont.ttf"
-	}
-
-	universal_login {
-		body = "<!DOCTYPE html><html><head>{%- auth0:head -%}</head>This is getting updated but it should not be read cuz the tenant flag is disabled<body>{%- auth0:widget -%}</body></html>"
-	}
-}
-`
-
-const testAccBrandingConfigUpdateAndAgain = `
-resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_tenant.my_tenant ]
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
 
 	logo_url = "https://mycompany.org/v3/logo.png"
 	favicon_url = "https://mycompany.org/favicon.ico"
@@ -103,12 +85,29 @@ resource "auth0_branding" "my_brand" {
 
 const testAccBrandingConfigReset = `
 resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_tenant.my_tenant ]
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
 
 	logo_url = "https://mycompany.org/v1/logo.png"
 	favicon_url = "https://mycompany.org/favicon.ico"
 }
 `
+
+func TestAccBranding_WithNoCustomDomainsSet(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantDisallowsUniversalLoginCustomization,
+				ExpectError: regexp.MustCompile(
+					"managing the universal login body through the 'auth0_branding' resource " +
+						"requires at least one custom domain to be configured for the tenant",
+				),
+			},
+		},
+	})
+}
 
 func TestAccBranding(t *testing.T) {
 	httpRecorder := recorder.New(t)
@@ -127,20 +126,6 @@ func TestAccBranding(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTenantDisallowsUniversalLoginCustomization + testAccBrandingConfigUpdateAgain,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v2/logo.png"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "favicon_url", "https://mycompany.org/favicon.ico"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.#", "1"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.0.primary", "#0059d6"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.0.page_background", "#00FF00"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "1"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.0.url", "https://example.com/font/myfont.ttf"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "0"),
-				),
-				ExpectNonEmptyPlan: true,
-			},
-			{
 				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigUpdateAllFields,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v2/logo.png"),
@@ -155,7 +140,7 @@ func TestAccBranding(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigUpdateAndAgain,
+				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigUpdateAgain,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v3/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "favicon_url", "https://mycompany.org/favicon.ico"),

@@ -78,7 +78,7 @@ Optional:
 
 Optional:
 
-- `shields` (Set of String) Action to take when a breached password is detected during a signup.
+- `shields` (Set of String) Action to take when a breached password is detected during a signup. Possible values: `block`, `admin_notification`.
 
 
 

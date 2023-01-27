@@ -102,7 +102,8 @@ func newAttackProtection() *schema.Resource {
 												"admin_notification",
 											}, false),
 										},
-										Description: "Action to take when a breached password is detected during a signup.",
+										Description: "Action to take when a breached password is detected during " +
+											"a signup. Possible values: `block`, `admin_notification`.",
 									},
 								},
 							},

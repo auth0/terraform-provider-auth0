@@ -351,14 +351,11 @@ func newTenant() *schema.Resource {
 				},
 			},
 			"default_redirection_uri": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ValidateFunc: validation.All(
-					internalValidation.IsURLWithNoFragment,
-					validation.IsURLWithScheme([]string{"https"}),
-				),
-				Description: "The default absolute redirection URI, must be https and cannot contain a fragment.",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+				Description:  "The default absolute redirection URI. Must be HTTPS or an empty string.",
 			},
 			"session_cookie": {
 				Type:        schema.TypeList,

@@ -9,6 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 func newGuardian() *schema.Resource {
@@ -333,14 +335,14 @@ func newGuardian() *schema.Resource {
 									"apple_app_link": {
 										Type:         schema.TypeString,
 										Optional:     true,
-										ValidateFunc: validation.IsURLWithHTTPS,
-										Description:  "Apple App Store URL.",
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+										Description:  "Apple App Store URL. Must be HTTPS or an empty string.",
 									},
 									"google_app_link": {
 										Type:         schema.TypeString,
 										Optional:     true,
-										ValidateFunc: validation.IsURLWithHTTPS,
-										Description:  "Google Store URL.",
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+										Description:  "Google Store URL. Must be HTTPS or an empty string.",
 									},
 								},
 							},

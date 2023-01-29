@@ -159,8 +159,8 @@ Required:
 Optional:
 
 - `app_name` (String) Custom Application Name.
-- `apple_app_link` (String) Apple App Store URL.
-- `google_app_link` (String) Google Store URL.
+- `apple_app_link` (String) Apple App Store URL. Must be HTTPS or an empty string.
+- `google_app_link` (String) Google Store URL. Must be HTTPS or an empty string.
 
 
 

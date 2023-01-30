@@ -537,7 +537,12 @@ var connectionSchema = map[string]*schema.Schema{
 				"adfs_server": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "ADFS Metadata source.",
+					Description: "ADFS URL where to fetch the metadata source.",
+				},
+				"fed_metadata_xml": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Federation Metadata for the ADFS connection.",
 				},
 				"community_base_url": {
 					Type:        schema.TypeString,

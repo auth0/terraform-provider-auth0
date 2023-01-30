@@ -561,7 +561,6 @@ resource "auth0_client" "my_client" {
 	is_first_party = true
 	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
-	cross_origin_auth = false
 	client_aliases = [ "https://example.com/audience" ]
 	callbacks = [ "https://example.com/callback" ]
 	allowed_origins = [ "https://example.com" ]
@@ -594,7 +593,6 @@ resource "auth0_client" "my_client" {
 	is_first_party = true
 	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
-	cross_origin_auth = true
 	client_aliases = [ ]
 	callbacks = [ ]
 	allowed_origins = [ ]
@@ -758,7 +756,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),

@@ -416,6 +416,7 @@ func flattenConnectionOptionsOkta(options *management.ConnectionOptionsOkta) (in
 		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"icon_url":                 options.GetLogoURL(),
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
@@ -1204,6 +1205,7 @@ func expandConnectionOptionsOkta(
 		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
 		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
 		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
+		LogoURL:               value.String(config.GetAttr("icon_url")),
 	}
 
 	expandConnectionOptionsScopes(d, options)

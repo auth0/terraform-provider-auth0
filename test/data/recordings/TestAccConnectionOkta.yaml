@@ -1,290 +1,290 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 750
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-Okta-TestAccConnectionOkta","display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","strategy":"okta","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 883
-      uncompressed: false
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 210.793634ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 135.547259ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 118.752147ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 154.06473ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 588
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","show_as_button":false,"options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["example.com"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v2/token","scope":"openid profile","set_user_root_attributes":"on_first_login","non_persistent_attrs":["gender"]}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 193.809703ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 213.062878ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_NiVA3P8OCg9Wpvmr","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 125.865711ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_NiVA3P8OCg9Wpvmr
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 201.74056ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 792
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Okta-TestAccConnectionOkta","display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","strategy":"okta","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"icon_url":"https://example.com/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 925
+        uncompressed: false
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"icon_url":"https://example.com/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 242.077791ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 112.298333ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 116.733417ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","client_secret":"123456","domain_aliases":["api.example.com","example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 137.959333ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 633
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","show_as_button":false,"options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["example.com"],"icon_url":"https://example.com/v2/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v2/token","scope":"openid profile","set_user_root_attributes":"on_first_login","non_persistent_attrs":["gender"]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 156.894666ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 174.443208ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_R2D5vSm8TRKatN0c","options":{"scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 102.262834ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_R2D5vSm8TRKatN0c
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2023-01-30T21:48:23.676Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 169.14325ms

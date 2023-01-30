@@ -259,41 +259,53 @@ func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 func expandUser(d *schema.ResourceData) (*management.User, error) {
 	config := d.GetRawConfig()
 
-	user := &management.User{
-		Connection: value.String(config.GetAttr("connection_name")),
-		Name:       value.String(config.GetAttr("name")),
-		GivenName:  value.String(config.GetAttr("given_name")),
-		FamilyName: value.String(config.GetAttr("family_name")),
-		Nickname:   value.String(config.GetAttr("nickname")),
-		Picture:    value.String(config.GetAttr("picture")),
-		Blocked:    value.Bool(config.GetAttr("blocked")),
-	}
+	user := &management.User{}
 
 	if d.IsNewResource() {
 		user.ID = value.String(config.GetAttr("user_id"))
 	}
-	if d.IsNewResource() || d.HasChange("email") {
+	if d.HasChange("email") {
 		user.Email = value.String(config.GetAttr("email"))
 	}
-	if d.IsNewResource() || d.HasChange("username") {
+	if d.HasChange("username") {
 		user.Username = value.String(config.GetAttr("username"))
 	}
-	if d.IsNewResource() || d.HasChange("password") {
+	if d.HasChange("password") {
 		user.Password = value.String(config.GetAttr("password"))
 	}
-	if d.IsNewResource() || d.HasChange("phone_number") {
+	if d.HasChange("phone_number") {
 		user.PhoneNumber = value.String(config.GetAttr("phone_number"))
 	}
-	if d.IsNewResource() || d.HasChange("email_verified") {
+	if d.HasChange("email_verified") {
 		user.EmailVerified = value.Bool(config.GetAttr("email_verified"))
 	}
-	if d.IsNewResource() || d.HasChange("verify_email") {
+	if d.HasChange("verify_email") {
 		user.VerifyEmail = value.Bool(config.GetAttr("verify_email"))
 	}
-	if d.IsNewResource() || d.HasChange("phone_verified") {
+	if d.HasChange("phone_verified") {
 		user.PhoneVerified = value.Bool(config.GetAttr("phone_verified"))
 	}
-
+	if d.HasChange("given_name") {
+		user.GivenName = value.String(config.GetAttr("given_name"))
+	}
+	if d.HasChange("family_name") {
+		user.FamilyName = value.String(config.GetAttr("family_name"))
+	}
+	if d.HasChange("nickname") {
+		user.Nickname = value.String(config.GetAttr("nickname"))
+	}
+	if d.HasChange("name") {
+		user.Name = value.String(config.GetAttr("name"))
+	}
+	if d.HasChange("picture") {
+		user.Picture = value.String(config.GetAttr("picture"))
+	}
+	if d.HasChange("blocked") {
+		user.Blocked = value.Bool(config.GetAttr("blocked"))
+	}
+	if d.HasChange("connection_name") {
+		user.Connection = value.String(config.GetAttr("connection_name"))
+	}
 	if d.HasChange("user_metadata") {
 		userMetadata, err := expandMetadata(d, "user")
 		if err != nil {
@@ -301,7 +313,6 @@ func expandUser(d *schema.ResourceData) (*management.User, error) {
 		}
 		user.UserMetadata = &userMetadata
 	}
-
 	if d.HasChange("app_metadata") {
 		appMetadata, err := expandMetadata(d, "app")
 		if err != nil {

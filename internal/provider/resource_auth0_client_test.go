@@ -584,7 +584,7 @@ resource "auth0_client" "my_client" {
 	custom_login_page = ""
 	form_template = ""
 	token_endpoint_auth_method = "client_secret_post"
-	initiate_login_uri = "https://example.com/login-uri"
+	initiate_login_uri = ""
 	logo_uri = "https://another-example.com/logoUri"
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
@@ -748,7 +748,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "form_template", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", "https://example.com/login-uri"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "logo_uri", "https://another-example.com/logoUri"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),

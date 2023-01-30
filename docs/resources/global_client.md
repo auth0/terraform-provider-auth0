@@ -50,7 +50,7 @@ PAGE
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `form_template` (String) HTML form template to be used for WS-Federation.
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
-- `initiate_login_uri` (String) Initiate login URI, must be HTTPS.
+- `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))

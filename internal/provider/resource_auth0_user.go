@@ -50,26 +50,38 @@ func newUser() *schema.Resource {
 				Description: "Username of the user. Only valid if the connection requires a username.",
 			},
 			"name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Name of the user.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				Description: "Name of the user. This value can only be updated if the connection is a " +
+					"database connection (using the Auth0 store), a passwordless connection (email or sms) or " +
+					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
+					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"family_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Family name of the user.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "Family name of the user. This value can only be updated if the connection is a " +
+					"database connection (using the Auth0 store), a passwordless connection (email or sms) or " +
+					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
+					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"given_name": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Given name of the user.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "Given name of the user. This value can only be updated if the connection is a " +
+					"database connection (using the Auth0 store), a passwordless connection (email or sms) or " +
+					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
+					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"nickname": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Preferred nickname or alias of the user.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				Description: "Preferred nickname or alias of the user. This value can only be updated if the connection is a " +
+					"database connection (using the Auth0 store), a passwordless connection (email or sms) or " +
+					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
+					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"password": {
 				Type:        schema.TypeString,
@@ -126,10 +138,13 @@ func newUser() *schema.Resource {
 				Description: "Indicates whether the user is blocked or not.",
 			},
 			"picture": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Picture of the user.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				Description: "Picture of the user. This value can only be updated if the connection is a " +
+					"database connection (using the Auth0 store), a passwordless connection (email or sms) or " +
+					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
+					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"roles": {
 				Type:        schema.TypeSet,

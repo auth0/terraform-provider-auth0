@@ -42,6 +42,12 @@ func TestIsURLWithHTTPSorEmptyString(t *testing.T) {
 			inputURL:       "",
 			expectedErrors: nil,
 		},
+		{
+			inputURL: "broken/url",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to have a host, got broken/url",
+			},
+		},
 	}
 
 	for i, testCase := range testCases {

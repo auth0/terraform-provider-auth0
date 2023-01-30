@@ -1,17 +1,40 @@
 package validation
 
 import (
-	"strings"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	"fmt"
+	"net/url"
 )
 
-func IsURLWithHTTPSorEmptyString(i interface{}, s string) ([]string, []error) {
-	_, errors := validation.IsURLWithHTTPS(i, s)
-	for _, err := range errors {
-		if !strings.Contains(err.Error(), "url to not be empty") {
-			return nil, errors
+func IsURLWithHTTPSorEmptyString(rawURL interface{}, key string) ([]string, []error) {
+	urlString, ok := rawURL.(string)
+	if !ok {
+		return nil, []error{
+			fmt.Errorf("expected type of %q to be string", key),
 		}
 	}
+
+	if urlString == "" {
+		return nil, nil
+	}
+
+	parsedURL, err := url.Parse(urlString)
+	if err != nil {
+		return nil, []error{
+			fmt.Errorf("expected %q to be a valid url, got %v: %+v", key, urlString, err),
+		}
+	}
+
+	if parsedURL.Host == "" {
+		return nil, []error{
+			fmt.Errorf("expected %q to have a host, got %v", key, urlString),
+		}
+	}
+
+	if parsedURL.Scheme != "https" {
+		return nil, []error{
+			fmt.Errorf("expected %q to have a url with schema of: %q, got %v", key, "https", urlString),
+		}
+	}
+
 	return nil, nil
 }

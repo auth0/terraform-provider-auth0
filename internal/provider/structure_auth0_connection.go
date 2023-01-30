@@ -109,6 +109,7 @@ func flattenConnectionOptionsAuth0(
 
 	m := map[string]interface{}{
 		"password_policy":                options.GetPasswordPolicy(),
+		"enable_script_context":          options.GetEnableScriptContext(),
 		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
 		"brute_force_protection":         options.GetBruteForceProtection(),
 		"import_mode":                    options.GetImportMode(),
@@ -733,6 +734,7 @@ func expandConnectionOptionsAuth0(config cty.Value) (*management.ConnectionOptio
 		PasswordPolicy:               value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:           value.Strings(config.GetAttr("non_persistent_attrs")),
 		SetUserAttributes:            value.String(config.GetAttr("set_user_root_attributes")),
+		EnableScriptContext:          value.Bool(config.GetAttr("enable_script_context")),
 		EnabledDatabaseCustomization: value.Bool(config.GetAttr("enabled_database_customization")),
 		BruteForceProtection:         value.Bool(config.GetAttr("brute_force_protection")),
 		ImportMode:                   value.Bool(config.GetAttr("import_mode")),

@@ -194,6 +194,12 @@ var connectionSchema = map[string]*schema.Schema{
 					},
 					Description: "Configuration settings for password complexity.",
 				},
+				"enable_script_context": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Set to `true` to inject context into custom DB scripts " +
+						"(warning: cannot be disabled once enabled).",
+				},
 				"enabled_database_customization": {
 					Type:        schema.TypeBool,
 					Optional:    true,

@@ -327,6 +327,58 @@ resource "auth0_connection" "azure_ad" {
 }
 `
 
+func TestAccConnectionADFS(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccConnectionADFSConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.tenant_domain", "example.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionADFSConfig = `
+resource "auth0_connection" "adfs" {
+	name     = "Acceptance-Test-ADFS-{{.testName}}"
+	strategy = "adfs"
+	show_as_button = true
+
+	options {
+		tenant_domain = "example.auth0.com"
+		domain_aliases = ["example.com"]
+		icon_url = "https://example.com/logo.svg"
+		adfs_server = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"
+		api_enable_users = false
+		set_user_root_attributes = "on_each_login"
+		non_persistent_attrs = ["gender","hair_color"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
 func TestAccConnectionOIDC(t *testing.T) {
 	httpRecorder := recorder.New(t)
 

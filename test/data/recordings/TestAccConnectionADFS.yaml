@@ -1,0 +1,146 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 545
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-ADFS-TestAccConnectionADFS","strategy":"adfs","show_as_button":true,"options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 891
+        uncompressed: false
+        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"thumbprints":[],"signInEndpoint":"https://adfs.provider/wsfed","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 302.604084ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 133.184583ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 109.013416ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2023-01-30T16:51:05.383Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 195.1685ms

@@ -526,13 +526,16 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 
 func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"icon_url":                 options.GetLogoURL(),
-		"adfs_server":              options.GetADFSServer(),
-		"api_enable_users":         options.GetEnableUsersAPI(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"tenant_domain":                          options.GetTenantDomain(),
+		"domain_aliases":                         options.GetDomainAliases(),
+		"icon_url":                               options.GetLogoURL(),
+		"adfs_server":                            options.GetADFSServer(),
+		"fed_metadata_xml":                       options.GetFedMetadataXML(),
+		"sign_in_endpoint":                       options.GetSignInEndpoint(),
+		"api_enable_users":                       options.GetEnableUsersAPI(),
+		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
+		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
@@ -1273,7 +1276,10 @@ func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOption
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 		ADFSServer:         value.String(config.GetAttr("adfs_server")),
+		FedMetadataXML:     value.String(config.GetAttr("fed_metadata_xml")),
+		SignInEndpoint:     value.String(config.GetAttr("sign_in_endpoint")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
+		TrustEmailVerified: value.String(config.GetAttr("should_trust_email_verified_connection")),
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}

@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 545
+        content_length: 665
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-ADFS-TestAccConnectionADFS","strategy":"adfs","show_as_button":true,"options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+            {"name":"Acceptance-Test-ADFS-TestAccConnectionADFS","strategy":"adfs","show_as_button":true,"options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"signInEndpoint":"https://adfs.provider/wsfed","should_trust_email_verified_connection":"always_set_emails_as_verified","set_user_root_attributes":"on_each_login"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/latest
+                - Go-Auth0-SDK/0.15.1
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 891
         uncompressed: false
-        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"thumbprints":[],"signInEndpoint":"https://adfs.provider/wsfed","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"signInEndpoint":"https://adfs.provider/wsfed","should_trust_email_verified_connection":"always_set_emails_as_verified","set_user_root_attributes":"on_each_login","thumbprints":[]},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 302.604084ms
+        duration: 399.605833ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,8 +55,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 133.184583ms
+        duration: 117.904833ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -91,8 +91,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,14 +102,158 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_0Jtg3QXV3LP4OizO","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/lkjtI4y5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.013416ms
+        duration: 101.947625ms
     - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"always_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 131.796875ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 2548
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"show_as_button":true,"options":{"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"icon_url":"https://example.com/logo.svg","adfs_server":"","fedMetadataXml":"\u003c?xml version=\"1.0\" encoding=\"utf-8\"?\u003e\n\u003cEntityDescriptor entityID=\"https://example.com\"\n                  xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\"\u003e\n    \u003cRoleDescriptor xsi:type=\"fed:ApplicationServiceType\"\n                    protocolSupportEnumeration=\"http://docs.oasis-open.org/wsfed/federation/200706\"\n                    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                    xmlns:fed=\"http://docs.oasis-open.org/wsfed/federation/200706\"\u003e\n        \u003cfed:TargetScopes\u003e\n            \u003cwsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\"\u003e\n                \u003cwsa:Address\u003ehttps://adfs.provider/\u003c/wsa:Address\u003e\n            \u003c/wsa:EndpointReference\u003e\n        \u003c/fed:TargetScopes\u003e\n        \u003cfed:ApplicationServiceEndpoint\u003e\n            \u003cwsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\"\u003e\n                \u003cwsa:Address\u003ehttps://adfs.provider/wsfed\u003c/wsa:Address\u003e\n            \u003c/wsa:EndpointReference\u003e\n        \u003c/fed:ApplicationServiceEndpoint\u003e\n        \u003cfed:PassiveRequestorEndpoint\u003e\n            \u003cwsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\"\u003e\n                \u003cwsa:Address\u003ehttps://adfs.provider/wsfed\u003c/wsa:Address\u003e\n            \u003c/wsa:EndpointReference\u003e\n        \u003c/fed:PassiveRequestorEndpoint\u003e\n    \u003c/RoleDescriptor\u003e\n    \u003cIDPSSODescriptor protocolSupportEnumeration=\"urn:oasis:names:tc:SAML:2.0:protocol\"\u003e\n        \u003cSingleLogoutService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_out\"/\u003e\n        \u003cSingleSignOnService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_in\"/\u003e\n    \u003c/IDPSSODescriptor\u003e\n\u003c/EntityDescriptor\u003e\n\n","api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"signInEndpoint":"https://adfs.provider/wsfed","should_trust_email_verified_connection":"never_set_emails_as_verified","set_user_root_attributes":"on_each_login"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"fedMetadataXml":"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<EntityDescriptor entityID=\"https://example.com\"\n                  xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\">\n    <RoleDescriptor xsi:type=\"fed:ApplicationServiceType\"\n                    protocolSupportEnumeration=\"http://docs.oasis-open.org/wsfed/federation/200706\"\n                    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                    xmlns:fed=\"http://docs.oasis-open.org/wsfed/federation/200706\">\n        <fed:TargetScopes>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:TargetScopes>\n        <fed:ApplicationServiceEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:ApplicationServiceEndpoint>\n        <fed:PassiveRequestorEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:PassiveRequestorEndpoint>\n    </RoleDescriptor>\n    <IDPSSODescriptor protocolSupportEnumeration=\"urn:oasis:names:tc:SAML:2.0:protocol\">\n        <SingleLogoutService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_out\"/>\n        <SingleSignOnService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_in\"/>\n    </IDPSSODescriptor>\n</EntityDescriptor>\n\n","signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 143.683625ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"fedMetadataXml":"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<EntityDescriptor entityID=\"https://example.com\"\n                  xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\">\n    <RoleDescriptor xsi:type=\"fed:ApplicationServiceType\"\n                    protocolSupportEnumeration=\"http://docs.oasis-open.org/wsfed/federation/200706\"\n                    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                    xmlns:fed=\"http://docs.oasis-open.org/wsfed/federation/200706\">\n        <fed:TargetScopes>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:TargetScopes>\n        <fed:ApplicationServiceEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:ApplicationServiceEndpoint>\n        <fed:PassiveRequestorEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:PassiveRequestorEndpoint>\n    </RoleDescriptor>\n    <IDPSSODescriptor protocolSupportEnumeration=\"urn:oasis:names:tc:SAML:2.0:protocol\">\n        <SingleLogoutService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_out\"/>\n        <SingleSignOnService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_in\"/>\n    </IDPSSODescriptor>\n</EntityDescriptor>\n\n","signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.864625ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_92qYX8oE4gQkGfks","options":{"icon_url":"https://example.com/logo.svg","adfs_server":"","thumbprints":[],"tenant_domain":"example.auth0.com","domain_aliases":["example.com"],"fedMetadataXml":"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<EntityDescriptor entityID=\"https://example.com\"\n                  xmlns=\"urn:oasis:names:tc:SAML:2.0:metadata\">\n    <RoleDescriptor xsi:type=\"fed:ApplicationServiceType\"\n                    protocolSupportEnumeration=\"http://docs.oasis-open.org/wsfed/federation/200706\"\n                    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n                    xmlns:fed=\"http://docs.oasis-open.org/wsfed/federation/200706\">\n        <fed:TargetScopes>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:TargetScopes>\n        <fed:ApplicationServiceEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:ApplicationServiceEndpoint>\n        <fed:PassiveRequestorEndpoint>\n            <wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\">\n                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>\n            </wsa:EndpointReference>\n        </fed:PassiveRequestorEndpoint>\n    </RoleDescriptor>\n    <IDPSSODescriptor protocolSupportEnumeration=\"urn:oasis:names:tc:SAML:2.0:protocol\">\n        <SingleLogoutService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_out\"/>\n        <SingleSignOnService Binding=\"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect\"\n                             Location=\"https://adfs.provider/sign_in\"/>\n    </IDPSSODescriptor>\n</EntityDescriptor>\n\n","signInEndpoint":"https://adfs.provider/wsfed","upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":false,"non_persistent_attrs":["gender","hair_color"],"set_user_root_attributes":"on_each_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"adfs","name":"Acceptance-Test-ADFS-TestAccConnectionADFS","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/p/adfs/ANjxwrJ5","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-ADFS-TestAccConnectionADFS"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 145.946292ms
+    - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -126,8 +270,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0Jtg3QXV3LP4OizO
+                - Go-Auth0-SDK/0.15.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_92qYX8oE4gQkGfks
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -137,10 +281,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2023-01-30T16:51:05.383Z"}'
+        body: '{"deleted_at":"2023-01-30T21:28:32.626Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 195.1685ms
+        duration: 154.1645ms

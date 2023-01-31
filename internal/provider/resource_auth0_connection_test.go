@@ -350,6 +350,30 @@ func TestAccConnectionADFS(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.should_trust_email_verified_connection", "always_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.sign_in_endpoint", "https://adfs.provider/wsfed"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionADFSConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.tenant_domain", "example.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", ""),
+					resource.TestCheckResourceAttrSet("auth0_connection.adfs", "options.0.fed_metadata_xml"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.should_trust_email_verified_connection", "never_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.sign_in_endpoint", "https://adfs.provider/wsfed"),
 				),
 			},
 		},
@@ -367,7 +391,67 @@ resource "auth0_connection" "adfs" {
 		domain_aliases = ["example.com"]
 		icon_url = "https://example.com/logo.svg"
 		adfs_server = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"
+		sign_in_endpoint = "https://adfs.provider/wsfed"
 		api_enable_users = false
+		set_user_root_attributes = "on_each_login"
+		non_persistent_attrs = ["gender","hair_color"]
+		should_trust_email_verified_connection = "always_set_emails_as_verified"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionADFSConfigUpdate = `
+resource "auth0_connection" "adfs" {
+	name     = "Acceptance-Test-ADFS-{{.testName}}"
+	strategy = "adfs"
+	show_as_button = true
+
+	options {
+		tenant_domain = "example.auth0.com"
+		domain_aliases = ["example.com"]
+		icon_url = "https://example.com/logo.svg"
+		adfs_server = ""
+		fed_metadata_xml = <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<EntityDescriptor entityID="https://example.com"
+                  xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <RoleDescriptor xsi:type="fed:ApplicationServiceType"
+                    protocolSupportEnumeration="http://docs.oasis-open.org/wsfed/federation/200706"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:fed="http://docs.oasis-open.org/wsfed/federation/200706">
+        <fed:TargetScopes>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:TargetScopes>
+        <fed:ApplicationServiceEndpoint>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:ApplicationServiceEndpoint>
+        <fed:PassiveRequestorEndpoint>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:PassiveRequestorEndpoint>
+    </RoleDescriptor>
+    <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                             Location="https://adfs.provider/sign_out"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                             Location="https://adfs.provider/sign_in"/>
+    </IDPSSODescriptor>
+</EntityDescriptor>
+
+EOF
+		sign_in_endpoint = "https://adfs.provider/wsfed"
+		api_enable_users = false
+		should_trust_email_verified_connection = "never_set_emails_as_verified"
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
 		upstream_params = jsonencode({

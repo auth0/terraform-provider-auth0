@@ -610,6 +610,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
 				),
 			},
 			{
@@ -633,6 +634,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
 				),
 			},
 		},
@@ -658,6 +660,7 @@ resource "auth0_connection" "okta" {
 		scopes                   = [ "openid", "profile", "email" ]
 		non_persistent_attrs     = [ "gender", "hair_color" ]
 		set_user_root_attributes = "on_each_login"
+		icon_url                 = "https://example.com/logo.svg"
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -686,6 +689,7 @@ resource "auth0_connection" "okta" {
 		scopes                   = [ "openid", "profile"]
 		non_persistent_attrs     = [ "gender" ]
 		set_user_root_attributes = "on_first_login"
+		icon_url                 = "https://example.com/v2/logo.svg"
 	}
 }
 `

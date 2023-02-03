@@ -94,6 +94,10 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*management.Management)
 
 	organizationID := data.Get("organization_id").(string)
+
+	globalMutex.Lock(organizationID)
+	defer globalMutex.Unlock(organizationID)
+
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
 
@@ -119,6 +123,10 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 
 	organizationConnection, err := api.Organization.Connection(organizationID, connectionID)
 	if err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
 		return diag.FromErr(err)
 	}
 
@@ -135,6 +143,10 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*management.Management)
 
 	organizationID := data.Get("organization_id").(string)
+
+	globalMutex.Lock(organizationID)
+	defer globalMutex.Unlock(organizationID)
+
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
 
@@ -153,6 +165,10 @@ func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*management.Management)
 
 	organizationID := data.Get("organization_id").(string)
+
+	globalMutex.Lock(organizationID)
+	defer globalMutex.Unlock(organizationID)
+
 	connectionID := data.Get("connection_id").(string)
 
 	if err := api.Organization.DeleteConnection(organizationID, connectionID); err != nil {

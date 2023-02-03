@@ -17,13 +17,17 @@ resource "auth0_guardian" "my_guardian" {
   otp           = true
   recovery_code = true
 
-  webauthn_platform {} # This will enable it. Removing this block will disable it.
+  webauthn_platform {
+    enabled = true
+  }
 
   webauthn_roaming {
+    enabled           = true
     user_verification = "required"
   }
 
   phone {
+    enabled       = true
     provider      = "auth0"
     message_types = ["sms", "voice"]
 
@@ -34,6 +38,9 @@ resource "auth0_guardian" "my_guardian" {
   }
 
   push {
+    enabled  = true
+    provider = "sns"
+
     amazon_sns {
       aws_access_key_id                 = "test1"
       aws_region                        = "us-west-1"
@@ -50,6 +57,7 @@ resource "auth0_guardian" "my_guardian" {
   }
 
   duo {
+    enabled         = true
     integration_key = "someKey"
     secret_key      = "someSecret"
     hostname        = "api-hostname"
@@ -84,6 +92,10 @@ resource "auth0_guardian" "my_guardian" {
 
 Required:
 
+- `enabled` (Boolean) Indicates whether Duo MFA is enabled.
+
+Optional:
+
 - `hostname` (String) Duo API Hostname, see the Duo documentation for more details on Duo setup.
 - `integration_key` (String) Duo client ID, see the Duo documentation for more details on Duo setup.
 - `secret_key` (String, Sensitive) Duo client secret, see the Duo documentation for more details on Duo setup.
@@ -94,12 +106,13 @@ Required:
 
 Required:
 
-- `message_types` (List of String) Message types to use, array of `sms` and/or `voice`. Adding both to the array should enable the user to choose.
-- `provider` (String) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`.
+- `enabled` (Boolean) Indicates whether Phone MFA is enabled.
 
 Optional:
 
+- `message_types` (List of String) Message types to use, array of `sms` and/or `voice`. Adding both to the array should enable the user to choose.
 - `options` (Block List, Max: 1) Options for the various providers. (see [below for nested schema](#nestedblock--phone--options))
+- `provider` (String) Provider to use, one of `auth0`, `twilio` or `phone-message-hook`. Selecting `phone-message-hook` will require a Phone Message Action to be created before. [Learn how](https://auth0.com/docs/customize/actions/flows-and-triggers/send-phone-message-flow).
 
 <a id="nestedblock--phone--options"></a>
 ### Nested Schema for `phone.options`
@@ -120,12 +133,13 @@ Optional:
 
 Required:
 
-- `provider` (String) Provider to use, one of `guardian`, `sns`.
+- `enabled` (Boolean) Indicates whether Push MFA is enabled.
 
 Optional:
 
 - `amazon_sns` (Block List, Max: 1) Configuration for Amazon SNS. (see [below for nested schema](#nestedblock--push--amazon_sns))
 - `custom_app` (Block List, Max: 1) Configuration for the Guardian Custom App. (see [below for nested schema](#nestedblock--push--custom_app))
+- `provider` (String) Provider to use, one of `guardian`, `sns`.
 
 <a id="nestedblock--push--amazon_sns"></a>
 ### Nested Schema for `push.amazon_sns`
@@ -145,13 +159,17 @@ Required:
 Optional:
 
 - `app_name` (String) Custom Application Name.
-- `apple_app_link` (String) Apple App Store URL.
-- `google_app_link` (String) Google Store URL.
+- `apple_app_link` (String) Apple App Store URL. Must be HTTPS or an empty string.
+- `google_app_link` (String) Google Store URL. Must be HTTPS or an empty string.
 
 
 
 <a id="nestedblock--webauthn_platform"></a>
 ### Nested Schema for `webauthn_platform`
+
+Required:
+
+- `enabled` (Boolean) Indicates whether WebAuthn with FIDO Device Biometrics MFA is enabled.
 
 Optional:
 
@@ -161,6 +179,10 @@ Optional:
 
 <a id="nestedblock--webauthn_roaming"></a>
 ### Nested Schema for `webauthn_roaming`
+
+Required:
+
+- `enabled` (Boolean) Indicates whether WebAuthn with FIDO Security Keys MFA is enabled.
 
 Optional:
 

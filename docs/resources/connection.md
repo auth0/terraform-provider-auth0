@@ -601,7 +601,6 @@ resource "auth0_connection" "okta" {
 ### Optional
 
 - `display_name` (String) Name used in login screen.
-- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))
@@ -619,7 +618,7 @@ resource "auth0_connection" "okta" {
 
 Optional:
 
-- `adfs_server` (String) ADFS Metadata source.
+- `adfs_server` (String) ADFS URL where to fetch the metadata source.
 - `allowed_audiences` (Set of String) List of allowed audiences.
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
@@ -639,8 +638,10 @@ Optional:
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
 - `domain` (String) Domain name.
 - `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
+- `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
 - `entity_id` (String) Custom Entity ID for the connection.
+- `fed_metadata_xml` (String) Federation Metadata for the ADFS connection.
 - `fields_map` (String) If you're configuring a SAML enterprise connection for a non-standard PingFederate Server, you must update the attribute mappings.
 - `forward_request_info` (Boolean) Specifies whether or not request info should be forwarded to sms gateway.
 - `from` (String) Address to use as the sender.

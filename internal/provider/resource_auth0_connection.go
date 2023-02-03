@@ -194,6 +194,12 @@ var connectionSchema = map[string]*schema.Schema{
 					},
 					Description: "Configuration settings for password complexity.",
 				},
+				"enable_script_context": {
+					Type:     schema.TypeBool,
+					Optional: true,
+					Description: "Set to `true` to inject context into custom DB scripts " +
+						"(warning: cannot be disabled once enabled).",
+				},
 				"enabled_database_customization": {
 					Type:        schema.TypeBool,
 					Optional:    true,
@@ -531,7 +537,12 @@ var connectionSchema = map[string]*schema.Schema{
 				"adfs_server": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "ADFS Metadata source.",
+					Description: "ADFS URL where to fetch the metadata source.",
+				},
+				"fed_metadata_xml": {
+					Type:        schema.TypeString,
+					Optional:    true,
+					Description: "Federation Metadata for the ADFS connection.",
 				},
 				"community_base_url": {
 					Type:        schema.TypeString,
@@ -561,11 +572,13 @@ var connectionSchema = map[string]*schema.Schema{
 				"issuer": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Issuer URL, e.g. `https://auth.example.com`.",
 				},
 				"jwks_uri": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "JWKS URI.",
 				},
 				"discovery_url": {
@@ -576,16 +589,19 @@ var connectionSchema = map[string]*schema.Schema{
 				"token_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Token endpoint.",
 				},
 				"userinfo_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "User info endpoint.",
 				},
 				"authorization_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "Authorization endpoint.",
 				},
 				"debug": {
@@ -737,13 +753,6 @@ var connectionSchema = map[string]*schema.Schema{
 				},
 			},
 		},
-	},
-	"enabled_clients": {
-		Type:        schema.TypeSet,
-		Elem:        &schema.Schema{Type: schema.TypeString},
-		Optional:    true,
-		Computed:    true,
-		Description: "IDs of the clients for which the connection is enabled.",
 	},
 	"realms": {
 		Type:     schema.TypeList,
@@ -924,7 +933,6 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		d.Set("is_domain_connection", connection.GetIsDomainConnection()),
 		d.Set("strategy", connection.GetStrategy()),
 		d.Set("options", connectionOptions),
-		d.Set("enabled_clients", connection.GetEnabledClients()),
 		d.Set("realms", connection.GetRealms()),
 		d.Set("metadata", connection.GetMetadata()),
 	)

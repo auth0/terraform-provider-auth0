@@ -41,6 +41,10 @@ resource "auth0_attack_protection" "my_protection" {
     enabled                      = true
     method                       = "standard"
     shields                      = ["admin_notification", "block"]
+
+    pre_user_registration {
+      shields = ["block"]
+    }
   }
 }
 ```
@@ -66,7 +70,16 @@ Optional:
 - `admin_notification_frequency` (Set of String) When "admin_notification" is enabled, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
 - `enabled` (Boolean) Whether breached password detection is active.
 - `method` (String) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
+- `pre_user_registration` (Block List, Max: 1) Configuration options that apply before every user registration attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--breached_password_detection--pre_user_registration))
 - `shields` (Set of String) Action to take when a breached password is detected.
+
+<a id="nestedblock--breached_password_detection--pre_user_registration"></a>
+### Nested Schema for `breached_password_detection.pre_user_registration`
+
+Optional:
+
+- `shields` (Set of String) Action to take when a breached password is detected during a signup. Possible values: `block`, `admin_notification`.
+
 
 
 <a id="nestedblock--brute_force_protection"></a>

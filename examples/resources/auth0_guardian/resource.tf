@@ -4,13 +4,17 @@ resource "auth0_guardian" "my_guardian" {
   otp           = true
   recovery_code = true
 
-  webauthn_platform {} # This will enable it. Removing this block will disable it.
+  webauthn_platform {
+    enabled = true
+  }
 
   webauthn_roaming {
+    enabled           = true
     user_verification = "required"
   }
 
   phone {
+    enabled       = true
     provider      = "auth0"
     message_types = ["sms", "voice"]
 
@@ -21,6 +25,9 @@ resource "auth0_guardian" "my_guardian" {
   }
 
   push {
+    enabled  = true
+    provider = "sns"
+
     amazon_sns {
       aws_access_key_id                 = "test1"
       aws_region                        = "us-west-1"
@@ -37,6 +44,7 @@ resource "auth0_guardian" "my_guardian" {
   }
 
   duo {
+    enabled         = true
     integration_key = "someKey"
     secret_key      = "someSecret"
     hostname        = "api-hostname"

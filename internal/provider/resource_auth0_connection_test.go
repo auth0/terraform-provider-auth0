@@ -100,6 +100,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enable_script_context", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enabled_database_customization", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "0"),
@@ -183,6 +184,7 @@ resource "auth0_connection" "my_connection" {
 		password_no_personal_info {
 			enable = true
 		}
+		enable_script_context = true
 		enabled_database_customization = true
 		set_user_root_attributes = "on_first_login"
 		brute_force_protection = false
@@ -316,6 +318,142 @@ resource "auth0_connection" "azure_ad" {
 		]
 		set_user_root_attributes = "on_each_login"
 		should_trust_email_verified_connection = "never_set_emails_as_verified"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+func TestAccConnectionADFS(t *testing.T) {
+	httpRecorder := recorder.New(t)
+
+	resource.Test(t, resource.TestCase{
+		ProviderFactories: testProviders(httpRecorder),
+		Steps: []resource.TestStep{
+			{
+				Config: template.ParseTestName(testAccConnectionADFSConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.tenant_domain", "example.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.should_trust_email_verified_connection", "always_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.sign_in_endpoint", "https://adfs.provider/wsfed"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccConnectionADFSConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.tenant_domain", "example.auth0.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", ""),
+					resource.TestCheckResourceAttrSet("auth0_connection.adfs", "options.0.fed_metadata_xml"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.should_trust_email_verified_connection", "never_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.sign_in_endpoint", "https://adfs.provider/wsfed"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionADFSConfig = `
+resource "auth0_connection" "adfs" {
+	name     = "Acceptance-Test-ADFS-{{.testName}}"
+	strategy = "adfs"
+	show_as_button = true
+
+	options {
+		tenant_domain = "example.auth0.com"
+		domain_aliases = ["example.com"]
+		icon_url = "https://example.com/logo.svg"
+		adfs_server = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"
+		sign_in_endpoint = "https://adfs.provider/wsfed"
+		api_enable_users = false
+		set_user_root_attributes = "on_each_login"
+		non_persistent_attrs = ["gender","hair_color"]
+		should_trust_email_verified_connection = "always_set_emails_as_verified"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionADFSConfigUpdate = `
+resource "auth0_connection" "adfs" {
+	name     = "Acceptance-Test-ADFS-{{.testName}}"
+	strategy = "adfs"
+	show_as_button = true
+
+	options {
+		tenant_domain = "example.auth0.com"
+		domain_aliases = ["example.com"]
+		icon_url = "https://example.com/logo.svg"
+		adfs_server = ""
+		fed_metadata_xml = <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<EntityDescriptor entityID="https://example.com"
+                  xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <RoleDescriptor xsi:type="fed:ApplicationServiceType"
+                    protocolSupportEnumeration="http://docs.oasis-open.org/wsfed/federation/200706"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:fed="http://docs.oasis-open.org/wsfed/federation/200706">
+        <fed:TargetScopes>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:TargetScopes>
+        <fed:ApplicationServiceEndpoint>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:ApplicationServiceEndpoint>
+        <fed:PassiveRequestorEndpoint>
+            <wsa:EndpointReference xmlns:wsa="http://www.w3.org/2005/08/addressing">
+                <wsa:Address>https://adfs.provider/wsfed</wsa:Address>
+            </wsa:EndpointReference>
+        </fed:PassiveRequestorEndpoint>
+    </RoleDescriptor>
+    <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                             Location="https://adfs.provider/sign_out"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+                             Location="https://adfs.provider/sign_in"/>
+    </IDPSSODescriptor>
+</EntityDescriptor>
+
+EOF
+		sign_in_endpoint = "https://adfs.provider/wsfed"
+		api_enable_users = false
+		should_trust_email_verified_connection = "never_set_emails_as_verified"
+		set_user_root_attributes = "on_each_login"
+		non_persistent_attrs = ["gender","hair_color"]
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -472,6 +610,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
 				),
 			},
 			{
@@ -495,6 +634,7 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
 				),
 			},
 		},
@@ -520,6 +660,7 @@ resource "auth0_connection" "okta" {
 		scopes                   = [ "openid", "profile", "email" ]
 		non_persistent_attrs     = [ "gender", "hair_color" ]
 		set_user_root_attributes = "on_each_login"
+		icon_url                 = "https://example.com/logo.svg"
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
@@ -548,6 +689,7 @@ resource "auth0_connection" "okta" {
 		scopes                   = [ "openid", "profile"]
 		non_persistent_attrs     = [ "gender" ]
 		set_user_root_attributes = "on_first_login"
+		icon_url                 = "https://example.com/v2/logo.svg"
 	}
 }
 `
@@ -642,80 +784,6 @@ resource "auth0_connection" "oauth2" {
 		}
 		pkce_enabled = false
 	}
-}
-`
-
-func TestAccConnectionWithEnabledClients(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
-		Steps: []resource.TestStep{
-			{
-				Config: template.ParseTestName(testAccConnectionWithEnabledClientsConfig, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "enabled_clients.#", "4"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"), // Gets computed with defaults by the API.
-				),
-			},
-			{
-				Config: template.ParseTestName(testAccConnectionWithEmptyEnabledClientsConfig, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "enabled_clients.#", "0"),
-				),
-			},
-		},
-	})
-}
-
-const testAccConnectionWithEnabledClientsConfig = `
-resource "auth0_client" "my_client_1" {
-	name = "Application - Acceptance Test - 1 - {{.testName}}"
-	description = "Test Applications Long Description"
-	app_type = "non_interactive"
-}
-
-resource "auth0_client" "my_client_2" {
-	depends_on = [auth0_client.my_client_1]
-	name = "Application - Acceptance Test - 2 - {{.testName}}"
-	description = "Test Applications Long Description"
-	app_type = "non_interactive"
-}
-
-resource "auth0_client" "my_client_3" {
-	depends_on = [auth0_client.my_client_2]
-	name = "Application - Acceptance Test - 3 - {{.testName}}"
-	description = "Test Applications Long Description"
-	app_type = "non_interactive"
-}
-
-resource "auth0_client" "my_client_4" {
-	depends_on = [auth0_client.my_client_3]
-	name = "Application - Acceptance Test - 4 - {{.testName}}"
-	description = "Test Applications Long Description"
-	app_type = "non_interactive"
-}
-
-resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-Connection-{{.testName}}"
-	is_domain_connection = true
-	strategy = "auth0"
-	enabled_clients = [
-		auth0_client.my_client_1.id,
-		auth0_client.my_client_2.id,
-		auth0_client.my_client_3.id,
-		auth0_client.my_client_4.id,
-	]
-}
-`
-
-const testAccConnectionWithEmptyEnabledClientsConfig = `
-resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-Connection-{{.testName}}"
-	is_domain_connection = true
-	strategy = "auth0"
-	enabled_clients = []
 }
 `
 

@@ -5,34 +5,36 @@ import (
 	"net/url"
 )
 
-// IsURLWithNoFragment is a SchemaValidateFunc which tests if the provided value
-// is of type string and a valid URL with no fragment.
-func IsURLWithNoFragment(i interface{}, k string) (warnings []string, errors []error) {
-	v, ok := i.(string)
+func IsURLWithHTTPSorEmptyString(rawURL interface{}, key string) ([]string, []error) {
+	urlString, ok := rawURL.(string)
 	if !ok {
-		errors = append(errors, fmt.Errorf("expected type of %q to be string", k))
-		return
+		return nil, []error{
+			fmt.Errorf("expected type of %q to be string", key),
+		}
 	}
 
-	if v == "" {
-		errors = append(errors, fmt.Errorf("expected %q url to not be empty, got %v", k, i))
-		return
+	if urlString == "" {
+		return nil, nil
 	}
 
-	u, err := url.Parse(v)
+	parsedURL, err := url.Parse(urlString)
 	if err != nil {
-		errors = append(errors, fmt.Errorf("expected %q to be a valid url, got %v: %+v", k, v, err))
-		return
+		return nil, []error{
+			fmt.Errorf("expected %q to be a valid url, got %v: %+v", key, urlString, err),
+		}
 	}
 
-	if u.Host == "" {
-		errors = append(errors, fmt.Errorf("expected %q to have a host, got %v", k, v))
-		return
+	if parsedURL.Host == "" {
+		return nil, []error{
+			fmt.Errorf("expected %q to have a host, got %v", key, urlString),
+		}
 	}
 
-	if u.Fragment != "" {
-		errors = append(errors, fmt.Errorf("expected %q to have a url with an empty fragment. %s", k, v))
+	if parsedURL.Scheme != "https" {
+		return nil, []error{
+			fmt.Errorf("expected %q to have a url with schema of: %q, got %v", key, "https", urlString),
+		}
 	}
 
-	return
+	return nil, nil
 }

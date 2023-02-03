@@ -64,6 +64,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
 				),
 			},
 			{
@@ -165,7 +166,7 @@ resource "auth0_tenant" "my_tenant" {
 			page_background = "#000000"
 		}
 	}
-	default_redirection_uri = "https://example.com/login"
+	default_redirection_uri = ""
 	session_cookie {
 		mode = "persistent"
 	}

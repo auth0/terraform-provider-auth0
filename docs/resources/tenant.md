@@ -73,7 +73,7 @@ resource "auth0_tenant" "my_tenant" {
 - `change_password` (Block List, Max: 1) Configuration settings for change password page. (see [below for nested schema](#nestedblock--change_password))
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
-- `default_redirection_uri` (String) The default absolute redirection URI, must be https and cannot contain a fragment.
+- `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
 - `error_page` (Block List, Max: 1) Configuration settings for error pages. (see [below for nested schema](#nestedblock--error_page))
 - `flags` (Block List, Max: 1) Configuration settings for tenant flags. (see [below for nested schema](#nestedblock--flags))

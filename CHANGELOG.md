@@ -1,3 +1,50 @@
+## 0.43.0
+
+BUG FIXES:
+
+- `resource/auth0_guardian`: Allow updating message templates for `phone-message-hook` sms provider ([#444](https://github.com/auth0/terraform-provider-auth0/pull/444))
+- `resource/auth0_branding`: Manage universal-login body only if custom domains are set ([#446](https://github.com/auth0/terraform-provider-auth0/pull/446))
+- `resource/auth0_connection`: Set `authorization_endpoint`, `issuer`, `jws_uri`, `token_endpoint`, `user_info_endpoint` as `Computed` to prevent diff issues ([#443](https://github.com/auth0/terraform-provider-auth0/pull/443))
+- `resource/auth0_user`: Only send changed fields when updating a user ([#453](https://github.com/auth0/terraform-provider-auth0/pull/453))
+- `resource/auth0_*`: Relax url schema validation for `initiate_login_uri`, `apple_app_link`, `google_app_link`, `default_redirection_uri` to allow to be set to empty ([#453](https://github.com/auth0/terraform-provider-auth0/pull/453))
+
+
+FEATURES:
+
+- `resource/auth0_log_stream`: Added support for segment log stream type ([#437](https://github.com/auth0/terraform-provider-auth0/pull/437))
+- `resource/auth0_action`: Added `node18` to runtime options ([#442](https://github.com/auth0/terraform-provider-auth0/pull/442))
+- `resource/auth0_attack_protection`: Added support for `breached_password_detection.stage` ([#445](https://github.com/auth0/terraform-provider-auth0/pull/445))
+- `resource/auth0_connection`: Added support for `enable_script_context` to db connections ([#452](https://github.com/auth0/terraform-provider-auth0/pull/452))
+- `resource/auth0_connection`: Added support for `fed_metadata_xml` to adfs connections ([#458](https://github.com/auth0/terraform-provider-auth0/pull/458))
+- `resource/auth0_connection`: Added support for `icon_url` to okta connections ([#459](https://github.com/auth0/terraform-provider-auth0/pull/459))
+
+NOTES:
+
+- `resource/auth0_client`: Updated `client_secret_rotation_trigger` docs ([#439](https://github.com/auth0/terraform-provider-auth0/pull/439))
+- `resource/auth0_client`: Updated `cross_origin_auth` docs ([#456](https://github.com/auth0/terraform-provider-auth0/pull/456))
+
+
+## 0.42.0
+
+BUG FIXES:
+
+- `resource/auth0_connection_client`, `resource/auth0_organization_connection`, `resource/auth0_organization_member`:
+Fixed concurrency issue ([#425](https://github.com/auth0/terraform-provider-auth0/pull/425))
+
+BREAKING CHANGES:
+
+- `resource/auth0_guardian`: Redesigned how mfa types get enabled ([#423](https://github.com/auth0/terraform-provider-auth0/pull/423))
+  - It is now necessary to explicitly set the enabled attribute on all mfa types. Please check the [auth0_guardian](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/guardian) docs for more info.
+
+
+## 0.41.0
+
+BREAKING CHANGES:
+
+- `resource/auth0_connection`: Removed `enabled_clients` field ([#421](https://github.com/auth0/terraform-provider-auth0/pull/421))
+  - It is necessary to migrate all `enabled_clients` on the `auth0_connection` resource to the [auth0_connection_client](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/connection_client) resource.
+
+
 ## 0.40.1
 
 FEATURES:

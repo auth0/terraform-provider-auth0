@@ -1,18 +1,64 @@
 package validation
 
-import "testing"
+import (
+	"fmt"
+	"testing"
 
-func TestIsURLWithNoFragment(t *testing.T) {
-	for url, valid := range map[string]bool{
-		"http://example.com":      true,
-		"http://example.com/foo":  true,
-		"http://example.com#foo":  false,
-		"https://example.com/foo": true,
-		"https://example.com#foo": false,
-	} {
-		_, err := IsURLWithNoFragment(url, "url")
-		if err != nil && valid {
-			t.Errorf("IsURLWithNoFragment(%s) produced an unexpected error", url)
-		}
+	"github.com/stretchr/testify/assert"
+)
+
+func TestIsURLWithHTTPSorEmptyString(t *testing.T) {
+	var testCases = []struct {
+		inputURL       string
+		expectedErrors []string
+	}{
+		{
+			inputURL: "http://example.com",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to have a url with schema of: \"https\", got http://example.com",
+			},
+		},
+		{
+			inputURL: "http://example.com/foo",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to have a url with schema of: \"https\", got http://example.com/foo",
+			},
+		},
+		{
+			inputURL: "http://example.com#foo",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to have a url with schema of: \"https\", got http://example.com#foo",
+			},
+		},
+		{
+			inputURL:       "https://example.com/foo",
+			expectedErrors: nil,
+		},
+		{
+			inputURL:       "https://example.com#foo",
+			expectedErrors: nil,
+		},
+		{
+			inputURL:       "",
+			expectedErrors: nil,
+		},
+		{
+			inputURL: "broken/url",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to have a host, got broken/url",
+			},
+		},
+	}
+
+	for i, testCase := range testCases {
+		t.Run(fmt.Sprintf("test case #%d", i), func(t *testing.T) {
+			var errorsAsString []string
+			_, actualErrors := IsURLWithHTTPSorEmptyString(testCase.inputURL, "theTestURL")
+			for _, actualError := range actualErrors {
+				errorsAsString = append(errorsAsString, actualError.Error())
+			}
+
+			assert.Equal(t, testCase.expectedErrors, errorsAsString)
+		})
 	}
 }

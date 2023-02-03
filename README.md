@@ -1,6 +1,5 @@
-<h1 align="center">Auth0 Terraform Provider</h1>
-
 <div align="center">
+  <h1>Auth0 Terraform Provider</h1>
 
 [![GoDoc](https://pkg.go.dev/badge/github.com/auth0/terraform-provider-auth0.svg)](https://pkg.go.dev/github.com/auth0/terraform-provider-auth0)
 [![Go Report Card](https://goreportcard.com/badge/github.com/auth0/terraform-provider-auth0?style=flat-square)](https://goreportcard.com/report/github.com/auth0/terraform-provider-auth0)
@@ -9,19 +8,23 @@
 [![License](https://img.shields.io/github/license/auth0/terraform-provider-auth0.svg?logo=fossa&style=flat-square)](https://github.com/auth0/terraform-provider-auth0/blob/main/LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/terraform-provider-auth0/main.yml?branch=main)](https://github.com/auth0/terraform-provider-auth0/actions?query=branch%3Amain)
 
+</div>
+
+-------------------------------------
+
 The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
 [Terraform](https://www.terraform.io/) tool.
 
-</div>
+📚 [Documentation](#documentation) • 🚀 [Getting Started](#getting-started) • 💬 [Feedback](#feedback)
 
----
+-------------------------------------
 
-## 📚 Documentation
+## Documentation
 
 - [Quickstart Guide](./docs/guides/quickstart.md)
 - [Official Docs](https://registry.terraform.io/providers/auth0/auth0/latest/docs)
 
-## 🎻 Getting Started
+## Getting Started
 
 ### Requirements
 
@@ -38,7 +41,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = ">= 0.34" # Refer to docs for latest version
+      version = ">= 0.43.0" # Refer to docs for latest version
     }
   }
 }
@@ -46,41 +49,38 @@ terraform {
 provider "auth0" {}
 ```
 
-```sh
+```shell
 $ terraform init
 ```
 
-## 👋 Contributing
+## Feedback
 
-Feedback and contributions to this project are welcome! Before you get started, please review the following:
+### Contributing
 
-- [Auth0 Contribution Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md)
-- [Auth0 Contributor Code of Conduct](https://github.com/auth0/open-source-template/blob/master/CODE-OF-CONDUCT.md)
-- [Contribution Guide](CONTRIBUTING.md)
+We appreciate feedback and contribution to this repo! Before you get started, please see the following:
 
-## 🙇 Support & Feedback
+- [Contribution Guide](./CONTRIBUTING.md)
+- [Auth0's General Contribution Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md)
+- [Auth0's Code of Conduct Guidelines](https://github.com/auth0/open-source-template/blob/master/CODE-OF-CONDUCT.md)
 
-### Raise an Issue
+### Raise an issue
 
-If you have found a bug or if you have a feature request, please raise an issue on our
-[issue tracker](https://github.com/auth0/terraform-provider-auth0/issues).
+To provide feedback or report a bug, [please raise an issue on our issue tracker](https://github.com/auth0/terraform-provider-auth0/issues).
 
 ### Vulnerability Reporting
 
 Please do not report security vulnerabilities on the public GitHub issue tracker.
-The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
+The [Responsible Disclosure Program](https://auth0.com/responsible-disclosure-policy) details the procedure for disclosing security issues.
 
 ---
 
 <div align="center">
-
-<img alt="Auth0 logo and word-mark in black on transparent background" src="https://user-images.githubusercontent.com/28300158/183676042-b9d92893-8fff-408f-9a36-63e77b14be30.png#gh-light-mode-only"  width="20%" height="20%">
-
-<img alt="Auth0 logo and word-mark in white on transparent background" src="https://user-images.githubusercontent.com/28300158/183676141-bea463f9-af82-40ce-b18c-3a1030183d58.png#gh-dark-mode-only"  width="20%" height="20%">
-
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.auth0.com/website/sdks/logos/auth0_dark_mode.png" width="150">
+    <img alt="Auth0 Logo" src="https://cdn.auth0.com/website/sdks/logos/auth0_light_mode.png" width="150">
+  </picture>
 </div>
-
-<br/>
 
 <div align="center">
 

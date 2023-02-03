@@ -6,6 +6,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 func newDataClient() *schema.Resource {
@@ -15,7 +17,7 @@ func newDataClient() *schema.Resource {
 		Description: "Data source to retrieve a specific Auth0 Application client by 'client_id' or 'name'.",
 	}
 
-	addOptionalFieldsToSchema(clientDataSource.Schema, "name", "client_id")
+	internalSchema.SetExistingAttributesAsOptional(clientDataSource.Schema, "name", "client_id")
 	clientDataSource.Schema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
 	clientDataSource.Schema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
 
@@ -23,7 +25,7 @@ func newDataClient() *schema.Resource {
 }
 
 func newClientSchema() map[string]*schema.Schema {
-	clientSchema := dataSourceSchemaFromResourceSchema(newClient().Schema)
+	clientSchema := internalSchema.TransformResourceToDataSource(newClient().Schema)
 	delete(clientSchema, "client_secret_rotation_trigger")
 	return clientSchema
 }

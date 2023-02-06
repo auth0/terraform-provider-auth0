@@ -120,10 +120,10 @@ func TestSetExistingAttributesAsOptional(t *testing.T) {
 	}
 
 	expectedOptionalAttributes := []string{"string_prop", "map_prop", "bool_prop"}
-	SetExistingAttributesAsOptional(newMockResourceSchema, expectedOptionalAttributes...)
+	SetExistingAttributesAsOptional(newMockResourceSchema, expectedOptionalAttributes[1:]...)
 
 	// It should not panic if we set a non-existent attribute as optional.
-	SetExistingAttributesAsOptional(newMockResourceSchema, "non_existent")
+	SetExistingAttributesAsOptional(newMockResourceSchema, "non_existent", expectedOptionalAttributes[0])
 
 	for _, attribute := range expectedOptionalAttributes {
 		assert.True(t, newMockResourceSchema[attribute].Optional)

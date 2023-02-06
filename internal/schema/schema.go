@@ -40,7 +40,7 @@ func TransformResourceToDataSource(resourceSchema map[string]*schema.Schema) map
 func SetExistingAttributesAsOptional(schema map[string]*schema.Schema, keys ...string) {
 	for _, attribute := range keys {
 		if _, ok := schema[attribute]; !ok {
-			break
+			continue
 		}
 
 		schema[attribute].Computed = false

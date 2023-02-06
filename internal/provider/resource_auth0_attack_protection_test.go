@@ -58,7 +58,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBreachedPasswordDetectionEnable,
@@ -162,7 +162,7 @@ func TestAccAttackProtectionBruteForceProtection(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccBruteForceProtectionEnable,
@@ -266,7 +266,7 @@ func TestAccAttackProtectionSuspiciousIPThrottling(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccSuspiciousIPThrottlingEnable,

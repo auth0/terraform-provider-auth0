@@ -2,7 +2,6 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"sort"
@@ -18,7 +17,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
-func testProviders(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
+func ProviderTestFactories(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
 	return map[string]func() (*schema.Provider, error){
 		"auth0": func() (*schema.Provider, error) {
 			provider := New()
@@ -84,26 +83,6 @@ func configureTestProvider(
 
 		return apiClient, nil
 	}
-}
-
-// Auth0 returns an instance of the Management
-// API Client used within test sweepers.
-func Auth0() (*management.Management, error) {
-	domain := os.Getenv("AUTH0_DOMAIN")
-	if domain == "" {
-		return nil, fmt.Errorf("failed to instantiate api client: AUTH0_DOMAIN is empty")
-	}
-
-	apiToken := os.Getenv("AUTH0_API_TOKEN")
-	authenticationOption := management.WithStaticToken(apiToken)
-	if apiToken == "" {
-		authenticationOption = management.WithClientCredentials(
-			os.Getenv("AUTH0_CLIENT_ID"),
-			os.Getenv("AUTH0_CLIENT_SECRET"),
-		)
-	}
-
-	return management.New(domain, authenticationOption)
 }
 
 func TestMain(m *testing.M) {

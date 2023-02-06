@@ -2,59 +2,24 @@ package provider
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 	"testing"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_user", &resource.Sweeper{
-		Name: "auth0_user",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-
-			var page int
-			var result *multierror.Error
-			for {
-				userList, err := api.User.Search(
-					management.Page(page),
-					management.Query(`email.domain:"acceptance.test.com"`))
-				if err != nil {
-					return err
-				}
-
-				for _, user := range userList.Users {
-					result = multierror.Append(
-						result,
-						api.User.Delete(user.GetID()),
-					)
-					log.Printf("[DEBUG] ✗ %s", user.GetName())
-				}
-				if !userList.HasNext() {
-					break
-				}
-				page++
-			}
-
-			return result.ErrorOrNil()
-		},
-	})
+	sweep.Users()
 }
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(nil),
+		ProviderFactories: ProviderTestFactories(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      "resource auth0_user user {}",
@@ -191,7 +156,7 @@ func TestAccUser(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccUserEmpty, strings.ToLower(t.Name())),
@@ -290,7 +255,7 @@ func TestAccUserChangeUsername(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),

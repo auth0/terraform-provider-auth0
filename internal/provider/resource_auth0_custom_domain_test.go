@@ -2,48 +2,18 @@ package provider
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_custom_domain", &resource.Sweeper{
-		Name: "auth0_custom_domain",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-
-			domains, err := api.CustomDomain.List()
-			if err != nil {
-				return err
-			}
-
-			var result *multierror.Error
-			for _, domain := range domains {
-				log.Printf("[DEBUG] ➝ %s", domain.GetDomain())
-
-				if strings.Contains(domain.GetDomain(), "auth.uat.terraform-provider-auth0.com") {
-					result = multierror.Append(
-						result,
-						api.CustomDomain.Delete(domain.GetID()),
-					)
-
-					log.Printf("[DEBUG] ✗ %s", domain.GetDomain())
-				}
-			}
-
-			return result.ErrorOrNil()
-		},
-	})
+	sweep.CustomDomains()
 }
 
 const testAccCreateSelfManagedCustomDomain = `
@@ -88,7 +58,7 @@ func TestAccCustomDomain(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccCreateSelfManagedCustomDomain, strings.ToLower(t.Name())),

@@ -10,19 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_email", &resource.Sweeper{
-		Name: "auth0_email",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-			return api.EmailProvider.Delete()
-		},
-	})
+	sweep.Email()
 }
 
 const testAccCreateSESEmailProvider = `
@@ -173,7 +165,7 @@ func TestAccEmail(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCreateSESEmailProvider,

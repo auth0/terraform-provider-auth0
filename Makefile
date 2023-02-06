@@ -133,7 +133,7 @@ test-acc: ## Run acceptance tests with http recordings. To run a specific test, 
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
 		${GO_PACKAGES}
 
-test-acc-record: ## Run acceptance tests without http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc-record FILTER="TestAccResourceServer`
+test-acc-record: ## Run acceptance tests and record http interactions. To run a specific test, pass the FILTER var. Usage `make test-acc-record FILTER="TestAccResourceServer`
 	${call print, "Running acceptance tests and recording http interactions"}
 	@AUTH0_HTTP_RECORDINGS=on \
 		TF_ACC=1 \

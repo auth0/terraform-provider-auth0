@@ -2,61 +2,24 @@ package provider
 
 import (
 	"fmt"
-	"log"
-	"strings"
 	"testing"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_role", &resource.Sweeper{
-		Name: "auth0_role",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-
-			var page int
-			var result *multierror.Error
-			for {
-				roleList, err := api.Role.List(management.Page(page))
-				if err != nil {
-					return err
-				}
-
-				for _, role := range roleList.Roles {
-					log.Printf("[DEBUG] ➝ %s", role.GetName())
-					if strings.Contains(role.GetName(), "Test") {
-						result = multierror.Append(
-							result,
-							api.Role.Delete(role.GetID()),
-						)
-						log.Printf("[DEBUG] ✗ %s", role.GetName())
-					}
-				}
-				if !roleList.HasNext() {
-					break
-				}
-				page++
-			}
-
-			return result.ErrorOrNil()
-		},
-	})
+	sweep.Roles()
 }
 
 func TestAccRole(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccRoleEmpty, t.Name()),
@@ -150,7 +113,7 @@ func TestAccRolePermissions(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccRolePermissions, t.Name()),

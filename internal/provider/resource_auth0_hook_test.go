@@ -15,7 +15,7 @@ func TestAccHook(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccHookEmpty,
@@ -63,7 +63,7 @@ func TestAccHookSecrets(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(testAccHookCreate, testAccHookSecrets),

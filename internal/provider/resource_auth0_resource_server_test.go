@@ -2,47 +2,25 @@ package provider
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"strings"
 	"testing"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_resource_server", &resource.Sweeper{
-		Name: "auth0_resource_server",
-		F: func(_ string) error {
-			api, err := Auth0()
-			if err != nil {
-				return err
-			}
-
-			fn := func(rs *management.ResourceServer) {
-				log.Printf("[DEBUG] ➝ %s", rs.GetName())
-				if strings.Contains(rs.GetName(), "Test") {
-					if err := api.ResourceServer.Delete(rs.GetID()); err != nil {
-						log.Printf("[DEBUG] Failed to delete resource server with ID: %s", rs.GetID())
-					}
-					log.Printf("[DEBUG] ✗ %s", rs.GetName())
-				}
-			}
-
-			return api.ResourceServer.Stream(fn, management.IncludeFields("id", "name"))
-		},
-	})
+	sweep.ResourceServers()
 }
 
 func TestAccResourceServer(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
@@ -179,7 +157,7 @@ func TestAccResourceServerAuth0APIManagement(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: `

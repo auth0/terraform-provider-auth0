@@ -3,34 +3,21 @@ package provider
 import (
 	"testing"
 
-	"github.com/auth0/go-auth0"
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 )
 
 func init() {
-	resource.AddTestSweepers("auth0_email_template", &resource.Sweeper{
-		Name: "auth0_email_template",
-		F: func(_ string) (err error) {
-			api, err := Auth0()
-			if err != nil {
-				return
-			}
-			err = api.EmailTemplate.Update("welcome_email", &management.EmailTemplate{
-				Enabled: auth0.Bool(false),
-			})
-			return
-		},
-	})
+	sweep.EmailTemplates()
 }
 
 func TestAccEmailTemplate(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: testProviders(httpRecorder),
+		ProviderFactories: ProviderTestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccEmailTemplateConfig,

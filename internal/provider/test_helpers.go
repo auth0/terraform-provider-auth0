@@ -11,7 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
-// TestFactories returns the configured auth0 provider to be used within tests.
+// TestFactories returns the configured Auth0 provider to be used within tests.
 func TestFactories(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
 	return map[string]func() (*schema.Provider, error){
 		"auth0": func() (*schema.Provider, error) {

@@ -1,4 +1,4 @@
-package provider
+package client
 
 import (
 	"context"
@@ -7,11 +7,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func newDataGlobalClient() *schema.Resource {
+// NewGlobalDataSource will return a new auth0_global_client data source.
+func NewGlobalDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readDataGlobalClient,
-		Schema:      newClientSchema(),
-		Description: "Retrieves a tenant's global Auth0 Application client.",
+		Schema:      dataSourceSchema(),
+		Description: "Retrieve a tenant's global Auth0 application client.",
 	}
 }
 

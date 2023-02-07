@@ -1,4 +1,4 @@
-package provider
+package client_test
 
 import (
 	"errors"
@@ -7,14 +7,36 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
+
+const testAccGlobalClientConfigEmpty = `
+`
+
+const testAccGlobalClientConfigDefault = `
+resource "auth0_global_client" "global" {
+}
+`
+
+const testAccGlobalClientConfigWithCustomLogin = `
+resource "auth0_global_client" "global" {
+    custom_login_page = "<html>TEST123</html>"
+    custom_login_page_on = true
+}
+`
+
+const testAccGlobalClientConfigNoCustomLogin = `
+resource "auth0_global_client" "global" {
+    custom_login_page_on = false
+}
+`
 
 func TestAccGlobalClient(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccGlobalClientConfigWithCustomLogin,
@@ -57,24 +79,3 @@ func TestAccGlobalClient(t *testing.T) {
 		},
 	})
 }
-
-const testAccGlobalClientConfigEmpty = `
-`
-
-const testAccGlobalClientConfigDefault = `
-resource "auth0_global_client" "global" {
-}
-`
-
-const testAccGlobalClientConfigWithCustomLogin = `
-resource "auth0_global_client" "global" {
-    custom_login_page = "<html>TEST123</html>"
-    custom_login_page_on = true
-}
-`
-
-const testAccGlobalClientConfigNoCustomLogin = `
-resource "auth0_global_client" "global" {
-    custom_login_page_on = false
-}
-`

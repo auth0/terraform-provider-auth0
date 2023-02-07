@@ -1,4 +1,4 @@
-package provider
+package client
 
 import (
 	"context"
@@ -10,27 +10,29 @@ import (
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
-func newDataClient() *schema.Resource {
-	clientDataSource := &schema.Resource{
-		ReadContext: readDataClient,
-		Schema:      newClientSchema(),
-		Description: "Data source to retrieve a specific Auth0 Application client by 'client_id' or 'name'.",
+// NewDataSource will return a new auth0_client data source.
+func NewDataSource() *schema.Resource {
+	return &schema.Resource{
+		ReadContext: readClientForDataSource,
+		Description: "Data source to retrieve a specific Auth0 application client by `client_id` or `name`.",
+		Schema:      dataSourceSchema(),
 	}
-
-	internalSchema.SetExistingAttributesAsOptional(clientDataSource.Schema, "name", "client_id")
-	clientDataSource.Schema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
-	clientDataSource.Schema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
-
-	return clientDataSource
 }
 
-func newClientSchema() map[string]*schema.Schema {
-	clientSchema := internalSchema.TransformResourceToDataSource(newClient().Schema)
-	delete(clientSchema, "client_secret_rotation_trigger")
-	return clientSchema
+func dataSourceSchema() map[string]*schema.Schema {
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(resourceSchema)
+
+	delete(dataSourceSchema, "client_secret_rotation_trigger")
+
+	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name", "client_id")
+
+	dataSourceSchema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
+	dataSourceSchema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
+
+	return dataSourceSchema
 }
 
-func readDataClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	clientID := d.Get("client_id").(string)
 	if clientID != "" {
 		d.SetId(clientID)

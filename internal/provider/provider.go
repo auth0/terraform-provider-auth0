@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
@@ -79,8 +80,8 @@ func New() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"auth0_client":                     newClient(),
-			"auth0_global_client":              newGlobalClient(),
+			"auth0_client":                     client.NewResource(),
+			"auth0_global_client":              client.NewGlobalResource(),
 			"auth0_client_grant":               newClientGrant(),
 			"auth0_connection":                 newConnection(),
 			"auth0_custom_domain":              newCustomDomain(),
@@ -109,8 +110,8 @@ func New() *schema.Provider {
 			"auth0_connection_client":          newConnectionClient(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"auth0_client":        newDataClient(),
-			"auth0_global_client": newDataGlobalClient(),
+			"auth0_client":        client.NewDataSource(),
+			"auth0_global_client": client.NewGlobalDataSource(),
 			"auth0_tenant":        newDataTenant(),
 		},
 	}

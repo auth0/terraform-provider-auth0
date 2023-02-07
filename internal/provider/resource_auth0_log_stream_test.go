@@ -21,7 +21,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
@@ -194,7 +194,7 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamAwsEventBridgeConfig, t.Name()),
@@ -269,7 +269,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamAzureEventGridConfig, t.Name()),
@@ -320,7 +320,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 func TestAccLogStreamDataDogRegionValidation(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(nil),
+		ProviderFactories: TestFactories(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "uS"),
@@ -349,7 +349,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamDatadogConfig, t.Name()),
@@ -417,7 +417,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSplunkConfig, t.Name()),
@@ -474,7 +474,7 @@ func TestAccLogStreamSegment(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSegmentConfig, t.Name()),
@@ -577,7 +577,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSumoConfig, t.Name()),
@@ -680,7 +680,7 @@ func TestAccLogStreamMixpanel(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamMixpanelConfig, t.Name()),

@@ -96,7 +96,7 @@ func TestAccBranding_WithNoCustomDomainsSet(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTenantDisallowsUniversalLoginCustomization,
@@ -113,7 +113,7 @@ func TestAccBranding(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigCreate,

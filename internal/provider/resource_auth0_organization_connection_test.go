@@ -46,7 +46,7 @@ func TestAccOrganizationConnection(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(TestAccOrganizationConnectionCreate, strings.ToLower(t.Name())),

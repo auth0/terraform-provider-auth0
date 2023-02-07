@@ -5,11 +5,22 @@ import (
 	"sync"
 )
 
+// Global is instantiated just once and
+// reused across different resources.
+var Global = New()
+
 // KeyValue is a simple key/value
 // store for arbitrary mutexes.
 type KeyValue struct {
 	lock  sync.Mutex
 	store map[string]*sync.Mutex
+}
+
+// New returns a properly initialized KeyValue mutex.
+func New() *KeyValue {
+	return &KeyValue{
+		store: make(map[string]*sync.Mutex),
+	}
 }
 
 // Lock the mutex for the given key.
@@ -40,11 +51,4 @@ func (m *KeyValue) get(key string) *sync.Mutex {
 	}
 
 	return mutex
-}
-
-// New returns a properly initialized KeyValue mutex.
-func New() *KeyValue {
-	return &KeyValue{
-		store: make(map[string]*sync.Mutex),
-	}
 }

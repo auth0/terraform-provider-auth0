@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"path"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -14,7 +16,7 @@ import (
 )
 
 const (
-	recordingsDIR    = "./../../test/data/recordings/"
+	recordingsDIR    = "test/data/recordings/"
 	recordingsTenant = "terraform-provider-auth0-dev"
 
 	// RecordingsDomain is used for testing with our recorded http interactions.
@@ -38,7 +40,7 @@ func New(t *testing.T) *Recorder {
 
 	recorderTransport, err := recorder.NewWithOptions(
 		&recorder.Options{
-			CassetteName:       recordingsDIR + t.Name(),
+			CassetteName:       cassetteName(t.Name()),
 			Mode:               recorder.ModeRecordOnce,
 			SkipRequestLatency: true,
 		},
@@ -53,6 +55,12 @@ func New(t *testing.T) *Recorder {
 	})
 
 	return &Recorder{recorderTransport}
+}
+
+func cassetteName(testName string) string {
+	_, file, _, _ := runtime.Caller(0)
+	rootDir := path.Join(path.Dir(file), "../..")
+	return path.Join(rootDir, recordingsDIR, testName)
 }
 
 func removeSensitiveDataFromRecordings(t *testing.T, recorderTransport *recorder.Recorder) {

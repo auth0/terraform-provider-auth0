@@ -1,4 +1,4 @@
-package provider
+package client_test
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
@@ -14,6 +15,12 @@ import (
 
 func init() {
 	sweep.Clients()
+}
+
+// This is needed so that the test
+// sweepers get registered.
+func TestMain(m *testing.M) {
+	resource.TestMain(m)
 }
 
 const testAccClientValidationOnInitiateLoginURIWithHTTP = `
@@ -25,7 +32,7 @@ resource "auth0_client" "my_client" {
 
 func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(nil),
+		ProviderFactories: provider.TestFactories(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      template.ParseTestName(testAccClientValidationOnInitiateLoginURIWithHTTP, t.Name()),
@@ -56,7 +63,7 @@ func TestAccClientRotateSecret(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccClientConfigRotateSecret, t.Name()),
@@ -90,7 +97,7 @@ resource "auth0_client" "my_client" {
 
 func TestAccClientMobileValidationError(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(nil),
+		ProviderFactories: provider.TestFactories(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      template.ParseTestName(testAccClientValidationOnMobile, t.Name()),
@@ -199,7 +206,7 @@ func TestAccClientMobile(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccCreateMobileClient, t.Name()),
@@ -338,7 +345,7 @@ func TestAccClientRefreshToken(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccCreateClientWithRefreshToken, t.Name()),
@@ -439,7 +446,7 @@ func TestAccClientJWTConfiguration(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccCreateClientWithJWTConfiguration, t.Name()),
@@ -570,7 +577,7 @@ func TestAccClient(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccClientConfigCreateWithOnlyRequiredFields, t.Name()),
@@ -620,14 +627,14 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_aliases"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "callbacks"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "allowed_logout_urls"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "allowed_origins"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "allowed_clients"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "web_origins"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "encryption_key"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_metadata"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_logout_urls.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_origins.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_clients.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "web_origins.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
 				),
 			},
 			{
@@ -847,7 +854,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccCreateClientWithAddons, t.Name()),
@@ -930,7 +937,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(`

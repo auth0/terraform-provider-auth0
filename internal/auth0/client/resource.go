@@ -1,4 +1,4 @@
-package provider
+package client
 
 import (
 	"context"
@@ -13,7 +13,8 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
-func newClient() *schema.Resource {
+// NewResource will return a new auth0_client resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createClient,
 		ReadContext:   readClient,
@@ -844,8 +845,4 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 	}
 
 	return d.Set("client_secret", client.GetClientSecret())
-}
-
-func clientHasChange(c *management.Client) bool {
-	return c.String() != "{}"
 }

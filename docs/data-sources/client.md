@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_client"
 description: |-
-  Data source to retrieve a specific Auth0 Application client by 'client_id' or 'name'.
+  Data source to retrieve a specific Auth0 application client by client_id or name.
 ---
 
 # Data Source: auth0_client
 
-Data source to retrieve a specific Auth0 Application client by 'client_id' or 'name'.
+Data source to retrieve a specific Auth0 application client by `client_id` or `name`.
 
 ## Example Usage
 

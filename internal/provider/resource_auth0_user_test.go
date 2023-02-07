@@ -19,7 +19,7 @@ func init() {
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(nil),
+		ProviderFactories: TestFactories(nil),
 		Steps: []resource.TestStep{
 			{
 				Config:      "resource auth0_user user {}",
@@ -156,7 +156,7 @@ func TestAccUser(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccUserEmpty, strings.ToLower(t.Name())),
@@ -255,7 +255,7 @@ func TestAccUserChangeUsername(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),

@@ -20,7 +20,7 @@ func TestAccOrganizationMember(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: ProviderTestFactories(httpRecorder),
+		ProviderFactories: TestFactories(httpRecorder),
 		Steps: []resource.TestStep{{
 			Config: template.ParseTestName(testAccOrganizationMembersAux+`
 			resource auth0_organization_member test_member {

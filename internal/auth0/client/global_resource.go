@@ -1,4 +1,4 @@
-package provider
+package client
 
 import (
 	"context"
@@ -8,8 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func newGlobalClient() *schema.Resource {
-	client := newClient()
+// NewGlobalResource will return a new auth0_global_client resource.
+func NewGlobalResource() *schema.Resource {
+	client := NewResource()
 	client.Description = "Use a tenant's global Auth0 Application client."
 	client.CreateContext = createGlobalClient
 	client.DeleteContext = deleteGlobalClient
@@ -69,7 +70,7 @@ func readGlobalClientID(ctx context.Context, d *schema.ResourceData, m interface
 	return nil
 }
 
-func deleteGlobalClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteGlobalClient(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

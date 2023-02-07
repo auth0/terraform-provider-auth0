@@ -20,7 +20,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(resourceSchema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
 
 	delete(dataSourceSchema, "client_secret_rotation_trigger")
 

@@ -1,13 +1,11 @@
-package provider
+package organization
 
 import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -21,7 +19,8 @@ var (
 	errInvalidOrganizationMemberIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<userID>")
 )
 
-func newOrganizationMember() *schema.Resource {
+// NewMemberResource will return a new auth0_organization_member resource.
+func NewMemberResource() *schema.Resource {
 	return &schema.Resource{
 		Description:   "This resource is used to manage the assignment of members and their roles within an organization.",
 		CreateContext: createOrganizationMember,
@@ -50,35 +49,6 @@ func newOrganizationMember() *schema.Resource {
 			},
 		},
 	}
-}
-
-func importOrganizationMember(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, errEmptyOrganizationMemberID
-	}
-
-	if !strings.Contains(rawID, ":") {
-		return nil, errInvalidOrganizationMemberIDFormat
-	}
-
-	idPair := strings.Split(rawID, ":")
-	if len(idPair) != 2 {
-		return nil, errInvalidOrganizationMemberIDFormat
-	}
-
-	result := multierror.Append(
-		data.Set("organization_id", idPair[0]),
-		data.Set("user_id", idPair[1]),
-	)
-
-	data.SetId(resource.UniqueId())
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }
 
 func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

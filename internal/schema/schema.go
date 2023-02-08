@@ -48,3 +48,17 @@ func SetExistingAttributesAsOptional(schema map[string]*schema.Schema, keys ...s
 		schema[attribute].Required = false
 	}
 }
+
+// Clone returns a shallow clone of m.
+func Clone[M ~map[K]V, K comparable, V any](m M) M {
+	if m == nil {
+		return nil
+	}
+
+	result := make(M, len(m))
+	for key, value := range m {
+		result[key] = value
+	}
+
+	return result
+}

@@ -7,6 +7,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 var resourceSchema = map[string]*schema.Schema{
@@ -774,7 +776,7 @@ var resourceSchema = map[string]*schema.Schema{
 }
 
 func connectionSchemaV0() *schema.Resource {
-	s := resourceSchema
+	s := internalSchema.Clone(resourceSchema)
 	s["strategy_version"] = &schema.Schema{
 		Type:     schema.TypeString,
 		Optional: true,
@@ -784,7 +786,7 @@ func connectionSchemaV0() *schema.Resource {
 }
 
 func connectionSchemaV1() *schema.Resource {
-	s := resourceSchema
+	s := internalSchema.Clone(resourceSchema)
 	s["validation"] = &schema.Schema{
 		Type:     schema.TypeMap,
 		Elem:     &schema.Schema{Type: schema.TypeString},

@@ -131,3 +131,19 @@ func TestSetExistingAttributesAsOptional(t *testing.T) {
 		assert.False(t, newMockResourceSchema[attribute].Required)
 	}
 }
+
+func TestClone(t *testing.T) {
+	var m1 = map[int]int{1: 2, 2: 4, 4: 8, 8: 16}
+
+	mc := Clone(m1)
+	assert.Equal(t, m1, mc)
+
+	mc[16] = 32
+	assert.NotEqual(t, m1, mc)
+}
+
+func TestCloneNil(t *testing.T) {
+	var m1 map[string]int
+	mc := Clone(m1)
+	assert.Nil(t, mc)
+}

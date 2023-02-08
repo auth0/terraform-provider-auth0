@@ -110,6 +110,7 @@ func New() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_client":        client.NewDataSource(),
 			"auth0_global_client": client.NewGlobalDataSource(),
+			"auth0_connection":    connection.NewDataSource(),
 			"auth0_tenant":        newDataTenant(),
 		},
 	}

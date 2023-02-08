@@ -763,6 +763,14 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
+	"enabled_clients": {
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "IDs of the clients for which the connection is enabled.",
+	},
 }
 
 func connectionSchemaV0() *schema.Resource {

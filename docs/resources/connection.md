@@ -606,8 +606,6 @@ resource "auth0_connection" "okta" {
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
-- `strategy_version` (String)
-- `validation` (Map of String)
 
 ### Read-Only
 

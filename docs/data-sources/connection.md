@@ -29,8 +29,6 @@ Data source to retrieve a specific Auth0 connection by `connection_id` or `name`
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
-- `strategy_version` (String)
-- `validation` (Map of String)
 
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`

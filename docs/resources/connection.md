@@ -611,6 +611,7 @@ resource "auth0_connection" "okta" {
 
 ### Read-Only
 
+- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
 
 <a id="nestedblock--options"></a>

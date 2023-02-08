@@ -85,6 +85,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		d.Set("options", connectionOptions),
 		d.Set("realms", connection.GetRealms()),
 		d.Set("metadata", connection.GetMetadata()),
+		d.Set("enabled_clients", connection.GetEnabledClients()),
 	)
 
 	switch connection.GetStrategy() {

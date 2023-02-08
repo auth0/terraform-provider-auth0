@@ -25,8 +25,12 @@ func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diag
 		connection.Strategy = value.String(config.GetAttr("strategy"))
 	}
 
-	if d.IsNewResource() || d.HasChange("realms") {
+	if d.HasChange("realms") {
 		connection.Realms = value.Strings(config.GetAttr("realms"))
+	}
+
+	if d.HasChange("enabled_clients") {
+		connection.EnabledClients = value.Strings(config.GetAttr("enabled_clients"))
 	}
 
 	var diagnostics diag.Diagnostics

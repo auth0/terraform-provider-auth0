@@ -1,16 +1,17 @@
-package provider
+package connection
 
 import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 var (
@@ -18,7 +19,8 @@ var (
 	errInvalidConnectionClientIDFormat = fmt.Errorf("ID must be formated as <connectionID>:<clientID>")
 )
 
-func newConnectionClient() *schema.Resource {
+// NewClientResource will return a new auth0_connection_client resource.
+func NewClientResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"connection_id": {
@@ -54,42 +56,13 @@ func newConnectionClient() *schema.Resource {
 	}
 }
 
-func importConnectionClient(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, errEmptyConnectionClientID
-	}
-
-	if !strings.Contains(rawID, ":") {
-		return nil, errInvalidConnectionClientIDFormat
-	}
-
-	idPair := strings.Split(rawID, ":")
-	if len(idPair) != 2 {
-		return nil, errInvalidConnectionClientIDFormat
-	}
-
-	result := multierror.Append(
-		data.Set("connection_id", idPair[0]),
-		data.Set("client_id", idPair[1]),
-	)
-
-	data.SetId(resource.UniqueId())
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
-}
-
 func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
 
 	connectionID := data.Get("connection_id").(string)
 
-	globalMutex.Lock(connectionID)
-	defer globalMutex.Unlock(connectionID)
+	mutex.Global.Lock(connectionID)
+	defer mutex.Global.Unlock(connectionID)
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {
@@ -150,8 +123,8 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 
 	connectionID := data.Get("connection_id").(string)
 
-	globalMutex.Lock(connectionID)
-	defer globalMutex.Unlock(connectionID)
+	mutex.Global.Lock(connectionID)
+	defer mutex.Global.Unlock(connectionID)
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {

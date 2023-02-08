@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -86,8 +87,8 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	userID := d.Get("user_id").(string)
 	orgID := d.Get("organization_id").(string)
 
-	globalMutex.Lock(orgID)
-	defer globalMutex.Unlock(orgID)
+	mutex.Global.Lock(orgID)
+	defer mutex.Global.Unlock(orgID)
 
 	if err := api.Organization.AddMembers(orgID, []string{userID}); err != nil {
 		return diag.FromErr(err)
@@ -184,8 +185,8 @@ func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 
 	orgID := d.Get("organization_id").(string)
 
-	globalMutex.Lock(orgID)
-	defer globalMutex.Unlock(orgID)
+	mutex.Global.Lock(orgID)
+	defer mutex.Global.Unlock(orgID)
 
 	if err := assignRoles(d, api); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to assign members to organization. %w", err))
@@ -200,8 +201,8 @@ func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	userID := d.Get("user_id").(string)
 	orgID := d.Get("organization_id").(string)
 
-	globalMutex.Lock(orgID)
-	defer globalMutex.Unlock(orgID)
+	mutex.Global.Lock(orgID)
+	defer mutex.Global.Unlock(orgID)
 
 	if err := api.Organization.DeleteMember(orgID, []string{userID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {

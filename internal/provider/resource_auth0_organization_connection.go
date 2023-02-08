@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 var (
@@ -95,8 +97,8 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 
-	globalMutex.Lock(organizationID)
-	defer globalMutex.Unlock(organizationID)
+	mutex.Global.Lock(organizationID)
+	defer mutex.Global.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
@@ -144,8 +146,8 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 
-	globalMutex.Lock(organizationID)
-	defer globalMutex.Unlock(organizationID)
+	mutex.Global.Lock(organizationID)
+	defer mutex.Global.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
@@ -166,8 +168,8 @@ func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 
-	globalMutex.Lock(organizationID)
-	defer globalMutex.Unlock(organizationID)
+	mutex.Global.Lock(organizationID)
+	defer mutex.Global.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 

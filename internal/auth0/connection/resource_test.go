@@ -1,13 +1,12 @@
-package provider
+package connection_test
 
 import (
-	"context"
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
@@ -17,11 +16,17 @@ func init() {
 	sweep.Connections()
 }
 
+// This is needed so that the test
+// sweepers get registered.
+func TestMain(m *testing.M) {
+	resource.TestMain(m)
+}
+
 func TestAccConnection(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionConfig, t.Name()),
@@ -169,7 +174,7 @@ func TestAccConnectionAD(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionADConfig, t.Name()),
@@ -222,7 +227,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionAzureADConfig, t.Name()),
@@ -290,7 +295,7 @@ func TestAccConnectionADFS(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionADFSConfig, t.Name()),
@@ -426,7 +431,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionOIDCConfig, t.Name()),
@@ -543,7 +548,7 @@ func TestAccConnectionOkta(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionOktaConfig, t.Name()),
@@ -657,7 +662,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionOAuth2Config, t.Name()),
@@ -750,7 +755,7 @@ func TestAccConnectionSMS(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionSMSConfig, t.Name()),
@@ -801,7 +806,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionCustomSMSConfig, t.Name()),
@@ -863,7 +868,7 @@ func TestAccConnectionEmail(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionEmailConfig, t.Name()),
@@ -981,7 +986,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionSalesforceConfig, t.Name()),
@@ -1018,7 +1023,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionGoogleOAuth2Config, t.Name()),
@@ -1065,7 +1070,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionGoogleApps, t.Name()),
@@ -1118,7 +1123,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionFacebookConfig, t.Name()),
@@ -1185,7 +1190,7 @@ func TestAccConnectionApple(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionAppleConfig, t.Name()),
@@ -1259,7 +1264,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionLinkedinConfig, t.Name()),
@@ -1326,7 +1331,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionGitHubConfig, t.Name()),
@@ -1387,7 +1392,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionWindowsliveConfig, t.Name()),
@@ -1457,7 +1462,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionConfigurationCreate, t.Name()),
@@ -1511,127 +1516,11 @@ resource "auth0_connection" "my_connection" {
 }
 `
 
-func TestConnectionInstanceStateUpgradeV0(t *testing.T) {
-	for _, tt := range []struct {
-		name            string
-		version         interface{}
-		versionExpected int
-	}{
-		{
-			name:            "Empty",
-			version:         "",
-			versionExpected: 0,
-		},
-		{
-			name:            "Zero",
-			version:         "0",
-			versionExpected: 0,
-		},
-		{
-			name:            "NonZero",
-			version:         "123",
-			versionExpected: 123,
-		},
-		{
-			name:            "Invalid",
-			version:         "foo",
-			versionExpected: 0,
-		},
-	} {
-		t.Run(tt.name, func(t *testing.T) {
-			state := map[string]interface{}{
-				"options": []interface{}{
-					map[string]interface{}{"strategy_version": tt.version},
-				},
-			}
-
-			actual, err := connectionSchemaUpgradeV0(context.Background(), state, nil)
-			if err != nil {
-				t.Fatalf("error migrating state: %s", err)
-			}
-
-			expected := map[string]interface{}{
-				"options": []interface{}{
-					map[string]interface{}{"strategy_version": tt.versionExpected},
-				},
-			}
-
-			if !reflect.DeepEqual(expected, actual) {
-				t.Fatalf("\n\nexpected:\n\n%#v\n\ngot:\n\n%#v\n\n", expected, actual)
-			}
-		})
-	}
-}
-
-func TestConnectionInstanceStateUpgradeV1(t *testing.T) {
-	for _, tt := range []struct {
-		name               string
-		validation         map[string]string
-		validationExpected []map[string][]interface{}
-	}{
-		{
-			name: "Only Min",
-			validation: map[string]string{
-				"min": "5",
-			},
-			validationExpected: []map[string][]interface{}{
-				{
-					"username": []interface{}{
-						map[string]string{
-							"min": "5",
-						},
-					},
-				},
-			},
-		},
-		{
-			name: "Min and Max",
-			validation: map[string]string{
-				"min": "5",
-				"max": "10",
-			},
-			validationExpected: []map[string][]interface{}{
-				{
-					"username": []interface{}{
-						map[string]string{
-							"min": "5",
-							"max": "10",
-						},
-					},
-				},
-			},
-		},
-	} {
-		t.Run(tt.name, func(t *testing.T) {
-			state := map[string]interface{}{
-				"options": []interface{}{
-					map[string]interface{}{"validation": tt.validation},
-				},
-			}
-
-			actual, err := connectionSchemaUpgradeV1(context.Background(), state, nil)
-			if err != nil {
-				t.Fatalf("error migrating state: %s", err)
-			}
-
-			expected := map[string]interface{}{
-				"options": []interface{}{
-					map[string]interface{}{"validation": tt.validationExpected},
-				},
-			}
-
-			if !reflect.DeepEqual(expected, actual) {
-				t.Fatalf("\n\nexpected:\n\n%#v\n\ngot:\n\n%#v\n\n", expected, actual)
-			}
-		})
-	}
-}
-
 func TestAccConnectionSAML(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testConnectionSAMLConfigCreate, t.Name()),
@@ -1809,7 +1698,7 @@ func TestAccConnectionTwitter(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccConnectionTwitterConfig, t.Name()),

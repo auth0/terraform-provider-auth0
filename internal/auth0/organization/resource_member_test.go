@@ -1,15 +1,12 @@
-package provider
+package organization_test
 
 import (
-	"context"
-	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/stretchr/testify/assert"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
@@ -20,7 +17,7 @@ func TestAccOrganizationMember(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{{
 			Config: template.ParseTestName(testAccOrganizationMembersAux+`
 			resource auth0_organization_member test_member {
@@ -126,54 +123,3 @@ resource auth0_organization some_org {
 	display_name = "{{.testName}}"
 }
 `
-
-func TestImportOrganizationMember(t *testing.T) {
-	var testCases = []struct {
-		testName               string
-		givenID                string
-		expectedOrganizationID string
-		expectedUserID         string
-		expectedError          error
-	}{
-		{
-			testName:               "it correctly parses the resource ID",
-			givenID:                "org_1234:auth0|62d82",
-			expectedOrganizationID: "org_1234",
-			expectedUserID:         "auth0|62d82",
-		},
-		{
-			testName:      "it fails when the given ID is empty",
-			givenID:       "",
-			expectedError: fmt.Errorf("ID cannot be empty"),
-		},
-		{
-			testName:      "it fails when the given ID does not have \":\" as a separator",
-			givenID:       "org_1234auth0|62d82",
-			expectedError: fmt.Errorf("ID must be formated as <organizationID>:<userID>"),
-		},
-		{
-			testName:      "it fails when the given ID has too many separators",
-			givenID:       "org_1234:auth0|62d82:",
-			expectedError: fmt.Errorf("ID must be formated as <organizationID>:<userID>"),
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.testName, func(t *testing.T) {
-			data := schema.TestResourceDataRaw(t, newOrganizationMember().Schema, nil)
-			data.SetId(testCase.givenID)
-
-			actualData, err := importOrganizationMember(context.Background(), data, nil)
-
-			if testCase.expectedError != nil {
-				assert.EqualError(t, err, testCase.expectedError.Error())
-				assert.Nil(t, actualData)
-				return
-			}
-
-			assert.Equal(t, actualData[0].Get("organization_id").(string), testCase.expectedOrganizationID)
-			assert.Equal(t, actualData[0].Get("user_id").(string), testCase.expectedUserID)
-			assert.NotEqual(t, actualData[0].Id(), testCase.givenID)
-		})
-	}
-}

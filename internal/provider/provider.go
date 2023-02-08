@@ -13,6 +13,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 )
 
 var version = "dev"
@@ -99,9 +100,9 @@ func New() *schema.Provider {
 			"auth0_log_stream":                 newLogStream(),
 			"auth0_branding":                   newBranding(),
 			"auth0_guardian":                   newGuardian(),
-			"auth0_organization":               newOrganization(),
-			"auth0_organization_connection":    newOrganizationConnection(),
-			"auth0_organization_member":        newOrganizationMember(),
+			"auth0_organization":               organization.NewResource(),
+			"auth0_organization_connection":    organization.NewConnectionResource(),
+			"auth0_organization_member":        organization.NewMemberResource(),
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),
 			"auth0_attack_protection":          newAttackProtection(),

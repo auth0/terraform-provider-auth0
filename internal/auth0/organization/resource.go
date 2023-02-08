@@ -1,4 +1,4 @@
-package provider
+package organization
 
 import (
 	"context"
@@ -13,7 +13,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newOrganization() *schema.Resource {
+// NewResource will return a new auth0_organization resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createOrganization,
 		ReadContext:   readOrganization,

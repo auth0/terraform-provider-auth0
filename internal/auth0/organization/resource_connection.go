@@ -1,10 +1,9 @@
-package provider
+package organization
 
 import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -20,7 +19,8 @@ var (
 	errInvalidOrganizationConnectionIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<connectionID>")
 )
 
-func newOrganizationConnection() *schema.Resource {
+// NewConnectionResource will return a new auth0_organization_connection resource.
+func NewConnectionResource() *schema.Resource {
 	return &schema.Resource{
 		Description:   "With this resource, you can manage enabled connections on an organization.",
 		CreateContext: createOrganizationConnection,
@@ -61,35 +61,6 @@ func newOrganizationConnection() *schema.Resource {
 			},
 		},
 	}
-}
-
-func importOrganizationConnection(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, errEmptyOrganizationConnectionID
-	}
-
-	if !strings.Contains(rawID, ":") {
-		return nil, errInvalidOrganizationConnectionIDFormat
-	}
-
-	idPair := strings.Split(rawID, ":")
-	if len(idPair) != 2 {
-		return nil, errInvalidOrganizationConnectionIDFormat
-	}
-
-	result := multierror.Append(
-		data.Set("organization_id", idPair[0]),
-		data.Set("connection_id", idPair[1]),
-	)
-
-	data.SetId(resource.UniqueId())
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

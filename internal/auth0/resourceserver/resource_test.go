@@ -1,4 +1,4 @@
-package provider
+package resourceserver_test
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
@@ -16,11 +17,17 @@ func init() {
 	sweep.ResourceServers()
 }
 
+// This is needed so that the test
+// sweepers get registered.
+func TestMain(m *testing.M) {
+	resource.TestMain(m)
+}
+
 func TestAccResourceServer(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
@@ -157,7 +164,7 @@ func TestAccResourceServerAuth0APIManagement(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: `

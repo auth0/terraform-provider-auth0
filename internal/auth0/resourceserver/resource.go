@@ -1,4 +1,4 @@
-package provider
+package resourceserver
 
 import (
 	"context"
@@ -17,7 +17,8 @@ import (
 
 const auth0ManagementAPI = "Auth0 Management API"
 
-func newResourceServer() *schema.Resource {
+// NewResource will return a new auth0_resource_server resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createResourceServer,
 		ReadContext:   readResourceServer,

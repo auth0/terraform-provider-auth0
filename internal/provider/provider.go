@@ -14,6 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 )
 
 var version = "dev"
@@ -86,7 +87,7 @@ func New() *schema.Provider {
 			"auth0_connection_client":          connection.NewClientResource(),
 			"auth0_custom_domain":              newCustomDomain(),
 			"auth0_custom_domain_verification": newCustomDomainVerification(),
-			"auth0_resource_server":            newResourceServer(),
+			"auth0_resource_server":            resourceserver.NewResource(),
 			"auth0_rule":                       newRule(),
 			"auth0_rule_config":                newRuleConfig(),
 			"auth0_hook":                       newHook(),
@@ -109,11 +110,12 @@ func New() *schema.Provider {
 			"auth0_branding_theme":             newBrandingTheme(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"auth0_client":        client.NewDataSource(),
-			"auth0_global_client": client.NewGlobalDataSource(),
-			"auth0_connection":    connection.NewDataSource(),
-			"auth0_organization":  organization.NewDataSource(),
-			"auth0_tenant":        newDataTenant(),
+			"auth0_client":          client.NewDataSource(),
+			"auth0_global_client":   client.NewGlobalDataSource(),
+			"auth0_connection":      connection.NewDataSource(),
+			"auth0_organization":    organization.NewDataSource(),
+			"auth0_resource_server": resourceserver.NewDataSource(),
+			"auth0_tenant":          newDataTenant(),
 		},
 	}
 

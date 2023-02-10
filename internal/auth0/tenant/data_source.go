@@ -1,4 +1,4 @@
-package provider
+package tenant
 
 import (
 	"context"
@@ -12,7 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func newDataTenant() *schema.Resource {
+// NewDataSource will return a new auth0_tenant data source.
+func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readDataTenant,
 		Description: "Use this data source to access information about the tenant this provider is configured to access.",

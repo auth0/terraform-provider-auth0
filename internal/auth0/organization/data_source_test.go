@@ -75,7 +75,6 @@ func TestAccDataSourceOrganizationByName(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
 					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
 					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
 				),
 			},
 			{
@@ -107,7 +106,6 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "connection_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
 					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
 				),
 			},

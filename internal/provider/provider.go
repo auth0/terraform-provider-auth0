@@ -15,6 +15,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 )
 
@@ -98,7 +99,7 @@ func New() *schema.Provider {
 			"auth0_email_template":             newEmailTemplate(),
 			"auth0_user":                       newUser(),
 			"auth0_tenant":                     tenant.NewResource(),
-			"auth0_role":                       newRole(),
+			"auth0_role":                       role.NewResource(),
 			"auth0_log_stream":                 newLogStream(),
 			"auth0_branding":                   newBranding(),
 			"auth0_guardian":                   newGuardian(),

@@ -120,6 +120,7 @@ func New() *schema.Provider {
 			"auth0_resource_server": resourceserver.NewDataSource(),
 			"auth0_tenant":          tenant.NewDataSource(),
 			"auth0_user":            user.NewDataSource(),
+			"auth0_role":            role.NewDataSource(),
 		},
 	}
 

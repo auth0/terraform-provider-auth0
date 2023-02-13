@@ -1,4 +1,4 @@
-package provider
+package tenant
 
 import (
 	"context"
@@ -12,10 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newTenant() *schema.Resource {
+// NewResource will return a new auth0_tenant resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createTenant,
 		ReadContext:   readTenant,
@@ -436,37 +436,4 @@ func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func deleteTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
-}
-
-func expandTenant(d *schema.ResourceData) *management.Tenant {
-	config := d.GetRawConfig()
-
-	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`
-	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`
-
-	tenant := &management.Tenant{
-		DefaultAudience:       value.String(config.GetAttr("default_audience")),
-		DefaultDirectory:      value.String(config.GetAttr("default_directory")),
-		DefaultRedirectionURI: value.String(config.GetAttr("default_redirection_uri")),
-		FriendlyName:          value.String(config.GetAttr("friendly_name")),
-		PictureURL:            value.String(config.GetAttr("picture_url")),
-		SupportEmail:          value.String(config.GetAttr("support_email")),
-		SupportURL:            value.String(config.GetAttr("support_url")),
-		AllowedLogoutURLs:     value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:       &sessionLifetime,
-		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
-		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
-		ChangePassword:        expandTenantChangePassword(config.GetAttr("change_password")),
-		GuardianMFAPage:       expandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
-		ErrorPage:             expandTenantErrorPage(config.GetAttr("error_page")),
-		Flags:                 expandTenantFlags(config.GetAttr("flags")),
-		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
-		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
-	}
-
-	if d.IsNewResource() || d.HasChange("idle_session_lifetime") {
-		tenant.IdleSessionLifetime = &idleSessionLifetime
-	}
-
-	return tenant
 }

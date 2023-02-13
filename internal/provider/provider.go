@@ -16,6 +16,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
 )
 
 var version = "dev"
@@ -96,7 +97,7 @@ func New() *schema.Provider {
 			"auth0_prompt_custom_text":         newPromptCustomText(),
 			"auth0_email":                      newEmail(),
 			"auth0_email_template":             newEmailTemplate(),
-			"auth0_user":                       newUser(),
+			"auth0_user":                       user.NewResource(),
 			"auth0_tenant":                     tenant.NewResource(),
 			"auth0_role":                       newRole(),
 			"auth0_log_stream":                 newLogStream(),

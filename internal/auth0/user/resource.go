@@ -1,4 +1,4 @@
-package provider
+package user
 
 import (
 	"context"
@@ -18,7 +18,8 @@ import (
 
 type validateUserFunc func(*management.User) error
 
-func newUser() *schema.Resource {
+// NewResource will return a new auth0_user resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createUser,
 		ReadContext:   readUser,

@@ -19,8 +19,106 @@ data "auth0_tenant" "my_tenant" {}
 
 ### Read-Only
 
+- `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
+- `change_password` (List of Object) Configuration settings for change password page. (see [below for nested schema](#nestedatt--change_password))
+- `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
+- `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
+- `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `domain` (String) Your Auth0 domain name.
+- `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
+- `error_page` (List of Object) Configuration settings for error pages. (see [below for nested schema](#nestedatt--error_page))
+- `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
+- `friendly_name` (String) Friendly name for the tenant.
+- `guardian_mfa_page` (List of Object) Configuration settings for the Guardian MFA page. (see [below for nested schema](#nestedatt--guardian_mfa_page))
 - `id` (String) The ID of this resource.
+- `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.
+- `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
+- `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
+- `session_cookie` (List of Object) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedatt--session_cookie))
+- `session_lifetime` (Number) Number of hours during which a session will stay valid.
+- `support_email` (String) Support email address for authenticating users.
+- `support_url` (String) Support URL for authenticating users.
+- `universal_login` (List of Object) Configuration settings for Universal Login. (see [below for nested schema](#nestedatt--universal_login))
+
+<a id="nestedatt--change_password"></a>
+### Nested Schema for `change_password`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `html` (String)
+
+
+<a id="nestedatt--error_page"></a>
+### Nested Schema for `error_page`
+
+Read-Only:
+
+- `html` (String)
+- `show_log_link` (Boolean)
+- `url` (String)
+
+
+<a id="nestedatt--flags"></a>
+### Nested Schema for `flags`
+
+Read-Only:
+
+- `allow_legacy_delegation_grant_types` (Boolean)
+- `allow_legacy_ro_grant_types` (Boolean)
+- `allow_legacy_tokeninfo_endpoint` (Boolean)
+- `dashboard_insights_view` (Boolean)
+- `dashboard_log_streams_next` (Boolean)
+- `disable_clickjack_protection_headers` (Boolean)
+- `disable_fields_map_fix` (Boolean)
+- `disable_management_api_sms_obfuscation` (Boolean)
+- `enable_adfs_waad_email_verification` (Boolean)
+- `enable_apis_section` (Boolean)
+- `enable_client_connections` (Boolean)
+- `enable_custom_domain_in_emails` (Boolean)
+- `enable_dynamic_client_registration` (Boolean)
+- `enable_idtoken_api2` (Boolean)
+- `enable_legacy_logs_search_v2` (Boolean)
+- `enable_legacy_profile` (Boolean)
+- `enable_pipeline2` (Boolean)
+- `enable_public_signup_user_exists_error` (Boolean)
+- `no_disclose_enterprise_connections` (Boolean)
+- `revoke_refresh_token_grant` (Boolean)
+- `universal_login` (Boolean)
+- `use_scope_descriptions_for_consent` (Boolean)
+
+
+<a id="nestedatt--guardian_mfa_page"></a>
+### Nested Schema for `guardian_mfa_page`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `html` (String)
+
+
+<a id="nestedatt--session_cookie"></a>
+### Nested Schema for `session_cookie`
+
+Read-Only:
+
+- `mode` (String)
+
+
+<a id="nestedatt--universal_login"></a>
+### Nested Schema for `universal_login`
+
+Read-Only:
+
+- `colors` (List of Object) (see [below for nested schema](#nestedobjatt--universal_login--colors))
+
+<a id="nestedobjatt--universal_login--colors"></a>
+### Nested Schema for `universal_login.colors`
+
+Read-Only:
+
+- `page_background` (String)
+- `primary` (String)
 
 

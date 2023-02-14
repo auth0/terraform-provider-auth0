@@ -1,4 +1,4 @@
-package provider
+package client
 
 import (
 	"context"
@@ -12,7 +12,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newClientGrant() *schema.Resource {
+// NewGrantResource will return a new auth0_client_grant resource.
+func NewGrantResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createClientGrant,
 		ReadContext:   readClientGrant,

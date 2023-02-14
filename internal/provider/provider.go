@@ -87,7 +87,7 @@ func New() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_client":                     client.NewResource(),
 			"auth0_global_client":              client.NewGlobalResource(),
-			"auth0_client_grant":               newClientGrant(),
+			"auth0_client_grant":               client.NewGrantResource(),
 			"auth0_connection":                 connection.NewResource(),
 			"auth0_connection_client":          connection.NewClientResource(),
 			"auth0_custom_domain":              customdomain.NewResource(),

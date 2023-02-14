@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
@@ -104,7 +105,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                     tenant.NewResource(),
 			"auth0_role":                       role.NewResource(),
 			"auth0_log_stream":                 newLogStream(),
-			"auth0_branding":                   newBranding(),
+			"auth0_branding":                   branding.NewResource(),
 			"auth0_guardian":                   newGuardian(),
 			"auth0_organization":               organization.NewResource(),
 			"auth0_organization_connection":    organization.NewConnectionResource(),
@@ -112,7 +113,7 @@ func New() *schema.Provider {
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),
 			"auth0_attack_protection":          attackprotection.NewResource(),
-			"auth0_branding_theme":             newBrandingTheme(),
+			"auth0_branding_theme":             branding.NewThemeResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_client":            client.NewDataSource(),

@@ -1,4 +1,4 @@
-package provider
+package branding
 
 import (
 	"context"
@@ -15,7 +15,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newBranding() *schema.Resource {
+// NewResource will return a new auth0_branding resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createBranding,
 		ReadContext:   readBranding,

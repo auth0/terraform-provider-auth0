@@ -13,6 +13,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
@@ -88,8 +89,8 @@ func New() *schema.Provider {
 			"auth0_client_grant":               newClientGrant(),
 			"auth0_connection":                 connection.NewResource(),
 			"auth0_connection_client":          connection.NewClientResource(),
-			"auth0_custom_domain":              newCustomDomain(),
-			"auth0_custom_domain_verification": newCustomDomainVerification(),
+			"auth0_custom_domain":              customdomain.NewResource(),
+			"auth0_custom_domain_verification": customdomain.NewVerificationResource(),
 			"auth0_resource_server":            resourceserver.NewResource(),
 			"auth0_rule":                       newRule(),
 			"auth0_rule_config":                newRuleConfig(),

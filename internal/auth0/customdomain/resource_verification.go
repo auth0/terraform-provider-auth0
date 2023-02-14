@@ -1,4 +1,4 @@
-package provider
+package customdomain
 
 import (
 	"context"
@@ -14,7 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func newCustomDomainVerification() *schema.Resource {
+// NewVerificationResource will return a new auth0_custom_domain_verification resource.
+func NewVerificationResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createCustomDomainVerification,
 		ReadContext:   readCustomDomainVerification,

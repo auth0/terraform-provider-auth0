@@ -1,17 +1,13 @@
-package provider
+package action_test
 
 import (
 	"fmt"
 	"regexp"
 	"testing"
 
-	"github.com/auth0/go-auth0"
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/stretchr/testify/assert"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
@@ -109,7 +105,7 @@ func TestAccAction(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccActionConfigCreateWithOnlyRequiredFields, t.Name()),
@@ -219,7 +215,7 @@ func TestAccAction_FailedBuild(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
@@ -235,71 +231,4 @@ func TestAccAction_FailedBuild(t *testing.T) {
 			},
 		},
 	})
-}
-
-func TestCheckForUntrackedActionSecrets(t *testing.T) {
-	var testCases = []struct {
-		name                 string
-		givenSecretsInConfig []interface{}
-		givenActionSecrets   []management.ActionSecret
-		expectedDiagnostics  diag.Diagnostics
-	}{
-		{
-			name:                 "action has no secrets",
-			givenSecretsInConfig: []interface{}{},
-			givenActionSecrets:   []management.ActionSecret{},
-			expectedDiagnostics:  diag.Diagnostics(nil),
-		},
-		{
-			name: "action has no untracked secrets",
-			givenSecretsInConfig: []interface{}{
-				map[string]interface{}{
-					"name": "secretName",
-				},
-			},
-			givenActionSecrets: []management.ActionSecret{
-				{
-					Name: auth0.String("secretName"),
-				},
-			},
-			expectedDiagnostics: diag.Diagnostics(nil),
-		},
-		{
-			name: "action has untracked secrets",
-			givenSecretsInConfig: []interface{}{
-				map[string]interface{}{
-					"name": "secretName",
-				},
-			},
-			givenActionSecrets: []management.ActionSecret{
-				{
-					Name: auth0.String("secretName"),
-				},
-				{
-					Name: auth0.String("anotherSecretName"),
-				},
-			},
-			expectedDiagnostics: diag.Diagnostics{
-				{
-					Severity: diag.Error,
-					Summary:  "Unmanaged Action Secret",
-					Detail: "Detected an action secret not managed though Terraform: anotherSecretName. " +
-						"If you proceed, this secret will get deleted. It is required to add this secret to " +
-						"your action configuration to prevent unintentionally destructive results.",
-					AttributePath: cty.Path{cty.GetAttrStep{Name: "secrets"}},
-				},
-			},
-		},
-	}
-
-	for _, testCase := range testCases {
-		t.Run(testCase.name, func(t *testing.T) {
-			actualDiagnostics := checkForUnmanagedActionSecrets(
-				testCase.givenSecretsInConfig,
-				testCase.givenActionSecrets,
-			)
-
-			assert.Equal(t, testCase.expectedDiagnostics, actualDiagnostics)
-		})
-	}
 }

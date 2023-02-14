@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
@@ -109,7 +110,7 @@ func New() *schema.Provider {
 			"auth0_organization_member":        organization.NewMemberResource(),
 			"auth0_action":                     newAction(),
 			"auth0_trigger_binding":            newTriggerBinding(),
-			"auth0_attack_protection":          newAttackProtection(),
+			"auth0_attack_protection":          attackprotection.NewResource(),
 			"auth0_branding_theme":             newBrandingTheme(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{

@@ -1,4 +1,4 @@
-package provider
+package attackprotection
 
 import (
 	"context"
@@ -14,7 +14,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newAttackProtection() *schema.Resource {
+// NewResource will return a new auth0_attack_protection resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createAttackProtection,
 		ReadContext:   readAttackProtection,

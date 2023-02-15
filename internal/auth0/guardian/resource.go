@@ -1,4 +1,4 @@
-package provider
+package guardian
 
 import (
 	"context"
@@ -13,7 +13,8 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
-func newGuardian() *schema.Resource {
+// NewResource will return a new auth0_guardian resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createGuardian,
 		ReadContext:   readGuardian,

@@ -1,4 +1,4 @@
-package provider
+package email
 
 import (
 	"context"
@@ -6,16 +6,14 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newEmailTemplate() *schema.Resource {
+// NewTemplateResource will return a new auth0_email_template resource.
+func NewTemplateResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createEmailTemplate,
 		ReadContext:   readEmailTemplate,
@@ -186,20 +184,4 @@ func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	return nil
-}
-
-func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
-	emailTemplate := &management.EmailTemplate{
-		Template:               value.String(config.GetAttr("template")),
-		Body:                   value.String(config.GetAttr("body")),
-		From:                   value.String(config.GetAttr("from")),
-		ResultURL:              value.String(config.GetAttr("result_url")),
-		Subject:                value.String(config.GetAttr("subject")),
-		Syntax:                 value.String(config.GetAttr("syntax")),
-		URLLifetimeInSecoonds:  value.Int(config.GetAttr("url_lifetime_in_seconds")),
-		Enabled:                value.Bool(config.GetAttr("enabled")),
-		IncludeEmailInRedirect: value.Bool(config.GetAttr("include_email_in_redirect")),
-	}
-
-	return emailTemplate
 }

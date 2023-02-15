@@ -1,4 +1,4 @@
-package provider
+package branding
 
 import (
 	"context"
@@ -14,7 +14,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newBrandingTheme() *schema.Resource {
+// NewThemeResource will return a new auth0_branding_theme resource.
+func NewThemeResource() *schema.Resource {
 	return &schema.Resource{
 		Description: "This resource allows you to manage branding themes for your Universal Login page " +
 			"within your Auth0 tenant.",

@@ -1,4 +1,4 @@
-package provider
+package branding_test
 
 import (
 	"regexp"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
 
@@ -96,7 +97,7 @@ func TestAccBranding_WithNoCustomDomainsSet(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTenantDisallowsUniversalLoginCustomization,
@@ -113,7 +114,7 @@ func TestAccBranding(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigCreate,

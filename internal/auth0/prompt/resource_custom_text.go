@@ -1,4 +1,4 @@
-package provider
+package prompt
 
 import (
 	"bytes"
@@ -32,7 +32,8 @@ var (
 	errInvalidPromptCustomTextIDFormat = fmt.Errorf("ID must be formated as prompt:language")
 )
 
-func newPromptCustomText() *schema.Resource {
+// NewCustomTextResource will return a new auth0_prompt_custom_text resource.
+func NewCustomTextResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createPromptCustomText,
 		ReadContext:   readPromptCustomText,

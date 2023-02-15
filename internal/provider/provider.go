@@ -17,6 +17,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
@@ -97,8 +98,8 @@ func New() *schema.Provider {
 			"auth0_rule":                       newRule(),
 			"auth0_rule_config":                newRuleConfig(),
 			"auth0_hook":                       newHook(),
-			"auth0_prompt":                     newPrompt(),
-			"auth0_prompt_custom_text":         newPromptCustomText(),
+			"auth0_prompt":                     prompt.NewResource(),
+			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
 			"auth0_email":                      newEmail(),
 			"auth0_email_template":             newEmailTemplate(),
 			"auth0_user":                       user.NewResource(),

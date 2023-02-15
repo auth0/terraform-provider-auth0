@@ -1,21 +1,38 @@
-package provider
+package hook_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/stretchr/testify/assert"
 
+	"github.com/auth0/terraform-provider-auth0/internal/provider"
 	"github.com/auth0/terraform-provider-auth0/internal/recorder"
 )
+
+const testAccHookEmpty = `
+resource "auth0_hook" "my_hook" {
+  name = "pre-user-reg-hook"
+  script = "function (user, context, callback) { callback(null, { user }); }"
+  trigger_id = "pre-user-registration"
+}
+`
+
+const testAccHookCreate = `
+resource "auth0_hook" "my_hook" {
+  name = "pre-user-reg-hook"
+  script = "function (user, context, callback) { callback(null, { user }); }"
+  trigger_id = "pre-user-registration"
+  enabled = true
+  %s
+}
+`
 
 func TestAccHook(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: testAccHookEmpty,
@@ -41,29 +58,44 @@ func TestAccHook(t *testing.T) {
 	})
 }
 
-const testAccHookEmpty = `
-resource "auth0_hook" "my_hook" {
-  name = "pre-user-reg-hook"
-  script = "function (user, context, callback) { callback(null, { user }); }"
-  trigger_id = "pre-user-registration"
-}
+const testAccHookSecrets = `
+  dependencies = {
+    auth0 = "2.30.0"
+  }
+  secrets = {
+    foo = "alpha"
+  }
 `
 
-const testAccHookCreate = `
-resource "auth0_hook" "my_hook" {
-  name = "pre-user-reg-hook"
-  script = "function (user, context, callback) { callback(null, { user }); }"
-  trigger_id = "pre-user-registration"
-  enabled = true
-  %s
-}
+const testAccHookSecretsUpdate = `
+  dependencies = {
+    auth0 = "2.30.0"
+  }
+  secrets = {
+    foo = "gamma"
+    bar = "kappa"
+  }
+`
+
+const testAccHookSecretsUpdateAndRemoval = `
+  dependencies = {
+    auth0 = "2.30.0"
+  }
+  secrets = {
+    foo = "delta"
+  }
+`
+
+const testAccHookSecretsEmpty = `
+  dependencies = {}
+  secrets = {}
 `
 
 func TestAccHookSecrets(t *testing.T) {
 	httpRecorder := recorder.New(t)
 
 	resource.Test(t, resource.TestCase{
-		ProviderFactories: TestFactories(httpRecorder),
+		ProviderFactories: provider.TestFactories(httpRecorder),
 		Steps: []resource.TestStep{
 			{
 				Config: fmt.Sprintf(testAccHookCreate, testAccHookSecrets),
@@ -113,51 +145,4 @@ func TestAccHookSecrets(t *testing.T) {
 			},
 		},
 	})
-}
-
-const testAccHookSecrets = `
-  dependencies = {
-    auth0 = "2.30.0"
-  }
-  secrets = {
-    foo = "alpha"
-  }
-`
-
-const testAccHookSecretsUpdate = `
-  dependencies = {
-    auth0 = "2.30.0"
-  }
-  secrets = {
-    foo = "gamma"
-    bar = "kappa"
-  }
-`
-
-const testAccHookSecretsUpdateAndRemoval = `
-  dependencies = {
-    auth0 = "2.30.0"
-  }
-  secrets = {
-    foo = "delta"
-  }
-`
-
-const testAccHookSecretsEmpty = `
-  dependencies = {}
-  secrets = {}
-`
-
-func TestHookNameRegexp(t *testing.T) {
-	for givenHookName, expectedError := range map[string]bool{
-		"my-hook-1":                 false,
-		"hook 2 name with spaces":   false,
-		" hook with a space prefix": true,
-		"hook with a space suffix ": true,
-		" ":                         true,
-		"   ":                       true,
-	} {
-		validationResult := validateHookName()(givenHookName, cty.Path{cty.GetAttrStep{Name: "name"}})
-		assert.Equal(t, expectedError, validationResult.HasError())
-	}
 }

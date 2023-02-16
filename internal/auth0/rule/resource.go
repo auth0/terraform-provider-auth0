@@ -1,4 +1,4 @@
-package provider
+package rule
 
 import (
 	"context"
@@ -7,18 +7,16 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
 
-func newRule() *schema.Resource {
+// NewResource will return a new auth0_rule resource.
+func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createRule,
 		ReadContext:   readRule,
@@ -123,13 +121,4 @@ func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	}
 
 	return nil
-}
-
-func expandRule(d cty.Value) *management.Rule {
-	return &management.Rule{
-		Name:    value.String(d.GetAttr("name")),
-		Script:  value.String(d.GetAttr("script")),
-		Order:   value.Int(d.GetAttr("order")),
-		Enabled: value.Bool(d.GetAttr("enabled")),
-	}
 }

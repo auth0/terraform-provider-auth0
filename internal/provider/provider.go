@@ -18,11 +18,13 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
 )
@@ -98,9 +100,9 @@ func New() *schema.Provider {
 			"auth0_custom_domain":              customdomain.NewResource(),
 			"auth0_custom_domain_verification": customdomain.NewVerificationResource(),
 			"auth0_resource_server":            resourceserver.NewResource(),
-			"auth0_rule":                       newRule(),
-			"auth0_rule_config":                newRuleConfig(),
-			"auth0_hook":                       newHook(),
+			"auth0_rule":                       rule.NewResource(),
+			"auth0_rule_config":                rule.NewConfigResource(),
+			"auth0_hook":                       hook.NewResource(),
 			"auth0_prompt":                     prompt.NewResource(),
 			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
 			"auth0_email":                      newEmail(),

@@ -1,4 +1,4 @@
-package provider
+package rule
 
 import (
 	"context"
@@ -6,14 +6,12 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newRuleConfig() *schema.Resource {
+// NewConfigResource will return a new auth0_rule_config resource.
+func NewConfigResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createRuleConfig,
 		ReadContext:   readRuleConfig,
@@ -96,11 +94,4 @@ func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	}
 
 	return nil
-}
-
-func expandRuleConfig(d cty.Value) *management.RuleConfig {
-	return &management.RuleConfig{
-		Key:   value.String(d.GetAttr("key")),
-		Value: value.String(d.GetAttr("value")),
-	}
 }

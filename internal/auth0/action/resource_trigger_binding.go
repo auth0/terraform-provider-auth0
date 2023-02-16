@@ -1,19 +1,17 @@
-package provider
+package action
 
 import (
 	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func newTriggerBinding() *schema.Resource {
+// NewTriggerBindingResource will return a new auth0_trigger_binding resource.
+func NewTriggerBindingResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createTriggerBinding,
 		ReadContext:   readTriggerBinding,
@@ -120,38 +118,4 @@ func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	}
 
 	return nil
-}
-
-func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
-	var triggerBindings []*management.ActionBinding
-
-	config.ForEachElement(func(_ cty.Value, action cty.Value) (stop bool) {
-		t := "action_id"
-		triggerBindings = append(triggerBindings, &management.ActionBinding{
-			Ref: &management.ActionBindingReference{
-				Type:  &t,
-				Value: value.String(action.GetAttr("id")),
-			},
-			DisplayName: value.String(action.GetAttr("display_name")),
-		})
-		return stop
-	})
-
-	return triggerBindings
-}
-
-func flattenTriggerBindingActions(bindings []*management.ActionBinding) []interface{} {
-	var triggerBindingActions []interface{}
-
-	for _, binding := range bindings {
-		triggerBindingActions = append(
-			triggerBindingActions,
-			map[string]interface{}{
-				"id":           binding.Action.GetID(),
-				"display_name": binding.GetDisplayName(),
-			},
-		)
-	}
-
-	return triggerBindingActions
 }

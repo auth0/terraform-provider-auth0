@@ -18,6 +18,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
@@ -107,7 +108,7 @@ func New() *schema.Provider {
 			"auth0_user":                       user.NewResource(),
 			"auth0_tenant":                     tenant.NewResource(),
 			"auth0_role":                       role.NewResource(),
-			"auth0_log_stream":                 newLogStream(),
+			"auth0_log_stream":                 logstream.NewResource(),
 			"auth0_branding":                   branding.NewResource(),
 			"auth0_guardian":                   guardian.NewResource(),
 			"auth0_organization":               organization.NewResource(),

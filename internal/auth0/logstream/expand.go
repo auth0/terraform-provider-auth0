@@ -64,7 +64,7 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 			logStream.Sink = expandLogStreamSinkSegment(sink)
 		default:
 			log.Printf("[WARN]: Unsupported log stream sink %s", logStream.GetType())
-			log.Printf("[WARN]: Raise an issue with the auth0 provider in order to support it:")
+			log.Printf("[WARN]: Raise an issue with the Auth0 provider in order to support it:")
 			log.Printf("[WARN]: 	https://github.com/auth0/terraform-provider-auth0/issues/new")
 		}
 

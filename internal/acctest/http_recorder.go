@@ -1,4 +1,4 @@
-package recorder
+package acctest
 
 import (
 	"encoding/json"
@@ -23,20 +23,9 @@ const (
 	RecordingsDomain = recordingsTenant + ".eu.auth0.com"
 )
 
-// Recorder used for our http test mocks.
-type Recorder struct {
-	*recorder.Recorder
-}
-
-// New creates a new instance of our http recorder used in tests.
-func New(t *testing.T) *Recorder {
+// NewHTTPRecorder creates a new instance of our http recorder used in tests.
+func newHTTPRecorder(t *testing.T) *recorder.Recorder {
 	t.Helper()
-
-	httpRecordings := os.Getenv("AUTH0_HTTP_RECORDINGS")
-	httpRecordingsEnabled := httpRecordings == "true" || httpRecordings == "1" || httpRecordings == "on"
-	if !httpRecordingsEnabled {
-		return nil
-	}
 
 	recorderTransport, err := recorder.NewWithOptions(
 		&recorder.Options{
@@ -54,7 +43,7 @@ func New(t *testing.T) *Recorder {
 		require.NoError(t, err)
 	})
 
-	return &Recorder{recorderTransport}
+	return recorderTransport
 }
 
 func cassetteName(testName string) string {

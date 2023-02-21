@@ -12,8 +12,7 @@ BUILD_DIR ?= $(CURDIR)/out
 
 GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
-GO_PACKAGES := $(shell go list ./... | grep -v vendor)
-GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
+GO_PACKAGES := $(shell go list ./... | grep -vE "vendor|tools")
 GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
@@ -116,10 +115,15 @@ check-vuln: ## Check go vulnerabilities
 
 test: test-unit test-acc ## Run all tests
 
-test-unit: ## Run unit tests
+test-unit: ## Run unit tests. To run a specific test, pass the FILTER var. Usage `make test-unit FILTER="TestAccResourceServer`
 	${call print, "Running unit tests"}
-	@go test ${GO_PACKAGES} || exit 1
-	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
+	@TF_ACC= \
+		go test \
+		-v \
+		-run "$(FILTER)" \
+		-timeout 30s \
+		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
+		${GO_PACKAGES}
 
 test-acc: ## Run acceptance tests with http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc FILTER="TestAccResourceServer`
 	${call print, "Running acceptance tests with http recordings"}
@@ -150,6 +154,7 @@ test-acc-e2e: ## Run acceptance tests without http recordings. To run a specific
 		-v \
 		-run "$(FILTER)" \
 		-timeout 120m \
+		-parallel 1 \
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
 		${GO_PACKAGES}
 
@@ -157,7 +162,7 @@ test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
 	@read -p "Continue? [y/N] " ans && ans=$${ans:-N} ; \
 	if [ $${ans} = y ] || [ $${ans} = Y ]; then \
-		go test ./internal/provider ./internal/auth0/... -v -sweep="phony" $(SWEEPARGS) ; \
+		go test -v -sweep="phony" ./internal/auth0/client ; \
 	fi
 
 #-----------------------------------------------------------------------------------------------------------------------

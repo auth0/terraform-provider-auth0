@@ -113,8 +113,6 @@ check-vuln: ## Check go vulnerabilities
 #-----------------------------------------------------------------------------------------------------------------------
 .PHONY: test test-unit test-acc test-sweep
 
-test: test-unit test-acc ## Run all tests
-
 test-unit: ## Run unit tests. To run a specific test, pass the FILTER var. Usage `make test-unit FILTER="TestAccResourceServer`
 	${call print, "Running unit tests"}
 	@TF_ACC= \

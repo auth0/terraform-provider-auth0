@@ -9,19 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
-
-func init() {
-	sweep.Users()
-}
-
-// This is needed so that the test
-// sweepers get registered.
-func TestMain(m *testing.M) {
-	resource.TestMain(m)
-}
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{

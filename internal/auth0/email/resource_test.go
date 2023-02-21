@@ -6,12 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/sweep"
 )
-
-func init() {
-	sweep.Email()
-}
 
 const testAccCreateSESEmailProvider = `
 resource "auth0_email" "my_email_provider" {

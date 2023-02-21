@@ -162,7 +162,7 @@ test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
 	@read -p "Continue? [y/N] " ans && ans=$${ans:-N} ; \
 	if [ $${ans} = y ] || [ $${ans} = Y ]; then \
-		go test -v -sweep="phony" ./internal/auth0/client ; \
+		go test ./internal/sweep -v -sweep="phony" $(SWEEPARGS) ; \
 	fi
 
 #-----------------------------------------------------------------------------------------------------------------------

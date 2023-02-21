@@ -132,6 +132,8 @@ func New() *schema.Provider {
 			"auth0_user":              user.NewDataSource(),
 			"auth0_role":              role.NewDataSource(),
 			"auth0_attack_protection": attackprotection.NewDataSource(),
+			"auth0_branding":          branding.NewDataSource(),
+			"auth0_branding_theme":    branding.NewThemeDataSource(),
 		},
 	}
 

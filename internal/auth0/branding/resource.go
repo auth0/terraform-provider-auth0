@@ -140,9 +140,10 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	branding := expandBranding(d.GetRawConfig())
-	if err := api.Branding.Update(branding); err != nil {
-		return diag.FromErr(err)
+	if branding := expandBranding(d.GetRawConfig()); branding.String() != "{}" {
+		if err := api.Branding.Update(branding); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {

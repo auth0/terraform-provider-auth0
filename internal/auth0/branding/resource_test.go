@@ -92,6 +92,16 @@ resource "auth0_branding" "my_brand" {
 }
 `
 
+const testAccBrandingConfigWithOnlyUniversalLogin = `
+resource "auth0_branding" "my_brand" {
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
+
+	universal_login {
+		body = "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"
+	}
+}
+`
+
 func TestAccBranding_WithNoCustomDomainsSet(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -155,6 +165,13 @@ func TestAccBranding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.#", "0"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "0"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "0"),
+				),
+			},
+			{
+				Config: testAccTenantAllowsUniversalLoginCustomization + testAccBrandingConfigWithOnlyUniversalLogin,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.0.body", "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
 				),
 			},
 		},

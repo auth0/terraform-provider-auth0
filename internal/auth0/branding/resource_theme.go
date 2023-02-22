@@ -414,6 +414,11 @@ func NewThemeResource() *schema.Resource {
 func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
 
+	if existingBrandingTheme, err := api.BrandingTheme.Default(); err == nil {
+		data.SetId(existingBrandingTheme.GetID())
+		return updateBrandingTheme(ctx, data, meta)
+	}
+
 	brandingTheme := expandBrandingTheme(data)
 	if err := api.BrandingTheme.Create(&brandingTheme); err != nil {
 		return diag.FromErr(err)
@@ -427,17 +432,17 @@ func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
 
-	brandingTheme, err := api.BrandingTheme.Read(data.Id())
+	brandingTheme, err := api.BrandingTheme.Default()
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
 		}
 
 		return diag.FromErr(err)
 	}
+
+	data.SetId(brandingTheme.GetID())
 
 	result := multierror.Append(
 		data.Set("display_name", brandingTheme.GetDisplayName()),

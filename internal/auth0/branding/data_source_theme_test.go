@@ -93,7 +93,7 @@ resource "auth0_branding_theme" "my_theme" {
 }
 
 data "auth0_branding_theme" "test" {
-	branding_theme_id = auth0_branding_theme.my_theme.id
+	depends_on = [ auth0_branding_theme.my_theme ]
 }
 `
 

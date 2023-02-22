@@ -136,7 +136,7 @@ Optional:
 - `enable_public_signup_user_exists_error` (Boolean) Indicates whether the public sign up process shows a `user_exists` error if the user already exists.
 - `no_disclose_enterprise_connections` (Boolean) Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
 - `revoke_refresh_token_grant` (Boolean) Delete underlying grant when a refresh token is revoked via the Authentication API.
-- `universal_login` (Boolean) Indicates whether the tenant uses Universal Login.
+- `universal_login` (Boolean, Deprecated) Indicates whether the New Universal Login Experience is enabled.
 - `use_scope_descriptions_for_consent` (Boolean) Indicates whether to use scope descriptions for consent.
 
 

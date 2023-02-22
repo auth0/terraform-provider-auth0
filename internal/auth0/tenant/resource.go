@@ -213,10 +213,12 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether the tenant allows custom domains in emails.",
 						},
 						"universal_login": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether the tenant uses Universal Login.",
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Deprecated: "This attribute is deprecated. Use the `universal_login_experience` attribute" +
+								" on the `auth0_prompt` resource to toggle the new or classic experience instead.",
+							Description: "Indicates whether the New Universal Login Experience is enabled.",
 						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,

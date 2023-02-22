@@ -62,12 +62,30 @@ func configureTestProviderWithHTTPRecordings(
 		domain := data.Get("domain").(string)
 		debug := data.Get("debug").(bool)
 
-		apiClient, err := management.New(
-			domain,
+		clientOptions := []management.Option{
 			management.WithStaticToken("insecure"),
 			management.WithClient(httpRecorder.GetDefaultClient()),
 			management.WithDebug(debug),
-		)
+		}
+
+		if domain != RecordingsDomain {
+			clientID := data.Get("client_id").(string)
+			clientSecret := data.Get("client_secret").(string)
+			apiToken := data.Get("api_token").(string)
+			audience := data.Get("audience").(string)
+
+			authenticationOption := management.WithStaticToken(apiToken)
+			if apiToken == "" {
+				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+				if audience != "" {
+					authenticationOption = management.WithClientCredentialsAndAudience(clientID, clientSecret, audience)
+				}
+			}
+
+			clientOptions = append(clientOptions, authenticationOption)
+		}
+
+		apiClient, err := management.New(domain, clientOptions...)
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}

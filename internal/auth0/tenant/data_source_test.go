@@ -7,8 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -59,10 +58,7 @@ data "auth0_tenant" "current" {
 `
 
 func TestAccDataSourceTenant(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccDataTenantConfig, t.Name()),

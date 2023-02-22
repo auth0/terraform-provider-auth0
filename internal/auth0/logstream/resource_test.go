@@ -8,27 +8,12 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
-	"github.com/auth0/terraform-provider-auth0/internal/sweep"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
-func init() {
-	sweep.LogStreams()
-}
-
-// This is needed so that the test
-// sweepers get registered.
-func TestMain(m *testing.M) {
-	resource.TestMain(m)
-}
-
 func TestAccLogStreamHTTP(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
@@ -198,10 +183,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamEventBridge(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamAwsEventBridgeConfig, t.Name()),
@@ -269,14 +251,11 @@ resource "auth0_log_stream" "my_log_stream" {
 // This test fails it subscription key is not valid, or EventGrid
 // Resource Provider is not registered in the subscription.
 func TestAccLogStreamEventGrid(t *testing.T) {
-	if os.Getenv("AUTH0_DOMAIN") != recorder.RecordingsDomain {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		t.Skip()
 	}
 
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamAzureEventGridConfig, t.Name()),
@@ -326,8 +305,8 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamDataDogRegionValidation(t *testing.T) {
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(nil),
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "uS"),
@@ -353,10 +332,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamDatadog(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamDatadogConfig, t.Name()),
@@ -421,10 +397,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamSplunk(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSplunkConfig, t.Name()),
@@ -478,10 +451,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamSegment(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSegmentConfig, t.Name()),
@@ -581,10 +551,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamSumo(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamSumoConfig, t.Name()),
@@ -684,10 +651,7 @@ resource "auth0_log_stream" "my_log_stream" {
 `
 
 func TestAccLogStreamMixpanel(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: template.ParseTestName(logStreamMixpanelConfig, t.Name()),

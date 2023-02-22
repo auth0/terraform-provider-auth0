@@ -5,14 +5,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
-	"github.com/auth0/terraform-provider-auth0/internal/sweep"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
-
-func init() {
-	sweep.Email()
-}
 
 const testAccCreateSESEmailProvider = `
 resource "auth0_email" "my_email_provider" {
@@ -159,10 +153,7 @@ resource "auth0_email" "no_conflict_email_provider" {
 `
 
 func TestAccEmail(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: testAccCreateSESEmailProvider,

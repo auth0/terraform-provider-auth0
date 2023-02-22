@@ -18,10 +18,10 @@ import (
 
 var (
 	availablePrompts = []string{
-		"login", "login-id", "login-password", "login-email-verification", "signup", "signup-id", "signup-password",
-		"reset-password", "consent", "mfa-push", "mfa-otp", "mfa-voice", "mfa-phone", "mfa-webauthn", "mfa-sms",
-		"mfa-email", "mfa-recovery-code", "mfa", "status", "device-flow", "email-verification", "email-otp-challenge",
-		"organizations", "invitation", "common",
+		"common", "consent", "device-flow", "email-otp-challenge", "email-verification", "invitation", "login",
+		"login-id", "login-password", "login-passwordless", "login-email-verification", "logout", "mfa", "mfa-email",
+		"mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code", "mfa-sms", "mfa-voice", "mfa-webauthn",
+		"organizations", "reset-password", "signup", "signup-id", "signup-password",
 	}
 	availableLanguages = []string{
 		"ar", "bg", "bs", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "fr-CA", "fr-FR", "he", "hi", "hr",
@@ -50,20 +50,14 @@ func NewCustomTextResource() *schema.Resource {
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(availablePrompts, false),
 				Description: "The term `prompt` is used to refer to a specific step in the login flow. " +
-					"Options include `login`, `login-id`, `login-password`, `login-email-verification`, `signup`, " +
-					"`signup-id`, `signup-password`, `reset-password`, `consent`, `mfa-push`, `mfa-otp`, `mfa-voice`," +
-					" `mfa-phone`, `mfa-webauthn`, `mfa-sms`, `mfa-email`, `mfa-recovery-code`, `mfa`, `status`, " +
-					"`device-flow`, `email-verification`, `email-otp-challenge`, `organizations`, " +
-					"`invitation`, `common`.",
+					"Options include: `" + strings.Join(availablePrompts, "`, `") + "`.",
 			},
 			"language": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(availableLanguages, false),
-				Description: "Language of the custom text. Options include `ar`, `bg`, `bs`, `cs`, `da`, `de`, `el`, " +
-					"`en`, `es`, `et`, `fi`, `fr`, `fr-CA`, `fr-FR`, `he`, `hi`, `hr`, `hu`, `id`, `is`, `it`, `ja`, " +
-					"`ko`, `lt`, `lv`, `nb`, `nl`, `pl`, `pt`, `pt-BR`, `pt-PT`, `ro`, `ru`, `sk`, `sl`, `sr`, `sv`, " +
-					"`th`, `tr`, `uk`, `vi`, `zh-CN`, `zh-TW`",
+				Description: "Language of the custom text. Options include: `" +
+					strings.Join(availableLanguages, "`, `") + "`.",
 			},
 			"body": {
 				Type:             schema.TypeString,

@@ -7,8 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -48,8 +47,8 @@ data "auth0_connection" "test" {
 `
 
 func TestAccDataSourceConnectionRequiredArguments(t *testing.T) {
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(nil),
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_connection" "test" { }`,
@@ -60,10 +59,7 @@ func TestAccDataSourceConnectionRequiredArguments(t *testing.T) {
 }
 
 func TestAccDataSourceConnectionByName(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories:         provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
@@ -91,10 +87,7 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 }
 
 func TestAccDataSourceConnectionByID(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories:         provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{

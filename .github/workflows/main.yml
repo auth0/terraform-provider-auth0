@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: go.mod
+          check-latest: true
 
       - name: Check that docs were generated
         run: make check-docs
@@ -42,9 +43,10 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version-file: go.mod
+          check-latest: true
 
       - name: Run tests
-        run: make test
+        run: make test-acc
 
       - name: Update codecov report
         uses: codecov/codecov-action@v3

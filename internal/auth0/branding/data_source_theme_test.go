@@ -5,8 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
 const testAccDataSourceBrandingTheme = `
@@ -94,15 +93,12 @@ resource "auth0_branding_theme" "my_theme" {
 }
 
 data "auth0_branding_theme" "test" {
-	branding_theme_id = auth0_branding_theme.my_theme.id
+	depends_on = [ auth0_branding_theme.my_theme ]
 }
 `
 
 func TestAccDataSourceBrandingTheme(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceBrandingTheme,

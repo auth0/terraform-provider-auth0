@@ -8,8 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
-	"github.com/auth0/terraform-provider-auth0/internal/provider"
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
@@ -57,8 +56,8 @@ data "auth0_role" "test" {
 `
 
 func TestAccDataSourceRoleRequiredArguments(t *testing.T) {
-	resource.Test(t, resource.TestCase{
-		ProviderFactories: provider.TestFactories(nil),
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: acctest.TestFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_role" "test" { }`,
@@ -69,10 +68,7 @@ func TestAccDataSourceRoleRequiredArguments(t *testing.T) {
 }
 
 func TestAccDataSourceRoleByName(t *testing.T) {
-	httpRecorder := recorder.New(t)
-
-	resource.Test(t, resource.TestCase{
-		ProviderFactories:         provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
@@ -89,11 +85,9 @@ func TestAccDataSourceRoleByName(t *testing.T) {
 }
 
 func TestAccDataSourceRoleByID(t *testing.T) {
-	httpRecorder := recorder.New(t)
 	testName := strings.ToLower(t.Name())
 
-	resource.Test(t, resource.TestCase{
-		ProviderFactories:         provider.TestFactories(httpRecorder),
+	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{

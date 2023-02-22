@@ -1,3 +1,29 @@
+## 0.44.0
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Added missing prompt types ([#506](https://github.com/auth0/terraform-provider-auth0/pull/506))
+- `resource/auth0_branding`: Fixed resource to allow managing only the universal login ([#506](https://github.com/auth0/terraform-provider-auth0/pull/506))
+
+FEATURES:
+
+- `data-source/auth0_connection`: Added data source to fetch connection information ([#470](https://github.com/auth0/terraform-provider-auth0/pull/470))
+- `data-source/auth0_resource_server`: Added data source to fetch resource server information ([#477](https://github.com/auth0/terraform-provider-auth0/pull/477))
+- `data-source/auth0_organization`: Added data source to fetch organization information ([#475](https://github.com/auth0/terraform-provider-auth0/pull/475))
+- `data-source/auth0_tenant`: Expanded data source to fetch all the tenant information ([#479](https://github.com/auth0/terraform-provider-auth0/pull/479))
+- `data-source/auth0_user`: Added data source to fetch user information ([#481](https://github.com/auth0/terraform-provider-auth0/pull/481))
+- `data-source/auth0_role`: Added data source to fetch role information ([#483](https://github.com/auth0/terraform-provider-auth0/pull/483))
+- `data-source/auth0_attack_protection`: Added data source to fetch attack protection information ([#485](https://github.com/auth0/terraform-provider-auth0/pull/485))
+- `data-source/auth0_branding`: Added data source to fetch branding information ([#500](https://github.com/auth0/terraform-provider-auth0/pull/500))
+- `data-source/auth0_branding_theme`: Added data source to fetch branding theme information ([#500](https://github.com/auth0/terraform-provider-auth0/pull/500))
+- `resource/auth0_branding_theme`: Simplified management of this resource to no longer force a user to import the resource if already existing ([#504](https://github.com/auth0/terraform-provider-auth0/pull/504))
+
+NOTES:
+
+- `resource/auth0_connection`: Updated connection docs ([#471](https://github.com/auth0/terraform-provider-auth0/pull/471))
+- `resource/auth0_tenant`: Added deprecation notice to `flags.universal_login` ([#503](https://github.com/auth0/terraform-provider-auth0/pull/503))
+
+
 ## 0.43.0
 
 BUG FIXES:

@@ -1,3 +1,20 @@
+# An example of the auth0_branding_theme using defaults for all the attributes.
+resource "auth0_branding_theme" "my_theme" {
+  borders {}
+  colors {}
+  fonts {
+    title {}
+    subtitle {}
+    links {}
+    input_labels {}
+    buttons_text {}
+    body_text {}
+  }
+  page_background {}
+  widget {}
+}
+
+# An example of a fully configured auth0_branding_theme.
 resource "auth0_branding_theme" "my_theme" {
   borders {
     button_border_radius = 1

@@ -150,16 +150,11 @@ func flattenConnectionOptionsAuth0(
 	}
 	m["upstream_params"] = upstreamParams
 
-	diags := checkForUnmanagedConfigurationSecrets(
-		dbSecretConfig.(map[string]interface{}),
-		options.GetConfiguration(),
-	)
-
-	return m, diags
+	return m, nil
 }
 
 // checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.
-func checkForUnmanagedConfigurationSecrets(configFromTF map[string]interface{}, configFromAPI map[string]string) diag.Diagnostics {
+func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[string]string) diag.Diagnostics {
 	var warnings diag.Diagnostics
 
 	for key := range configFromAPI {
@@ -167,7 +162,7 @@ func checkForUnmanagedConfigurationSecrets(configFromTF map[string]interface{}, 
 			warnings = append(warnings, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  "Unmanaged Configuration Secret",
-				Detail: fmt.Sprintf("Detected a configuration secret not managed though terraform: %q. "+
+				Detail: fmt.Sprintf("Detected a configuration secret not managed through terraform: %q. "+
 					"If you proceed, this configuration secret will get deleted. It is required to "+
 					"add this configuration secret to your custom database settings to "+
 					"prevent unintentionally destructive results.",

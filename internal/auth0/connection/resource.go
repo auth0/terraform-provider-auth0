@@ -44,7 +44,7 @@ func NewResource() *schema.Resource {
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	connection, diagnostics := expandConnection(d)
+	connection, diagnostics := expandConnection(d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
@@ -105,7 +105,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	connection, diagnostics := expandConnection(d)
+	connection, diagnostics := expandConnection(d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}

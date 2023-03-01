@@ -11,7 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diagnostics) {
+func expandConnection(d *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
 	config := d.GetRawConfig()
 
 	connection := &management.Connection{
@@ -40,7 +40,7 @@ func expandConnection(d *schema.ResourceData) (*management.Connection, diag.Diag
 	config.GetAttr("options").ForEachElement(func(_ cty.Value, options cty.Value) (stop bool) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			connection.Options, diagnostics = expandConnectionOptionsAuth0(options)
+			connection.Options, diagnostics = expandConnectionOptionsAuth0(d, options, api)
 		case management.ConnectionStrategyGoogleOAuth2:
 			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(d, options)
 		case management.ConnectionStrategyGoogleApps:
@@ -140,7 +140,11 @@ func expandConnectionOptionsGitHub(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAuth0(config cty.Value) (*management.ConnectionOptions, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(
+	d *schema.ResourceData,
+	config cty.Value,
+	api *management.Management,
+) (*management.ConnectionOptions, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:               value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:           value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -270,8 +274,27 @@ func expandConnectionOptionsAuth0(config cty.Value) (*management.ConnectionOptio
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
 
-	return options, diag.FromErr(err)
+	if !d.IsNewResource() {
+		apiConn, err := api.Connection.Read(d.Id())
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+
+		diags := checkForUnmanagedConfigurationSecrets(
+			options.GetConfiguration(),
+			apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
+		)
+
+		if diags.HasError() {
+			return nil, diags
+		}
+	}
+
+	return options, nil
 }
 
 func expandConnectionOptionsGoogleOAuth2(

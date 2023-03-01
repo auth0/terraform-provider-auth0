@@ -2,6 +2,8 @@ package connection_test
 
 import (
 	"fmt"
+	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -1411,6 +1413,41 @@ func TestAccConnectionConfiguration(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.bar", "yyy"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.baz", "zzz"),
 				),
+			},
+		},
+	})
+}
+
+func TestAccConnectionConfigurationFailsToUpdateWhenEncounteringUnmanagedSecrets(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		t.Skip()
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: `
+resource "auth0_connection" "my_connection" {
+	name = "Unmanaged-Secrets"
+	strategy = "auth0"
+}`,
+				ResourceName:       "auth0_connection.my_connection",
+				ImportState:        true,
+				ImportStateId:      "con_8yq21qxhWtFQi0aM",
+				ImportStatePersist: true,
+			},
+			{
+				Config: `
+resource "auth0_connection" "my_connection" {
+	name = "Unmanaged-Secrets"
+	strategy = "auth0"
+	options {
+		configuration = {
+			foo = "xxx"
+		}
+	}
+}`,
+				ExpectError: regexp.MustCompile("Detected a configuration secret not managed through terraform"),
 			},
 		},
 	})

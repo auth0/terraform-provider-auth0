@@ -6,7 +6,7 @@ require (
 	github.com/auth0/go-auth0 v0.15.1
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/hashicorp/terraform-plugin-docs v0.14.0
+	github.com/hashicorp/terraform-plugin-docs v0.14.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.25.0
 	github.com/stretchr/testify v1.8.2
 	gopkg.in/dnaeon/go-vcr.v3 v3.1.2

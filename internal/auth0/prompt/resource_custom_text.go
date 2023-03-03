@@ -21,7 +21,7 @@ var (
 		"common", "consent", "device-flow", "email-otp-challenge", "email-verification", "invitation", "login",
 		"login-id", "login-password", "login-passwordless", "login-email-verification", "logout", "mfa", "mfa-email",
 		"mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code", "mfa-sms", "mfa-voice", "mfa-webauthn",
-		"organizations", "reset-password", "signup", "signup-id", "signup-password",
+		"organizations", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}
 	availableLanguages = []string{
 		"ar", "bg", "bs", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "fr-CA", "fr-FR", "he", "hi", "hr",

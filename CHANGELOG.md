@@ -1,3 +1,20 @@
+## 0.44.1
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Added missing status prompt type ([#513](https://github.com/auth0/terraform-provider-auth0/pull/513))
+- `data-source/auth0_connection`: Moved check for config secrets from the read to the update func ([#517](https://github.com/auth0/terraform-provider-auth0/pull/517))
+
+ENHANCEMENTS:
+
+- `resource/auth0_branding_theme`: Made fields optional ([#499](https://github.com/auth0/terraform-provider-auth0/pull/499))
+
+NOTES:
+
+- Added docs on available log stream types ([#462](https://github.com/auth0/terraform-provider-auth0/pull/462))
+- Added docs on how to obtain the custom domain id for importing `auth0_custom_domain` resources ([#463](https://github.com/auth0/terraform-provider-auth0/pull/463))
+
+
 ## 0.44.0
 
 BUG FIXES:

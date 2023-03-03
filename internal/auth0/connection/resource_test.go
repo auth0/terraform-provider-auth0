@@ -1420,6 +1420,9 @@ func TestAccConnectionConfiguration(t *testing.T) {
 
 func TestAccConnectionConfigurationFailsToUpdateWhenEncounteringUnmanagedSecrets(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// Only run with recorded HTTP requests because it is required to import an
+		// already existing database connection with configuration secrets that
+		// is created outside the scope of terraform.
 		t.Skip()
 	}
 

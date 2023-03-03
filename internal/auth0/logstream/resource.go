@@ -3,6 +3,7 @@ package logstream
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +11,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
+
+var validLogStreamTypes = []string{
+	"eventbridge",
+	"eventgrid",
+	"http",
+	"datadog",
+	"splunk",
+	"sumo",
+	"mixpanel",
+	"segment",
+}
 
 // NewResource will return a new auth0_log_stream resource.
 func NewResource() *schema.Resource {
@@ -29,20 +41,12 @@ func NewResource() *schema.Resource {
 				Description: "Name of the log stream.",
 			},
 			"type": {
-				Type:     schema.TypeString,
-				Required: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"eventbridge",
-					"eventgrid",
-					"http",
-					"datadog",
-					"splunk",
-					"sumo",
-					"mixpanel",
-					"segment",
-				}, true),
-				ForceNew:    true,
-				Description: "Type of the log stream, which indicates the sink provider.",
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringInSlice(validLogStreamTypes, true),
+				ForceNew:     true,
+				Description: "Type of the log stream, which indicates the sink provider. " +
+					"Options include: `" + strings.Join(validLogStreamTypes, "`, `") + "`.",
 			},
 			"status": {
 				Type:     schema.TypeString,

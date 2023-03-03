@@ -60,7 +60,7 @@ resource "auth0_log_stream" "example_aws" {
 
 - `name` (String) Name of the log stream.
 - `sink` (Block List, Min: 1, Max: 1) The sink configuration for the log stream. (see [below for nested schema](#nestedblock--sink))
-- `type` (String) Type of the log stream, which indicates the sink provider.
+- `type` (String) Type of the log stream, which indicates the sink provider. Options include: `eventbridge`, `eventgrid`, `http`, `datadog`, `splunk`, `sumo`, `mixpanel`, `segment`.
 
 ### Optional
 

@@ -8,6 +8,23 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
+const testAccBrandingThemeDefaults = `
+resource "auth0_branding_theme" "my_theme" {
+	borders {}
+	colors {}
+	fonts {
+		title {}
+		subtitle {}
+		links {}
+		input_labels {}
+		buttons_text {}
+		body_text {}
+	}
+	page_background {}
+	widget {}
+}
+`
+
 const testAccBrandingThemeCreate = `
 resource "auth0_branding_theme" "my_theme" {
 	borders {
@@ -96,7 +113,6 @@ resource "auth0_branding_theme" "my_theme" {
 const testAccBrandingThemeUpdate = `
 resource "auth0_branding_theme" "my_theme" {
 	display_name = "My branding"
-
 	borders {
 		button_border_radius = 2
 		button_border_weight = 2
@@ -186,6 +202,73 @@ resource "auth0_branding_theme" "my_theme" {
 func TestAccBrandingTheme(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config: testAccBrandingThemeDefaults,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "display_name", ""),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.button_border_radius", "3"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.button_border_weight", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.buttons_style", "rounded"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.input_border_radius", "3"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.input_border_weight", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.inputs_style", "rounded"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.show_widget_shadow", "true"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.widget_border_weight", "0"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.widget_corner_radius", "5"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_focus_color", "#635dff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_hover_color", "#000000"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.body_text", "#1e212a"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.error", "#d03c38"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.header", "#1e212a"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.icons", "#65676e"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.input_background", "#ffffff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.input_border", "#c9cace"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.input_filled_text", "#000000"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.input_labels_placeholders", "#65676e"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.links_focused_components", "#635dff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button", "#635dff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.primary_button_label", "#ffffff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_border", "#c9cace"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.secondary_button_label", "#1e212a"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.success", "#13a688"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.widget_background", "#ffffff"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.widget_border", "#c9cace"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.font_url", ""),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links_style", "normal"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.reference_text_size", "16"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.0.bold", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.0.size", "87.5"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.buttons_text.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.buttons_text.0.bold", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.buttons_text.0.size", "100"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.input_labels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.input_labels.0.bold", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.input_labels.0.size", "100"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links.0.bold", "true"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links.0.size", "87.5"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.title.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.title.0.bold", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.title.0.size", "150"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.subtitle.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.subtitle.0.bold", "false"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.subtitle.0.size", "87.5"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "page_background.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "page_background.0.background_color", "#000000"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "page_background.0.background_image_url", ""),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "page_background.0.page_layout", "center"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.header_text_alignment", "center"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_height", "52"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_position", "center"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.logo_url", ""),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "widget.0.social_buttons_layout", "bottom"),
+				),
+			},
 			{
 				Config: testAccBrandingThemeCreate,
 				Check: resource.ComposeTestCheckFunc(

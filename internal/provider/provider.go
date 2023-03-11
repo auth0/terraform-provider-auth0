@@ -129,6 +129,7 @@ func New() *schema.Provider {
 			"auth0_client":            client.NewDataSource(),
 			"auth0_global_client":     client.NewGlobalDataSource(),
 			"auth0_connection":        connection.NewDataSource(),
+			"auth0_custom_domain":     customdomain.NewDataSource(),
 			"auth0_organization":      organization.NewDataSource(),
 			"auth0_resource_server":   resourceserver.NewDataSource(),
 			"auth0_role":              role.NewDataSource(),

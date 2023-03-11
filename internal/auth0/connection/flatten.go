@@ -106,17 +106,18 @@ func flattenConnectionOptionsAuth0(
 	}
 
 	m := map[string]interface{}{
-		"password_policy":                options.GetPasswordPolicy(),
-		"enable_script_context":          options.GetEnableScriptContext(),
-		"enabled_database_customization": options.GetEnabledDatabaseCustomization(),
-		"brute_force_protection":         options.GetBruteForceProtection(),
-		"import_mode":                    options.GetImportMode(),
-		"disable_signup":                 options.GetDisableSignup(),
-		"requires_username":              options.GetRequiresUsername(),
-		"custom_scripts":                 options.GetCustomScripts(),
-		"configuration":                  dbSecretConfig, // Values do not get read back.
-		"non_persistent_attrs":           options.GetNonPersistentAttrs(),
-		"set_user_root_attributes":       options.GetSetUserAttributes(),
+		"password_policy":                      options.GetPasswordPolicy(),
+		"enable_script_context":                options.GetEnableScriptContext(),
+		"enabled_database_customization":       options.GetEnabledDatabaseCustomization(),
+		"brute_force_protection":               options.GetBruteForceProtection(),
+		"import_mode":                          options.GetImportMode(),
+		"disable_signup":                       options.GetDisableSignup(),
+		"disable_self_service_change_password": options.GetDisableSelfServiceChangePassword(),
+		"requires_username":                    options.GetRequiresUsername(),
+		"custom_scripts":                       options.GetCustomScripts(),
+		"configuration":                        dbSecretConfig, // Values do not get read back.
+		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":             options.GetSetUserAttributes(),
 	}
 
 	if options.PasswordComplexityOptions != nil {

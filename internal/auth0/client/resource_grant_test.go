@@ -69,6 +69,28 @@ resource "auth0_client_grant" "my_client_grant" {
 }
 `
 
+const testAccAlreadyExistingGrantWillNotConflict = testAccClientGrantAuxConfig + `
+resource "auth0_client" "my_client_alt" {
+	name = "Acceptance Test - Client Grant Alt - {{.testName}}"
+	custom_login_page_on = true
+	is_first_party = true
+}
+
+resource "auth0_client_grant" "my_client_grant" {
+	client_id = "${auth0_client.my_client_alt.id}"
+	audience = "${auth0_resource_server.my_resource_server.identifier}"
+	scope = [ ]
+}
+
+resource "auth0_client_grant" "no_conflict_client_grant" {
+	depends_on = [ auth0_client_grant.my_client_grant ]
+
+	client_id = "${auth0_client.my_client_alt.id}"
+	audience = "${auth0_resource_server.my_resource_server.identifier}"
+	scope = [ ]
+}
+`
+
 func TestAccClientGrant(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -96,6 +118,12 @@ func TestAccClientGrant(t *testing.T) {
 				Config: template.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+				),
+			},
+			{
+				Config: template.ParseTestName(testAccAlreadyExistingGrantWillNotConflict, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_grant.no_conflict_client_grant", "scope.#", "0"),
 				),
 			},
 		},

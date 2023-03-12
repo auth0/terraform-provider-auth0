@@ -52,6 +52,19 @@ func NewGrantResource() *schema.Resource {
 func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
+	grantList, err := api.ClientGrant.List(
+		management.Parameter("audience", d.Get("audience").(string)),
+		management.Parameter("client_id", d.Get("client_id").(string)),
+	)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if len(grantList.ClientGrants) != 0 {
+		d.SetId(grantList.ClientGrants[0].GetID())
+		return readClientGrant(ctx, d, m)
+	}
+
 	clientGrant := expandClientGrant(d)
 	if err := api.ClientGrant.Create(clientGrant); err != nil {
 		return diag.FromErr(err)

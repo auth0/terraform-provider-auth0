@@ -102,6 +102,9 @@ func expandConnection(d *schema.ResourceData, api *management.Management) (*mana
 		case management.ConnectionStrategyADFS:
 			connection.ShowAsButton = showAsButton
 			connection.Options, diagnostics = expandConnectionOptionsADFS(options)
+		case management.ConnectionStrategyPingFederate:
+			connection.ShowAsButton = showAsButton
+			connection.Options, diagnostics = expandConnectionOptionsPingFederate(options)
 		default:
 			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
@@ -715,6 +718,39 @@ func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOption
 		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
+
+	var err error
+	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
+
+	return options, diag.FromErr(err)
+}
+
+func expandConnectionOptionsPingFederate(
+	config cty.Value,
+) (*management.ConnectionOptionsPingFederate, diag.Diagnostics) {
+	options := &management.ConnectionOptionsPingFederate{
+		SigningCert:         value.String(config.GetAttr("signing_cert")),
+		LogoURL:             value.String(config.GetAttr("icon_url")),
+		TenantDomain:        value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:       value.Strings(config.GetAttr("domain_aliases")),
+		SignInEndpoint:      value.String(config.GetAttr("sign_in_endpoint")),
+		DigestAlgorithm:     value.String(config.GetAttr("digest_algorithm")),
+		SignSAMLRequest:     value.Bool(config.GetAttr("sign_saml_request")),
+		SignatureAlgorithm:  value.String(config.GetAttr("signature_algorithm")),
+		PingFederateBaseURL: value.String(config.GetAttr("ping_federate_base_url")),
+		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:   value.String(config.GetAttr("set_user_root_attributes")),
+	}
+
+	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
+		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			ClientID:             value.String(idp.GetAttr("client_id")),
+			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
+			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
+		}
+
+		return stop
+	})
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))

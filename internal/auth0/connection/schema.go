@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 var resourceSchema = map[string]*schema.Schema{
@@ -317,6 +318,12 @@ var resourceSchema = map[string]*schema.Schema{
 					Type:        schema.TypeString,
 					Optional:    true,
 					Description: "Icon URL.",
+				},
+				"ping_federate_base_url": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+					Description:  "Ping Federate Server URL.",
 				},
 				"identity_api": {
 					Type:     schema.TypeString,

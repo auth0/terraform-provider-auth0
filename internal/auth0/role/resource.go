@@ -49,7 +49,7 @@ func NewResource() *schema.Resource {
 							Description: "Name of the permission (scope) configured on the resource server. " +
 								"If referencing a scope from an `auth0_resource_server` resource, " +
 								"use the `value` property, " +
-								"e.g. `auth0_resource_server.my_resource_server.scopes[0].value`.",
+								"for example `auth0_resource_server.my_resource_server.scopes[0].value`.",
 						},
 						"resource_server_identifier": {
 							Type:        schema.TypeString,

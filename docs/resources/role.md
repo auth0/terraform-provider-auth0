@@ -68,7 +68,7 @@ resource "auth0_role" "my_role" {
 
 Required:
 
-- `name` (String) Name of the permission (scope) configured on the resource server. If referencing a scope from an `auth0_resource_server` resource, use the `value` property, e.g. `auth0_resource_server.my_resource_server.scopes[0].value`.
+- `name` (String) Name of the permission (scope) configured on the resource server. If referencing a scope from an `auth0_resource_server` resource, use the `value` property, for example `auth0_resource_server.my_resource_server.scopes[0].value`.
 - `resource_server_identifier` (String) Unique identifier for the resource server.
 
 ## Import

@@ -44,9 +44,12 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Name of the permission (scope).",
+							Type:     schema.TypeString,
+							Required: true,
+							Description: "Name of the permission (scope) configured on the resource server. " +
+								"If referencing a scope from an `auth0_resource_server` resource, " +
+								"use the `value` property, " +
+								"for example `auth0_resource_server.my_resource_server.scopes[0].value`.",
 						},
 						"resource_server_identifier": {
 							Type:        schema.TypeString,

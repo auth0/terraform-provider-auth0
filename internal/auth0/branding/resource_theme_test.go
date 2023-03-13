@@ -149,7 +149,7 @@ resource "auth0_branding_theme" "my_theme" {
 
 	fonts {
 		font_url = "https://google.com/font.woff"
-		links_style = "normal"
+		links_style = "underlined"
 		reference_text_size = 12
 
 		body_text {
@@ -368,7 +368,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.widget_border", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.#", "1"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.font_url", "https://google.com/font.woff"),
-					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links_style", "normal"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.links_style", "underlined"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.#", "1"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.0.bold", "true"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "fonts.0.body_text.0.size", "100"),

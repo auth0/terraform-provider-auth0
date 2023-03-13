@@ -326,7 +326,7 @@ func NewThemeResource() *schema.Resource {
 						"links_style": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							ValidateFunc: validation.StringInSlice([]string{"normal", "underline"}, false),
+							ValidateFunc: validation.StringInSlice([]string{"normal", "underlined"}, false),
 							Default:      "normal",
 							Description:  "Links style. Defaults to `normal`.",
 						},

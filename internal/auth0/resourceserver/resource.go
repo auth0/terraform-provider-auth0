@@ -170,6 +170,10 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
+	// Ensuring the ID is the resource server ID and not the identifier,
+	// as both can be used to find a resource server with the Read() func.
+	d.SetId(resourceServer.GetID())
+
 	result := multierror.Append(
 		d.Set("name", resourceServer.GetName()),
 		d.Set("identifier", resourceServer.GetIdentifier()),

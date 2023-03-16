@@ -1754,7 +1754,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testConnectionPingFederateConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testConnectionPingFederateConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),

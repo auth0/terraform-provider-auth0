@@ -31,6 +31,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.import_mode", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_signup", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_self_service_change_password", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.requires_username", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.validation.0.username.0.min", "10"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.validation.0.username.0.max", "40"),
@@ -52,6 +53,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enable_script_context", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.enabled_database_customization", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_self_service_change_password", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "0"),
 				),
@@ -96,6 +98,7 @@ resource "auth0_connection" "my_connection" {
 		import_mode = false
 		requires_username = true
 		disable_signup = false
+		disable_self_service_change_password = false
 		custom_scripts = {
 			get_user = "myFunction"
 		}
@@ -140,6 +143,7 @@ resource "auth0_connection" "my_connection" {
 		brute_force_protection = false
 		import_mode = false
 		disable_signup = false
+		disable_self_service_change_password = true
 		requires_username = true
 		custom_scripts = {
 			get_user = "myFunction"

@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccOrganizationGiven2Connections = `
@@ -108,7 +107,7 @@ func TestAccOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccOrganizationEmpty, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationEmpty, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
@@ -117,7 +116,7 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
@@ -126,7 +125,7 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationUpdate, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
@@ -139,7 +138,7 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationUpdateAgain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
@@ -154,7 +153,7 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationUpdateAgainAndAgain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationUpdateAgainAndAgain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),
@@ -168,7 +167,7 @@ func TestAccOrganization(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationRemoveAllOptionalParams, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOrganizationRemoveAllOptionalParams, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-%s", strings.ToLower(t.Name()))),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. %s", strings.ToLower(t.Name()))),

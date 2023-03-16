@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccActionConfigCreateWithOnlyRequiredFields = `
@@ -104,7 +103,7 @@ func TestAccAction(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccActionConfigCreateWithOnlyRequiredFields, t.Name()),
+				Config: acctest.ParseTestName(testAccActionConfigCreateWithOnlyRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
@@ -119,7 +118,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigUpdateAllFields, t.Name()),
+				Config: acctest.ParseTestName(testAccActionConfigUpdateAllFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
@@ -138,7 +137,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigUpdateAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccActionConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
@@ -161,7 +160,7 @@ func TestAccAction(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccActionConfigResetToRequiredFields, t.Name()),
+				Config: acctest.ParseTestName(testAccActionConfigResetToRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
@@ -211,7 +210,7 @@ func TestAccAction_FailedBuild(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
+				Config: acctest.ParseTestName(testAccActionConfigCreateWithFailedBuild, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 				),

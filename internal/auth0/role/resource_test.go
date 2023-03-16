@@ -7,14 +7,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccRole(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccRoleEmpty, t.Name()),
+				Config: acctest.ParseTestName(testAccRoleEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", ""),
@@ -22,7 +21,7 @@ func TestAccRole(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRoleCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccRoleCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One - Acceptance Test"),
@@ -30,14 +29,14 @@ func TestAccRole(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRoleUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccRoleUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One who will bring peace - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "2"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRoleEmptyAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccRoleEmptyAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", " "), // #Management API ignores empty strings for role descriptions
@@ -105,7 +104,7 @@ func TestAccRolePermissions(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccRolePermissions, t.Name()),
+				Config: acctest.ParseTestName(testAccRolePermissions, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.role", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.role", "description", "The One - Acceptance Test"),

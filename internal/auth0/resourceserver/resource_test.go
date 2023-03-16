@@ -8,14 +8,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccResourceServer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
+				Config: acctest.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", ""),
@@ -25,7 +24,7 @@ func TestAccResourceServer(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccResourceServerConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccResourceServerConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
@@ -55,7 +54,7 @@ func TestAccResourceServer(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccResourceServerConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccResourceServerConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
@@ -70,7 +69,7 @@ func TestAccResourceServer(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccResourceServerConfigEmptyAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccResourceServerConfigEmptyAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),

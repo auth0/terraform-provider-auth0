@@ -7,14 +7,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccRule(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccRuleCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "name", fmt.Sprintf("acceptance-test-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "script", "function (user, context, callback) { callback(null, user, context); }"),
@@ -23,7 +22,7 @@ func TestAccRule(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRuleUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "name", fmt.Sprintf("acceptance-test-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "script", "function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }"),
@@ -32,7 +31,7 @@ func TestAccRule(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRuleUpdateAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "name", fmt.Sprintf("acceptance-test-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule.my_rule", "script", "function (user, context, callback) { console.log(\"here!\"); callback(null, user, context); }"),

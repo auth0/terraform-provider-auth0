@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccOrganizationMember(t *testing.T) {
@@ -15,7 +14,7 @@ func TestAccOrganizationMember(t *testing.T) {
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{{
-			Config: template.ParseTestName(testAccOrganizationMembersAux+`
+			Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
 			resource auth0_organization_member test_member {
 				depends_on = [ auth0_user.user, auth0_organization.some_org ]
 				organization_id = auth0_organization.some_org.id
@@ -29,7 +28,7 @@ func TestAccOrganizationMember(t *testing.T) {
 			),
 		},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
 				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader ]
 					organization_id = auth0_organization.some_org.id
@@ -45,7 +44,7 @@ func TestAccOrganizationMember(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
 				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 					organization_id = auth0_organization.some_org.id
@@ -62,7 +61,7 @@ func TestAccOrganizationMember(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+`
+				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
 				resource auth0_organization_member test_member {
 					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
 					organization_id = auth0_organization.some_org.id
@@ -78,7 +77,7 @@ func TestAccOrganizationMember(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccOrganizationMembersAux+
+				Config: acctest.ParseTestName(testAccOrganizationMembersAux+
 					`
 			resource auth0_organization_member test_member {
 				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]

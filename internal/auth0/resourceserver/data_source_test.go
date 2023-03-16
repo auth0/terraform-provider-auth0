@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccGivenAResourceServer = `
@@ -65,7 +64,7 @@ func TestAccDataSourceResourceServerByIdentifier(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAResourceServer, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAResourceServer, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_api", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_api", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
@@ -95,7 +94,7 @@ func TestAccDataSourceResourceServerByIdentifier(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccDataConnectionConfigByIdentifier, t.Name()),
+				Config: acctest.ParseTestName(testAccDataConnectionConfigByIdentifier, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
@@ -133,7 +132,7 @@ func TestAccDataSourceResourceServerByID(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAResourceServer, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAResourceServer, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_api", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_api", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
@@ -163,7 +162,7 @@ func TestAccDataSourceResourceServerByID(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccDataConnectionConfigByID, t.Name()),
+				Config: acctest.ParseTestName(testAccDataConnectionConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_resource_server.test", "resource_server_id"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),

@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
@@ -151,7 +150,7 @@ func TestAccUser(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserEmpty, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserEmpty, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "email", fmt.Sprintf("%s@acceptance.test.com", strings.ToLower(t.Name()))),
@@ -159,7 +158,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserUpdate, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "connection_name", "Username-Password-Authentication"),
 					resource.TestCheckResourceAttr("auth0_user.user", "username", strings.ToLower(t.Name())),
@@ -176,7 +175,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserUpdateWithRolesAndMetadata, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserUpdateWithRolesAndMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
 					resource.TestCheckResourceAttr("auth0_role.owner", "name", "owner"),
@@ -186,7 +185,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserUpdateRemovingOneRoleAndUpdatingMetadata, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserUpdateRemovingOneRoleAndUpdatingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"bars"}`),
@@ -194,7 +193,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserUpdateRemovingAllRolesAndUpdatingMetadata, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserUpdateRemovingAllRolesAndUpdatingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"barss","foo2":"bar2"}`),
@@ -202,7 +201,7 @@ func TestAccUser(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserUpdateRemovingMetadata, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserUpdateRemovingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
@@ -247,7 +246,7 @@ func TestAccUserChangeUsername(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccUserChangeUsernameCreate, "terra"),
+				Config: acctest.ParseTestName(testAccUserChangeUsernameCreate, "terra"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_terra"),
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
@@ -255,7 +254,7 @@ func TestAccUserChangeUsername(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUserChangeUsernameUpdate, "terra"),
+				Config: acctest.ParseTestName(testAccUserChangeUsernameUpdate, "terra"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "username", "user_x_terra"),
 					resource.TestCheckResourceAttr("auth0_user.auth0_user_change_username", "email", "change.username.terra@acceptance.test.com"),
@@ -263,7 +262,7 @@ func TestAccUserChangeUsername(t *testing.T) {
 				),
 			},
 			{
-				Config:      template.ParseTestName(testAccUserChangeUsernameAndPassword, "terra"),
+				Config:      acctest.ParseTestName(testAccUserChangeUsernameAndPassword, "terra"),
 				ExpectError: regexp.MustCompile("cannot update username and password simultaneously"),
 			},
 		},

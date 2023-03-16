@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccCreateConnectionClient = `
@@ -65,7 +64,7 @@ func TestAccConnectionClient(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateConnectionClient, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateConnectionClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),
@@ -82,7 +81,7 @@ func TestAccConnectionClient(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccDeleteConnectionClient, t.Name()),
+				Config: acctest.ParseTestName(testAccDeleteConnectionClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),

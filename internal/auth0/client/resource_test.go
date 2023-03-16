@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccClientValidationOnInitiateLoginURIWithHTTP = `
@@ -23,7 +22,7 @@ func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 		ProviderFactories: acctest.TestFactories(),
 		Steps: []resource.TestStep{
 			{
-				Config:      template.ParseTestName(testAccClientValidationOnInitiateLoginURIWithHTTP, t.Name()),
+				Config:      acctest.ParseTestName(testAccClientValidationOnInitiateLoginURIWithHTTP, t.Name()),
 				ExpectError: regexp.MustCompile("to have a url with schema"),
 			},
 		},
@@ -51,14 +50,14 @@ func TestAccClientRotateSecret(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccClientConfigRotateSecret, t.Name()),
+				Config: acctest.ParseTestName(testAccClientConfigRotateSecret, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Rotate Secret - %s", t.Name())),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientConfigRotateSecretUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccClientConfigRotateSecretUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Rotate Secret - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger.triggered_at", "2021-10-01T23:12:01Z"),
@@ -85,7 +84,7 @@ func TestAccClientMobileValidationError(t *testing.T) {
 		ProviderFactories: acctest.TestFactories(),
 		Steps: []resource.TestStep{
 			{
-				Config:      template.ParseTestName(testAccClientValidationOnMobile, t.Name()),
+				Config:      acctest.ParseTestName(testAccClientValidationOnMobile, t.Name()),
 				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 		},
@@ -191,7 +190,7 @@ func TestAccClientMobile(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateMobileClient, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateMobileClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
@@ -211,7 +210,7 @@ func TestAccClientMobile(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateMobileClient, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateMobileClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
@@ -232,7 +231,7 @@ func TestAccClientMobile(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateMobileClientAgainByRemovingSomeFields, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateMobileClientAgainByRemovingSomeFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
@@ -257,7 +256,7 @@ func TestAccClientMobile(t *testing.T) {
 				//
 				// To note also that we can't reset mobile to empty.
 				// We need a different approach or wait until the API behaves differently.
-				Config: template.ParseTestName(testAccChangeMobileClientToM2M, t.Name()),
+				Config: acctest.ParseTestName(testAccChangeMobileClientToM2M, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
@@ -327,7 +326,7 @@ func TestAccClientRefreshToken(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateClientWithRefreshToken, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithRefreshToken, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Refresh Token - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -342,7 +341,7 @@ func TestAccClientRefreshToken(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateClientWithRefreshToken, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithRefreshToken, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Refresh Token - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -357,7 +356,7 @@ func TestAccClientRefreshToken(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateClientWithRefreshTokenWhenRemovedFromConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithRefreshTokenWhenRemovedFromConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Refresh Token - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -425,7 +424,7 @@ func TestAccClientJWTConfiguration(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateClientWithJWTConfiguration, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithJWTConfiguration, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - JWT Config - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
@@ -438,7 +437,7 @@ func TestAccClientJWTConfiguration(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateClientWithJWTConfiguration, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithJWTConfiguration, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - JWT Config - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
@@ -452,7 +451,7 @@ func TestAccClientJWTConfiguration(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateClientWithJWTConfigurationEmpty, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithJWTConfigurationEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - JWT Config - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
@@ -465,7 +464,7 @@ func TestAccClientJWTConfiguration(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateClientWithJWTConfigurationRemoved, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithJWTConfigurationRemoved, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - JWT Config - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
@@ -553,7 +552,7 @@ func TestAccClient(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccClientConfigCreateWithOnlyRequiredFields, t.Name()),
+				Config: acctest.ParseTestName(testAccClientConfigCreateWithOnlyRequiredFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
@@ -611,7 +610,7 @@ func TestAccClient(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientConfigUpdateAllFields, t.Name()),
+				Config: acctest.ParseTestName(testAccClientConfigUpdateAllFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
@@ -677,7 +676,7 @@ func TestAccClient(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientConfigUpdateSomeFieldsToEmpty, t.Name()),
+				Config: acctest.ParseTestName(testAccClientConfigUpdateSomeFieldsToEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
@@ -827,7 +826,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateClientWithAddons, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithAddons, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
@@ -861,7 +860,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccCreateClientWithAddonsAndEmptyFields, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithAddonsAndEmptyFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
@@ -890,7 +889,7 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccCreateClientWithAddonsRemovedFromConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithAddonsRemovedFromConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
@@ -907,7 +906,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(`
+				Config: acctest.ParseTestName(`
 					resource "auth0_client" "my_client" {
 						name = "Acceptance Test - Metadata - {{.testName}}"
 						client_metadata = {
@@ -923,7 +922,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(`
+				Config: acctest.ParseTestName(`
 					resource "auth0_client" "my_client" {
 						name = "Acceptance Test - Metadata - {{.testName}}"
 						client_metadata = {
@@ -939,7 +938,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(`
+				Config: acctest.ParseTestName(`
 					resource "auth0_client" "my_client" {
 						name = "Acceptance Test - Metadata - {{.testName}}"
 						client_metadata = {
@@ -953,7 +952,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(`
+				Config: acctest.ParseTestName(`
 					resource "auth0_client" "my_client" {
 						name = "Acceptance Test - Metadata - {{.testName}}"
 						client_metadata = { }

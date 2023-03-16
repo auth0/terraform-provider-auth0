@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccGivenAnOrganizationWithConnectionsAndMembers = `
@@ -64,7 +63,7 @@ func TestAccDataSourceOrganizationByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
+				Config: acctest.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
 					resource.TestCheckResourceAttr("auth0_organization.my_organization", "name", fmt.Sprintf("test-%s", testName)),
@@ -75,7 +74,7 @@ func TestAccDataSourceOrganizationByName(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccDataSourceOrganizationConfigByName, testName),
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationConfigByName, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "name", fmt.Sprintf("test-%s", testName)),
@@ -94,7 +93,7 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
+				Config: acctest.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
 					resource.TestCheckResourceAttr("auth0_organization.my_organization", "name", fmt.Sprintf("test-%s", testName)),
@@ -105,7 +104,7 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccDataSourceOrganizationConfigByID, testName),
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationConfigByID, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "name", fmt.Sprintf("test-%s", testName)),

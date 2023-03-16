@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccGivenAResourceServer = `
@@ -72,7 +71,7 @@ func TestAccDataSourceRoleByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccDataSourceRoleByName, t.Name()),
+				Config: acctest.ParseTestName(testAccDataSourceRoleByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("data.auth0_role.test", "role_id"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
@@ -91,7 +90,7 @@ func TestAccDataSourceRoleByID(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccDataSourceRoleByID, testName),
+				Config: acctest.ParseTestName(testAccDataSourceRoleByID, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_role.test", "role_id"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", strings.ToLower(t.Name()))),

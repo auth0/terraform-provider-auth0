@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccCreateSelfManagedCustomDomain = `
@@ -53,7 +52,7 @@ func TestAccCustomDomain(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccCreateSelfManagedCustomDomain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccCreateSelfManagedCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
@@ -70,7 +69,7 @@ func TestAccCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateSelfManagedCustomDomain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUpdateSelfManagedCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
@@ -87,7 +86,7 @@ func TestAccCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateSelfManagedCustomDomainWithEmptyClientIPHeader, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUpdateSelfManagedCustomDomainWithEmptyClientIPHeader, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
@@ -104,7 +103,7 @@ func TestAccCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccCreateAuth0ManagedCustomDomain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccCreateAuth0ManagedCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
@@ -121,7 +120,7 @@ func TestAccCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccUpdateAuth0ManagedCustomDomain, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUpdateAuth0ManagedCustomDomain, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",

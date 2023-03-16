@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccTriggerBindingAction = `
@@ -93,7 +92,7 @@ func TestAccTriggerBinding(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccTriggerBindingConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerBindingConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
@@ -102,7 +101,7 @@ func TestAccTriggerBinding(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccTriggerBindingConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerBindingConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
@@ -112,7 +111,7 @@ func TestAccTriggerBinding(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccTriggerBindingConfigUpdateAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerBindingConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
@@ -122,7 +121,7 @@ func TestAccTriggerBinding(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccTriggerBindingConfigRemoveAction, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerBindingConfigRemoveAction, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),

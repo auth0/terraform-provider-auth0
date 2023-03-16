@@ -9,14 +9,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccLogStreamHTTP(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -28,7 +27,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -39,7 +38,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONOBJECT, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfigUpdateFormatToJSONOBJECT, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -50,7 +49,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -61,7 +60,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfigUpdateCustomHTTPHeaders, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -77,7 +76,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccLogStreamHTTPConfigEmptyCustomHTTPHeaders, t.Name()),
+				Config: acctest.ParseTestName(testAccLogStreamHTTPConfigEmptyCustomHTTPHeaders, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
@@ -186,7 +185,7 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamAwsEventBridgeConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamAwsEventBridgeConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
@@ -195,7 +194,7 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamAwsEventBridgeConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamAwsEventBridgeConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
@@ -204,7 +203,7 @@ func TestAccLogStreamEventBridge(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamAwsEventBridgeConfigUpdateName, t.Name()),
+				Config: acctest.ParseTestName(logStreamAwsEventBridgeConfigUpdateName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-aws-new-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventbridge"),
@@ -258,7 +257,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamAzureEventGridConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamAzureEventGridConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-azure-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventgrid"),
@@ -268,7 +267,7 @@ func TestAccLogStreamEventGrid(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamAzureEventGridConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamAzureEventGridConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-azure-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "eventgrid"),
@@ -335,7 +334,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamDatadogConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamDatadogConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
@@ -344,7 +343,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamDatadogConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamDatadogConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
@@ -353,7 +352,7 @@ func TestAccLogStreamDatadog(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamDatadogConfigRemoveAndCreate, t.Name()),
+				Config: acctest.ParseTestName(logStreamDatadogConfigRemoveAndCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-datadog-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "datadog"),
@@ -400,7 +399,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamSplunkConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamSplunkConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-splunk-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
@@ -411,7 +410,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSplunkConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamSplunkConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-splunk-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
@@ -454,7 +453,7 @@ func TestAccLogStreamSegment(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamSegmentConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamSegmentConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
@@ -462,7 +461,7 @@ func TestAccLogStreamSegment(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSegmentConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamSegmentConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
@@ -471,7 +470,7 @@ func TestAccLogStreamSegment(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSegmentConfigUpdateWithFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamSegmentConfigUpdateWithFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
@@ -484,7 +483,7 @@ func TestAccLogStreamSegment(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSegmentConfigUpdateWithEmptyFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamSegmentConfigUpdateWithEmptyFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-segment-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "segment"),
@@ -554,7 +553,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamSumoConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamSumoConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
@@ -562,7 +561,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamSumoConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
@@ -571,7 +570,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdateWithFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamSumoConfigUpdateWithFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
@@ -584,7 +583,7 @@ func TestAccLogStreamSumo(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamSumoConfigUpdateWithEmptyFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamSumoConfigUpdateWithEmptyFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-sumo-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "sumo"),
@@ -654,7 +653,7 @@ func TestAccLogStreamMixpanel(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(logStreamMixpanelConfig, t.Name()),
+				Config: acctest.ParseTestName(logStreamMixpanelConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
@@ -665,7 +664,7 @@ func TestAccLogStreamMixpanel(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamMixpanelConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(logStreamMixpanelConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
@@ -677,7 +676,7 @@ func TestAccLogStreamMixpanel(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamMixpanelConfigUpdateWithFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamMixpanelConfigUpdateWithFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),
@@ -693,7 +692,7 @@ func TestAccLogStreamMixpanel(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(logStreamMixpanelConfigUpdateWithEmptyFilters, t.Name()),
+				Config: acctest.ParseTestName(logStreamMixpanelConfigUpdateWithEmptyFilters, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-mixpanel-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "mixpanel"),

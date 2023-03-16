@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccOrganizationConnectionGivenAnOrgAndAConnection = `
@@ -42,7 +41,7 @@ func TestAccOrganizationConnection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(TestAccOrganizationConnectionCreate, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(TestAccOrganizationConnectionCreate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "connection_id"),
@@ -64,7 +63,7 @@ func TestAccOrganizationConnection(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(TestAccOrganizationConnectionUpdate, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(TestAccOrganizationConnectionUpdate, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
 					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "connection_id"),

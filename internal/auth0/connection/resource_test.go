@@ -9,14 +9,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 func TestAccConnection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
@@ -47,7 +46,7 @@ func TestAccConnection(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.brute_force_protection", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.mfa.0.return_enroll_settings", "false"),
@@ -165,7 +164,7 @@ func TestAccConnectionAD(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionADConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionADConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.ad", "name", fmt.Sprintf("Acceptance-Test-AD-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "strategy", "ad"),
@@ -215,7 +214,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionAzureADConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionAzureADConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "name", fmt.Sprintf("Acceptance-Test-Azure-AD-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "strategy", "waad"),
@@ -280,7 +279,7 @@ func TestAccConnectionADFS(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionADFSConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionADFSConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
@@ -301,7 +300,7 @@ func TestAccConnectionADFS(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionADFSConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionADFSConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "name", fmt.Sprintf("Acceptance-Test-ADFS-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "strategy", "adfs"),
@@ -413,7 +412,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionOIDCConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOIDCConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "name", fmt.Sprintf("Acceptance-Test-OIDC-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "strategy", "oidc"),
@@ -441,7 +440,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionOIDCConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOIDCConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
@@ -527,7 +526,7 @@ func TestAccConnectionOkta(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionOktaConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOktaConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
@@ -554,7 +553,7 @@ func TestAccConnectionOkta(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionOktaConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOktaConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
@@ -638,7 +637,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionOAuth2Config, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOAuth2Config, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "name", fmt.Sprintf("Acceptance-Test-OAuth2-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "strategy", "oauth2"),
@@ -658,7 +657,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionOAuth2ConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionOAuth2ConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_id", "1234567"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_secret", "1234567"),
@@ -728,7 +727,7 @@ func TestAccConnectionSMS(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionSMSConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionSMSConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.sms", "name", fmt.Sprintf("Acceptance-Test-SMS-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "strategy", "sms"),
@@ -776,7 +775,7 @@ func TestAccConnectionCustomSMS(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionCustomSMSConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionCustomSMSConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.sms", "name", fmt.Sprintf("Acceptance-Test-Custom-SMS-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.sms", "strategy", "sms"),
@@ -835,7 +834,7 @@ func TestAccConnectionEmail(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionEmailConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionEmailConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.email", "name", fmt.Sprintf("Acceptance-Test-Email-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.email", "strategy", "email"),
@@ -849,7 +848,7 @@ func TestAccConnectionEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionEmailConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionEmailConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.totp.0.time_step", "360"),
@@ -862,7 +861,7 @@ func TestAccConnectionEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionEmailConfigClearAuthParams, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionEmailConfigClearAuthParams, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.email", "options.0.auth_params.%", "0"),
 				),
@@ -950,7 +949,7 @@ func TestAccConnectionSalesforce(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionSalesforceConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionSalesforceConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "name", fmt.Sprintf("Acceptance-Test-Salesforce-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.salesforce_community", "strategy", "salesforce-community"),
@@ -984,7 +983,7 @@ func TestAccConnectionGoogleOAuth2(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionGoogleOAuth2Config, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionGoogleOAuth2Config, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "name", fmt.Sprintf("Acceptance-Test-Google-OAuth2-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.google_oauth2", "strategy", "google-oauth2"),
@@ -1028,7 +1027,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionGoogleApps, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionGoogleApps, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "name", fmt.Sprintf("Acceptance-Test-Google-Apps-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "strategy", "google-apps"),
@@ -1078,7 +1077,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionFacebookConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionFacebookConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "name", fmt.Sprintf("Acceptance-Test-Facebook-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "strategy", "facebook"),
@@ -1091,7 +1090,7 @@ func TestAccConnectionFacebook(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionFacebookConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionFacebookConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "name", fmt.Sprintf("Acceptance-Test-Facebook-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.facebook", "strategy", "facebook"),
@@ -1142,7 +1141,7 @@ func TestAccConnectionApple(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionAppleConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionAppleConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.apple", "name", fmt.Sprintf("Acceptance-Test-Apple-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "strategy", "apple"),
@@ -1158,7 +1157,7 @@ func TestAccConnectionApple(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionAppleConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionAppleConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.team_id", "team_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.apple", "options.0.key_id", "key_id_update"),
@@ -1213,7 +1212,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionLinkedinConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionLinkedinConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "name", fmt.Sprintf("Acceptance-Test-Linkedin-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "strategy", "linkedin"),
@@ -1227,7 +1226,7 @@ func TestAccConnectionLinkedin(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionLinkedinConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionLinkedinConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_id", "client_id_update"),
 					resource.TestCheckResourceAttr("auth0_connection.linkedin", "options.0.client_secret", "client_secret_update"),
@@ -1277,7 +1276,7 @@ func TestAccConnectionGitHub(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionGitHubConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionGitHubConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.github", "name", fmt.Sprintf("Acceptance-Test-GitHub-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.github", "strategy", "github"),
@@ -1335,7 +1334,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionWindowsliveConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionWindowsliveConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "name", fmt.Sprintf("Acceptance-Test-Windowslive-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "strategy", "windowslive"),
@@ -1349,7 +1348,7 @@ func TestAccConnectionWindowslive(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionWindowsliveConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionWindowsliveConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "name", fmt.Sprintf("Acceptance-Test-Windowslive-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.windowslive", "strategy", "windowslive"),
@@ -1402,7 +1401,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionConfigurationCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionConfigurationCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.%", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.foo", "xxx"),
@@ -1410,7 +1409,7 @@ func TestAccConnectionConfiguration(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionConfigurationUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionConfigurationUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.%", "3"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.configuration.foo", "xxx"),
@@ -1495,7 +1494,7 @@ func TestAccConnectionSAML(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testConnectionSAMLConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testConnectionSAMLConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-SAML-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", fmt.Sprintf("Acceptance-Test-SAML-%s", t.Name())),
@@ -1516,7 +1515,7 @@ func TestAccConnectionSAML(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testConnectionSAMLConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testConnectionSAMLConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
@@ -1670,7 +1669,7 @@ func TestAccConnectionTwitter(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccConnectionTwitterConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionTwitterConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),
@@ -1681,7 +1680,7 @@ func TestAccConnectionTwitter(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccConnectionTwitterConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccConnectionTwitterConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.twitter", "name", fmt.Sprintf("Acceptance-Test-Twitter-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.twitter", "strategy", "twitter"),

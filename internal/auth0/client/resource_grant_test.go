@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccClientGrantAuxConfig = `
@@ -95,33 +94,33 @@ func TestAccClientGrant(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", fmt.Sprintf("https://uat.tf.terraform-provider-auth0.com/client-grant/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccClientGrantConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.0", "create:foo"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
+				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccAlreadyExistingGrantWillNotConflict, t.Name()),
+				Config: acctest.ParseTestName(testAccAlreadyExistingGrantWillNotConflict, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.no_conflict_client_grant", "scope.#", "0"),
 				),

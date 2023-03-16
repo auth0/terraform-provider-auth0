@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccRuleConfigCreate = `
@@ -42,7 +41,7 @@ func TestAccRuleConfig(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccRuleConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_%s", t.Name())),
@@ -50,7 +49,7 @@ func TestAccRuleConfig(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRuleConfigUpdateValue, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleConfigUpdateValue, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_%s", t.Name())),
@@ -58,7 +57,7 @@ func TestAccRuleConfig(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRuleConfigUpdateKey, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleConfigUpdateKey, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_key_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_key_%s", t.Name())),
@@ -66,7 +65,7 @@ func TestAccRuleConfig(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccRuleConfigEmptyValue, t.Name()),
+				Config: acctest.ParseTestName(testAccRuleConfigEmptyValue, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "id", fmt.Sprintf("acc_test_key_%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_rule_config.foo", "key", fmt.Sprintf("acc_test_key_%s", t.Name())),

@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccGivenAClient = `
@@ -36,7 +35,7 @@ func TestAccDataClientByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAClient+testAccDataClientConfigByName, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientConfigByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "client_id"),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"),
@@ -54,7 +53,7 @@ func TestAccDataClientById(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAClient+testAccDataClientConfigByID, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "id"),
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),

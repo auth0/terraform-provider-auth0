@@ -1,4 +1,4 @@
-package template
+package acctest
 
 import (
 	"bytes"
@@ -6,14 +6,15 @@ import (
 )
 
 // ParseTestName renders templates defined with {{.testName}} placeholders.
-// This is useful for acceptance tests.
 func ParseTestName(rawTemplate, testName string) string {
-	t := template.Must(template.New("tpl").Parse(rawTemplate))
+	t, err := template.New("tpl").Parse(rawTemplate)
+	if err != nil {
+		return ""
+	}
 
 	var buf bytes.Buffer
-	err := t.Execute(&buf, map[string]string{"testName": testName})
-	if err != nil {
-		panic(err)
+	if err := t.Execute(&buf, map[string]string{"testName": testName}); err != nil {
+		return ""
 	}
 
 	return buf.String()

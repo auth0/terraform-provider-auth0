@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/auth0/terraform-provider-auth0/internal/template"
 )
 
 const testAccGivenAConnection = `
@@ -63,7 +62,7 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAConnection, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAConnection, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -74,7 +73,7 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByName, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
@@ -91,7 +90,7 @@ func TestAccDataSourceConnectionByID(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: template.ParseTestName(testAccGivenAConnection, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAConnection, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -102,7 +101,7 @@ func TestAccDataSourceConnectionByID(t *testing.T) {
 				),
 			},
 			{
-				Config: template.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByID, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),

@@ -632,6 +632,7 @@ Optional:
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
 - `disable_cache` (Boolean) Indicates whether to disable the cache or not.
+- `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
 - `disable_sign_out` (Boolean) When enabled, will disable sign out.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.

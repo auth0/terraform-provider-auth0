@@ -62,6 +62,7 @@ Read-Only:
 - `debug` (Boolean)
 - `digest_algorithm` (String)
 - `disable_cache` (Boolean)
+- `disable_self_service_change_password` (Boolean)
 - `disable_sign_out` (Boolean)
 - `disable_signup` (Boolean)
 - `discovery_url` (String)

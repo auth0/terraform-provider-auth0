@@ -221,6 +221,11 @@ var resourceSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Indicates whether to allow user sign-ups to your application.",
 				},
+				"disable_self_service_change_password": {
+					Type:        schema.TypeBool,
+					Optional:    true,
+					Description: "Indicates whether to remove the forgot password link within the New Universal Login.",
+				},
 				"requires_username": {
 					Type:     schema.TypeBool,
 					Optional: true,

@@ -149,17 +149,18 @@ func expandConnectionOptionsAuth0(
 	api *management.Management,
 ) (*management.ConnectionOptions, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
-		PasswordPolicy:               value.String(config.GetAttr("password_policy")),
-		NonPersistentAttrs:           value.Strings(config.GetAttr("non_persistent_attrs")),
-		SetUserAttributes:            value.String(config.GetAttr("set_user_root_attributes")),
-		EnableScriptContext:          value.Bool(config.GetAttr("enable_script_context")),
-		EnabledDatabaseCustomization: value.Bool(config.GetAttr("enabled_database_customization")),
-		BruteForceProtection:         value.Bool(config.GetAttr("brute_force_protection")),
-		ImportMode:                   value.Bool(config.GetAttr("import_mode")),
-		DisableSignup:                value.Bool(config.GetAttr("disable_signup")),
-		RequiresUsername:             value.Bool(config.GetAttr("requires_username")),
-		CustomScripts:                value.MapOfStrings(config.GetAttr("custom_scripts")),
-		Configuration:                value.MapOfStrings(config.GetAttr("configuration")),
+		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
+		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:                value.String(config.GetAttr("set_user_root_attributes")),
+		EnableScriptContext:              value.Bool(config.GetAttr("enable_script_context")),
+		EnabledDatabaseCustomization:     value.Bool(config.GetAttr("enabled_database_customization")),
+		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
+		ImportMode:                       value.Bool(config.GetAttr("import_mode")),
+		DisableSignup:                    value.Bool(config.GetAttr("disable_signup")),
+		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
+		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
+		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
+		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
 	}
 
 	config.GetAttr("validation").ForEachElement(

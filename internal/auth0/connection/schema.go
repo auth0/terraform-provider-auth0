@@ -323,6 +323,12 @@ var resourceSchema = map[string]*schema.Schema{
 					Optional:    true,
 					Description: "Icon URL.",
 				},
+				"ping_federate_base_url": {
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.IsURLWithHTTPorHTTPS,
+					Description:  "Ping Federate Server URL.",
+				},
 				"identity_api": {
 					Type:     schema.TypeString,
 					Optional: true,

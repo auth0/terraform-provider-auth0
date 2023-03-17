@@ -52,6 +52,8 @@ func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]in
 		m, diags = flattenConnectionOptionsAzureAD(connectionOptions)
 	case *management.ConnectionOptionsADFS:
 		m, diags = flattenConnectionOptionsADFS(connectionOptions)
+	case *management.ConnectionOptionsPingFederate:
+		m, diags = flattenConnectionOptionsPingFederate(connectionOptions)
 	case *management.ConnectionOptionsSAML:
 		m, diags = flattenConnectionOptionsSAML(d, connectionOptions)
 	}
@@ -592,6 +594,45 @@ func flattenConnectionOptionsSAML(
 		return nil, diag.FromErr(err)
 	}
 	m["fields_map"] = fieldsMap
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+	m["upstream_params"] = upstreamParams
+
+	return m, nil
+}
+
+func flattenConnectionOptionsPingFederate(
+	options *management.ConnectionOptionsPingFederate,
+) (interface{}, diag.Diagnostics) {
+	signingCert := options.GetSigningCert()
+	if signingCert == "" {
+		signingCert = options.GetCert()
+	}
+
+	m := map[string]interface{}{
+		"signing_cert":             signingCert,
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"sign_in_endpoint":         options.GetSignInEndpoint(),
+		"signature_algorithm":      options.GetSignatureAlgorithm(),
+		"digest_algorithm":         options.GetDigestAlgorithm(),
+		"sign_saml_request":        options.GetSignSAMLRequest(),
+		"ping_federate_base_url":   options.GetPingFederateBaseURL(),
+		"icon_url":                 options.GetLogoURL(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+	}
+
+	m["idp_initiated"] = []interface{}{
+		map[string]interface{}{
+			"client_id":              options.GetIdpInitiated().GetClientID(),
+			"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
+			"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),
+		},
+	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {

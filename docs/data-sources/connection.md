@@ -97,6 +97,7 @@ Read-Only:
 - `password_history` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_history))
 - `password_no_personal_info` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_no_personal_info))
 - `password_policy` (String)
+- `ping_federate_base_url` (String)
 - `pkce_enabled` (Boolean)
 - `protocol_binding` (String)
 - `provider` (String)

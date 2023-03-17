@@ -1719,3 +1719,176 @@ resource "auth0_connection" "twitter" {
 	}
 }
 `
+
+func TestAccConnectionPingFederate(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testConnectionPingFederateConfigCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "pingfederate"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.tenant_domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.ping_federate_base_url", "https://pingfederate.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://pingfederate.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.1", "example.coz"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signature_algorithm", "rsa-sha256"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_saml_request", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.digest_algorithm", "sha256"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testConnectionPingFederateConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "display_name", fmt.Sprintf("Acceptance-Test-PingFederate-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "pingfederate"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.tenant_domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.ping_federate_base_url", "https://pingfederate.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://pingfederate.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.0", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.domain_aliases.1", "example.coz"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signature_algorithm", "rsa-sha256"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_saml_request", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.digest_algorithm", "sha256"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.icon_url", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.0", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.1", "hair_color"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
+				),
+			},
+		},
+	})
+}
+
+const testConnectionPingFederateConfigCreate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-PingFederate-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-{{.testName}}"
+	strategy = "pingfederate"
+	show_as_button = false
+	options {
+		signing_cert = <<EOF
+-----BEGIN CERTIFICATE-----
+MIID6TCCA1ICAQEwDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRQwEgYDVQQK
+EwtHb29nbGUgSW5jLjEMMAoGA1UECxMDRW5nMQwwCgYDVQQDEwNhZ2wxHTAbBgkq
+hkiG9w0BCQEWDmFnbEBnb29nbGUuY29tMB4XDTA5MDkwOTIyMDU0M1oXDTEwMDkw
+OTIyMDU0M1owajELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxITAf
+BgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEjMCEGA1UEAxMaZXVyb3Bh
+LnNmby5jb3JwLmdvb2dsZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQC6pgYt7/EibBDumASF+S0qvqdL/f+nouJw2T1Qc8GmXF/iiUcrsgzh/Fd8
+pDhz/T96Qg9IyR4ztuc2MXrmPra+zAuSf5bevFReSqvpIt8Duv0HbDbcqs/XKPfB
+uMDe+of7a9GCywvAZ4ZUJcp0thqD9fKTTjUWOBzHY1uNE4RitrhmJCrbBGXbJ249
+bvgmb7jgdInH2PU7PT55hujvOoIsQW2osXBFRur4pF1wmVh4W4lTLD6pjfIMUcML
+ICHEXEN73PDic8KS3EtNYCwoIld+tpIBjE1QOb1KOyuJBNW6Esw9ALZn7stWdYcE
+qAwvv20egN2tEXqj7Q4/1ccyPZc3PQgC3FJ8Be2mtllM+80qf4dAaQ/fWvCtOrQ5
+pnfe9juQvCo8Y0VGlFcrSys/MzSg9LJ/24jZVgzQved/Qupsp89wVidwIzjt+WdS
+fyWfH0/v1aQLvu5cMYuW//C0W2nlYziL5blETntM8My2ybNARy3ICHxCBv2RNtPI
+WQVm+E9/W5rwh2IJR4DHn2LHwUVmT/hHNTdBLl5Uhwr4Wc7JhE7AVqb14pVNz1lr
+5jxsp//ncIwftb7mZQ3DF03Yna+jJhpzx8CQoeLT6aQCHyzmH68MrHHT4MALPyUs
+Pomjn71GNTtDeWAXibjCgdL6iHACCF6Htbl0zGlG0OAK+bdn0QIDAQABMA0GCSqG
+SIb3DQEBBQUAA4GBAOKnQDtqBV24vVqvesL5dnmyFpFPXBn3WdFfwD6DzEb21UVG
+5krmJiu+ViipORJPGMkgoL6BjU21XI95VQbun5P8vvg8Z+FnFsvRFY3e1CCzAVQY
+ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
+-----END CERTIFICATE-----
+EOF
+		tenant_domain = "example.com"
+		ping_federate_base_url = "https://pingfederate.example.com"
+		sign_in_endpoint = "https://pingfederate.example.com"
+		domain_aliases = ["example.com", "example.coz"]
+		signature_algorithm = "rsa-sha256"
+		sign_saml_request = false
+		digest_algorithm = "sha256"
+		icon_url = "https://example.com/logo.svg"
+		set_user_root_attributes = "on_first_login"
+		non_persistent_attrs = ["gender","hair_color"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+		idp_initiated {
+			client_id = "client_id"
+			client_protocol = "samlp"
+			client_authorize_query = "type=code&timeout=30"
+		}
+	}
+}
+`
+
+const testConnectionPingFederateConfigUpdate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-PingFederate-{{.testName}}"
+	display_name = "Acceptance-Test-PingFederate-{{.testName}}"
+	strategy = "pingfederate"
+	show_as_button = true
+	options {
+		signing_cert = <<EOF
+-----BEGIN CERTIFICATE-----
+MIID6TCCA1ICAQEwDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNVBAYTAlVTMRMwEQYD
+VQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRQwEgYDVQQK
+EwtHb29nbGUgSW5jLjEMMAoGA1UECxMDRW5nMQwwCgYDVQQDEwNhZ2wxHTAbBgkq
+hkiG9w0BCQEWDmFnbEBnb29nbGUuY29tMB4XDTA5MDkwOTIyMDU0M1oXDTEwMDkw
+OTIyMDU0M1owajELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxITAf
+BgNVBAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEjMCEGA1UEAxMaZXVyb3Bh
+LnNmby5jb3JwLmdvb2dsZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQC6pgYt7/EibBDumASF+S0qvqdL/f+nouJw2T1Qc8GmXF/iiUcrsgzh/Fd8
+pDhz/T96Qg9IyR4ztuc2MXrmPra+zAuSf5bevFReSqvpIt8Duv0HbDbcqs/XKPfB
+uMDe+of7a9GCywvAZ4ZUJcp0thqD9fKTTjUWOBzHY1uNE4RitrhmJCrbBGXbJ249
+bvgmb7jgdInH2PU7PT55hujvOoIsQW2osXBFRur4pF1wmVh4W4lTLD6pjfIMUcML
+ICHEXEN73PDic8KS3EtNYCwoIld+tpIBjE1QOb1KOyuJBNW6Esw9ALZn7stWdYcE
+qAwvv20egN2tEXqj7Q4/1ccyPZc3PQgC3FJ8Be2mtllM+80qf4dAaQ/fWvCtOrQ5
+pnfe9juQvCo8Y0VGlFcrSys/MzSg9LJ/24jZVgzQved/Qupsp89wVidwIzjt+WdS
+fyWfH0/v1aQLvu5cMYuW//C0W2nlYziL5blETntM8My2ybNARy3ICHxCBv2RNtPI
+WQVm+E9/W5rwh2IJR4DHn2LHwUVmT/hHNTdBLl5Uhwr4Wc7JhE7AVqb14pVNz1lr
+5jxsp//ncIwftb7mZQ3DF03Yna+jJhpzx8CQoeLT6aQCHyzmH68MrHHT4MALPyUs
+Pomjn71GNTtDeWAXibjCgdL6iHACCF6Htbl0zGlG0OAK+bdn0QIDAQABMA0GCSqG
+SIb3DQEBBQUAA4GBAOKnQDtqBV24vVqvesL5dnmyFpFPXBn3WdFfwD6DzEb21UVG
+5krmJiu+ViipORJPGMkgoL6BjU21XI95VQbun5P8vvg8Z+FnFsvRFY3e1CCzAVQY
+ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
+-----END CERTIFICATE-----
+EOF
+		tenant_domain = "example.com"
+		ping_federate_base_url = "https://pingfederate.example.com"
+		sign_in_endpoint = "https://pingfederate.example.com"
+		domain_aliases = ["example.com", "example.coz"]
+		signature_algorithm = "rsa-sha256"
+		sign_saml_request = true
+		digest_algorithm = "sha256"
+		set_user_root_attributes = "on_first_login"
+		non_persistent_attrs = ["gender","hair_color"]
+		idp_initiated {
+			client_id = "client_id"
+			client_protocol = "samlp"
+			client_authorize_query = "type=code&timeout=60"
+		}
+	}
+}
+`

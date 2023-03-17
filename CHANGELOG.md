@@ -1,3 +1,25 @@
+## 0.45.0
+
+BUG FIXES:
+
+- `resource/auth0_branding_theme`: Fixed typo in `fonts.links_style` validation ([#523](https://github.com/auth0/terraform-provider-auth0/pull/523))
+- `data-source/auth0_resource_server`: Fixed data source to always return the id instead of the identifier ([#532](https://github.com/auth0/terraform-provider-auth0/pull/532))
+
+FEATURES:
+
+- `data-source/auth0_custom_domain`: Added data source to fetch custom domain ([#526](https://github.com/auth0/terraform-provider-auth0/pull/526))
+- `resource/auth0_connection`: Added support for ping federate connections ([#527](https://github.com/auth0/terraform-provider-auth0/pull/527))
+
+ENHANCEMENTS:
+
+- `resource/auth0_client_grant`: Check if client grant already exists before creating ([#529](https://github.com/auth0/terraform-provider-auth0/pull/529))
+- `resource/auth0_connection`: Added `disable_self_service_change_password` flag to database connection ([#525](https://github.com/auth0/terraform-provider-auth0/pull/525))
+
+NOTES:
+
+- Updated docs for `auth0_role` resource ([#524](https://github.com/auth0/terraform-provider-auth0/pull/524))
+
+
 ## 0.44.1
 
 BUG FIXES:

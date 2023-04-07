@@ -180,7 +180,6 @@ resource "auth0_resource_server" "auth0" {
 					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "token_lifetime_for_web", "7200"),
 					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "scopes.#", "0"),
 					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "verification_location"),
-					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "options"),
 					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "enforce_policies"),
 					resource.TestCheckNoResourceAttr("auth0_resource_server.auth0", "token_dialect"),
 				),

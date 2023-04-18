@@ -10,7 +10,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -57,14 +57,14 @@ func NewVerificationResource() *schema.Resource {
 func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
 
-	err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
 		if err != nil {
-			return resource.NonRetryableError(err)
+			return retry.NonRetryableError(err)
 		}
 
 		if customDomainVerification.GetStatus() != "ready" {
-			return resource.RetryableError(
+			return retry.RetryableError(
 				fmt.Errorf("custom domain has status %q", customDomainVerification.GetStatus()),
 			)
 		}
@@ -77,7 +77,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 		// succeeds for the first time. Therefore, we set it on the resource in
 		// the creation routine only, and never touch it again.
 		if err := d.Set("cname_api_key", customDomainVerification.GetCNAMEAPIKey()); err != nil {
-			return resource.NonRetryableError(err)
+			return retry.NonRetryableError(err)
 		}
 
 		return nil

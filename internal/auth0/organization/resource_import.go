@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-multierror"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -33,7 +33,7 @@ func importOrganizationConnection(
 		data.Set("connection_id", idPair[1]),
 	)
 
-	data.SetId(resource.UniqueId())
+	data.SetId(id.UniqueId())
 
 	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }
@@ -62,7 +62,7 @@ func importOrganizationMember(
 		data.Set("user_id", idPair[1]),
 	)
 
-	data.SetId(resource.UniqueId())
+	data.SetId(id.UniqueId())
 
 	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

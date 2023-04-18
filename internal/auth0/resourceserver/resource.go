@@ -116,12 +116,6 @@ func NewResource() *schema.Resource {
 				Description: "URL from which to retrieve JWKs for this resource server. " +
 					"Used for verifying the JWT sent to Auth0 for token introspection.",
 			},
-			"options": {
-				Type:        schema.TypeMap,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Optional:    true,
-				Description: "Used to store additional metadata.",
-			},
 			"enforce_policies": {
 				Type:     schema.TypeBool,
 				Computed: true,
@@ -192,7 +186,6 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 		result = multierror.Append(
 			result,
 			d.Set("verification_location", resourceServer.GetVerificationLocation()),
-			d.Set("options", resourceServer.GetOptions()),
 			d.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
 			d.Set("token_dialect", resourceServer.GetTokenDialect()),
 			d.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
@@ -257,7 +250,6 @@ func expandResourceServer(d *schema.ResourceData) *management.ResourceServer {
 		resourceServer.EnforcePolicies = value.Bool(config.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(config.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(config.GetAttr("verification_location"))
-		resourceServer.Options = value.MapOfStrings(config.GetAttr("options"))
 	}
 
 	return resourceServer

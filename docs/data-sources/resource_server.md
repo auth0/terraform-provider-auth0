@@ -36,7 +36,6 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `id` (String) The ID of this resource.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
-- `options` (Map of String) Used to store additional metadata.
 - `scopes` (Set of Object) List of permissions (scopes) used by this resource server. (see [below for nested schema](#nestedatt--scopes))
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256` and `RS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).

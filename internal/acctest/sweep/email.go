@@ -3,7 +3,7 @@ package sweep
 import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 // Email will run a test sweeper to remove the Auth0 Email Provider created through tests.

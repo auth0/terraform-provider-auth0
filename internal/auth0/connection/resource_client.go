@@ -8,7 +8,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
@@ -79,7 +79,7 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 		return diag.FromErr(err)
 	}
 
-	data.SetId(resource.UniqueId())
+	data.SetId(id.UniqueId())
 
 	return readConnectionClient(ctx, data, meta)
 }

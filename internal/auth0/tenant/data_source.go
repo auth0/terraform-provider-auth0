@@ -8,7 +8,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
@@ -48,7 +48,7 @@ func readTenantForDataSource(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(fmt.Errorf("unable to determine management API URL: %w", err))
 	}
 
-	data.SetId(resource.UniqueId())
+	data.SetId(id.UniqueId())
 
 	result := multierror.Append(
 		data.Set("domain", u.Hostname()),

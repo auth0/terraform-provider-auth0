@@ -8,7 +8,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -219,14 +219,14 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	api := m.(*management.Management)
 
-	err := resource.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		action, err := api.Action.Read(d.Id())
 		if err != nil {
-			return resource.NonRetryableError(err)
+			return retry.NonRetryableError(err)
 		}
 
 		if action.GetStatus() == management.ActionStatusFailed {
-			return resource.NonRetryableError(
+			return retry.NonRetryableError(
 				fmt.Errorf(
 					"action %q failed to build, check the Auth0 UI for errors",
 					action.GetName(),
@@ -235,7 +235,7 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		}
 
 		if action.GetStatus() != management.ActionStatusBuilt {
-			return resource.RetryableError(
+			return retry.RetryableError(
 				fmt.Errorf(
 					"expected action %q status %q to equal %q",
 					action.GetName(),

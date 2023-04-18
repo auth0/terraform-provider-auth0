@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
@@ -24,6 +24,6 @@ func dataSourceSchema() map[string]*schema.Schema {
 }
 
 func readAttackProtectionForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	data.SetId(resource.UniqueId())
+	data.SetId(id.UniqueId())
 	return readAttackProtection(ctx, data, meta)
 }

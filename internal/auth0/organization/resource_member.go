@@ -7,7 +7,7 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
@@ -64,7 +64,7 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
-	d.SetId(resource.UniqueId())
+	d.SetId(id.UniqueId())
 
 	if err := assignRoles(d, api); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member: %w", err))

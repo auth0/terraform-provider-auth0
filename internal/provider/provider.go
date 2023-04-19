@@ -185,6 +185,7 @@ func configureProvider(
 			authenticationOption,
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent),
+			management.WithAuth0ClientEnvEntry("Terraform-Provider-Auth0", version),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)

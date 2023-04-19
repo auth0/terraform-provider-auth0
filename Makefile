@@ -12,7 +12,7 @@ BUILD_DIR ?= $(CURDIR)/out
 
 GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
-GO_PACKAGES := $(shell go list ./... | grep -vE "vendor|tools|sweep")
+GO_PACKAGES := $(shell go list ./... | grep -vE "vendor|tools|sweep|acctest")
 GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 

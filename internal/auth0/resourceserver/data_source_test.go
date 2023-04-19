@@ -2,6 +2,7 @@ package resourceserver_test
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"testing"
 
@@ -31,7 +32,7 @@ resource "auth0_resource_server" "my_api" {
 }
 `
 
-const testAccDataConnectionConfigByIdentifier = testAccGivenAResourceServer + `
+const testAccDataResourceServerConfigByIdentifier = testAccGivenAResourceServer + `
 data "auth0_resource_server" "test" {
 	depends_on = [ auth0_resource_server.my_api ]
 
@@ -39,7 +40,7 @@ data "auth0_resource_server" "test" {
 }
 `
 
-const testAccDataConnectionConfigByID = testAccGivenAResourceServer + `
+const testAccDataResourceServerConfigByID = testAccGivenAResourceServer + `
 data "auth0_resource_server" "test" {
 	depends_on = [ auth0_resource_server.my_api ]
 
@@ -94,7 +95,7 @@ func TestAccDataSourceResourceServerByIdentifier(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataConnectionConfigByIdentifier, t.Name()),
+				Config: acctest.ParseTestName(testAccDataResourceServerConfigByIdentifier, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
@@ -162,7 +163,7 @@ func TestAccDataSourceResourceServerByID(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataConnectionConfigByID, t.Name()),
+				Config: acctest.ParseTestName(testAccDataResourceServerConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_resource_server.test", "resource_server_id"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.test", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -190,6 +191,42 @@ func TestAccDataSourceResourceServerByID(t *testing.T) {
 							"description": "Create bars",
 						},
 					),
+				),
+			},
+		},
+	})
+}
+
+const testAccDataAuth0ManagementAPI = `
+data "auth0_resource_server" "auth0" {
+	resource_server_id = "112233445566777899011232"
+}
+`
+
+func TestAccDataResourceServerAuth0APIManagement(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// Skip this test if we're running with a real domain as the Auth0 Management API
+		// is a singleton resource always created on the tenant and each tenant
+		// will have it created with different IDs and Identifiers.
+		t.Skip()
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccDataAuth0ManagementAPI,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "name", "Auth0 Management API"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "identifier", "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_lifetime", "86400"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "skip_consent_for_verifiable_first_party_clients", "false"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "allow_offline_access", "false"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_lifetime_for_web", "7200"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "scopes.#", "136"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "verification_location", ""),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "enforce_policies", "false"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_dialect", ""),
 				),
 			},
 		},

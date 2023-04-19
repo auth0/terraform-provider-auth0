@@ -2,6 +2,7 @@ package action_test
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -127,6 +128,51 @@ func TestAccTriggerBinding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTriggerBinding_Import(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// Only run with recorded HTTP requests, as it is required to import an already
+		// existing trigger binding that is created outside the scope of terraform.
+		t.Skip()
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					resource "auth0_trigger_binding" "test_flow"{
+						trigger = "post-user-registration"
+						actions {
+							id = "c2d5b219-4390-4bea-8a1f-c61672b54db3"
+							display_name = "Test"
+						}
+					}
+				`,
+				ResourceName:       "auth0_trigger_binding.test_flow",
+				ImportState:        true,
+				ImportStateId:      "post-user-registration",
+				ImportStatePersist: true,
+			},
+			{
+				Config: `
+					resource "auth0_trigger_binding" "test_flow"{
+						trigger = "post-user-registration"
+						actions {
+							id = "c2d5b219-4390-4bea-8a1f-c61672b54db3"
+							display_name = "Test"
+						}
+					}
+				`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "id", "post-user-registration"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "trigger", "post-user-registration"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "actions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "actions.0.display_name", "Test"),
 				),
 			},
 		},

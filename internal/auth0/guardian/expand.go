@@ -275,6 +275,18 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 			}
 		}
 
+		if d.HasChange("push.0.direct_apns") {
+			if err = updateDirectAPNS(push.GetAttr("direct_apns"), api); err != nil {
+				return true
+			}
+		}
+
+		if d.HasChange("push.0.direct_fcm") {
+			if err = updateDirectFCM(push.GetAttr("direct_fcm"), api); err != nil {
+				return true
+			}
+		}
+
 		if d.HasChange("push.0.amazon_sns") {
 			if err = updateAmazonSNS(push.GetAttr("amazon_sns"), api); err != nil {
 				return true
@@ -315,6 +327,40 @@ func updateCustomApp(options cty.Value, api *management.Management) error {
 				AppName:       value.String(config.GetAttr("app_name")),
 				AppleAppLink:  value.String(config.GetAttr("apple_app_link")),
 				GoogleAppLink: value.String(config.GetAttr("google_app_link")),
+			},
+		)
+
+		return stop
+	})
+
+	return err
+}
+
+func updateDirectAPNS(options cty.Value, api *management.Management) error {
+	var err error
+
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		err = api.Guardian.MultiFactor.Push.UpdateDirectAPNS(
+			&management.MultiFactorPushDirectAPNS{
+				Sandbox:  value.Bool(config.GetAttr("sandbox")),
+				BundleID: value.String(config.GetAttr("bundle_id")),
+				P12:      value.String(config.GetAttr("p12")),
+			},
+		)
+
+		return stop
+	})
+
+	return err
+}
+
+func updateDirectFCM(options cty.Value, api *management.Management) error {
+	var err error
+
+	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		err = api.Guardian.MultiFactor.Push.UpdateDirectFCM(
+			&management.MultiFactorPushDirectFCM{
+				ServerKey: value.String(config.GetAttr("server_key")),
 			},
 		)
 

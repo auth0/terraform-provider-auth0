@@ -181,6 +181,26 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 		},
 	}
 
+	directAPNS, err := api.Guardian.MultiFactor.Push.DirectAPNS()
+	if err != nil {
+		return nil, err
+	}
+
+	pushData["direct_apns"] = []interface{}{
+		map[string]interface{}{
+			"sandbox":   directAPNS.GetSandbox(),
+			"p12":       d.Get("push.0.direct_apns.0.p12"), // Does not get read back.
+			"bundle_id": directAPNS.GetBundleID(),
+			"enabled":   directAPNS.GetEnabled(),
+		},
+	}
+
+	pushData["direct_fcm"] = []interface{}{
+		map[string]interface{}{
+			"server_key": d.Get("push.0.direct_fcm.0.server_key"), // Does not get read back.
+		},
+	}
+
 	if pushProvider.GetProvider() == "sns" {
 		amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS()
 		if err != nil {

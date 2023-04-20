@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -67,9 +68,11 @@ func NewTriggerBindingResource() *schema.Resource {
 }
 
 func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*management.Management)
+
 	id := d.Get("trigger").(string)
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
-	api := m.(*management.Management)
+
 	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
@@ -81,18 +84,22 @@ func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 
 func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*management.Management)
+
 	triggerBindings, err := api.Action.Bindings(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings)))
+	result := multierror.Append(
+		d.Set("trigger", d.Id()),
+		d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings)),
+	)
+
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

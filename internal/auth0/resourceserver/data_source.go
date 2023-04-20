@@ -2,8 +2,11 @@ package resourceserver
 
 import (
 	"context"
+	"net/http"
 	"net/url"
 
+	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -38,11 +41,41 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	resourceServerID := data.Get("resource_server_id").(string)
-	if resourceServerID != "" {
-		data.SetId(resourceServerID)
-		return readResourceServer(ctx, data, meta)
+	if resourceServerID == "" {
+		resourceServerID = url.PathEscape(data.Get("identifier").(string))
 	}
 
-	data.SetId(url.PathEscape(data.Get("identifier").(string)))
-	return readResourceServer(ctx, data, meta)
+	api := meta.(*management.Management)
+	resourceServer, err := api.ResourceServer.Read(resourceServerID)
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	// Ensuring the ID is the resource server ID and not the identifier,
+	// as both can be used to find a resource server with the Read() func.
+	data.SetId(resourceServer.GetID())
+
+	result := multierror.Append(
+		data.Set("name", resourceServer.GetName()),
+		data.Set("identifier", resourceServer.GetIdentifier()),
+		data.Set("token_lifetime", resourceServer.GetTokenLifetime()),
+		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
+		data.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
+		data.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
+		data.Set("signing_secret", resourceServer.GetSigningSecret()),
+		data.Set(
+			"skip_consent_for_verifiable_first_party_clients",
+			resourceServer.GetSkipConsentForVerifiableFirstPartyClients(),
+		),
+		data.Set("verification_location", resourceServer.GetVerificationLocation()),
+		data.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
+		data.Set("token_dialect", resourceServer.GetTokenDialect()),
+		data.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
+	)
+
+	return diag.FromErr(result.ErrorOrNil())
 }

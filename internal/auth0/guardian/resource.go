@@ -278,8 +278,8 @@ func NewResource() *schema.Resource {
 						"provider": {
 							Type:         schema.TypeString,
 							Optional:     true,
-							ValidateFunc: validation.StringInSlice([]string{"guardian", "sns"}, false),
-							Description:  "Provider to use, one of `guardian`, `sns`.",
+							ValidateFunc: validation.StringInSlice([]string{"direct", "guardian", "sns"}, false),
+							Description:  "Provider to use, one of `direct`, `guardian`, `sns`.",
 						},
 						"amazon_sns": {
 							Type:         schema.TypeList,
@@ -344,6 +344,61 @@ func NewResource() *schema.Resource {
 										Optional:     true,
 										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
 										Description:  "Google Store URL. Must be HTTPS or an empty string.",
+									},
+								},
+							},
+						},
+						"direct_apns": {
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							RequiredWith: []string{"push.0.provider"},
+							Description:  "Configuration for the Apple Push Notification service (APNs) settings.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"sandbox": {
+										Type:     schema.TypeBool,
+										Required: true,
+										Description: "Set to true to use the sandbox iOS app environment, " +
+											"otherwise set to false to use the production iOS app environment.",
+									},
+									"bundle_id": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The Apple Push Notification service Bundle ID.",
+									},
+									"p12": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+										Description: "The base64 encoded certificate in P12 format.",
+									},
+									"enabled": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+										Description: "Indicates whether the Apple Push Notification service is enabled.",
+									},
+								},
+							},
+						},
+						"direct_fcm": {
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							RequiredWith: []string{"push.0.provider"},
+							Description:  "Configuration for Firebase Cloud Messaging (FCM) settings.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"server_key": {
+										Type:      schema.TypeString,
+										Required:  true,
+										Sensitive: true,
+										Description: "The Firebase Cloud Messaging Server Key. " +
+											"For security purposes, we don’t retrieve your existing FCM server key " +
+											"to check for drift.",
 									},
 								},
 							},

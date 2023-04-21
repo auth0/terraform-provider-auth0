@@ -1,9 +1,12 @@
 package guardian_test
 
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/stretchr/testify/require"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -443,6 +446,36 @@ resource "auth0_guardian" "foo" {
 }
 `
 
+const testAccConfigurePushUpdateDirectAPNS = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	push {
+		enabled  = true
+		provider = "direct"
+
+		direct_apns {
+			sandbox = false
+			bundle_id = "com.my.app"
+			p12 = %q
+		}
+	}
+}
+`
+
+const testAccConfigurePushUpdateDirectFCM = `
+resource "auth0_guardian" "foo" {
+	policy = "all-applications"
+	push {
+		enabled  = true
+		provider = "direct"
+
+		direct_fcm {
+			server_key = "abc123"
+		}
+	}
+}
+`
+
 const testAccConfigurePushDelete = `
 resource "auth0_guardian" "foo" {
 	policy = "all-applications"
@@ -453,6 +486,9 @@ resource "auth0_guardian" "foo" {
 `
 
 func TestAccGuardianPush(t *testing.T) {
+	apnsCertificate, err := os.ReadFile("./../../../test/data/apns.p12")
+	require.NoError(t, err)
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -496,6 +532,30 @@ func TestAccGuardianPush(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.app_name", "CustomApp"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.apple_app_link", "https://itunes.apple.com/us/app/my-app/id123121"),
 					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.custom_app.0.google_app_link", "https://play.google.com/store/apps/details?id=com.my.app"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(testAccConfigurePushUpdateDirectAPNS, apnsCertificate),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.provider", "direct"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.direct_apns.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.direct_apns.0.sandbox", "false"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.direct_apns.0.bundle_id", "com.my.app"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.direct_apns.0.enabled", "true"),
+					resource.TestCheckResourceAttrSet("auth0_guardian.foo", "push.0.direct_apns.0.p12"),
+				),
+			},
+			{
+				Config: testAccConfigurePushUpdateDirectFCM,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "policy", "all-applications"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.#", "1"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.provider", "direct"),
+					resource.TestCheckResourceAttr("auth0_guardian.foo", "push.0.direct_fcm.#", "1"),
 				),
 			},
 			{

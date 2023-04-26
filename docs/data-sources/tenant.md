@@ -83,6 +83,7 @@ Read-Only:
 - `enable_legacy_profile` (Boolean)
 - `enable_pipeline2` (Boolean)
 - `enable_public_signup_user_exists_error` (Boolean)
+- `mfa_show_factor_list_on_enrollment` (Boolean)
 - `no_disclose_enterprise_connections` (Boolean)
 - `revoke_refresh_token_grant` (Boolean)
 - `universal_login` (Boolean)

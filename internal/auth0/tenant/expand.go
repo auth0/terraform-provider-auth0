@@ -117,6 +117,7 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DashboardLogStreams:                value.Bool(flags.GetAttr("dashboard_log_streams_next")),
 			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
+			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
 		}
 
 		return stop

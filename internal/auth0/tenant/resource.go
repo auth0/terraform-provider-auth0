@@ -316,6 +316,12 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Disables SAML fields map fix for bad mappings with repeated attributes.",
 						},
+						"mfa_show_factor_list_on_enrollment": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
+						},
 					},
 				},
 			},

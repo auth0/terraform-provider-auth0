@@ -44,6 +44,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.primary", "#0059d6"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.page_background", "#000000"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
@@ -59,6 +60,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
@@ -109,6 +111,7 @@ resource "auth0_tenant" "my_tenant" {
 		no_disclose_enterprise_connections = false
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix = false
+		mfa_show_factor_list_on_enrollment = false
 	}
 	universal_login {
 		colors {
@@ -156,6 +159,7 @@ resource "auth0_tenant" "my_tenant" {
 		no_disclose_enterprise_connections = false
 		disable_management_api_sms_obfuscation = true
 		disable_fields_map_fix = true
+		mfa_show_factor_list_on_enrollment = true
 	}
 	universal_login {
 		colors {

@@ -614,6 +614,7 @@ var connectionSchema = map[string]*schema.Schema{
 					Optional: true,
 					Description: "X.509 signing certificate (encoded in PEM or CER) you retrieved " +
 						"from the IdP, Base64-encoded.",
+					Computed: true,
 				},
 				"signing_key": {
 					Type:     schema.TypeList,
@@ -679,11 +680,13 @@ var connectionSchema = map[string]*schema.Schema{
 				"sign_in_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "SAML single login URL for the connection.",
 				},
 				"sign_out_endpoint": {
 					Type:        schema.TypeString,
 					Optional:    true,
+					Computed:    true,
 					Description: "SAML single logout URL for the connection.",
 				},
 				"disable_sign_out": {

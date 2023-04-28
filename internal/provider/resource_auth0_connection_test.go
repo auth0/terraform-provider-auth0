@@ -1707,7 +1707,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_sign_out", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", "example"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"appelido\",\"name\":[\"name\"]}"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
@@ -1817,7 +1817,7 @@ resource "auth0_connection" "my_connection" {
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=60"
 		}
-		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/a51c2f52877c26a00e7a3e67ca56aff00be18762/auth0/testdata/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
+		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
 	}
 }
 `

@@ -1,7 +1,7 @@
 ---
 page_title: Retrieve triggers available within actions
 description: |-
-Retrieve the set of triggers currently available within actions.
+  Retrieve the set of triggers currently available within actions.
 ---
 
 # Retrieving the set of triggers available within actions

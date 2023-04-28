@@ -1,110 +1,15 @@
 package provider
 
 import (
-	"context"
-	"fmt"
-	"net/http"
 	"os"
 	"sort"
 	"strings"
 	"testing"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-
-	"github.com/auth0/terraform-provider-auth0/internal/recorder"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
-
-func testProviders(httpRecorder *recorder.Recorder) map[string]func() (*schema.Provider, error) {
-	return map[string]func() (*schema.Provider, error){
-		"auth0": func() (*schema.Provider, error) {
-			provider := New()
-
-			provider.ConfigureContextFunc = configureTestProvider(httpRecorder)
-
-			return provider, nil
-		},
-	}
-}
-
-func configureTestProvider(
-	httpRecorder *recorder.Recorder,
-) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		domain := data.Get("domain").(string)
-		debug := data.Get("debug").(bool)
-
-		testClient := http.DefaultClient
-		if httpRecorder != nil {
-			testClient = httpRecorder.GetDefaultClient()
-		}
-
-		apiClient, err := management.New(
-			domain,
-			management.WithStaticToken("insecure"),
-			management.WithClient(testClient),
-			management.WithDebug(debug),
-		)
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
-
-		if domain != recorder.RecordingsDomain {
-			clientID := data.Get("client_id").(string)
-			clientSecret := data.Get("client_secret").(string)
-			apiToken := data.Get("api_token").(string)
-			audience := data.Get("audience").(string)
-
-			authenticationOption := management.WithStaticToken(apiToken)
-			if apiToken == "" {
-				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
-
-				if audience != "" {
-					authenticationOption = management.WithClientCredentialsAndAudience(
-						clientID,
-						clientSecret,
-						audience,
-					)
-				}
-			}
-
-			apiClient, err = management.New(
-				domain,
-				authenticationOption,
-				management.WithClient(testClient),
-				management.WithDebug(debug),
-			)
-			if err != nil {
-				return nil, diag.FromErr(err)
-			}
-		}
-
-		return apiClient, nil
-	}
-}
-
-// Auth0 returns an instance of the Management
-// API Client used within test sweepers.
-func Auth0() (*management.Management, error) {
-	domain := os.Getenv("AUTH0_DOMAIN")
-	if domain == "" {
-		return nil, fmt.Errorf("failed to instantiate api client: AUTH0_DOMAIN is empty")
-	}
-
-	apiToken := os.Getenv("AUTH0_API_TOKEN")
-	authenticationOption := management.WithStaticToken(apiToken)
-	if apiToken == "" {
-		authenticationOption = management.WithClientCredentials(
-			os.Getenv("AUTH0_CLIENT_ID"),
-			os.Getenv("AUTH0_CLIENT_SECRET"),
-		)
-	}
-
-	return management.New(domain, authenticationOption)
-}
 
 func TestMain(m *testing.M) {
 	resource.TestMain(m)

@@ -1,7 +1,7 @@
 ---
 page_title: Quickstart
 description: |-
-Quickly get started with the Auth0 Provider.
+  Quickly get started with the Auth0 Provider.
 ---
 
 # Getting started
@@ -58,7 +58,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "~> 0.34.0"
+      version = "~> 0.45.0" # Refer to docs for latest version
     }
   }
 }

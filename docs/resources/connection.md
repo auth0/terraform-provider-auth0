@@ -606,11 +606,10 @@ resource "auth0_connection" "okta" {
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
-- `strategy_version` (String)
-- `validation` (Map of String)
 
 ### Read-Only
 
+- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
 
 <a id="nestedblock--options"></a>
@@ -633,6 +632,7 @@ Optional:
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
 - `disable_cache` (Boolean) Indicates whether to disable the cache or not.
+- `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
 - `disable_sign_out` (Boolean) When enabled, will disable sign out.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
 - `discovery_url` (String) OpenID discovery URL, e.g. `https://auth.example.com/.well-known/openid-configuration`.
@@ -667,6 +667,7 @@ Optional:
 - `password_history` (Block List) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. (see [below for nested schema](#nestedblock--options--password_history))
 - `password_no_personal_info` (Block List, Max: 1) Configuration settings for the password personal info check, which does not allow passwords that contain any part of the user's personal data, including user's `name`, `username`, `nickname`, `user_metadata.name`, `user_metadata.first`, `user_metadata.last`, user's `email`, or first part of the user's `email`. (see [below for nested schema](#nestedblock--options--password_no_personal_info))
 - `password_policy` (String) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
+- `ping_federate_base_url` (String) Ping Federate Server URL.
 - `pkce_enabled` (Boolean) Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.

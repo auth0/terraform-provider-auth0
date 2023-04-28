@@ -139,7 +139,9 @@ Optional:
 
 - `amazon_sns` (Block List, Max: 1) Configuration for Amazon SNS. (see [below for nested schema](#nestedblock--push--amazon_sns))
 - `custom_app` (Block List, Max: 1) Configuration for the Guardian Custom App. (see [below for nested schema](#nestedblock--push--custom_app))
-- `provider` (String) Provider to use, one of `guardian`, `sns`.
+- `direct_apns` (Block List, Max: 1) Configuration for the Apple Push Notification service (APNs) settings. (see [below for nested schema](#nestedblock--push--direct_apns))
+- `direct_fcm` (Block List, Max: 1) Configuration for Firebase Cloud Messaging (FCM) settings. (see [below for nested schema](#nestedblock--push--direct_fcm))
+- `provider` (String) Provider to use, one of `direct`, `guardian`, `sns`.
 
 <a id="nestedblock--push--amazon_sns"></a>
 ### Nested Schema for `push.amazon_sns`
@@ -161,6 +163,28 @@ Optional:
 - `app_name` (String) Custom Application Name.
 - `apple_app_link` (String) Apple App Store URL. Must be HTTPS or an empty string.
 - `google_app_link` (String) Google Store URL. Must be HTTPS or an empty string.
+
+
+<a id="nestedblock--push--direct_apns"></a>
+### Nested Schema for `push.direct_apns`
+
+Required:
+
+- `bundle_id` (String) The Apple Push Notification service Bundle ID.
+- `p12` (String, Sensitive) The base64 encoded certificate in P12 format.
+- `sandbox` (Boolean) Set to true to use the sandbox iOS app environment, otherwise set to false to use the production iOS app environment.
+
+Optional:
+
+- `enabled` (Boolean) Indicates whether the Apple Push Notification service is enabled.
+
+
+<a id="nestedblock--push--direct_fcm"></a>
+### Nested Schema for `push.direct_fcm`
+
+Required:
+
+- `server_key` (String, Sensitive) The Firebase Cloud Messaging Server Key. For security purposes, we don’t retrieve your existing FCM server key to check for drift.
 
 
 

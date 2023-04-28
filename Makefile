@@ -12,8 +12,7 @@ BUILD_DIR ?= $(CURDIR)/out
 
 GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
-GO_PACKAGES := $(shell go list ./... | grep -v vendor)
-GO_FILES := $(shell find . -name '*.go' | grep -v vendor)
+GO_PACKAGES := $(shell go list ./... | grep -vE "vendor|tools|sweep|acctest")
 GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
 
@@ -114,25 +113,55 @@ check-vuln: ## Check go vulnerabilities
 #-----------------------------------------------------------------------------------------------------------------------
 .PHONY: test test-unit test-acc test-sweep
 
-test: test-unit test-acc ## Run all tests
-
-test-unit: ## Run unit tests
+test-unit: ## Run unit tests. To run a specific test, pass the FILTER var. Usage `make test-unit FILTER="TestAccResourceServer`
 	${call print, "Running unit tests"}
-	@go test ${GO_PACKAGES} || exit 1
-	@echo ${GO_PACKAGES} | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
+	@TF_ACC= \
+		go test \
+		-v \
+		-run "$(FILTER)" \
+		-timeout 30s \
+		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
+		${GO_PACKAGES}
 
-test-acc: ## Run acceptance tests with http recordings
-	${call print, "Running acceptance tests"}
-	@AUTH0_HTTP_RECORDINGS=on AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com TF_ACC=1 \
-		go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
+test-acc: ## Run acceptance tests with http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc FILTER="TestAccResourceServer`
+	${call print, "Running acceptance tests with http recordings"}
+	@AUTH0_HTTP_RECORDINGS=on \
+		AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com \
+		TF_ACC=1 \
+		go test \
+		-v \
+		-run "$(FILTER)" \
+		-timeout 120m \
+		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
+		${GO_PACKAGES}
 
-test-acc-e2e: ## Run acceptance tests end to end
-	${call print, "Running acceptance tests E2E"}
-	@TF_ACC=1 go test ${GO_PACKAGES} -v $(TESTARGS) -timeout 120m -coverprofile="${GO_TEST_COVERAGE_FILE}"
+test-acc-record: ## Run acceptance tests and record http interactions. To run a specific test, pass the FILTER var. Usage `make test-acc-record FILTER="TestAccResourceServer`
+	${call print, "Running acceptance tests and recording http interactions"}
+	@AUTH0_HTTP_RECORDINGS=on \
+		TF_ACC=1 \
+		go test \
+		-v \
+		-run "$(FILTER)" \
+		-timeout 120m \
+		${GO_PACKAGES}
+
+test-acc-e2e: ## Run acceptance tests without http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc-e2e FILTER="TestAccResourceServer`
+	${call print, "Running acceptance tests against a real Auth0 tenant"}
+	@TF_ACC=1 \
+		go test \
+		-v \
+		-run "$(FILTER)" \
+		-timeout 120m \
+		-parallel 1 \
+		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
+		${GO_PACKAGES}
 
 test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}
-	@go test ./internal/provider -v -sweep="phony" $(SWEEPARGS)
+	@read -p "Continue? [y/N] " ans && ans=$${ans:-N} ; \
+	if [ $${ans} = y ] || [ $${ans} = Y ]; then \
+		go test ./internal/acctest/sweep -v -sweep="phony" $(SWEEPARGS) ; \
+	fi
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Helpers

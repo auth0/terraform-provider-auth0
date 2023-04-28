@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_global_client"
 description: |-
-  Retrieves a tenant's global Auth0 Application client.
+  Retrieve a tenant's global Auth0 application client.
 ---
 
 # Data Source: auth0_global_client
 
-Retrieves a tenant's global Auth0 Application client.
+Retrieve a tenant's global Auth0 application client.
 
 ## Example Usage
 

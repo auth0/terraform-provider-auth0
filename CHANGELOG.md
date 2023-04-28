@@ -1,3 +1,68 @@
+## 0.45.0
+
+BUG FIXES:
+
+- `resource/auth0_branding_theme`: Fixed typo in `fonts.links_style` validation ([#523](https://github.com/auth0/terraform-provider-auth0/pull/523))
+- `data-source/auth0_resource_server`: Fixed data source to always return the id instead of the identifier ([#532](https://github.com/auth0/terraform-provider-auth0/pull/532))
+
+FEATURES:
+
+- `data-source/auth0_custom_domain`: Added data source to fetch custom domain ([#526](https://github.com/auth0/terraform-provider-auth0/pull/526))
+- `resource/auth0_connection`: Added support for ping federate connections ([#527](https://github.com/auth0/terraform-provider-auth0/pull/527))
+
+ENHANCEMENTS:
+
+- `resource/auth0_client_grant`: Check if client grant already exists before creating ([#529](https://github.com/auth0/terraform-provider-auth0/pull/529))
+- `resource/auth0_connection`: Added `disable_self_service_change_password` flag to database connection ([#525](https://github.com/auth0/terraform-provider-auth0/pull/525))
+
+NOTES:
+
+- Updated docs for `auth0_role` resource ([#524](https://github.com/auth0/terraform-provider-auth0/pull/524))
+
+
+## 0.44.1
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Added missing status prompt type ([#513](https://github.com/auth0/terraform-provider-auth0/pull/513))
+- `data-source/auth0_connection`: Moved check for config secrets from the read to the update func ([#517](https://github.com/auth0/terraform-provider-auth0/pull/517))
+
+ENHANCEMENTS:
+
+- `resource/auth0_branding_theme`: Made fields optional ([#499](https://github.com/auth0/terraform-provider-auth0/pull/499))
+
+NOTES:
+
+- Added docs on available log stream types ([#462](https://github.com/auth0/terraform-provider-auth0/pull/462))
+- Added docs on how to obtain the custom domain id for importing `auth0_custom_domain` resources ([#463](https://github.com/auth0/terraform-provider-auth0/pull/463))
+
+
+## 0.44.0
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Added missing prompt types ([#506](https://github.com/auth0/terraform-provider-auth0/pull/506))
+- `resource/auth0_branding`: Fixed resource to allow managing only the universal login ([#506](https://github.com/auth0/terraform-provider-auth0/pull/506))
+
+FEATURES:
+
+- `data-source/auth0_connection`: Added data source to fetch connection information ([#470](https://github.com/auth0/terraform-provider-auth0/pull/470))
+- `data-source/auth0_resource_server`: Added data source to fetch resource server information ([#477](https://github.com/auth0/terraform-provider-auth0/pull/477))
+- `data-source/auth0_organization`: Added data source to fetch organization information ([#475](https://github.com/auth0/terraform-provider-auth0/pull/475))
+- `data-source/auth0_tenant`: Expanded data source to fetch all the tenant information ([#479](https://github.com/auth0/terraform-provider-auth0/pull/479))
+- `data-source/auth0_user`: Added data source to fetch user information ([#481](https://github.com/auth0/terraform-provider-auth0/pull/481))
+- `data-source/auth0_role`: Added data source to fetch role information ([#483](https://github.com/auth0/terraform-provider-auth0/pull/483))
+- `data-source/auth0_attack_protection`: Added data source to fetch attack protection information ([#485](https://github.com/auth0/terraform-provider-auth0/pull/485))
+- `data-source/auth0_branding`: Added data source to fetch branding information ([#500](https://github.com/auth0/terraform-provider-auth0/pull/500))
+- `data-source/auth0_branding_theme`: Added data source to fetch branding theme information ([#500](https://github.com/auth0/terraform-provider-auth0/pull/500))
+- `resource/auth0_branding_theme`: Simplified management of this resource to no longer force a user to import the resource if already existing ([#504](https://github.com/auth0/terraform-provider-auth0/pull/504))
+
+NOTES:
+
+- `resource/auth0_connection`: Updated connection docs ([#471](https://github.com/auth0/terraform-provider-auth0/pull/471))
+- `resource/auth0_tenant`: Added deprecation notice to `flags.universal_login` ([#503](https://github.com/auth0/terraform-provider-auth0/pull/503))
+
+
 ## 0.43.0
 
 BUG FIXES:

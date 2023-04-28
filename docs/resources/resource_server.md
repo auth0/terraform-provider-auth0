@@ -44,7 +44,6 @@ resource "auth0_resource_server" "my_resource_server" {
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
-- `options` (Map of String) Used to store additional metadata.
 - `scopes` (Block Set) List of permissions (scopes) used by this resource server. (see [below for nested schema](#nestedblock--scopes))
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256` and `RS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).

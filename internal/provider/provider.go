@@ -11,12 +11,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/action"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
 )
 
 var version = "dev"
-
-var globalMutex = mutex.New()
 
 // New returns a *schema.Provider.
 func New() *schema.Provider {
@@ -79,39 +93,48 @@ func New() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"auth0_client":                     newClient(),
-			"auth0_global_client":              newGlobalClient(),
-			"auth0_client_grant":               newClientGrant(),
-			"auth0_connection":                 newConnection(),
-			"auth0_custom_domain":              newCustomDomain(),
-			"auth0_custom_domain_verification": newCustomDomainVerification(),
-			"auth0_resource_server":            newResourceServer(),
-			"auth0_rule":                       newRule(),
-			"auth0_rule_config":                newRuleConfig(),
-			"auth0_hook":                       newHook(),
-			"auth0_prompt":                     newPrompt(),
-			"auth0_prompt_custom_text":         newPromptCustomText(),
-			"auth0_email":                      newEmail(),
-			"auth0_email_template":             newEmailTemplate(),
-			"auth0_user":                       newUser(),
-			"auth0_tenant":                     newTenant(),
-			"auth0_role":                       newRole(),
-			"auth0_log_stream":                 newLogStream(),
-			"auth0_branding":                   newBranding(),
-			"auth0_guardian":                   newGuardian(),
-			"auth0_organization":               newOrganization(),
-			"auth0_organization_connection":    newOrganizationConnection(),
-			"auth0_organization_member":        newOrganizationMember(),
-			"auth0_action":                     newAction(),
-			"auth0_trigger_binding":            newTriggerBinding(),
-			"auth0_attack_protection":          newAttackProtection(),
-			"auth0_branding_theme":             newBrandingTheme(),
-			"auth0_connection_client":          newConnectionClient(),
+			"auth0_action":                     action.NewResource(),
+			"auth0_trigger_binding":            action.NewTriggerBindingResource(),
+			"auth0_attack_protection":          attackprotection.NewResource(),
+			"auth0_branding":                   branding.NewResource(),
+			"auth0_branding_theme":             branding.NewThemeResource(),
+			"auth0_client":                     client.NewResource(),
+			"auth0_client_grant":               client.NewGrantResource(),
+			"auth0_global_client":              client.NewGlobalResource(),
+			"auth0_connection":                 connection.NewResource(),
+			"auth0_connection_client":          connection.NewClientResource(),
+			"auth0_custom_domain":              customdomain.NewResource(),
+			"auth0_custom_domain_verification": customdomain.NewVerificationResource(),
+			"auth0_email":                      email.NewResource(),
+			"auth0_email_template":             email.NewTemplateResource(),
+			"auth0_guardian":                   guardian.NewResource(),
+			"auth0_hook":                       hook.NewResource(),
+			"auth0_log_stream":                 logstream.NewResource(),
+			"auth0_organization":               organization.NewResource(),
+			"auth0_organization_connection":    organization.NewConnectionResource(),
+			"auth0_organization_member":        organization.NewMemberResource(),
+			"auth0_prompt":                     prompt.NewResource(),
+			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
+			"auth0_resource_server":            resourceserver.NewResource(),
+			"auth0_role":                       role.NewResource(),
+			"auth0_rule":                       rule.NewResource(),
+			"auth0_rule_config":                rule.NewConfigResource(),
+			"auth0_tenant":                     tenant.NewResource(),
+			"auth0_user":                       user.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"auth0_client":        newDataClient(),
-			"auth0_global_client": newDataGlobalClient(),
-			"auth0_tenant":        newDataTenant(),
+			"auth0_attack_protection": attackprotection.NewDataSource(),
+			"auth0_branding":          branding.NewDataSource(),
+			"auth0_branding_theme":    branding.NewThemeDataSource(),
+			"auth0_client":            client.NewDataSource(),
+			"auth0_global_client":     client.NewGlobalDataSource(),
+			"auth0_connection":        connection.NewDataSource(),
+			"auth0_custom_domain":     customdomain.NewDataSource(),
+			"auth0_organization":      organization.NewDataSource(),
+			"auth0_resource_server":   resourceserver.NewDataSource(),
+			"auth0_role":              role.NewDataSource(),
+			"auth0_tenant":            tenant.NewDataSource(),
+			"auth0_user":              user.NewDataSource(),
 		},
 	}
 
@@ -162,6 +185,7 @@ func configureProvider(
 			authenticationOption,
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent),
+			management.WithAuth0ClientEnvEntry("Terraform-Provider-Auth0", version),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)

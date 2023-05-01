@@ -55,7 +55,7 @@ func TestImportOrganizationConnection(t *testing.T) {
 
 			assert.Equal(t, actualData[0].Get("organization_id").(string), testCase.expectedOrganizationID)
 			assert.Equal(t, actualData[0].Get("connection_id").(string), testCase.expectedConnectionID)
-			assert.NotEqual(t, actualData[0].Id(), testCase.givenID)
+			assert.Equal(t, actualData[0].Id(), testCase.givenID)
 		})
 	}
 }
@@ -106,7 +106,7 @@ func TestImportOrganizationMember(t *testing.T) {
 
 			assert.Equal(t, actualData[0].Get("organization_id").(string), testCase.expectedOrganizationID)
 			assert.Equal(t, actualData[0].Get("user_id").(string), testCase.expectedUserID)
-			assert.NotEqual(t, actualData[0].Id(), testCase.givenID)
+			assert.Equal(t, actualData[0].Id(), testCase.givenID)
 		})
 	}
 }

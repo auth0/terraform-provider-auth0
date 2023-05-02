@@ -1,3 +1,29 @@
+## 0.46.0
+
+BUG FIXES:
+
+- `resource/auth0_resource_server`: Remove invalid `options` attribute from schema ([#551](https://github.com/auth0/terraform-provider-auth0/pull/551))
+- `resource/auth0_trigger_binding`: Fix `trigger` import issue ([#554](https://github.com/auth0/terraform-provider-auth0/pull/554))
+- `data-source/auth0_resource_server`: Fix auth0 management api data source not reading `scopes` ([#555](https://github.com/auth0/terraform-provider-auth0/pull/555))
+- `resource/auth0_connection`: Fix faulty diffs when setting the `metadata_xml` on a SAML connection ([#559](https://github.com/auth0/terraform-provider-auth0/pull/559))
+- `resource/auth0_connection_client`: Stop overriding internally the imported ID for this resource ([#562](https://github.com/auth0/terraform-provider-auth0/pull/562))
+- `resource/auth0_organization_connection`: Stop overriding internally the imported ID for this resource ([#562](https://github.com/auth0/terraform-provider-auth0/pull/562))
+- `resource/auth0_organization_member`: Stop overriding internally the imported ID for this resource ([#562](https://github.com/auth0/terraform-provider-auth0/pull/562))
+
+FEATURES:
+
+- `resource/auth0_guardian`: Add support for `direct` provider within `push` MFA ([#535](https://github.com/auth0/terraform-provider-auth0/pull/535))
+
+ENHANCEMENTS:
+
+- `resource/auth0_tenant`: Add support for `mfa_show_factor_list_on_enrollment` flag ([#561](https://github.com/auth0/terraform-provider-auth0/pull/561))
+
+NOTES:
+
+- :warning: The removal of the `options` attribute from the `auth0_resource_server` resource, while technically a breaking change,
+should not cause any issues as the API wasn't accepting this parameter.
+
+
 ## 0.45.0
 
 BUG FIXES:

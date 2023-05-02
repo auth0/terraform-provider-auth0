@@ -24,6 +24,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 }
 
 func readAttackProtectionForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
 	return readAttackProtection(ctx, data, meta)
 }

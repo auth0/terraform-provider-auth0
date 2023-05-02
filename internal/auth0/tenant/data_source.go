@@ -48,6 +48,7 @@ func readTenantForDataSource(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(fmt.Errorf("unable to determine management API URL: %w", err))
 	}
 
+	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
 
 	result := multierror.Append(

@@ -55,7 +55,7 @@ func TestImportConnectionClient(t *testing.T) {
 
 			assert.Equal(t, actualData[0].Get("connection_id").(string), testCase.expectedConnectionID)
 			assert.Equal(t, actualData[0].Get("client_id").(string), testCase.expectedClientID)
-			assert.NotEqual(t, actualData[0].Id(), testCase.givenID)
+			assert.Equal(t, actualData[0].Id(), testCase.givenID)
 		})
 	}
 }

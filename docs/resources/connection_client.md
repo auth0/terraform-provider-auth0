@@ -1,12 +1,14 @@
 ---
 page_title: "Resource: auth0_connection_client"
 description: |-
-  With this resource, you can manage enabled clients on a connection.
+  With this resource, you can enable a single client on a connection.
 ---
 
 # Resource: auth0_connection_client
 
-With this resource, you can manage enabled clients on a connection.
+With this resource, you can enable a single client on a connection.
+
+!> To prevent issues, avoid using this resource together with the `auth0_connection_clients` resource.
 
 ## Example Usage
 
@@ -14,14 +16,14 @@ With this resource, you can manage enabled clients on a connection.
 resource "auth0_connection" "my_conn" {
   name     = "My-Auth0-Connection"
   strategy = "auth0"
-  # Avoid using the enabled_clients = [...],
-  # if using the auth0_connection_client resource.
 }
 
 resource "auth0_client" "my_client" {
   name = "My-Auth0-Client"
 }
 
+# One connection to one client association.
+# To prevent issues, avoid using this resource together with the `auth0_connection_clients` resource.
 resource "auth0_connection_client" "my_conn_client_assoc" {
   connection_id = auth0_connection.my_conn.id
   client_id     = auth0_client.my_client.id

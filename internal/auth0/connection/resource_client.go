@@ -19,7 +19,7 @@ var (
 	errInvalidConnectionClientIDFormat = fmt.Errorf("ID must be formated as <connectionID>:<clientID>")
 )
 
-// NewClientResource will return a new auth0_connection_client resource.
+// NewClientResource will return a new auth0_connection_client (1:1) resource.
 func NewClientResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -52,7 +52,7 @@ func NewClientResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importConnectionClient,
 		},
-		Description: "With this resource, you can manage enabled clients on a connection.",
+		Description: "With this resource, you can enable a single client on a connection.",
 	}
 }
 

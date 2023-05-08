@@ -121,6 +121,7 @@ func New() *schema.Provider {
 			"auth0_rule_config":                rule.NewConfigResource(),
 			"auth0_tenant":                     tenant.NewResource(),
 			"auth0_user":                       user.NewResource(),
+			"auth0_user_permission":            user.NewPermissionResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection": attackprotection.NewDataSource(),

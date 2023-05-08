@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -11,11 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
-)
-
-var (
-	errEmptyOrganizationConnectionID         = fmt.Errorf("ID cannot be empty")
-	errInvalidOrganizationConnectionIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<connectionID>")
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewConnectionResource will return a new auth0_organization_connection resource.
@@ -27,7 +22,7 @@ func NewConnectionResource() *schema.Resource {
 		UpdateContext: updateOrganizationConnection,
 		DeleteContext: deleteOrganizationConnection,
 		Importer: &schema.ResourceImporter{
-			StateContext: importOrganizationConnection,
+			StateContext: internalSchema.ImportResourcePairID("organization_id", "connection_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {

@@ -2,7 +2,6 @@ package connection
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -11,11 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
-)
-
-var (
-	errEmptyConnectionClientID         = fmt.Errorf("ID cannot be empty")
-	errInvalidConnectionClientIDFormat = fmt.Errorf("ID must be formated as <connectionID>:<clientID>")
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewClientResource will return a new auth0_connection_client (1:1) resource.
@@ -49,7 +44,7 @@ func NewClientResource() *schema.Resource {
 		ReadContext:   readConnectionClient,
 		DeleteContext: deleteConnectionClient,
 		Importer: &schema.ResourceImporter{
-			StateContext: importConnectionClient,
+			StateContext: internalSchema.ImportResourcePairID("connection_id", "client_id"),
 		},
 		Description: "With this resource, you can enable a single client on a connection.",
 	}

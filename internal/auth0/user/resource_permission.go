@@ -6,7 +6,6 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
@@ -34,6 +33,7 @@ func NewPermissionResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "The name of the connection on which to enable the client.",
 			},
+			// TODO: add read-only properties: permission description and resource server name
 		},
 		CreateContext: createUserPermission,
 		ReadContext:   readUserPermission,
@@ -64,7 +64,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
-	data.SetId(id.UniqueId())
+	data.SetId(userId + resourceServerId + permissionName)
 
 	return readUserPermission(ctx, data, meta)
 }
@@ -105,27 +105,6 @@ func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta int
 
 	mutex.Global.Lock(userId)
 	defer mutex.Global.Unlock(userId)
-
-	existingPermissions, err := api.User.Permissions(userId)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
-	}
-
-	found := false
-	for _, p := range existingPermissions.Permissions {
-		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerId {
-			found = true
-		}
-	}
-
-	if !found {
-		data.SetId("")
-		return nil
-	}
 
 	if err := api.User.RemovePermissions(
 		userId,

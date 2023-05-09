@@ -5,10 +5,6 @@ import (
 	"sync"
 )
 
-// Global is instantiated just once and
-// reused across different resources.
-var Global = New()
-
 // KeyValue is a simple key/value
 // store for arbitrary mutexes.
 type KeyValue struct {

@@ -10,6 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewTemplateResource will return a new auth0_email_template resource.
@@ -99,7 +101,7 @@ func NewTemplateResource() *schema.Resource {
 }
 
 func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailTemplate(d.GetRawConfig())
 
@@ -129,7 +131,7 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 }
 
 func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	email, err := api.EmailTemplate.Read(d.Id())
 	if err != nil {
@@ -158,7 +160,7 @@ func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{
 }
 
 func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailTemplate(d.GetRawConfig())
 	if err := api.EmailTemplate.Update(d.Id(), email); err != nil {
@@ -169,7 +171,7 @@ func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 }
 
 func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	emailTemplate := &management.EmailTemplate{
 		Template: auth0.String(d.Id()),
 		Enabled:  auth0.Bool(false),

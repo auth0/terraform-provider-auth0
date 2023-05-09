@@ -65,7 +65,7 @@ build: ## Build the provider binary. Usage: "make build VERSION=0.2.0"
 	then \
 	  echo "Please provide a version. Example: make build VERSION=0.2.0" && exit 1; \
  	fi
-	@go build -v -ldflags "-X github.com/auth0/terraform-provider-auth0/internal/provider.version=${VERSION}" -o "${BUILD_DIR}/${BINARY}_v$(VERSION)"
+	@go build -v -ldflags "-X github.com/auth0/terraform-provider-auth0/internal/config.version=${VERSION}" -o "${BUILD_DIR}/${BINARY}_v$(VERSION)"
 
 install: build ## Install the provider as a terraform plugin. Usage: "make install VERSION=0.2.0"
 	@mkdir -p "${HOME}/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/$(VERSION)/${GO_OS}_${GO_ARCH}"

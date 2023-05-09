@@ -8,6 +8,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewConfigResource will return a new auth0_rule_config resource.
@@ -45,7 +47,7 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	key := auth0.StringValue(ruleConfig.Key)
 	ruleConfig.Key = nil
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.RuleConfig.Upsert(key, ruleConfig); err != nil {
 		return diag.FromErr(err)
 	}
@@ -56,7 +58,7 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	ruleConfig, err := api.RuleConfig.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -74,7 +76,7 @@ func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) 
 func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	ruleConfig.Key = nil
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.RuleConfig.Upsert(d.Id(), ruleConfig); err != nil {
 		return diag.FromErr(err)
 	}
@@ -83,7 +85,7 @@ func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.RuleConfig.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {

@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -76,7 +77,7 @@ func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m inter
 }
 
 func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	customText, err := api.Prompt.CustomText(d.Get("prompt").(string), d.Get("language").(string))
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -97,7 +98,7 @@ func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	prompt := d.Get("prompt").(string)
 	language := d.Get("language").(string)

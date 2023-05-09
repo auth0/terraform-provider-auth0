@@ -2,9 +2,11 @@ package connection
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -72,24 +74,23 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(err)
 	}
 
-	data.SetId(connection.GetID())
+	// This is never nil because the enabled clients is a required parameter.
+	enabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
 
-	if len(connection.GetEnabledClients()) != 0 {
+	if diagnostics := guardAgainstErasingUnwantedEnabledClients(
+		connection.GetID(),
+		*enabledClients,
+		connection.GetEnabledClients(),
+	); diagnostics.HasError() {
 		data.SetId("")
-
-		return diag.Diagnostics{
-			diag.Diagnostic{
-				Severity: diag.Error,
-				Summary:  "Connection with non empty enabled clients",
-				Detail: "The connection already has enabled clients attached to it. " +
-					"Import the resource instead to get an accurate diff that can be reviewed.",
-			},
-		}
+		return diagnostics
 	}
+
+	data.SetId(connection.GetID())
 
 	if err := api.Connection.Update(
 		connectionID,
-		&management.Connection{EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))},
+		&management.Connection{EnabledClients: enabledClients},
 	); err != nil {
 		return diag.FromErr(err)
 	}
@@ -166,4 +167,29 @@ func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	data.SetId("")
 
 	return nil
+}
+
+func guardAgainstErasingUnwantedEnabledClients(
+	connectionID string,
+	configEnabledClients []string,
+	connectionEnabledClients []string,
+) diag.Diagnostics {
+	if len(connectionEnabledClients) == 0 {
+		return nil
+	}
+
+	if cmp.Equal(configEnabledClients, connectionEnabledClients) {
+		return nil
+	}
+
+	return diag.Diagnostics{
+		diag.Diagnostic{
+			Severity: diag.Error,
+			Summary:  "Connection with non empty enabled clients",
+			Detail: cmp.Diff(configEnabledClients, connectionEnabledClients) +
+				fmt.Sprintf("\nThe connection already has enabled clients attached to it. "+
+					"Import the resource instead in order to proceed with the changes. "+
+					"Run: 'terraform import auth0_connection_clients.<given-name> %s'.", connectionID),
+		},
+	}
 }

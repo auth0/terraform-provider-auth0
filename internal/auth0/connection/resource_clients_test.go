@@ -96,15 +96,6 @@ resource "auth0_connection_clients" "my_conn_client_assoc" {
 }
 `
 
-const testAccConnectionClientsWithNoEnabledClients = givenASingleConnection + `
-resource "auth0_connection_clients" "my_conn_client_assoc" {
-	depends_on = [ auth0_connection.my_conn ]
-
-	connection_id = auth0_connection.my_conn.id
-	enabled_clients = []
-}
-`
-
 func TestAccConnectionClients(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -133,11 +124,14 @@ func TestAccConnectionClients(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccConnectionClientsWithNoEnabledClients, t.Name()),
+				Config: acctest.ParseTestName(givenASingleConnection, t.Name()),
+			},
+			{
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "enabled_clients.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "0"),
 				),
 			},
 		},

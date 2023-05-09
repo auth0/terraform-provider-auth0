@@ -154,7 +154,7 @@ func NewResource() *schema.Resource {
 				Description: "Set of IDs of roles assigned to the user.",
 			},
 			"permissions": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Computed:    true,
 				Description: "Configuration settings for the credentials for the email provider.",
 				Elem: &schema.Resource{

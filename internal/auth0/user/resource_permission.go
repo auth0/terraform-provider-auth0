@@ -2,9 +2,12 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -33,14 +36,23 @@ func NewPermissionResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "The name of the connection on which to enable the client.",
 			},
-			// TODO: add read-only properties: permission description and resource server name
+			"description": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Description of the permission.",
+			},
+			"resource_server_name": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Name of resource server that the permission is associated with.",
+			},
 		},
 		CreateContext: createUserPermission,
 		ReadContext:   readUserPermission,
 		DeleteContext: deleteUserPermission,
-		// Importer: &schema.ResourceImporter{
-		// 	StateContext: importUserPermission,
-		// },
+		Importer: &schema.ResourceImporter{
+			StateContext: importUserPermission,
+		},
 		Description: "With this resource, you can manage user permissions.",
 	}
 }
@@ -124,4 +136,32 @@ func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta int
 
 	data.SetId("")
 	return nil
+}
+
+func importUserPermission(
+	_ context.Context,
+	data *schema.ResourceData,
+	_ interface{},
+) ([]*schema.ResourceData, error) {
+	rawID := data.Id()
+	if rawID == "" {
+		return nil, fmt.Errorf("ID cannot be empty")
+	}
+
+	if !strings.Contains(rawID, ":") {
+		return nil, fmt.Errorf("ID must be formated as <userID>:<resourceServerIdentifier>:<permission>")
+	}
+
+	idPair := strings.Split(rawID, ":")
+	if len(idPair) != 3 {
+		return nil, fmt.Errorf("ID must be formated as <userID>:<resourceServerIdentifier>:<permission>")
+	}
+
+	result := multierror.Append(
+		data.Set("user_id", idPair[0]),
+		data.Set("resource_server_identifier", idPair[1]),
+		data.Set("permission", idPair[2]),
+	)
+
+	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

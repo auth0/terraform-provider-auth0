@@ -10,12 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
-)
-
-var (
-	errEmptyOrganizationMemberID         = fmt.Errorf("ID cannot be empty")
-	errInvalidOrganizationMemberIDFormat = fmt.Errorf("ID must be formated as <organizationID>:<userID>")
 )
 
 // NewMemberResource will return a new auth0_organization_member resource.
@@ -27,7 +23,7 @@ func NewMemberResource() *schema.Resource {
 		UpdateContext: updateOrganizationMember,
 		DeleteContext: deleteOrganizationMember,
 		Importer: &schema.ResourceImporter{
-			StateContext: importOrganizationMember,
+			StateContext: internalSchema.ImportResourcePairID("organization_id", "user_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {

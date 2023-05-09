@@ -164,10 +164,20 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Name of permission.",
 						},
+						"description": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Description of the permission.",
+						},
 						"resource_server_identifier": {
 							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Resource server identifier associated with permission.",
+						},
+						"resource_server_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of resource server that the permission is associated with.",
 						},
 					},
 				},
@@ -408,6 +418,8 @@ func flattenUserPermissions(permissionList *management.PermissionList) []interfa
 		permissions = append(permissions, map[string]string{
 			"name":                       p.GetName(),
 			"resource_server_identifier": p.GetResourceServerIdentifier(),
+			"description":                p.GetDescription(),
+			"resource_server_name":       p.GetResourceServerName(),
 		})
 	}
 	return permissions

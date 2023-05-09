@@ -153,6 +153,25 @@ func NewResource() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Set of IDs of roles assigned to the user.",
 			},
+			"permissions": {
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "Configuration settings for the credentials for the email provider.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of permission.",
+						},
+						"resource_server_identifier": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Resource server identifier associated with permission.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -208,6 +227,12 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(err)
 	}
 	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
+
+	permissions, err := api.User.Permissions(*user.ID)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	result = multierror.Append(result, d.Set("permissions", flattenUserPermissions(permissions)))
 
 	return diag.FromErr(result.ErrorOrNil())
 }
@@ -375,6 +400,17 @@ func flattenUserRoles(roleList *management.RoleList) []interface{} {
 		roles = append(roles, role.GetID())
 	}
 	return roles
+}
+
+func flattenUserPermissions(permissionList *management.PermissionList) []interface{} {
+	var permissions []interface{}
+	for _, p := range permissionList.Permissions {
+		permissions = append(permissions, map[string]string{
+			"name":                       p.GetName(),
+			"resource_server_identifier": p.GetResourceServerIdentifier(),
+		})
+	}
+	return permissions
 }
 
 func validateUser(user *management.User) error {

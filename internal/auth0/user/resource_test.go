@@ -172,6 +172,7 @@ func TestAccUser(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
 				),
 			},
 			{
@@ -204,6 +205,7 @@ func TestAccUser(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserUpdateRemovingMetadata, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
 				),

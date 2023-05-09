@@ -60,6 +60,17 @@ resource "auth0_role" "admin" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `permissions` (Set of Object) Configuration settings for the credentials for the email provider. (see [below for nested schema](#nestedatt--permissions))
+
+<a id="nestedatt--permissions"></a>
+### Nested Schema for `permissions`
+
+Read-Only:
+
+- `description` (String)
+- `name` (String)
+- `resource_server_identifier` (String)
+- `resource_server_name` (String)
 
 ## Import
 

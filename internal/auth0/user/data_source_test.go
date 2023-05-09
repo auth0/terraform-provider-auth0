@@ -66,6 +66,7 @@ func TestAccDataSourceUser(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.test", "nickname", strings.ToLower(t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "picture", "https://www.example.com/picture.jpg"),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "roles.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "0"),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "user_metadata", `{"baz":"qux","foo":"bar"}`),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "app_metadata", `{"baz":"qux","foo":"bar"}`),
 				),

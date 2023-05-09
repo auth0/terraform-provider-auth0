@@ -6,21 +6,21 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 39
+        content_length: 82
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"owner","description":"Owner"}
+            {"name":"Acceptance-Test-Connection-TestAccConnectionClients","strategy":"auth0"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
         proto: HTTP/2.0
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}'
+        content_length: 363
+        uncompressed: false
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 166.88025ms
+        status: 201 Created
+        code: 201
+        duration: 147.294042ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -56,7 +56,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_qhhoGHqqEDzDoRW2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.357333ms
+        duration: 97.35075ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -92,7 +92,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_qhhoGHqqEDzDoRW2/permissions?include_totals=true&page=0&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,34 +102,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 115.946417ms
+        duration: 108.561583ms
     - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 47
+        content_length: 23
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"admin","description":"Administrator"}
+            {"enabled_clients":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
-        method: POST
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -138,13 +138,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.357958ms
+        duration: 220.957083ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -164,7 +164,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_5k9IOqn69u4IvsQn
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -174,13 +174,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.414125ms
+        duration: 189.829ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -200,7 +200,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_5k9IOqn69u4IvsQn/permissions?include_totals=true&page=0&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -210,85 +210,85 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 117.464708ms
+        duration: 98.038917ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 443
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","email":"testaccdatasourceuser@acceptance.test.com","name":"Firstname Lastname","given_name":"Firstname","family_name":"Lastname","username":"testaccdatasourceuser","nickname":"testaccdatasourceuser","password":"passpass$12$12","user_metadata":{"baz":"qux","foo":"bar"},"app_metadata":{"baz":"qux","foo":"bar"},"picture":"https://www.example.com/picture.jpg"}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
-        method: POST
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 610
-        uncompressed: false
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 288.116667ms
+        status: 200 OK
+        code: 200
+        duration: 103.320834ms
     - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 58
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"roles":["rol_qhhoGHqqEDzDoRW2","rol_5k9IOqn69u4IvsQn"]}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles
-        method: POST
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 107.120291ms
+        status: 200 OK
+        code: 200
+        duration: 108.263583ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -308,7 +308,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -318,34 +318,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.245625ms
+        duration: 121.784792ms
     - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 61
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"name":"Acceptance-Test-Client-1-TestAccConnectionClients"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
-        method: GET
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -353,14 +353,14 @@ interactions:
         transfer_encoding: []
         trailer: {}
         content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        uncompressed: false
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 100.833375ms
+        status: 201 Created
+        code: 201
+        duration: 718.669667ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -380,7 +380,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: GET
       response:
         proto: HTTP/2.0
@@ -390,34 +390,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 114.681458ms
+        duration: 121.325166ms
     - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 57
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: GET
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -426,13 +426,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.269542ms
+        duration: 141.28875ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -452,7 +452,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -462,13 +462,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.379375ms
+        duration: 100.3335ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -488,7 +488,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -498,13 +498,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.993125ms
+        duration: 226.554959ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -524,7 +524,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: GET
       response:
         proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.956833ms
+        duration: 264.085083ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -560,7 +560,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -570,13 +570,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.810708ms
+        duration: 99.632084ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -596,7 +596,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -606,13 +606,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 119.288208ms
+        duration: 96.471666ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -632,7 +632,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_qhhoGHqqEDzDoRW2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: GET
       response:
         proto: HTTP/2.0
@@ -642,13 +642,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 125.6595ms
+        duration: 139.444875ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -668,7 +668,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_qhhoGHqqEDzDoRW2/permissions?include_totals=true&page=0&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -678,34 +678,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.753459ms
+        duration: 119.481125ms
     - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 61
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"name":"Acceptance-Test-Client-1-TestAccConnectionClients"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_5k9IOqn69u4IvsQn
-        method: GET
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -713,14 +713,14 @@ interactions:
         transfer_encoding: []
         trailer: {}
         content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"}'
+        uncompressed: false
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.061959ms
+        status: 201 Created
+        code: 201
+        duration: 408.205708ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -740,7 +740,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_5k9IOqn69u4IvsQn/permissions?include_totals=true&page=0&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi
         method: GET
       response:
         proto: HTTP/2.0
@@ -750,34 +750,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.036375ms
+        duration: 125.578083ms
     - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 92
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"enabled_clients":["NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: GET
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -786,13 +786,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.440209ms
+        duration: 122.9845ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -812,7 +812,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -822,13 +822,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.409ms
+        duration: 170.74575ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -848,7 +848,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -858,13 +858,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 67.680875ms
+        duration: 165.672625ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -884,7 +884,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: GET
       response:
         proto: HTTP/2.0
@@ -894,13 +894,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.790625ms
+        duration: 96.885583ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -920,7 +920,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi
         method: GET
       response:
         proto: HTTP/2.0
@@ -930,13 +930,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 64.79525ms
+        duration: 123.181708ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -956,7 +956,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -966,13 +966,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.869125ms
+        duration: 102.551209ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -992,7 +992,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6?fields=enabled_clients%2Cstrategy%2Cname&include_fields=true
         method: GET
       response:
         proto: HTTP/2.0
@@ -1002,13 +1002,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-05-09T20:14:14.582Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-05-09T20:14:14.582Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.318666ms
+        duration: 89.087ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -1028,7 +1028,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: GET
       response:
         proto: HTTP/2.0
@@ -1038,13 +1038,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_5k9IOqn69u4IvsQn","name":"admin","description":"Administrator"},{"id":"rol_qhhoGHqqEDzDoRW2","name":"owner","description":"Owner"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":["ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi"],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.607ms
+        duration: 132.387875ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1064,7 +1064,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: GET
       response:
         proto: HTTP/2.0
@@ -1074,14 +1074,86 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.348084ms
+        duration: 132.357834ms
     - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance-Test-Client-1-TestAccConnectionClients","client_id":"NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 132.418292ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 23
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"enabled_clients":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 116.051166ms
+    - id: 32
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1099,7 +1171,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/NcNTDYPMN4YdPQEIOr1lwdwHwMYIgmDi
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1115,27 +1187,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 142.964875ms
-    - id: 31
+        duration: 253.830041ms
+    - id: 33
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 3
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_5k9IOqn69u4IvsQn
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/ah7TKVsfgza2bNVpKMCgtW2KA1rJsFbY
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1143,35 +1214,106 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 2
+        content_length: 0
         uncompressed: false
-        body: '{}'
+        body: ""
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 65.001667ms
-    - id: 32
+        status: 204 No Content
+        code: 204
+        duration: 207.823708ms
+    - id: 34
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 3
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_qhhoGHqqEDzDoRW2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 108.051042ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_bdCGh5mlMR53cKT6","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionClients","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionClients"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 182.687666ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_bdCGh5mlMR53cKT6
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1179,12 +1321,12 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 2
+        content_length: 41
         uncompressed: false
-        body: '{}'
+        body: '{"deleted_at":"2023-05-09T09:38:58.164Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 168.373ms
+        status: 202 Accepted
+        code: 202
+        duration: 130.806375ms

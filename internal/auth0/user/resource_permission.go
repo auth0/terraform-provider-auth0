@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewPermissionResource will return a new auth0_connection_client resource.
@@ -59,13 +59,14 @@ func NewPermissionResource() *schema.Resource {
 
 func createUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
+	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	resourceServerId := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	mutex.Global.Lock(userID)
-	defer mutex.Global.Unlock(userID)
+	mutex.Lock(userID)
+	defer mutex.Unlock(userID)
 
 	if err := api.User.AssignPermissions(userID, []*management.Permission{
 		{
@@ -114,13 +115,14 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 
 func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
+	mutex := meta.(*config.Config).GetMutex()
 
 	userId := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerId := data.Get("resource_server_identifier").(string)
 
-	mutex.Global.Lock(userId)
-	defer mutex.Global.Unlock(userId)
+	mutex.Lock(userId)
+	defer mutex.Unlock(userId)
 
 	if err := api.User.RemovePermissions(
 		userId,

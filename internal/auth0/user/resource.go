@@ -156,7 +156,7 @@ func NewResource() *schema.Resource {
 			"permissions": {
 				Type:        schema.TypeSet,
 				Computed:    true,
-				Description: "Configuration settings for the credentials for the email provider.",
+				Description: "List of API permissions granted to the user.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

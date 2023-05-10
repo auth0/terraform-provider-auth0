@@ -150,13 +150,13 @@ func importUserPermission(
 		return nil, fmt.Errorf("ID cannot be empty")
 	}
 
-	if !strings.Contains(rawID, ":") {
-		return nil, fmt.Errorf("ID must be formated as <userID>:<resourceServerIdentifier>:<permission>")
+	if !strings.Contains(rawID, "::") {
+		return nil, fmt.Errorf("ID must be formated as <userID>::<resourceServerIdentifier>::<permission>")
 	}
 
-	idPair := strings.Split(rawID, ":")
+	idPair := strings.Split(rawID, "::")
 	if len(idPair) != 3 {
-		return nil, fmt.Errorf("ID must be formated as <userID>:<resourceServerIdentifier>:<permission>")
+		return nil, fmt.Errorf("ID must be formated as <userID>::<resourceServerIdentifier>::<permission>")
 	}
 
 	result := multierror.Append(

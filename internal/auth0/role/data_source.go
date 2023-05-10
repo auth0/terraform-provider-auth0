@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -42,7 +43,7 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		return readRole(ctx, data, meta)
 	}
 
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 	name := data.Get("name").(string)
 	page := 0
 	for {

@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/provider"
 )
 
@@ -55,9 +56,7 @@ func testFactoriesWithHTTPRecordings(httpRecorder *recorder.Recorder) map[string
 	}
 }
 
-func configureTestProviderWithHTTPRecordings(
-	httpRecorder *recorder.Recorder,
-) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) schema.ConfigureContextFunc {
 	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		domain := data.Get("domain").(string)
 		debug := data.Get("debug").(bool)
@@ -90,6 +89,6 @@ func configureTestProviderWithHTTPRecordings(
 			return nil, diag.FromErr(err)
 		}
 
-		return apiClient, nil
+		return config.New(apiClient), nil
 	}
 }

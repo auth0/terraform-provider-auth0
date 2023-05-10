@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewResource will return a new auth0_action resource.
@@ -131,7 +133,7 @@ func NewResource() *schema.Resource {
 }
 
 func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	action := expandAction(d.GetRawConfig())
 	if err := api.Action.Create(action); err != nil {
@@ -148,7 +150,7 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	action, err := api.Action.Read(d.Id())
 	if err != nil {
@@ -177,7 +179,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	diagnostics := preventErasingUnmanagedSecrets(d, api)
 	if diagnostics.HasError() {
@@ -197,7 +199,7 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.Action.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -217,7 +219,7 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return nil
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		action, err := api.Action.Read(d.Id())

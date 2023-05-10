@@ -60,14 +60,14 @@ func NewPermissionResource() *schema.Resource {
 func createUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*management.Management)
 
-	userId := data.Get("user_id").(string)
+	userID := data.Get("user_id").(string)
 	resourceServerId := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	mutex.Global.Lock(userId)
-	defer mutex.Global.Unlock(userId)
+	mutex.Global.Lock(userID)
+	defer mutex.Global.Unlock(userID)
 
-	if err := api.User.AssignPermissions(userId, []*management.Permission{
+	if err := api.User.AssignPermissions(userID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerId,
 			Name:                     &permissionName,
@@ -76,7 +76,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
-	data.SetId(userId + resourceServerId + permissionName)
+	data.SetId(fmt.Sprintf(`%s::%s::%s`, userID, resourceServerId, permissionName))
 
 	return readUserPermission(ctx, data, meta)
 }

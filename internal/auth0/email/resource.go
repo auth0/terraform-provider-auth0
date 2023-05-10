@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewResource will return a new auth0_email resource.
@@ -187,7 +189,7 @@ func NewResource() *schema.Resource {
 func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(id.UniqueId())
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if emailProviderIsConfigured(api) {
 		return updateEmail(ctx, d, m)
 	}
@@ -201,7 +203,7 @@ func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 }
 
 func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	email, err := api.EmailProvider.Read()
 	if err != nil {
@@ -225,7 +227,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 }
 
 func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailProvider(d.GetRawConfig())
 	if err := api.EmailProvider.Update(email); err != nil {
@@ -236,7 +238,7 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 }
 
 func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.EmailProvider.Delete(); err != nil {
 		return diag.FromErr(err)

@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -104,7 +105,7 @@ func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	branding, err := api.Branding.Read()
 	if err != nil {
@@ -138,7 +139,7 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if branding := expandBranding(d.GetRawConfig()); branding.String() != "{}" {
 		if err := api.Branding.Update(branding); err != nil {
@@ -160,7 +161,7 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if _, ok := d.GetOk("universal_login"); !ok {
 		d.SetId("")

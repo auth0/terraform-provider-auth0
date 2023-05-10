@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -462,7 +463,7 @@ func NewThemeResource() *schema.Resource {
 }
 
 func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	if existingBrandingTheme, err := api.BrandingTheme.Default(); err == nil {
 		data.SetId(existingBrandingTheme.GetID())
@@ -480,7 +481,7 @@ func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 }
 
 func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	brandingTheme, err := api.BrandingTheme.Default()
 	if err != nil {
@@ -507,7 +508,7 @@ func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta inte
 }
 
 func updateBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	brandingTheme := expandBrandingTheme(data)
 	if err := api.BrandingTheme.Update(data.Id(), &brandingTheme); err != nil {
@@ -518,7 +519,7 @@ func updateBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 }
 
 func deleteBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	if err := api.BrandingTheme.Delete(data.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

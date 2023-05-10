@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -47,13 +47,14 @@ func NewMemberResource() *schema.Resource {
 }
 
 func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
+	mutex := m.(*config.Config).GetMutex()
 
 	userID := d.Get("user_id").(string)
 	orgID := d.Get("organization_id").(string)
 
-	mutex.Global.Lock(orgID)
-	defer mutex.Global.Unlock(orgID)
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
 
 	if err := api.Organization.AddMembers(orgID, []string{userID}); err != nil {
 		return diag.FromErr(err)
@@ -121,7 +122,7 @@ func addMemberRoles(orgID string, userID string, roles []interface{}, api *manag
 }
 
 func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	orgID := d.Get("organization_id").(string)
 	userID := d.Get("user_id").(string)
@@ -146,12 +147,13 @@ func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m inter
 }
 
 func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
+	mutex := m.(*config.Config).GetMutex()
 
 	orgID := d.Get("organization_id").(string)
 
-	mutex.Global.Lock(orgID)
-	defer mutex.Global.Unlock(orgID)
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
 
 	if err := assignRoles(d, api); err != nil {
 		return diag.FromErr(fmt.Errorf("failed to assign members to organization. %w", err))
@@ -161,13 +163,14 @@ func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 }
 
 func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
+	mutex := m.(*config.Config).GetMutex()
 
 	userID := d.Get("user_id").(string)
 	orgID := d.Get("organization_id").(string)
 
-	mutex.Global.Lock(orgID)
-	defer mutex.Global.Unlock(orgID)
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
 
 	if err := api.Organization.DeleteMember(orgID, []string{userID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {

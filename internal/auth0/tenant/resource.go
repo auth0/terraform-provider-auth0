@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -395,7 +396,7 @@ func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	tenant, err := api.Tenant.Read()
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -433,7 +434,7 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	tenant := expandTenant(d)
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Tenant.Update(tenant); err != nil {
 		return diag.FromErr(err)
 	}

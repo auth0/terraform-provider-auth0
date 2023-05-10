@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -734,7 +735,7 @@ func NewResource() *schema.Resource {
 }
 
 func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
 	if err := api.Client.Create(client); err != nil {
@@ -747,7 +748,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	client, err := api.Client.Read(d.Id())
 	if err != nil {
@@ -800,7 +801,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
 	if clientHasChange(client) {
@@ -819,7 +820,7 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.Client.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -837,7 +838,7 @@ func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
 		return nil
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	client, err := api.Client.RotateSecret(d.Id())
 	if err != nil {

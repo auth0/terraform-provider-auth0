@@ -9,6 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewTriggerBindingResource will return a new auth0_trigger_binding resource.
@@ -68,7 +70,7 @@ func NewTriggerBindingResource() *schema.Resource {
 }
 
 func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	id := d.Get("trigger").(string)
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
@@ -83,7 +85,7 @@ func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	triggerBindings, err := api.Action.Bindings(d.Id())
 	if err != nil {
@@ -104,7 +106,7 @@ func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
@@ -113,7 +115,7 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {

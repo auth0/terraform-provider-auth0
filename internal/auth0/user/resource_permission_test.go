@@ -24,28 +24,98 @@ resource "auth0_resource_server" "resource_server" {
 }
 `
 
-const testAccUserPermission = `
-resource "auth0_user_permission" "user_permission" {
+const givenAUserPermission = `
+resource "auth0_user_permission" "user_permission_read" {
 	depends_on = [auth0_resource_server.resource_server, auth0_user.user ]
+
 	user_id = auth0_user.user.id
 	resource_server_identifier = auth0_resource_server.resource_server.identifier
 	permission = "read:foo"
 }
 `
 
+const givenAnotherUserPermission = `
+resource "auth0_user_permission" "user_permission_create" {
+	depends_on = [auth0_resource_server.resource_server, auth0_user.user ]
+
+	user_id = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission = "create:foo"
+}
+`
+
+const givenAUserWithNoPermissions = testAccUserEmpty
+const givenAUserWithOnePermission = givenAUserWithNoPermissions + givenAUserPermission
+const givenAUserWithTwoPermissions = givenAUserWithOnePermission + givenAnotherUserPermission
+
+const testAccUserPermissionNoneAssigned = givenAResourceServerWithPermissions + givenAUserWithNoPermissions + `data "auth0_user" "user" {
+	depends_on= [auth0_resource_server.resource_server, auth0_user.user ]
+	user_id = auth0_user.user.id
+}`
+
+const testAccUserPermissionOneAssigned = givenAResourceServerWithPermissions + givenAUserWithOnePermission + `data "auth0_user" "user" {
+	depends_on= [auth0_resource_server.resource_server, auth0_user.user , auth0_user_permission.user_permission_read ]
+	user_id = auth0_user.user.id
+}`
+
+const testAccUserPermissionTwoAssigned = givenAResourceServerWithPermissions + givenAUserWithTwoPermissions + `data "auth0_user" "user" {
+	depends_on= [auth0_resource_server.resource_server, auth0_user.user , auth0_user_permission.user_permission_read, auth0_user_permission.user_permission_create ]
+	user_id = auth0_user.user.id
+}`
+
 func TestAccUserPermission(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccUserEmpty+givenAResourceServerWithPermissions+testAccUserPermission, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "0"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserEmpty+givenAResourceServerWithPermissions, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "user_id", "auth0|testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
+					// resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", "Acceptance Test - testaccuserpermission"),
+					// resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "description", "Can read Foo"),
+
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.permission", "read:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.user_id", "auth0|testaccuserpermission"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.resource_server_name", "Acceptance Test - testaccuserpermission"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.description", "Can read Foo"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionTwoAssigned, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "permission", "create:foo"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
+				Check:  resource.ComposeTestCheckFunc(), //Intentionally empty to make asserts against the deletion
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
+				Check:  resource.ComposeTestCheckFunc(), //Intentionally empty to make asserts against the deletion
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "0"),
 				),
 			},
 		},

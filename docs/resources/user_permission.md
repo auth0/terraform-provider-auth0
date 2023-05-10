@@ -52,7 +52,7 @@ resource "auth0_user_permission" "user_permission_read" {
 ### Required
 
 - `permission` (String) Name of the permission.
-- `resource_server_identifier` (String) Identifier (ID) of the resource server that the permission is associated with.
+- `resource_server_identifier` (String) Identifier of the resource server that the permission is associated with.
 - `user_id` (String) ID of user to associate the permission to.
 
 ### Read-Only

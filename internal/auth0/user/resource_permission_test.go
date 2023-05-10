@@ -45,23 +45,12 @@ resource "auth0_user_permission" "user_permission_create" {
 `
 
 const givenAUserWithNoPermissions = testAccUserEmpty
-const givenAUserWithOnePermission = givenAUserWithNoPermissions + givenAUserPermission
-const givenAUserWithTwoPermissions = givenAUserWithOnePermission + givenAnotherUserPermission
+const givenAUserWithOnePermission = testAccUserEmpty + givenAUserPermission
+const givenAUserWithTwoPermissions = givenAUserWithNoPermissions + givenAUserPermission + givenAnotherUserPermission
 
-const testAccUserPermissionNoneAssigned = givenAResourceServerWithPermissions + givenAUserWithNoPermissions + `data "auth0_user" "user" {
-	depends_on= [auth0_resource_server.resource_server, auth0_user.user ]
-	user_id = auth0_user.user.id
-}`
-
-const testAccUserPermissionOneAssigned = givenAResourceServerWithPermissions + givenAUserWithOnePermission + `data "auth0_user" "user" {
-	depends_on= [auth0_resource_server.resource_server, auth0_user.user , auth0_user_permission.user_permission_read ]
-	user_id = auth0_user.user.id
-}`
-
-const testAccUserPermissionTwoAssigned = givenAResourceServerWithPermissions + givenAUserWithTwoPermissions + `data "auth0_user" "user" {
-	depends_on= [auth0_resource_server.resource_server, auth0_user.user , auth0_user_permission.user_permission_read, auth0_user_permission.user_permission_create ]
-	user_id = auth0_user.user.id
-}`
+const testAccUserPermissionNoneAssigned = givenAResourceServerWithPermissions + givenAUserWithNoPermissions
+const testAccUserPermissionOneAssigned = givenAResourceServerWithPermissions + givenAUserWithOnePermission
+const testAccUserPermissionTwoAssigned = givenAResourceServerWithPermissions + givenAUserWithTwoPermissions
 
 func TestAccUserPermission(t *testing.T) {
 	acctest.Test(t, resource.TestCase{

@@ -34,7 +34,7 @@ func NewPermissionResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Identifier (ID) of the resource server that the permission is associated with.",
+				Description: "Identifier of the resource server that the permission is associated with.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -99,9 +99,11 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 
 	for _, p := range existingPermissions.Permissions {
 		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerId {
-			data.Set("description", p.GetDescription())
-			data.Set("resource_server_name", p.GetResourceServerName())
-			return nil
+			result := multierror.Append(
+				data.Set("description", p.GetDescription()),
+				data.Set("resource_server_name", p.GetResourceServerName()),
+			)
+			return diag.FromErr(result.ErrorOrNil())
 		}
 	}
 

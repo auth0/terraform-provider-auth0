@@ -11,6 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
@@ -65,7 +67,7 @@ func NewResource() *schema.Resource {
 
 func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := expandRule(d.GetRawConfig())
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Rule.Create(rule); err != nil {
 		return diag.FromErr(err)
 	}
@@ -76,7 +78,7 @@ func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	rule, err := api.Rule.Read(d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -100,7 +102,7 @@ func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 
 func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := expandRule(d.GetRawConfig())
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Rule.Update(d.Id(), rule); err != nil {
 		return diag.FromErr(err)
 	}
@@ -109,7 +111,7 @@ func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.Rule.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {

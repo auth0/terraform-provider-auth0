@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -140,7 +141,7 @@ func NewResource() *schema.Resource {
 }
 
 func createResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	resourceServer := expandResourceServer(d)
 	if err := api.ResourceServer.Create(resourceServer); err != nil {
@@ -153,7 +154,7 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	resourceServer, err := api.ResourceServer.Read(d.Id())
 	if err != nil {
@@ -196,7 +197,7 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	resourceServer := expandResourceServer(d)
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
@@ -212,7 +213,7 @@ func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 		return nil
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.ResourceServer.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

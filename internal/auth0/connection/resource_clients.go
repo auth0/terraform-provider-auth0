@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -54,12 +54,13 @@ func NewClientsResource() *schema.Resource {
 }
 
 func createConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex.Global.Lock(connectionID)
-	defer mutex.Global.Unlock(connectionID)
+	mutex.Lock(connectionID)
+	defer mutex.Unlock(connectionID)
 
 	connection, err := api.Connection.Read(
 		connectionID,
@@ -99,7 +100,7 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 }
 
 func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(
 		data.Id(),
@@ -124,10 +125,11 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Global.Lock(data.Id())
-	defer mutex.Global.Unlock(data.Id())
+	mutex.Lock(data.Id())
+	defer mutex.Unlock(data.Id())
 
 	if err := api.Connection.Update(
 		data.Id(),
@@ -145,10 +147,11 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 }
 
 func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Global.Lock(data.Id())
-	defer mutex.Global.Unlock(data.Id())
+	mutex.Lock(data.Id())
+	defer mutex.Unlock(data.Id())
 
 	enabledClients := make([]string, 0)
 

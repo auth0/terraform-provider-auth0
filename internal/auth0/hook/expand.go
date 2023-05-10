@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -34,7 +35,7 @@ func expandHook(d *schema.ResourceData) *management.Hook {
 func checkForUntrackedHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	secretsFromConfig := d.Get("secrets").(map[string]interface{})
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	secretsFromAPI, err := api.Hook.Secrets(d.Id())
 	if err != nil {
 		return diag.FromErr(err)

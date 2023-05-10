@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -58,7 +59,7 @@ func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	prompt, err := api.Prompt.Read()
 	if err != nil {
@@ -75,7 +76,7 @@ func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	prompt := expandPrompt(d.GetRawConfig())
 	if err := api.Prompt.Update(prompt); err != nil {

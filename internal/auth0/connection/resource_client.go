@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -51,12 +51,13 @@ func NewClientResource() *schema.Resource {
 }
 
 func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex.Global.Lock(connectionID)
-	defer mutex.Global.Unlock(connectionID)
+	mutex.Lock(connectionID)
+	defer mutex.Unlock(connectionID)
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {
@@ -79,7 +80,7 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 }
 
 func readConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
@@ -113,12 +114,13 @@ func readConnectionClient(_ context.Context, data *schema.ResourceData, meta int
 }
 
 func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex.Global.Lock(connectionID)
-	defer mutex.Global.Unlock(connectionID)
+	mutex.Lock(connectionID)
+	defer mutex.Unlock(connectionID)
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {

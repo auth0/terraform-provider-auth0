@@ -8,6 +8,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewResource will return a new auth0_connection resource.
@@ -42,7 +44,7 @@ func NewResource() *schema.Resource {
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	connection, diagnostics := expandConnection(d, api)
 	if diagnostics.HasError() {
@@ -61,7 +63,7 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(d.Id())
 	if err != nil {
@@ -103,7 +105,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	connection, diagnostics := expandConnection(d, api)
 	if diagnostics.HasError() {
@@ -120,7 +122,7 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.Connection.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

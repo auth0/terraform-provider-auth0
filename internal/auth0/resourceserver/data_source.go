@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -45,7 +46,7 @@ func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceD
 		resourceServerID = url.PathEscape(data.Get("identifier").(string))
 	}
 
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 	resourceServer, err := api.ResourceServer.Read(resourceServerID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

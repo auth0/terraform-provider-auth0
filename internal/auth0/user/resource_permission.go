@@ -22,7 +22,7 @@ func NewPermissionResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "ID of user to associate permission to.",
+				Description: "ID of user to associate the permission to.",
 			},
 			"permission": {
 				Type:        schema.TypeString,
@@ -34,7 +34,7 @@ func NewPermissionResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "The name of the connection on which to enable the client.",
+				Description: "Identifier (ID) of the resource server that the permission is associated with.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -44,7 +44,7 @@ func NewPermissionResource() *schema.Resource {
 			"resource_server_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Name of resource server that the permission is associated with.",
+				Description: "Name of the resource server that the permission is associated with.",
 			},
 		},
 		CreateContext: createUserPermission,

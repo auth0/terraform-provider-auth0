@@ -16,11 +16,13 @@ With this resource, you can manage user permissions.
 ### Required
 
 - `permission` (String) Name of the permission.
-- `resource_server_identifier` (String) The name of the connection on which to enable the client.
-- `user_id` (String) ID of user to associate permission to.
+- `resource_server_identifier` (String) Identifier (ID) of the resource server that the permission is associated with.
+- `user_id` (String) ID of user to associate the permission to.
 
 ### Read-Only
 
+- `description` (String) Description of the permission.
 - `id` (String) The ID of this resource.
+- `resource_server_name` (String) Name of the resource server that the permission is associated with.
 
 

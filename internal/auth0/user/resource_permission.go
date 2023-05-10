@@ -22,7 +22,7 @@ func NewPermissionResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "ID of user to associate the permission to.",
+				Description: "ID of the user to associate the permission to.",
 			},
 			"permission": {
 				Type:        schema.TypeString,

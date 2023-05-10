@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -64,7 +65,7 @@ func NewResource() *schema.Resource {
 }
 
 func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	role := expandRole(d)
 	if err := api.Role.Create(role); err != nil {
@@ -83,7 +84,7 @@ func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	role, err := api.Role.Read(d.Id())
 	if err != nil {
@@ -125,7 +126,7 @@ func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 }
 
 func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	role := expandRole(d)
 	if err := api.Role.Update(d.Id(), role); err != nil {
@@ -142,7 +143,7 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.Role.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -186,7 +187,7 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 		})
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if len(rmPermissions) > 0 {
 		if err := api.Role.RemovePermissions(d.Id(), rmPermissions); err != nil {

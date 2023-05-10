@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -100,7 +101,7 @@ func NewResource() *schema.Resource {
 }
 
 func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
 	if err := api.CustomDomain.Create(customDomain); err != nil {
@@ -113,7 +114,7 @@ func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {
@@ -144,7 +145,7 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
 	if err := api.CustomDomain.Update(d.Id(), customDomain); err != nil {
@@ -159,7 +160,7 @@ func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.CustomDomain.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

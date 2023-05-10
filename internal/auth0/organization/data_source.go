@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -61,7 +62,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 }
 
 func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 	var foundOrganization *management.Organization
 	var err error
 

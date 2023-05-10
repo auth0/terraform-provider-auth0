@@ -1,15 +1,9 @@
 package provider
 
 import (
-	"context"
-	"fmt"
 	"os"
 
-	"github.com/auth0/go-auth0"
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/action"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
@@ -28,9 +22,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
-
-var version = "dev"
 
 // New returns a *schema.Provider.
 func New() *schema.Provider {
@@ -140,59 +133,7 @@ func New() *schema.Provider {
 		},
 	}
 
-	provider.ConfigureContextFunc = configureProvider(&provider.TerraformVersion)
+	provider.ConfigureContextFunc = config.ConfigureProvider(&provider.TerraformVersion)
 
 	return provider
-}
-
-// ConfigureProvider will configure the *schema.Provider so that *management.Management
-// client is stored and passed into the subsequent resources as the meta parameter.
-func configureProvider(
-	terraformVersion *string,
-) func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		sdkVersion := auth0.Version
-		terraformSDKVersion := meta.SDKVersionString()
-
-		userAgent := fmt.Sprintf(
-			"Terraform-Provider-Auth0/%s (Go-Auth0-SDK/%s; Terraform-SDK/%s; Terraform/%s)",
-			version,
-			sdkVersion,
-			terraformSDKVersion,
-			*terraformVersion,
-		)
-
-		domain := data.Get("domain").(string)
-		audience := data.Get("audience").(string)
-		debug := data.Get("debug").(bool)
-		clientID := data.Get("client_id").(string)
-		clientSecret := data.Get("client_secret").(string)
-		apiToken := data.Get("api_token").(string)
-
-		authenticationOption := management.WithStaticToken(apiToken)
-		// If api_token is not specified, authenticate with client ID and client secret.
-		if apiToken == "" {
-			authenticationOption = management.WithClientCredentials(clientID, clientSecret)
-
-			if audience != "" {
-				authenticationOption = management.WithClientCredentialsAndAudience(
-					clientID,
-					clientSecret,
-					audience,
-				)
-			}
-		}
-
-		apiClient, err := management.New(domain,
-			authenticationOption,
-			management.WithDebug(debug),
-			management.WithUserAgent(userAgent),
-			management.WithAuth0ClientEnvEntry("Terraform-Provider-Auth0", version),
-		)
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
-
-		return apiClient, nil
-	}
 }

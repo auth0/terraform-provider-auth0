@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -50,7 +51,7 @@ func NewGrantResource() *schema.Resource {
 }
 
 func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	grantList, err := api.ClientGrant.List(
 		management.Parameter("audience", d.Get("audience").(string)),
@@ -76,7 +77,7 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 }
 
 func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	clientGrant, err := api.ClientGrant.Read(d.Id())
 	if err != nil {
@@ -97,7 +98,7 @@ func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{})
 }
 
 func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	clientGrant := expandClientGrant(d)
 	if clientGrantHasChange(clientGrant) {
@@ -110,7 +111,7 @@ func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 }
 
 func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.ClientGrant.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

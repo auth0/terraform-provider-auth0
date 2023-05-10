@@ -238,7 +238,7 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 	}
 	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
 
-	permissions, err := api.User.Permissions(*user.ID)
+	permissions, err := api.User.Permissions(user.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}

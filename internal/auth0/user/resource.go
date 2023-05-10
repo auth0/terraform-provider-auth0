@@ -172,7 +172,7 @@ func NewResource() *schema.Resource {
 						"resource_server_identifier": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "Resource server identifier associated with permission.",
+							Description: "Resource server identifier associated with the permission.",
 						},
 						"resource_server_name": {
 							Type:        schema.TypeString,

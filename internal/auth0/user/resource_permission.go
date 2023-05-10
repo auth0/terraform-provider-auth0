@@ -58,7 +58,7 @@ func NewPermissionResource() *schema.Resource {
 }
 
 func createUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
@@ -83,7 +83,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 }
 
 func readUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	userId := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
@@ -114,7 +114,7 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 }
 
 func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
 	userId := data.Get("user_id").(string)

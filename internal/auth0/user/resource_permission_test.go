@@ -75,15 +75,14 @@ func TestAccUserPermission(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "user_id", "auth0|testaccuserpermission"),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
-					// resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", "Acceptance Test - testaccuserpermission"),
-					// resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "description", "Can read Foo"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", "Acceptance Test - testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "description", "Can read Foo"),
 
-					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.permission", "read:foo"),
-					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.user_id", "auth0|testaccuserpermission"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.name", "read:foo"),
 					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
 					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.resource_server_name", "Acceptance Test - testaccuserpermission"),
 					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.description", "Can read Foo"),
@@ -92,9 +91,15 @@ func TestAccUserPermission(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccUserPermissionTwoAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "2"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "permission", "create:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "user_id", "auth0|testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_name", "Acceptance Test - testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "description", "Can create Foo"),
+
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.name", "create:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.1.name", "read:foo"),
 				),
 			},
 			{
@@ -105,7 +110,7 @@ func TestAccUserPermission(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user", "permissions.0.name", "read:foo"),
 				),
 			},
 			{

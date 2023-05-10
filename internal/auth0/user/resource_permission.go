@@ -99,6 +99,8 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 
 	for _, p := range existingPermissions.Permissions {
 		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerId {
+			data.Set("description", p.GetDescription())
+			data.Set("resource_server_name", p.GetResourceServerName())
 			return nil
 		}
 	}

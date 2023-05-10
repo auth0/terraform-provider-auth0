@@ -37,6 +37,7 @@ data "auth0_user" "my_user" {
 - `name` (String) Name of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
 - `nickname` (String) Preferred nickname or alias of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
 - `password` (String) Initial password for this user. Required for non-passwordless connections (SMS and email).
+- `permissions` (Set of Object) List of API permissions granted to the user. (see [below for nested schema](#nestedatt--permissions))
 - `phone_number` (String) Phone number for the user; follows the E.164 recommendation. Used for SMS connections.
 - `phone_verified` (Boolean) Indicates whether the phone number has been verified.
 - `picture` (String) Picture of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
@@ -44,5 +45,15 @@ data "auth0_user" "my_user" {
 - `user_metadata` (String) Custom fields that store info about the user that does not impact a user's core functionality. Examples include work address, home address, and user preferences.
 - `username` (String) Username of the user. Only valid if the connection requires a username.
 - `verify_email` (Boolean) Indicates whether the user will receive a verification email after creation. Overrides behavior of `email_verified` parameter.
+
+<a id="nestedatt--permissions"></a>
+### Nested Schema for `permissions`
+
+Read-Only:
+
+- `description` (String)
+- `name` (String)
+- `resource_server_identifier` (String)
+- `resource_server_name` (String)
 
 

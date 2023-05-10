@@ -156,7 +156,7 @@ func NewResource() *schema.Resource {
 			"permissions": {
 				Type:        schema.TypeSet,
 				Computed:    true,
-				Description: "Configuration settings for the credentials for the email provider.",
+				Description: "List of API permissions granted to the user.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -172,7 +172,7 @@ func NewResource() *schema.Resource {
 						"resource_server_identifier": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "Resource server identifier associated with permission.",
+							Description: "Resource server identifier associated with the permission.",
 						},
 						"resource_server_name": {
 							Type:        schema.TypeString,
@@ -238,7 +238,7 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 	}
 	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
 
-	permissions, err := api.User.Permissions(*user.ID)
+	permissions, err := api.User.Permissions(user.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}

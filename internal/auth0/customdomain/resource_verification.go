@@ -12,6 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewVerificationResource will return a new auth0_custom_domain_verification resource.
@@ -55,7 +57,7 @@ func NewVerificationResource() *schema.Resource {
 }
 
 func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
@@ -90,7 +92,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 }
 
 func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	customDomain, err := api.CustomDomain.Read(d.Id())
 	if err != nil {

@@ -3,12 +3,12 @@ package branding
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -29,7 +29,7 @@ func readBrandingForDataSource(ctx context.Context, data *schema.ResourceData, m
 	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
 
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	branding, err := api.Branding.Read()
 	if err != nil {

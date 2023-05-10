@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -416,7 +417,7 @@ func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	flattenedPolicy, err := flattenMultiFactorPolicy(api)
 	if err != nil {
@@ -480,7 +481,7 @@ func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) di
 }
 
 func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	result := multierror.Append(
 		updatePolicy(d, api),
@@ -501,7 +502,7 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 }
 
 func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	result := multierror.Append(
 		api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}),

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -44,7 +45,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 		return diag.Errorf("One of 'client_id' or 'name' is required.")
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	var page int
 	for {

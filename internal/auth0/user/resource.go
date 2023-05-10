@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -187,7 +188,7 @@ func NewResource() *schema.Resource {
 }
 
 func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	user, err := api.User.Read(d.Id())
 	if err != nil {
@@ -248,7 +249,7 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 }
 
 func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	user, err := expandUser(d)
 	if err != nil {
@@ -278,7 +279,7 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if userHasChange(user) {
 		if err := api.User.Update(d.Id(), user); err != nil {
 			return diag.FromErr(err)
@@ -293,7 +294,7 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 	if err := api.User.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {

@@ -6,6 +6,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // NewGlobalResource will return a new auth0_global_client resource.
@@ -52,7 +54,7 @@ func createGlobalClient(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func readGlobalClientID(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	clients, err := api.Client.List(
 		management.Parameter("is_global", "true"),

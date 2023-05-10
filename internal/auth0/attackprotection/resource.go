@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -277,7 +278,7 @@ func createAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 }
 
 func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
 	if err != nil {
@@ -304,7 +305,7 @@ func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interfa
 }
 
 func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if ipt := expandSuspiciousIPThrottling(d); ipt != nil {
 		if err := api.AttackProtection.UpdateSuspiciousIPThrottling(ipt); err != nil {
@@ -328,7 +329,7 @@ func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 }
 
 func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	enabled := false
 

@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -74,7 +75,7 @@ func NewResource() *schema.Resource {
 }
 
 func createOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
 	if err := api.Organization.Create(organization); err != nil {
@@ -87,7 +88,7 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	organization, err := api.Organization.Read(d.Id())
 	if err != nil {
@@ -109,7 +110,7 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 }
 
 func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
 	if err := api.Organization.Update(d.Id(), organization); err != nil {
@@ -120,7 +121,7 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*management.Management)
+	api := m.(*config.Config).GetAPI()
 
 	if err := api.Organization.Delete(d.Id()); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {

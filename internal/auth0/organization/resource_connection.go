@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -58,12 +58,13 @@ func NewConnectionResource() *schema.Resource {
 }
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex.Global.Lock(organizationID)
-	defer mutex.Global.Unlock(organizationID)
+	mutex.Lock(organizationID)
+	defer mutex.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
@@ -83,7 +84,7 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
@@ -107,12 +108,13 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex.Global.Lock(organizationID)
-	defer mutex.Global.Unlock(organizationID)
+	mutex.Lock(organizationID)
+	defer mutex.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
@@ -129,12 +131,13 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 }
 
 func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*management.Management)
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex.Global.Lock(organizationID)
-	defer mutex.Global.Unlock(organizationID)
+	mutex.Lock(organizationID)
+	defer mutex.Unlock(organizationID)
 
 	connectionID := data.Get("connection_id").(string)
 

@@ -154,6 +154,35 @@ func NewResource() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Set of IDs of roles assigned to the user.",
 			},
+			"permissions": {
+				Type:        schema.TypeSet,
+				Computed:    true,
+				Description: "List of API permissions granted to the user.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of permission.",
+						},
+						"description": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Description of the permission.",
+						},
+						"resource_server_identifier": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Resource server identifier associated with the permission.",
+						},
+						"resource_server_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of resource server that the permission is associated with.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -209,6 +238,12 @@ func readUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 		return diag.FromErr(err)
 	}
 	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
+
+	permissions, err := api.User.Permissions(user.GetID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	result = multierror.Append(result, d.Set("permissions", flattenUserPermissions(permissions)))
 
 	return diag.FromErr(result.ErrorOrNil())
 }
@@ -376,6 +411,19 @@ func flattenUserRoles(roleList *management.RoleList) []interface{} {
 		roles = append(roles, role.GetID())
 	}
 	return roles
+}
+
+func flattenUserPermissions(permissionList *management.PermissionList) []interface{} {
+	var permissions []interface{}
+	for _, p := range permissionList.Permissions {
+		permissions = append(permissions, map[string]string{
+			"name":                       p.GetName(),
+			"resource_server_identifier": p.GetResourceServerIdentifier(),
+			"description":                p.GetDescription(),
+			"resource_server_name":       p.GetResourceServerName(),
+		})
+	}
+	return permissions
 }
 
 func validateUser(user *management.User) error {

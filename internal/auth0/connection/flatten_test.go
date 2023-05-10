@@ -19,7 +19,7 @@ func TestFlattenConnectionOptions(t *testing.T) {
 }
 
 func TestFlattenConnectionOptionsEmail(t *testing.T) {
-	// Invalid Authentication Params
+	// Invalid Authentication Params.
 	invalidAuthParams := "some non-map value"
 	_, diags := flattenConnectionOptionsEmail(&management.ConnectionOptionsEmail{
 		AuthParams: invalidAuthParams,
@@ -37,7 +37,7 @@ func TestFlattenConnectionOptionsEmail(t *testing.T) {
 		t.Errorf("Expected specific warning summary, got %q", diags[0].Summary)
 	}
 
-	// Valid Authentication Params
+	// Valid Authentication Params.
 	validAuthParams := map[string]interface{}{
 		"foo": "bar",
 		"bar": "baz",

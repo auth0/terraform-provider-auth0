@@ -62,7 +62,7 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	return diagnostics
 }
 
-func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(d.Id())
@@ -121,7 +121,7 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	return diagnostics
 }
 
-func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Connection.Delete(d.Id()); err != nil {

@@ -285,7 +285,7 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	return readLogStream(ctx, d, m)
 }
 
-func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	logStream, err := api.LogStream.Read(d.Id())
@@ -319,7 +319,7 @@ func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	return readLogStream(ctx, d, m)
 }
 
-func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.LogStream.Delete(d.Id()); err != nil {

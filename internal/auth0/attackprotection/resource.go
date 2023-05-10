@@ -277,7 +277,7 @@ func createAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 	return updateAttackProtection(ctx, d, m)
 }
 
-func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readAttackProtection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	breachedPasswords, err := api.AttackProtection.GetBreachedPasswordDetection()
@@ -328,7 +328,7 @@ func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 	return readAttackProtection(ctx, d, m)
 }
 
-func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteAttackProtection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	enabled := false

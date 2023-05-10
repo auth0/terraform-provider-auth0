@@ -5,6 +5,8 @@ import (
 	"net/url"
 )
 
+// IsURLWithHTTPSorEmptyString is a validation func that checks
+// that the given rawURL is a https url or is an empty string.
 func IsURLWithHTTPSorEmptyString(rawURL interface{}, key string) ([]string, []error) {
 	urlString, ok := rawURL.(string)
 	if !ok {

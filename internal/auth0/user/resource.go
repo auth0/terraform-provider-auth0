@@ -158,7 +158,7 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	user, err := api.User.Read(d.Id())
@@ -258,7 +258,7 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readUser(ctx, d, m)
 }
 
-func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	if err := api.User.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

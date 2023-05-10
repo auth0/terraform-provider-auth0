@@ -416,7 +416,7 @@ func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return updateGuardian(ctx, d, m)
 }
 
-func readGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readGuardian(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	flattenedPolicy, err := flattenMultiFactorPolicy(api)
@@ -501,7 +501,7 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return readGuardian(ctx, d, m)
 }
 
-func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteGuardian(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	result := multierror.Append(

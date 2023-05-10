@@ -153,7 +153,7 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	return readResourceServer(ctx, d, m)
 }
 
-func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readResourceServer(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	resourceServer, err := api.ResourceServer.Read(d.Id())
@@ -207,7 +207,7 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	return readResourceServer(ctx, d, m)
 }
 
-func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteResourceServer(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	if isManagementAPI(d.GetRawState()) {
 		d.SetId("")
 		return nil

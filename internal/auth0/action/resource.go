@@ -149,7 +149,7 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readAction(ctx, d, m)
 }
 
-func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	action, err := api.Action.Read(d.Id())
@@ -198,7 +198,7 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readAction(ctx, d, m)
 }
 
-func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Action.Delete(d.Id()); err != nil {

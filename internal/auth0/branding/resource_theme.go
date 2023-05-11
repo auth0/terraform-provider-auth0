@@ -480,7 +480,7 @@ func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	return readBrandingTheme(ctx, data, meta)
 }
 
-func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readBrandingTheme(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	brandingTheme, err := api.BrandingTheme.Default()
@@ -518,7 +518,7 @@ func updateBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	return readBrandingTheme(ctx, data, meta)
 }
 
-func deleteBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteBrandingTheme(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	if err := api.BrandingTheme.Delete(data.Id()); err != nil {

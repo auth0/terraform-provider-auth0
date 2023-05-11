@@ -76,7 +76,7 @@ func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m inter
 	return updatePromptCustomText(ctx, d, m)
 }
 
-func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readPromptCustomText(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	customText, err := api.Prompt.CustomText(d.Get("prompt").(string), d.Get("language").(string))
 	if err != nil {

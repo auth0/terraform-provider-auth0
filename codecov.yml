@@ -1,0 +1,18 @@
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  status:
+    patch:
+      default:
+        threshold: 50%
+        if_no_uploads: error
+    changes: true
+    project:
+      default:
+        target: auto
+        threshold: 2%
+        if_no_uploads: error
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default

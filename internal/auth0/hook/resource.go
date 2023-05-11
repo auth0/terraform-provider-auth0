@@ -140,7 +140,7 @@ func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readHook(ctx, d, m)
 }
 
-func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	if err := api.Hook.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
@@ -155,7 +155,7 @@ func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func upsertHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) error {
+func upsertHookSecrets(_ context.Context, d *schema.ResourceData, m interface{}) error {
 	if d.IsNewResource() || d.HasChange("secrets") {
 		api := m.(*config.Config).GetAPI()
 

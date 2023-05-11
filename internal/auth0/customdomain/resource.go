@@ -113,7 +113,7 @@ func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	return readCustomDomain(ctx, d, m)
 }
 
-func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readCustomDomain(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	customDomain, err := api.CustomDomain.Read(d.Id())
@@ -159,7 +159,7 @@ func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	return readCustomDomain(ctx, d, m)
 }
 
-func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteCustomDomain(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.CustomDomain.Delete(d.Id()); err != nil {

@@ -40,7 +40,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return dataSourceSchema
 }
 
-func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readResourceServerForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	resourceServerID := data.Get("resource_server_id").(string)
 	if resourceServerID == "" {
 		resourceServerID = url.PathEscape(data.Get("identifier").(string))

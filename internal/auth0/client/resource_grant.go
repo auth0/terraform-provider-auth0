@@ -76,7 +76,7 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	return readClientGrant(ctx, d, m)
 }
 
-func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	clientGrant, err := api.ClientGrant.Read(d.Id())
@@ -110,7 +110,7 @@ func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	return readClientGrant(ctx, d, m)
 }
 
-func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.ClientGrant.Delete(d.Id()); err != nil {

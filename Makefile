@@ -12,6 +12,7 @@ BUILD_DIR ?= $(CURDIR)/out
 
 GO_OS ?= $(shell go env GOOS)
 GO_ARCH ?= $(shell go env GOARCH)
+GO_BIN ?= $(shell go env GOPATH)/bin
 GO_PACKAGES := $(shell go list ./... | grep -vE "vendor|tools|sweep|acctest")
 GO_LINT_SCRIPT ?= $(CURDIR)/scripts/golangci-lint.sh
 GO_TEST_COVERAGE_FILE ?= "coverage.out"
@@ -38,15 +39,17 @@ docs: ## Generate docs
 #-----------------------------------------------------------------------------------------------------------------------
 # Dependencies
 #-----------------------------------------------------------------------------------------------------------------------
-.PHONY: deps deps-dev deps-rm
+.PHONY: deps deps-rm
 
 deps: ## Download dependencies
 	${call print, "Downloading dependencies"}
 	@go mod vendor -v
 
-deps-dev: ## Download development dependencies
+$(GO_BIN)/golangci-lint:
 	${call print, "Installing golangci-lint"}
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	@go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+$(GO_BIN)/govulncheck:
 	${call print, "Installing go vulnerability checker"}
 	@go install golang.org/x/vuln/cmd/govulncheck@latest
 
@@ -80,13 +83,9 @@ clean: ## Clean up locally installed provider binaries
 #-----------------------------------------------------------------------------------------------------------------------
 .PHONY: lint check-docs check-vuln
 
-lint: ## Run go linter checks
-	@if ! command -v golangci-lint &> /dev/null; \
-	then \
-		make deps-dev; \
- 	fi
+lint: $(GO_BIN)/golangci-lint ## Run go linter checks
 	${call print, "Running golangci-lint over project"}
-	@golangci-lint run -v -c .golangci.yml ./...
+	@golangci-lint run -v --fix -c .golangci.yml ./...
 
 check-docs: ## Check that documentation was generated correctly
 	${call print, "Checking that documentation was generated correctly"}
@@ -100,11 +99,7 @@ check-docs: ## Check that documentation was generated correctly
 	fi
 	@echo "Documentation is generated correctly."
 
-check-vuln: ## Check go vulnerabilities
-	@if ! command -v govulncheck &> /dev/null; \
-	then \
-		make deps-dev; \
- 	fi
+check-vuln: $(GO_BIN)/govulncheck ## Check go vulnerabilities
 	${call print, "Running govulncheck over project"}
 	@govulncheck -v ./...
 

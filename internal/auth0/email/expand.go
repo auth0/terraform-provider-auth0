@@ -28,7 +28,7 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 	case management.EmailProviderMailgun:
 		expandEmailProviderMailgun(config, emailProvider)
 	case management.EmailProviderSMTP:
-		expandEmailProviderSmtp(config, emailProvider)
+		expandEmailProviderSMTP(config, emailProvider)
 	}
 
 	return emailProvider
@@ -108,7 +108,7 @@ func expandEmailProviderMailgun(config cty.Value, emailProvider *management.Emai
 	})
 }
 
-func expandEmailProviderSmtp(config cty.Value, emailProvider *management.EmailProvider) {
+func expandEmailProviderSMTP(config cty.Value, emailProvider *management.EmailProvider) {
 	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
 		emailProvider.Credentials = &management.EmailProviderCredentialsSMTP{
 			SMTPHost: value.String(credentials.GetAttr("smtp_host")),

@@ -83,7 +83,7 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	return readOrganizationConnection(ctx, data, meta)
 }
 
-func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationConnection(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
@@ -130,7 +130,7 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	return readOrganizationConnection(ctx, data, meta)
 }
 
-func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationConnection(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 

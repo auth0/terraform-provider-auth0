@@ -395,7 +395,7 @@ func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return updateTenant(ctx, d, m)
 }
 
-func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readTenant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	tenant, err := api.Tenant.Read()
 	if err != nil {
@@ -442,7 +442,7 @@ func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readTenant(ctx, d, m)
 }
 
-func deleteTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteTenant(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

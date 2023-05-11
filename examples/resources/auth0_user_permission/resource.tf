@@ -25,9 +25,7 @@ resource "auth0_user" "user" {
 }
 
 resource "auth0_user_permission" "user_permission_read" {
-  depends_on = [auth0_resource_server.resource_server, auth0_user.user]
-
   user_id                    = auth0_user.user.id
   resource_server_identifier = auth0_resource_server.resource_server.identifier
-  permission                 = "create:foo"
+  permission                 = tolist(auth0_resource_server.resource_server.scopes)[0]
 }

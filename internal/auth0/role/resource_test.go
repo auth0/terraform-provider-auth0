@@ -39,7 +39,7 @@ func TestAccRole(t *testing.T) {
 				Config: acctest.ParseTestName(testAccRoleEmptyAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_role.the_one", "description", " "), // #Management API ignores empty strings for role descriptions
+					resource.TestCheckResourceAttr("auth0_role.the_one", "description", " "), // Management API ignores empty strings for role descriptions.
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "0"),
 				),
 			},

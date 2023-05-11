@@ -104,7 +104,7 @@ func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return updateBranding(ctx, d, m)
 }
 
-func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	branding, err := api.Branding.Read()
@@ -160,7 +160,7 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return readBranding(ctx, d, m)
 }
 
-func deleteBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if _, ok := d.GetOk("universal_login"); !ok {

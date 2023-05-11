@@ -99,7 +99,7 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	return readConnectionClients(ctx, data, meta)
 }
 
-func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(
@@ -146,7 +146,7 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	return readConnectionClients(ctx, data, meta)
 }
 
-func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 

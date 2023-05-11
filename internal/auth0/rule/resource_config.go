@@ -57,7 +57,7 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	return readRuleConfig(ctx, d, m)
 }
 
-func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readRuleConfig(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	ruleConfig, err := api.RuleConfig.Read(d.Id())
 	if err != nil {
@@ -84,7 +84,7 @@ func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	return readRuleConfig(ctx, d, m)
 }
 
-func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteRuleConfig(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	if err := api.RuleConfig.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {

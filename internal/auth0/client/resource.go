@@ -747,7 +747,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	client, err := api.Client.Read(d.Id())
@@ -819,7 +819,7 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Client.Delete(d.Id()); err != nil {

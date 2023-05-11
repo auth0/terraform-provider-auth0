@@ -91,7 +91,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 	return readCustomDomainVerification(ctx, d, m)
 }
 
-func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readCustomDomainVerification(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	customDomain, err := api.CustomDomain.Read(d.Id())
@@ -111,7 +111,7 @@ func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteCustomDomainVerification(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	d.SetId("")
 	return nil
 }

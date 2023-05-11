@@ -810,9 +810,9 @@ func connectionSchemaV1() *schema.Resource {
 }
 
 func connectionSchemaUpgradeV0(
-	ctx context.Context,
+	_ context.Context,
 	state map[string]interface{},
-	meta interface{},
+	_ interface{},
 ) (map[string]interface{}, error) {
 	options, ok := state["options"]
 	if !ok {
@@ -849,9 +849,9 @@ func connectionSchemaUpgradeV0(
 }
 
 func connectionSchemaUpgradeV1(
-	ctx context.Context,
+	_ context.Context,
 	state map[string]interface{},
-	meta interface{},
+	_ interface{},
 ) (map[string]interface{}, error) {
 	options, ok := state["options"]
 	if !ok {

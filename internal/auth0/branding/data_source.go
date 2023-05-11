@@ -25,7 +25,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
 }
 
-func readBrandingForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readBrandingForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
 

@@ -25,24 +25,19 @@ linters-settings:
   staticcheck:
     checks: [ "all" ]
   godot:
-    scope: declarations
+    scope: all
     capital: true
+    period: true
   goimports:
     local-prefixes: "github.com/auth0/terraform-provider-auth0"
-  revive:
-    rules:
-      - name: package-comments
-        severity: warning
-        disabled: true
-  gosec:
-    excludes:
-      # G101 is "Potential hardcoded credentials"
-      # We exclude it as we need to set dummy
-      # credentials within our tests.
-      - G101
   gocyclo:
     min-complexity: 30 # This is the default but our goal is to take this down to 15.
 
 issues:
   exclude-use-default: false
-  fix: true
+  exclude-rules:
+    - path: "(.+)_test.go"
+      linters:
+        - gosec
+  exclude:
+    - "should have a package comment"

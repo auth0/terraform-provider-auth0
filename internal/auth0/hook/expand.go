@@ -32,7 +32,7 @@ func expandHook(d *schema.ResourceData) *management.Hook {
 	return hook
 }
 
-func checkForUntrackedHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func checkForUntrackedHookSecrets(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	secretsFromConfig := d.Get("secrets").(map[string]interface{})
 
 	api := m.(*config.Config).GetAPI()

@@ -202,7 +202,7 @@ func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	return readEmail(ctx, d, m)
 }
 
-func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	email, err := api.EmailProvider.Read()
@@ -237,7 +237,7 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	return readEmail(ctx, d, m)
 }
 
-func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.EmailProvider.Delete(); err != nil {

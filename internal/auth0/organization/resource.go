@@ -87,7 +87,7 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	return readOrganization(ctx, d, m)
 }
 
-func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	organization, err := api.Organization.Read(d.Id())
@@ -120,7 +120,7 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	return readOrganization(ctx, d, m)
 }
 
-func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Organization.Delete(d.Id()); err != nil {

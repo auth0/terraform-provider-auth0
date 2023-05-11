@@ -11,8 +11,8 @@ import (
 func expandTenant(d *schema.ResourceData) *management.Tenant {
 	config := d.GetRawConfig()
 
-	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`
-	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`
+	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
 	tenant := &management.Tenant{
 		DefaultAudience:       value.String(config.GetAttr("default_audience")),

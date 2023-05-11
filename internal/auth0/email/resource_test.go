@@ -66,7 +66,7 @@ resource "auth0_email" "my_email_provider" {
 }
 `
 
-const testAccCreateSmtpEmailProvider = `
+const testAccCreateSMTPEmailProvider = `
 resource "auth0_email" "my_email_provider" {
 	name = "smtp"
 	enabled = true
@@ -80,7 +80,7 @@ resource "auth0_email" "my_email_provider" {
 }
 `
 
-const testAccUpdateSmtpEmailProvider = `
+const testAccUpdateSMTPEmailProvider = `
 resource "auth0_email" "my_email_provider" {
 	name = "smtp"
 	enabled = true
@@ -206,7 +206,7 @@ func TestAccEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccCreateSmtpEmailProvider,
+				Config: testAccCreateSMTPEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "smtp"),
 					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
@@ -219,7 +219,7 @@ func TestAccEmail(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccUpdateSmtpEmailProvider,
+				Config: testAccUpdateSMTPEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "smtp"),
 					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),

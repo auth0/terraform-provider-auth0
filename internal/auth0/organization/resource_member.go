@@ -121,7 +121,7 @@ func addMemberRoles(orgID string, userID string, roles []interface{}, api *manag
 	return api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
 }
 
-func readOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readOrganizationMember(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	orgID := d.Get("organization_id").(string)
@@ -162,7 +162,7 @@ func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	return readOrganizationMember(ctx, d, m)
 }
 
-func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteOrganizationMember(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	mutex := m.(*config.Config).GetMutex()
 

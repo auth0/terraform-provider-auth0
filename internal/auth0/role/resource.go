@@ -83,7 +83,7 @@ func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readRole(ctx, d, m)
 }
 
-func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readRole(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	role, err := api.Role.Read(d.Id())
@@ -142,7 +142,7 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readRole(ctx, d, m)
 }
 
-func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteRole(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Role.Delete(d.Id()); err != nil {

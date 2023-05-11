@@ -130,7 +130,7 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	return readEmailTemplate(ctx, d, m)
 }
 
-func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readEmailTemplate(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	email, err := api.EmailTemplate.Read(d.Id())
@@ -170,7 +170,7 @@ func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	return readEmailTemplate(ctx, d, m)
 }
 
-func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteEmailTemplate(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	emailTemplate := &management.EmailTemplate{
 		Template: auth0.String(d.Id()),

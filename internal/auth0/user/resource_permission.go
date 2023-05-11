@@ -62,7 +62,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
-	resourceServerId := data.Get("resource_server_identifier").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
 	mutex.Lock(userID)
@@ -70,14 +70,14 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 
 	if err := api.User.AssignPermissions(userID, []*management.Permission{
 		{
-			ResourceServerIdentifier: &resourceServerId,
+			ResourceServerIdentifier: &resourceServerID,
 			Name:                     &permissionName,
 		},
 	}); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(fmt.Sprintf(`%s::%s::%s`, userID, resourceServerId, permissionName))
+	data.SetId(fmt.Sprintf(`%s::%s::%s`, userID, resourceServerID, permissionName))
 
 	return readUserPermission(ctx, data, meta)
 }
@@ -85,11 +85,11 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 func readUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	userId := data.Get("user_id").(string)
+	userID := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
-	resourceServerId := data.Get("resource_server_identifier").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	existingPermissions, err := api.User.Permissions(userId)
+	existingPermissions, err := api.User.Permissions(userID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -99,7 +99,7 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 	}
 
 	for _, p := range existingPermissions.Permissions {
-		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerId {
+		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerID {
 			result := multierror.Append(
 				data.Set("description", p.GetDescription()),
 				data.Set("resource_server_name", p.GetResourceServerName()),
@@ -110,25 +110,24 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 
 	data.SetId("")
 	return nil
-
 }
 
 func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	userId := data.Get("user_id").(string)
+	userID := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
-	resourceServerId := data.Get("resource_server_identifier").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	mutex.Lock(userId)
-	defer mutex.Unlock(userId)
+	mutex.Lock(userID)
+	defer mutex.Unlock(userID)
 
 	if err := api.User.RemovePermissions(
-		userId,
+		userID,
 		[]*management.Permission{
 			{
-				ResourceServerIdentifier: &resourceServerId,
+				ResourceServerIdentifier: &resourceServerID,
 				Name:                     &permissionName,
 			},
 		},
@@ -155,12 +154,12 @@ func importUserPermission(
 	}
 
 	if !strings.Contains(rawID, "::") {
-		return nil, fmt.Errorf("ID must be formated as <userID>::<resourceServerIdentifier>::<permission>")
+		return nil, fmt.Errorf("ID must be formatted as <userID>::<resourceServerIdentifier>::<permission>")
 	}
 
 	idPair := strings.Split(rawID, "::")
 	if len(idPair) != 3 {
-		return nil, fmt.Errorf("ID must be formated as <userID>::<resourceServerIdentifier>::<permission>")
+		return nil, fmt.Errorf("ID must be formatted as <userID>::<resourceServerIdentifier>::<permission>")
 	}
 
 	result := multierror.Append(

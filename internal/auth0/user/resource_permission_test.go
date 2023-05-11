@@ -9,7 +9,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const givenAResourceServerWithPermissions = `
+const givenAResourceServerAndUser = `
 resource "auth0_resource_server" "resource_server" {
 	name = "Acceptance Test - {{.testName}}"
 	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
@@ -21,6 +21,15 @@ resource "auth0_resource_server" "resource_server" {
 		value = "create:foo"
 		description = "Can create Foo"
 	}
+}
+
+resource "auth0_user" "user" { 
+	depends_on = [ auth0_resource_server.resource_server ] 
+	connection_name = "Username-Password-Authentication" 
+	user_id = "{{.testName}}" 
+	username = "{{.testName}}" 
+	password = "passpass$12$12" 
+	email = "{{.testName}}@acceptance.test.com" 
 }
 `
 
@@ -44,9 +53,9 @@ resource "auth0_user_permission" "user_permission_create" {
 }
 `
 
-const testAccUserPermissionNoneAssigned = givenAResourceServerWithPermissions + testAccUserEmpty
-const testAccUserPermissionOneAssigned = givenAResourceServerWithPermissions + testAccUserEmpty + givenAUserPermission
-const testAccUserPermissionTwoAssigned = givenAResourceServerWithPermissions + testAccUserEmpty + givenAUserPermission + givenAnotherUserPermission
+const testAccUserPermissionNoneAssigned = givenAResourceServerAndUser
+const testAccUserPermissionOneAssigned = givenAResourceServerAndUser + givenAUserPermission
+const testAccUserPermissionTwoAssigned = givenAResourceServerAndUser + givenAUserPermission + givenAnotherUserPermission
 
 func TestAccUserPermission(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -61,7 +70,7 @@ func TestAccUserPermission(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "read:foo"),
@@ -80,7 +89,7 @@ func TestAccUserPermission(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserPermissionTwoAssigned, strings.ToLower(t.Name())),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionTwoAssigned, strings.ToLower(t.Name())),
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "2"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "create:foo"),
@@ -97,7 +106,7 @@ func TestAccUserPermission(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "read:foo"),
@@ -107,7 +116,7 @@ func TestAccUserPermission(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
 				),

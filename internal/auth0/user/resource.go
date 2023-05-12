@@ -153,6 +153,9 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Set of IDs of roles assigned to the user.",
+				Deprecated: "Managing roles through this attribute is deprecated and it will be changed to read-only in a future version. " +
+					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) on how to do that.",
 			},
 			"permissions": {
 				Type:        schema.TypeSet,
@@ -262,7 +265,7 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	d.SetId(user.GetID())
 
-	if err = updateUserRoles(d, api); err != nil {
+	if err = persistUserRoles(d, api); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -286,7 +289,7 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		}
 	}
 
-	if err = updateUserRoles(d, api); err != nil {
+	if err = persistUserRoles(d, api); err != nil {
 		return diag.Errorf("failed assigning user roles. %s", err)
 	}
 
@@ -470,7 +473,7 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 	}
 }
 
-func updateUserRoles(d *schema.ResourceData, api *management.Management) error {
+func persistUserRoles(d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("roles") {
 		return nil
 	}

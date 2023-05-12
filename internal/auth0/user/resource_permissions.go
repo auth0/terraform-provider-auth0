@@ -26,7 +26,6 @@ func NewPermissionsResource() *schema.Resource {
 			"permissions": {
 				Type:        schema.TypeSet,
 				Required:    true,
-				ForceNew:    true,
 				Description: "List of API permissions granted to the user.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -54,7 +53,8 @@ func NewPermissionsResource() *schema.Resource {
 				},
 			},
 		},
-		CreateContext: createUserPermissions,
+		CreateContext: upsertUserPermissions,
+		UpdateContext: upsertUserPermissions,
 		ReadContext:   readUserPermissions,
 		DeleteContext: deleteUserPermissions,
 		Importer: &schema.ResourceImporter{
@@ -64,7 +64,7 @@ func NewPermissionsResource() *schema.Resource {
 	}
 }
 
-func createUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 

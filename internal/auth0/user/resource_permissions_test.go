@@ -12,7 +12,7 @@ import (
 const testAccUserPermissionsNoneAssigned = givenAResourceServerAndUser
 
 const testAccUserPermissionsOneAssigned = givenAResourceServerAndUser + `
-resource "auth0_user_permissions" "user_permission_create" {
+resource "auth0_user_permissions" "user_permissions" {
 	depends_on = [ auth0_resource_server.resource_server, auth0_user.user ]
 
 	user_id = auth0_user.user.id
@@ -25,7 +25,7 @@ resource "auth0_user_permissions" "user_permission_create" {
 `
 
 const testAccUserPermissionsTwoAssigned = givenAResourceServerAndUser + `
-resource "auth0_user_permissions" "user_permission_create" {
+resource "auth0_user_permissions" "user_permissions" {
 	depends_on = [ auth0_resource_server.resource_server, auth0_user.user ]
 
 	user_id = auth0_user.user.id
@@ -61,6 +61,11 @@ func TestAccUserPermissions(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermissions"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.resource_server_name", "Acceptance Test - testaccuserpermissions"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.description", "Can read Foo"),
+
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.0.name", "read:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.0.resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermissions"),
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.0.resource_server_name", "Acceptance Test - testaccuserpermissions"),
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.0.description", "Can read Foo"),
 				),
 			},
 			{
@@ -69,6 +74,10 @@ func TestAccUserPermissions(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.0.name", "create:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.1.name", "read:foo"),
+
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "2"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "create:foo"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.1.name", "read:foo"),
@@ -85,6 +94,7 @@ func TestAccUserPermissions(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "read:foo"),
 				),

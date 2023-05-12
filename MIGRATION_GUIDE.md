@@ -13,8 +13,8 @@ automated workflows before upgrading.
 
 The `roles` field on the `auth0_user` resource will continue to be available for managing user roles. However, to ensure
 a smooth transition when we eventually remove the capability to manage roles through this field, we recommend
-proactively migrating to the newly introduced `auth0_user_roles` resource. This will help you stay prepared for future
-changes.
+proactively migrating to the newly introduced `auth0_user_roles` or `auth0_user_role` resource. This will help you stay
+prepared for future changes.
 
 <table>
 <tr>
@@ -66,9 +66,18 @@ resource "auth0_user" "user" {
   }
 }
 
+# Use the auth0_user_roles to manage a 1:many 
+# relationship between the user and its roles.
 resource auth0_user_roles user_roles {
   user_id = auth0_user.user.id
   roles = [auth0_role.admin.id]
+}
+
+# Or the auth0_user_roles to manage a 1:1 
+# relationship between the user and its role.
+resource auth0_user_role user_roles {
+  user_id = auth0_user.user.id
+  roles = auth0_role.admin.id
 }
 ```
 

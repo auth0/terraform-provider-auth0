@@ -1,14 +1,14 @@
 ---
-page_title: "Resource: auth0_user_roles"
+page_title: "Resource: auth0_user_role"
 description: |-
   With this resource, you can manage assigned roles for a user.
 ---
 
-# Resource: auth0_user_roles
+# Resource: auth0_user_role
 
 With this resource, you can manage assigned roles for a user.
 
-!> To prevent issues, avoid using this resource together with the `auth0_user_role` resource.
+!> To prevent issues, avoid using this resource together with the `auth0_user_roles` resource.
 
 ## Example Usage
 
@@ -34,9 +34,9 @@ resource "auth0_user" "user" {
   }
 }
 
-resource "auth0_user_roles" "user_roles" {
+resource "auth0_user_role" "user_roles" {
   user_id = auth0_user.user.id
-  roles   = [auth0_role.admin.id]
+  role_id = auth0_role.admin.id
 }
 ```
 
@@ -45,12 +45,14 @@ resource "auth0_user_roles" "user_roles" {
 
 ### Required
 
-- `roles` (Set of String) Set of IDs of roles assigned to the user.
+- `role_id` (String) ID of the role assigned to the user.
 - `user_id` (String) ID of the user.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `role_description` (String) Description of the role.
+- `role_name` (String) Name of the role.
 
 ## Import
 
@@ -60,5 +62,5 @@ Import is supported using the following syntax:
 # This resource can be imported using the user ID.
 #
 # Example:
-terraform import auth0_user_roles.user_roles "auth0|111111111111111111111111"
+terraform import auth0_user_role.user_role "auth0|111111111111111111111111"
 ```

@@ -511,6 +511,7 @@ resource "auth0_client" "my_client" {
 	allowed_clients = [ "https://allowed.example.com" ]
 	grant_types = [ "authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token" ]
 	allowed_logout_urls = [ "https://example.com" ]
+	oidc_backchannel_logout_urls = [ "https://example.com/oidc-logout" ]
 	web_origins = [ "https://example.com" ]
 	client_metadata = {
 		foo = "zoo"
@@ -545,6 +546,7 @@ resource "auth0_client" "my_client" {
 	allowed_logout_urls = [ ]
 	web_origins = [ ]
 	client_metadata = {}
+	oidc_backchannel_logout_urls = []
 }
 `
 
@@ -607,6 +609,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "web_origins.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
+					resource.TestCheckNoResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls"),
 				),
 			},
 			{
@@ -673,6 +676,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "1"),
 				),
 			},
 			{
@@ -727,6 +731,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "web_origins.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "0"),
 				),
 			},
 		},

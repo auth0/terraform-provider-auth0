@@ -120,6 +120,14 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "URLs that Auth0 may redirect to after logout.",
 			},
+			"oidc_backchannel_logout_urls": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional:    true,
+				Description: "Set of URLs enabled for OIDC back-channel logout",
+			},
 			"grant_types": {
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -795,6 +803,7 @@ func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
 		d.Set("client_metadata", client.ClientMetadata),
+		d.Set("oidc_backchannel_logout_urls", client.OIDCBackchannelLogout.GetBackChannelLogoutURLs()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

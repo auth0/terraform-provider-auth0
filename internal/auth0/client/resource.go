@@ -121,7 +121,7 @@ func NewResource() *schema.Resource {
 				Description: "URLs that Auth0 may redirect to after logout.",
 			},
 			"oidc_backchannel_logout_urls": {
-				Type: schema.TypeList,
+				Type: schema.TypeSet,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},

@@ -8,6 +8,8 @@ description: |-
 
 With this resource, you can manage user permissions.
 
+!> To prevent issues, avoid using this resource together with the `auth0_user_permissions` resource.
+
 ## Example Usage
 
 ```terraform

@@ -41,8 +41,11 @@ func NewResource() *schema.Resource {
 			"permissions": {
 				Type:        schema.TypeSet,
 				Optional:    true,
+				Computed:    true,
 				Description: "Configuration settings for permissions (scopes) attached to the role.",
-				Deprecated:  "",
+				Deprecated: "Managing permissions through the `permissions` attribute is deprecated and it will be changed to read-only in a future version. " +
+					"Migrate to the `auth0_role_permission` resource to manage role permissions instead. " +
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

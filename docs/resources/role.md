@@ -57,7 +57,7 @@ resource "auth0_role" "my_role" {
 ### Optional
 
 - `description` (String) Description of the role.
-- `permissions` (Block Set) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedblock--permissions))
+- `permissions` (Block Set, Deprecated) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedblock--permissions))
 
 ### Read-Only
 

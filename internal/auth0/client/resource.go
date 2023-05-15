@@ -126,7 +126,7 @@ func NewResource() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional:    true,
-				Description: "Set of URLs enabled for OIDC back-channel logout",
+				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
 			},
 			"grant_types": {
 				Type:        schema.TypeList,

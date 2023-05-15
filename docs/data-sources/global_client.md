@@ -46,7 +46,7 @@ data "auth0_global_client" "global" {}
 - `mobile` (List of Object) Additional configuration for native mobile apps. (see [below for nested schema](#nestedatt--mobile))
 - `name` (String) Name of the client.
 - `native_social_login` (List of Object) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedatt--native_social_login))
-- `oidc_backchannel_logout_urls` (Set of String) Set of URLs enabled for OIDC back-channel logout
+- `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default) or `pre_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.

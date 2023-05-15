@@ -1,0 +1,172 @@
+package role
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"strings"
+
+	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
+)
+
+// NewPermissionResource will return a new auth0_role_permission resource.
+func NewPermissionResource() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"role_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "ID of the role to associate the permission to.",
+			},
+			"permission": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Name of the permission.",
+			},
+			"resource_server_identifier": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Identifier of the resource server that the permission is associated with.",
+			},
+			"description": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Description of the permission.",
+			},
+			"resource_server_name": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Name of the resource server that the permission is associated with.",
+			},
+		},
+		CreateContext: createRolePermission,
+		ReadContext:   readRolePermission,
+		DeleteContext: deleteRolePermission,
+		Importer: &schema.ResourceImporter{
+			StateContext: importRolePermission,
+		},
+		Description: "With this resource, you can manage role permissions (1-1).",
+	}
+}
+
+func createRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
+
+	roleID := data.Get("role_id").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
+	permissionName := data.Get("permission").(string)
+
+	mutex.Lock(roleID)
+	defer mutex.Unlock(roleID)
+
+	if err := api.Role.AssociatePermissions(roleID, []*management.Permission{
+		{
+			ResourceServerIdentifier: &resourceServerID,
+			Name:                     &permissionName,
+		},
+	}); err != nil {
+		return diag.FromErr(err)
+	}
+
+	data.SetId(fmt.Sprintf(`%s::%s::%s`, roleID, resourceServerID, permissionName))
+
+	return readRolePermission(ctx, data, meta)
+}
+
+func readRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	roleID := data.Get("role_id").(string)
+	permissionName := data.Get("permission").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
+
+	existingPermissions, err := api.Role.Permissions(roleID)
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	for _, p := range existingPermissions.Permissions {
+		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerID {
+			result := multierror.Append(
+				data.Set("description", p.GetDescription()),
+				data.Set("resource_server_name", p.GetResourceServerName()),
+			)
+			return diag.FromErr(result.ErrorOrNil())
+		}
+	}
+
+	data.SetId("")
+	return nil
+}
+
+func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
+
+	roleID := data.Get("role_id").(string)
+	permissionName := data.Get("permission").(string)
+	resourceServerID := data.Get("resource_server_identifier").(string)
+
+	mutex.Lock(roleID)
+	defer mutex.Unlock(roleID)
+
+	if err := api.Role.RemovePermissions(
+		roleID,
+		[]*management.Permission{
+			{
+				ResourceServerIdentifier: &resourceServerID,
+				Name:                     &permissionName,
+			},
+		},
+	); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	data.SetId("")
+	return nil
+}
+
+func importRolePermission(
+	_ context.Context,
+	data *schema.ResourceData,
+	_ interface{},
+) ([]*schema.ResourceData, error) {
+	rawID := data.Id()
+	if rawID == "" {
+		return nil, fmt.Errorf("ID cannot be empty")
+	}
+
+	if !strings.Contains(rawID, "::") {
+		return nil, fmt.Errorf("ID must be formatted as <roleID>::<resourceServerIdentifier>::<permission>")
+	}
+
+	idPair := strings.Split(rawID, "::")
+	if len(idPair) != 3 {
+		return nil, fmt.Errorf("ID must be formatted as <roleID>::<resourceServerIdentifier>::<permission>")
+	}
+
+	result := multierror.Append(
+		data.Set("role_id", idPair[0]),
+		data.Set("resource_server_identifier", idPair[1]),
+		data.Set("permission", idPair[2]),
+	)
+
+	return []*schema.ResourceData{data}, result.ErrorOrNil()
+}

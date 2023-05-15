@@ -42,6 +42,7 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "Configuration settings for permissions (scopes) attached to the role.",
+				Deprecated:  "",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

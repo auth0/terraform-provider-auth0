@@ -40,6 +40,7 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		TokenEndpointAuthMethod:        value.String(config.GetAttr("token_endpoint_auth_method")),
 		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
+		OIDCBackchannelLogout:          expandOIDCBackchannelLogout(d),
 		ClientMetadata:                 expandClientMetadata(d),
 		RefreshToken:                   expandClientRefreshToken(d),
 		JWTConfiguration:               expandClientJWTConfiguration(d),
@@ -49,6 +50,20 @@ func expandClient(d *schema.ResourceData) *management.Client {
 	}
 
 	return client
+}
+
+func expandOIDCBackchannelLogout(d *schema.ResourceData) *management.OIDCBackchannelLogout {
+	raw := d.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
+
+	logoutUrls := value.Strings(raw)
+
+	if logoutUrls == nil {
+		return nil
+	}
+
+	return &management.OIDCBackchannelLogout{
+		BackChannelLogoutURLs: logoutUrls,
+	}
 }
 
 func expandClientRefreshToken(d *schema.ResourceData) *management.ClientRefreshToken {

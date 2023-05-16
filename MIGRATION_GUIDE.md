@@ -160,8 +160,8 @@ resource auth0_role content_editor {
 	}
 }
 
-# Or the auth0_user_role to manage a 1:1
-# relationship between the user and its role.
+# Use the auth0_role_permission resource to manage a 1:1
+# relationship between a role and its permissions.
 resource "auth0_role_permission" "read_posts_permission" {
 	role_id = auth0_role.content_editor.id
 	resource_server_identifier = auth0_resource_server.api.identifier

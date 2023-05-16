@@ -41,7 +41,6 @@ func NewResource() *schema.Resource {
 			"permissions": {
 				Type:        schema.TypeSet,
 				Optional:    true,
-				Computed:    true,
 				Description: "Configuration settings for permissions (scopes) attached to the role.",
 				Deprecated: "Managing permissions through the `permissions` attribute is deprecated and it will be changed to read-only in a future version. " +
 					"Migrate to the `auth0_role_permission` resource to manage role permissions instead. " +

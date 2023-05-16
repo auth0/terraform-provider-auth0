@@ -36,6 +36,10 @@ resource "auth0_role" "role" {
 		ignore_changes = [ permissions ]
 	}
 }
+
+data "auth0_role" "role" {
+	role_id = auth0_role.role.id
+}
 `
 
 const testAccRolePermissionsNoneAssigned = givenAResourceServerAndARole + `

@@ -106,9 +106,8 @@ resource auth0_role the_one {
 }
 `
 
-const testAccRoleEmptyAgain = testAccRoleAux + `
+const testAccRoleEmptyAgain = `
 resource auth0_role the_one {
-	depends_on = [ auth0_resource_server.matrix ] 
   name = "The One - Acceptance Test - {{.testName}}"
   description = " "
 }

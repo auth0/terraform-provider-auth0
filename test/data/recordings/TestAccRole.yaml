@@ -1,1334 +1,1370 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 51
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"The One - Acceptance Test - TestAccRole"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":null}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 212
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 403
-      uncompressed: false
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 8
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 9
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 93
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 10
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 116
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"stop:bullets"}]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 2
-      uncompressed: false
-      body: '{}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 11
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 12
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 13
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 14
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 15
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 16
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 17
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 18
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 19
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 114
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 20
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 115
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"bring:peace"}]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 2
-      uncompressed: false
-      body: '{}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 21
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 22
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 23
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 24
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 25
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 26
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 27
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"632da00717d703d775734d7b","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 28
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 29
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/632da00717d703d775734d7b
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 30
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 69
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"The One - Acceptance Test - TestAccRole","description":" "}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":" "}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 31
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 213
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"stop:bullets"},{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"bring:peace"}]}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
-  - id: 32
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":" "}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 33
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 34
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"rol_E1hcU5HqIZP6NrP5","name":"The One - Acceptance Test - TestAccRole","description":" "}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 35
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5/permissions?include_totals=true&page=0&per_page=50
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 36
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 3
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/latest
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_E1hcU5HqIZP6NrP5
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 2
-      uncompressed: false
-      body: '{}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 51
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"The One - Acceptance Test - TestAccRole"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 104.255459ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 156.196208ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 100.531583ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 160.783208ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.96325ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 95.683625ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 105.135ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 212
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 403
+        uncompressed: false
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 104.598875ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 101.654375ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 93
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 99.645916ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 116
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"stop:bullets"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 110.990709ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 95.313167ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 127.372ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 61.708042ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 65.557375ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 157.430833ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.0615ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 146.622333ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 103.348958ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 114
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 105.489ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 115
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"bring:peace"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 75.96ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 96.820125ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 74.192584ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 95.725416ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 95.817458ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 97.516ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 109.649542ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":"The One who will bring peace - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.602ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - TestAccRole","resource_server_identifier":"https://TestAccRole.matrix.com/"}],"start":0,"limit":50,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 108.801541ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 69
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"The One - Acceptance Test - TestAccRole","description":" "}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":" "}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 157.936208ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 213
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"stop:bullets"},{"resource_server_identifier":"https://TestAccRole.matrix.com/","permission_name":"bring:peace"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 146.898958ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":" "}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 101.675458ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 106.135875ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"646371ce7579750806a7a010","name":"Role - Acceptance Test - TestAccRole","identifier":"https://TestAccRole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 92.846458ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_lLwehO4rRSnFZY5o","name":"The One - Acceptance Test - TestAccRole","description":" "}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 76.876167ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o/permissions?include_totals=true&page=0&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 97.118208ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_lLwehO4rRSnFZY5o
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 112.571208ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/646371ce7579750806a7a010
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 157.450417ms

@@ -9,7 +9,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const givenARole = `
+const givenAResourceServerAndARole = `
 resource "auth0_resource_server" "resource_server" {
 	name = "Acceptance Test - {{.testName}}"
 	identifier = "https://uat.{{.testName}}.terraform-provider-auth0.com/api"
@@ -24,6 +24,8 @@ resource "auth0_resource_server" "resource_server" {
 }
 
 resource "auth0_role" "role" {
+	depends_on = [ auth0_resource_server.resource_server ]
+
 	name = "Acceptance Test - {{.testName}}"
 	description = "Acceptance Test Role - {{.testName}}"
 
@@ -31,15 +33,13 @@ resource "auth0_role" "role" {
 		ignore_changes = [ permissions ]
 	}
 }
-
-data "auth0_role" "role" {
-	role_id = auth0_role.role.id
-}
 `
 
-const testAccRolePermissionsNoneAssigned = givenARole
+const testAccRolePermissionsNoneAssigned = givenAResourceServerAndARole + `data "auth0_role" "role" {
+	role_id = auth0_role.role.id
+}`
 
-const testAccRolePermissionsOneAssigned = givenARole + `
+const givenAResourceServerAndARoleAndAPermission = givenAResourceServerAndARole + `
 resource "auth0_role_permission" "role_permission" {
 	role_id = auth0_role.role.id
 	resource_server_identifier = auth0_resource_server.resource_server.identifier
@@ -47,7 +47,14 @@ resource "auth0_role_permission" "role_permission" {
 }
 `
 
-const testAccRolePermissionsTwoAssigned = testAccRolePermissionsOneAssigned + `
+const testAccRolePermissionsOneAssigned = givenAResourceServerAndARoleAndAPermission + `
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permission.role_permission ]
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsTwoAssigned = givenAResourceServerAndARoleAndAPermission + `
 resource "auth0_role_permission" "another_role_permission" {
 	depends_on = [ auth0_role_permission.another_role_permission ]
 
@@ -56,6 +63,10 @@ resource "auth0_role_permission" "another_role_permission" {
 	permission = "read:foo"
 }
 
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permission.role_permission, auth0_role_permission.another_role_permission ]
+	role_id = auth0_role.role.id
+}
 `
 
 func TestAccRolePermission(t *testing.T) {
@@ -69,9 +80,6 @@ func TestAccRolePermission(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionsOneAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "create:foo"),
@@ -85,9 +93,6 @@ func TestAccRolePermission(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionsTwoAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role_permission.role_permission", "permission", "create:foo"),
 					resource.TestCheckResourceAttr("auth0_role_permission.another_role_permission", "permission", "read:foo"),

@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
+                - Go-Auth0-SDK/0.17.1
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -30,50 +30,14 @@ interactions:
         trailer: {}
         content_length: 439
         uncompressed: false
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 103.180875ms
+        duration: 191.549958ms
     - id: 1
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 112
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 110.074334ms
-    - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -91,8 +55,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,13 +66,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 56.441042ms
+        duration: 105.422375ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 112
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 107.418875ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -127,8 +127,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -138,13 +138,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 114.083125ms
+        duration: 96.497167ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -163,8 +163,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -180,7 +180,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 112.118542ms
+        duration: 106.011166ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -199,8 +199,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -210,13 +210,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.919541ms
+        duration: 105.279709ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -235,8 +235,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -252,7 +252,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.82ms
+        duration: 114.587542ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -271,8 +271,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,13 +282,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 57.903125ms
+        duration: 133.3455ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -307,8 +307,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -324,7 +324,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 100.832875ms
+        duration: 142.007458ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -343,8 +343,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -354,13 +354,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 58.767208ms
+        duration: 62.467459ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -379,8 +379,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -390,13 +390,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 95.953666ms
+        duration: 104.682958ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -415,8 +415,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -432,7 +432,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.139791ms
+        duration: 105.711042ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -451,8 +451,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -462,13 +462,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 142.409542ms
+        duration: 98.37475ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -487,8 +487,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -504,7 +504,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.925416ms
+        duration: 106.460709ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -523,8 +523,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 98.954625ms
+        duration: 97.076125ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -559,8 +559,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -576,7 +576,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.606ms
+        duration: 120.281042ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -595,8 +595,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -606,13 +606,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.805875ms
+        duration: 117.741375ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -631,8 +631,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -642,13 +642,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.154333ms
+        duration: 68.564667ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -667,8 +667,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -678,49 +678,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 270.791917ms
+        duration: 164.967375ms
     - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 149
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"create:foo"}]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions
+        method: POST
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        content_length: 2
+        uncompressed: false
+        body: '{}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 64.511834ms
+        status: 201 Created
+        code: 201
+        duration: 110.158459ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -739,8 +739,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -750,13 +750,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.5065ms
+        duration: 164.0095ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -775,8 +775,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -786,13 +786,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 91.229416ms
+        duration: 61.618416ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -811,8 +811,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -822,49 +822,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.573542ms
+        duration: 107.043583ms
     - id: 23
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 149
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"create:foo"}]}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions
-        method: POST
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 2
-        uncompressed: false
-        body: '{}'
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 113.955209ms
+        status: 200 OK
+        code: 200
+        duration: 63.585792ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -883,8 +883,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -900,7 +900,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 67.920959ms
+        duration: 106.836833ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -919,8 +919,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -930,13 +930,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.368166ms
+        duration: 90.820917ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -955,8 +955,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -966,13 +966,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.542625ms
+        duration: 104.134084ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -991,8 +991,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1002,13 +1002,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.821083ms
+        duration: 120.275583ms
     - id: 28
       request:
         proto: HTTP/1.1
@@ -1027,8 +1027,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1038,13 +1038,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 147.017833ms
+        duration: 101.945625ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1063,8 +1063,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1074,13 +1074,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.775458ms
+        duration: 108.272167ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1099,8 +1099,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1110,13 +1110,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 58.309792ms
+        duration: 103.570083ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1135,8 +1135,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1146,13 +1146,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 110.155542ms
+        duration: 152.13525ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1171,8 +1171,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1188,7 +1188,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 71.585833ms
+        duration: 107.24ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1207,8 +1207,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -1218,13 +1218,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.097541ms
+        duration: 104.241ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1243,8 +1243,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1254,13 +1254,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.68625ms
+        duration: 97.951333ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1279,8 +1279,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1290,13 +1290,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.268375ms
+        duration: 96.545417ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1315,44 +1315,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 102.041916ms
-    - id: 37
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1368,7 +1332,43 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 100.192334ms
+        duration: 110.131542ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 147
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"read:foo"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 98.936583ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1387,8 +1387,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1398,13 +1398,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.495167ms
+        duration: 70.646416ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1423,8 +1423,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1434,13 +1434,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.574167ms
+        duration: 146.611416ms
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1459,8 +1459,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1470,13 +1470,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.370792ms
+        duration: 107.215833ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1495,8 +1495,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1506,13 +1506,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.43075ms
+        duration: 99.201583ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1531,8 +1531,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1542,13 +1542,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.61975ms
+        duration: 74.7415ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1567,8 +1567,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -1578,13 +1578,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.484541ms
+        duration: 95.7255ms
     - id: 44
       request:
         proto: HTTP/1.1
@@ -1603,8 +1603,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1614,13 +1614,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.11ms
+        duration: 112.016625ms
     - id: 45
       request:
         proto: HTTP/1.1
@@ -1639,8 +1639,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1650,13 +1650,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.280083ms
+        duration: 106.0905ms
     - id: 46
       request:
         proto: HTTP/1.1
@@ -1675,8 +1675,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1686,13 +1686,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.366125ms
+        duration: 102.362541ms
     - id: 47
       request:
         proto: HTTP/1.1
@@ -1711,8 +1711,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1722,13 +1722,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 108.042791ms
+        duration: 116.009375ms
     - id: 48
       request:
         proto: HTTP/1.1
@@ -1747,8 +1747,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1758,13 +1758,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 63.329166ms
+        duration: 58.333709ms
     - id: 49
       request:
         proto: HTTP/1.1
@@ -1783,8 +1783,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1794,13 +1794,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.132709ms
+        duration: 68.458292ms
     - id: 50
       request:
         proto: HTTP/1.1
@@ -1819,8 +1819,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1830,49 +1830,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.212458ms
+        duration: 99.352125ms
     - id: 51
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 147
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"read:foo"}]}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions
-        method: POST
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 2
-        uncompressed: false
-        body: '{}'
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 62.322083ms
+        status: 200 OK
+        code: 200
+        duration: 156.449666ms
     - id: 52
       request:
         proto: HTTP/1.1
@@ -1891,8 +1891,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -1902,13 +1902,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.70525ms
+        duration: 97.251541ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1927,8 +1927,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1938,13 +1938,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 127.279542ms
+        duration: 115.675458ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1963,8 +1963,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -1974,13 +1974,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 79.1495ms
+        duration: 103.598125ms
     - id: 55
       request:
         proto: HTTP/1.1
@@ -1999,8 +1999,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2010,13 +2010,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.297416ms
+        duration: 118.19875ms
     - id: 56
       request:
         proto: HTTP/1.1
@@ -2035,8 +2035,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2046,13 +2046,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.513583ms
+        duration: 114.378958ms
     - id: 57
       request:
         proto: HTTP/1.1
@@ -2071,8 +2071,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2082,13 +2082,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.976167ms
+        duration: 103.578834ms
     - id: 58
       request:
         proto: HTTP/1.1
@@ -2107,8 +2107,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2118,13 +2118,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.08875ms
+        duration: 121.148958ms
     - id: 59
       request:
         proto: HTTP/1.1
@@ -2143,8 +2143,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2154,13 +2154,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 106.505375ms
+        duration: 61.141042ms
     - id: 60
       request:
         proto: HTTP/1.1
@@ -2179,8 +2179,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2196,43 +2196,43 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 110.995667ms
+        duration: 161.538042ms
     - id: 61
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 147
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"read:foo"}]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions
+        method: DELETE
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        content_length: 0
+        uncompressed: false
+        body: ""
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 102.598667ms
+        status: 204 No Content
+        code: 204
+        duration: 62.022875ms
     - id: 62
       request:
         proto: HTTP/1.1
@@ -2251,8 +2251,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2262,13 +2262,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.682084ms
+        duration: 72.383083ms
     - id: 63
       request:
         proto: HTTP/1.1
@@ -2287,8 +2287,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2298,13 +2298,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.713458ms
+        duration: 113.60525ms
     - id: 64
       request:
         proto: HTTP/1.1
@@ -2323,8 +2323,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -2334,13 +2334,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 52.134416ms
+        duration: 101.523667ms
     - id: 65
       request:
         proto: HTTP/1.1
@@ -2359,8 +2359,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2370,13 +2370,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 98.388375ms
+        duration: 97.95375ms
     - id: 66
       request:
         proto: HTTP/1.1
@@ -2395,8 +2395,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2406,13 +2406,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 66.047ms
+        duration: 107.175916ms
     - id: 67
       request:
         proto: HTTP/1.1
@@ -2431,8 +2431,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2442,13 +2442,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.301542ms
+        duration: 108.641042ms
     - id: 68
       request:
         proto: HTTP/1.1
@@ -2467,8 +2467,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2478,13 +2478,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.08225ms
+        duration: 56.413166ms
     - id: 69
       request:
         proto: HTTP/1.1
@@ -2503,8 +2503,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2514,13 +2514,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.032666ms
+        duration: 111.142458ms
     - id: 70
       request:
         proto: HTTP/1.1
@@ -2539,8 +2539,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2550,13 +2550,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 107.187708ms
+        duration: 82.161375ms
     - id: 71
       request:
         proto: HTTP/1.1
@@ -2575,8 +2575,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2586,13 +2586,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.680917ms
+        duration: 129.35775ms
     - id: 72
       request:
         proto: HTTP/1.1
@@ -2611,8 +2611,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -2622,13 +2622,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 65.871834ms
+        duration: 106.461792ms
     - id: 73
       request:
         proto: HTTP/1.1
@@ -2647,8 +2647,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2658,13 +2658,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 89.669084ms
+        duration: 97.999375ms
     - id: 74
       request:
         proto: HTTP/1.1
@@ -2683,8 +2683,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2694,13 +2694,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.747584ms
+        duration: 108.6185ms
     - id: 75
       request:
         proto: HTTP/1.1
@@ -2719,8 +2719,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2730,13 +2730,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 117.310959ms
+        duration: 113.29025ms
     - id: 76
       request:
         proto: HTTP/1.1
@@ -2755,8 +2755,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2766,13 +2766,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 110.017958ms
+        duration: 173.77225ms
     - id: 77
       request:
         proto: HTTP/1.1
@@ -2791,8 +2791,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2802,13 +2802,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.180958ms
+        duration: 102.93125ms
     - id: 78
       request:
         proto: HTTP/1.1
@@ -2827,8 +2827,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -2838,13 +2838,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 110.382875ms
+        duration: 102.135959ms
     - id: 79
       request:
         proto: HTTP/1.1
@@ -2863,8 +2863,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2874,13 +2874,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 67.366916ms
+        duration: 101.620917ms
     - id: 80
       request:
         proto: HTTP/1.1
@@ -2899,8 +2899,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2910,13 +2910,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 145.378375ms
+        duration: 108.135125ms
     - id: 81
       request:
         proto: HTTP/1.1
@@ -2935,8 +2935,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -2946,49 +2946,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":2}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.742ms
+        duration: 152.023166ms
     - id: 82
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 147
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"read:foo"}]}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions
-        method: DELETE
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 98.311083ms
+        status: 200 OK
+        code: 200
+        duration: 104.169708ms
     - id: 83
       request:
         proto: HTTP/1.1
@@ -3007,8 +3007,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3018,13 +3018,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 95.617375ms
+        duration: 98.086958ms
     - id: 84
       request:
         proto: HTTP/1.1
@@ -3043,8 +3043,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3054,13 +3054,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.922167ms
+        duration: 98.475084ms
     - id: 85
       request:
         proto: HTTP/1.1
@@ -3079,8 +3079,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3090,13 +3090,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 61.442291ms
+        duration: 109.973083ms
     - id: 86
       request:
         proto: HTTP/1.1
@@ -3115,8 +3115,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3126,13 +3126,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 152.644917ms
+        duration: 103.048959ms
     - id: 87
       request:
         proto: HTTP/1.1
@@ -3151,8 +3151,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3168,43 +3168,43 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 176.347917ms
+        duration: 103.958041ms
     - id: 88
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 149
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"create:foo"}]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions
+        method: DELETE
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        content_length: 0
+        uncompressed: false
+        body: ""
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 96.790208ms
+        status: 204 No Content
+        code: 204
+        duration: 97.971792ms
     - id: 89
       request:
         proto: HTTP/1.1
@@ -3223,8 +3223,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3234,13 +3234,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.001625ms
+        duration: 102.008542ms
     - id: 90
       request:
         proto: HTTP/1.1
@@ -3259,8 +3259,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3270,13 +3270,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.115542ms
+        duration: 109.065042ms
     - id: 91
       request:
         proto: HTTP/1.1
@@ -3295,8 +3295,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -3306,13 +3306,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 61.914667ms
+        duration: 85.223625ms
     - id: 92
       request:
         proto: HTTP/1.1
@@ -3331,8 +3331,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3342,13 +3342,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 60.977667ms
+        duration: 105.449458ms
     - id: 93
       request:
         proto: HTTP/1.1
@@ -3367,8 +3367,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3378,13 +3378,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.347458ms
+        duration: 106.006333ms
     - id: 94
       request:
         proto: HTTP/1.1
@@ -3403,8 +3403,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3414,13 +3414,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.122709ms
+        duration: 100.789ms
     - id: 95
       request:
         proto: HTTP/1.1
@@ -3439,8 +3439,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3450,13 +3450,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 117.685625ms
+        duration: 167.625375ms
     - id: 96
       request:
         proto: HTTP/1.1
@@ -3475,8 +3475,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3486,13 +3486,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 61.658333ms
+        duration: 153.932583ms
     - id: 97
       request:
         proto: HTTP/1.1
@@ -3511,8 +3511,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3522,13 +3522,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 64.658166ms
+        duration: 100.967291ms
     - id: 98
       request:
         proto: HTTP/1.1
@@ -3547,8 +3547,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: GET
       response:
         proto: HTTP/2.0
@@ -3558,13 +3558,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"64650a536c65a7e36766b3b7","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 72.29175ms
+        duration: 101.686916ms
     - id: 99
       request:
         proto: HTTP/1.1
@@ -3583,8 +3583,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3594,13 +3594,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.189125ms
+        duration: 98.569042ms
     - id: 100
       request:
         proto: HTTP/1.1
@@ -3619,8 +3619,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3630,13 +3630,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 95.995875ms
+        duration: 68.37625ms
     - id: 101
       request:
         proto: HTTP/1.1
@@ -3655,8 +3655,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3666,13 +3666,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 63.686292ms
+        duration: 105.588042ms
     - id: 102
       request:
         proto: HTTP/1.1
@@ -3691,8 +3691,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3702,13 +3702,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 90.275583ms
+        duration: 103.460042ms
     - id: 103
       request:
         proto: HTTP/1.1
@@ -3727,8 +3727,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: GET
       response:
         proto: HTTP/2.0
@@ -3738,13 +3738,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
+        body: '{"id":"rol_PfZcJ9EhDtH4TnCd","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 96.382ms
+        duration: 98.324417ms
     - id: 104
       request:
         proto: HTTP/1.1
@@ -3763,8 +3763,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd/permissions?include_totals=true&page=0&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -3774,770 +3774,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.304125ms
+        duration: 159.45825ms
     - id: 105
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 64.267834ms
-    - id: 106
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 117.785958ms
-    - id: 107
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 95.388167ms
-    - id: 108
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccrolepermission","resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 85.619083ms
-    - id: 109
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 149
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"permissions":[{"resource_server_identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","permission_name":"create:foo"}]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 105.511ms
-    - id: 110
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 57.932167ms
-    - id: 111
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.211375ms
-    - id: 112
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.280042ms
-    - id: 113
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.430708ms
-    - id: 114
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 62.241416ms
-    - id: 115
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 63.36475ms
-    - id: 116
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 159.882084ms
-    - id: 117
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 97.176292ms
-    - id: 118
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 100.009417ms
-    - id: 119
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 105.1775ms
-    - id: 120
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"64637186f0b8e74f44ba6baf","name":"Acceptance Test - testaccrolepermission","identifier":"https://uat.testaccrolepermission.terraform-provider-auth0.com/api","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 153.419ms
-    - id: 121
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 100.612583ms
-    - id: 122
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 94.67275ms
-    - id: 123
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 142.737541ms
-    - id: 124
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_IwZupyDEd4uUFGA0","name":"Acceptance Test - testaccrolepermission","description":"Acceptance Test Role - testaccrolepermission"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 96.026583ms
-    - id: 125
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0/permissions?include_totals=true&page=0&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 106.00825ms
-    - id: 126
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -4555,8 +3799,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_IwZupyDEd4uUFGA0
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_PfZcJ9EhDtH4TnCd
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -4572,8 +3816,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.775875ms
-    - id: 127
+        duration: 66.59525ms
+    - id: 106
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -4590,8 +3834,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.17.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64637186f0b8e74f44ba6baf
+                - Go-Auth0-SDK/0.17.1
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64650a536c65a7e36766b3b7
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -4607,4 +3851,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 139.030667ms
+        duration: 166.5905ms

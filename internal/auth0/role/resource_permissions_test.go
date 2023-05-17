@@ -9,9 +9,11 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccRolePermissionNoneAssigned = givenARole
+const testAccRolePermissionNoneAssigned = givenAResourceServerAndARole + `data "auth0_role" "role" {
+	role_id = auth0_role.role.id
+}`
 
-const testAccRolePermissionOneAssigned = givenARole + `
+const testAccRolePermissionOneAssigned = givenAResourceServerAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
 	role_id = auth0_role.role.id
 	
@@ -20,9 +22,14 @@ resource "auth0_role_permissions" "role_permissions" {
 		name = "read:foo"
 	}
 }
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+	role_id = auth0_role.role.id
+}
 `
 
-const testAccRolePermissionTwoAssigned = givenARole + `
+const testAccRolePermissionTwoAssigned = givenAResourceServerAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
 	role_id = auth0_role.role.id
 	
@@ -34,6 +41,11 @@ resource "auth0_role_permissions" "role_permissions" {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name = "read:foo"
 	}
+}
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+	role_id = auth0_role.role.id
 }
 `
 
@@ -48,9 +60,6 @@ func TestAccRolePermissions(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionOneAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "read:foo"),
@@ -64,9 +73,6 @@ func TestAccRolePermissions(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionTwoAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.name", "create:foo"),
 					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.1.name", "read:foo"),
@@ -80,9 +86,6 @@ func TestAccRolePermissions(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionOneAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "read:foo"),

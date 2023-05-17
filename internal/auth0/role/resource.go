@@ -60,6 +60,16 @@ func NewResource() *schema.Resource {
 							Required:    true,
 							Description: "Unique identifier for the resource server.",
 						},
+						"description": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Description of the permission.",
+						},
+						"resource_server_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of resource server that the permission is associated with.",
+						},
 					},
 				},
 			},
@@ -212,7 +222,9 @@ func flattenRolePermissions(permissions []*management.Permission) []interface{} 
 	for _, permission := range permissions {
 		result = append(result, map[string]interface{}{
 			"name":                       permission.GetName(),
+			"description":                permission.GetDescription(),
 			"resource_server_identifier": permission.GetResourceServerIdentifier(),
+			"resource_server_name":       permission.GetResourceServerName(),
 		})
 	}
 	return result

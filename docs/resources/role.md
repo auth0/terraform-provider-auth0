@@ -71,6 +71,11 @@ Required:
 - `name` (String) Name of the permission (scope) configured on the resource server. If referencing a scope from an `auth0_resource_server` resource, use the `value` property, for example `auth0_resource_server.my_resource_server.scopes[0].value`.
 - `resource_server_identifier` (String) Unique identifier for the resource server.
 
+Read-Only:
+
+- `description` (String) Description of the permission.
+- `resource_server_name` (String) Name of resource server that the permission is associated with.
+
 ## Import
 
 Import is supported using the following syntax:

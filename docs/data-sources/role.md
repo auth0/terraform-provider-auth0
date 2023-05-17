@@ -41,7 +41,9 @@ data "auth0_role" "some-role-by-id" {
 
 Read-Only:
 
+- `description` (String)
 - `name` (String)
 - `resource_server_identifier` (String)
+- `resource_server_name` (String)
 
 

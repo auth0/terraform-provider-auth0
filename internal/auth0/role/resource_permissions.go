@@ -142,22 +142,17 @@ func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta in
 	mutex.Lock(roleID)
 	defer mutex.Unlock(roleID)
 
-	permissions, err := api.Role.Permissions(roleID)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	permissionsToRemove := data.Get("permissions").(*schema.Set).List()
+	var rmPermissions []*management.Permission
+	for _, p := range permissionsToRemove {
+		perm := p.(map[string]interface{})
+		role := &management.Permission{
+			ResourceServerIdentifier: auth0.String(perm["resource_server_identifier"].(string)),
+			Name:                     auth0.String(perm["name"].(string)),
 		}
-		return diag.FromErr(err)
+		rmPermissions = append(rmPermissions, role)
 	}
 
-	var rmPermissions []*management.Permission
-	for _, rmPermission := range permissions.Permissions {
-		rmPermissions = append(rmPermissions, &management.Permission{
-			Name:                     auth0.String(rmPermission.GetName()),
-			ResourceServerIdentifier: auth0.String(rmPermission.GetResourceServerIdentifier()),
-		})
-	}
 	if err := api.Role.RemovePermissions(
 		roleID,
 		rmPermissions,

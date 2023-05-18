@@ -90,6 +90,73 @@ EOF
 }
 `
 
+const testAccAddUpdateClientCredentialsExpiresAt = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Client Credentials - {{.testName}}"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id = auth0_client.my_client.id
+
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name            = "Testing Credentials 1"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			expires_at      = "2024-05-13T09:33:13.000Z"
+			pem = <<EOF
+%s
+EOF
+		}
+		credentials {
+			name            = "Testing Credentials 2"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			parse_expiry_from_cert = false
+			expires_at      = "2025-05-13T09:33:13.000Z"
+			pem = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+const testAccRemoveOneClientCredentialPrivateKeyJWT = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Client Credentials - {{.testName}}"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id = auth0_client.my_client.id
+
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			name            = "Testing Credentials 2"
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			parse_expiry_from_cert = false
+			expires_at      = "2025-05-13T09:33:13.000Z"
+			pem = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
 func TestClientAuthenticationMethods(t *testing.T) {
 	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
 	require.NoError(t, err)
@@ -150,6 +217,55 @@ func TestClientAuthenticationMethods(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.created_at"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.updated_at"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccAddUpdateClientCredentialsExpiresAt, t.Name()), credsCert1, credsCert2),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.name", "Testing Credentials 1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "false"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2024-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.updated_at"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.name", "Testing Credentials 2"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.credential_type", "public_key"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.algorithm", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.parse_expiry_from_cert", "false"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.pem"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.created_at"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.updated_at"),
+				),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccRemoveOneClientCredentialPrivateKeyJWT, t.Name()), credsCert2),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.name", "Testing Credentials 2"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "false"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.updated_at"),
 				),
 			},
 		},

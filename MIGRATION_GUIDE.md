@@ -52,6 +52,11 @@ resource "auth0_role" "admin" {
   description = "Administrator"
 }
 
+resource "auth0_role" "owner" {
+  name        = "owner"
+  description = "Owner"
+}
+
 resource "auth0_user" "user" {
   connection_name = "Username-Password-Authentication"
   username        = "unique_username"
@@ -71,14 +76,19 @@ resource "auth0_user" "user" {
 # relationship between the user and its roles.
 resource auth0_user_roles user_roles {
   user_id = auth0_user.user.id
-  roles = [auth0_role.admin.id]
+  roles   = [ auth0_role.admin.id, auth0_role.owner.id ]
 }
 
-# Or the auth0_user_role to manage a 1:1
+# Use the auth0_user_role to manage a 1:1
 # relationship between the user and its role.
-resource auth0_user_role user_roles {
+resource auth0_user_role user_admin {
   user_id = auth0_user.user.id
-  roles = auth0_role.admin.id
+  role_id = auth0_role.admin.id
+}
+
+resource auth0_user_role user_owner {
+  user_id = auth0_user.user.id
+  role_id = auth0_role.owner.id
 }
 ```
 
@@ -103,28 +113,31 @@ prepared for future changes.
 
 ```terraform
 resource auth0_resource_server api {
-    name = "Example API"
-    identifier = "https://api.travel0.com/"
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
 
-    scopes {
-        value = "read:posts"
-        description = "Can read posts"
-    }
-    scopes {
-        value = "write:posts"
-        description = "Can write posts"
-    }
+  scopes {
+    value       = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    value       = "write:posts"
+    description = "Can write posts"
+  }
 }
 
 resource auth0_role content_editor {
-  name = "Content Editor"
+  name        = "Content Editor"
   description = "Elevated roles for editing content"
+
   permissions {
-    name = "read:posts"
+    name                       = "read:posts"
     resource_server_identifier = auth0_resource_server.api.identifier
   }
+
   permissions {
-    name = "write:posts"
+    name                       = "write:posts"
     resource_server_identifier = auth0_resource_server.api.identifier
   }
 }
@@ -135,21 +148,22 @@ resource auth0_role content_editor {
 
 ```terraform
 resource auth0_resource_server api {
-    name = "Example API"
-    identifier = "https://api.travel0.com/"
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
 
-    scopes {
-        value = "read:posts"
-        description = "Can read posts"
-    }
-    scopes {
-        value = "write:posts"
-        description = "Can write posts"
-    }
+  scopes {
+    value       = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    value       = "write:posts"
+    description = "Can write posts"
+  }
 }
 
 resource auth0_role content_editor {
-  name = "Content Editor"
+  name        = "Content Editor"
   description = "Elevated roles for editing content"
 
   # Until we remove the ability to operate changes on
@@ -164,22 +178,30 @@ resource auth0_role content_editor {
 # relationship between the role and its permissions.
 resource "auth0_role_permissions" "editor_permissions" {
 	role_id = auth0_role.content_editor.id
-	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "read:posts"
+
+  permissions  {
+    resource_server_identifier = auth0_resource_server.api.identifier
+    name                       = "read:posts"
+  }
+
+  permissions  {
+    resource_server_identifier = auth0_resource_server.api.identifier
+    name                       = "write:posts"
+  }
 }
 
 # Use the auth0_role_permission resource to manage a 1:1
 # relationship between a role and its permissions.
 resource "auth0_role_permission" "read_posts_permission" {
-	role_id = auth0_role.content_editor.id
+	role_id                    = auth0_role.content_editor.id
 	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "read:posts"
+	permission                 = "read:posts"
 }
 
 resource "auth0_role_permission" "write_posts_permission" {
-	role_id = auth0_role.content_editor.id
+	role_id                    = auth0_role.content_editor.id
 	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "write:posts"
+	permission                 = "write:posts"
 }
 ```
 

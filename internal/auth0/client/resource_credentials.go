@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"

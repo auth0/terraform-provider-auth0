@@ -38,10 +38,6 @@ resource "auth0_role" "role" {
 }
 `
 
-const testAccRolePermissionsNoneAssigned = givenAResourceServerAndARole + `data "auth0_role" "role" {
-	role_id = auth0_role.role.id
-}`
-
 const testAccRolePermissionsNoneAssigned = givenAResourceServerAndARole + `
 data "auth0_role" "role" {
 	role_id = auth0_role.role.id

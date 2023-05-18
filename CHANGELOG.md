@@ -1,3 +1,28 @@
+## 0.47.0
+
+FEATURES:
+
+- `resource/auth0_connection_clients`: Add new resource to manage a 1:many relationship between the connection and its enabled clients ([#568](https://github.com/auth0/terraform-provider-auth0/pull/568))
+- `resource/auth0_user_permission`: Add new resource to manage a 1:1 relationship between the user and its permissions ([#574](https://github.com/auth0/terraform-provider-auth0/pull/574))
+- `resource/auth0_user_permissions`: Add new resource to manage a 1:many relationship between the user and its permissions ([#578](https://github.com/auth0/terraform-provider-auth0/pull/578))
+- `resource/auth0_user_role`: Add new resource to manage a 1:1 relationship between the user and its roles ([#580](https://github.com/auth0/terraform-provider-auth0/pull/580))
+- `resource/auth0_user_roles`: Add new resource to manage a 1:many relationship between the user and its roles ([#579](https://github.com/auth0/terraform-provider-auth0/pull/579))
+- `resource/auth0_role_permission`: Add new resource to manage a 1:1 relationship between the role and its permissions ([#582](https://github.com/auth0/terraform-provider-auth0/pull/582))
+- `resource/auth0_role_permissions`: Add new resource to manage a 1:many relationship between the role and its permissions ([#583](https://github.com/auth0/terraform-provider-auth0/pull/583))
+- `resource/auth0_user`: Add new readonly `permissions` attribute ([#572](https://github.com/auth0/terraform-provider-auth0/pull/572))
+- `resource/auth0_client`: Add OIDC Back-Channel Logout support ([#581](https://github.com/auth0/terraform-provider-auth0/pull/581))
+- `resource/auth0_role`: Add `description` and `resource_server_name` read-only fields to `permissions` ([#581](https://github.com/auth0/terraform-provider-auth0/pull/581))
+
+BUG FIXES:
+
+- Fix created import ID on association resource ([#569](https://github.com/auth0/terraform-provider-auth0/pull/569))
+
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
+to navigate the deprecations that were added in this release.
+
+
 ## 0.46.0
 
 BUG FIXES:

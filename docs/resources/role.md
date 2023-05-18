@@ -57,7 +57,7 @@ resource "auth0_role" "my_role" {
 ### Optional
 
 - `description` (String) Description of the role.
-- `permissions` (Block Set) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedblock--permissions))
+- `permissions` (Block Set, Deprecated) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedblock--permissions))
 
 ### Read-Only
 
@@ -70,6 +70,11 @@ Required:
 
 - `name` (String) Name of the permission (scope) configured on the resource server. If referencing a scope from an `auth0_resource_server` resource, use the `value` property, for example `auth0_resource_server.my_resource_server.scopes[0].value`.
 - `resource_server_identifier` (String) Unique identifier for the resource server.
+
+Read-Only:
+
+- `description` (String) Description of the permission.
+- `resource_server_name` (String) Name of resource server that the permission is associated with.
 
 ## Import
 

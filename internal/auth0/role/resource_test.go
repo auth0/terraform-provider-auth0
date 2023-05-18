@@ -26,6 +26,10 @@ func TestAccRole(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.name", "stop:bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.description", "Stop bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_identifier", fmt.Sprintf("https://%s.matrix.com/", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_name", fmt.Sprintf("Role - Acceptance Test - %s", t.Name())),
 				),
 			},
 			{
@@ -33,6 +37,15 @@ func TestAccRole(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One who will bring peace - Acceptance Test"),
 					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "2"),
+
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.name", "bring:peace"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.description", "Bring peace"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_identifier", fmt.Sprintf("https://%s.matrix.com/", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_name", fmt.Sprintf("Role - Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.1.name", "stop:bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.1.description", "Stop bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.1.resource_server_identifier", fmt.Sprintf("https://%s.matrix.com/", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.1.resource_server_name", fmt.Sprintf("Role - Acceptance Test - %s", t.Name())),
 				),
 			},
 			{
@@ -100,11 +113,11 @@ resource auth0_role the_one {
 }
 `
 
-func TestAccRolePermissions(t *testing.T) {
+func TestAccRoleResourcePermissions(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccRolePermissions, t.Name()),
+				Config: acctest.ParseTestName(testAccRoleResourcePermissions, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.role", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_role.role", "description", "The One - Acceptance Test"),
@@ -115,7 +128,7 @@ func TestAccRolePermissions(t *testing.T) {
 	})
 }
 
-const testAccRolePermissions = `
+const testAccRoleResourcePermissions = `
 locals {
 	permissions = {
 		"permission:1"   = "Permission 1"

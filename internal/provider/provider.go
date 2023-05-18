@@ -92,6 +92,7 @@ func New() *schema.Provider {
 			"auth0_branding":                   branding.NewResource(),
 			"auth0_branding_theme":             branding.NewThemeResource(),
 			"auth0_client":                     client.NewResource(),
+			"auth0_client_credentials":         client.NewCredentialsResource(),
 			"auth0_client_grant":               client.NewGrantResource(),
 			"auth0_global_client":              client.NewGlobalResource(),
 			"auth0_connection":                 connection.NewResource(),

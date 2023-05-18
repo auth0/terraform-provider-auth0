@@ -110,6 +110,7 @@ func New() *schema.Provider {
 			"auth0_prompt":                     prompt.NewResource(),
 			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
 			"auth0_resource_server":            resourceserver.NewResource(),
+			"auth0_resource_server_scope":      resourceserver.NewScopeResource(),
 			"auth0_role":                       role.NewResource(),
 			"auth0_role_permission":            role.NewPermissionResource(),
 			"auth0_role_permissions":           role.NewPermissionsResource(),

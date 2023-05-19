@@ -47,9 +47,9 @@ const testAccTwoScopesAssigned = givenAResourceServer + givenAScope + givenAnoth
 	identifier = auth0_resource_server.resource_server.identifier
 }`
 
-const resourceServerIdentifier = "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"
+const resourceServerIdentifier = "https://uat.api.terraform-provider-auth0.com/testaccresourceserverscope"
 
-func TestAccUserPermission(t *testing.T) {
+func TestAccResourceServerScope(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

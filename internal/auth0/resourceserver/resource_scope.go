@@ -53,6 +53,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
+	description := data.Get("description").(string)
 
 	mutex.Lock(resourceServerID)
 	defer mutex.Unlock(resourceServerID)
@@ -63,7 +64,8 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	scopes := append(*currentScopes.Scopes, management.ResourceServerScope{
-		Value: &scope,
+		Value:       &scope,
+		Description: &description,
 	})
 	resourceServer := management.ResourceServer{
 		Scopes: &scopes,

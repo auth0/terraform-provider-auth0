@@ -24,6 +24,8 @@ const givenAScope = `
 resource "auth0_resource_server_scope" "read_posts" { 
 	scope = "read:posts"
 	resource_server_identifier = auth0_resource_server.resource_server.identifier
+
+	description = "Can read posts"
 }
 `
 
@@ -63,7 +65,11 @@ func TestAccResourceServerScope(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "scope", "read:posts"),
+					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "description", "Can read posts"),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "resource_server_identifier", resourceServerIdentifier),
+
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.value", "read:posts"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.description", "Can read posts"),
 				),
 			},
 			{
@@ -71,7 +77,13 @@ func TestAccResourceServerScope(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.#", "2"),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "scope", "write:posts"),
+					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "description", ""),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "resource_server_identifier", resourceServerIdentifier),
+
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.value", "write:posts"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.description", ""),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.1.value", "read:posts"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.1.description", "Can read posts"),
 				),
 			},
 			{

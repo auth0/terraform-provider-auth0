@@ -77,10 +77,12 @@ func NewCredentialsResource() *schema.Resource {
 										Description: "The ID of the client credential.",
 									},
 									"name": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										ForceNew:    true,
-										Description: "Friendly name for a credential.",
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+										Description: "Friendly name for a credential. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"key_id": {
 										Type:        schema.TypeString,
@@ -92,14 +94,18 @@ func NewCredentialsResource() *schema.Resource {
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
-										Description:  "Credential type. Supported types: `public_key`.",
+										Description: "Credential type. Supported types: `public_key`. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"pem": {
 										Type:     schema.TypeString,
 										Required: true,
 										ForceNew: true,
-										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped. " +
-											"Changing this will force the credential to be recreated, resulting in a new client credential ID.",
+										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
+											"Must be JSON escaped. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"algorithm": {
 										Type:         schema.TypeString,
@@ -108,7 +114,10 @@ func NewCredentialsResource() *schema.Resource {
 										ValidateFunc: validation.StringInSlice([]string{"RS256", "RS384", "PS256"}, false),
 										Default:      "RS256",
 										Description: "Algorithm which will be used with the credential. " +
-											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, `RS256` will be used.",
+											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, " +
+											"`RS256` will be used. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"parse_expiry_from_cert": {
 										Type:     schema.TypeBool,
@@ -116,7 +125,8 @@ func NewCredentialsResource() *schema.Resource {
 										ForceNew: true,
 										Description: "Parse expiry from x509 certificate. " +
 											"If true, attempts to parse the expiry date from the provided PEM. " +
-											"Changing this will force the credential to be recreated, resulting in a new client credential ID.",
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"created_at": {
 										Type:        schema.TypeString,
@@ -133,7 +143,8 @@ func NewCredentialsResource() *schema.Resource {
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IsRFC3339Time,
-										Description:  "The ISO 8601 formatted date representing the expiration of the credential.",
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential.",
 									},
 								},
 							},
@@ -149,8 +160,8 @@ func NewCredentialsResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "With this resource, you can set up applications that use Auth0 for authentication " +
-			"and configure allowed callback URLs and secrets for these applications.",
+		Description: "With this resource, you can configure the method to use when making requests to any endpoint " +
+			"that requires this client to authenticate.",
 	}
 }
 
@@ -158,6 +169,18 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 
 	clientID := data.Get("client_id").(string)
+
+	// Check that client exists.
+	if _, err := api.Client.Read(clientID, management.IncludeFields("client_id")); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+
+		return diag.FromErr(err)
+	}
+
+	data.SetId(clientID)
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	switch authenticationMethod {
@@ -167,11 +190,6 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		}
 	case "client_secret_post", "client_secret_basic":
 		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 
@@ -180,16 +198,9 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		}
 	case "none":
 		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 	}
-
-	data.SetId(clientID)
 
 	return readClientCredentials(ctx, data, meta)
 }
@@ -198,7 +209,15 @@ func readClientCredentials(_ context.Context, data *schema.ResourceData, meta in
 	api := meta.(*config.Config).GetAPI()
 	clientID := data.Get("client_id").(string)
 
-	client, err := api.Client.Read(clientID)
+	client, err := api.Client.Read(
+		clientID,
+		management.IncludeFields(
+			"client_id",
+			"client_secret",
+			"token_endpoint_auth_method",
+			"client_authentication_methods",
+		),
+	)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -225,6 +244,18 @@ func readClientCredentials(_ context.Context, data *schema.ResourceData, meta in
 func updateClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
+	clientID := data.Get("client_id").(string)
+
+	// Check that client exists.
+	if _, err := api.Client.Read(clientID, management.IncludeFields("client_id")); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+
+		return diag.FromErr(err)
+	}
+
 	authenticationMethod := data.Get("authentication_method").(string)
 	switch authenticationMethod {
 	case "private_key_jwt":
@@ -233,11 +264,6 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		}
 	case "client_secret_post", "client_secret_basic":
 		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 
@@ -246,11 +272,6 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		}
 	case "none":
 		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 	}
@@ -317,11 +338,9 @@ func createPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 		})
 	}
 
-	if err := attachCredentialsToClient(api, clientID, credentialsToAttach); err != nil {
-		return diag.FromErr(err)
-	}
+	err := attachCredentialsToClient(api, clientID, credentialsToAttach)
 
-	return nil
+	return diag.FromErr(err)
 }
 
 func modifyPrivateKeyJWTCredentials(api *management.Management, data *schema.ResourceData) diag.Diagnostics {
@@ -331,16 +350,6 @@ func modifyPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 	}
 
 	clientID := data.Get("client_id").(string)
-
-	// Check that client exists.
-	if _, err := api.Client.Read(clientID, management.IncludeFields("client_id")); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
-	}
 
 	for index, credential := range credentials {
 		const configAddress = "private_key_jwt.0.credentials"
@@ -367,11 +376,15 @@ func modifyPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 	return nil
 }
 
+type clientWithAuthMethod struct {
+	ID                          string                                  `json:"-"`
+	ClientAuthenticationMethods *management.ClientAuthenticationMethods `json:"client_authentication_methods"`
+	TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
+}
+
 func attachCredentialsToClient(api *management.Management, clientID string, credentials []management.Credential) error {
-	var client = struct {
-		ClientAuthenticationMethods *management.ClientAuthenticationMethods `json:"client_authentication_methods"`
-		TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
-	}{
+	client := clientWithAuthMethod{
+		ID: clientID,
 		ClientAuthenticationMethods: &management.ClientAuthenticationMethods{
 			PrivateKeyJWT: &management.PrivateKeyJWT{
 				Credentials: &credentials,
@@ -380,41 +393,21 @@ func attachCredentialsToClient(api *management.Management, clientID string, cred
 		TokenEndpointAuthMethod: nil,
 	}
 
-	request, err := api.NewRequest(http.MethodPatch, api.URI("clients", clientID), &client)
-	if err != nil {
-		return err
-	}
-
-	response, err := api.Do(request)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = response.Body.Close()
-	}()
-
-	if response.StatusCode >= http.StatusBadRequest {
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-
-		return fmt.Errorf("%s", string(body))
-	}
-
-	return nil
+	return updateClientWithAuthMethod(api, client)
 }
 
 func detachCredentialsFromClient(api *management.Management, clientID string) error {
-	var client = struct {
-		ClientAuthenticationMethods *management.ClientAuthenticationMethods `json:"client_authentication_methods"`
-		TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
-	}{
+	client := clientWithAuthMethod{
+		ID:                          clientID,
 		ClientAuthenticationMethods: nil,
 		TokenEndpointAuthMethod:     auth0.String("client_secret_post"),
 	}
 
-	request, err := api.NewRequest(http.MethodPatch, api.URI("clients", clientID), &client)
+	return updateClientWithAuthMethod(api, client)
+}
+
+func updateClientWithAuthMethod(api *management.Management, client clientWithAuthMethod) error {
+	request, err := api.NewRequest(http.MethodPatch, api.URI("clients", client.ID), &client)
 	if err != nil {
 		return err
 	}

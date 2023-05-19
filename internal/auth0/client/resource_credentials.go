@@ -77,10 +77,12 @@ func NewCredentialsResource() *schema.Resource {
 										Description: "The ID of the client credential.",
 									},
 									"name": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										ForceNew:    true,
-										Description: "Friendly name for a credential.",
+										Type:     schema.TypeString,
+										Optional: true,
+										ForceNew: true,
+										Description: "Friendly name for a credential. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"key_id": {
 										Type:        schema.TypeString,
@@ -92,7 +94,9 @@ func NewCredentialsResource() *schema.Resource {
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
-										Description:  "Credential type. Supported types: `public_key`.",
+										Description: "Credential type. Supported types: `public_key`. " +
+											"Changing this will force the credential to be recreated, " +
+											"resulting in a new client credential ID.",
 									},
 									"pem": {
 										Type:     schema.TypeString,

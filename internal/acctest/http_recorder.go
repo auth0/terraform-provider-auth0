@@ -105,10 +105,19 @@ func redactDomain(i *cassette.Interaction, domain string) {
 }
 
 func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain string) {
-	create := i.Request.URL == "https://"+domain+"/api/v2/clients" && i.Request.Method == http.MethodPost
-	read := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") && i.Request.Method == http.MethodGet
-	update := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") && i.Request.Method == http.MethodPatch
-	rotateSecret := strings.Contains(i.Request.URL, "clients") && strings.Contains(i.Request.URL, "/rotate-secret")
+	create := i.Request.URL == "https://"+domain+"/api/v2/clients" &&
+		i.Request.Method == http.MethodPost
+
+	read := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") &&
+		!strings.Contains(i.Request.URL, "credentials") &&
+		i.Request.Method == http.MethodGet
+
+	update := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") &&
+		!strings.Contains(i.Request.URL, "credentials") &&
+		i.Request.Method == http.MethodPatch
+
+	rotateSecret := strings.Contains(i.Request.URL, "clients") &&
+		strings.Contains(i.Request.URL, "/rotate-secret")
 
 	if create || read || update || rotateSecret {
 		var client management.Client
@@ -119,7 +128,10 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 		client.SigningKeys = []map[string]string{
 			{"cert": redacted},
 		}
-		client.ClientSecret = &redacted
+
+		if client.GetClientSecret() != "" {
+			client.ClientSecret = &redacted
+		}
 
 		clientBody, err := json.Marshal(client)
 		require.NoError(t, err)

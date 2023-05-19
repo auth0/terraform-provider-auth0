@@ -14,10 +14,6 @@ require (
 	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
 )
 
-replace (
-	github.com/auth0/go-auth0 v0.0.0-20230516085808-85d92279deba => /Users/sergiu.ghitea/auth0/go-auth0
-)
-
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect

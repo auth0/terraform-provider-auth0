@@ -14,7 +14,8 @@ import (
 
 const testAccThrowErrorWhenPrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 }
 
 resource "auth0_client_credentials" "my_client_credentials" {
@@ -26,7 +27,8 @@ resource "auth0_client_credentials" "my_client_credentials" {
 
 const testAccCreateOneClientCredentialUsingPrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -54,7 +56,8 @@ EOF
 
 const testAccAddAnotherClientCredentialUsingPrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -92,7 +95,8 @@ EOF
 
 const testAccAddUpdateClientCredentialsExpiresAt = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -106,10 +110,11 @@ resource "auth0_client_credentials" "test" {
 
 	private_key_jwt {
 		credentials {
-			name            = "Testing Credentials 1"
-			credential_type = "public_key"
-			algorithm       = "RS256"
-			expires_at      = "2024-05-13T09:33:13.000Z"
+			name                   = "Testing Credentials 1"
+			credential_type        = "public_key"
+			algorithm              = "RS256"
+			parse_expiry_from_cert = true
+			expires_at             = "2050-05-13T09:33:13.000Z" # This takes precedence.
 			pem = <<EOF
 %s
 EOF
@@ -130,7 +135,8 @@ EOF
 
 const testAccRemoveOneClientCredentialPrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -158,7 +164,8 @@ EOF
 
 const testAccSwitchToClientSecretBasicFromPrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -172,26 +179,10 @@ resource "auth0_client_credentials" "test" {
 }
 `
 
-const testAccAllowUpdatingTheClientSecret = `
-resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
-
-	jwt_configuration {
-		alg = "RS256"
-	}
-}
-
-resource "auth0_client_credentials" "test" {
-	client_id = auth0_client.my_client.id
-
-	authentication_method = "client_secret_post"
-	client_secret         = "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"
-}
-`
-
 const testAccSwitchBackToUsePrivateKeyJWT = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Credentials - {{.testName}}"
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
 
 	jwt_configuration {
 		alg = "RS256"
@@ -217,7 +208,18 @@ EOF
 }
 `
 
-func TestClientAuthenticationMethods(t *testing.T) {
+const testAccDeletingTheResourceSetsTheTokenEndpointAuthMethodToADefaultOnTheClient = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials - {{.testName}}"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+`
+
+func TestAccClientAuthenticationMethods(t *testing.T) {
 	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
 	require.NoError(t, err)
 
@@ -291,8 +293,8 @@ func TestClientAuthenticationMethods(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.name", "Testing Credentials 1"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2024-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "true"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2050-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
@@ -339,16 +341,6 @@ func TestClientAuthenticationMethods(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccAllowUpdatingTheClientSecret, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "0"),
-				),
-			},
-			{
 				Config: fmt.Sprintf(acctest.ParseTestName(testAccSwitchBackToUsePrivateKeyJWT, t.Name()), credsCert2),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
@@ -366,6 +358,54 @@ func TestClientAuthenticationMethods(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.updated_at"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDeletingTheResourceSetsTheTokenEndpointAuthMethodToADefaultOnTheClient, t.Name()),
+			},
+			{
+				RefreshState: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
+				),
+			},
+		},
+	})
+}
+
+const testAccAllowUpdatingTheClientSecret = `
+resource "auth0_client" "my_client" {
+	name     = "Acceptance Test - Client Credentials With Secret Rotation"
+	app_type = "non_interactive"
+}
+
+resource "auth0_client_credentials" "test" {
+	client_id = auth0_client.my_client.id
+
+	authentication_method = "client_secret_post"
+	client_secret         = "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"
+}
+`
+
+func TestAccAllowUpdatingTheClientSecret(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// Only run with recorded HTTP requests, because
+		// the http recorder redacts the client secret.
+		t.Skip()
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccAllowUpdatingTheClientSecret,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", "Acceptance Test - Client Credentials With Secret Rotation"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "0"),
 				),
 			},
 		},

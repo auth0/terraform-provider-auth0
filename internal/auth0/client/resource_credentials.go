@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -77,12 +76,10 @@ func NewCredentialsResource() *schema.Resource {
 										Description: "The ID of the client credential.",
 									},
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
-										ForceNew: true,
-										Description: "Friendly name for a credential. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										ForceNew:    true,
+										Description: "Friendly name for a credential.",
 									},
 									"key_id": {
 										Type:        schema.TypeString,
@@ -94,18 +91,14 @@ func NewCredentialsResource() *schema.Resource {
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
-										Description: "Credential type. Supported types: `public_key`. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+										Description:  "Credential type. Supported types: `public_key`.",
 									},
 									"pem": {
 										Type:     schema.TypeString,
 										Required: true,
 										ForceNew: true,
 										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
-											"Must be JSON escaped. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+											"Must be JSON escaped.",
 									},
 									"algorithm": {
 										Type:         schema.TypeString,
@@ -115,9 +108,7 @@ func NewCredentialsResource() *schema.Resource {
 										Default:      "RS256",
 										Description: "Algorithm which will be used with the credential. " +
 											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, " +
-											"`RS256` will be used. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+											"`RS256` will be used.",
 									},
 									"parse_expiry_from_cert": {
 										Type:     schema.TypeBool,
@@ -125,8 +116,8 @@ func NewCredentialsResource() *schema.Resource {
 										ForceNew: true,
 										Description: "Parse expiry from x509 certificate. " +
 											"If true, attempts to parse the expiry date from the provided PEM. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+											"If also the `expires_at` is set the credential expiry will be set to " +
+											"the explicit `expires_at` value.",
 									},
 									"created_at": {
 										Type:        schema.TypeString,
@@ -144,7 +135,8 @@ func NewCredentialsResource() *schema.Resource {
 										Computed:     true,
 										ValidateFunc: validation.IsRFC3339Time,
 										Description: "The ISO 8601 formatted date representing " +
-											"the expiration of the credential.",
+											"the expiration of the credential. It is not possible to set this to" +
+											"never expire after it has been set. Recreate the certificate if needed.",
 									},
 								},
 							},
@@ -283,20 +275,34 @@ func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 
 	clientID := data.Get("client_id").(string)
+	client, err := api.Client.Read(clientID, management.IncludeFields("client_id", "app_type"))
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+
+		return diag.FromErr(err)
+	}
+
+	tokenEndpointAuthMethod := ""
+	switch client.GetAppType() {
+	case "native", "spa":
+		tokenEndpointAuthMethod = "none"
+	case "regular_web", "non_interactive":
+		tokenEndpointAuthMethod = "client_secret_post"
+	default:
+		tokenEndpointAuthMethod = "client_secret_basic"
+	}
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	if authenticationMethod == "private_key_jwt" {
 		credentials, err := api.Client.ListCredentials(clientID)
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 
-		if err := detachCredentialsFromClient(api, clientID); err != nil {
+		if err := detachCredentialsFromClient(api, clientID, tokenEndpointAuthMethod); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -306,11 +312,17 @@ func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta 
 			}
 		}
 
+		data.SetId("")
 		return nil
 	}
 
-	data.SetId("")
+	if err := api.Client.Update(clientID, &management.Client{
+		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
+	}); err != nil {
+		return diag.FromErr(err)
+	}
 
+	data.SetId("")
 	return nil
 }
 
@@ -325,11 +337,6 @@ func createPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 	credentialsToAttach := make([]management.Credential, 0)
 	for _, credential := range credentials {
 		if err := api.Client.CreateCredential(clientID, credential); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 
@@ -396,11 +403,12 @@ func attachCredentialsToClient(api *management.Management, clientID string, cred
 	return updateClientWithAuthMethod(api, client)
 }
 
-func detachCredentialsFromClient(api *management.Management, clientID string) error {
+func detachCredentialsFromClient(api *management.Management, clientID, tokenEndpointAuthMethod string) error {
 	client := clientWithAuthMethod{
 		ID:                          clientID,
 		ClientAuthenticationMethods: nil,
-		TokenEndpointAuthMethod:     auth0.String("client_secret_post"),
+		// API doesn't accept nil on both of these, so we temporarily set this to a default.
+		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}
 
 	return updateClientWithAuthMethod(api, client)
@@ -535,10 +543,6 @@ func flattenPrivateKeyJWT(
 	for index, credential := range clientAuthMethods.GetPrivateKeyJWT().GetCredentials() {
 		credential, err := api.Client.GetCredential(data.Id(), credential.GetID())
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				return nil, nil
-			}
-
 			return nil, err
 		}
 

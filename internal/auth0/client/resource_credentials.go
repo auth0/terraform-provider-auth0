@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -77,12 +76,10 @@ func NewCredentialsResource() *schema.Resource {
 										Description: "The ID of the client credential.",
 									},
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
-										ForceNew: true,
-										Description: "Friendly name for a credential. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										ForceNew:    true,
+										Description: "Friendly name for a credential.",
 									},
 									"key_id": {
 										Type:        schema.TypeString,
@@ -94,9 +91,7 @@ func NewCredentialsResource() *schema.Resource {
 										Required:     true,
 										ForceNew:     true,
 										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
-										Description: "Credential type. Supported types: `public_key`. " +
-											"Changing this will force the credential to be recreated, " +
-											"resulting in a new client credential ID.",
+										Description:  "Credential type. Supported types: `public_key`.",
 									},
 									"pem": {
 										Type:     schema.TypeString,

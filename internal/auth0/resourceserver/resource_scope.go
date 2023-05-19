@@ -166,7 +166,7 @@ func importResourceServerScope(
 	}
 
 	idPair := strings.Split(rawID, "::")
-	if len(idPair) != 3 {
+	if len(idPair) != 2 {
 		return nil, fmt.Errorf("ID must be formatted as <resourceServerIdentifier>::<scope>")
 	}
 

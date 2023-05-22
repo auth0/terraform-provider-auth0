@@ -33,11 +33,11 @@ func NewScopeResource() *schema.Resource {
 			"description": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Computed:    true,
 				Description: "Description of the scope (permission).",
 			},
 		},
 		CreateContext: createResourceServerScope,
+		UpdateContext: updateResourceServerScope,
 		ReadContext:   readResourceServerScope,
 		DeleteContext: deleteResourceServerScope,
 		Importer: &schema.ResourceImporter{
@@ -56,6 +56,10 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 	currentScopes, err := api.ResourceServer.Read(resourceServerID)
 	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
 		return diag.FromErr(err)
 	}
 
@@ -68,6 +72,50 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if err := api.ResourceServer.Update(resourceServerID, &resourceServer); err != nil {
+		return diag.FromErr(err)
+	}
+
+	data.SetId(fmt.Sprintf(`%s::%s`, resourceServerID, scope))
+
+	return readResourceServerScope(ctx, data, meta)
+}
+
+func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	resourceServerID := data.Get("resource_server_identifier").(string)
+	scope := data.Get("scope").(string)
+	newDescription := data.Get("description").(string)
+
+	existingScopes, err := api.ResourceServer.Read(resourceServerID)
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	updatedScopes := []management.ResourceServerScope{}
+
+	found := false
+	for _, p := range existingScopes.GetScopes() {
+		updated := p
+		if p.GetValue() == scope {
+			found = true
+			updated.Description = &newDescription
+		}
+		updatedScopes = append(updatedScopes, updated)
+	}
+
+	if !found {
+		data.SetId("")
+		return nil
+	}
+
+	if err := api.ResourceServer.Update(resourceServerID, &management.ResourceServer{
+		Scopes: &updatedScopes,
+	}); err != nil {
 		return diag.FromErr(err)
 	}
 

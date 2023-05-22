@@ -29,6 +29,15 @@ resource "auth0_resource_server_scope" "read_posts" {
 }
 `
 
+const givenAnUpdatedScope = `
+resource "auth0_resource_server_scope" "read_posts" { 
+	scope = "read:posts"
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+
+	description = "Can read posts from API"
+}
+`
+
 const givenAnotherScope = `
 resource "auth0_resource_server_scope" "write_posts" { 
 	depends_on = [ auth0_resource_server_scope.read_posts ] 
@@ -44,7 +53,12 @@ const testAccOneScopeAssigned = givenAResourceServer + givenAScope + `data "auth
 	identifier = auth0_resource_server.resource_server.identifier
 }`
 
-const testAccTwoScopesAssigned = givenAResourceServer + givenAScope + givenAnotherScope + `data "auth0_resource_server" "resource_server" {
+const testAccOneScopeAssignedWithUpdate = givenAResourceServer + givenAnUpdatedScope + `data "auth0_resource_server" "resource_server" {
+	depends_on = [ auth0_resource_server_scope.read_posts ]
+	identifier = auth0_resource_server.resource_server.identifier
+}`
+
+const testAccTwoScopesAssigned = givenAResourceServer + givenAnUpdatedScope + givenAnotherScope + `data "auth0_resource_server" "resource_server" {
 	depends_on = [ auth0_resource_server_scope.read_posts, auth0_resource_server_scope.write_posts]
 	identifier = auth0_resource_server.resource_server.identifier
 }`
@@ -73,6 +87,13 @@ func TestAccResourceServerScope(t *testing.T) {
 				),
 			},
 			{
+				Config: acctest.ParseTestName(testAccOneScopeAssignedWithUpdate, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "description", "Can read posts from API"),
+				),
+			},
+			{
 				Config: acctest.ParseTestName(testAccTwoScopesAssigned, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.#", "2"),
@@ -83,11 +104,11 @@ func TestAccResourceServerScope(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.value", "write:posts"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.0.description", ""),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.1.value", "read:posts"),
-					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.1.description", "Can read posts"),
+					resource.TestCheckResourceAttr("data.auth0_resource_server.resource_server", "scopes.1.description", "Can read posts from API"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOneScopeAssigned, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccOneScopeAssignedWithUpdate, strings.ToLower(t.Name())),
 			},
 			{
 				RefreshState: true,

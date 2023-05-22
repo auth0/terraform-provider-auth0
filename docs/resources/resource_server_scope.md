@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_resource_server_scope"
 description: |-
-  With this resource, you can manage user permissions.
+  With this resource, you can manage scopes (permissions) associated with a resource server (API).
 ---
 
 # Resource: auth0_resource_server_scope
 
-With this resource, you can manage user permissions.
+With this resource, you can manage scopes (permissions) associated with a resource server (API).
 
 ## Example Usage
 
@@ -39,7 +39,7 @@ resource "auth0_resource_server_scope" "write_posts" {
 
 ### Required
 
-- `resource_server_identifier` (String) Identifier of the resource server that the scope is associated with.
+- `resource_server_identifier` (String) Identifier of the resource server that the scope (permission) is associated with.
 - `scope` (String) Name of the scope.
 
 ### Optional

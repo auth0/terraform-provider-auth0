@@ -28,7 +28,7 @@ func NewScopeResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Identifier of the resource server that the scope is associated with.",
+				Description: "Identifier of the resource server that the scope (permission) is associated with.",
 			},
 			"description": {
 				Type:        schema.TypeString,
@@ -43,7 +43,7 @@ func NewScopeResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importResourceServerScope,
 		},
-		Description: "With this resource, you can manage user permissions.",
+		Description: "With this resource, you can manage scopes (permissions) associated with a resource server (API).",
 	}
 }
 

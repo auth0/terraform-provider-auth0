@@ -63,7 +63,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	scopes := append(*currentScopes.Scopes, management.ResourceServerScope{
+	scopes := append(currentScopes.GetScopes(), management.ResourceServerScope{
 		Value:       &scope,
 		Description: &description,
 	})

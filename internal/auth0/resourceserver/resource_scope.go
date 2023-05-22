@@ -49,14 +49,10 @@ func NewScopeResource() *schema.Resource {
 
 func createResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
 	description := data.Get("description").(string)
-
-	mutex.Lock(resourceServerID)
-	defer mutex.Unlock(resourceServerID)
 
 	currentScopes, err := api.ResourceServer.Read(resourceServerID)
 	if err != nil {
@@ -110,13 +106,9 @@ func readResourceServerScope(_ context.Context, data *schema.ResourceData, meta 
 
 func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
-
-	mutex.Lock(resourceServerID)
-	defer mutex.Unlock(resourceServerID)
 
 	existingScopes, err := api.ResourceServer.Read(resourceServerID)
 	if err != nil {

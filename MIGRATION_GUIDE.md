@@ -1,5 +1,61 @@
 # Migration Guide
 
+## Upgrading from v0.47.0 → v0.48.0
+
+There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
+automated workflows before upgrading.
+
+### Deprecations
+
+- [Client Authentication Method](#client-authentication-method)
+
+
+#### Client Authentication Method
+
+
+The `token_endpoint_auth_method` field on the `auth0_client` resource will continue to be available for managing the
+client's authentication method. However, to ensure a smooth transition when we eventually remove the capability to 
+manage the authentication method through this field, we recommend proactively migrating to the newly introduced 
+`auth0_client_credentials` resource as this will also give you the possibility of managing the client secret.
+This will help you stay prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.47.0)</th>
+<th>After (v0.48.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+# Example:
+resource "auth0_client" "my_client" {
+  name = "My Client"
+  
+  token_endpoint_auth_method = "client_secret_post"
+}
+```
+
+</td>
+<td>
+
+```terraform
+# Example:
+resource "auth0_client" "my_client" {
+  name = "My Client"
+}
+
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "client_secret_post"
+}
+```
+
+</td>
+</tr>
+</table>
+
 ## Upgrading from v0.46.0 → v0.47.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
@@ -10,7 +66,7 @@ automated workflows before upgrading.
 - [User Roles](#user-roles)
 - [Role Permissions](#role-permissions)
 
-### User Roles
+#### User Roles
 
 The `roles` field on the `auth0_user` resource will continue to be available for managing user roles. However, to ensure
 a smooth transition when we eventually remove the capability to manage roles through this field, we recommend
@@ -96,7 +152,7 @@ resource auth0_user_role user_owner {
 </tr>
 </table>
 
-### Role Permissions
+#### Role Permissions
 
 The `permissions` field on the `auth0_role` resource will continue to be available for managing role permissions. However, to ensure
 a smooth transition when we eventually remove the capability to manage permissions through this field, we recommend

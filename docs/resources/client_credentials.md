@@ -8,6 +8,9 @@ description: |-
 
 With this resource, you can configure the method to use when making requests to any endpoint that requires this client to authenticate.
 
+-> Check out [our guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation)
+on how to achieve zero downtime client credentials rotation.
+
 ## Example Usage
 
 ```terraform

@@ -61,6 +61,9 @@ func NewResource() *schema.Resource {
 					"The contents of this map are arbitrary and are hashed by the provider. When the hash changes, a rotation is triggered. " +
 					"For example, the map could contain the user making the change, the date of the change, and a text reason for the change. " +
 					"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret).",
+				Deprecated: "Rotating a client's secret through this attribute is deprecated and it will be removed" +
+					" in a future version. Migrate to the `auth0_client_credentials` resource to manage a client's " +
+					"secret instead.",
 			},
 			"client_aliases": {
 				Type: schema.TypeList,

@@ -50,6 +50,9 @@ func NewResource() *schema.Resource {
 				Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
 					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
 					"empty string.",
+				Deprecated: "Reading the client secret through this attribute is deprecated and it will be " +
+					"removed in a future version. Migrate to the `auth0_client_credentials` resource to " +
+					"manage a client's secret instead.",
 			},
 			"client_secret_rotation_trigger": {
 				Type:     schema.TypeMap,

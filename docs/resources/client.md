@@ -131,7 +131,7 @@ resource "auth0_client" "my_client" {
 ### Read-Only
 
 - `client_id` (String) The ID of the client.
-- `client_secret` (String, Sensitive) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+- `client_secret` (String, Sensitive, Deprecated) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
 - `id` (String) The ID of this resource.
 - `signing_keys` (List of Map of String, Sensitive) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 

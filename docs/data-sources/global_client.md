@@ -28,7 +28,7 @@ data "auth0_global_client" "global" {}
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_id` (String) The ID of the client.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
-- `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+- `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`). Requires the `coa_toggle_enabled` feature flag to be enabled on the tenant by the support team.
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.

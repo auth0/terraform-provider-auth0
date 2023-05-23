@@ -8,14 +8,13 @@ automated workflows before upgrading.
 ### Deprecations
 
 - [Client Authentication Method](#client-authentication-method)
-
+- [Resource Server Scopes](#resource-server-scopes)
 
 #### Client Authentication Method
 
-
 The `token_endpoint_auth_method` field on the `auth0_client` resource will continue to be available for managing the
-client's authentication method. However, to ensure a smooth transition when we eventually remove the capability to 
-manage the authentication method through this field, we recommend proactively migrating to the newly introduced 
+client's authentication method. However, to ensure a smooth transition when we eventually remove the capability to
+manage the authentication method through this field, we recommend proactively migrating to the newly introduced
 `auth0_client_credentials` resource as this will also give you the possibility of managing the client secret.
 This will help you stay prepared for future changes.
 
@@ -31,7 +30,7 @@ This will help you stay prepared for future changes.
 # Example:
 resource "auth0_client" "my_client" {
   name = "My Client"
-  
+
   token_endpoint_auth_method = "client_secret_post"
 }
 ```
@@ -49,6 +48,68 @@ resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id
 
   authentication_method = "client_secret_post"
+}
+```
+
+</td>
+</tr>
+</table>
+
+#### Resource Server Scopes
+
+The `scopes` field on the `auth0_resource_server` resource will continue to be available for managing resource server scopes. However, to ensure a smooth transition when we eventually remove the capability to manage scopes through this field, we recommend proactively migrating to the newly introduced `auth0_resource_server_scope` resource. This will help you stay prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.47.0)</th>
+<th>After (v0.48.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource auth0_resource_server api {
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
+
+  scopes {
+    value       = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    value       = "write:posts"
+    description = "Can write posts"
+  }
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource auth0_resource_server api {
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
+
+  # Until we remove the ability to operate changes on
+  # the scopes field it is important to have this
+  # block in the config, to avoid diffing issues.
+  lifecycle {
+    ignore_changes = [scopes]
+  }
+}
+
+resource auth0_resource_server_scope read_posts {
+  resource_server_identifier = auth0_resource_server.api.identifier
+  scope       = "read:posts"
+  description = "Can read posts"
+}
+
+resource auth0_resource_server_scope write_posts {
+  resource_server_identifier = auth0_resource_server.api.identifier
+  scope       = "write:posts"
+  description = "Can write posts"
 }
 ```
 

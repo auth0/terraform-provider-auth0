@@ -20,6 +20,8 @@ var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
 // NewResource will return a new auth0_rule resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
+		DeprecationMessage: "This resource is deprecated. Refer to the [guide on how to migrate from rules to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-rules-to-actions) " +
+			"and manage your actions using the `auth0_action` resource.",
 		CreateContext: createRule,
 		ReadContext:   readRule,
 		UpdateContext: updateRule,

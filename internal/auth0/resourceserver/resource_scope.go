@@ -22,7 +22,7 @@ func NewScopeResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Name of the scope.",
+				Description: "Name of the scope (permission).",
 			},
 			"resource_server_identifier": {
 				Type:        schema.TypeString,

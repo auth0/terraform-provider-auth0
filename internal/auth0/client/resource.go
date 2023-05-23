@@ -542,6 +542,11 @@ func NewResource() *schema.Resource {
 					"Options include `none` (public client without a client secret), " +
 					"`client_secret_post` (client uses HTTP POST parameters), " +
 					"`client_secret_basic` (client uses HTTP Basic).",
+				Deprecated: "Managing the authentication method through this attribute is deprecated and it will be " +
+					"changed to read-only in a future version. Migrate to the `auth0_client_credentials` resource to " +
+					"manage a client's authentication method instead. Check the " +
+					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) " +
+					"on how to do that.",
 			},
 			"client_metadata": {
 				Type:     schema.TypeMap,

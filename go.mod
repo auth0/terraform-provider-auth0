@@ -3,14 +3,14 @@ module github.com/auth0/terraform-provider-auth0
 go 1.20
 
 require (
-	github.com/auth0/go-auth0 v0.17.1
+	github.com/auth0/go-auth0 v0.17.2
 	github.com/google/go-cmp v0.5.9
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/terraform-plugin-docs v0.14.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
 	github.com/hashicorp/terraform-plugin-testing v1.2.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
 )
 

@@ -1,5 +1,61 @@
 # Migration Guide
 
+## Upgrading from v0.47.0 → v0.48.0
+
+There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
+automated workflows before upgrading.
+
+### Deprecations
+
+- [Client Authentication Method](#client-authentication-method)
+
+
+#### Client Authentication Method
+
+
+The `token_endpoint_auth_method` field on the `auth0_client` resource will continue to be available for managing the
+client's authentication method. However, to ensure a smooth transition when we eventually remove the capability to 
+manage the authentication method through this field, we recommend proactively migrating to the newly introduced 
+`auth0_client_credentials` resource as this will also give you the possibility of managing the client secret.
+This will help you stay prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.47.0)</th>
+<th>After (v0.48.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+# Example:
+resource "auth0_client" "my_client" {
+  name = "My Client"
+  
+  token_endpoint_auth_method = "client_secret_post"
+}
+```
+
+</td>
+<td>
+
+```terraform
+# Example:
+resource "auth0_client" "my_client" {
+  name = "My Client"
+}
+
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "client_secret_post"
+}
+```
+
+</td>
+</tr>
+</table>
+
 ## Upgrading from v0.46.0 → v0.47.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
@@ -10,7 +66,7 @@ automated workflows before upgrading.
 - [User Roles](#user-roles)
 - [Role Permissions](#role-permissions)
 
-### User Roles
+#### User Roles
 
 The `roles` field on the `auth0_user` resource will continue to be available for managing user roles. However, to ensure
 a smooth transition when we eventually remove the capability to manage roles through this field, we recommend
@@ -52,6 +108,11 @@ resource "auth0_role" "admin" {
   description = "Administrator"
 }
 
+resource "auth0_role" "owner" {
+  name        = "owner"
+  description = "Owner"
+}
+
 resource "auth0_user" "user" {
   connection_name = "Username-Password-Authentication"
   username        = "unique_username"
@@ -71,14 +132,19 @@ resource "auth0_user" "user" {
 # relationship between the user and its roles.
 resource auth0_user_roles user_roles {
   user_id = auth0_user.user.id
-  roles = [auth0_role.admin.id]
+  roles   = [ auth0_role.admin.id, auth0_role.owner.id ]
 }
 
-# Or the auth0_user_role to manage a 1:1
+# Use the auth0_user_role to manage a 1:1
 # relationship between the user and its role.
-resource auth0_user_role user_roles {
+resource auth0_user_role user_admin {
   user_id = auth0_user.user.id
-  roles = auth0_role.admin.id
+  role_id = auth0_role.admin.id
+}
+
+resource auth0_user_role user_owner {
+  user_id = auth0_user.user.id
+  role_id = auth0_role.owner.id
 }
 ```
 
@@ -86,7 +152,7 @@ resource auth0_user_role user_roles {
 </tr>
 </table>
 
-### Role Permissions
+#### Role Permissions
 
 The `permissions` field on the `auth0_role` resource will continue to be available for managing role permissions. However, to ensure
 a smooth transition when we eventually remove the capability to manage permissions through this field, we recommend
@@ -103,28 +169,31 @@ prepared for future changes.
 
 ```terraform
 resource auth0_resource_server api {
-    name = "Example API"
-    identifier = "https://api.travel0.com/"
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
 
-    scopes {
-        value = "read:posts"
-        description = "Can read posts"
-    }
-    scopes {
-        value = "write:posts"
-        description = "Can write posts"
-    }
+  scopes {
+    value       = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    value       = "write:posts"
+    description = "Can write posts"
+  }
 }
 
 resource auth0_role content_editor {
-  name = "Content Editor"
+  name        = "Content Editor"
   description = "Elevated roles for editing content"
+
   permissions {
-    name = "read:posts"
+    name                       = "read:posts"
     resource_server_identifier = auth0_resource_server.api.identifier
   }
+
   permissions {
-    name = "write:posts"
+    name                       = "write:posts"
     resource_server_identifier = auth0_resource_server.api.identifier
   }
 }
@@ -135,21 +204,22 @@ resource auth0_role content_editor {
 
 ```terraform
 resource auth0_resource_server api {
-    name = "Example API"
-    identifier = "https://api.travel0.com/"
+  name       = "Example API"
+  identifier = "https://api.travel0.com/"
 
-    scopes {
-        value = "read:posts"
-        description = "Can read posts"
-    }
-    scopes {
-        value = "write:posts"
-        description = "Can write posts"
-    }
+  scopes {
+    value       = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    value       = "write:posts"
+    description = "Can write posts"
+  }
 }
 
 resource auth0_role content_editor {
-  name = "Content Editor"
+  name        = "Content Editor"
   description = "Elevated roles for editing content"
 
   # Until we remove the ability to operate changes on
@@ -164,22 +234,30 @@ resource auth0_role content_editor {
 # relationship between the role and its permissions.
 resource "auth0_role_permissions" "editor_permissions" {
 	role_id = auth0_role.content_editor.id
-	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "read:posts"
+
+  permissions  {
+    resource_server_identifier = auth0_resource_server.api.identifier
+    name                       = "read:posts"
+  }
+
+  permissions  {
+    resource_server_identifier = auth0_resource_server.api.identifier
+    name                       = "write:posts"
+  }
 }
 
 # Use the auth0_role_permission resource to manage a 1:1
 # relationship between a role and its permissions.
 resource "auth0_role_permission" "read_posts_permission" {
-	role_id = auth0_role.content_editor.id
+	role_id                    = auth0_role.content_editor.id
 	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "read:posts"
+	permission                 = "read:posts"
 }
 
 resource "auth0_role_permission" "write_posts_permission" {
-	role_id = auth0_role.content_editor.id
+	role_id                    = auth0_role.content_editor.id
 	resource_server_identifier = auth0_resource_server.api.identifier
-	permission = "write:posts"
+	permission                 = "write:posts"
 }
 ```
 

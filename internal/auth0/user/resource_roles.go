@@ -6,13 +6,14 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
-// NewRolesResource will returns a new auth0_user_roles (1:many) resource.
+// NewRolesResource will return a new auth0_user_roles (1:many) resource.
 func NewRolesResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -63,9 +64,7 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	userID := data.Get("user_id").(string)
-
-	rolesList, err := api.User.Roles(userID)
+	rolesList, err := api.User.Roles(data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -80,11 +79,12 @@ func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{
 		userRoles = append(userRoles, role.GetID())
 	}
 
-	if err := data.Set("roles", userRoles); err != nil {
-		return diag.FromErr(err)
-	}
+	result := multierror.Append(
+		data.Set("user_id", data.Id()),
+		data.Set("roles", userRoles),
+	)
 
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

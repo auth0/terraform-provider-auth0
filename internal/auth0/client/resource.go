@@ -266,78 +266,116 @@ func NewResource() *schema.Resource {
 						"aws": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"azure_blob": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"azure_sb": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"rms": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"mscrm": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"slack": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"sentry": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"box": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"cloudbees": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"concur": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"dropbox": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"echosign": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"egnyte": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"firebase": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"newrelic": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"office365": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"salesforce": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"salesforce_api": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"salesforce_sandbox_api": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"samlp": {
 							Type:        schema.TypeList,
@@ -495,22 +533,32 @@ func NewResource() *schema.Resource {
 						"layer": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"sap_api": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"sharepoint": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"springcm": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"wams": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"wsfed": {
 							Type:     schema.TypeMap,
@@ -521,10 +569,14 @@ func NewResource() *schema.Resource {
 						"zendesk": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 						"zoom": {
 							Type:     schema.TypeMap,
 							Optional: true,
+							Deprecated: "This attribute is deprecated and it will be removed in a future version. " +
+								"Use SSO Integrations or the `auth0_client.addons.samlp` configuration instead.",
 						},
 					},
 				},

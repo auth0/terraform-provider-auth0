@@ -40,7 +40,7 @@ resource "auth0_resource_server_scope" "write_posts" {
 ### Required
 
 - `resource_server_identifier` (String) Identifier of the resource server that the scope (permission) is associated with.
-- `scope` (String) Name of the scope.
+- `scope` (String) Name of the scope (permission).
 
 ### Optional
 

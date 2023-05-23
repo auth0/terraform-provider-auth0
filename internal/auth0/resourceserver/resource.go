@@ -43,8 +43,11 @@ func NewResource() *schema.Resource {
 					"for authorization calls. Cannot be changed once set.",
 			},
 			"scopes": {
-				Type:        schema.TypeSet,
-				Optional:    true,
+				Type:     schema.TypeSet,
+				Optional: true,
+				Deprecated: "Managing scopes through the `scopes` attribute is deprecated and it will be changed to read-only in a future version. " +
+					"Migrate to the `auth0_resource_server_scope` resource to manage role scopes instead. " +
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info.",
 				Description: "List of permissions (scopes) used by this resource server.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -198,8 +201,12 @@ func readResourceServer(_ context.Context, d *schema.ResourceData, m interface{}
 
 func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+	mutex := m.(*config.Config).GetMutex()
 
 	resourceServer := expandResourceServer(d)
+	mutex.Lock(resourceServer.GetIdentifier())
+	defer mutex.Unlock(resourceServer.GetIdentifier())
+
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
 		return diag.FromErr(err)
 	}

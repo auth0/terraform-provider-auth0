@@ -17,6 +17,8 @@ import (
 // NewResource will return a new auth0_hook resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
+		DeprecationMessage: "This resource is deprecated. Refer to the [guide on how to migrate from hooks to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-hooks-to-actions) " +
+			"and manage your actions using the `auth0_action` resource.",
 		CreateContext: createHook,
 		ReadContext:   readHook,
 		UpdateContext: updateHook,

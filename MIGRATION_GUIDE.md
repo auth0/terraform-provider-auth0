@@ -100,6 +100,24 @@ resource auth0_resource_server api {
   }
 }
 
+# Use the auth0_resource_server_scopes to manage a 1:many
+# relationship between the resource server and its scopes.
+resource "auth0_resource_server_scopes" "my_api_scopes" {
+  resource_server_identifier = auth0_resource_server.my_api.identifier
+
+  scopes {
+    name        = "read:posts"
+    description = "Can read posts"
+  }
+
+  scopes {
+    name        = "write:posts"
+    description = "Can write posts"
+  }
+}
+
+# Use the auth0_resource_server_scope to manage a 1:1
+# relationship between the resource server and its scopes.
 resource auth0_resource_server_scope read_posts {
   resource_server_identifier = auth0_resource_server.api.identifier
   scope       = "read:posts"

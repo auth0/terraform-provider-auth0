@@ -116,6 +116,7 @@ func readConnectionClients(_ context.Context, data *schema.ResourceData, meta in
 	}
 
 	result := multierror.Append(
+		data.Set("connection_id", connection.GetID()),
 		data.Set("name", connection.GetName()),
 		data.Set("strategy", connection.GetStrategy()),
 		data.Set("enabled_clients", connection.GetEnabledClients()),

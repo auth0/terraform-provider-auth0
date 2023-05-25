@@ -2,7 +2,7 @@
 
 FEATURES:
 
-- `resource/auth0_client_credentials`: Add new resource to manage all things client credentials (`client_secret`, `private_key_jwt`, `authentication_methods`) ([#588](https://github.com/auth0/terraform-provider-auth0/pull/588))
+- `resource/auth0_client_credentials`: Add new resource to manage client credentials (`client_secret`, `private_key_jwt`, `authentication_methods`) ([#588](https://github.com/auth0/terraform-provider-auth0/pull/588))
 - `resource/auth0_resource_server_scopes`: Add new resource to manage a 1:many relationship between the resource server (API) and its scopes (permissions) ([#600](https://github.com/auth0/terraform-provider-auth0/pull/600))
 - `resource/auth0_resource_server_scope`: Add new resource to manage a 1:1 relationship between the resource server (API) and its scopes (permissions) ([#589](https://github.com/auth0/terraform-provider-auth0/pull/589))
 

@@ -8,6 +8,8 @@ description: |-
 
 With this resource, you can manage scopes (permissions) associated with a resource server (API).
 
+!> To prevent issues, avoid using this resource together with the `auth0_resource_server_scopes` resource.
+
 ## Example Usage
 
 ```terraform

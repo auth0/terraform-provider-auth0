@@ -46,7 +46,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Deprecated: "Managing scopes through the `scopes` attribute is deprecated and it will be changed to read-only in a future version. " +
-					"Migrate to the `auth0_resource_server_scope` resource to manage role scopes instead. " +
+					"Migrate to the `auth0_resource_server_scope` or `auth0_resource_server_scopes` resources to manage role scopes instead. " +
 					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info.",
 				Description: "List of permissions (scopes) used by this resource server.",
 				Elem: &schema.Resource{

@@ -507,9 +507,13 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 		"api_enable_users":                       options.GetEnableUsersAPI(),
 		"max_groups_to_retrieve":                 options.GetMaxGroupsToRetrieve(),
 		"scopes":                                 options.Scopes(),
-		"set_user_root_attributes":               options.GetSetUserAttributes(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)

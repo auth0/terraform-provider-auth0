@@ -236,6 +236,29 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionADConfigUpdateSetUserRootAttributes, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "name", fmt.Sprintf("Acceptance-Test-Azure-AD-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "strategy", "waad"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.identity_api", "azure-active-directory-v1.0"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.domain_aliases.*", "api.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.scopes.#", "3"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "basic_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "ext_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.azure_ad", "options.0.scopes.*", "ext_groups"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.should_trust_email_verified_connection", "never_set_emails_as_verified"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+				),
+			},
 		},
 	})
 }
@@ -265,6 +288,41 @@ resource "auth0_connection" "azure_ad" {
 			"ext_profile"
 		]
 		set_user_root_attributes = "on_each_login"
+		should_trust_email_verified_connection = "never_set_emails_as_verified"
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionADConfigUpdateSetUserRootAttributes = `
+resource "auth0_connection" "azure_ad" {
+	name     = "Acceptance-Test-Azure-AD-{{.testName}}"
+	strategy = "waad"
+	show_as_button = true
+	options {
+		identity_api  = "azure-active-directory-v1.0"
+		client_id     = "123456"
+		client_secret = "123456"
+		tenant_domain = "example.onmicrosoft.com"
+		domain        = "example.onmicrosoft.com"
+		domain_aliases = [
+			"example.com",
+			"api.example.com"
+		]
+		use_wsfed            = false
+		waad_protocol        = "openid-connect"
+		waad_common_endpoint = false
+		api_enable_users     = true
+		scopes               = [
+			"basic_profile",
+			"ext_groups",
+			"ext_profile"
+		]
+		set_user_root_attributes = "on_first_login"
 		should_trust_email_verified_connection = "never_set_emails_as_verified"
 		upstream_params = jsonencode({
 			"screen_name": {

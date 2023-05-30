@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/stretchr/testify/require"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
@@ -406,6 +407,123 @@ func TestAccAllowUpdatingTheClientSecret(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "authentication_method", "client_secret_post"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "client_secret", "LUFqPx+sRLjbL7peYRPFmFu-bbvE7u7og4YUNe_C345=683341"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccImportClientWithSecretPost = `
+resource "auth0_client" "my_test_client_secret" {
+	name 	                   = "Acceptance Test - Client Credentials Import"
+	app_type                   = "non_interactive"
+	token_endpoint_auth_method = "client_secret_post"
+}
+
+resource "auth0_client_credentials" "test_simple_client" {
+	client_id = auth0_client.my_test_client_secret.id
+
+	authentication_method = "client_secret_post"
+}
+`
+
+const testAccImportClientWithPrivateKeyJWT = `
+resource "auth0_client" "my_test_client_jwt_ca" {
+	name 	 = "Acceptance Test - Client Credentials Import"
+	app_type = "non_interactive"
+
+	jwt_configuration {
+		alg = "RS256"
+	}
+}
+
+resource "auth0_client_credentials" "test_jwt_ca_client" {
+	client_id = auth0_client.my_test_client_jwt_ca.id
+
+	authentication_method = "private_key_jwt"
+
+	private_key_jwt {
+		credentials {
+			credential_type = "public_key"
+			algorithm       = "RS256"
+			pem = <<EOF
+%s
+EOF
+		}
+	}
+}
+`
+
+func TestAccClientCredentialsImport(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// The test runs only with recordings as it requires an initial setup.
+		t.Skip()
+	}
+
+	credsCert, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+	require.NoError(t, err)
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             testAccImportClientWithSecretPost,
+				ResourceName:       "auth0_client.my_test_client_secret",
+				ImportState:        true,
+				ImportStateId:      "Bjnm4jQ66Kb5Ug33eSBDxHsW6teU7SE1",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             testAccImportClientWithSecretPost,
+				ResourceName:       "auth0_client_credentials.test_simple_client",
+				ImportState:        true,
+				ImportStateId:      "Bjnm4jQ66Kb5Ug33eSBDxHsW6teU7SE1",
+				ImportStatePersist: true,
+			},
+			{
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Config: testAccImportClientWithSecretPost,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_simple_client", "authentication_method", "client_secret_post"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test_simple_client", "client_secret"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_simple_client", "private_key_jwt.#", "0"),
+				),
+			},
+			{
+				Config:             testAccImportClientWithPrivateKeyJWT,
+				ResourceName:       "auth0_client.my_test_client_jwt_ca",
+				ImportState:        true,
+				ImportStateId:      "zm5DPtaaSqenbpEX36nNLbmUQ2rW81Mu",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             fmt.Sprintf(testAccImportClientWithPrivateKeyJWT, credsCert),
+				ResourceName:       "auth0_client_credentials.test_jwt_ca_client",
+				ImportState:        true,
+				ImportStateId:      "zm5DPtaaSqenbpEX36nNLbmUQ2rW81Mu",
+				ImportStatePersist: true,
+			},
+			{
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client_credentials.test_jwt_ca_client", plancheck.ResourceActionDestroyBeforeCreate),
+					},
+				},
+				Config: fmt.Sprintf(testAccImportClientWithPrivateKeyJWT, credsCert),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "authentication_method", "private_key_jwt"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.pem"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.key_id"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.created_at"),
+					resource.TestCheckResourceAttrSet("auth0_client_credentials.test_jwt_ca_client", "private_key_jwt.0.credentials.0.updated_at"),
 				),
 			},
 		},

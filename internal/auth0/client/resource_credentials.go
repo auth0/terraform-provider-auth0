@@ -26,6 +26,7 @@ func NewCredentialsResource() *schema.Resource {
 			"client_id": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The ID of the client for which to configure the authentication method.",
 			},
 			"authentication_method": {
@@ -199,10 +200,9 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 func readClientCredentials(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	clientID := data.Get("client_id").(string)
 
 	client, err := api.Client.Read(
-		clientID,
+		data.Id(),
 		management.IncludeFields(
 			"client_id",
 			"client_secret",
@@ -225,6 +225,7 @@ func readClientCredentials(_ context.Context, data *schema.ResourceData, meta in
 	}
 
 	result := multierror.Append(
+		data.Set("client_id", client.GetClientID()),
 		data.Set("authentication_method", flattenAuthenticationMethod(client)),
 		data.Set("client_secret", client.GetClientSecret()),
 		data.Set("private_key_jwt", privateKeyJWT),
@@ -236,10 +237,8 @@ func readClientCredentials(_ context.Context, data *schema.ResourceData, meta in
 func updateClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	clientID := data.Get("client_id").(string)
-
 	// Check that client exists.
-	if _, err := api.Client.Read(clientID, management.IncludeFields("client_id")); err != nil {
+	if _, err := api.Client.Read(data.Id(), management.IncludeFields("client_id")); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -274,8 +273,7 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	clientID := data.Get("client_id").(string)
-	client, err := api.Client.Read(clientID, management.IncludeFields("client_id", "app_type"))
+	client, err := api.Client.Read(data.Id(), management.IncludeFields("client_id", "app_type"))
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -297,17 +295,17 @@ func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta 
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	if authenticationMethod == "private_key_jwt" {
-		credentials, err := api.Client.ListCredentials(clientID)
+		credentials, err := api.Client.ListCredentials(client.GetClientID())
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := detachCredentialsFromClient(api, clientID, tokenEndpointAuthMethod); err != nil {
+		if err := detachCredentialsFromClient(api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
 			return diag.FromErr(err)
 		}
 
 		for _, credential := range credentials {
-			if err := api.Client.DeleteCredential(clientID, credential.GetID()); err != nil {
+			if err := api.Client.DeleteCredential(client.GetClientID(), credential.GetID()); err != nil {
 				return diag.FromErr(err)
 			}
 		}
@@ -316,7 +314,7 @@ func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta 
 		return nil
 	}
 
-	if err := api.Client.Update(clientID, &management.Client{
+	if err := api.Client.Update(client.GetClientID(), &management.Client{
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}); err != nil {
 		return diag.FromErr(err)

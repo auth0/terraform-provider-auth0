@@ -88,6 +88,7 @@ func New() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                     action.NewResource(),
 			"auth0_trigger_binding":            action.NewTriggerBindingResource(),
+			"auth0_trigger_action":             action.NewTriggerActionResource(),
 			"auth0_attack_protection":          attackprotection.NewResource(),
 			"auth0_branding":                   branding.NewResource(),
 			"auth0_branding_theme":             branding.NewThemeResource(),

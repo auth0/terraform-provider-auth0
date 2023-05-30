@@ -2,10 +2,12 @@ package role_test
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -106,6 +108,94 @@ func TestAccRolePermissions(t *testing.T) {
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccRolePermissionsImport = `
+resource "auth0_resource_server" "resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.{{.testName}}.terraform-provider-auth0.com/api"
+
+	scopes {
+		value       = "read:foo"
+		description = "Can read Foo"
+	}
+
+	scopes {
+		value       = "create:foo"
+		description = "Can create Foo"
+	}
+}
+
+resource "auth0_role" "role" {
+	depends_on = [ auth0_resource_server.resource_server ]
+
+	name        = "Acceptance Test - {{.testName}}"
+	description = "Acceptance Test Role - {{.testName}}"
+
+	lifecycle {
+		ignore_changes = [ permissions ]
+	}
+}
+
+resource "auth0_role_permissions" "role_permissions" {
+	role_id = auth0_role.role.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "read:foo"
+	}
+}
+`
+
+func TestAccRolePermissionsImport(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// The test runs only with recordings as it requires an initial setup.
+		t.Skip()
+	}
+
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
+				ResourceName:       "auth0_resource_server.resource_server",
+				ImportState:        true,
+				ImportStateId:      "646cbf5e8ffa2057b6112389",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
+				ResourceName:       "auth0_role.role",
+				ImportState:        true,
+				ImportStateId:      "rol_y36rul7VuBQGVpNa",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
+				ResourceName:       "auth0_role_permissions.role_permissions",
+				ImportState:        true,
+				ImportStateId:      "rol_y36rul7VuBQGVpNa",
+				ImportStatePersist: true,
+			},
+			{
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Config: acctest.ParseTestName(testAccRolePermissionsImport, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.#", "2"),
 				),
 			},
 		},

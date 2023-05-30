@@ -584,9 +584,13 @@ func expandConnectionOptionsAzureAD(
 		EnableUsersAPI:      value.Bool(config.GetAttr("api_enable_users")),
 		LogoURL:             value.String(config.GetAttr("icon_url")),
 		IdentityAPI:         value.String(config.GetAttr("identity_api")),
-		SetUserAttributes:   value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	expandConnectionOptionsScopes(d, options)

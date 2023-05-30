@@ -1,3 +1,24 @@
+## 0.48.0
+
+FEATURES:
+
+- `resource/auth0_client_credentials`: Add new resource to manage client credentials (`client_secret`, `private_key_jwt`, `authentication_methods`) ([#588](https://github.com/auth0/terraform-provider-auth0/pull/588))
+- `resource/auth0_resource_server_scopes`: Add new resource to manage a 1:many relationship between the resource server (API) and its scopes (permissions) ([#600](https://github.com/auth0/terraform-provider-auth0/pull/600))
+- `resource/auth0_resource_server_scope`: Add new resource to manage a 1:1 relationship between the resource server (API) and its scopes (permissions) ([#589](https://github.com/auth0/terraform-provider-auth0/pull/589))
+
+BUG FIXES:
+
+- `resource/auth0_connection`: Fix json tag for `forward_request_info` attribute ([#591](https://github.com/auth0/terraform-provider-auth0/pull/591))
+- Fix import issue on several resources (`auth0_connection_clients`, `auth0_user_permissions`, `auth0_user_roles`, `auth0_role_permissions`) ([#594](https://github.com/auth0/terraform-provider-auth0/pull/594), [#595](https://github.com/auth0/terraform-provider-auth0/pull/595), [#596](https://github.com/auth0/terraform-provider-auth0/pull/596), [#597](https://github.com/auth0/terraform-provider-auth0/pull/597))
+- `resource/auth0_connection`: Fix issue with setting `set_user_root_attributes` to `on_each_login` for Microsoft Azure AD Connections ([#602](https://github.com/auth0/terraform-provider-auth0/pull/602))
+
+NOTES:
+
+- New guides on how to achieve 0 downtime client credentials were added in this release ([#592](https://github.com/auth0/terraform-provider-auth0/pull/592))
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
+to navigate the deprecations that were added in this release.
+
+
 ## 0.47.0
 
 FEATURES:

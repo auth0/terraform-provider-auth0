@@ -1,10 +1,12 @@
 package user_test
 
 import (
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -106,6 +108,97 @@ func TestAccUserPermissions(t *testing.T) {
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccUserPermissionsImport = `
+resource "auth0_resource_server" "resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	scopes {
+		value = "read:foo"
+		description = "Can read Foo"
+	}
+
+	scopes {
+		value = "create:foo"
+		description = "Can create Foo"
+	}
+}
+
+resource "auth0_user" "user" {
+	depends_on = [ auth0_resource_server.resource_server ]
+
+	connection_name = "Username-Password-Authentication"
+	password        = "passpass$12$12"
+	email           = "{{.testName}}@acceptance.test.com"
+
+	lifecycle {
+		ignore_changes = [ connection_name, password ]
+	}
+}
+
+resource "auth0_user_permissions" "user_permissions" {
+	depends_on = [ auth0_resource_server.resource_server, auth0_user.user ]
+
+	user_id = auth0_user.user.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name = "read:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name = "create:foo"
+	}
+}
+`
+
+func TestAccUserPermissionsImport(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// The test runs only with recordings as it requires an initial setup.
+		t.Skip()
+	}
+
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             acctest.ParseTestName(testAccUserPermissionsImport, testName),
+				ResourceName:       "auth0_resource_server.resource_server",
+				ImportState:        true,
+				ImportStateId:      "646cad063390a55e156ee4cd",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccUserPermissionsImport, testName),
+				ResourceName:       "auth0_user.user",
+				ImportState:        true,
+				ImportStateId:      "auth0|646cad06363aac78e30fc478",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccUserPermissionsImport, testName),
+				ResourceName:       "auth0_user_permissions.user_permissions",
+				ImportState:        true,
+				ImportStateId:      "auth0|646cad06363aac78e30fc478",
+				ImportStatePersist: true,
+			},
+			{
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Config: acctest.ParseTestName(testAccUserPermissionsImport, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user_permissions.user_permissions", "permissions.#", "2"),
 				),
 			},
 		},

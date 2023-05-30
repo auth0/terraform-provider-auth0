@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -117,9 +118,7 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 func readUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	userID := data.Get("user_id").(string)
-
-	permissions, err := api.User.Permissions(userID)
+	permissions, err := api.User.Permissions(data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -128,9 +127,12 @@ func readUserPermissions(_ context.Context, data *schema.ResourceData, meta inte
 		return diag.FromErr(err)
 	}
 
-	err = data.Set("permissions", flattenUserPermissions(permissions))
+	result := multierror.Append(
+		data.Set("user_id", data.Id()),
+		data.Set("permissions", flattenUserPermissions(permissions)),
+	)
 
-	return diag.FromErr(err)
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

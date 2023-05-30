@@ -2,10 +2,12 @@ package connection_test
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -132,6 +134,72 @@ func TestAccConnectionClients(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection.my_conn", "enabled_clients.#", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccConnectionClientsImport = `
+resource "auth0_connection" "my_conn" {
+	name = "Acceptance-Test-{{.testName}}"
+	strategy = "auth0"
+}
+
+resource "auth0_client" "my_client-1" {
+	depends_on = [ auth0_connection.my_conn ]
+
+	name = "Acceptance-Test-Client-1-{{.testName}}"
+}
+
+resource "auth0_connection_clients" "my_conn_client_assoc" {
+	depends_on = [ auth0_client.my_client-1 ]
+
+	connection_id = auth0_connection.my_conn.id
+	enabled_clients = [ auth0_client.my_client-1.id ]
+}
+`
+
+func TestAccConnectionClientsImport(t *testing.T) {
+	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
+		// The test runs only with recordings as it requires an initial setup.
+		t.Skip()
+	}
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
+				ResourceName:       "auth0_connection.my_conn",
+				ImportState:        true,
+				ImportStateId:      "con_ouKiPbGv6eONERfA",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
+				ResourceName:       "auth0_client.my_client-1",
+				ImportState:        true,
+				ImportStateId:      "TGIXl1IBOpFmwBpxuCLsoXwl5OQBa1Z7",
+				ImportStatePersist: true,
+			},
+			{
+				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
+				ResourceName:       "auth0_connection_clients.my_conn_client_assoc",
+				ImportState:        true,
+				ImportStateId:      "con_ouKiPbGv6eONERfA",
+				ImportStatePersist: true,
+			},
+			{
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Config: acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "enabled_clients.#", "1"),
 				),
 			},
 		},

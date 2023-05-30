@@ -9,7 +9,7 @@ import (
 
 func TestIsURLWithHTTPSorEmptyString(t *testing.T) {
 	var testCases = []struct {
-		inputURL       string
+		inputURL       interface{}
 		expectedErrors []string
 	}{
 		{
@@ -46,6 +46,18 @@ func TestIsURLWithHTTPSorEmptyString(t *testing.T) {
 			inputURL: "broken/url",
 			expectedErrors: []string{
 				"expected \"theTestURL\" to have a host, got broken/url",
+			},
+		},
+		{
+			inputURL: nil,
+			expectedErrors: []string{
+				"expected type of \"theTestURL\" to be string",
+			},
+		},
+		{
+			inputURL: "://example.com",
+			expectedErrors: []string{
+				"expected \"theTestURL\" to be a valid url, got ://example.com: parse \"://example.com\": missing protocol scheme",
 			},
 		},
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -13,7 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// NewPermissionsResource will return a new auth0_role_permissions resource.
+// NewPermissionsResource will return a new auth0_role_permissions (1:many) resource.
 func NewPermissionsResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -117,9 +118,7 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 func readRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	roleID := data.Get("role_id").(string)
-
-	permissions, err := api.Role.Permissions(roleID)
+	permissions, err := api.Role.Permissions(data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -128,9 +127,12 @@ func readRolePermissions(_ context.Context, data *schema.ResourceData, meta inte
 		return diag.FromErr(err)
 	}
 
-	err = data.Set("permissions", flattenRolePermissions(permissions.Permissions))
+	result := multierror.Append(
+		data.Set("role_id", data.Id()),
+		data.Set("permissions", flattenRolePermissions(permissions.Permissions)),
+	)
 
-	return diag.FromErr(err)
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

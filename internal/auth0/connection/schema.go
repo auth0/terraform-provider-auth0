@@ -503,19 +503,12 @@ var resourceSchema = map[string]*schema.Schema{
 				},
 
 				"set_user_root_attributes": {
-					Type:     schema.TypeString,
-					Optional: true,
-					Computed: true,
-					ValidateFunc: validation.StringInSlice([]string{
-						"on_each_login", "on_first_login",
-					}, false),
-					Description: "Determines whether the 'name', 'given_name', 'family_name', 'nickname', " +
-						"and 'picture' attributes can be independently updated when using an external IdP. " +
-						"Possible values are 'on_each_login' (default value, it configures the connection to " +
-						"automatically update the root attributes from the external IdP with each user login. " +
-						"When this setting is used, root attributes cannot be independently updated), " +
-						"'on_first_login' (configures the connection to only set the root attributes on " +
-						"first login, allowing them to be independently updated thereafter).",
+					Type:         schema.TypeString,
+					Optional:     true,
+					ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
+					Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
+						"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
+						"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
 				},
 				"non_persistent_attrs": {
 					Type:     schema.TypeSet,

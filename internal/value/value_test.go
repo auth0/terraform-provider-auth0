@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -263,4 +264,24 @@ func TestMapFromJSON(t *testing.T) {
 
 		assert.JSONEq(t, string(expected), string(actualString))
 	})
+}
+
+func TestDifference(t *testing.T) {
+	resourceData := schema.TestResourceDataRaw(t, map[string]*schema.Schema{
+		"key": {
+			Type: schema.TypeSet,
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+		},
+	}, map[string]interface{}{
+		"key": []interface{}{"a", "b"},
+	})
+
+	resourceData.SetId("1")
+
+	oldValue, newValue := Difference(resourceData, "key")
+
+	assert.Equal(t, []interface{}{"a", "b"}, oldValue)
+	assert.Equal(t, []interface{}{}, newValue)
 }

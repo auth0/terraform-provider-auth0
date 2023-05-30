@@ -98,7 +98,7 @@ func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readHook(ctx, d, m)
 }
 
-func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	hook, err := api.Hook.Read(d.Id())
 	if err != nil {
@@ -111,7 +111,13 @@ func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(err)
 	}
 
-	diagnostics := checkForUntrackedHookSecrets(ctx, d, m)
+	hookSecrets, err := api.Hook.Secrets(d.Id())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	configSecrets := d.Get("secrets").(map[string]interface{})
+
+	diagnostics := checkForUntrackedHookSecrets(hookSecrets, configSecrets)
 
 	result := multierror.Append(
 		d.Set("name", hook.Name),

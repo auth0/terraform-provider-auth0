@@ -1,7 +1,6 @@
 package hook
 
 import (
-	"context"
 	"fmt"
 	"regexp"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -32,15 +30,7 @@ func expandHook(d *schema.ResourceData) *management.Hook {
 	return hook
 }
 
-func checkForUntrackedHookSecrets(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	secretsFromConfig := d.Get("secrets").(map[string]interface{})
-
-	api := m.(*config.Config).GetAPI()
-	secretsFromAPI, err := api.Hook.Secrets(d.Id())
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
+func checkForUntrackedHookSecrets(secretsFromAPI management.HookSecrets, secretsFromConfig map[string]interface{}) diag.Diagnostics {
 	var warnings diag.Diagnostics
 	for key := range secretsFromAPI {
 		if _, ok := secretsFromConfig[key]; !ok {

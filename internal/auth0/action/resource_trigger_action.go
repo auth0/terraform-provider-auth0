@@ -24,7 +24,7 @@ func NewTriggerActionResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: importTriggerAction,
 		},
-		Description: "With this resource, you can bind an action to a trigger. Once an action is created and deployed, it can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.",
+		Description: "With this resource, you can bind an action to a trigger. Once an action is created and deployed, it can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.\n\nOrdering of an action within a specific flow is not currently supported when using this resource. Instead, it is advised to correct the order using the dashboard UI or use the `auth0_trigger_bindings` resource instead",
 		Schema: map[string]*schema.Schema{
 			"trigger": {
 				Type:     schema.TypeString,

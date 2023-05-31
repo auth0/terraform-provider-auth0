@@ -77,7 +77,7 @@ func TestAccTriggerAction(t *testing.T) {
 
 const testAccImportTriggerAction = `
 	resource auth0_action my_action {
-		name = "Test Action testaccimporttriggeraction"
+		name = "Test Action {{.testName}}"
 		code = "exports.onExecutePostLogin = async (event, api) => {};"
 
 		supported_triggers {

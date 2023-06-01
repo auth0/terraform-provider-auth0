@@ -100,7 +100,7 @@ func TestAccTriggerActionImport(t *testing.T) {
 
 	testName := strings.ToLower(t.Name())
 
-	importedActionID := "a6bc1597-1401-4635-b1df-de27e500ff3c"
+	importedActionID := "a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2"
 
 	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,

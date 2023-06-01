@@ -127,7 +127,7 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 	}
 
 	for _, binding := range triggerBindings.Bindings {
-		if binding.Action.ID == &actionID {
+		if binding.Action.GetID() == actionID {
 			d.SetId(trigger + "::" + actionID)
 			return nil
 		}

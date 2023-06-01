@@ -1,0 +1,398 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testaccimporttriggeraction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:32:59.072958437Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 110.785417ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"8687733d-870b-4f91-b652-fa4d77e2f7e0","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.860273186Z","updated_at":"2023-06-01T18:32:59.860273186Z"},{"id":"0ce7fc15-e93c-4aea-9cb3-13c199ee8511","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.861959305Z","updated_at":"2023-06-01T18:32:59.861959305Z"},{"id":"dc5e0d4e-f262-4777-a392-f981e07ca784","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.863723469Z","updated_at":"2023-06-01T18:32:59.863723469Z"},{"id":"37423c6e-4890-4f96-9e25-c54988e35411","trigger_id":"post-login","action":{"id":"6daca728-99c7-4448-b8d1-4e1329c88671","name":"A different API","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:16.211972271Z","updated_at":"2023-06-01T12:58:16.211972271Z","current_version":{"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:19.114548092Z","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","deployed":true,"number":1,"built_at":"2023-06-01T12:58:19.114548092Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.865262395Z","updated_at":"2023-06-01T18:32:59.865262395Z"},{"id":"1ef1764e-c168-4cb6-8a60-bc385426d5ea","trigger_id":"post-login","action":{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testaccimporttriggeraction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:32:59.066082388Z","current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.866775124Z","updated_at":"2023-06-01T18:32:59.866775124Z","display_name":"Test Action testaccimporttriggeraction"}],"total":5,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 121.189417ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testaccimporttriggeraction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:32:59.072958437Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 114.089666ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"8687733d-870b-4f91-b652-fa4d77e2f7e0","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.860273186Z","updated_at":"2023-06-01T18:32:59.860273186Z"},{"id":"0ce7fc15-e93c-4aea-9cb3-13c199ee8511","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.861959305Z","updated_at":"2023-06-01T18:32:59.861959305Z"},{"id":"dc5e0d4e-f262-4777-a392-f981e07ca784","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.863723469Z","updated_at":"2023-06-01T18:32:59.863723469Z"},{"id":"37423c6e-4890-4f96-9e25-c54988e35411","trigger_id":"post-login","action":{"id":"6daca728-99c7-4448-b8d1-4e1329c88671","name":"A different API","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:16.211972271Z","updated_at":"2023-06-01T12:58:16.211972271Z","current_version":{"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:19.114548092Z","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","deployed":true,"number":1,"built_at":"2023-06-01T12:58:19.114548092Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.865262395Z","updated_at":"2023-06-01T18:32:59.865262395Z"},{"id":"1ef1764e-c168-4cb6-8a60-bc385426d5ea","trigger_id":"post-login","action":{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testaccimporttriggeraction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:32:59.066082388Z","current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.866775124Z","updated_at":"2023-06-01T18:32:59.866775124Z","display_name":"Test Action testaccimporttriggeraction"}],"total":5,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 127.718708ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 208
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onExecutePostLogin = async (event, api) =\u003e {};","dependencies":[],"secrets":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:33:41.767001736Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 154.35525ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:33:41.767001736Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 101.911416ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:33:41.767001736Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 116.446583ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"8687733d-870b-4f91-b652-fa4d77e2f7e0","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.860273186Z","updated_at":"2023-06-01T18:32:59.860273186Z"},{"id":"0ce7fc15-e93c-4aea-9cb3-13c199ee8511","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.861959305Z","updated_at":"2023-06-01T18:32:59.861959305Z"},{"id":"dc5e0d4e-f262-4777-a392-f981e07ca784","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.863723469Z","updated_at":"2023-06-01T18:32:59.863723469Z"},{"id":"37423c6e-4890-4f96-9e25-c54988e35411","trigger_id":"post-login","action":{"id":"6daca728-99c7-4448-b8d1-4e1329c88671","name":"A different API","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:16.211972271Z","updated_at":"2023-06-01T12:58:16.211972271Z","current_version":{"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:19.114548092Z","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","deployed":true,"number":1,"built_at":"2023-06-01T12:58:19.114548092Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.865262395Z","updated_at":"2023-06-01T18:32:59.865262395Z"},{"id":"1ef1764e-c168-4cb6-8a60-bc385426d5ea","trigger_id":"post-login","action":{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:33:41.755758299Z","current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.866775124Z","updated_at":"2023-06-01T18:32:59.866775124Z","display_name":"Test Action testaccimporttriggeraction"}],"total":5,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 151.162583ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"8687733d-870b-4f91-b652-fa4d77e2f7e0","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.860273186Z","updated_at":"2023-06-01T18:32:59.860273186Z"},{"id":"0ce7fc15-e93c-4aea-9cb3-13c199ee8511","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.861959305Z","updated_at":"2023-06-01T18:32:59.861959305Z"},{"id":"dc5e0d4e-f262-4777-a392-f981e07ca784","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.863723469Z","updated_at":"2023-06-01T18:32:59.863723469Z"},{"id":"37423c6e-4890-4f96-9e25-c54988e35411","trigger_id":"post-login","action":{"id":"6daca728-99c7-4448-b8d1-4e1329c88671","name":"A different API","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:16.211972271Z","updated_at":"2023-06-01T12:58:16.211972271Z","current_version":{"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:19.114548092Z","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","deployed":true,"number":1,"built_at":"2023-06-01T12:58:19.114548092Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.865262395Z","updated_at":"2023-06-01T18:32:59.865262395Z"},{"id":"1ef1764e-c168-4cb6-8a60-bc385426d5ea","trigger_id":"post-login","action":{"id":"a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2","name":"Test Action testacctriggeractionimport","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T18:32:59.066082388Z","updated_at":"2023-06-01T18:33:41.755758299Z","current_version":{"id":"5ba4e854-f4ba-48b0-981b-706198317284","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T18:32:59.397672004Z","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5ba4e854-f4ba-48b0-981b-706198317284","deployed":true,"number":1,"built_at":"2023-06-01T18:32:59.397672004Z","secrets":[],"status":"built","created_at":"2023-06-01T18:32:59.355800899Z","updated_at":"2023-06-01T18:32:59.398017135Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:32:59.866775124Z","updated_at":"2023-06-01T18:32:59.866775124Z","display_name":"Test Action testaccimporttriggeraction"}],"total":5,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 111.333333ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 319
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"ref":{"type":"action_id","value":"3b131daf-af26-4fbc-88a0-d0f93d71ad11"}},{"ref":{"type":"action_id","value":"3b131daf-af26-4fbc-88a0-d0f93d71ad11"}},{"ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}},{"ref":{"type":"action_id","value":"6daca728-99c7-4448-b8d1-4e1329c88671"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"80bf6012-b625-4315-9fa4-94c30bb0d2ac","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:33:43.051839373Z","updated_at":"2023-06-01T18:33:43.051839373Z"},{"id":"20957883-5272-4a36-864e-24d073b954cb","trigger_id":"post-login","action":{"id":"3b131daf-af26-4fbc-88a0-d0f93d71ad11","name":"Test action","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:38.597019453Z","updated_at":"2023-06-01T12:58:38.597019453Z","current_version":{"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:41.971216538Z","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"cd23b93f-3ecf-415a-9f91-54dd450f8ca9","deployed":true,"number":1,"built_at":"2023-06-01T12:58:41.971216538Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:41.871924557Z","updated_at":"2023-06-01T12:58:41.971549075Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:33:43.054372100Z","updated_at":"2023-06-01T18:33:43.054372100Z"},{"id":"49a6cbb2-5d25-473e-8d88-30746d888695","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-06-01T18:33:43.056476297Z","updated_at":"2023-06-01T18:33:43.056476297Z"},{"id":"f44de912-62a5-4189-bf28-47a4527f384c","trigger_id":"post-login","action":{"id":"6daca728-99c7-4448-b8d1-4e1329c88671","name":"A different API","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-06-01T12:58:16.211972271Z","updated_at":"2023-06-01T12:58:16.211972271Z","current_version":{"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-06-01T12:58:19.114548092Z","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z"},"deployed_version":{"code":"/**\n* Handler that will be called during the execution of a PostLogin flow.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\nexports.onExecutePostLogin = async (event, api) => {\n};\n\n\n/**\n* Handler that will be invoked when this action is resuming after an external redirect. If your\n* onExecutePostLogin function does not perform a redirect, this function can be safely ignored.\n*\n* @param {Event} event - Details about the user and the context in which they are logging in.\n* @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.\n*/\n// exports.onContinuePostLogin = async (event, api) => {\n// };\n","dependencies":[],"id":"c65f0f34-5057-44af-8e31-5fe289bab2de","deployed":true,"number":1,"built_at":"2023-06-01T12:58:19.114548092Z","secrets":[],"status":"built","created_at":"2023-06-01T12:58:19.044381058Z","updated_at":"2023-06-01T12:58:19.114919738Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-06-01T18:33:43.058165622Z","updated_at":"2023-06-01T18:33:43.058165622Z"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 143.990792ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/a35e5b88-7a3e-4e7a-9a3d-4e0f3b4d95d2
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 137.659916ms

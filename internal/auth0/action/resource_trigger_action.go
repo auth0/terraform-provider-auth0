@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -69,19 +70,19 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		return diag.FromErr(err)
 	}
 
-	t := "action_id"
-
 	var updatedBindings []*management.ActionBinding
 	for _, binding := range currentBindings.Bindings {
 		if binding.Action.ID == &actionID {
 			d.SetId(trigger + "::" + actionID)
 			return nil
 		}
+
 		updatedBindings = append(updatedBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
-				Type:  &t,
+				Type:  auth0.String("action_id"),
 				Value: binding.Action.ID,
 			},
+			DisplayName: binding.DisplayName,
 		})
 	}
 
@@ -96,7 +97,7 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 
 	updatedBindings = append(updatedBindings, &management.ActionBinding{
 		Ref: &management.ActionBindingReference{
-			Type:  &t,
+			Type:  auth0.String("action_id"),
 			Value: &actionID,
 		},
 		DisplayName: action.Name,
@@ -118,10 +119,6 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 
 	triggerBindings, err := api.Action.Bindings(trigger)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -144,10 +141,6 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 
 	triggerBindings, err := api.Action.Bindings(trigger)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -157,15 +150,12 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 			continue
 		}
 
-		t := "action_id"
-		id := binding.Action.GetID()
-		displayName := binding.GetDisplayName()
 		updatedBindings = append(updatedBindings, &management.ActionBinding{
 			Ref: &management.ActionBindingReference{
-				Type:  &t,
-				Value: &id,
+				Type:  auth0.String("action_id"),
+				Value: binding.Action.ID,
 			},
-			DisplayName: &displayName,
+			DisplayName: binding.DisplayName,
 		})
 	}
 

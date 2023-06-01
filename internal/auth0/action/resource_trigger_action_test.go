@@ -25,7 +25,7 @@ const testAccCreateTriggerAction = `
 
 	resource auth0_trigger_action my_action_post_login {
 		action_id = auth0_action.my_action.id
-		trigger = tolist(auth0_action.my_action.supported_triggers)[0].id
+		trigger = auth0_action.my_action.supported_triggers[0].id
 	}
 `
 

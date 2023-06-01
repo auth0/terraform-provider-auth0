@@ -50,7 +50,6 @@ func NewTriggerActionResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "The ID of the action to bind to the trigger.",
 			},
-			//TODO: eventually allow to dictate position.
 		},
 	}
 }
@@ -127,13 +126,13 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 	}
 
 	for _, binding := range triggerBindings.Bindings {
-		if binding.Action.ID == &actionID {
+		if binding.Action.GetID() == actionID {
 			d.SetId(trigger + "::" + actionID)
 			return nil
 		}
 	}
 
-	d.SetId(trigger + "::" + actionID)
+	d.SetId("")
 	return nil
 }
 

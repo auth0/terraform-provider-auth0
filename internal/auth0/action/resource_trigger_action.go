@@ -50,7 +50,6 @@ func NewTriggerActionResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "The ID of the action to bind to the trigger.",
 			},
-			//TODO: eventually allow to dictate position.
 		},
 	}
 }

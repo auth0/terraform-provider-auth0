@@ -206,10 +206,6 @@ func guardAgainstErasingUnwantedConnections(
 		return nil
 	}
 
-	if cmp.Equal(connectionsToAdd, alreadyEnabledConnections) {
-		return nil
-	}
-
 	return diag.Diagnostics{
 		diag.Diagnostic{
 			Severity: diag.Error,

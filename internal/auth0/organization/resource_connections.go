@@ -47,7 +47,7 @@ func NewConnectionsResource() *schema.Resource {
 					},
 				},
 				Required:    true,
-				Description: "IDs of the connections that are enabled for the organization.",
+				Description: "Connections that are enabled for the organization.",
 			},
 		},
 		CreateContext: createOrganizationConnections,
@@ -131,8 +131,10 @@ func readOrganizationConnections(_ context.Context, data *schema.ResourceData, m
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(data.Id())
-	defer mutex.Unlock(data.Id())
+
+	orgID := data.Id()
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
 
 	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
@@ -140,7 +142,12 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, rmConnection := range toRemove {
 		connection := rmConnection.(map[string]interface{})
 
-		if err := api.Organization.DeleteConnection(data.Id(), connection["connection_id"].(string)); err != nil {
+		if err := api.Organization.DeleteConnection(orgID, connection["connection_id"].(string)); err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
 			result = multierror.Append(result, err)
 		}
 	}
@@ -148,7 +155,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
 
-		if err := api.Organization.AddConnection(data.Id(), &management.OrganizationConnection{
+		if err := api.Organization.AddConnection(orgID, &management.OrganizationConnection{
 			ConnectionID:            auth0.String(connection["connection_id"].(string)),
 			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
 		}); err != nil {
@@ -156,6 +163,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 				data.SetId("")
 				return nil
 			}
+
 			result = multierror.Append(result, err)
 		}
 	}

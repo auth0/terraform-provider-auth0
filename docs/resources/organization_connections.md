@@ -48,7 +48,7 @@ resource "auth0_organization_connections" "one-to-many" {
 
 ### Required
 
-- `enabled_connections` (Block Set, Min: 1) IDs of the connections that are enabled for the organization. (see [below for nested schema](#nestedblock--enabled_connections))
+- `enabled_connections` (Block Set, Min: 1) Connections that are enabled for the organization. (see [below for nested schema](#nestedblock--enabled_connections))
 - `organization_id` (String) ID of the organization on which to enable the connections.
 
 ### Read-Only

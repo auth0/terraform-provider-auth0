@@ -132,7 +132,7 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 		}
 	}
 
-	d.SetId(trigger + "::" + actionID)
+	d.SetId("")
 	return nil
 }
 

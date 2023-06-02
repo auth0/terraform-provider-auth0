@@ -21,6 +21,7 @@ func NewTriggerActionResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createTriggerAction,
 		ReadContext:   readTriggerAction,
+		UpdateContext: updateTriggerAction,
 		DeleteContext: deleteTriggerAction,
 		Importer: &schema.ResourceImporter{
 			StateContext: importTriggerAction,
@@ -53,7 +54,6 @@ func NewTriggerActionResource() *schema.Resource {
 			},
 			"display_name": {
 				Type:        schema.TypeString,
-				ForceNew:    true,
 				Required:    true,
 				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.",
 			},
@@ -100,6 +100,59 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		},
 		DisplayName: &displayName,
 	})
+
+	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
+		return diag.FromErr(err)
+	}
+
+	d.SetId(trigger + "::" + actionID)
+	return nil
+}
+
+func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*config.Config).GetAPI()
+
+	trigger := d.Get("trigger").(string)
+	actionID := d.Get("action_id").(string)
+	displayName := d.Get("display_name").(string)
+
+	currentBindings, err := api.Action.Bindings(trigger)
+	if err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
+		}
+		return diag.FromErr(err)
+	}
+
+	found := false
+	var updatedBindings []*management.ActionBinding
+	for _, binding := range currentBindings.Bindings {
+		if binding.Action.GetID() == actionID {
+			d.SetId(trigger + "::" + actionID)
+			updatedBindings = append(updatedBindings, &management.ActionBinding{
+				Ref: &management.ActionBindingReference{
+					Type:  auth0.String("action_id"),
+					Value: &actionID,
+				},
+				DisplayName: &displayName,
+			})
+			found = true
+		} else {
+			updatedBindings = append(updatedBindings, &management.ActionBinding{
+				Ref: &management.ActionBindingReference{
+					Type:  auth0.String("action_id"),
+					Value: binding.Action.ID,
+				},
+				DisplayName: binding.DisplayName,
+			})
+		}
+	}
+
+	if !found {
+		d.SetId("")
+		return nil
+	}
 
 	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
 		return diag.FromErr(err)

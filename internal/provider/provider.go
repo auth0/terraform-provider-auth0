@@ -88,6 +88,7 @@ func New() *schema.Provider {
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                     action.NewResource(),
 			"auth0_trigger_binding":            action.NewTriggerBindingResource(),
+			"auth0_trigger_action":             action.NewTriggerActionResource(),
 			"auth0_attack_protection":          attackprotection.NewResource(),
 			"auth0_branding":                   branding.NewResource(),
 			"auth0_branding_theme":             branding.NewThemeResource(),
@@ -107,6 +108,7 @@ func New() *schema.Provider {
 			"auth0_log_stream":                 logstream.NewResource(),
 			"auth0_organization":               organization.NewResource(),
 			"auth0_organization_connection":    organization.NewConnectionResource(),
+			"auth0_organization_connections":   organization.NewConnectionsResource(),
 			"auth0_organization_member":        organization.NewMemberResource(),
 			"auth0_prompt":                     prompt.NewResource(),
 			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),

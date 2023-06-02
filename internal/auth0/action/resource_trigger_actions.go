@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -89,10 +88,6 @@ func readTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}
 
 	triggerBindings, err := api.Action.Bindings(d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -117,12 +112,6 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 func deleteTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	if err := api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
 		return diag.FromErr(err)
 	}
 

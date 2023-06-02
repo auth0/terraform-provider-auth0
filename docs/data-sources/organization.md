@@ -36,6 +36,7 @@ data "auth0_organization" "some-organization-by-id" {
 - `connections` (Set of Object) (see [below for nested schema](#nestedatt--connections))
 - `display_name` (String) Friendly name of this organization.
 - `id` (String) The ID of this resource.
+- `members` (Set of String) User ID(s) that are members of the organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
 
 <a id="nestedatt--branding"></a>

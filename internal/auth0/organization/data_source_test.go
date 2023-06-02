@@ -12,7 +12,15 @@ import (
 )
 
 const testAccGivenAnOrganizationWithConnectionsAndMembers = `
+resource "auth0_user" "user" {
+	connection_name = "Username-Password-Authentication"
+	email           = "{{.testName}}@auth0.com"
+	password        = "MyPass123$"
+}
+
 resource "auth0_connection" "my_connection" {
+	depends_on = [ auth0_user.user ]
+
 	name     = "Acceptance-Test-Connection-{{.testName}}"
 	strategy = "auth0"
 }
@@ -29,6 +37,13 @@ resource "auth0_organization_connection" "my_org_conn" {
 
 	organization_id = auth0_organization.my_organization.id
 	connection_id   = auth0_connection.my_connection.id
+}
+
+resource "auth0_organization_member" "org_member" {
+	depends_on = [ auth0_organization_connection.my_org_conn ]
+
+	organization_id = auth0_organization.my_organization.id
+	user_id         = auth0_user.user.id
 }
 `
 
@@ -80,6 +95,7 @@ func TestAccDataSourceOrganizationByName(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "name", fmt.Sprintf("test-%s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "connections.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "connections.0.connection_id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.test", "members.#", "1"),
 				),
 			},
 		},
@@ -110,6 +126,7 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "name", fmt.Sprintf("test-%s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "connections.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "connections.0.connection_id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.test", "members.#", "1"),
 				),
 			},
 		},

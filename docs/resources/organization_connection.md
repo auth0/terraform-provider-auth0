@@ -8,6 +8,8 @@ description: |-
 
 With this resource, you can manage enabled connections on an organization.
 
+!> To prevent issues, avoid using this resource together with the `auth0_organization_connections` resource.
+
 ## Example Usage
 
 ```terraform

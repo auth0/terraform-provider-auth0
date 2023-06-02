@@ -1,0 +1,1440 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 202
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onExecutePostLogin = async (event, api) =\u003e {};","dependencies":[],"secrets":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 399
+        uncompressed: false
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 129.004708ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 123.553042ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29/deploy
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.536562406Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}],"action":{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.261007053Z","all_changes_deployed":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 134.888875ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 102.748333ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"49519bbe-5656-48e1-ab0d-849d3db8e5e8","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:21:05.589074391Z","updated_at":"2023-05-31T17:21:05.589074391Z"}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 118.651625ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.798166ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 217
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}},{"display_name":"Test Action TestAccTriggerAction","ref":{"type":"action_id","value":"917be4e6-e344-473d-8f84-c0fc3f235e29"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e0a9a46-6e24-4a63-8ece-2f72a5455206","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.011150791Z","updated_at":"2023-05-31T17:23:14.011150791Z"},{"id":"1725d180-b1f5-491a-a78f-5ef38554e80c","trigger_id":"post-login","action":{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.261007053Z","current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.012724778Z","updated_at":"2023-05-31T17:23:14.012724778Z","display_name":"Test Action TestAccTriggerAction"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 151.98275ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 160.768916ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e0a9a46-6e24-4a63-8ece-2f72a5455206","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.011150791Z","updated_at":"2023-05-31T17:23:14.011150791Z"},{"id":"1725d180-b1f5-491a-a78f-5ef38554e80c","trigger_id":"post-login","action":{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.261007053Z","current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.012724778Z","updated_at":"2023-05-31T17:23:14.012724778Z","display_name":"Test Action TestAccTriggerAction"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 120.5245ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.276811711Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 104.233291ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e0a9a46-6e24-4a63-8ece-2f72a5455206","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.011150791Z","updated_at":"2023-05-31T17:23:14.011150791Z"},{"id":"1725d180-b1f5-491a-a78f-5ef38554e80c","trigger_id":"post-login","action":{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.261007053Z","current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.012724778Z","updated_at":"2023-05-31T17:23:14.012724778Z","display_name":"Test Action TestAccTriggerAction"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 106.783166ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e0a9a46-6e24-4a63-8ece-2f72a5455206","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.011150791Z","updated_at":"2023-05-31T17:23:14.011150791Z"},{"id":"1725d180-b1f5-491a-a78f-5ef38554e80c","trigger_id":"post-login","action":{"id":"917be4e6-e344-473d-8f84-c0fc3f235e29","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:13.261007053Z","updated_at":"2023-05-31T17:23:13.261007053Z","current_version":{"id":"487b9354-3894-4a08-aebe-9ed7753489e4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:13.595616260Z","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"487b9354-3894-4a08-aebe-9ed7753489e4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:13.595616260Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:13.536562406Z","updated_at":"2023-05-31T17:23:13.597013076Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:14.012724778Z","updated_at":"2023-05-31T17:23:14.012724778Z","display_name":"Test Action TestAccTriggerAction"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 112.143375ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 212
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onExecutePostLogin = async (event, api) =\u003e {};","dependencies":[],"secrets":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 409
+        uncompressed: false
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 131.807875ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 97.700583ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 109
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"display_name":"","ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"4589f70f-56e9-4d33-b39d-b031d6ed0758","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:15.665537371Z","updated_at":"2023-05-31T17:23:15.665537371Z"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 183.033625ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad/deploy
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.774227377Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}],"action":{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.528287483Z","all_changes_deployed":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 121.433125ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 70.786041ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/917be4e6-e344-473d-8f84-c0fc3f235e29
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 164.079458ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"4589f70f-56e9-4d33-b39d-b031d6ed0758","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:15.665537371Z","updated_at":"2023-05-31T17:23:15.665537371Z"}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 107.298292ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 101.791208ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 227
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}},{"display_name":"Test Action TestAccTriggerAction (another)","ref":{"type":"action_id","value":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"85aeaf5d-77d6-498d-a4c8-bc3173aae6d6","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.153965145Z","updated_at":"2023-05-31T17:23:16.153965145Z"},{"id":"8bb1947d-c9df-4809-a541-550601e5977e","trigger_id":"post-login","action":{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.528287483Z","current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.155587554Z","updated_at":"2023-05-31T17:23:16.155587554Z","display_name":"Test Action TestAccTriggerAction (another)"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 108.625875ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 100.473833ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"85aeaf5d-77d6-498d-a4c8-bc3173aae6d6","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.153965145Z","updated_at":"2023-05-31T17:23:16.153965145Z"},{"id":"8bb1947d-c9df-4809-a541-550601e5977e","trigger_id":"post-login","action":{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.528287483Z","current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.155587554Z","updated_at":"2023-05-31T17:23:16.155587554Z","display_name":"Test Action TestAccTriggerAction (another)"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 103.663792ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"85aeaf5d-77d6-498d-a4c8-bc3173aae6d6","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.153965145Z","updated_at":"2023-05-31T17:23:16.153965145Z"},{"id":"8bb1947d-c9df-4809-a541-550601e5977e","trigger_id":"post-login","action":{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.528287483Z","current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.155587554Z","updated_at":"2023-05-31T17:23:16.155587554Z","display_name":"Test Action TestAccTriggerAction (another)"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 98.394292ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.549226817Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 156.077583ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"85aeaf5d-77d6-498d-a4c8-bc3173aae6d6","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.153965145Z","updated_at":"2023-05-31T17:23:16.153965145Z"},{"id":"8bb1947d-c9df-4809-a541-550601e5977e","trigger_id":"post-login","action":{"id":"3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad","name":"Test Action TestAccTriggerAction (another)","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:15.528287483Z","updated_at":"2023-05-31T17:23:15.528287483Z","current_version":{"id":"7270b944-c505-44fa-afc8-619817b94815","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:15.816559657Z","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"7270b944-c505-44fa-afc8-619817b94815","deployed":true,"number":1,"built_at":"2023-05-31T17:23:15.816559657Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:15.774227377Z","updated_at":"2023-05-31T17:23:15.816919758Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:16.155587554Z","updated_at":"2023-05-31T17:23:16.155587554Z","display_name":"Test Action TestAccTriggerAction (another)"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 105.1ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 202
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"code":"exports.onExecutePostLogin = async (event, api) =\u003e {};","dependencies":[],"secrets":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 399
+        uncompressed: false
+        body: '{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.817869717Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"pending","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 144.766833ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.817869717Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"all_changes_deployed":false}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 107.75ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 109
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"display_name":"","ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e2690dd-97f4-4d91-a0c4-2c2f1a434eeb","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:17.920843188Z","updated_at":"2023-05-31T17:23:17.920843188Z"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 184.824833ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda/deploy
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":false,"number":1,"secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.047377310Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}],"action":{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.796894562Z","all_changes_deployed":false}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 104.29575ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/3d9dd9d2-2045-4c2e-a202-f5ebf39b49ad
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 131.1035ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.817869717Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 91.928458ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"5e2690dd-97f4-4d91-a0c4-2c2f1a434eeb","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:17.920843188Z","updated_at":"2023-05-31T17:23:17.920843188Z"}],"total":1,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 104.293459ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.817869717Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 91.621875ms
+    - id: 34
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 217
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}},{"display_name":"Test Action TestAccTriggerAction","ref":{"type":"action_id","value":"4568ba5f-0428-4e69-85fd-1146bc91bbda"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"34480d4c-a3d6-4f4e-bd09-5cddaeabff38","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.458809782Z","updated_at":"2023-05-31T17:23:18.458809782Z"},{"id":"fd963d05-1057-41fc-bdf0-126705e766a6","trigger_id":"post-login","action":{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.796894562Z","current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.460309940Z","updated_at":"2023-05-31T17:23:18.460309940Z","display_name":"Test Action TestAccTriggerAction"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 138.219416ms
+    - id: 35
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.817869717Z","code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"runtime":"node16","status":"built","secrets":[],"current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":true}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 73.122375ms
+    - id: 36
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"34480d4c-a3d6-4f4e-bd09-5cddaeabff38","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.458809782Z","updated_at":"2023-05-31T17:23:18.458809782Z"},{"id":"fd963d05-1057-41fc-bdf0-126705e766a6","trigger_id":"post-login","action":{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.796894562Z","current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.460309940Z","updated_at":"2023-05-31T17:23:18.460309940Z","display_name":"Test Action TestAccTriggerAction"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 116.883416ms
+    - id: 37
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings?per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"34480d4c-a3d6-4f4e-bd09-5cddaeabff38","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.458809782Z","updated_at":"2023-05-31T17:23:18.458809782Z"},{"id":"fd963d05-1057-41fc-bdf0-126705e766a6","trigger_id":"post-login","action":{"id":"4568ba5f-0428-4e69-85fd-1146bc91bbda","name":"Test Action TestAccTriggerAction","supported_triggers":[{"id":"post-login","version":"v3"}],"created_at":"2023-05-31T17:23:17.796894562Z","updated_at":"2023-05-31T17:23:17.796894562Z","current_version":{"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","code":"exports.onExecutePostLogin = async (event, api) => {};","runtime":"node16","status":"BUILT","number":1,"build_time":"2023-05-31T17:23:18.083883783Z","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z"},"deployed_version":{"code":"exports.onExecutePostLogin = async (event, api) => {};","dependencies":[],"id":"5e60f8ac-f16b-4db7-84f1-7080026954c4","deployed":true,"number":1,"built_at":"2023-05-31T17:23:18.083883783Z","secrets":[],"status":"built","created_at":"2023-05-31T17:23:18.047377310Z","updated_at":"2023-05-31T17:23:18.084247855Z","runtime":"node16","supported_triggers":[{"id":"post-login","version":"v3"}]},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:18.460309940Z","updated_at":"2023-05-31T17:23:18.460309940Z","display_name":"Test Action TestAccTriggerAction"}],"total":2,"per_page":50}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 102.789084ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 109
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"bindings":[{"display_name":"","ref":{"type":"action_id","value":"D1AD7CCF-7BAB-417F-91C0-563595A916D8"}}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/triggers/post-login/bindings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"bindings":[{"id":"09501d9b-4b70-4e6e-b16d-fdd51b621ab0","trigger_id":"post-login","action":{"id":"D1AD7CCF-7BAB-417F-91C0-563595A916D8","name":"Anonomatic PII Vault v1","supported_triggers":[{"id":"post-login","version":"v3","status":"CURRENT"}],"created_at":"2022-08-22T23:57:45.856907897Z","updated_at":"2022-08-22T23:57:45.856907897Z","current_version":{"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","runtime":"node16","status":"BUILT","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z"},"deployed_version":{"code":"","dependencies":[],"id":"7284e308-1cf9-475d-94ef-d960d9af9a0b","deployed":true,"secrets":[],"status":"built","created_at":"2023-03-20T16:29:00.733545721Z","updated_at":"2023-03-20T16:29:00.858978434Z","runtime":"node16"},"installed_integration_id":"72f156cd-e7ee-47c4-9dda-0ef751205c37","integration":{"id":"deb19c81-5510-43f2-b33b-e3c6474dc45c","catalog_id":"pii-vault-data-privacy-and-compliance","url_slug":"pii-vault-data-privacy-and-compliance","partner_id":"069ef4d3-30fe-4656-a91d-f6e4d5979b25","name":"Anonomatic PII Vault","description":"Keep Auth0, and your database, completely PII-free. PII Vault APIs allow you to store user profiles, and any other PII, in our specialized PII database so you don''t have to.\n\nRestricted re-identification allows you to ensure users and processes have access to only those PII values they need. Data privacy compliance is much easier when working only with de-identified data.\n","short_description":"PII-as-a-Service allows your product and Auth0 to be PII free","logo":"https://cdn.auth0.com/marketplace/catalog/content/assets/creators/anonomatic/anonomatic-avatar.png","terms_of_use_url":"https://anonomatic.com/legal/terms/","updated_at":"2023-03-20T16:29:00.724915633Z","created_at":"2022-08-10T17:45:26.296689356Z","feature_type":"action","current_release":{"id":"","semver":{}}},"all_changes_deployed":false},"created_at":"2023-05-31T17:23:19.617497551Z","updated_at":"2023-05-31T17:23:19.617497551Z"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 139.386042ms
+    - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/actions/actions/4568ba5f-0428-4e69-85fd-1146bc91bbda
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 156.60525ms

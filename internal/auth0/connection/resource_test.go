@@ -182,6 +182,25 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionADConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.ad", "name", fmt.Sprintf("Acceptance-Test-AD-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "strategy", "ad"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "show_as_button", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.tenant_domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.use_kerberos", "false"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.domain_aliases.*", "api.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "ethnicity"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+				),
+			},
 		},
 	})
 }
@@ -200,6 +219,30 @@ resource "auth0_connection" "ad" {
 		]
 		ips = [ "192.168.1.1", "192.168.1.2" ]
 		set_user_root_attributes = "on_each_login"
+		non_persistent_attrs = ["ethnicity","gender"]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionADConfigUpdate = `
+resource "auth0_connection" "ad" {
+	name = "Acceptance-Test-AD-{{.testName}}"
+	strategy = "ad"
+	show_as_button = true
+	options {
+		brute_force_protection = true
+		tenant_domain = "example.com"
+		domain_aliases = [
+			"example.com",
+			"api.example.com"
+		]
+		ips = [ "192.168.1.1", "192.168.1.2" ]
+		set_user_root_attributes = "on_first_login"
 		non_persistent_attrs = ["ethnicity","gender"]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -370,7 +413,7 @@ func TestAccConnectionADFS(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", ""),
 					resource.TestCheckResourceAttrSet("auth0_connection.adfs", "options.0.fed_metadata_xml"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
-					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
@@ -455,7 +498,7 @@ EOF
 		sign_in_endpoint = "https://adfs.provider/wsfed"
 		api_enable_users = false
 		should_trust_email_verified_connection = "never_set_emails_as_verified"
-		set_user_root_attributes = "on_each_login"
+		set_user_root_attributes = "on_first_login"
 		non_persistent_attrs = ["gender","hair_color"]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -1098,6 +1141,28 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "example.com"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionGoogleAppsUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "name", fmt.Sprintf("Acceptance-Test-Google-Apps-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "strategy", "google-apps"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.client_id", ""),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.client_secret", ""),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.tenant_domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.domain_aliases.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
@@ -1121,6 +1186,31 @@ resource "auth0_connection" "google_apps" {
 		tenant_domain = "example.com"
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
+		set_user_root_attributes = "on_each_login"
+		scopes = [ "ext_profile", "ext_groups" ]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionGoogleAppsUpdate = `
+resource "auth0_connection" "google_apps" {
+	name = "Acceptance-Test-Google-Apps-{{.testName}}"
+	is_domain_connection = false
+	strategy = "google-apps"
+	show_as_button = false
+	options {
+		client_id = ""
+		client_secret = ""
+		domain = "example.com"
+		tenant_domain = "example.com"
+		domain_aliases = [ "example.com", "api.example.com" ]
+		api_enable_users = true
+		set_user_root_attributes = "on_first_login"
 		scopes = [ "ext_profile", "ext_groups" ]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -1572,6 +1662,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
 				),
 			},
 			{
@@ -1590,6 +1681,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_xml", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
 				),
 			},
 		},
@@ -1616,6 +1708,7 @@ resource "auth0_connection" "my_connection" {
 		signature_algorithm = "rsa-sha256"
 		digest_algorithm = "sha256"
 		icon_url = "https://example.com/logo.svg"
+		set_user_root_attributes = "on_each_login"
 		fields_map = jsonencode({
 			"name": ["name", "nameidentifier"]
 			"email": ["emailaddress", "nameidentifier"]
@@ -1686,6 +1779,7 @@ resource "auth0_connection" "my_connection" {
 		signature_algorithm = "rsa-sha256"
 		digest_algorithm = "sha256"
 		entity_id = "example"
+		set_user_root_attributes = "on_first_login"
 		fields_map = jsonencode({
 			"name": ["name"]
 			"email": ["emailaddress", "nameidentifier"]
@@ -1808,7 +1902,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_saml_request", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.digest_algorithm", "sha256"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.icon_url", ""),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.0", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.1", "hair_color"),
@@ -1918,7 +2012,7 @@ EOF
 		signature_algorithm = "rsa-sha256"
 		sign_saml_request = true
 		digest_algorithm = "sha256"
-		set_user_root_attributes = "on_first_login"
+		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
 		idp_initiated {
 			client_id = "client_id"

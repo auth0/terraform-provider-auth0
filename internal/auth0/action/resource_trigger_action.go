@@ -54,7 +54,8 @@ func NewTriggerActionResource() *schema.Resource {
 			},
 			"display_name": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
+				Computed:    true,
 				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.",
 			},
 		},
@@ -91,6 +92,14 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 			},
 			DisplayName: binding.DisplayName,
 		})
+	}
+
+	if displayName == "" {
+		action, err := api.Action.Read(actionID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		displayName = action.GetName()
 	}
 
 	updatedBindings = append(updatedBindings, &management.ActionBinding{
@@ -175,6 +184,10 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 
 	for _, binding := range triggerBindings.Bindings {
 		if binding.Action.GetID() == actionID {
+			err = d.Set("display_name", binding.GetDisplayName())
+			if err != nil {
+				return diag.FromErr(err)
+			}
 			d.SetId(trigger + "::" + actionID)
 			return nil
 		}

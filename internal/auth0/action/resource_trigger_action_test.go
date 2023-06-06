@@ -27,7 +27,6 @@ const testAccCreateTriggerAction = givenAnAction + `
 	resource auth0_trigger_action my_action_post_login {
 		action_id = auth0_action.my_action.id
 		trigger = auth0_action.my_action.supported_triggers[0].id
-		display_name = auth0_action.my_action.name
 	}
 `
 
@@ -65,8 +64,8 @@ func TestAccTriggerAction(t *testing.T) {
 				Config: acctest.ParseTestName(testAccCreateTriggerAction, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "trigger", "post-login"),
-					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "display_name", "Test Action TestAccTriggerAction"),
 					resource.TestCheckResourceAttrSet("auth0_trigger_action.my_action_post_login", "action_id"),
+					resource.TestCheckNoResourceAttr("auth0_trigger_action.my_action_post_login", "display_name"),
 				),
 			},
 			{

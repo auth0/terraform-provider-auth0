@@ -62,7 +62,7 @@ func NewTriggerActionsResource() *schema.Resource {
 						},
 					},
 				},
-				Description: "The actions bound to this trigger",
+				Description: "The list of actions bound to this trigger.",
 			},
 		},
 	}

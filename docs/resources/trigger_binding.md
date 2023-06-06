@@ -63,7 +63,7 @@ resource "auth0_trigger_binding" "login_flow" {
 
 ### Required
 
-- `actions` (Block List, Min: 1) The actions bound to this trigger (see [below for nested schema](#nestedblock--actions))
+- `actions` (Block List, Min: 1) The list of actions bound to this trigger. (see [below for nested schema](#nestedblock--actions))
 - `trigger` (String) The ID of the trigger to bind with.
 
 ### Read-Only
@@ -75,7 +75,7 @@ resource "auth0_trigger_binding" "login_flow" {
 
 Required:
 
-- `display_name` (String) The name of an action.
+- `display_name` (String) The display name of the action within the flow.
 - `id` (String) Action ID.
 
 ## Import

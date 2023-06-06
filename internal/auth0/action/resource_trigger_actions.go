@@ -58,7 +58,7 @@ func NewTriggerActionsResource() *schema.Resource {
 						"display_name": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "The name of an action.",
+							Description: "The display name of the action within the flow.",
 						},
 					},
 				},

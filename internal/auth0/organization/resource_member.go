@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -29,11 +28,13 @@ func NewMemberResource() *schema.Resource {
 			"organization_id": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "The ID of the organization to assign the member to.",
 			},
 			"user_id": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ForceNew:    true,
 				Description: "ID of the user to add as an organization member.",
 			},
 			"roles": {
@@ -54,22 +55,26 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	orgID := d.Get("organization_id").(string)
 
 	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
-
 	if err := api.Organization.AddMembers(orgID, []string{userID}); err != nil {
 		return diag.FromErr(err)
 	}
+	mutex.Unlock(orgID)
 
 	d.SetId(orgID + ":" + userID)
 
-	if err := assignRoles(d, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member: %w", err))
+	if err := assignRoles(d, m); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
+		}
+
+		return diag.FromErr(err)
 	}
 
 	return readOrganizationMember(ctx, d, m)
 }
 
-func assignRoles(d *schema.ResourceData, api *management.Management) error {
+func assignRoles(d *schema.ResourceData, meta interface{}) error {
 	if !d.HasChange("roles") {
 		return nil
 	}
@@ -79,14 +84,14 @@ func assignRoles(d *schema.ResourceData, api *management.Management) error {
 
 	toAdd, toRemove := value.Difference(d, "roles")
 
-	if err := addMemberRoles(orgID, userID, toAdd, api); err != nil {
+	if err := addMemberRoles(meta, orgID, userID, toAdd); err != nil {
 		return err
 	}
 
-	return removeMemberRoles(orgID, userID, toRemove, api)
+	return removeMemberRoles(meta, orgID, userID, toRemove)
 }
 
-func removeMemberRoles(orgID string, userID string, roles []interface{}, api *management.Management) error {
+func removeMemberRoles(meta interface{}, orgID string, userID string, roles []interface{}) error {
 	if len(roles) == 0 {
 		return nil
 	}
@@ -96,19 +101,16 @@ func removeMemberRoles(orgID string, userID string, roles []interface{}, api *ma
 		rolesToRemove = append(rolesToRemove, role.(string))
 	}
 
-	err := api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
-	if err != nil {
-		// Ignore 404 errors as the role may have been deleted prior to un-assigning them from the member.
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-		return err
-	}
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
-	return nil
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
+
+	return api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
 }
 
-func addMemberRoles(orgID string, userID string, roles []interface{}, api *management.Management) error {
+func addMemberRoles(meta interface{}, orgID string, userID string, roles []interface{}) error {
 	if len(roles) == 0 {
 		return nil
 	}
@@ -117,6 +119,12 @@ func addMemberRoles(orgID string, userID string, roles []interface{}, api *manag
 	for _, role := range roles {
 		rolesToAssign = append(rolesToAssign, role.(string))
 	}
+
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
+
+	mutex.Lock(orgID)
+	defer mutex.Unlock(orgID)
 
 	return api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
 }
@@ -147,16 +155,13 @@ func readOrganizationMember(_ context.Context, d *schema.ResourceData, m interfa
 }
 
 func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	mutex := m.(*config.Config).GetMutex()
+	if err := assignRoles(d, m); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			d.SetId("")
+			return nil
+		}
 
-	orgID := d.Get("organization_id").(string)
-
-	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
-
-	if err := assignRoles(d, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign members to organization. %w", err))
+		return diag.FromErr(err)
 	}
 
 	return readOrganizationMember(ctx, d, m)

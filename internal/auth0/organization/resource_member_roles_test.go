@@ -9,49 +9,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccOrganizationMemberRolesCreateWithOneRole = `
-resource "auth0_role" "reader" {
-	name = "Test Reader - {{.testName}}"
-}
-
-resource "auth0_user" "user" {
-	depends_on = [ auth0_role.reader ]
-
-	connection_name = "Username-Password-Authentication"
-
-	email    = "{{.testName}}@auth0.com"
-	password = "MyPass123$"
-}
-
-resource "auth0_organization" "org" {
-	depends_on = [ auth0_user.user ]
-
-	name         = "some-org-{{.testName}}"
-	display_name = "{{.testName}}"
-}
-
-resource "auth0_organization_member" "member" {
-	depends_on = [ auth0_organization.org ]
-
-	organization_id = auth0_organization.org.id
-	user_id         = auth0_user.user.id
-
-	lifecycle {
-		ignore_changes = [ roles ]
-	}
-}
-
-resource "auth0_organization_member_roles" "roles" {
-	depends_on = [ auth0_organization_member.member ]
-
-	organization_id = auth0_organization.org.id
-	user_id         = auth0_user.user.id
-
-	roles = [ auth0_role.reader.id ]
-}
-`
-
-const testAccOrganizationMemberRolesCreateWithTwoRoles = `
+const testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember = `
 resource "auth0_role" "reader" {
 	name = "Test Reader - {{.testName}}"
 }
@@ -88,7 +46,20 @@ resource "auth0_organization_member" "member" {
 		ignore_changes = [ roles ]
 	}
 }
+`
 
+const testAccOrganizationMemberRolesCreateWithOneRole = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
+resource "auth0_organization_member_roles" "roles" {
+	depends_on = [ auth0_organization_member.member ]
+
+	organization_id = auth0_organization.org.id
+	user_id         = auth0_user.user.id
+
+	roles = [ auth0_role.reader.id ]
+}
+`
+
+const testAccOrganizationMemberRolesCreateWithTwoRoles = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
 resource "auth0_organization_member_roles" "roles" {
 	depends_on = [ auth0_organization_member.member ]
 
@@ -99,32 +70,18 @@ resource "auth0_organization_member_roles" "roles" {
 }
 `
 
-const testAccOrganizationMemberRolesCreateWithNoRoles = `
-resource "auth0_user" "user" {
-	connection_name = "Username-Password-Authentication"
-
-	email    = "{{.testName}}@auth0.com"
-	password = "MyPass123$"
-}
-
-resource "auth0_organization" "org" {
-	depends_on = [ auth0_user.user ]
-
-	name         = "some-org-{{.testName}}"
-	display_name = "{{.testName}}"
-}
-
-resource "auth0_organization_member" "member" {
-	depends_on = [ auth0_organization.org ]
+const testAccOrganizationMemberRolesCreateWithOneRoleRemoved = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
+resource "auth0_organization_member_roles" "roles" {
+	depends_on = [ auth0_organization_member.member ]
 
 	organization_id = auth0_organization.org.id
 	user_id         = auth0_user.user.id
 
-	lifecycle {
-		ignore_changes = [ roles ]
-	}
+	roles = [ auth0_role.writer.id ]
 }
+`
 
+const testAccOrganizationMemberRolesCreateWithNoRoles = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
 resource "auth0_organization_member_roles" "roles" {
 	depends_on = [ auth0_organization_member.member ]
 
@@ -153,7 +110,7 @@ func TestAccOrganizationMemberRoles(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMemberRolesCreateWithOneRole, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberRolesCreateWithOneRoleRemoved, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member_roles.roles", "roles.#", "1"),
 				),

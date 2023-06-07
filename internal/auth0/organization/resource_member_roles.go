@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -35,7 +34,7 @@ func NewMemberRolesResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "The ID of the user that is an organization member.",
+				Description: "The user ID of the organization member.",
 			},
 			"roles": {
 				Type: schema.TypeSet,
@@ -50,20 +49,19 @@ func NewMemberRolesResource() *schema.Resource {
 }
 
 func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
+	if err := assignRoles(data, meta); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+
+		return diag.FromErr(err)
+	}
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
-
 	data.SetId(organizationID + ":" + userID)
-
-	if err := assignRoles(data, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign roles to organization member: %w", err))
-	}
 
 	return readOrganizationMemberRoles(ctx, data, meta)
 }
@@ -93,16 +91,13 @@ func readOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, m
 }
 
 func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
+	if err := assignRoles(data, meta); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
 
-	organizationID := data.Get("organization_id").(string)
-
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
-
-	if err := assignRoles(data, api); err != nil {
-		return diag.FromErr(fmt.Errorf("failed to assign members to organization: %w", err))
+		return diag.FromErr(err)
 	}
 
 	return readOrganizationMember(ctx, data, meta)

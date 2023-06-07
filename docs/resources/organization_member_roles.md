@@ -49,7 +49,7 @@ resource "auth0_organization_member_roles" "my_org_member_roles" {
 
 - `organization_id` (String) The ID of the organization.
 - `roles` (Set of String) The role ID(s) to assign to the organization member.
-- `user_id` (String) The ID of the user that is an organization member.
+- `user_id` (String) The user ID of the organization member.
 
 ### Read-Only
 

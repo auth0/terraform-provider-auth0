@@ -55,13 +55,14 @@ func NewTriggerActionResource() *schema.Resource {
 			"display_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.",
 			},
 		},
 	}
 }
 
-func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	trigger := d.Get("trigger").(string)
@@ -119,10 +120,10 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 	}
 
 	d.SetId(trigger + "::" + actionID)
-	return nil
+	return readTriggerAction(ctx, d, m)
 }
 
-func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	trigger := d.Get("trigger").(string)
@@ -166,7 +167,7 @@ func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		return diag.FromErr(err)
 	}
 
-	return nil
+	return readTriggerAction(ctx, d, m)
 }
 
 func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -182,10 +183,10 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 
 	for _, binding := range triggerBindings.Bindings {
 		if binding.Action.GetID() == actionID {
-			// Err = d.Set("display_name", binding.GetDisplayName())
-			// if err != nil {
-			// 	return diag.FromErr(err)
-			// }.
+			err = d.Set("display_name", binding.GetDisplayName())
+			if err != nil {
+				return diag.FromErr(err)
+			}
 			return nil
 		}
 	}

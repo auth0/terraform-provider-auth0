@@ -65,7 +65,7 @@ func TestAccTriggerAction(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "trigger", "post-login"),
 					resource.TestCheckResourceAttrSet("auth0_trigger_action.my_action_post_login", "action_id"),
-					resource.TestCheckNoResourceAttr("auth0_trigger_action.my_action_post_login", "display_name"),
+					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "display_name", "Test Action TestAccTriggerAction"),
 				),
 			},
 			{

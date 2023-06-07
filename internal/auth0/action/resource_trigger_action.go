@@ -94,7 +94,7 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		})
 	}
 
-	if displayName == "" {
+	if d.GetRawConfig().GetAttr("display_name").IsNull() {
 		action, err := api.Action.Read(actionID)
 		if err != nil {
 			return diag.FromErr(err)

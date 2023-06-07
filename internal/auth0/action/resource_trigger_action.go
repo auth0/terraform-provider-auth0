@@ -96,7 +96,12 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 
 	if displayName == "" {
 		action, err := api.Action.Read(actionID)
+
 		if err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				d.SetId("")
+				return nil
+			}
 			return diag.FromErr(err)
 		}
 		displayName = action.GetName()

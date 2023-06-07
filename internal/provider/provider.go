@@ -111,6 +111,8 @@ func New() *schema.Provider {
 			"auth0_organization_connection":    organization.NewConnectionResource(),
 			"auth0_organization_connections":   organization.NewConnectionsResource(),
 			"auth0_organization_member":        organization.NewMemberResource(),
+			"auth0_organization_member_roles":  organization.NewMemberRolesResource(),
+			"auth0_organization_members":       organization.NewMembersResource(),
 			"auth0_prompt":                     prompt.NewResource(),
 			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
 			"auth0_resource_server":            resourceserver.NewResource(),

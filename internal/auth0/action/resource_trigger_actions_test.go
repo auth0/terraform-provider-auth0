@@ -10,7 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccTriggerBindingAction = `
+const testAccTriggerActionsAction = `
 resource auth0_action action_foo {
 	name = "Test Trigger Binding Foo {{.testName}}"
 	supported_triggers {
@@ -41,8 +41,8 @@ resource auth0_action action_bar {
 }
 `
 
-const testAccTriggerBindingConfigCreate = testAccTriggerBindingAction + `
-resource auth0_trigger_binding login_flow {
+const testAccTriggerActionsConfigCreate = testAccTriggerActionsAction + `
+resource auth0_trigger_actions login_flow {
 	trigger = "post-login"
 	actions {
 		id = auth0_action.action_foo.id
@@ -51,8 +51,8 @@ resource auth0_trigger_binding login_flow {
 }
 `
 
-const testAccTriggerBindingConfigUpdate = testAccTriggerBindingAction + `
-resource auth0_trigger_binding login_flow {
+const testAccTriggerActionsConfigUpdate = testAccTriggerActionsAction + `
+resource auth0_trigger_actions login_flow {
 	trigger = "post-login"
 	actions {
 		id = auth0_action.action_foo.id
@@ -65,8 +65,8 @@ resource auth0_trigger_binding login_flow {
 }
 `
 
-const testAccTriggerBindingConfigUpdateAgain = testAccTriggerBindingAction + `
-resource auth0_trigger_binding login_flow {
+const testAccTriggerActionsConfigUpdateAgain = testAccTriggerActionsAction + `
+resource auth0_trigger_actions login_flow {
 	trigger = "post-login"
 	actions {
 		id = auth0_action.action_bar.id # <----- change the order of the actions
@@ -79,8 +79,8 @@ resource auth0_trigger_binding login_flow {
 }
 `
 
-const testAccTriggerBindingConfigRemoveAction = testAccTriggerBindingAction + `
-resource auth0_trigger_binding login_flow {
+const testAccTriggerActionsConfigRemoveAction = testAccTriggerActionsAction + `
+resource auth0_trigger_actions login_flow {
 	trigger = "post-login"
 	actions {
 		id = auth0_action.action_bar.id
@@ -89,52 +89,52 @@ resource auth0_trigger_binding login_flow {
 }
 `
 
-func TestAccTriggerBinding(t *testing.T) {
+func TestAccTriggerActions(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccTriggerBindingConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerActionsConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccTriggerBindingConfigUpdate, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerActionsConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccTriggerBindingConfigUpdateAgain, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerActionsConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "2"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "2"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.1.display_name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccTriggerBindingConfigRemoveAction, t.Name()),
+				Config: acctest.ParseTestName(testAccTriggerActionsConfigRemoveAction, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.action_foo", "name", fmt.Sprintf("Test Trigger Binding Foo %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.action_bar", "name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.login_flow", "actions.0.display_name", fmt.Sprintf("Test Trigger Binding Bar %s", t.Name())),
 				),
 			},
 		},
 	})
 }
 
-func TestAccTriggerBinding_Import(t *testing.T) {
+func TestAccTriggerActions_Import(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// Only run with recorded HTTP requests, as it is required to import an already
 		// existing trigger binding that is created outside the scope of terraform.
@@ -145,7 +145,7 @@ func TestAccTriggerBinding_Import(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: `
-					resource "auth0_trigger_binding" "test_flow"{
+					resource "auth0_trigger_actions" "test_flow"{
 						trigger = "post-user-registration"
 						actions {
 							id = "c2d5b219-4390-4bea-8a1f-c61672b54db3"
@@ -153,14 +153,14 @@ func TestAccTriggerBinding_Import(t *testing.T) {
 						}
 					}
 				`,
-				ResourceName:       "auth0_trigger_binding.test_flow",
+				ResourceName:       "auth0_trigger_actions.test_flow",
 				ImportState:        true,
 				ImportStateId:      "post-user-registration",
 				ImportStatePersist: true,
 			},
 			{
 				Config: `
-					resource "auth0_trigger_binding" "test_flow"{
+					resource "auth0_trigger_actions" "test_flow"{
 						trigger = "post-user-registration"
 						actions {
 							id = "c2d5b219-4390-4bea-8a1f-c61672b54db3"
@@ -169,10 +169,10 @@ func TestAccTriggerBinding_Import(t *testing.T) {
 					}
 				`,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "id", "post-user-registration"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "trigger", "post-user-registration"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "actions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_trigger_binding.test_flow", "actions.0.display_name", "Test"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.test_flow", "id", "post-user-registration"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.test_flow", "trigger", "post-user-registration"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.test_flow", "actions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_trigger_actions.test_flow", "actions.0.display_name", "Test"),
 				),
 			},
 		},

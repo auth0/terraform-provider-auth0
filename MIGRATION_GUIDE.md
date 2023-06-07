@@ -1,5 +1,55 @@
 # Migration Guide
 
+## Upgrading from v0.48.0 → v0.49.0
+
+There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
+automated workflows before upgrading.
+
+### Deprecations
+
+- [Trigger Binding Renaming](#trigger-binding-renaming)
+
+#### Trigger Binding Renaming
+
+The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions` for clarity and consistency with the `auth0_trigger_action` (1:1) resource. To migrate, simply rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions`.
+
+<table>
+<tr>
+<th>Before (v0.48.0)</th>
+<th>After (v0.49.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource auth0_trigger_binding login_flow {
+	trigger = "post-login"
+
+	actions {
+		id = auth0_action.my_action.id
+		display_name = auth0_action.my_action.name
+	}
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource auth0_trigger_actions login_flow {
+	trigger = "post-login"
+
+	actions {
+		id = auth0_action.my_action.id
+		display_name = auth0_action.my_action.name
+	}
+}
+```
+
+</td>
+</tr>
+</table>
+
 ## Upgrading from v0.47.0 → v0.48.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential

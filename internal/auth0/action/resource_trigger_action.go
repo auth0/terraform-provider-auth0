@@ -191,7 +191,6 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 			if err != nil {
 				return diag.FromErr(err)
 			}
-			d.SetId(trigger + "::" + actionID)
 			return nil
 		}
 	}

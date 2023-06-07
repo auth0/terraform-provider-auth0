@@ -138,7 +138,6 @@ func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 	var updatedBindings []*management.ActionBinding
 	for _, binding := range currentBindings.Bindings {
 		if binding.Action.GetID() == actionID {
-			d.SetId(trigger + "::" + actionID)
 			updatedBindings = append(updatedBindings, &management.ActionBinding{
 				Ref: &management.ActionBindingReference{
 					Type:  auth0.String("action_id"),
@@ -147,15 +146,15 @@ func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 				DisplayName: &displayName,
 			})
 			found = true
-		} else {
-			updatedBindings = append(updatedBindings, &management.ActionBinding{
-				Ref: &management.ActionBindingReference{
-					Type:  auth0.String("action_id"),
-					Value: binding.Action.ID,
-				},
-				DisplayName: binding.DisplayName,
-			})
+			continue
 		}
+		updatedBindings = append(updatedBindings, &management.ActionBinding{
+			Ref: &management.ActionBindingReference{
+				Type:  auth0.String("action_id"),
+				Value: binding.Action.ID,
+			},
+			DisplayName: binding.DisplayName,
+		})
 	}
 
 	if !found {
@@ -167,7 +166,6 @@ func updateTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		return diag.FromErr(err)
 	}
 
-	d.SetId(trigger + "::" + actionID)
 	return nil
 }
 

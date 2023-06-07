@@ -43,6 +43,10 @@ resource "auth0_trigger_action" "post_login_alert_action" {
 - `action_id` (String) The ID of the action to bind to the trigger.
 - `trigger` (String) The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `iga-approval`, `iga-certification`, `iga-fulfillment-assignment`, `iga-fulfillment-execution`,
 
+### Optional
+
+- `display_name` (String) The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.
+
 ### Read-Only
 
 - `id` (String) The ID of this resource.

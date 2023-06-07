@@ -31,7 +31,7 @@ func NewMembersResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "The ID of the organization to assign the member to.",
+				Description: "The ID of the organization to assign the members to.",
 			},
 			"members": {
 				Type: schema.TypeSet,
@@ -109,7 +109,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	organizationID := data.Get("organization_id").(string)
+	organizationID := data.Id()
 
 	mutex.Lock(organizationID)
 	defer mutex.Unlock(organizationID)
@@ -139,6 +139,11 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 	if len(addMembers) > 0 {
 		if err := api.Organization.AddMembers(organizationID, addMembers); err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
 			return diag.FromErr(err)
 		}
 	}
@@ -150,15 +155,18 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	organizationID := data.Get("organization_id").(string)
-	membersToRemove := value.Strings(data.GetRawState().GetAttr("members"))
+	organizationID := data.Id()
+	membersToRemove := *value.Strings(data.GetRawState().GetAttr("members"))
+
+	if len(membersToRemove) == 0 {
+		return nil
+	}
 
 	mutex.Lock(organizationID)
 	defer mutex.Unlock(organizationID)
 
-	if err := api.Organization.DeleteMember(organizationID, *membersToRemove); err != nil {
+	if err := api.Organization.DeleteMember(organizationID, membersToRemove); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
 

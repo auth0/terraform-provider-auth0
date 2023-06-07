@@ -43,7 +43,7 @@ resource "auth0_organization_members" "my_members" {
 	depends_on = [ auth0_organization_member.org_member_1 ]
 
 	organization_id = auth0_organization.my_org.id
-	members = [ auth0_user.user_2.id ]
+	members         = [ auth0_user.user_2.id ]
 }
 `
 
@@ -65,7 +65,7 @@ resource "auth0_organization_members" "my_members" {
 	depends_on = [ auth0_organization.my_org ]
 
 	organization_id = auth0_organization.my_org.id
-	members = [ auth0_user.user_1.id ]
+	members         = [ auth0_user.user_1.id ]
 }
 `
 
@@ -95,7 +95,7 @@ resource "auth0_organization_members" "my_members" {
 	depends_on = [ auth0_organization.my_org ]
 
 	organization_id = auth0_organization.my_org.id
-	members = [ auth0_user.user_1.id, auth0_user.user_2.id ]
+	members         = [ auth0_user.user_1.id, auth0_user.user_2.id ]
 }
 `
 
@@ -117,7 +117,21 @@ resource "auth0_organization_members" "my_members" {
 	depends_on = [ auth0_organization.my_org ]
 
 	organization_id = auth0_organization.my_org.id
-	members = [ auth0_user.user_2.id ]
+	members         = [ auth0_user.user_2.id ]
+}
+`
+
+const testAccOrganizationMembersRemoveAllMembers = `
+resource "auth0_organization" "my_org" {
+	name         = "some-org-{{.testName}}"
+	display_name = "{{.testName}}"
+}
+
+resource "auth0_organization_members" "my_members" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+	members         = []
 }
 `
 
@@ -146,6 +160,12 @@ func TestAccOrganizationMembers(t *testing.T) {
 				Config: acctest.ParseTestName(testAccOrganizationMembersRemoveOneMember, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_members.my_members", "members.#", "1"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMembersRemoveAllMembers, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization_members.my_members", "members.#", "0"),
 				),
 			},
 		},

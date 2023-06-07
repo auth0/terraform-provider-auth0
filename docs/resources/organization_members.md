@@ -15,19 +15,19 @@ This resource is used to manage members of an organization.
 ```terraform
 resource "auth0_user" "user_1" {
   connection_name = "Username-Password-Authentication"
-  email           = "{{.testName}}1@auth0.com"
+  email           = "myuser1@auth0.com"
   password        = "MyPass123$"
 }
 
 resource "auth0_user" "user_2" {
   connection_name = "Username-Password-Authentication"
-  email           = "{{.testName}}2@auth0.com"
+  email           = "myuser2@auth0.com"
   password        = "MyPass123$"
 }
 
 resource "auth0_organization" "my_org" {
-  name         = "some-org-{{.testName}}"
-  display_name = "{{.testName}}"
+  name         = "some-org"
+  display_name = "Some Organization"
 }
 
 resource "auth0_organization_members" "my_members" {
@@ -42,7 +42,7 @@ resource "auth0_organization_members" "my_members" {
 ### Required
 
 - `members` (Set of String) Add user ID(s) directly from the tenant to become members of the organization.
-- `organization_id` (String) The ID of the organization to assign the member to.
+- `organization_id` (String) The ID of the organization to assign the members to.
 
 ### Read-Only
 

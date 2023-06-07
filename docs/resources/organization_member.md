@@ -8,6 +8,8 @@ description: |-
 
 This resource is used to manage the assignment of members and their roles within an organization.
 
+!> To prevent issues, avoid using this resource together with the `auth0_organization_members` resource.
+
 ## Example Usage
 
 ```terraform

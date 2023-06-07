@@ -204,16 +204,20 @@ func flattenConnectionOptionsGoogleApps(
 	options *management.ConnectionOptionsGoogleApps,
 ) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
-		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
-		"domain":                   options.GetDomain(),
-		"tenant_domain":            options.GetTenantDomain(),
-		"api_enable_users":         options.GetEnableUsersAPI(),
-		"scopes":                   options.Scopes(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"icon_url":                 options.GetLogoURL(),
+		"client_id":            options.GetClientID(),
+		"client_secret":        options.GetClientSecret(),
+		"domain":               options.GetDomain(),
+		"tenant_domain":        options.GetTenantDomain(),
+		"api_enable_users":     options.GetEnableUsersAPI(),
+		"scopes":               options.Scopes(),
+		"non_persistent_attrs": options.GetNonPersistentAttrs(),
+		"domain_aliases":       options.GetDomainAliases(),
+		"icon_url":             options.GetLogoURL(),
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
@@ -470,16 +474,20 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 
 func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"icon_url":                 options.GetLogoURL(),
-		"ips":                      options.GetIPs(),
-		"use_cert_auth":            options.GetCertAuth(),
-		"use_kerberos":             options.GetKerberos(),
-		"disable_cache":            options.GetDisableCache(),
-		"brute_force_protection":   options.GetBruteForceProtection(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"tenant_domain":          options.GetTenantDomain(),
+		"domain_aliases":         options.GetDomainAliases(),
+		"icon_url":               options.GetLogoURL(),
+		"ips":                    options.GetIPs(),
+		"use_cert_auth":          options.GetCertAuth(),
+		"use_kerberos":           options.GetKerberos(),
+		"disable_cache":          options.GetDisableCache(),
+		"brute_force_protection": options.GetBruteForceProtection(),
+		"non_persistent_attrs":   options.GetNonPersistentAttrs(),
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
@@ -535,8 +543,12 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (in
 		"sign_in_endpoint":                       options.GetSignInEndpoint(),
 		"api_enable_users":                       options.GetEnableUsersAPI(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
-		"set_user_root_attributes":               options.GetSetUserAttributes(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
@@ -553,25 +565,29 @@ func flattenConnectionOptionsSAML(
 	options *management.ConnectionOptionsSAML,
 ) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
-		"signing_cert":             options.GetSigningCert(),
-		"protocol_binding":         options.GetProtocolBinding(),
-		"debug":                    options.GetDebug(),
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"sign_in_endpoint":         options.GetSignInEndpoint(),
-		"sign_out_endpoint":        options.GetSignOutEndpoint(),
-		"disable_sign_out":         options.GetDisableSignOut(),
-		"signature_algorithm":      options.GetSignatureAlgorithm(),
-		"digest_algorithm":         options.GetDigestAglorithm(),
-		"sign_saml_request":        options.GetSignSAMLRequest(),
-		"icon_url":                 options.GetLogoURL(),
-		"request_template":         options.GetRequestTemplate(),
-		"user_id_attribute":        options.GetUserIDAttribute(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"entity_id":                options.GetEntityID(),
-		"metadata_url":             options.GetMetadataURL(),
-		"metadata_xml":             d.Get("options.0.metadata_xml").(string), // Does not get read back.
+		"signing_cert":         options.GetSigningCert(),
+		"protocol_binding":     options.GetProtocolBinding(),
+		"debug":                options.GetDebug(),
+		"tenant_domain":        options.GetTenantDomain(),
+		"domain_aliases":       options.GetDomainAliases(),
+		"sign_in_endpoint":     options.GetSignInEndpoint(),
+		"sign_out_endpoint":    options.GetSignOutEndpoint(),
+		"disable_sign_out":     options.GetDisableSignOut(),
+		"signature_algorithm":  options.GetSignatureAlgorithm(),
+		"digest_algorithm":     options.GetDigestAglorithm(),
+		"sign_saml_request":    options.GetSignSAMLRequest(),
+		"icon_url":             options.GetLogoURL(),
+		"request_template":     options.GetRequestTemplate(),
+		"user_id_attribute":    options.GetUserIDAttribute(),
+		"non_persistent_attrs": options.GetNonPersistentAttrs(),
+		"entity_id":            options.GetEntityID(),
+		"metadata_url":         options.GetMetadataURL(),
+		"metadata_xml":         d.Get("options.0.metadata_xml").(string), // Does not get read back.
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	if options.IdpInitiated != nil {
@@ -617,17 +633,21 @@ func flattenConnectionOptionsPingFederate(
 	}
 
 	m := map[string]interface{}{
-		"signing_cert":             signingCert,
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"sign_in_endpoint":         options.GetSignInEndpoint(),
-		"signature_algorithm":      options.GetSignatureAlgorithm(),
-		"digest_algorithm":         options.GetDigestAlgorithm(),
-		"sign_saml_request":        options.GetSignSAMLRequest(),
-		"ping_federate_base_url":   options.GetPingFederateBaseURL(),
-		"icon_url":                 options.GetLogoURL(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"signing_cert":           signingCert,
+		"tenant_domain":          options.GetTenantDomain(),
+		"domain_aliases":         options.GetDomainAliases(),
+		"sign_in_endpoint":       options.GetSignInEndpoint(),
+		"signature_algorithm":    options.GetSignatureAlgorithm(),
+		"digest_algorithm":       options.GetDigestAlgorithm(),
+		"sign_saml_request":      options.GetSignSAMLRequest(),
+		"ping_federate_base_url": options.GetPingFederateBaseURL(),
+		"icon_url":               options.GetLogoURL(),
+		"non_persistent_attrs":   options.GetNonPersistentAttrs(),
+	}
+
+	m["set_user_root_attributes"] = options.GetSetUserAttributes()
+	if options.GetSetUserAttributes() == "" {
+		m["set_user_root_attributes"] = "on_each_login"
 	}
 
 	m["idp_initiated"] = []interface{}{

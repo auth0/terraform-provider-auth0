@@ -21,6 +21,7 @@ func NewTriggerActionResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createTriggerAction,
 		ReadContext:   readTriggerAction,
+		UpdateContext: updateTriggerAction,
 		DeleteContext: deleteTriggerAction,
 		Importer: &schema.ResourceImporter{
 			StateContext: importTriggerAction,
@@ -51,15 +52,22 @@ func NewTriggerActionResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "The ID of the action to bind to the trigger.",
 			},
+			"display_name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger. Defaults to action name when not provided.",
+			},
 		},
 	}
 }
 
-func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	trigger := d.Get("trigger").(string)
 	actionID := d.Get("action_id").(string)
+	displayName := d.Get("display_name").(string)
 
 	currentBindings, err := api.Action.Bindings(trigger)
 	if err != nil {
@@ -86,13 +94,17 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		})
 	}
 
-	action, err := api.Action.Read(actionID)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
+	if displayName == "" {
+		action, err := api.Action.Read(actionID)
+
+		if err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				d.SetId("")
+				return nil
+			}
+			return diag.FromErr(err)
 		}
-		return diag.FromErr(err)
+		displayName = action.GetName()
 	}
 
 	updatedBindings = append(updatedBindings, &management.ActionBinding{
@@ -100,7 +112,7 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 			Type:  auth0.String("action_id"),
 			Value: &actionID,
 		},
-		DisplayName: action.Name,
+		DisplayName: &displayName,
 	})
 
 	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
@@ -108,7 +120,54 @@ func createTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 	}
 
 	d.SetId(trigger + "::" + actionID)
-	return nil
+	return readTriggerAction(ctx, d, m)
+}
+
+func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*config.Config).GetAPI()
+
+	trigger := d.Get("trigger").(string)
+	actionID := d.Get("action_id").(string)
+	displayName := d.Get("display_name").(string)
+
+	currentBindings, err := api.Action.Bindings(trigger)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	found := false
+	var updatedBindings []*management.ActionBinding
+	for _, binding := range currentBindings.Bindings {
+		if binding.Action.GetID() == actionID {
+			updatedBindings = append(updatedBindings, &management.ActionBinding{
+				Ref: &management.ActionBindingReference{
+					Type:  auth0.String("action_id"),
+					Value: &actionID,
+				},
+				DisplayName: &displayName,
+			})
+			found = true
+			continue
+		}
+		updatedBindings = append(updatedBindings, &management.ActionBinding{
+			Ref: &management.ActionBindingReference{
+				Type:  auth0.String("action_id"),
+				Value: binding.Action.ID,
+			},
+			DisplayName: binding.DisplayName,
+		})
+	}
+
+	if !found {
+		d.SetId("")
+		return nil
+	}
+
+	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
+		return diag.FromErr(err)
+	}
+
+	return readTriggerAction(ctx, d, m)
 }
 
 func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -124,7 +183,10 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 
 	for _, binding := range triggerBindings.Bindings {
 		if binding.Action.GetID() == actionID {
-			d.SetId(trigger + "::" + actionID)
+			err = d.Set("display_name", binding.GetDisplayName())
+			if err != nil {
+				return diag.FromErr(err)
+			}
 			return nil
 		}
 	}

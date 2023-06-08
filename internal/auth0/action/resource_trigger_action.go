@@ -56,7 +56,7 @@ func NewTriggerActionResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.",
+				Description: "The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger. Defaults to action name when not provided.",
 			},
 		},
 	}

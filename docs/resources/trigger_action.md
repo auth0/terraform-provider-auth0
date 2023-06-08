@@ -45,7 +45,7 @@ resource "auth0_trigger_action" "post_login_alert_action" {
 
 ### Optional
 
-- `display_name` (String) The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger.
+- `display_name` (String) The name for this action within the trigger. This can be useful for distinguishing between multiple instances of the same action bound to a trigger. Defaults to action name when not provided.
 
 ### Read-Only
 

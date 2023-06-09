@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewScopeResource will return a new auth0_connection_client resource.
@@ -41,7 +40,7 @@ func NewScopeResource() *schema.Resource {
 		ReadContext:   readResourceServerScope,
 		DeleteContext: deleteResourceServerScope,
 		Importer: &schema.ResourceImporter{
-			StateContext: importResourceServerScope,
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "resource_server_identifier", "scope"),
 		},
 		Description: "With this resource, you can manage scopes (permissions) associated with a resource server (API).",
 	}
@@ -207,31 +206,4 @@ func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, met
 
 	data.SetId("")
 	return nil
-}
-
-func importResourceServerScope(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, fmt.Errorf("ID cannot be empty")
-	}
-
-	if !strings.Contains(rawID, "::") {
-		return nil, fmt.Errorf("ID must be formatted as <resourceServerIdentifier>::<scope>")
-	}
-
-	idPair := strings.Split(rawID, "::")
-	if len(idPair) != 2 {
-		return nil, fmt.Errorf("ID must be formatted as <resourceServerIdentifier>::<scope>")
-	}
-
-	result := multierror.Append(
-		data.Set("resource_server_identifier", idPair[0]),
-		data.Set("scope", idPair[1]),
-	)
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

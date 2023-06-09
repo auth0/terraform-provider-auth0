@@ -9,16 +9,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-const separator = ":"
+const (
+	// SeparatorColon used for imports that use ":".
+	SeparatorColon = ":"
 
-var (
-	errEmptyID         = fmt.Errorf("ID cannot be empty")
-	errInvalidIDFormat = "ID must be formatted as <%s>:<%s>"
+	// SeparatorDoubleColon used for imports that use "::".
+	SeparatorDoubleColon = "::"
 )
 
-// ImportResourcePairID deconstructs the given ID when terraform
-// import runs, so the 2 pairs can be set within terraform state.
-func ImportResourcePairID(resourceAID, resourceBID string) schema.StateContextFunc {
+var errEmptyID = fmt.Errorf("ID cannot be empty")
+
+// ImportResourceGroupID deconstructs the given ID when terraform import
+// runs, so the attribute groups can be set within the terraform state.
+func ImportResourceGroupID(separator string, resourceGroup ...string) schema.StateContextFunc {
 	return func(_ context.Context, data *schema.ResourceData, _ interface{}) ([]*schema.ResourceData, error) {
 		givenRawID := data.Id()
 		if givenRawID == "" {
@@ -26,19 +29,28 @@ func ImportResourcePairID(resourceAID, resourceBID string) schema.StateContextFu
 		}
 
 		if !strings.Contains(givenRawID, separator) {
-			return nil, fmt.Errorf(errInvalidIDFormat, resourceAID, resourceBID)
+			return nil, errInvalidID(separator, resourceGroup...)
 		}
 
-		idPair := strings.Split(givenRawID, separator)
-		if len(idPair) != 2 {
-			return nil, fmt.Errorf(errInvalidIDFormat, resourceAID, resourceBID)
+		idGroup := strings.Split(givenRawID, separator)
+		if len(idGroup) != len(resourceGroup) {
+			return nil, errInvalidID(separator, resourceGroup...)
 		}
 
-		result := multierror.Append(
-			data.Set(resourceAID, idPair[0]),
-			data.Set(resourceBID, idPair[1]),
-		)
+		var result *multierror.Error
+		for index, attribute := range resourceGroup {
+			result = multierror.Append(result, data.Set(attribute, idGroup[index]))
+		}
 
 		return []*schema.ResourceData{data}, result.ErrorOrNil()
 	}
+}
+
+func errInvalidID(separator string, resourceGroup ...string) error {
+	var formattedErrorMessage []string
+	for _, s := range resourceGroup {
+		formattedErrorMessage = append(formattedErrorMessage, "<"+s+">")
+	}
+
+	return fmt.Errorf("ID must be formatted as %s", strings.Join(formattedErrorMessage, separator))
 }

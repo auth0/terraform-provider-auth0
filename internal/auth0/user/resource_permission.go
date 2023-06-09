@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -12,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewPermissionResource will return a new auth0_connection_client resource.
@@ -51,7 +51,7 @@ func NewPermissionResource() *schema.Resource {
 		ReadContext:   readUserPermission,
 		DeleteContext: deleteUserPermission,
 		Importer: &schema.ResourceImporter{
-			StateContext: importUserPermission,
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "user_id", "resource_server_identifier", "permission"),
 		},
 		Description: "With this resource, you can manage user permissions.",
 	}
@@ -141,32 +141,4 @@ func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta int
 
 	data.SetId("")
 	return nil
-}
-
-func importUserPermission(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, fmt.Errorf("ID cannot be empty")
-	}
-
-	if !strings.Contains(rawID, "::") {
-		return nil, fmt.Errorf("ID must be formatted as <userID>::<resourceServerIdentifier>::<permission>")
-	}
-
-	idPair := strings.Split(rawID, "::")
-	if len(idPair) != 3 {
-		return nil, fmt.Errorf("ID must be formatted as <userID>::<resourceServerIdentifier>::<permission>")
-	}
-
-	result := multierror.Append(
-		data.Set("user_id", idPair[0]),
-		data.Set("resource_server_identifier", idPair[1]),
-		data.Set("permission", idPair[2]),
-	)
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

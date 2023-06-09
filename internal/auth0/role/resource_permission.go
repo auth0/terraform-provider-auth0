@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -12,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewPermissionResource will return a new auth0_role_permission resource.
@@ -51,7 +51,7 @@ func NewPermissionResource() *schema.Resource {
 		ReadContext:   readRolePermission,
 		DeleteContext: deleteRolePermission,
 		Importer: &schema.ResourceImporter{
-			StateContext: importRolePermission,
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "role_id", "resource_server_identifier", "permission"),
 		},
 		Description: "With this resource, you can manage role permissions (1-1).",
 	}
@@ -141,32 +141,4 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 
 	data.SetId("")
 	return nil
-}
-
-func importRolePermission(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, fmt.Errorf("ID cannot be empty")
-	}
-
-	if !strings.Contains(rawID, "::") {
-		return nil, fmt.Errorf("ID must be formatted as <roleID>::<resourceServerIdentifier>::<permission>")
-	}
-
-	idPair := strings.Split(rawID, "::")
-	if len(idPair) != 3 {
-		return nil, fmt.Errorf("ID must be formatted as <roleID>::<resourceServerIdentifier>::<permission>")
-	}
-
-	result := multierror.Append(
-		data.Set("role_id", idPair[0]),
-		data.Set("resource_server_identifier", idPair[1]),
-		data.Set("permission", idPair[2]),
-	)
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

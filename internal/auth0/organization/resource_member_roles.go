@@ -21,7 +21,7 @@ func NewMemberRolesResource() *schema.Resource {
 		UpdateContext: updateOrganizationMemberRoles,
 		DeleteContext: deleteOrganizationMemberRoles,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourcePairID("organization_id", "user_id"),
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "organization_id", "user_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {

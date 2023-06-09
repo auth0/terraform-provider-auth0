@@ -153,8 +153,10 @@ func deleteResourceServerScopes(_ context.Context, data *schema.ResourceData, me
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Lock(data.Id())
-	defer mutex.Unlock(data.Id())
+	resourceServerIdentifier := data.Id()
+
+	mutex.Lock(resourceServerIdentifier)
+	defer mutex.Unlock(resourceServerIdentifier)
 
 	resourceServer := &management.ResourceServer{
 		Scopes: &[]management.ResourceServerScope{},

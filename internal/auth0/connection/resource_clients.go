@@ -129,8 +129,9 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Lock(data.Id())
-	defer mutex.Unlock(data.Id())
+	connectionID := data.Id()
+	mutex.Lock(connectionID)
+	defer mutex.Unlock(connectionID)
 
 	if err := api.Connection.Update(
 		data.Id(),
@@ -151,8 +152,9 @@ func deleteConnectionClients(_ context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Lock(data.Id())
-	defer mutex.Unlock(data.Id())
+	connectionID := data.Id()
+	mutex.Lock(connectionID)
+	defer mutex.Unlock(connectionID)
 
 	enabledClients := make([]string, 0)
 

@@ -1,14 +1,12 @@
 ---
-page_title: "Resource: auth0_trigger_binding"
+page_title: "Resource: auth0_trigger_actions"
 description: |-
   With this resource, you can bind actions to a trigger. Once actions are created and deployed, they can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.
 ---
 
-# Resource: auth0_trigger_binding
+# Resource: auth0_trigger_actions
 
 With this resource, you can bind actions to a trigger. Once actions are created and deployed, they can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.
-
-!> This resource has been deprecated in favor of the `auth0_trigger_actions` resource.
 
 ## Example Usage
 
@@ -43,7 +41,7 @@ resource "auth0_action" "action_bar" {
   }
 }
 
-resource "auth0_trigger_binding" "login_flow" {
+resource "auth0_trigger_actions" "login_flow" {
   trigger = "post-login"
 
   actions {
@@ -86,5 +84,5 @@ Import is supported using the following syntax:
 # This resource can be imported using the bindings trigger ID.
 #
 # Example:
-terraform import auth0_trigger_binding.example "post-login"
+terraform import auth0_trigger_actions.example "post-login"
 ```

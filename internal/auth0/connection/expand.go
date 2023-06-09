@@ -331,10 +331,14 @@ func expandConnectionOptionsGoogleApps(
 		Domain:             value.String(config.GetAttr("domain")),
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
-		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	expandConnectionOptionsScopes(d, options)
@@ -555,9 +559,13 @@ func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsA
 		CertAuth:             value.Bool(config.GetAttr("use_cert_auth")),
 		Kerberos:             value.Bool(config.GetAttr("use_kerberos")),
 		DisableCache:         value.Bool(config.GetAttr("disable_cache")),
-		SetUserAttributes:    value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
 		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	var err error
@@ -673,11 +681,15 @@ func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOption
 		RequestTemplate:    value.String(config.GetAttr("request_template")),
 		UserIDAttribute:    value.String(config.GetAttr("user_id_attribute")),
 		LogoURL:            value.String(config.GetAttr("icon_url")),
-		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 		EntityID:           value.String(config.GetAttr("entity_id")),
 		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
 		MetadataURL:        value.String(config.GetAttr("metadata_url")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
@@ -720,8 +732,12 @@ func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOption
 		SignInEndpoint:     value.String(config.GetAttr("sign_in_endpoint")),
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
 		TrustEmailVerified: value.String(config.GetAttr("should_trust_email_verified_connection")),
-		SetUserAttributes:  value.String(config.GetAttr("set_user_root_attributes")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	var err error
@@ -744,7 +760,11 @@ func expandConnectionOptionsPingFederate(
 		SignatureAlgorithm:  value.String(config.GetAttr("signature_algorithm")),
 		PingFederateBaseURL: value.String(config.GetAttr("ping_federate_base_url")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
-		SetUserAttributes:   value.String(config.GetAttr("set_user_root_attributes")),
+	}
+
+	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
+	if options.GetSetUserAttributes() == "on_each_login" {
+		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {

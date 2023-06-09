@@ -58,6 +58,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		},
 	}
 
+	dataSourceSchema["members"] = &schema.Schema{
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "User ID(s) that are members of the organization.",
+	}
+
 	return dataSourceSchema
 }
 
@@ -108,21 +117,23 @@ func readOrganizationForDataSource(_ context.Context, data *schema.ResourceData,
 
 	data.SetId(foundOrganization.GetID())
 
-	result := multierror.Append(
-		data.Set("name", foundOrganization.GetName()),
-		data.Set("display_name", foundOrganization.GetDisplayName()),
-		data.Set("branding", flattenOrganizationBranding(foundOrganization.GetBranding())),
-		data.Set("metadata", foundOrganization.GetMetadata()),
-	)
-
 	foundConnections, err := fetchAllOrganizationConnections(api, foundOrganization.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result = multierror.Append(
-		result,
+	foundMembers, err := fetchAllOrganizationMembers(api, foundOrganization.GetID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	result := multierror.Append(
+		data.Set("name", foundOrganization.GetName()),
+		data.Set("display_name", foundOrganization.GetDisplayName()),
+		data.Set("branding", flattenOrganizationBranding(foundOrganization.GetBranding())),
+		data.Set("metadata", foundOrganization.GetMetadata()),
 		data.Set("connections", flattenOrganizationConnections(foundConnections)),
+		data.Set("members", foundMembers),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -148,6 +159,30 @@ func fetchAllOrganizationConnections(api *management.Management, organizationID 
 	}
 
 	return foundConnections, nil
+}
+
+func fetchAllOrganizationMembers(api *management.Management, organizationID string) ([]string, error) {
+	foundMembers := make([]string, 0)
+	var page int
+
+	for {
+		members, err := api.Organization.Members(organizationID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return nil, err
+		}
+
+		for _, member := range members.Members {
+			foundMembers = append(foundMembers, member.GetUserID())
+		}
+
+		if !members.HasNext() {
+			break
+		}
+
+		page++
+	}
+
+	return foundMembers, nil
 }
 
 func flattenOrganizationConnections(connections []*management.OrganizationConnection) []interface{} {

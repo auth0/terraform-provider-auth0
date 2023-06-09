@@ -1,5 +1,145 @@
 # Migration Guide
 
+## Upgrading from v0.48.0 → v0.49.0
+
+There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
+automated workflows before upgrading.
+
+### Deprecations
+
+- [Trigger Binding Renaming](#trigger-binding-renaming)
+- [Organization Member Roles](#organization-member-roles)
+
+#### Trigger Binding Renaming
+
+The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions` for clarity and consistency with the `auth0_trigger_action` (1:1) resource. To migrate, simply rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions`.
+
+<table>
+<tr>
+<th>Before (v0.48.0)</th>
+<th>After (v0.49.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource auth0_trigger_binding login_flow {
+	trigger = "post-login"
+
+	actions {
+		id = auth0_action.my_action.id
+		display_name = auth0_action.my_action.name
+	}
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource auth0_trigger_actions login_flow {
+	trigger = "post-login"
+
+	actions {
+		id = auth0_action.my_action.id
+		display_name = auth0_action.my_action.name
+	}
+}
+```
+
+</td>
+</tr>
+</table>
+
+#### Organization Member Roles
+
+The `roles` field on the `auth0_organization_member` resource will continue to be available for managing an organization
+member's roles. However, to ensure a smooth transition when we eventually remove the capability to manage roles through
+this field, we recommend proactively migrating to the newly introduced `auth0_organization_member_roles` resource.
+This will help you stay prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.48.0)</th>
+<th>After (v0.49.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource "auth0_role" "reader" {
+  name = "Reader"
+}
+
+resource "auth0_role" "writer" {
+  name = "Writer"
+}
+
+resource "auth0_user" "user" {
+  email           = "test-user@auth0.com"
+  connection_name = "Username-Password-Authentication"
+  email_verified  = true
+  password        = "MyPass123$"
+}
+
+resource "auth0_organization" "my_org" {
+  name         = "some-org"
+  display_name = "Some Org"
+}
+
+resource "auth0_organization_member" "my_org_member" {
+  organization_id = auth0_organization.my_org.id
+  user_id         = auth0_user.user.id
+  roles           = [ auth0_role.reader.id, auth0_role.writer.id ]
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource "auth0_role" "reader" {
+  name = "Reader"
+}
+
+resource "auth0_role" "writer" {
+  name = "Writer"
+}
+
+resource "auth0_user" "user" {
+  connection_name = "Username-Password-Authentication"
+  email           = "test-user@auth0.com"
+  password        = "MyPass123$"
+}
+
+resource "auth0_organization" "my_org" {
+  name         = "some-org"
+  display_name = "Some Org"
+}
+
+resource "auth0_organization_member" "my_org_member" {
+  organization_id = auth0_organization.my_org.id
+  user_id         = auth0_user.user.id
+
+  # Until we remove the ability to operate changes on
+  # the roles field it is important to have this
+  # block in the config, to avoid diffing issues.
+  lifecycle {
+    ignore_changes = [ roles ]
+  }
+}
+
+resource "auth0_organization_member_roles" "my_org_member_roles" {
+  organization_id = auth0_organization.my_org.id
+  user_id         = auth0_user.user.id
+  roles           = [ auth0_role.reader.id, auth0_role.writer.id ]
+}
+```
+
+</td>
+</tr>
+</table>
+
 ## Upgrading from v0.47.0 → v0.48.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential

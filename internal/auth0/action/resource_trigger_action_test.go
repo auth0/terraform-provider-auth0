@@ -10,22 +10,31 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccCreateTriggerAction = `
-	resource auth0_action my_action {
-		name = "Test Action {{.testName}}"
-		code = "exports.onExecutePostLogin = async (event, api) => {};"
+const givenAnAction = `	resource auth0_action my_action {
+	name = "Test Action {{.testName}}"
+	code = "exports.onExecutePostLogin = async (event, api) => {};"
 
-		supported_triggers {
-			id = "post-login"
-			version = "v3"
-		}
-
-		deploy = true
+	supported_triggers {
+		id = "post-login"
+		version = "v3"
 	}
 
+	deploy = true
+}
+`
+
+const testAccCreateTriggerAction = givenAnAction + `
 	resource auth0_trigger_action my_action_post_login {
 		action_id = auth0_action.my_action.id
 		trigger = auth0_action.my_action.supported_triggers[0].id
+	}
+`
+
+const testAccUpdateTriggerAction = givenAnAction + `
+	resource auth0_trigger_action my_action_post_login {
+		action_id = auth0_action.my_action.id
+		trigger = auth0_action.my_action.supported_triggers[0].id
+		display_name = format("%s %s", auth0_action.my_action.name,"(new display name)")
 	}
 `
 
@@ -43,7 +52,8 @@ const testAccCreateAnotherTriggerAction = `
 
 	resource auth0_trigger_action another_action_post_login {
 		action_id = auth0_action.another_action.id
-		trigger = tolist(auth0_action.another_action.supported_triggers)[0].id
+		trigger = auth0_action.another_action.supported_triggers[0].id
+		display_name = auth0_action.another_action.name
 	}
 `
 
@@ -54,6 +64,15 @@ func TestAccTriggerAction(t *testing.T) {
 				Config: acctest.ParseTestName(testAccCreateTriggerAction, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "trigger", "post-login"),
+					resource.TestCheckResourceAttrSet("auth0_trigger_action.my_action_post_login", "action_id"),
+					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "display_name", "Test Action TestAccTriggerAction"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateTriggerAction, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "trigger", "post-login"),
+					resource.TestCheckResourceAttr("auth0_trigger_action.my_action_post_login", "display_name", "Test Action TestAccTriggerAction (new display name)"),
 					resource.TestCheckResourceAttrSet("auth0_trigger_action.my_action_post_login", "action_id"),
 				),
 			},

@@ -8,17 +8,11 @@ description: |-
 
 This resource is used to manage the assignment of members and their roles within an organization.
 
+!> To prevent issues, avoid using this resource together with the `auth0_organization_members` resource.
+
 ## Example Usage
 
 ```terraform
-resource "auth0_role" "reader" {
-  name = "Reader"
-}
-
-resource "auth0_role" "admin" {
-  name = "Admin"
-}
-
 resource "auth0_user" "user" {
   email           = "test-user@auth0.com"
   connection_name = "Username-Password-Authentication"
@@ -34,7 +28,6 @@ resource "auth0_organization" "my_org" {
 resource "auth0_organization_member" "my_org_member" {
   organization_id = auth0_organization.my_org.id
   user_id         = auth0_user.user.id
-  roles           = [auth0_role.reader.id, auth0_role.admin.id]
 }
 ```
 
@@ -48,7 +41,7 @@ resource "auth0_organization_member" "my_org_member" {
 
 ### Optional
 
-- `roles` (Set of String) The role ID(s) to assign to the organization member.
+- `roles` (Set of String, Deprecated) The role ID(s) to assign to the organization member.
 
 ### Read-Only
 

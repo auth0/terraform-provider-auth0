@@ -2,18 +2,16 @@ package action
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewTriggerActionResource will return a new auth0_trigger_action resource.
@@ -24,7 +22,7 @@ func NewTriggerActionResource() *schema.Resource {
 		UpdateContext: updateTriggerAction,
 		DeleteContext: deleteTriggerAction,
 		Importer: &schema.ResourceImporter{
-			StateContext: importTriggerAction,
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "trigger", "action_id"),
 		},
 		Description: "With this resource, you can bind an action to a trigger. Once an action is created and deployed, it can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow.\n\nOrdering of an action within a specific flow is not currently supported when using this resource; the action will get appended to the end of the flow. To precisely manage ordering, it is advised to either do so with the dashboard UI or with the `auth0_trigger_bindings` resource.",
 		Schema: map[string]*schema.Schema{
@@ -226,31 +224,4 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 	}
 
 	return nil
-}
-
-func importTriggerAction(
-	_ context.Context,
-	data *schema.ResourceData,
-	_ interface{},
-) ([]*schema.ResourceData, error) {
-	rawID := data.Id()
-	if rawID == "" {
-		return nil, fmt.Errorf("ID cannot be empty")
-	}
-
-	if !strings.Contains(rawID, "::") {
-		return nil, fmt.Errorf("ID must be formatted as <trigger>::<actionID>")
-	}
-
-	idPair := strings.Split(rawID, "::")
-	if len(idPair) != 2 {
-		return nil, fmt.Errorf("ID must be formatted as <trigger>::<actionID>")
-	}
-
-	result := multierror.Append(
-		data.Set("trigger", idPair[0]),
-		data.Set("action_id", idPair[1]),
-	)
-
-	return []*schema.ResourceData{data}, result.ErrorOrNil()
 }

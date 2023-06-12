@@ -31,7 +31,7 @@ func New() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"domain": {
 				Type:        schema.TypeString,
-				Required:    true,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AUTH0_DOMAIN", nil),
 				Description: "Your Auth0 domain name. " +
 					"It can also be sourced from the `AUTH0_DOMAIN` environment variable.",

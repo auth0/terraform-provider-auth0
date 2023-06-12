@@ -8,7 +8,9 @@ description: |-
 
 {{ .Description | trimspace }}
 
-!> To prevent issues, avoid using this resource together with the `auth0_user_roles` resource.
+!> This resource appends a role to a user. In contrast, the `auth0_user_roles` resource manages all the roles assigned
+to a user. To avoid potential issues, it is recommended not to use this resource in conjunction with the
+`auth0_user_roles` resource when managing roles for the same user id.
 
 {{ if .HasExample -}}
 

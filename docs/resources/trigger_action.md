@@ -11,6 +11,10 @@ With this resource, you can bind an action to a trigger. Once an action is creat
 
 Ordering of an action within a specific flow is not currently supported when using this resource; the action will get appended to the end of the flow. To precisely manage ordering, it is advised to either do so with the dashboard UI or with the `auth0_trigger_bindings` resource.
 
+!> This resource appends an action to the trigger binding. In contrast, the `auth0_trigger_actions` resource manages all
+the action bindings to a trigger. To avoid potential issues, it is recommended not to use this resource in conjunction
+with the `auth0_trigger_action` resource when binding actions to the same trigger.
+
 ## Example Usage
 
 ```terraform

@@ -201,11 +201,12 @@ func readResourceServer(_ context.Context, d *schema.ResourceData, m interface{}
 
 func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	mutex := m.(*config.Config).GetMutex()
 
 	resourceServer := expandResourceServer(d)
-	mutex.Lock(resourceServer.GetIdentifier())
-	defer mutex.Unlock(resourceServer.GetIdentifier())
+
+	mutex := m.(*config.Config).GetMutex()
+	mutex.Lock(resourceServer.GetIdentifier() + "-scopes")
+	defer mutex.Unlock(resourceServer.GetIdentifier() + "-scopes")
 
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
 		return diag.FromErr(err)

@@ -63,12 +63,12 @@ func NewConnectionsResource() *schema.Resource {
 
 func createOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-connections")
+	defer mutex.Unlock(organizationID + "-connections")
 
 	alreadyEnabledConnections, err := api.Organization.Connections(organizationID)
 	if err != nil {
@@ -130,11 +130,12 @@ func readOrganizationConnections(_ context.Context, data *schema.ResourceData, m
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Id()
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
+
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-connections")
+	defer mutex.Unlock(organizationID + "-connections")
 
 	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
@@ -177,11 +178,12 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Id()
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
+
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-connections")
+	defer mutex.Unlock(organizationID + "-connections")
 
 	var result *multierror.Error
 

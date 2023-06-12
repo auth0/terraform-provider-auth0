@@ -52,12 +52,12 @@ func NewClientResource() *schema.Resource {
 
 func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex.Lock(connectionID)
-	defer mutex.Unlock(connectionID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(connectionID + "-clients")
+	defer mutex.Unlock(connectionID + "-clients")
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {
@@ -115,12 +115,12 @@ func readConnectionClient(_ context.Context, data *schema.ResourceData, meta int
 
 func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex.Lock(connectionID)
-	defer mutex.Unlock(connectionID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(connectionID + "-clients")
+	defer mutex.Unlock(connectionID + "-clients")
 
 	connection, err := api.Connection.Read(connectionID)
 	if err != nil {

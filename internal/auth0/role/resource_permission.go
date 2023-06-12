@@ -59,14 +59,14 @@ func NewPermissionResource() *schema.Resource {
 
 func createRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(roleID + "-permissions")
+	defer mutex.Unlock(roleID + "-permissions")
 
 	if err := api.Role.AssociatePermissions(roleID, []*management.Permission{
 		{
@@ -114,14 +114,14 @@ func readRolePermission(_ context.Context, data *schema.ResourceData, meta inter
 
 func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(roleID + "-permissions")
+	defer mutex.Unlock(roleID + "-permissions")
 
 	if err := api.Role.RemovePermissions(
 		roleID,

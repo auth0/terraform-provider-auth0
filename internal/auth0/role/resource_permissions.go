@@ -67,7 +67,6 @@ func NewPermissionsResource() *schema.Resource {
 
 func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
 
@@ -75,8 +74,9 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 		return nil
 	}
 
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(roleID + "-permissions")
+	defer mutex.Unlock(roleID + "-permissions")
 
 	toAdd, toRemove := value.Difference(data, "permissions")
 
@@ -137,12 +137,12 @@ func readRolePermissions(_ context.Context, data *schema.ResourceData, meta inte
 
 func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
 
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(roleID + "-permissions")
+	defer mutex.Unlock(roleID + "-permissions")
 
 	permissionsToRemove := data.Get("permissions").(*schema.Set).List()
 	var rmPermissions []*management.Permission

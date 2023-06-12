@@ -54,13 +54,13 @@ func NewRoleResource() *schema.Resource {
 
 func createUserRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
 
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(userID + "-roles")
+	defer mutex.Unlock(userID + "-roles")
 
 	roleID := data.Get("role_id").(string)
 	if err := api.User.AssignRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
@@ -107,12 +107,12 @@ func readUserRole(_ context.Context, data *schema.ResourceData, meta interface{}
 
 func deleteUserRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(userID + "-roles")
+	defer mutex.Unlock(userID + "-roles")
 
 	roleID := data.Get("role_id").(string)
 	if err := api.User.RemoveRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {

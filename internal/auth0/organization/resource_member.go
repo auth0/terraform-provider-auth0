@@ -52,20 +52,21 @@ func NewMemberResource() *schema.Resource {
 
 func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	mutex := m.(*config.Config).GetMutex()
 
 	userID := d.Get("user_id").(string)
-	orgID := d.Get("organization_id").(string)
+	organizationID := d.Get("organization_id").(string)
 
-	mutex.Lock(orgID)
-	if err := api.Organization.AddMembers(orgID, []string{userID}); err != nil {
+	mutex := m.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-members")
+	defer mutex.Unlock(organizationID + "-members")
+
+	if err := api.Organization.AddMembers(organizationID, []string{userID}); err != nil {
 		return diag.FromErr(err)
 	}
-	mutex.Unlock(orgID)
 
-	d.SetId(orgID + ":" + userID)
+	d.SetId(organizationID + ":" + userID)
 
-	if err := assignRoles(d, m); err != nil {
+	if err := assignMemberRoles(d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -77,24 +78,24 @@ func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 	return readOrganizationMember(ctx, d, m)
 }
 
-func assignRoles(d *schema.ResourceData, meta interface{}) error {
+func assignMemberRoles(d *schema.ResourceData, meta interface{}) error {
 	if !d.HasChange("roles") {
 		return nil
 	}
 
 	userID := d.Get("user_id").(string)
-	orgID := d.Get("organization_id").(string)
+	organizationID := d.Get("organization_id").(string)
 
 	toAdd, toRemove := value.Difference(d, "roles")
 
-	if err := addMemberRoles(meta, orgID, userID, toAdd); err != nil {
+	if err := addMemberRoles(meta, organizationID, userID, toAdd); err != nil {
 		return err
 	}
 
-	return removeMemberRoles(meta, orgID, userID, toRemove)
+	return removeMemberRoles(meta, organizationID, userID, toRemove)
 }
 
-func removeMemberRoles(meta interface{}, orgID string, userID string, roles []interface{}) error {
+func removeMemberRoles(meta interface{}, organizationID string, userID string, roles []interface{}) error {
 	if len(roles) == 0 {
 		return nil
 	}
@@ -105,15 +106,11 @@ func removeMemberRoles(meta interface{}, orgID string, userID string, roles []in
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
-
-	return api.Organization.DeleteMemberRoles(orgID, userID, rolesToRemove)
+	return api.Organization.DeleteMemberRoles(organizationID, userID, rolesToRemove)
 }
 
-func addMemberRoles(meta interface{}, orgID string, userID string, roles []interface{}) error {
+func addMemberRoles(meta interface{}, organizationID string, userID string, roles []interface{}) error {
 	if len(roles) == 0 {
 		return nil
 	}
@@ -124,21 +121,17 @@ func addMemberRoles(meta interface{}, orgID string, userID string, roles []inter
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
-	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
-
-	return api.Organization.AssignMemberRoles(orgID, userID, rolesToAssign)
+	return api.Organization.AssignMemberRoles(organizationID, userID, rolesToAssign)
 }
 
 func readOrganizationMember(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgID := d.Get("organization_id").(string)
+	organizationID := d.Get("organization_id").(string)
 	userID := d.Get("user_id").(string)
 
-	roles, err := api.Organization.MemberRoles(orgID, userID)
+	roles, err := api.Organization.MemberRoles(organizationID, userID)
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -158,7 +151,13 @@ func readOrganizationMember(_ context.Context, d *schema.ResourceData, m interfa
 }
 
 func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	if err := assignRoles(d, m); err != nil {
+	organizationID := d.Get("organization_id").(string)
+
+	mutex := m.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-members")
+	defer mutex.Unlock(organizationID + "-members")
+
+	if err := assignMemberRoles(d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -172,15 +171,15 @@ func updateOrganizationMember(ctx context.Context, d *schema.ResourceData, m int
 
 func deleteOrganizationMember(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	mutex := m.(*config.Config).GetMutex()
 
+	organizationID := d.Get("organization_id").(string)
 	userID := d.Get("user_id").(string)
-	orgID := d.Get("organization_id").(string)
 
-	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
+	mutex := m.(*config.Config).GetMutex()
+	mutex.Lock(organizationID + "-members")
+	defer mutex.Unlock(organizationID + "-members")
 
-	if err := api.Organization.DeleteMember(orgID, []string{userID}); err != nil {
+	if err := api.Organization.DeleteMember(organizationID, []string{userID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

@@ -2,7 +2,6 @@ package role
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -74,10 +73,14 @@ func createRolePermission(ctx context.Context, data *schema.ResourceData, meta i
 			Name:                     &permissionName,
 		},
 	}); err != nil {
+		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+			return nil
+		}
+
 		return diag.FromErr(err)
 	}
 
-	data.SetId(fmt.Sprintf(`%s::%s::%s`, roleID, resourceServerID, permissionName))
+	data.SetId(roleID + internalSchema.SeparatorDoubleColon + resourceServerID + internalSchema.SeparatorDoubleColon + permissionName)
 
 	return readRolePermission(ctx, data, meta)
 }
@@ -95,6 +98,7 @@ func readRolePermission(_ context.Context, data *schema.ResourceData, meta inter
 			data.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
@@ -104,6 +108,7 @@ func readRolePermission(_ context.Context, data *schema.ResourceData, meta inter
 				data.Set("description", p.GetDescription()),
 				data.Set("resource_server_name", p.GetResourceServerName()),
 			)
+
 			return diag.FromErr(result.ErrorOrNil())
 		}
 	}
@@ -133,12 +138,11 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 		},
 	); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
-	data.SetId("")
 	return nil
 }

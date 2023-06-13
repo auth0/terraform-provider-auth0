@@ -2,24 +2,58 @@ package role_test
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccRolePermissionNoneAssigned = givenAResourceServerAndARole + `
-data "auth0_role" "role" {
-	role_id = auth0_role.role.id
+const testAccGivenAResourceServerWithTwoScopesAndARole = `
+resource "auth0_resource_server" "resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	lifecycle {
+		ignore_changes = [ scopes ]
+	}
+}
+
+resource "auth0_resource_server_scopes" "my_scopes" {
+	depends_on = [ auth0_resource_server.resource_server ]
+
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+
+	scopes {
+		name        = "read:foo"
+		description = "Can read Foo"
+	}
+
+	scopes {
+		name        = "create:foo"
+		description = "Can create Foo"
+	}
+}
+
+resource "auth0_role" "role" {
+	depends_on = [ auth0_resource_server_scopes.my_scopes ]
+
+	name        = "Acceptance Test - {{.testName}}"
+	description = "Acceptance Test Role - {{.testName}}"
+
+	lifecycle {
+		ignore_changes = [ permissions ]
+	}
 }
 `
 
-const testAccRolePermissionOneAssigned = givenAResourceServerAndARole + `
+const testAccRolePermissionOneAssigned = testAccGivenAResourceServerWithTwoScopesAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
 	role_id = auth0_role.role.id
 
 	permissions  {
@@ -35,8 +69,79 @@ data "auth0_role" "role" {
 }
 `
 
-const testAccRolePermissionTwoAssigned = givenAResourceServerAndARole + `
+const testAccRolePermissionTwoAssigned = testAccGivenAResourceServerWithTwoScopesAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "read:foo"
+	}
+}
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsRemoveOnePermission = testAccGivenAResourceServerWithTwoScopesAndARole + `
+resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+}
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsDeleteResource = testAccGivenAResourceServerWithTwoScopesAndARole + `
+data "auth0_role" "role" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsImportSetup = testAccGivenAResourceServerWithTwoScopesAndARole + `
+resource "auth0_role_permission" "role_permission_1" {
+	depends_on = [ auth0_role.role ]
+
+	role_id                    = auth0_role.role.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "read:foo"
+}
+
+resource "auth0_role_permission" "role_permission_2" {
+	depends_on = [ auth0_role_permission.role_permission_1 ]
+
+	role_id                    = auth0_role.role.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "create:foo"
+}
+`
+
+const testAccRolePermissionsImportCheck = testAccRolePermissionsImportSetup + `
+resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role_permission.role_permission_2 ]
+
 	role_id = auth0_role.role.id
 
 	permissions  {
@@ -63,46 +168,108 @@ func TestAccRolePermissions(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccRolePermissionNoneAssigned, testName),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "0"),
-				),
-			},
-			{
 				Config: acctest.ParseTestName(testAccRolePermissionOneAssigned, testName),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_role_permissions.role_permissions",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "read:foo"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.resource_server_identifier", fmt.Sprintf("https://uat.%s.terraform-provider-auth0.com/api", testName)),
-
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.name", "read:foo"),
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.resource_server_identifier", fmt.Sprintf("https://uat.%s.terraform-provider-auth0.com/api", testName)),
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.resource_server_name", fmt.Sprintf("Acceptance Test - %s", testName)),
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.description", "Can read Foo"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_role.role",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccRolePermissionTwoAssigned, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.0.name", "create:foo"),
-					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.1.name", "read:foo"),
-
+					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_role_permissions.role_permissions",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_role_permissions.role_permissions",
+						"permissions.*",
+						map[string]string{
+							"name":                       "create:foo",
+							"description":                "Can create Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "2"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "create:foo"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.1.name", "read:foo"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.resource_server_identifier", fmt.Sprintf("https://uat.%s.terraform-provider-auth0.com/api", testName)),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.1.resource_server_identifier", fmt.Sprintf("https://uat.%s.terraform-provider-auth0.com/api", testName)),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_role.role",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_role.role",
+						"permissions.*",
+						map[string]string{
+							"name":                       "create:foo",
+							"description":                "Can create Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccRolePermissionOneAssigned, testName),
+				Config: acctest.ParseTestName(testAccRolePermissionsRemoveOnePermission, testName),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"auth0_role_permissions.role_permissions",
+						"permissions.*",
+						map[string]string{
+							"name":                       "create:foo",
+							"description":                "Can create Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.0.name", "read:foo"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_role.role",
+						"permissions.*",
+						map[string]string{
+							"name":                       "create:foo",
+							"description":                "Can create Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccRolePermissionNoneAssigned, testName),
+				Config: acctest.ParseTestName(testAccRolePermissionsDeleteResource, testName),
 			},
 			{
 				RefreshState: true,
@@ -110,91 +277,27 @@ func TestAccRolePermissions(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "0"),
 				),
 			},
-		},
-	})
-}
-
-const testAccRolePermissionsImport = `
-resource "auth0_resource_server" "resource_server" {
-	name       = "Acceptance Test - {{.testName}}"
-	identifier = "https://uat.{{.testName}}.terraform-provider-auth0.com/api"
-
-	scopes {
-		value       = "read:foo"
-		description = "Can read Foo"
-	}
-
-	scopes {
-		value       = "create:foo"
-		description = "Can create Foo"
-	}
-}
-
-resource "auth0_role" "role" {
-	depends_on = [ auth0_resource_server.resource_server ]
-
-	name        = "Acceptance Test - {{.testName}}"
-	description = "Acceptance Test Role - {{.testName}}"
-
-	lifecycle {
-		ignore_changes = [ permissions ]
-	}
-}
-
-resource "auth0_role_permissions" "role_permissions" {
-	role_id = auth0_role.role.id
-
-	permissions  {
-		resource_server_identifier = auth0_resource_server.resource_server.identifier
-		name                       = "create:foo"
-	}
-
-	permissions  {
-		resource_server_identifier = auth0_resource_server.resource_server.identifier
-		name                       = "read:foo"
-	}
-}
-`
-
-func TestAccRolePermissionsImport(t *testing.T) {
-	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
-		// The test runs only with recordings as it requires an initial setup.
-		t.Skip()
-	}
-
-	testName := strings.ToLower(t.Name())
-
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
 			{
-				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
-				ResourceName:       "auth0_resource_server.resource_server",
-				ImportState:        true,
-				ImportStateId:      "646cbf5e8ffa2057b6112389",
+				Config: acctest.ParseTestName(testAccRolePermissionsImportSetup, testName),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccRolePermissionsImportCheck, testName),
+				ResourceName: "auth0_role_permissions.role_permissions",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					return acctest.ExtractResourceAttributeFromState(state, "auth0_role.role", "id")
+				},
 				ImportStatePersist: true,
 			},
 			{
-				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
-				ResourceName:       "auth0_role.role",
-				ImportState:        true,
-				ImportStateId:      "rol_y36rul7VuBQGVpNa",
-				ImportStatePersist: true,
-			},
-			{
-				Config:             acctest.ParseTestName(testAccRolePermissionsImport, testName),
-				ResourceName:       "auth0_role_permissions.role_permissions",
-				ImportState:        true,
-				ImportStateId:      "rol_y36rul7VuBQGVpNa",
-				ImportStatePersist: true,
-			},
-			{
+				Config: acctest.ParseTestName(testAccRolePermissionsImportCheck, testName),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectEmptyPlan(),
 					},
 				},
-				Config: acctest.ParseTestName(testAccRolePermissionsImport, testName),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_role.role", "permissions.#", "2"),
 					resource.TestCheckResourceAttr("auth0_role_permissions.role_permissions", "permissions.#", "2"),
 				),
 			},

@@ -45,8 +45,6 @@ func NewRolesResource() *schema.Resource {
 }
 
 func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
-
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
 
@@ -54,7 +52,12 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 	mutex.Lock(userID + "-roles")
 	defer mutex.Unlock(userID + "-roles")
 
-	if err := persistUserRoles(data, api); err != nil {
+	if err := persistUserRoles(data, meta); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			data.SetId("")
+			return nil
+		}
+
 		return diag.FromErr(err)
 	}
 
@@ -90,8 +93,7 @@ func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{
 func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	userID := data.Get("user_id").(string)
-	data.SetId(userID)
+	userID := data.Id()
 
 	mutex := meta.(*config.Config).GetMutex()
 	mutex.Lock(userID + "-roles")
@@ -106,14 +108,11 @@ func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interfac
 
 	if err := api.User.RemoveRoles(userID, rmRoles); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
 
 		return diag.FromErr(err)
 	}
-
-	data.SetId("")
 
 	return nil
 }

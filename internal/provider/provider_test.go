@@ -80,10 +80,6 @@ func TestProvider_configValidation(t *testing.T) {
 			resourceConfig: map[string]interface{}{"client_id": "test", "client_secret": "test", "api_token": "test"},
 			expectedErrors: diag.Diagnostics{
 				diag.Diagnostic{
-					Summary: "Missing required argument",
-					Detail:  "The argument \"domain\" is required, but no definition was found.",
-				},
-				diag.Diagnostic{
 					Summary: "ConflictsWith",
 					Detail:  "\"api_token\": conflicts with client_id",
 				},

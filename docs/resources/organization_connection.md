@@ -8,7 +8,10 @@ description: |-
 
 With this resource, you can manage enabled connections on an organization.
 
-!> To prevent issues, avoid using this resource together with the `auth0_organization_connections` resource.
+!> This resource appends a connection to an organization. In contrast, the `auth0_organization_connections` resource
+manages all the connections enabled for an organization. To avoid potential issues, it is recommended not to use this
+resource in conjunction with the `auth0_organization_connections` resource when managing enabled connections for the
+same organization id.
 
 ## Example Usage
 

@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewRoleResource will return a new auth0_user_role (1:1) resource.
@@ -46,7 +47,7 @@ func NewRoleResource() *schema.Resource {
 		ReadContext:   readUserRole,
 		DeleteContext: deleteUserRole,
 		Importer: &schema.ResourceImporter{
-			StateContext: schema.ImportStatePassthroughContext,
+			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "user_id", "role_id"),
 		},
 		Description: "With this resource, you can manage assigned roles for a user.",
 	}
@@ -56,21 +57,21 @@ func createUserRole(ctx context.Context, data *schema.ResourceData, meta interfa
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
-	data.SetId(userID)
+	roleID := data.Get("role_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
 	mutex.Lock(userID + "-roles")
 	defer mutex.Unlock(userID + "-roles")
 
-	roleID := data.Get("role_id").(string)
 	if err := api.User.AssignRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
 
 		return diag.FromErr(err)
 	}
+
+	data.SetId(userID + internalSchema.SeparatorDoubleColon + roleID)
 
 	return readUserRole(ctx, data, meta)
 }
@@ -97,6 +98,7 @@ func readUserRole(_ context.Context, data *schema.ResourceData, meta interface{}
 				data.Set("role_name", role.GetName()),
 				data.Set("role_description", role.GetDescription()),
 			)
+
 			return diag.FromErr(result.ErrorOrNil())
 		}
 	}
@@ -109,22 +111,19 @@ func deleteUserRole(_ context.Context, data *schema.ResourceData, meta interface
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
+	roleID := data.Get("role_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
 	mutex.Lock(userID + "-roles")
 	defer mutex.Unlock(userID + "-roles")
 
-	roleID := data.Get("role_id").(string)
 	if err := api.User.RemoveRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
 
 		return diag.FromErr(err)
 	}
-
-	data.SetId("")
 
 	return nil
 }

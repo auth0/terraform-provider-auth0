@@ -8,7 +8,9 @@ description: |-
 
 With this resource, you can manage assigned roles for a user.
 
-!> To prevent issues, avoid using this resource together with the `auth0_user_roles` resource.
+!> This resource appends a role to a user. In contrast, the `auth0_user_roles` resource manages all the roles assigned
+to a user. To avoid potential issues, it is recommended not to use this resource in conjunction with the
+`auth0_user_roles` resource when managing roles for the same user id.
 
 ## Example Usage
 
@@ -59,8 +61,10 @@ resource "auth0_user_role" "user_roles" {
 Import is supported using the following syntax:
 
 ```shell
-# This resource can be imported using the user ID.
+# This resource can be imported by specifying the
+# user ID and role ID separated by "::" (note the double colon)
+# <userID>::<roleID>
 #
 # Example:
-terraform import auth0_user_role.user_role "auth0|111111111111111111111111"
+terraform import auth0_user_role.user_role "auth0|111111111111111111111111::role_123"
 ```

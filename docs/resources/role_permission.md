@@ -8,7 +8,9 @@ description: |-
 
 With this resource, you can manage role permissions (1-1).
 
-!> To prevent issues, avoid using this resource together with the `auth0_role_permissions` resource.
+!> This resource appends a permission to a role. In contrast, the `auth0_role_permissions` resource manages all the
+permissions assigned to a role. To avoid potential issues, it is recommended not to use this resource in conjunction
+with the `auth0_role_permissions` resource when managing permissions for the same role id.
 
 
 

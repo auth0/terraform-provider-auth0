@@ -57,9 +57,6 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 
-	userID := data.Get("user_id").(string)
-	data.SetId(userID)
-
 	return readUserRoles(ctx, data, meta)
 }
 

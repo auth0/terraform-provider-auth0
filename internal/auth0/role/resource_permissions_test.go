@@ -71,6 +71,8 @@ data "auth0_role" "role" {
 
 const testAccRolePermissionTwoAssigned = testAccGivenAResourceServerWithTwoScopesAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
 	role_id = auth0_role.role.id
 
 	permissions  {
@@ -93,6 +95,8 @@ data "auth0_role" "role" {
 
 const testAccRolePermissionsRemoveOnePermission = testAccGivenAResourceServerWithTwoScopesAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
 	role_id = auth0_role.role.id
 
 	permissions  {

@@ -66,34 +66,19 @@ func NewPermissionsResource() *schema.Resource {
 }
 
 func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	if !data.HasChange("permissions") {
+		return nil
+	}
+
 	api := meta.(*config.Config).GetAPI()
 	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 
-	if !data.HasChange("permissions") {
-		return nil
-	}
-
 	mutex.Lock(userID)
 	defer mutex.Unlock(userID)
 
 	toAdd, toRemove := value.Difference(data, "permissions")
-
-	var addPermissions []*management.Permission
-	for _, addPermission := range toAdd {
-		permission := addPermission.(map[string]interface{})
-		addPermissions = append(addPermissions, &management.Permission{
-			Name:                     auth0.String(permission["name"].(string)),
-			ResourceServerIdentifier: auth0.String(permission["resource_server_identifier"].(string)),
-		})
-	}
-
-	if len(addPermissions) > 0 {
-		if err := api.User.AssignPermissions(userID, addPermissions); err != nil {
-			return diag.FromErr(err)
-		}
-	}
 
 	var rmPermissions []*management.Permission
 	for _, rmPermission := range toRemove {
@@ -106,6 +91,31 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 
 	if len(rmPermissions) > 0 {
 		if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
+			return diag.FromErr(err)
+		}
+	}
+
+	var addPermissions []*management.Permission
+	for _, addPermission := range toAdd {
+		permission := addPermission.(map[string]interface{})
+		addPermissions = append(addPermissions, &management.Permission{
+			Name:                     auth0.String(permission["name"].(string)),
+			ResourceServerIdentifier: auth0.String(permission["resource_server_identifier"].(string)),
+		})
+	}
+
+	if len(addPermissions) > 0 {
+		if err := api.User.AssignPermissions(userID, addPermissions); err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
 			return diag.FromErr(err)
 		}
 	}
@@ -124,6 +134,7 @@ func readUserPermissions(_ context.Context, data *schema.ResourceData, meta inte
 			data.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
@@ -144,33 +155,24 @@ func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta in
 	mutex.Lock(userID)
 	defer mutex.Unlock(userID)
 
-	permissions, err := api.User.Permissions(userID)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
-	}
+	permissions := data.Get("permissions").(*schema.Set).List()
 
 	var rmPermissions []*management.Permission
-	for _, rmPermission := range permissions.Permissions {
+	for _, rmPermission := range permissions {
+		permission := rmPermission.(map[string]interface{})
 		rmPermissions = append(rmPermissions, &management.Permission{
-			Name:                     auth0.String(rmPermission.GetName()),
-			ResourceServerIdentifier: auth0.String(rmPermission.GetResourceServerIdentifier()),
+			Name:                     auth0.String(permission["name"].(string)),
+			ResourceServerIdentifier: auth0.String(permission["resource_server_identifier"].(string)),
 		})
 	}
-	if err := api.User.RemovePermissions(
-		userID,
-		rmPermissions,
-	); err != nil {
+
+	if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
-	data.SetId("")
 	return nil
 }

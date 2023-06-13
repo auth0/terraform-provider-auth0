@@ -1,124 +1,212 @@
 package user_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const givenAResourceServerAndUser = `
-resource "auth0_resource_server" "resource_server" {
-	name = "Acceptance Test - {{.testName}}"
-	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-	scopes {
-		value = "read:foo"
-		description = "Can read Foo"
-	}
-	scopes {
-		value = "create:foo"
-		description = "Can create Foo"
-	}
-}
-
-resource "auth0_user" "user" { 
-	depends_on = [ auth0_resource_server.resource_server ] 
-	connection_name = "Username-Password-Authentication" 
-	user_id = "{{.testName}}" 
-	username = "{{.testName}}" 
-	password = "passpass$12$12" 
-	email = "{{.testName}}@acceptance.test.com" 
-}
-`
-
-const givenAUserPermission = `
+const testAccUserPermissionWithOnePermissionAssigned = testAccGivenAResourceServerWithTwoScopesAndAUser + `
 resource "auth0_user_permission" "user_permission_read" {
-	depends_on = [ auth0_resource_server.resource_server, auth0_user.user ]
+	depends_on = [ auth0_user.user ]
+
+	user_id                    = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "read:foo"
+}
+
+data "auth0_user" "user_data" {
+	depends_on = [ auth0_user_permission.user_permission_read ]
 
 	user_id = auth0_user.user.id
-	resource_server_identifier = auth0_resource_server.resource_server.identifier
-	permission = "read:foo"
 }
 `
 
-const givenAnotherUserPermission = `
+const testAccUserPermissionWithTwoPermissionsAssigned = testAccGivenAResourceServerWithTwoScopesAndAUser + `
+resource "auth0_user_permission" "user_permission_read" {
+	depends_on = [ auth0_user.user ]
+
+	user_id                    = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "read:foo"
+}
+
 resource "auth0_user_permission" "user_permission_create" {
-	depends_on = [ auth0_resource_server.resource_server, auth0_user.user ]
+	depends_on = [ auth0_user_permission.user_permission_read ]
+
+	user_id                    = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "create:foo"
+}
+
+data "auth0_user" "user_data" {
+	depends_on = [ auth0_user_permission.user_permission_create ]
 
 	user_id = auth0_user.user.id
-	resource_server_identifier = auth0_resource_server.resource_server.identifier
-	permission = "create:foo"
 }
 `
 
-const testAccUserPermissionNoneAssigned = givenAResourceServerAndUser
-const testAccUserPermissionOneAssigned = givenAResourceServerAndUser + givenAUserPermission
-const testAccUserPermissionTwoAssigned = givenAResourceServerAndUser + givenAUserPermission + givenAnotherUserPermission
+const testAccUserPermissionImportSetup = testAccGivenAResourceServerWithTwoScopesAndAUser + `
+resource "auth0_user_permissions" "user_permissions" {
+	depends_on = [ auth0_user.user ]
+
+	user_id = auth0_user.user.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "read:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+}
+`
+
+const testAccUserPermissionImportCheck = testAccUserPermissionImportSetup + `
+resource "auth0_user_permission" "user_permission_read" {
+	depends_on = [ auth0_user.user ]
+
+	user_id                    = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "read:foo"
+}
+
+resource "auth0_user_permission" "user_permission_create" {
+	depends_on = [ auth0_user_permission.user_permission_read ]
+
+	user_id                    = auth0_user.user.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "create:foo"
+}
+
+data "auth0_user" "user_data" {
+	depends_on = [ auth0_user_permission.user_permission_create ]
+
+	user_id = auth0_user.user.id
+}
+`
 
 func TestAccUserPermission(t *testing.T) {
+	testName := strings.ToLower(t.Name())
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserPermissionWithOnePermissionAssigned, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "read:foo"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.resource_server_name", "Acceptance Test - testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.description", "Can read Foo"),
-
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "permissions.#", "1"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_user.user_data",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "user_id", "auth0|testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", "Acceptance Test - testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "user_id", fmt.Sprintf("auth0|%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", fmt.Sprintf("Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "description", "Can read Foo"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionTwoAssigned, strings.ToLower(t.Name())),
-			},
-			{
-				RefreshState: true,
+				Config: acctest.ParseTestName(testAccUserPermissionWithTwoPermissionsAssigned, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "2"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "create:foo"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.1.name", "read:foo"),
-
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "permissions.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_user.user_data",
+						"permissions.*",
+						map[string]string{
+							"name":                       "read:foo",
+							"description":                "Can read Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
+					resource.TestCheckTypeSetElemNestedAttrs(
+						"data.auth0_user.user_data",
+						"permissions.*",
+						map[string]string{
+							"name":                       "create:foo",
+							"description":                "Can create Foo",
+							"resource_server_identifier": fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName),
+							"resource_server_name":       fmt.Sprintf("Acceptance Test - %s", testName),
+						},
+					),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "permission", "read:foo"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "user_id", fmt.Sprintf("auth0|%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "resource_server_name", fmt.Sprintf("Acceptance Test - %s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_read", "description", "Can read Foo"),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "permission", "create:foo"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "user_id", "auth0|testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_identifier", "https://uat.api.terraform-provider-auth0.com/testaccuserpermission"),
-					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_name", "Acceptance Test - testaccuserpermission"),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "user_id", fmt.Sprintf("auth0|%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "resource_server_name", fmt.Sprintf("Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("auth0_user_permission.user_permission_create", "description", "Can create Foo"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionOneAssigned, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserPermissionsDeleteResource, testName),
 			},
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "1"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.0.name", "read:foo"),
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "permissions.#", "0"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserPermissionNoneAssigned, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccUserPermissionImportSetup, testName),
 			},
 			{
-				RefreshState: true,
+				Config:       acctest.ParseTestName(testAccUserPermissionImportCheck, testName),
+				ResourceName: "auth0_user_permission.user_permission_read",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user", "id")
+					assert.NoError(t, err)
+
+					apiID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_resource_server.resource_server", "identifier")
+					assert.NoError(t, err)
+
+					return userID + "::" + apiID + "::" + "read:foo", nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config:       acctest.ParseTestName(testAccUserPermissionImportCheck, testName),
+				ResourceName: "auth0_user_permission.user_permission_create",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user", "id")
+					assert.NoError(t, err)
+
+					apiID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_resource_server.resource_server", "identifier")
+					assert.NoError(t, err)
+
+					return userID + "::" + apiID + "::" + "create:foo", nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserPermissionImportCheck, testName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "permissions.#", "2"),
 				),
 			},
 		},

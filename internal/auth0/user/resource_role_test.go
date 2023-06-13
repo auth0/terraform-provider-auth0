@@ -5,91 +5,78 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const updateUserWithOneRoleAssigned = `
-resource auth0_role owner {
-	name = "owner"
-	description = "Owner"
-}
-
-resource auth0_user user {
-	depends_on = [auth0_role.owner]
-
-	connection_name = "Username-Password-Authentication"
-	email = "{{.testName}}@acceptance.test.com"
-	password = "passpass$12$12"
-
-	lifecycle {
-		ignore_changes = [roles]
-	}
-}
-
-resource auth0_user_role user_role-1 {
+const updateUserWithOneRoleAssigned = testAccGivenTwoRolesAndAUser + `
+resource "auth0_user_role" "user_role-1" {
 	depends_on = [ auth0_user.user ]
 
 	user_id = auth0_user.user.id
 	role_id = auth0_role.owner.id
 }
 
-data auth0_user user_data {
+data "auth0_user" "user_data" {
 	depends_on = [ auth0_user_role.user_role-1 ]
 
 	user_id = auth0_user.user.id
 }
 `
 
-const updateUserWithTwoRolesAssigned = `
-resource auth0_role owner {
-	name = "owner"
-	description = "Owner"
-}
-
-resource auth0_role admin {
-	name = "admin"
-	description = "Administrator"
-}
-
-resource auth0_user user {
-	depends_on = [auth0_role.owner, auth0_role.admin]
-
-	connection_name = "Username-Password-Authentication"
-	email = "{{.testName}}@acceptance.test.com"
-	password = "passpass$12$12"
-
-	lifecycle {
-		ignore_changes = [roles]
-	}
-}
-
-resource auth0_user_role user_role-1 {
+const updateUserWithTwoRolesAssigned = testAccGivenTwoRolesAndAUser + `
+resource "auth0_user_role" "user_role-1" {
 	depends_on = [ auth0_user.user ]
 
 	user_id = auth0_user.user.id
 	role_id = auth0_role.owner.id
 }
 
-resource auth0_user_role user_role-2 {
+resource "auth0_user_role" "user_role-2" {
 	depends_on = [ auth0_user_role.user_role-1 ]
 
 	user_id = auth0_user.user.id
 	role_id = auth0_role.admin.id
 }
 
-data auth0_user user_data {
+data "auth0_user" "user_data" {
 	depends_on = [ auth0_user_role.user_role-2 ]
 
 	user_id = auth0_user.user.id
 }
 `
 
-const removeAssignedRolesFromUser = `
-resource auth0_user user {
-	connection_name = "Username-Password-Authentication"
-	email = "{{.testName}}@acceptance.test.com"
-	password = "passpass$12$12"
+const testAccUserRoleImportSetup = testAccGivenTwoRolesAndAUser + `
+resource "auth0_user_roles" "user_roles" {
+	depends_on = [ auth0_user.user ]
+
+	user_id = auth0_user.user.id
+	roles   = [ auth0_role.owner.id, auth0_role.admin.id ]
+}
+`
+
+const testAccUserRoleImportCheck = testAccUserRoleImportSetup + `
+resource "auth0_user_role" "user_role-1" {
+	depends_on = [ auth0_user_roles.user_roles ]
+
+	user_id = auth0_user.user.id
+	role_id = auth0_role.owner.id
+}
+
+resource "auth0_user_role" "user_role-2" {
+	depends_on = [ auth0_user_role.user_role-1 ]
+
+	user_id = auth0_user.user.id
+	role_id = auth0_role.admin.id
+}
+
+data "auth0_user" "user_data" {
+	depends_on = [ auth0_user_role.user_role-2 ]
+
+	user_id = auth0_user.user.id
 }
 `
 
@@ -104,8 +91,8 @@ func TestAccUserRole(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "1"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "owner"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "test-owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Test Owner"),
 				),
 			},
 			{
@@ -114,18 +101,65 @@ func TestAccUserRole(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "2"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "owner"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "test-owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Test Owner"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-2", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-2", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_name", "admin"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_description", "Administrator"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_name", "test-admin"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_description", "Test Administrator"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(removeAssignedRolesFromUser, testName),
+				Config: acctest.ParseTestName(testAccUserRolesDeleteResource, testName),
+			},
+			{
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserRoleImportSetup, testName),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccUserRoleImportCheck, testName),
+				ResourceName: "auth0_user_role.user_role-1",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user", "id")
+					assert.NoError(t, err)
+
+					roleID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_role.owner", "id")
+					assert.NoError(t, err)
+
+					return userID + "::" + roleID, nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config:       acctest.ParseTestName(testAccUserRoleImportCheck, testName),
+				ResourceName: "auth0_user_role.user_role-2",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user", "id")
+					assert.NoError(t, err)
+
+					roleID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_role.admin", "id")
+					assert.NoError(t, err)
+
+					return userID + "::" + roleID, nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserRoleImportCheck, testName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "2"),
 				),
 			},
 		},

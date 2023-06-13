@@ -204,10 +204,6 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 
 	resourceServer := expandResourceServer(d)
 
-	mutex := m.(*config.Config).GetMutex()
-	mutex.Lock(resourceServer.GetIdentifier() + "-scopes")
-	defer mutex.Unlock(resourceServer.GetIdentifier() + "-scopes")
-
 	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
 		return diag.FromErr(err)
 	}

@@ -63,10 +63,6 @@ func createRolePermission(ctx context.Context, data *schema.ResourceData, meta i
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(roleID + "-permissions")
-	defer mutex.Unlock(roleID + "-permissions")
-
 	if err := api.Role.AssociatePermissions(roleID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerID,
@@ -123,10 +119,6 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 	roleID := data.Get("role_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(roleID + "-permissions")
-	defer mutex.Unlock(roleID + "-permissions")
 
 	if err := api.Role.RemovePermissions(
 		roleID,

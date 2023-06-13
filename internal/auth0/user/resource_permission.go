@@ -63,10 +63,6 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-permissions")
-	defer mutex.Unlock(userID + "-permissions")
-
 	if err := api.User.AssignPermissions(userID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerID,
@@ -123,10 +119,6 @@ func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta int
 	userID := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-permissions")
-	defer mutex.Unlock(userID + "-permissions")
 
 	if err := api.User.RemovePermissions(
 		userID,

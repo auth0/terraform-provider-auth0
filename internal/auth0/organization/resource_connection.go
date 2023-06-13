@@ -62,10 +62,6 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
-
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
 
@@ -112,10 +108,6 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
-
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
 
@@ -134,10 +126,6 @@ func deleteOrganizationConnection(_ context.Context, data *schema.ResourceData, 
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
 
 	connectionID := data.Get("connection_id").(string)
 

@@ -54,7 +54,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	description := data.Get("description").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
+	mutex.Lock(resourceServerIdentifier + "-scopes") // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
@@ -98,7 +98,7 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	newDescription := data.Get("description").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
+	mutex.Lock(resourceServerIdentifier + "-scopes") // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
@@ -171,7 +171,7 @@ func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, met
 	scope := data.Get("scope").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
+	mutex.Lock(resourceServerIdentifier + "-scopes") // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)

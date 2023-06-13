@@ -59,10 +59,6 @@ func createUserRole(ctx context.Context, data *schema.ResourceData, meta interfa
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-roles")
-	defer mutex.Unlock(userID + "-roles")
-
 	if err := api.User.AssignRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			return nil
@@ -112,10 +108,6 @@ func deleteUserRole(_ context.Context, data *schema.ResourceData, meta interface
 
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-roles")
-	defer mutex.Unlock(userID + "-roles")
 
 	if err := api.User.RemoveRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

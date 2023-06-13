@@ -63,10 +63,6 @@ func createOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-roles")
-	defer mutex.Unlock(organizationID + "-roles")
-
 	if err := api.Organization.AssignMemberRoles(organizationID, userID, []string{roleID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
@@ -117,10 +113,6 @@ func deleteOrganizationMemberRole(_ context.Context, data *schema.ResourceData, 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-roles")
-	defer mutex.Unlock(organizationID + "-roles")
 
 	if err := api.Organization.DeleteMemberRoles(organizationID, userID, []string{roleID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {

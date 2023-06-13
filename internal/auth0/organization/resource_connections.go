@@ -66,10 +66,6 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Get("organization_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
-
 	alreadyEnabledConnections, err := api.Organization.Connections(organizationID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -133,10 +129,6 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
-
 	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
 
@@ -180,10 +172,6 @@ func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData,
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Id()
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-connections")
-	defer mutex.Unlock(organizationID + "-connections")
 
 	var result *multierror.Error
 

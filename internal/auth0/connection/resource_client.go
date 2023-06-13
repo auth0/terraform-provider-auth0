@@ -56,7 +56,7 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	connectionID := data.Get("connection_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID + "-clients")
+	mutex.Lock(connectionID + "-clients") // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID + "-clients")
 
 	connection, err := api.Connection.Read(connectionID)
@@ -119,7 +119,7 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 	connectionID := data.Get("connection_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID + "-clients")
+	mutex.Lock(connectionID + "-clients") // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID + "-clients")
 
 	connection, err := api.Connection.Read(connectionID)

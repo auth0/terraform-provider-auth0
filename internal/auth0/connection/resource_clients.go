@@ -58,10 +58,6 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 
 	connectionID := data.Get("connection_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID + "-clients")
-	defer mutex.Unlock(connectionID + "-clients")
-
 	connection, err := api.Connection.Read(
 		connectionID,
 		management.IncludeFields("enabled_clients", "strategy", "name"),
@@ -128,12 +124,6 @@ func readConnectionClients(_ context.Context, data *schema.ResourceData, meta in
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connectionID := data.Id()
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID + "-clients")
-	defer mutex.Unlock(connectionID + "-clients")
-
 	if err := api.Connection.Update(
 		data.Id(),
 		&management.Connection{EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))},
@@ -151,12 +141,6 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 
 func deleteConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	connectionID := data.Id()
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID + "-clients")
-	defer mutex.Unlock(connectionID + "-clients")
 
 	enabledClients := make([]string, 0)
 

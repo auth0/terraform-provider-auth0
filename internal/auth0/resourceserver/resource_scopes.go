@@ -62,10 +62,6 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
-	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
-
 	existingResourceServer, err := api.ResourceServer.Read(resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -129,10 +125,6 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
-	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
-
 	updatedResourceServer := &management.ResourceServer{
 		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
@@ -151,12 +143,6 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 
 func deleteResourceServerScopes(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	resourceServerIdentifier := data.Id()
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(resourceServerIdentifier + "-scopes")
-	defer mutex.Unlock(resourceServerIdentifier + "-scopes")
 
 	resourceServer := &management.ResourceServer{
 		Scopes: &[]management.ResourceServerScope{},

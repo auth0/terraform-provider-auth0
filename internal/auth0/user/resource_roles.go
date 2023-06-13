@@ -48,10 +48,6 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-roles")
-	defer mutex.Unlock(userID + "-roles")
-
 	if err := persistUserRoles(data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -94,10 +90,6 @@ func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interfac
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Id()
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(userID + "-roles")
-	defer mutex.Unlock(userID + "-roles")
 
 	userRolesToRemove := data.Get("roles").(*schema.Set).List()
 	var rmRoles []*management.Role

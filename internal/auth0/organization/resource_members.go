@@ -48,10 +48,6 @@ func NewMembersResource() *schema.Resource {
 func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	organizationID := data.Get("organization_id").(string)
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-members")
-	defer mutex.Unlock(organizationID + "-members")
-
 	api := meta.(*config.Config).GetAPI()
 	alreadyMembers, err := api.Organization.Members(organizationID)
 	if err != nil {
@@ -109,10 +105,6 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 	organizationID := data.Id()
 
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-members")
-	defer mutex.Unlock(organizationID + "-members")
-
 	toAdd, toRemove := value.Difference(data, "members")
 
 	removeMembers := make([]string, 0)
@@ -159,10 +151,6 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 	if len(membersToRemove) == 0 {
 		return nil
 	}
-
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(organizationID + "-members")
-	defer mutex.Unlock(organizationID + "-members")
 
 	if err := api.Organization.DeleteMember(organizationID, membersToRemove); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

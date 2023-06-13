@@ -71,6 +71,77 @@ data "auth0_role" "role" {
 
 const testAccRolePermissionTwoAssigned = testAccGivenAResourceServerWithTwoScopesAndARole + `
 resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "read:foo"
+	}
+}
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsRemoveOnePermission = testAccGivenAResourceServerWithTwoScopesAndARole + `
+resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+}
+
+data "auth0_role" "role" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsDeleteResource = testAccGivenAResourceServerWithTwoScopesAndARole + `
+data "auth0_role" "role" {
+	depends_on = [ auth0_role.role ]
+
+	role_id = auth0_role.role.id
+}
+`
+
+const testAccRolePermissionsImportSetup = testAccGivenAResourceServerWithTwoScopesAndARole + `
+resource "auth0_role_permission" "role_permission_1" {
+	depends_on = [ auth0_role.role ]
+
+	role_id                    = auth0_role.role.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "read:foo"
+}
+
+resource "auth0_role_permission" "role_permission_2" {
+	depends_on = [ auth0_role_permission.role_permission_1 ]
+
+	role_id                    = auth0_role.role.id
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+	permission                 = "create:foo"
+}
+`
+
+const testAccRolePermissionsImportCheck = testAccRolePermissionsImportSetup + `
+resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role_permission.role_permission_2 ]
+
 	role_id = auth0_role.role.id
 
 	permissions  {

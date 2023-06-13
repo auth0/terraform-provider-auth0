@@ -42,14 +42,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 49
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"name":"test-owner","description":"Test Owner"}
         form: {}
         headers:
             Content-Type:
@@ -102,7 +102,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"rol_2EdagcPmeRIyjBYp","name":"test-admin","description":"Test Administrator"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -714,7 +714,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"id":"rol_EOP9frywYtV1oDIh","name":"test-owner","description":"Test Owner"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
@@ -2406,7 +2406,7 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[],"start":0,"limit":50,"total":0}'
+        body: '{"roles":[{"id":"rol_2EdagcPmeRIyjBYp","name":"test-admin","description":"Test Administrator"},{"id":"rol_EOP9frywYtV1oDIh","name":"test-owner","description":"Test Owner"}],"start":0,"limit":50,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8

@@ -88,11 +88,8 @@ func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{
 
 func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Id()
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	userRolesToRemove := data.Get("roles").(*schema.Set).List()
 	var rmRoles []*management.Role

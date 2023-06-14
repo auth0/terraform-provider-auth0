@@ -63,12 +63,8 @@ func NewConnectionsResource() *schema.Resource {
 
 func createOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
-
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
 
 	alreadyEnabledConnections, err := api.Organization.Connections(organizationID)
 	if err != nil {
@@ -130,11 +126,8 @@ func readOrganizationConnections(_ context.Context, data *schema.ResourceData, m
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
-	orgID := data.Id()
-	mutex.Lock(orgID)
-	defer mutex.Unlock(orgID)
+	organizationID := data.Id()
 
 	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
@@ -142,7 +135,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, rmConnection := range toRemove {
 		connection := rmConnection.(map[string]interface{})
 
-		if err := api.Organization.DeleteConnection(orgID, connection["connection_id"].(string)); err != nil {
+		if err := api.Organization.DeleteConnection(organizationID, connection["connection_id"].(string)); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -155,7 +148,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
 
-		if err := api.Organization.AddConnection(orgID, &management.OrganizationConnection{
+		if err := api.Organization.AddConnection(organizationID, &management.OrganizationConnection{
 			ConnectionID:            auth0.String(connection["connection_id"].(string)),
 			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
 		}); err != nil {
@@ -177,15 +170,14 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(data.Id())
-	defer mutex.Unlock(data.Id())
+
+	organizationID := data.Id()
 
 	var result *multierror.Error
 
 	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	for _, conn := range connections {
-		err := api.Organization.DeleteConnection(data.Id(), conn.GetConnectionID())
+		err := api.Organization.DeleteConnection(organizationID, conn.GetConnectionID())
 		result = multierror.Append(result, err)
 	}
 

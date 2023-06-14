@@ -5,116 +5,161 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
+
+const testAccOrganizationMemberAddOneMember = testAccGivenTwoUsersAndAnOrganization + `
+resource "auth0_organization_member" "member_1" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+	user_id         = auth0_user.user_1.id
+}
+
+data "auth0_organization" "my_org_data" {
+	depends_on = [ auth0_organization_member.member_1 ]
+
+	organization_id = auth0_organization.my_org.id
+}
+`
+
+const testAccOrganizationMemberAddTwoMembers = testAccGivenTwoUsersAndAnOrganization + `
+resource "auth0_organization_member" "member_1" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+	user_id         = auth0_user.user_1.id
+}
+
+resource "auth0_organization_member" "member_2" {
+	depends_on = [ auth0_organization_member.member_1 ]
+
+	organization_id = auth0_organization.my_org.id
+	user_id         = auth0_user.user_2.id
+}
+
+data "auth0_organization" "my_org_data" {
+	depends_on = [ auth0_organization_member.member_2 ]
+
+	organization_id = auth0_organization.my_org.id
+}
+`
+
+const testAccOrganizationMemberImportSetup = testAccGivenTwoUsersAndAnOrganization + `
+resource "auth0_organization_members" "my_members" {
+	depends_on = [ auth0_organization.my_org ]
+
+	organization_id = auth0_organization.my_org.id
+	members         = [ auth0_user.user_1.id, auth0_user.user_2.id ]
+}
+`
+
+const testAccOrganizationMemberImportCheck = testAccOrganizationMemberImportSetup + `
+resource "auth0_organization_member" "member_1" {
+	depends_on = [ auth0_organization_members.my_members ]
+
+	organization_id = auth0_organization.my_org.id
+	user_id         = auth0_user.user_1.id
+}
+
+resource "auth0_organization_member" "member_2" {
+	depends_on = [ auth0_organization_member.member_1 ]
+
+	organization_id = auth0_organization.my_org.id
+	user_id         = auth0_user.user_2.id
+}
+
+data "auth0_organization" "my_org_data" {
+	depends_on = [ auth0_organization_member.member_1 ]
+
+	organization_id = auth0_organization.my_org.id
+}
+`
 
 func TestAccOrganizationMember(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{{
-			Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
-			resource auth0_organization_member test_member {
-				depends_on = [ auth0_user.user, auth0_organization.some_org ]
-				organization_id = auth0_organization.some_org.id
-				user_id = auth0_user.user.id
-			}
-			`, testName),
-			Check: resource.ComposeTestCheckFunc(
-				resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "0"),
-				resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
-				resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
-			),
-		},
+		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member test_member {
-					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader ]
-					organization_id = auth0_organization.some_org.id
-					user_id = auth0_user.user.id
-					roles = [ auth0_role.reader.id ] // Adding role
-				}
-			`, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberAddOneMember, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
-					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.reader", "id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "1"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "organization_id", "auth0_organization.my_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "user_id", "auth0_user.user_1", "id"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member test_member {
-					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
-					organization_id = auth0_organization.some_org.id
-					user_id = auth0_user.user.id
-					roles = [ auth0_role.reader.id, auth0_role.admin.id ] // Adding an additional role
-				}
-			`, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberAddTwoMembers, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
-					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "2"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.reader", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.admin", "id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "2"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "organization_id", "auth0_organization.my_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "user_id", "auth0_user.user_1", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_2", "organization_id", "auth0_organization.my_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_2", "user_id", "auth0_user.user_2", "id"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMembersAux+`
-				resource auth0_organization_member test_member {
-					depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
-					organization_id = auth0_organization.some_org.id
-					user_id = auth0_user.user.id
-					roles = [ auth0_role.admin.id ] // Removing a role
-				}
-			`, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMembersDeleteResource, testName),
+			},
+			{
+				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
-					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "1"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "roles.*", "auth0_role.admin", "id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "0"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMembersAux+
-					`
-			resource auth0_organization_member test_member {
-				depends_on = [ auth0_user.user, auth0_organization.some_org, auth0_role.reader, auth0_role.admin ]
-				organization_id = auth0_organization.some_org.id
-				user_id = auth0_user.user.id
-				// Removing roles entirely
-			}`, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberImportSetup, testName),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccOrganizationMemberImportCheck, testName),
+				ResourceName: "auth0_organization_member.member_1",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					orgID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_organization.my_org", "id")
+					assert.NoError(t, err)
+
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user_1", "id")
+					assert.NoError(t, err)
+
+					return orgID + ":" + userID, nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config:       acctest.ParseTestName(testAccOrganizationMemberImportCheck, testName),
+				ResourceName: "auth0_organization_member.member_2",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					orgID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_organization.my_org", "id")
+					assert.NoError(t, err)
+
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user_2", "id")
+					assert.NoError(t, err)
+
+					return orgID + ":" + userID, nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMemberImportCheck, testName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_organization_member.test_member", "roles.#", "0"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "organization_id", "auth0_organization.some_org", "id"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.test_member", "user_id", "auth0_user.user", "id"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org_data", "members.#", "2"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "organization_id", "auth0_organization.my_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_1", "user_id", "auth0_user.user_1", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_2", "organization_id", "auth0_organization.my_org", "id"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_organization_member.member_2", "user_id", "auth0_user.user_2", "id"),
 				),
 			},
 		},
 	})
 }
-
-const testAccOrganizationMembersAux = `
-resource auth0_role reader {
-	name = "Reader - {{.testName}}"
-}
-
-resource auth0_role admin {
-	depends_on = [ auth0_role.reader ]
-	name = "Admin - {{.testName}}"
-}
-
-resource auth0_user user {
-	username = "testusername"
-	email = "{{.testName}}@auth0.com"
-	connection_name = "Username-Password-Authentication"
-	email_verified = true
-	password = "MyPass123$"
-}
-
-resource auth0_organization some_org {
-	name = "some-org-{{.testName}}"
-	display_name = "{{.testName}}"
-}
-`

@@ -3,27 +3,27 @@
 FEATURES:
 
 - `data-source/auth0_organization`: Add members ([#615](https://github.com/auth0/terraform-provider-auth0/pull/615))
-- `resource/auth0_organization_connections`: Add new resource to manage a 1:many relationship between the organization and its enabled connections ([#610](https://github.com/auth0/terraform-provider-auth0/pull/610))
-- `resource/auth0_organization_members`: Add new resource to manage a 1:many relationship between the organization and its members ([#614](https://github.com/auth0/terraform-provider-auth0/pull/614))
-- `resource/auth0_organization_member_role`: Add new resource to manage a 1:1 relationship between the organization member and its roles ([#622](https://github.com/auth0/terraform-provider-auth0/pull/622))
-- `resource/auth0_organization_member_roles`: Add new resource to manage a 1:many relationship between the organization member and its roles ([#617](https://github.com/auth0/terraform-provider-auth0/pull/617))
-- `resource/auth0_trigger_action`: Add new resource to manage a 1:1 relationship between the trigger binding and an action ([#612](https://github.com/auth0/terraform-provider-auth0/pull/612), [#621](https://github.com/auth0/terraform-provider-auth0/pull/621))
-- `resource/auth0_trigger_actions`: Add new resource to manage a 1:many relationship between the trigger binding and multiple actions ([#613](https://github.com/auth0/terraform-provider-auth0/pull/613))
+- `resource/auth0_organization_connections`: Add new resource to manage a 1:many relationship between an organization and its enabled connections ([#610](https://github.com/auth0/terraform-provider-auth0/pull/610))
+- `resource/auth0_organization_members`: Add new resource to manage a 1:many relationship between an organization and its members ([#614](https://github.com/auth0/terraform-provider-auth0/pull/614))
+- `resource/auth0_organization_member_role`: Add new resource to manage a 1:1 relationship between an organization member and its roles ([#622](https://github.com/auth0/terraform-provider-auth0/pull/622))
+- `resource/auth0_organization_member_roles`: Add new resource to manage a 1:many relationship between an organization member and its roles ([#617](https://github.com/auth0/terraform-provider-auth0/pull/617))
+- `resource/auth0_trigger_action`: Add new resource to manage a 1:1 relationship between a trigger binding and an action ([#612](https://github.com/auth0/terraform-provider-auth0/pull/612), [#621](https://github.com/auth0/terraform-provider-auth0/pull/621))
+- `resource/auth0_trigger_actions`: Add new resource to manage a 1:many relationship between a trigger binding and actions ([#613](https://github.com/auth0/terraform-provider-auth0/pull/613))
 
 BUG FIXES:
 
-- `resource/auth0_client_credentials`: Fix import issue ([#608](https://github.com/auth0/terraform-provider-auth0/pull/608))
-- `resource/auth0_connection`: Fix `set_user_root_attributes` attribute for enterprise connections ([#619](https://github.com/auth0/terraform-provider-auth0/pull/619))
-- `resource/auth0_user_role`: Fix import issue ([#629](https://github.com/auth0/terraform-provider-auth0/pull/629))
-- `resource/auth0_user_permissions`: Fix updating permissions ([#630](https://github.com/auth0/terraform-provider-auth0/pull/630))
-- `resource/auth0_role_permissions`: Fix updating permissions ([#632](https://github.com/auth0/terraform-provider-auth0/pull/632))
+- `resource/auth0_client_credentials`: Correctly set ID when importing ([#608](https://github.com/auth0/terraform-provider-auth0/pull/608))
+- `resource/auth0_connection`: More consistent `set_user_root_attributes` behavior for enterprise connections ([#619](https://github.com/auth0/terraform-provider-auth0/pull/619))
+- `resource/auth0_user_role`: Enable importing of resource ([#629](https://github.com/auth0/terraform-provider-auth0/pull/629))
+- `resource/auth0_user_permissions`: Update diffing algorithm to address a bug where the order of additions and removals was causing incorrect results ([#630](https://github.com/auth0/terraform-provider-auth0/pull/630))
+- `resource/auth0_role_permissions`: Update diffing algorithm to address a bug where the order of additions and removals was causing incorrect results ([#632](https://github.com/auth0/terraform-provider-auth0/pull/632))
 - `resource/auth0_trigger_action`: Fix delete logic ([#639](https://github.com/auth0/terraform-provider-auth0/pull/639))
 
 NOTES: 
 
-- The documentation warnings for mutually exclusive resources have been improved ([#626](https://github.com/auth0/terraform-provider-auth0/pull/626))
 - :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
 to navigate the deprecations that were added in this release.
+
 
 ## 0.48.0
 

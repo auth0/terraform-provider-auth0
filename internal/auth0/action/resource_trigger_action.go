@@ -204,7 +204,7 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		return diag.FromErr(err)
 	}
 
-	var updatedBindings []*management.ActionBinding
+	updatedBindings := make([]*management.ActionBinding, 0)
 	for _, binding := range triggerBindings.Bindings {
 		if binding.Action.GetID() == actionID {
 			continue
@@ -219,9 +219,5 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		})
 	}
 
-	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
-		return diag.FromErr(err)
-	}
-
-	return nil
+	return diag.FromErr(api.Action.UpdateBindings(trigger, updatedBindings))
 }

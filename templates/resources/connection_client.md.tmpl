@@ -8,7 +8,10 @@ description: |-
 
 {{ .Description | trimspace }}
 
-!> To prevent issues, avoid using this resource together with the `auth0_connection_clients` resource.
+!> This resource appends an enabled client to a connection. In contrast, the `auth0_connection_clients` resource
+manages all the clients enabled for a connection. To avoid potential issues, it is recommended not to use this
+resource in conjunction with the `auth0_connection_clients` resource when managing enabled clients for the
+same connection id.
 
 {{ if .HasExample -}}
 

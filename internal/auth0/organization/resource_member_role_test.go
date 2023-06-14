@@ -32,7 +32,7 @@ resource "auth0_organization_member_role" "role1" {
 }
 
 resource "auth0_organization_member_role" "role2" {
-	depends_on = [ auth0_organization_member.member ]
+	depends_on = [ auth0_organization_member_role.role1 ]
 
 	organization_id = auth0_organization.org.id
 	user_id         = auth0_user.user.id
@@ -51,7 +51,7 @@ resource "auth0_organization_member_roles" "roles" {
 }
 `
 
-const testAccOrganizationMemberRolesImportSetup = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
+const testAccOrganizationMemberRoleImportSetup = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
 resource "auth0_organization_member_roles" "roles" {
 	depends_on = [ auth0_organization_member.member ]
 
@@ -62,18 +62,9 @@ resource "auth0_organization_member_roles" "roles" {
 }
 `
 
-const testAccOrganizationMemberRolesImportCheck = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
-resource "auth0_organization_member_roles" "roles" {
-	depends_on = [ auth0_organization_member.member ]
-
-	organization_id = auth0_organization.org.id
-	user_id         = auth0_user.user.id
-
-	roles = [ auth0_role.reader.id, auth0_role.writer.id ]
-}
-
+const testAccOrganizationMemberRoleImportCheck = testAccOrganizationMemberRoleImportSetup + `
 resource "auth0_organization_member_role" "role1" {
-	depends_on = [ auth0_organization_member.member ]
+	depends_on = [ auth0_organization_member_roles.roles ]
 
 	organization_id = auth0_organization.org.id
 	user_id         = auth0_user.user.id
@@ -81,7 +72,7 @@ resource "auth0_organization_member_role" "role1" {
 }
 
 resource "auth0_organization_member_role" "role2" {
-	depends_on = [ auth0_organization_member.member ]
+	depends_on = [ auth0_organization_member_role.role1 ]
 
 	organization_id = auth0_organization.org.id
 	user_id         = auth0_user.user.id
@@ -147,13 +138,13 @@ func TestAccOrganizationMemberRole(t *testing.T) {
 				},
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMemberRolesImportSetup, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberRoleImportSetup, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member_roles.roles", "roles.#", "2"),
 				),
 			},
 			{
-				Config:       acctest.ParseTestName(testAccOrganizationMemberRolesImportCheck, testName),
+				Config:       acctest.ParseTestName(testAccOrganizationMemberRoleImportCheck, testName),
 				ResourceName: "auth0_organization_member_role.role1",
 				ImportState:  true,
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
@@ -177,7 +168,7 @@ func TestAccOrganizationMemberRole(t *testing.T) {
 				ImportStatePersist: true,
 			},
 			{
-				Config:       acctest.ParseTestName(testAccOrganizationMemberRolesImportCheck, testName),
+				Config:       acctest.ParseTestName(testAccOrganizationMemberRoleImportCheck, testName),
 				ResourceName: "auth0_organization_member_role.role2",
 				ImportState:  true,
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
@@ -201,7 +192,7 @@ func TestAccOrganizationMemberRole(t *testing.T) {
 				ImportStatePersist: true,
 			},
 			{
-				Config: acctest.ParseTestName(testAccOrganizationMemberRolesImportCheck, testName),
+				Config: acctest.ParseTestName(testAccOrganizationMemberRoleImportCheck, testName),
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectEmptyPlan(),

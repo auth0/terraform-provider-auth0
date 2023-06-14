@@ -265,7 +265,11 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	d.SetId(user.GetID())
 
-	if err = persistUserRoles(d, api); err != nil {
+	if err = persistUserRoles(d, m); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			return readUser(ctx, d, m)
+		}
+
 		return diag.FromErr(err)
 	}
 
@@ -289,8 +293,12 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		}
 	}
 
-	if err = persistUserRoles(d, api); err != nil {
-		return diag.Errorf("failed assigning user roles. %s", err)
+	if err = persistUserRoles(d, m); err != nil {
+		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
+			return readUser(ctx, d, m)
+		}
+
+		return diag.FromErr(err)
 	}
 
 	return readUser(ctx, d, m)
@@ -473,21 +481,21 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 	}
 }
 
-func persistUserRoles(d *schema.ResourceData, api *management.Management) error {
+func persistUserRoles(d *schema.ResourceData, meta interface{}) error {
 	if !d.HasChange("roles") {
 		return nil
 	}
 
 	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
 
-	if err := removeUserRoles(api, d.Id(), rolesToRemove); err != nil {
+	if err := removeUserRoles(meta, d.Id(), rolesToRemove); err != nil {
 		return err
 	}
 
-	return assignUserRoles(api, d.Id(), rolesToAdd)
+	return assignUserRoles(meta, d.Id(), rolesToAdd)
 }
 
-func removeUserRoles(api *management.Management, userID string, userRolesToRemove []interface{}) error {
+func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interface{}) error {
 	if len(userRolesToRemove) == 0 {
 		return nil
 	}
@@ -498,18 +506,16 @@ func removeUserRoles(api *management.Management, userID string, userRolesToRemov
 		rmRoles = append(rmRoles, role)
 	}
 
-	err := api.User.RemoveRoles(userID, rmRoles)
-	if err != nil {
-		// Ignore 404 errors as the role may have been deleted prior to un-assigning them from the user.
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-	}
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
 
-	return err
+	mutex.Lock(userID)
+	defer mutex.Unlock(userID)
+
+	return api.User.RemoveRoles(userID, rmRoles)
 }
 
-func assignUserRoles(api *management.Management, userID string, userRolesToAdd []interface{}) error {
+func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface{}) error {
 	if len(userRolesToAdd) == 0 {
 		return nil
 	}
@@ -520,6 +526,12 @@ func assignUserRoles(api *management.Management, userID string, userRolesToAdd [
 		role := &management.Role{ID: &roleID}
 		addRoles = append(addRoles, role)
 	}
+
+	api := meta.(*config.Config).GetAPI()
+	mutex := meta.(*config.Config).GetMutex()
+
+	mutex.Lock(userID)
+	defer mutex.Unlock(userID)
 
 	return api.User.AssignRoles(userID, addRoles)
 }

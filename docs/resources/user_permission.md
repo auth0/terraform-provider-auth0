@@ -8,7 +8,9 @@ description: |-
 
 With this resource, you can manage user permissions.
 
-!> To prevent issues, avoid using this resource together with the `auth0_user_permissions` resource.
+!> This resource appends a permission to a user. In contrast, the `auth0_user_permissions` resource manages all the
+permissions assigned to a user. To avoid potential issues, it is recommended not to use this resource in conjunction
+with the `auth0_user_permissions` resource when managing permissions for the same user id.
 
 ## Example Usage
 
@@ -69,7 +71,6 @@ Import is supported using the following syntax:
 # This resource can be imported by specifying the
 # user ID, resource identifier and permission name separated by "::" (note the double colon)
 # <userID>::<resourceServerIdentifier>::<permission>
-
 #
 # Example:
 terraform import auth0_user_permission.permission "auth0|111111111111111111111111::https://api.travel0.com/v1::read:posts"

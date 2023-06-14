@@ -46,14 +46,9 @@ func NewMembersResource() *schema.Resource {
 }
 
 func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
-
 	organizationID := data.Get("organization_id").(string)
 
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
-
+	api := meta.(*config.Config).GetAPI()
 	alreadyMembers, err := api.Organization.Members(organizationID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -107,12 +102,8 @@ func readOrganizationMembers(_ context.Context, data *schema.ResourceData, meta 
 
 func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Id()
-
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
 
 	toAdd, toRemove := value.Difference(data, "members")
 
@@ -153,7 +144,6 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Id()
 	membersToRemove := *value.Strings(data.GetRawState().GetAttr("members"))
@@ -161,9 +151,6 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 	if len(membersToRemove) == 0 {
 		return nil
 	}
-
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
 
 	if err := api.Organization.DeleteMember(organizationID, membersToRemove); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

@@ -71,12 +71,8 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
-
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
 
 	toAdd, toRemove := value.Difference(data, "permissions")
 
@@ -147,12 +143,8 @@ func readRolePermissions(_ context.Context, data *schema.ResourceData, meta inte
 
 func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	roleID := data.Get("role_id").(string)
-
-	mutex.Lock(roleID)
-	defer mutex.Unlock(roleID)
 
 	permissionsToRemove := data.Get("permissions").(*schema.Set).List()
 

@@ -49,7 +49,10 @@ func NewMemberRolesResource() *schema.Resource {
 }
 
 func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	if err := assignRoles(data, meta); err != nil {
+	organizationID := data.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
+
+	if err := assignMemberRoles(data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -57,9 +60,6 @@ func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 
 		return diag.FromErr(err)
 	}
-
-	organizationID := data.Get("organization_id").(string)
-	userID := data.Get("user_id").(string)
 
 	data.SetId(organizationID + ":" + userID)
 
@@ -91,7 +91,7 @@ func readOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, m
 }
 
 func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	if err := assignRoles(data, meta); err != nil {
+	if err := assignMemberRoles(data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -105,7 +105,6 @@ func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 
 func deleteOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
@@ -119,9 +118,6 @@ func deleteOrganizationMemberRoles(_ context.Context, data *schema.ResourceData,
 	for _, role := range roles {
 		rolesToRemove = append(rolesToRemove, role.(string))
 	}
-
-	mutex.Lock(organizationID)
-	defer mutex.Unlock(organizationID)
 
 	if err := api.Organization.DeleteMemberRoles(organizationID, userID, rolesToRemove); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {

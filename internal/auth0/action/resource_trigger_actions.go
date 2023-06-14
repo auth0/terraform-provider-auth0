@@ -100,8 +100,9 @@ func readTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}
 }
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	api := m.(*config.Config).GetAPI()
+
+	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
@@ -111,9 +112,5 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 
 func deleteTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}); err != nil {
-		return diag.FromErr(err)
-	}
-
-	return nil
+	return diag.FromErr(api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}))
 }

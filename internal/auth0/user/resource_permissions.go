@@ -71,12 +71,8 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	toAdd, toRemove := value.Difference(data, "permissions")
 
@@ -148,12 +144,8 @@ func readUserPermissions(_ context.Context, data *schema.ResourceData, meta inte
 
 func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	permissions := data.Get("permissions").(*schema.Set).List()
 

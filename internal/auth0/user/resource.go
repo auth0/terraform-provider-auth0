@@ -507,10 +507,6 @@ func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interf
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	return api.User.RemoveRoles(userID, rmRoles)
 }
@@ -528,10 +524,6 @@ func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	return api.User.AssignRoles(userID, addRoles)
 }

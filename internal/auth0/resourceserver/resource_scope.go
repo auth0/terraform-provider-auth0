@@ -48,13 +48,13 @@ func NewScopeResource() *schema.Resource {
 
 func createResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
 	description := data.Get("description").(string)
 
-	mutex.Lock(resourceServerIdentifier)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
@@ -92,13 +92,13 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
 	newDescription := data.Get("description").(string)
 
-	mutex.Lock(resourceServerIdentifier)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
@@ -166,12 +166,12 @@ func readResourceServerScope(_ context.Context, data *schema.ResourceData, meta 
 
 func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
 
-	mutex.Lock(resourceServerIdentifier)
+	mutex := meta.(*config.Config).GetMutex()
+	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
 	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)

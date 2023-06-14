@@ -55,13 +55,9 @@ func NewRoleResource() *schema.Resource {
 
 func createUserRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	if err := api.User.AssignRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -109,13 +105,9 @@ func readUserRole(_ context.Context, data *schema.ResourceData, meta interface{}
 
 func deleteUserRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	if err := api.User.RemoveRoles(userID, []*management.Role{{ID: &roleID}}); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {

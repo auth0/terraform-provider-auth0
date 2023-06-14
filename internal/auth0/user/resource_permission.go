@@ -58,14 +58,10 @@ func NewPermissionResource() *schema.Resource {
 
 func createUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	if err := api.User.AssignPermissions(userID, []*management.Permission{
 		{
@@ -119,14 +115,10 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 
 func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	mutex := meta.(*config.Config).GetMutex()
 
 	userID := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
-
-	mutex.Lock(userID)
-	defer mutex.Unlock(userID)
 
 	if err := api.User.RemovePermissions(
 		userID,

@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -92,6 +94,35 @@ resource "auth0_organization_member_roles" "roles" {
 }
 `
 
+const testAccOrganizationMemberRolesImportSetup = testAccGivenTwoRolesAUserAnOrganizationAndAnOrganizationMember + `
+resource "auth0_organization_member_role" "role1" {
+	depends_on = [ auth0_organization_member.member ]
+
+	organization_id = auth0_organization.org.id
+	user_id         = auth0_user.user.id
+	role_id         = auth0_role.reader.id
+}
+
+resource "auth0_organization_member_role" "role2" {
+	depends_on = [ auth0_organization_member_role.role1 ]
+
+	organization_id = auth0_organization.org.id
+	user_id         = auth0_user.user.id
+	role_id         = auth0_role.writer.id
+}
+`
+
+const testAccOrganizationMemberRolesImportCheck = testAccOrganizationMemberRolesImportSetup + `
+resource "auth0_organization_member_roles" "roles" {
+	depends_on = [ auth0_organization_member_role.role2 ]
+
+	organization_id = auth0_organization.org.id
+	user_id         = auth0_user.user.id
+
+	roles = [ auth0_role.reader.id, auth0_role.writer.id ]
+}
+`
+
 func TestAccOrganizationMemberRoles(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
@@ -119,6 +150,39 @@ func TestAccOrganizationMemberRoles(t *testing.T) {
 				Config: acctest.ParseTestName(testAccOrganizationMemberRolesCreateWithNoRoles, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_member_roles.roles", "roles.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMemberRolesImportSetup, testName),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccOrganizationMemberRolesImportCheck, testName),
+				ResourceName: "auth0_organization_member_roles.roles",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					organizationID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_organization.org", "id")
+					if err != nil {
+						return "", err
+					}
+
+					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user", "id")
+					if err != nil {
+						return "", err
+					}
+
+					return organizationID + ":" + userID, nil
+				},
+				ImportStatePersist: true,
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationMemberRolesImportCheck, testName),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization_member_roles.roles", "roles.#", "2"),
 				),
 			},
 		},

@@ -18,11 +18,6 @@ import (
 func NewAuth0Resource() *schema.Resource {
 	baseResource := NewBaseConnectionResource(
 		map[string]*schema.Schema{
-			"strategy": {
-				Type:        schema.TypeString,
-				Computed:    true,
-				Description: "Type of the connection, which indicates the identity provider.",
-			},
 			"validation": {
 				Type:        schema.TypeList,
 				MaxItems:    1,

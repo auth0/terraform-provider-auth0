@@ -1,4 +1,4 @@
-package connection_new //nolint:all
+package connection_new //nolint:all temporarily until v0 connection resource removed
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -16,6 +16,11 @@ var baseSchema = map[string]*schema.Schema{
 		Type:        schema.TypeString,
 		Optional:    true,
 		Description: "Name used in login screen.",
+	},
+	"strategy": {
+		Type:        schema.TypeString,
+		Computed:    true,
+		Description: "Type of the connection, which indicates the identity provider.",
 	},
 	"is_domain_connection": {
 		Type:        schema.TypeBool,

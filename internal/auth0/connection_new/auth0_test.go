@@ -17,7 +17,7 @@ func TestAccConnection(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "is_domain_connection", "true"),
-					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "strategy", "auth0"), //TODO: make.
+					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "metadata.key1", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection_auth0.my_connection", "metadata.key2", "bar"),
 					resource.TestCheckNoResourceAttr("auth0_connection_auth0.my_connection", "show_as_button"),
@@ -63,7 +63,7 @@ const testAccConnectionConfig = `
 resource "auth0_connection_auth0" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"
 	is_domain_connection = true
-	strategy = "auth0"
+
 	metadata = {
 		key1 = "foo"
 		key2 = "bar"
@@ -119,7 +119,7 @@ const testAccConnectionConfigUpdate = `
 resource "auth0_connection_auth0" "my_connection" {
 	name = "Acceptance-Test-Connection-{{.testName}}"
 	is_domain_connection = true
-	strategy = "auth0"
+
 	metadata = {
 		key1 = "foo"
 		key2 = "bar"

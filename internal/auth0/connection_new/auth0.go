@@ -3,6 +3,7 @@ package connection_new //nolint:all
 import (
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -17,6 +18,11 @@ import (
 func NewAuth0Resource() *schema.Resource {
 	baseResource := NewBaseConnectionResource(
 		map[string]*schema.Schema{
+			"strategy": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Type of the connection, which indicates the identity provider.",
+			},
 			"validation": {
 				Type:        schema.TypeList,
 				MaxItems:    1,
@@ -228,14 +234,14 @@ func NewAuth0Resource() *schema.Resource {
 					"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
 			},
 		},
-		expandConnectionOptionsAuth0,
-		flattenConnectionOptionsAuth0,
+		expandConnectionAuth0,
+		flattenConnectionAuth0,
 	)
 
 	return baseResource
 }
 
-func flattenConnectionOptionsAuth0(
+func flattenConnectionAuth0(
 	d *schema.ResourceData,
 	options *management.ConnectionOptions,
 ) (map[string]interface{}, diag.Diagnostics) {
@@ -245,6 +251,7 @@ func flattenConnectionOptionsAuth0(
 	}
 
 	m := map[string]interface{}{
+		"strategy":                             "auth0",
 		"password_policy":                      options.GetPasswordPolicy(),
 		"enable_script_context":                options.GetEnableScriptContext(),
 		"enabled_database_customization":       options.GetEnabledDatabaseCustomization(),
@@ -293,11 +300,13 @@ func flattenConnectionOptionsAuth0(
 	return m, nil
 }
 
-func expandConnectionOptionsAuth0(
+func expandConnectionAuth0(
+	conn *management.Connection,
 	d *schema.ResourceData,
-	config cty.Value,
 	api *management.Management,
-) (*management.ConnectionOptions, diag.Diagnostics) {
+) (*management.Connection, diag.Diagnostics) {
+	config := d.GetRawConfig()
+
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -446,9 +455,13 @@ func expandConnectionOptionsAuth0(
 		if diags.HasError() {
 			return nil, diags
 		}
+	} else {
+		conn.Strategy = auth0.String("auth0")
 	}
 
-	return options, nil
+	conn.Options = options
+
+	return conn, nil
 }
 
 // checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.

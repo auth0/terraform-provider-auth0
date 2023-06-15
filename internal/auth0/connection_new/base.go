@@ -128,7 +128,6 @@ func expandBaseConnection[T interface{}](d *schema.ResourceData, api *management
 
 	if d.IsNewResource() {
 		connection.Name = value.String(config.GetAttr("name"))
-		connection.Strategy = value.String(config.GetAttr("strategy"))
 	}
 
 	if d.HasChange("realms") {
@@ -139,11 +138,7 @@ func expandBaseConnection[T interface{}](d *schema.ResourceData, api *management
 		connection.EnabledClients = value.Strings(config.GetAttr("enabled_clients"))
 	}
 
-	var diagnostics diag.Diagnostics
-
-	connection.Options, diagnostics = expandSpecificConnectionType(d, d.GetRawConfig(), api)
-
-	return connection, diagnostics
+	return expandSpecificConnectionType(connection, d, api)
 }
 
 func updateConnection[T interface{}](typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

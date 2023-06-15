@@ -1,4 +1,4 @@
-package connection_new //nolint:all
+package connection_new //nolint:all temporarily until v0 connection resource removed
 
 import (
 	"fmt"

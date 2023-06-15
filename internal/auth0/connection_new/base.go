@@ -1,4 +1,4 @@
-package connection_new //nolint:all
+package connection_new //nolint:all temporarily until v0 connection resource removed
 
 import (
 	"context"
@@ -13,6 +13,19 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
+
+// TypeSpecificExpandConnectionFunction is a generic function signature for connection expansion.
+type TypeSpecificExpandConnectionFunction[T interface{}] func(
+	conn *management.Connection,
+	d *schema.ResourceData,
+	api *management.Management,
+) (*management.Connection, diag.Diagnostics)
+
+// TypeSpecificFlattenConnectionFunction is a generic function signature for connection flatten.
+type TypeSpecificFlattenConnectionFunction[T interface{}] func(
+	d *schema.ResourceData,
+	options *T,
+) (map[string]interface{}, diag.Diagnostics)
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
 func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
@@ -78,11 +91,6 @@ func readConnection[T interface{}](typeSpecificFlatten TypeSpecificFlattenConnec
 			return diag.FromErr(errors.New("could not convert connection options to specified type"))
 		}
 
-		connectionOptions, diags := flattenConnectionOptions(d, opts, typeSpecificFlatten)
-		if diags.HasError() {
-			return diags
-		}
-
 		result := multierror.Append(
 			d.Set("name", connection.GetName()),
 			d.Set("display_name", connection.GetDisplayName()),
@@ -93,10 +101,15 @@ func readConnection[T interface{}](typeSpecificFlatten TypeSpecificFlattenConnec
 			d.Set("enabled_clients", connection.GetEnabledClients()),
 		)
 
-		for _, value := range connectionOptions {
-			for key, v := range value {
+		connectionOptions, diags := flattenConnectionOptions(d, opts, typeSpecificFlatten)
+		if diags.HasError() {
+			return diags
+		}
+
+		for _, opts := range connectionOptions {
+			for key, v := range opts {
 				if key == "configuration" {
-					continue // For ignoring sensitive fields.
+					continue // Preventing update of sensitive field.
 				}
 				result = multierror.Append(d.Set(key, v), err)
 			}
@@ -104,6 +117,7 @@ func readConnection[T interface{}](typeSpecificFlatten TypeSpecificFlattenConnec
 		}
 
 		switch connection.GetStrategy() {
+		//TODO: eventually remove this and integrate with connection-specific flatten functions.
 		case management.ConnectionStrategyGoogleApps,
 			management.ConnectionStrategyOIDC,
 			management.ConnectionStrategyAD,

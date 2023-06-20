@@ -1,4 +1,4 @@
-package connection_new //nolint:all temporarily until v0 connection resource removed
+package connection
 
 import (
 	"fmt"
@@ -11,12 +11,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// NewAuth0Resource will return a new auth0_connection_auth0 resource.
-func NewAuth0Resource() *schema.Resource {
-	baseResource := NewBaseConnectionResource(
+// NewDatabaseResource will return a new auth0_connection_database resource.
+func NewDatabaseResource() *schema.Resource {
+	baseResource := connection.NewBaseConnectionResource(
 		map[string]*schema.Schema{
 			"validation": {
 				Type:        schema.TypeList,

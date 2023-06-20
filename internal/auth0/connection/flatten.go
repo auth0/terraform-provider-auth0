@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
-func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
+func flattenConnectionOptionsV0(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
 	if options == nil {
 		return nil, nil
 	}

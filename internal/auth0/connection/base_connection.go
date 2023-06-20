@@ -1,4 +1,4 @@
-package connection_new //nolint:all temporarily until v0 connection resource removed
+package connection
 
 import (
 	"context"
@@ -29,7 +29,7 @@ type TypeSpecificFlattenConnectionFunction[T interface{}] func(
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
 func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
-	resourceSchema := baseSchema
+	resourceSchema := baseConnectionSchema
 
 	for key, value := range optionsSchema {
 		resourceSchema[key] = value

@@ -1,0 +1,326 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 854
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Connection-TestAccConnectionDatabase","strategy":"auth0","is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"fair","validation":{"username":{"max":40,"min":10}},"password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false,"configuration":{"foo":"2.0$96faed0d6a330ad5c2eff307204912c8$033b3a369815f2a1f27bdf1a475c6bda$5311bb137acd47ab654d3a32e807ceceaf7c353077633211368aea25de649d2c"},"strategy_version":2},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 172.98625ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$96faed0d6a330ad5c2eff307204912c8$033b3a369815f2a1f27bdf1a475c6bda$5311bb137acd47ab654d3a32e807ceceaf7c353077633211368aea25de649d2c"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 113.178416ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$96faed0d6a330ad5c2eff307204912c8$033b3a369815f2a1f27bdf1a475c6bda$5311bb137acd47ab654d3a32e807ceceaf7c353077633211368aea25de649d2c"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 110.285292ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$96faed0d6a330ad5c2eff307204912c8$033b3a369815f2a1f27bdf1a475c6bda$5311bb137acd47ab654d3a32e807ceceaf7c353077633211368aea25de649d2c"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 113.894584ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$96faed0d6a330ad5c2eff307204912c8$033b3a369815f2a1f27bdf1a475c6bda$5311bb137acd47ab654d3a32e807ceceaf7c353077633211368aea25de649d2c"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 114.935125ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 596
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":false},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"enable_script_context":true,"enabledDatabaseCustomization":true,"brute_force_protection":false,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"set_user_root_attributes":"on_first_login","non_persistent_attrs":[],"disable_self_service_change_password":true}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$0b2381f096ba860d79f12e07e7122020$b36cf29e1443bf844f99faa261b7b992$70fa8729e622c6a402773d8b350fbd9205c22a1733886a8348e1640e3b93f0df"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 177.131416ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$0b2381f096ba860d79f12e07e7122020$b36cf29e1443bf844f99faa261b7b992$70fa8729e622c6a402773d8b350fbd9205c22a1733886a8348e1640e3b93f0df"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 112.520417ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_jj8XfaknMttH2lGZ","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$0b2381f096ba860d79f12e07e7122020$b36cf29e1443bf844f99faa261b7b992$70fa8729e622c6a402773d8b350fbd9205c22a1733886a8348e1640e3b93f0df"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionDatabase","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionDatabase"],"metadata":{"key1":"foo","key2":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 136.992958ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/0.17.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_jj8XfaknMttH2lGZ
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2023-06-20T20:02:52.242Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 166.940709ms

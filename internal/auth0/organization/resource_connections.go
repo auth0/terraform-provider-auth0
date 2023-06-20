@@ -89,15 +89,18 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		return diagnostics
 	}
 
-	var result *multierror.Error
-	for _, connection := range connectionsToAdd {
-		if err := api.Organization.AddConnection(organizationID, connection); err != nil {
-			result = multierror.Append(result, err)
-		}
-	}
+	if len(connectionsToAdd) > len(alreadyEnabledConnections.OrganizationConnections) {
+		var result *multierror.Error
 
-	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
+		for _, connection := range connectionsToAdd {
+			if err := api.Organization.AddConnection(organizationID, connection); err != nil {
+				result = multierror.Append(result, err)
+			}
+		}
+
+		if result.ErrorOrNil() != nil {
+			return diag.FromErr(result.ErrorOrNil())
+		}
 	}
 
 	return readOrganizationConnections(ctx, data, meta)
@@ -198,11 +201,25 @@ func guardAgainstErasingUnwantedConnections(
 		return nil
 	}
 
+	alreadyEnabledConnectionsIDs := make([]string, 0)
+	for _, conn := range alreadyEnabledConnections {
+		alreadyEnabledConnectionsIDs = append(alreadyEnabledConnectionsIDs, conn.GetConnectionID())
+	}
+
+	connectionIDsToAdd := make([]string, 0)
+	for _, conn := range connectionsToAdd {
+		connectionIDsToAdd = append(connectionIDsToAdd, conn.GetConnectionID())
+	}
+
+	if cmp.Equal(connectionIDsToAdd, alreadyEnabledConnectionsIDs) {
+		return nil
+	}
+
 	return diag.Diagnostics{
 		diag.Diagnostic{
 			Severity: diag.Error,
 			Summary:  "Organization with non empty enabled connections",
-			Detail: cmp.Diff(connectionsToAdd, alreadyEnabledConnections) +
+			Detail: cmp.Diff(connectionIDsToAdd, alreadyEnabledConnectionsIDs) +
 				fmt.Sprintf("\nThe organization already has enabled connections attached to it. "+
 					"Import the resource instead in order to proceed with the changes. "+
 					"Run: 'terraform import auth0_organization_connections.<given-name> %s'.", organizationID),

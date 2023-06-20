@@ -15,10 +15,10 @@ import (
 // NewResource will return a new auth0_connection resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: createConnection,
-		ReadContext:   readConnection,
-		UpdateContext: updateConnection,
-		DeleteContext: deleteConnection,
+		CreateContext: createConnectionV0,
+		ReadContext:   readConnectionV0,
+		UpdateContext: updateConnectionV0,
+		DeleteContext: deleteConnectionV0,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -43,7 +43,7 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func createConnectionV0(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	connection, diagnostics := expandConnection(d, api)
@@ -58,11 +58,11 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 
 	d.SetId(connection.GetID())
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	diagnostics = append(diagnostics, readConnectionV0(ctx, d, m)...)
 	return diagnostics
 }
 
-func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readConnectionV0(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(d.Id())
@@ -74,7 +74,7 @@ func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
+	connectionOptions, diags := flattenConnectionOptionsV0(d, connection.Options)
 	if diags.HasError() {
 		return diags
 	}
@@ -104,7 +104,7 @@ func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) di
 	return diags
 }
 
-func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func updateConnectionV0(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	connection, diagnostics := expandConnection(d, api)
@@ -117,11 +117,11 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diagnostics
 	}
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
+	diagnostics = append(diagnostics, readConnectionV0(ctx, d, m)...)
 	return diagnostics
 }
 
-func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteConnectionV0(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Connection.Delete(d.Id()); err != nil {

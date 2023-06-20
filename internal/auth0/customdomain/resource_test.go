@@ -13,22 +13,22 @@ import (
 const testAccCreateSelfManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
 	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "self_managed_certs"
+	type   = "self_managed_certs"
 }
 `
 
 const testAccUpdateSelfManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "self_managed_certs"
+	domain                  = "{{.testName}}.auth.terraform-provider-auth0.com"
+	type                    = "self_managed_certs"
 	custom_client_ip_header = "true-client-ip"
 }
 `
 
 const testAccUpdateSelfManagedCustomDomainWithEmptyClientIPHeader = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "self_managed_certs"
+	domain                  = "{{.testName}}.auth.terraform-provider-auth0.com"
+	type                    = "self_managed_certs"
 	custom_client_ip_header = ""
 }
 `
@@ -36,14 +36,14 @@ resource "auth0_custom_domain" "my_custom_domain" {
 const testAccCreateAuth0ManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
 	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "auth0_managed_certs"
+	type   = "auth0_managed_certs"
 }
 `
 
 const testAccUpdateAuth0ManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "auth0_managed_certs"
+	domain     = "{{.testName}}.auth.terraform-provider-auth0.com"
+	type       = "auth0_managed_certs"
 	tls_policy = "recommended"
 }
 `

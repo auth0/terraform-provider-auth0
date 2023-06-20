@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -91,8 +92,8 @@ func TestAccUserRole(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "1"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "test-owner"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Test Owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", fmt.Sprintf("Test Owner %s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", fmt.Sprintf("Owner %s", testName)),
 				),
 			},
 			{
@@ -101,12 +102,12 @@ func TestAccUserRole(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.user_data", "roles.#", "2"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-1", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", "test-owner"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", "Test Owner"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_name", fmt.Sprintf("Test Owner %s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-1", "role_description", fmt.Sprintf("Owner %s", testName)),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-2", "user_id"),
 					resource.TestCheckResourceAttrSet("auth0_user_role.user_role-2", "role_id"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_name", "test-admin"),
-					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_description", "Test Administrator"),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_name", fmt.Sprintf("Test Admin %s", testName)),
+					resource.TestCheckResourceAttr("auth0_user_role.user_role-2", "role_description", fmt.Sprintf("Administrator %s", testName)),
 				),
 			},
 			{

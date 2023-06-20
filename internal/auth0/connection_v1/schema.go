@@ -1,4 +1,4 @@
-package connection_new //nolint:all
+package connection_v1 //nolint:all
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"

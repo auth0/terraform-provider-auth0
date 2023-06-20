@@ -160,6 +160,9 @@ func TestAccOrganizationMembers(t *testing.T) {
 				ExpectError: regexp.MustCompile("Organization with non empty members"),
 			},
 			{
+				Config: acctest.ParseTestName(testAccOrganizationMembersRemoveAllMembers, testName),
+			},
+			{
 				Config: acctest.ParseTestName(testAccOrganizationMembersWithOneMember, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_organization_members.my_members", "members.#", "1"),

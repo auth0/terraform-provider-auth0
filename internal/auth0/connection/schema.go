@@ -11,7 +11,7 @@ import (
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
-var resourceSchema = map[string]*schema.Schema{
+var resourceSchemaV0 = map[string]*schema.Schema{
 	"name": {
 		Type:        schema.TypeString,
 		Required:    true,
@@ -783,7 +783,7 @@ var resourceSchema = map[string]*schema.Schema{
 }
 
 func connectionSchemaV0() *schema.Resource {
-	s := internalSchema.Clone(resourceSchema)
+	s := internalSchema.Clone(resourceSchemaV0)
 	s["strategy_version"] = &schema.Schema{
 		Type:     schema.TypeString,
 		Optional: true,
@@ -793,7 +793,7 @@ func connectionSchemaV0() *schema.Resource {
 }
 
 func connectionSchemaV1() *schema.Resource {
-	s := internalSchema.Clone(resourceSchema)
+	s := internalSchema.Clone(resourceSchemaV0)
 	s["validation"] = &schema.Schema{
 		Type:     schema.TypeMap,
 		Elem:     &schema.Schema{Type: schema.TypeString},

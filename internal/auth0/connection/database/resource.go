@@ -15,7 +15,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// NewDatabaseResource will return a new auth0_connection_auth0 resource.
+// NewDatabaseResource will return a new auth0_connection_database resource.
 func NewDatabaseResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
 		map[string]*schema.Schema{

@@ -162,6 +162,9 @@ func TestAccOrganizationMembers(t *testing.T) {
 				ExpectError: regexp.MustCompile("Organization with non empty members"),
 			},
 			{
+				Config: acctest.ParseTestName(testAccGivenTwoUsersAndAnOrganization, testName),
+			},
+			{
 				Config: acctest.ParseTestName(testAccOrganizationMembersRemoveAllMembers, testName),
 			},
 			{

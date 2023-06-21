@@ -197,6 +197,9 @@ func TestAccOrganizationConnections(t *testing.T) {
 				ExpectError: regexp.MustCompile("Organization with non empty enabled connections"),
 			},
 			{
+				Config: acctest.ParseTestName(testAccOrganizationConnectionsDelete, testName),
+			},
+			{
 				Config: acctest.ParseTestName(testAccOrganizationConnectionsWithOneConnection, testName),
 			},
 			{

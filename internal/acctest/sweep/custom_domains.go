@@ -27,7 +27,7 @@ func CustomDomains() {
 			for _, domain := range domains {
 				log.Printf("[DEBUG] ➝ %s", domain.GetDomain())
 
-				if strings.Contains(domain.GetDomain(), "auth.uat.terraform-provider-auth0.com") {
+				if strings.Contains(domain.GetDomain(), "auth.terraform-provider-auth0.com") {
 					result = multierror.Append(
 						result,
 						api.CustomDomain.Delete(domain.GetID()),

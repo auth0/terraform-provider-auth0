@@ -72,8 +72,10 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 		return diagnostics
 	}
 
-	if err := api.Organization.AddMembers(organizationID, membersToAdd); err != nil {
-		return diag.FromErr(err)
+	if len(membersToAdd) > len(alreadyMembers.Members) {
+		if err := api.Organization.AddMembers(organizationID, membersToAdd); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readOrganizationMembers(ctx, data, meta)
@@ -166,9 +168,18 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 func guardAgainstErasingUnwantedMembers(
 	organizationID string,
 	alreadyMembers []management.OrganizationMember,
-	membersToAdd []string,
+	memberIDsToAdd []string,
 ) diag.Diagnostics {
 	if len(alreadyMembers) == 0 {
+		return nil
+	}
+
+	alreadyMemberIDs := make([]string, 0)
+	for _, member := range alreadyMembers {
+		alreadyMemberIDs = append(alreadyMemberIDs, member.GetUserID())
+	}
+
+	if cmp.Equal(memberIDsToAdd, alreadyMemberIDs) {
 		return nil
 	}
 
@@ -176,7 +187,7 @@ func guardAgainstErasingUnwantedMembers(
 		diag.Diagnostic{
 			Severity: diag.Error,
 			Summary:  "Organization with non empty members",
-			Detail: cmp.Diff(membersToAdd, alreadyMembers) +
+			Detail: cmp.Diff(memberIDsToAdd, alreadyMemberIDs) +
 				fmt.Sprintf("\nThe organization already has members attached to it. "+
 					"Import the resource instead in order to proceed with the changes. "+
 					"Run: 'terraform import auth0_organization_members.<given-name> %s'.", organizationID),

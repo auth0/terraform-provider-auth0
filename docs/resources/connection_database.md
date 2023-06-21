@@ -86,24 +86,16 @@ resource "auth0_connection_database" "my_connection" {
 
 ### Optional
 
-- `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
-- `client_id` (String) The strategy's client ID.
-- `client_secret` (String, Sensitive) The strategy's client secret.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
 - `disable_signup` (Boolean) Indicates whether to allow user sign-ups to your application.
 - `display_name` (String) Name used in login screen.
-- `domain` (String) Domain name.
-- `domain_aliases` (Set of String) List of the domains that can be authenticated using the identity provider. Only needed for Identifier First authentication flows.
 - `enable_script_context` (Boolean) Set to `true` to inject context into custom DB scripts (warning: cannot be disabled once enabled).
 - `enabled_database_customization` (Boolean) Set to `true` to use a legacy user store.
-- `icon_url` (String) Icon URL.
 - `import_mode` (Boolean) Indicates whether you have a legacy user store and want to gradually migrate those users to the Auth0 user store.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
-- `issuer` (String) Issuer URL, e.g. `https://auth.example.com`.
-- `jwks_uri` (String) JWKS URI.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--mfa))
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
@@ -114,12 +106,9 @@ resource "auth0_connection_database" "my_connection" {
 - `password_policy` (String) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
-- `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
-- `token_endpoint` (String) Token endpoint.
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
-- `userinfo_endpoint` (String) User info endpoint.
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--validation))
 
 ### Read-Only

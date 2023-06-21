@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -29,7 +30,7 @@ type TypeSpecificFlattenConnectionFunction[T interface{}] func(
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
 func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
-	resourceSchema := baseConnectionSchema
+	resourceSchema := internalSchema.Clone(baseConnectionSchema)
 
 	for key, value := range optionsSchema {
 		resourceSchema[key] = value

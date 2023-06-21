@@ -1,4 +1,4 @@
-package connection
+package okta
 
 import (
 	"github.com/auth0/go-auth0"

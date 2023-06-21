@@ -1,4 +1,4 @@
-package connection_test
+package okta_test
 
 import (
 	"fmt"

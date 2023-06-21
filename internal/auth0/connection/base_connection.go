@@ -11,25 +11,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // TypeSpecificExpandConnectionFunction is a generic function signature for connection expansion.
 type TypeSpecificExpandConnectionFunction[T interface{}] func(
 	conn *management.Connection,
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	api *management.Management,
 ) (*management.Connection, diag.Diagnostics)
 
 // TypeSpecificFlattenConnectionFunction is a generic function signature for connection flatten.
 type TypeSpecificFlattenConnectionFunction[T interface{}] func(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	options *T,
 ) (map[string]interface{}, diag.Diagnostics)
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
 func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
-	resourceSchema := baseConnectionSchema
+	resourceSchema := internalSchema.Clone(baseConnectionSchema)
 
 	for key, value := range optionsSchema {
 		resourceSchema[key] = value
@@ -179,13 +180,11 @@ func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) 
 
 	if err := api.Connection.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
 			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	d.SetId("")
 	return nil
 }
 

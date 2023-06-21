@@ -9,7 +9,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-func TestAccConnectionOkta(t *testing.T) {
+func TestAccOktaConnection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

@@ -88,6 +88,7 @@ resource "auth0_connection_okta" "okta" {
 
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
+- `strategy` (String) Type of the connection, which indicates the identity provider.
 
 <a id="nestedblock--mfa"></a>
 ### Nested Schema for `mfa`

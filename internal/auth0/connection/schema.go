@@ -881,6 +881,11 @@ var baseConnectionSchema = map[string]*schema.Schema{
 		ForceNew:    true,
 		Description: "Name of the connection.",
 	},
+	"strategy": {
+		Type:        schema.TypeString,
+		Computed:    true,
+		Description: "Type of the connection, which indicates the identity provider.",
+	},
 	"display_name": {
 		Type:        schema.TypeString,
 		Optional:    true,

@@ -18,10 +18,7 @@ import (
 // NewDatabaseResource will return a new auth0_connection_database resource.
 func NewDatabaseResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
-		"With Auth0, you can define sources of users, otherwise known as connections, "+
-			"which may include identity providers (such as Google or LinkedIn), databases, or "+
-			"passwordless authentication methods. This resource allows you to configure "+
-			"and manage connections to be used with your clients and users.",
+		"Auth0 provides database connections to authenticate users with an email/username and password. These credentials are securely stored in the Auth0 user store or in your own database. You can use this resource to create and manage database connections.",
 		map[string]*schema.Schema{
 			"strategy": {
 				Type:        schema.TypeString,
@@ -250,7 +247,7 @@ func flattenConnectionAuth0(
 	d *schema.ResourceData,
 	options *management.ConnectionOptions,
 ) (map[string]interface{}, diag.Diagnostics) {
-	dbSecretConfig, ok := d.GetOk("options.0.configuration")
+	dbSecretConfig, ok := d.GetOk("configuration")
 	if !ok {
 		dbSecretConfig = make(map[string]interface{})
 	}

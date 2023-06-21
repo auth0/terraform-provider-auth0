@@ -40,6 +40,7 @@ func TestAccConnectionDatabase(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "non_persistent_attrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection_database.my_connection", "non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection_database.my_connection", "non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "configuration.foo", "bar"),
 				),
 			},
 			{
@@ -53,6 +54,8 @@ func TestAccConnectionDatabase(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "disable_self_service_change_password", "true"),
 					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "non_persistent_attrs.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "configuration.foo", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection_database.my_connection", "configuration.bar", "baz"),
 				),
 			},
 		},
@@ -146,6 +149,7 @@ resource "auth0_connection_database" "my_connection" {
 	}
 	configuration = {
 		foo = "bar"
+		bar = "baz"
 	}
 	mfa {
 		active                 = true

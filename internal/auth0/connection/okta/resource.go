@@ -11,9 +11,10 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// NewOktaResource will return a new auth0_connection_auth0 resource.
-func NewOktaResource() *schema.Resource {
+// NewConnectionResource will return a new auth0_connection_okta resource.
+func NewConnectionResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
+		"",
 		map[string]*schema.Schema{
 			"client_id": {
 				Type:        schema.TypeString,

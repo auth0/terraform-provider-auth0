@@ -18,18 +18,18 @@ import (
 // TypeSpecificExpandConnectionFunction is a generic function signature for connection expansion.
 type TypeSpecificExpandConnectionFunction[T interface{}] func(
 	conn *management.Connection,
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	api *management.Management,
 ) (*management.Connection, diag.Diagnostics)
 
 // TypeSpecificFlattenConnectionFunction is a generic function signature for connection flatten.
 type TypeSpecificFlattenConnectionFunction[T interface{}] func(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	options *T,
 ) (map[string]interface{}, diag.Diagnostics)
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
-func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
+func NewBaseConnectionResource[T interface{}](description string, optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
 	resourceSchema := internalSchema.Clone(baseConnectionSchema)
 
 	for key, value := range optionsSchema {
@@ -44,10 +44,7 @@ func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.S
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "With Auth0, you can define sources of users, otherwise known as connections, " +
-			"which may include identity providers (such as Google or LinkedIn), databases, or " +
-			"passwordless authentication methods. This resource allows you to configure " +
-			"and manage connections to be used with your clients and users.",
+		Description:   description,
 		Schema:        resourceSchema,
 		SchemaVersion: 0,
 	}
@@ -180,13 +177,11 @@ func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) 
 
 	if err := api.Connection.Delete(d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
 			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	d.SetId("")
 	return nil
 }
 

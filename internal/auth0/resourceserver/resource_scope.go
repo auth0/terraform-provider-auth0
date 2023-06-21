@@ -57,7 +57,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
-	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
+	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -83,7 +83,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 		Scopes: &scopes,
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, &resourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, &resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -101,7 +101,7 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
-	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
+	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -127,7 +127,7 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 		return nil
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, &management.ResourceServer{
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, &management.ResourceServer{
 		Scopes: &updatedScopes,
 	}); err != nil {
 		return diag.FromErr(err)
@@ -138,13 +138,13 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	return readResourceServerScope(ctx, data, meta)
 }
 
-func readResourceServerScope(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	scope := data.Get("scope").(string)
 
-	existingAPI, err := api.ResourceServer.Read(resourceServerID)
+	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -164,7 +164,7 @@ func readResourceServerScope(_ context.Context, data *schema.ResourceData, meta 
 	return nil
 }
 
-func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteResourceServerScope(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
@@ -174,7 +174,7 @@ func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, met
 	mutex.Lock(resourceServerIdentifier) // Prevents colliding API requests between other `auth0_resource_server_scope` resource.
 	defer mutex.Unlock(resourceServerIdentifier)
 
-	existingAPI, err := api.ResourceServer.Read(resourceServerIdentifier)
+	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -191,6 +191,7 @@ func deleteResourceServerScope(_ context.Context, data *schema.ResourceData, met
 	}
 
 	if err := api.ResourceServer.Update(
+		ctx,
 		resourceServerIdentifier,
 		&management.ResourceServer{
 			Scopes: &updateScopes,

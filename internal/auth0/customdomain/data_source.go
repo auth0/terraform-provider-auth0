@@ -24,10 +24,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
 }
 
-func readCustomDomainForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	customDomains, err := api.CustomDomain.List()
+	customDomains, err := api.CustomDomain.List(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}

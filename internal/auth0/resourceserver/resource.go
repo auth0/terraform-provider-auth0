@@ -147,7 +147,7 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	api := m.(*config.Config).GetAPI()
 
 	resourceServer := expandResourceServer(d)
-	if err := api.ResourceServer.Create(resourceServer); err != nil {
+	if err := api.ResourceServer.Create(ctx, resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -156,10 +156,10 @@ func createResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	return readResourceServer(ctx, d, m)
 }
 
-func readResourceServer(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	resourceServer, err := api.ResourceServer.Read(d.Id())
+	resourceServer, err := api.ResourceServer.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -204,14 +204,14 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 
 	resourceServer := expandResourceServer(d)
 
-	if err := api.ResourceServer.Update(d.Id(), resourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, d.Id(), resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readResourceServer(ctx, d, m)
 }
 
-func deleteResourceServer(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	if isManagementAPI(d.GetRawState()) {
 		d.SetId("")
 		return nil
@@ -219,7 +219,7 @@ func deleteResourceServer(_ context.Context, d *schema.ResourceData, m interface
 
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.ResourceServer.Delete(d.Id()); err != nil {
+	if err := api.ResourceServer.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

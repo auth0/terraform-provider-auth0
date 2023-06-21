@@ -1,8 +1,6 @@
 package client
 
 import (
-	"strconv"
-
 	"github.com/auth0/go-auth0/management"
 )
 
@@ -60,62 +58,61 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 	}
 }
 
-func flattenClientAddons(addons map[string]interface{}) []interface{} {
-	if addons == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	if v, ok := addons["samlp"]; ok {
-		samlp := v.(map[string]interface{})
-
-		samlpMap := map[string]interface{}{
-			"issuer":                             samlp["issuer"],
-			"audience":                           samlp["audience"],
-			"recipient":                          samlp["recipient"],
-			"mappings":                           samlp["mappings"],
-			"create_upn_claim":                   samlp["createUpnClaim"],
-			"passthrough_claims_with_no_mapping": samlp["passthroughClaimsWithNoMapping"],
-			"map_unknown_claims_as_is":           samlp["mapUnknownClaimsAsIs"],
-			"map_identities":                     samlp["mapIdentities"],
-			"signature_algorithm":                samlp["signatureAlgorithm"],
-			"digest_algorithm":                   samlp["digestAlgorithm"],
-			"destination":                        samlp["destination"],
-			"lifetime_in_seconds":                samlp["lifetimeInSeconds"],
-			"sign_response":                      samlp["signResponse"],
-			"name_identifier_format":             samlp["nameIdentifierFormat"],
-			"name_identifier_probes":             samlp["nameIdentifierProbes"],
-			"authn_context_class_ref":            samlp["authnContextClassRef"],
-			"typed_attributes":                   samlp["typedAttributes"],
-			"include_attribute_name_format":      samlp["includeAttributeNameFormat"],
-			"binding":                            samlp["binding"],
-			"signing_cert":                       samlp["signingCert"],
-		}
-
-		if logout, ok := samlp["logout"].(map[string]interface{}); ok {
-			samlpMap["logout"] = mapToState(logout)
-		}
-
-		m["samlp"] = []interface{}{samlpMap}
-	}
-
-	for _, name := range []string{
-		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-		"springcm", "wams", "wsfed", "zendesk", "zoom",
-	} {
-		if v, ok := addons[name]; ok {
-			if addonType, ok := v.(map[string]interface{}); ok {
-				m[name] = mapToState(addonType)
-			}
-		}
-	}
-
-	return []interface{}{m}
-}
+//	if addons == nil {
+//		return nil
+//	}
+//
+//	m := make(map[string]interface{})
+//
+//	if v, ok := addons["samlp"]; ok {
+//		samlp := v.(map[string]interface{})
+//
+//		samlpMap := map[string]interface{}{
+//			"issuer":                             samlp["issuer"],
+//			"audience":                           samlp["audience"],
+//			"recipient":                          samlp["recipient"],
+//			"mappings":                           samlp["mappings"],
+//			"create_upn_claim":                   samlp["createUpnClaim"],
+//			"passthrough_claims_with_no_mapping": samlp["passthroughClaimsWithNoMapping"],
+//			"map_unknown_claims_as_is":           samlp["mapUnknownClaimsAsIs"],
+//			"map_identities":                     samlp["mapIdentities"],
+//			"signature_algorithm":                samlp["signatureAlgorithm"],
+//			"digest_algorithm":                   samlp["digestAlgorithm"],
+//			"destination":                        samlp["destination"],
+//			"lifetime_in_seconds":                samlp["lifetimeInSeconds"],
+//			"sign_response":                      samlp["signResponse"],
+//			"name_identifier_format":             samlp["nameIdentifierFormat"],
+//			"name_identifier_probes":             samlp["nameIdentifierProbes"],
+//			"authn_context_class_ref":            samlp["authnContextClassRef"],
+//			"typed_attributes":                   samlp["typedAttributes"],
+//			"include_attribute_name_format":      samlp["includeAttributeNameFormat"],
+//			"binding":                            samlp["binding"],
+//			"signing_cert":                       samlp["signingCert"],
+//		}
+//
+//		if logout, ok := samlp["logout"].(map[string]interface{}); ok {
+//			samlpMap["logout"] = mapToState(logout)
+//		}
+//
+//		m["samlp"] = []interface{}{samlpMap}
+//	}
+//
+//	for _, name := range []string{
+//		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
+//		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
+//		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
+//		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
+//		"springcm", "wams", "wsfed", "zendesk", "zoom",
+//	} {
+//		if v, ok := addons[name]; ok {
+//			if addonType, ok := v.(map[string]interface{}); ok {
+//				m[name] = mapToState(addonType)
+//			}
+//		}
+//	}
+//
+//	return []interface{}{m}
+// }.
 
 func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
 	if mobile == nil {
@@ -148,25 +145,24 @@ func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
 	return []interface{}{m}
 }
 
-func mapToState(input map[string]interface{}) map[string]interface{} {
-	output := make(map[string]interface{})
-
-	for key, v := range input {
-		switch val := v.(type) {
-		case bool:
-			if val {
-				output[key] = "true"
-			} else {
-				output[key] = "false"
-			}
-		case float64:
-			output[key] = strconv.Itoa(int(val))
-		case int:
-			output[key] = strconv.Itoa(val)
-		default:
-			output[key] = val
-		}
-	}
-
-	return output
-}
+//	output := make(map[string]interface{})
+//
+//	for key, v := range input {
+//		switch val := v.(type) {
+//		case bool:
+//			if val {
+//				output[key] = "true"
+//			} else {
+//				output[key] = "false"
+//			}
+//		case float64:
+//			output[key] = strconv.Itoa(int(val))
+//		case int:
+//			output[key] = strconv.Itoa(val)
+//		default:
+//			output[key] = val
+//		}
+//	}
+//
+//	return output
+// }.

@@ -53,10 +53,11 @@ func createGlobalClient(ctx context.Context, d *schema.ResourceData, m interface
 	return updateClient(ctx, d, m)
 }
 
-func readGlobalClientID(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readGlobalClientID(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	clients, err := api.Client.List(
+		ctx,
 		management.Parameter("is_global", "true"),
 		management.IncludeFields("client_id"),
 	)

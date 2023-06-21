@@ -75,9 +75,9 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 
 			authenticationOption := management.WithStaticToken(apiToken)
 			if apiToken == "" {
-				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+				authenticationOption = management.WithClientCredentials(ctx, clientID, clientSecret)
 				if audience != "" {
-					authenticationOption = management.WithClientCredentialsAndAudience(clientID, clientSecret, audience)
+					authenticationOption = management.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience)
 				}
 			}
 

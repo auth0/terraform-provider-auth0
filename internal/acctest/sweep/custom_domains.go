@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
@@ -13,12 +14,14 @@ func CustomDomains() {
 	resource.AddTestSweepers("auth0_custom_domain", &resource.Sweeper{
 		Name: "auth0_custom_domain",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
 			}
 
-			domains, err := api.CustomDomain.List()
+			domains, err := api.CustomDomain.List(ctx)
 			if err != nil {
 				return err
 			}
@@ -30,7 +33,7 @@ func CustomDomains() {
 				if strings.Contains(domain.GetDomain(), "auth.terraform-provider-auth0.com") {
 					result = multierror.Append(
 						result,
-						api.CustomDomain.Delete(domain.GetID()),
+						api.CustomDomain.Delete(ctx, domain.GetID()),
 					)
 
 					log.Printf("[DEBUG] ✗ %s", domain.GetDomain())

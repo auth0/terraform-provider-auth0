@@ -1,8 +1,6 @@
 package client
 
 import (
-	"strconv"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -44,9 +42,9 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		ClientMetadata:                 expandClientMetadata(d),
 		RefreshToken:                   expandClientRefreshToken(d),
 		JWTConfiguration:               expandClientJWTConfiguration(d),
-		Addons:                         expandClientAddons(d),
-		NativeSocialLogin:              expandClientNativeSocialLogin(d),
-		Mobile:                         expandClientMobile(d),
+		//Addons:                         expandClientAddons(d), TODO: DXCDT-441.
+		NativeSocialLogin: expandClientNativeSocialLogin(d),
+		Mobile:            expandClientMobile(d),
 	}
 
 	return client
@@ -238,175 +236,174 @@ func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
 	return &newMetadataMap
 }
 
-func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
-	if !d.HasChange("addons") {
-		return nil
-	}
-
-	addons := make(map[string]interface{})
-	var allowedAddons = []string{
-		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-		"springcm", "wams", "wsfed", "zendesk", "zoom",
-	}
-	for _, name := range allowedAddons {
-		if _, ok := d.GetOk("addons.0." + name); ok {
-			addons[name] = mapFromState(d.Get("addons.0." + name).(map[string]interface{}))
-		}
-	}
-
-	addonsConfig := d.GetRawConfig().GetAttr("addons")
-	if addonsConfig.IsNull() {
-		return addons
-	}
-
-	addonsConfig.ForEachElement(func(_ cty.Value, addonsConfig cty.Value) (stop bool) {
-		samlpConfig := addonsConfig.GetAttr("samlp")
-		if samlpConfig.IsNull() {
-			return stop
-		}
-
-		samlp := make(map[string]interface{})
-
-		samlpConfig.ForEachElement(func(_ cty.Value, samlpConfig cty.Value) (stop bool) {
-			if issuer := value.String(samlpConfig.GetAttr("issuer")); issuer != nil {
-				samlp["issuer"] = issuer
-			}
-			if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
-				samlp["audience"] = audience
-			}
-			if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
-				samlp["authnContextClassRef"] = authnContextClassRef
-			}
-			if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
-				samlp["binding"] = binding
-			}
-			if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
-				samlp["signingCert"] = signingCert
-			}
-			if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
-				samlp["destination"] = destination
-			}
-
-			digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm"))
-			samlp["digestAlgorithm"] = digestAlgorithm
-			if digestAlgorithm == nil {
-				samlp["digestAlgorithm"] = "sha1"
-			}
-
-			nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format"))
-			samlp["nameIdentifierFormat"] = nameIdentifierFormat
-			if nameIdentifierFormat == nil {
-				samlp["nameIdentifierFormat"] = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-			}
-
-			if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
-				samlp["recipient"] = recipient
-			}
-
-			signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm"))
-			samlp["signatureAlgorithm"] = signatureAlgorithm
-			if signatureAlgorithm == nil {
-				samlp["signatureAlgorithm"] = "rsa-sha1"
-			}
-
-			createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim"))
-			samlp["createUpnClaim"] = createUpnClaim
-			if createUpnClaim == nil {
-				samlp["createUpnClaim"] = true
-			}
-
-			includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format"))
-			samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
-			if includeAttributeNameFormat == nil {
-				samlp["includeAttributeNameFormat"] = true
-			}
-
-			mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities"))
-			samlp["mapIdentities"] = mapIdentities
-			if mapIdentities == nil {
-				samlp["mapIdentities"] = true
-			}
-
-			mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is"))
-			samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
-			if mapUnknownClaimsAsIs == nil {
-				samlp["mapUnknownClaimsAsIs"] = false
-			}
-
-			passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping"))
-			samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
-			if passthroughClaimsWithNoMapping == nil {
-				samlp["passthroughClaimsWithNoMapping"] = true
-			}
-
-			if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
-				samlp["signResponse"] = signResponse
-			}
-
-			typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes"))
-			samlp["typedAttributes"] = typedAttributes
-			if typedAttributes == nil {
-				samlp["typedAttributes"] = true
-			}
-
-			lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds"))
-			samlp["lifetimeInSeconds"] = lifetimeInSeconds
-			if lifetimeInSeconds == nil {
-				samlp["lifetimeInSeconds"] = 3600
-			}
-
-			if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
-				samlp["mappings"] = mappings
-			}
-			if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
-				samlp["nameIdentifierProbes"] = nameIdentifierProbes
-			}
-			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); len(logout) != 0 {
-				samlp["logout"] = logout
-			}
-
-			return stop
-		})
-
-		if len(samlp) > 0 {
-			addons["samlp"] = samlp
-		}
-
-		return stop
-	})
-
-	return addons
-}
-
-func mapFromState(input map[string]interface{}) map[string]interface{} {
-	output := make(map[string]interface{})
-
-	for key, val := range input {
-		switch v := val.(type) {
-		case string:
-			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
-				output[key] = i
-			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
-				output[key] = f
-			} else if b, err := strconv.ParseBool(v); err == nil {
-				output[key] = b
-			} else {
-				output[key] = v
-			}
-		case map[string]interface{}:
-			output[key] = mapFromState(v)
-		case []interface{}:
-			output[key] = v
-		default:
-			output[key] = v
-		}
-	}
-
-	return output
-}
+//	if !d.HasChange("addons") {
+//		return nil
+//	}
+//
+//	addons := make(map[string]interface{})
+//	var allowedAddons = []string{
+//		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
+//		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
+//		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
+//		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
+//		"springcm", "wams", "wsfed", "zendesk", "zoom",
+//	}
+//	for _, name := range allowedAddons {
+//		if _, ok := d.GetOk("addons.0." + name); ok {
+//			addons[name] = mapFromState(d.Get("addons.0." + name).(map[string]interface{}))
+//		}
+//	}
+//
+//	addonsConfig := d.GetRawConfig().GetAttr("addons")
+//	if addonsConfig.IsNull() {
+//		return addons
+//	}
+//
+//	addonsConfig.ForEachElement(func(_ cty.Value, addonsConfig cty.Value) (stop bool) {
+//		samlpConfig := addonsConfig.GetAttr("samlp")
+//		if samlpConfig.IsNull() {
+//			return stop
+//		}
+//
+//		samlp := make(map[string]interface{})
+//
+//		samlpConfig.ForEachElement(func(_ cty.Value, samlpConfig cty.Value) (stop bool) {
+//			if issuer := value.String(samlpConfig.GetAttr("issuer")); issuer != nil {
+//				samlp["issuer"] = issuer
+//			}
+//			if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
+//				samlp["audience"] = audience
+//			}
+//			if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
+//				samlp["authnContextClassRef"] = authnContextClassRef
+//			}
+//			if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
+//				samlp["binding"] = binding
+//			}
+//			if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
+//				samlp["signingCert"] = signingCert
+//			}
+//			if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
+//				samlp["destination"] = destination
+//			}
+//
+//			digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm"))
+//			samlp["digestAlgorithm"] = digestAlgorithm
+//			if digestAlgorithm == nil {
+//				samlp["digestAlgorithm"] = "sha1"
+//			}
+//
+//			nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format"))
+//			samlp["nameIdentifierFormat"] = nameIdentifierFormat
+//			if nameIdentifierFormat == nil {
+//				samlp["nameIdentifierFormat"] = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+//			}
+//
+//			if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
+//				samlp["recipient"] = recipient
+//			}
+//
+//			signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm"))
+//			samlp["signatureAlgorithm"] = signatureAlgorithm
+//			if signatureAlgorithm == nil {
+//				samlp["signatureAlgorithm"] = "rsa-sha1"
+//			}
+//
+//			createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim"))
+//			samlp["createUpnClaim"] = createUpnClaim
+//			if createUpnClaim == nil {
+//				samlp["createUpnClaim"] = true
+//			}
+//
+//			includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format"))
+//			samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
+//			if includeAttributeNameFormat == nil {
+//				samlp["includeAttributeNameFormat"] = true
+//			}
+//
+//			mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities"))
+//			samlp["mapIdentities"] = mapIdentities
+//			if mapIdentities == nil {
+//				samlp["mapIdentities"] = true
+//			}
+//
+//			mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is"))
+//			samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
+//			if mapUnknownClaimsAsIs == nil {
+//				samlp["mapUnknownClaimsAsIs"] = false
+//			}
+//
+//			passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping"))
+//			samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
+//			if passthroughClaimsWithNoMapping == nil {
+//				samlp["passthroughClaimsWithNoMapping"] = true
+//			}
+//
+//			if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
+//				samlp["signResponse"] = signResponse
+//			}
+//
+//			typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes"))
+//			samlp["typedAttributes"] = typedAttributes
+//			if typedAttributes == nil {
+//				samlp["typedAttributes"] = true
+//			}
+//
+//			lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds"))
+//			samlp["lifetimeInSeconds"] = lifetimeInSeconds
+//			if lifetimeInSeconds == nil {
+//				samlp["lifetimeInSeconds"] = 3600
+//			}
+//
+//			if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
+//				samlp["mappings"] = mappings
+//			}
+//			if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
+//				samlp["nameIdentifierProbes"] = nameIdentifierProbes
+//			}
+//			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); len(logout) != 0 {
+//				samlp["logout"] = logout
+//			}
+//
+//			return stop
+//		})
+//
+//		if len(samlp) > 0 {
+//			addons["samlp"] = samlp
+//		}
+//
+//		return stop
+//	})
+//
+//	return addons
+//}
+//
+// func mapFromState(input map[string]interface{}) map[string]interface{} {
+//	output := make(map[string]interface{})
+//
+//	for key, val := range input {
+//		switch v := val.(type) {
+//		case string:
+//			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
+//				output[key] = i
+//			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
+//				output[key] = f
+//			} else if b, err := strconv.ParseBool(v); err == nil {
+//				output[key] = b
+//			} else {
+//				output[key] = v
+//			}
+//		case map[string]interface{}:
+//			output[key] = mapFromState(v)
+//		case []interface{}:
+//			output[key] = v
+//		default:
+//			output[key] = v
+//		}
+//	}
+//
+//	return output
+// }........
 
 func clientHasChange(c *management.Client) bool {
 	return c.String() != "{}"

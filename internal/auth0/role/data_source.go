@@ -48,6 +48,7 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 	page := 0
 	for {
 		roles, err := api.Role.List(
+			ctx,
 			management.Page(page),
 			management.PerPage(100),
 			management.Parameter("name_filter", name),

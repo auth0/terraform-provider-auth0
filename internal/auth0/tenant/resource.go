@@ -395,9 +395,9 @@ func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return updateTenant(ctx, d, m)
 }
 
-func readTenant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	tenant, err := api.Tenant.Read()
+	tenant, err := api.Tenant.Read(ctx)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -435,7 +435,7 @@ func readTenant(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	tenant := expandTenant(d)
 	api := m.(*config.Config).GetAPI()
-	if err := api.Tenant.Update(tenant); err != nil {
+	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
 

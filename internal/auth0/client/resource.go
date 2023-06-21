@@ -763,7 +763,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
-	if err := api.Client.Create(client); err != nil {
+	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -772,10 +772,10 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(d.Id())
+	client, err := api.Client.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -815,7 +815,7 @@ func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
-		d.Set("addons", flattenClientAddons(client.Addons)),
+
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
@@ -831,13 +831,13 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	client := expandClient(d)
 	if clientHasChange(client) {
-		if err := api.Client.Update(d.Id(), client); err != nil {
+		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	d.Partial(true)
-	if err := rotateClientSecret(d, m); err != nil {
+	if err := rotateClientSecret(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 	d.Partial(false)
@@ -845,10 +845,10 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Client.Delete(d.Id()); err != nil {
+	if err := api.Client.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -859,14 +859,14 @@ func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
+func rotateClientSecret(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	if !d.HasChange("client_secret_rotation_trigger") {
 		return nil
 	}
 
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.RotateSecret(d.Id())
+	client, err := api.Client.RotateSecret(ctx, d.Id())
 	if err != nil {
 		return err
 	}

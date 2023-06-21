@@ -1454,6 +1454,40 @@ func TestAccConnectionGitHub(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionGitHubConfigRemoveScopes, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "profile"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionGitHubConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.github", "options.0.scopes.#", "20"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "email"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "profile"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "follow"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_public_key"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_public_key"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "write_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_user"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_repo_hook"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "admin_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo_status"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_org"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "gist"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "repo_deployment"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "public_repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "notifications"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "delete_repo"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.github", "options.0.scopes.*", "read_public_key"),
+				),
+			},
 		},
 	})
 }
@@ -1469,6 +1503,23 @@ resource "auth0_connection" "github" {
 				   "delete_repo", "notifications", "gist", "read_repo_hook", "write_repo_hook", "admin_repo_hook",
 				   "read_org", "admin_org", "read_public_key", "write_public_key", "admin_public_key", "write_org"
 		]
+		upstream_params = jsonencode({
+			"screen_name": {
+				"alias": "login_hint"
+			}
+		})
+	}
+}
+`
+
+const testAccConnectionGitHubConfigRemoveScopes = `
+resource "auth0_connection" "github" {
+	name = "Acceptance-Test-GitHub-{{.testName}}"
+	strategy = "github"
+	options {
+		client_id = "client-id"
+		client_secret = "client-secret"
+		scopes = [ "email", "profile"]
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"

@@ -481,7 +481,7 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 					"prevent unintentionally destructive results.",
 					key,
 				),
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.configuration"}},
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "configuration"}},
 			})
 		}
 	}

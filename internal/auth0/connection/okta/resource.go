@@ -14,7 +14,7 @@ import (
 // NewConnectionResource will return a new auth0_connection_okta resource.
 func NewConnectionResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
-		"",
+		"This resource configure your Okta Enterprise Connection to allow your users to use their enterprise credentials to login to your app.",
 		map[string]*schema.Schema{
 			"client_id": {
 				Type:        schema.TypeString,

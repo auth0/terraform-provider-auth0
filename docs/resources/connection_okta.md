@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_connection_okta"
 description: |-
-  With Auth0, you can define sources of users, otherwise known as connections, which may include identity providers (such as Google or LinkedIn), databases, or passwordless authentication methods. This resource allows you to configure and manage connections to be used with your clients and users.
+  This resource configure your Okta Enterprise Connection to allow your users to use their enterprise credentials to login to your app.
 ---
 
 # Resource: auth0_connection_okta
 
-With Auth0, you can define sources of users, otherwise known as connections, which may include identity providers (such as Google or LinkedIn), databases, or passwordless authentication methods. This resource allows you to configure and manage connections to be used with your clients and users.
+This resource configure your Okta Enterprise Connection to allow your users to use their enterprise credentials to login to your app.
 
 ## Example Usage
 

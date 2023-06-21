@@ -29,7 +29,7 @@ type TypeSpecificFlattenConnectionFunction[T interface{}] func(
 ) (map[string]interface{}, diag.Diagnostics)
 
 // NewBaseConnectionResource will return a new auth0_connection resource.
-func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
+func NewBaseConnectionResource[T interface{}](description string, optionsSchema map[string]*schema.Schema, typeSpecificExpand TypeSpecificExpandConnectionFunction[T], typeSpecificFlatten TypeSpecificFlattenConnectionFunction[T]) *schema.Resource {
 	resourceSchema := internalSchema.Clone(baseConnectionSchema)
 
 	for key, value := range optionsSchema {
@@ -44,10 +44,7 @@ func NewBaseConnectionResource[T interface{}](optionsSchema map[string]*schema.S
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "With Auth0, you can define sources of users, otherwise known as connections, " +
-			"which may include identity providers (such as Google or LinkedIn), databases, or " +
-			"passwordless authentication methods. This resource allows you to configure " +
-			"and manage connections to be used with your clients and users.",
+		Description:   description,
 		Schema:        resourceSchema,
 		SchemaVersion: 0,
 	}

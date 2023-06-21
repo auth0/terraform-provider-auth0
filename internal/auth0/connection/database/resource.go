@@ -18,6 +18,10 @@ import (
 // NewDatabaseResource will return a new auth0_connection_database resource.
 func NewDatabaseResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
+		"With Auth0, you can define sources of users, otherwise known as connections, "+
+			"which may include identity providers (such as Google or LinkedIn), databases, or "+
+			"passwordless authentication methods. This resource allows you to configure "+
+			"and manage connections to be used with your clients and users.",
 		map[string]*schema.Schema{
 			"strategy": {
 				Type:        schema.TypeString,

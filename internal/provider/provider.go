@@ -10,7 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
-	database "github.com/auth0/terraform-provider-auth0/internal/auth0/connection/database"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection/database"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
@@ -99,7 +99,7 @@ func New() *schema.Provider {
 			"auth0_client_grant":               client.NewGrantResource(),
 			"auth0_global_client":              client.NewGlobalResource(),
 			"auth0_connection":                 connection.NewResource(),
-			"auth0_connection_database":        database.NewDatabaseResource(),
+			"auth0_connection_database":        database.NewConnectionResource(),
 			"auth0_connection_client":          connection.NewClientResource(),
 			"auth0_connection_clients":         connection.NewClientsResource(),
 			"auth0_custom_domain":              customdomain.NewResource(),

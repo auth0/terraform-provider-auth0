@@ -1,4 +1,4 @@
-package connection
+package database
 
 import (
 	"fmt"
@@ -15,8 +15,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-// NewDatabaseResource will return a new auth0_connection_database resource.
-func NewDatabaseResource() *schema.Resource {
+// NewConnectionResource will return a new auth0_connection_database resource.
+func NewConnectionResource() *schema.Resource {
 	baseResource := connection.NewBaseConnectionResource(
 		"Auth0 provides database connections to authenticate users with an email/username and password. These credentials are securely stored in the Auth0 user store or in your own database. You can use this resource to create and manage database connections.",
 		map[string]*schema.Schema{

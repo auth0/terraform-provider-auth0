@@ -8,7 +8,7 @@ import (
 )
 
 func TestFlattenConnectionOptions(t *testing.T) {
-	result, diags := flattenConnectionOptionsV0(nil, nil)
+	result, diags := flattenConnectionOptions(nil, nil)
 
 	if diags != nil {
 		t.Errorf("Expected nil diagnostics, got %v", diags)

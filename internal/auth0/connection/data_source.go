@@ -40,7 +40,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	connectionID := data.Get("connection_id").(string)
 	if connectionID != "" {
 		data.SetId(connectionID)
-		return readConnection(ctx, data, meta)
+		return readConnectionV0(ctx, data, meta)
 	}
 
 	api := meta.(*config.Config).GetAPI()
@@ -58,7 +58,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				return readConnection(ctx, data, meta)
+				return readConnectionV0(ctx, data, meta)
 			}
 		}
 

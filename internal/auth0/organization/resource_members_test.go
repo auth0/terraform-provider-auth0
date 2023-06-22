@@ -17,6 +17,7 @@ resource "auth0_user" "user_1" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}1@auth0.com"
 	password        = "MyPass123$"
+	username        = "{{.testName}}11"
 }
 
 resource "auth0_user" "user_2" {
@@ -25,6 +26,7 @@ resource "auth0_user" "user_2" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}2@auth0.com"
 	password        = "MyPass123$"
+	username        = "{{.testName}}22"
 }
 
 resource "auth0_organization" "my_org" {
@@ -158,6 +160,9 @@ func TestAccOrganizationMembers(t *testing.T) {
 			{
 				Config:      acctest.ParseTestName(testAccOrganizationMembersPreventErasingMembersOnCreate, testName),
 				ExpectError: regexp.MustCompile("Organization with non empty members"),
+			},
+			{
+				Config: acctest.ParseTestName(testAccGivenTwoUsersAndAnOrganization, testName),
 			},
 			{
 				Config: acctest.ParseTestName(testAccOrganizationMembersRemoveAllMembers, testName),

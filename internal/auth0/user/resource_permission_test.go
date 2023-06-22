@@ -59,12 +59,12 @@ resource "auth0_user_permissions" "user_permissions" {
 
 	user_id = auth0_user.user.id
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "read:foo"
 	}
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "create:foo"
 	}

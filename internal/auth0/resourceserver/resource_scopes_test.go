@@ -152,6 +152,9 @@ func TestAccResourceServerScopes(t *testing.T) {
 				ExpectError: regexp.MustCompile("Resource Server with non empty scopes"),
 			},
 			{
+				Config: acctest.ParseTestName(testAccDeleteResourceServerScopes, testName),
+			},
+			{
 				Config: acctest.ParseTestName(testAccCreateResourceServerScopesWithOneScope, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_resource_server.my_api", "scopes.#", "1"),

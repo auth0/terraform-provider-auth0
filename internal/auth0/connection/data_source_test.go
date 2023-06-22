@@ -24,12 +24,14 @@ resource "auth0_client" "my_client" {
 }
 
 resource "auth0_connection_client" "my_conn_client_assoc" {
+	depends_on = [ auth0_client.my_client ]
+
 	connection_id = auth0_connection.my_connection.id
 	client_id     = auth0_client.my_client.id
 }
 `
 
-const testAccDataConnectionConfigByName = `
+const testAccDataConnectionConfigByName = testAccGivenAConnection + `
 data "auth0_connection" "test" {
 	depends_on = [ auth0_connection_client.my_conn_client_assoc ]
 
@@ -37,7 +39,7 @@ data "auth0_connection" "test" {
 }
 `
 
-const testAccDataConnectionConfigByID = `
+const testAccDataConnectionConfigByID = testAccGivenAConnection + `
 data "auth0_connection" "test" {
 	depends_on = [ auth0_connection_client.my_conn_client_assoc ]
 
@@ -59,10 +61,9 @@ func TestAccDataSourceConnectionRequiredArguments(t *testing.T) {
 
 func TestAccDataSourceConnectionByName(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAConnection, t.Name()),
+				Config: acctest.ParseTestName(testAccDataConnectionConfigByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -70,11 +71,6 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByName, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "auth0"),
@@ -87,10 +83,9 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 
 func TestAccDataSourceConnectionByID(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAConnection, t.Name()),
+				Config: acctest.ParseTestName(testAccDataConnectionConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
@@ -98,11 +93,6 @@ func TestAccDataSourceConnectionByID(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccGivenAConnection+testAccDataConnectionConfigByID, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "auth0"),

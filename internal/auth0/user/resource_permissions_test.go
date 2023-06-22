@@ -45,6 +45,7 @@ resource "auth0_user" "user" {
 	user_id         = "{{.testName}}"
 	password        = "passpass$12$12"
 	email           = "{{.testName}}@acceptance.test.com"
+	username        = "{{.testName}}"
 }
 `
 
@@ -54,7 +55,7 @@ resource "auth0_user_permissions" "user_permissions" {
 
 	user_id = auth0_user.user.id
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "read:foo"
 	}
@@ -97,7 +98,7 @@ resource "auth0_user_permissions" "user_permissions" {
 
 	user_id = auth0_user.user.id
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "create:foo"
 	}
@@ -142,12 +143,12 @@ resource "auth0_user_permissions" "user_permissions" {
 
 	user_id = auth0_user.user.id
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "read:foo"
 	}
 
-	permissions  {
+	permissions {
 		resource_server_identifier = auth0_resource_server.resource_server.identifier
 		name                       = "create:foo"
 	}

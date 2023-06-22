@@ -142,14 +142,11 @@ test-acc-record: ## Run acceptance tests and record http interactions. To run a 
 
 test-acc-e2e: ## Run acceptance tests without http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc-e2e FILTER="TestAccResourceServer`
 	${call print, "Running acceptance tests against a real Auth0 tenant"}
-	@TF_ACC=1 \
-		go test \
-		-v \
-		-run "$(FILTER)" \
-		-timeout 120m \
-		-parallel 1 \
-		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
-		${GO_PACKAGES}
+	@EXIT_CODE=0; \
+	for package in ${GO_PACKAGES}; do \
+  		TF_ACC=1 go test -v -run "$(FILTER)" -timeout 20m -parallel 1 "$$package" || EXIT_CODE=1; \
+  	done; \
+  	exit $$EXIT_CODE
 
 test-sweep: ## Clean up test tenant
 	${call print_warning, "WARNING: This will destroy infrastructure. Use only in development accounts."}

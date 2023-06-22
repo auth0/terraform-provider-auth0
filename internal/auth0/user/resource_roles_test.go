@@ -13,15 +13,15 @@ import (
 
 const testAccGivenTwoRolesAndAUser = `
 resource "auth0_role" "owner" {
-	name        = "test-owner"
-	description = "Test Owner"
+	name        = "Test Owner {{.testName}}"
+	description = "Owner {{.testName}}"
 }
 
 resource "auth0_role" "admin" {
 	depends_on = [ auth0_role.owner ]
 
-	name        = "test-admin"
-	description = "Test Administrator"
+	name        = "Test Admin {{.testName}}"
+	description = "Administrator {{.testName}}"
 }
 
 resource "auth0_user" "user" {
@@ -30,6 +30,7 @@ resource "auth0_user" "user" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}@acceptance.test.com"
 	password        = "passpass$12$12"
+	username        = "{{.testName}}"
 
 	lifecycle {
 		ignore_changes = [roles]
@@ -57,11 +58,11 @@ resource "auth0_user_roles" "user_roles" {
 	depends_on = [ auth0_user.user ]
 
 	user_id = auth0_user.user.id
-	roles   = [auth0_role.owner.id, auth0_role.admin.id]
+	roles   = [ auth0_role.owner.id, auth0_role.admin.id ]
 }
 
 data "auth0_user" "user_data" {
-	depends_on = [auth0_user_roles.user_roles]
+	depends_on = [ auth0_user_roles.user_roles ]
 
 	user_id = auth0_user.user.id
 }
@@ -76,7 +77,7 @@ resource "auth0_user_roles" "user_roles" {
 }
 
 data "auth0_user" "user_data" {
-	depends_on = [auth0_user_roles.user_roles]
+	depends_on = [ auth0_user_roles.user_roles ]
 
 	user_id = auth0_user.user.id
 }
@@ -115,7 +116,7 @@ resource "auth0_user_roles" "user_roles" {
 }
 
 data "auth0_user" "user_data" {
-	depends_on = [auth0_user_roles.user_roles]
+	depends_on = [ auth0_user_roles.user_roles ]
 
 	user_id = auth0_user.user.id
 }

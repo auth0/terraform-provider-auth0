@@ -49,6 +49,18 @@ func TestAccRole(t *testing.T) {
 				),
 			},
 			{
+				Config: acctest.ParseTestName(testAccRoleCreate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "description", "The One - Acceptance Test"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.#", "1"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.name", "stop:bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.description", "Stop bullets"),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_identifier", fmt.Sprintf("https://%s.matrix.com/", t.Name())),
+					resource.TestCheckResourceAttr("auth0_role.the_one", "permissions.0.resource_server_name", fmt.Sprintf("Role - Acceptance Test - %s", t.Name())),
+				),
+			},
+			{
 				Config: acctest.ParseTestName(testAccRoleEmptyAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_role.the_one", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),

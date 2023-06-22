@@ -84,11 +84,11 @@ func assignMemberRoles(d *schema.ResourceData, meta interface{}) error {
 
 	toAdd, toRemove := value.Difference(d, "roles")
 
-	if err := addMemberRoles(meta, organizationID, userID, toAdd); err != nil {
+	if err := removeMemberRoles(meta, organizationID, userID, toRemove); err != nil {
 		return err
 	}
 
-	return removeMemberRoles(meta, organizationID, userID, toRemove)
+	return addMemberRoles(meta, organizationID, userID, toAdd)
 }
 
 func removeMemberRoles(meta interface{}, organizationID string, userID string, roles []interface{}) error {

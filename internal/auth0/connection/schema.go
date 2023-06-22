@@ -569,7 +569,9 @@ var resourceSchemaV0 = map[string]*schema.Schema{
 				"type": {
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: "Value can be `back_channel` or `front_channel`.",
+					Description: "Value can be `back_channel` or `front_channel`. " +
+						"Front Channel will use OIDC protocol with response_mode=form_post andresponse_type=id_token. " +
+ 						"Back Channel will use response_type=code."
 				},
 				"issuer": {
 					Type:        schema.TypeString,

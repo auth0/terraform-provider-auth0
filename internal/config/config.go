@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -59,6 +60,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
+			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)

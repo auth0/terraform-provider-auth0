@@ -56,7 +56,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		debug := data.Get("debug").(bool)
 
 		apiClient, err := management.New(domain,
-			authenticationOption(ctx, clientID, clientSecret, apiToken, audience),
+			authenticationOption(clientID, clientSecret, apiToken, audience),
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
@@ -88,7 +88,9 @@ func userAgent(terraformVersion *string) string {
 }
 
 // authenticationOption computes the desired authentication option for the *management.Management client.
-func authenticationOption(ctx context.Context, clientID, clientSecret, apiToken, audience string) management.Option {
+func authenticationOption(clientID, clientSecret, apiToken, audience string) management.Option {
+	ctx := context.Background()
+
 	if apiToken != "" {
 		return management.WithStaticToken(apiToken)
 	}

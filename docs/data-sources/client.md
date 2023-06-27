@@ -75,6 +75,7 @@ Read-Only:
 
 - `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
 - `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
+- `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -104,6 +105,18 @@ Read-Only:
 - `expiration` (Number)
 - `signed_identifier` (String)
 - `storage_access_key` (String)
+
+
+<a id="nestedobjatt--addons--azure_sb"></a>
+### Nested Schema for `addons.azure_sb`
+
+Read-Only:
+
+- `entity_path` (String)
+- `expiration` (Number)
+- `namespace` (String)
+- `sas_key` (String)
+- `sas_key_name` (String)
 
 
 

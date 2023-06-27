@@ -246,6 +246,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 	d.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
 		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
 		addons.AzureBlob = expandClientAddonAzureBlob(addonsCfg.GetAttr("azure_blob"))
+		addons.AzureSB = expandClientAddonAzureSB(addonsCfg.GetAttr("azure_sb"))
 		return stop
 	})
 
@@ -290,6 +291,24 @@ func expandClientAddonAzureBlob(azureCfg cty.Value) *management.AzureBlobClientA
 			ContainerWrite:   value.Bool(azureCfg.GetAttr("container_write")),
 			ContainerDelete:  value.Bool(azureCfg.GetAttr("container_delete")),
 			ContainerList:    value.Bool(azureCfg.GetAttr("container_list")),
+		}
+
+		return stop
+	})
+
+	return &azureAddon
+}
+
+func expandClientAddonAzureSB(azureCfg cty.Value) *management.AzureSBClientAddon {
+	var azureAddon management.AzureSBClientAddon
+
+	azureCfg.ForEachElement(func(_ cty.Value, azureCfg cty.Value) (stop bool) {
+		azureAddon = management.AzureSBClientAddon{
+			Namespace:  value.String(azureCfg.GetAttr("namespace")),
+			SASKeyName: value.String(azureCfg.GetAttr("sas_key_name")),
+			SASKey:     value.String(azureCfg.GetAttr("sas_key")),
+			EntityPath: value.String(azureCfg.GetAttr("entity_path")),
+			Expiration: value.Int(azureCfg.GetAttr("expiration")),
 		}
 
 		return stop

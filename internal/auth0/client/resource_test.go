@@ -577,7 +577,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "4"),
@@ -636,7 +636,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "5"),
@@ -703,7 +703,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "0"),
@@ -778,6 +778,23 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsAzureSB = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		azure_sb {
+			namespace    = "acmeorg"
+			sas_key_name = "my-policy"
+			sas_key      = "my-key"
+			entity_path  = "my-queue"
+			expiration   = 10
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -811,6 +828,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_write", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_delete", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_list", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsAzureSB, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.namespace", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.sas_key_name", "my-policy"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.sas_key", "my-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.entity_path", "my-queue"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.expiration", "10"),
 				),
 			},
 		},

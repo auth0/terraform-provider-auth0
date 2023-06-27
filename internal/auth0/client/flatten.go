@@ -97,6 +97,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 	m := map[string]interface{}{
 		"aws":        nil,
 		"azure_blob": nil,
+		"azure_sb":   nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -125,6 +126,18 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"container_write":    addons.GetAzureBlob().GetContainerWrite(),
 				"container_delete":   addons.GetAzureBlob().GetContainerDelete(),
 				"container_list":     addons.GetAzureBlob().GetContainerList(),
+			},
+		}
+	}
+
+	if addons.GetAzureSB() != nil {
+		m["azure_sb"] = []interface{}{
+			map[string]interface{}{
+				"namespace":    addons.GetAzureSB().GetNamespace(),
+				"sas_key_name": addons.GetAzureSB().GetSASKeyName(),
+				"sas_key":      addons.GetAzureSB().GetSASKey(),
+				"entity_path":  addons.GetAzureSB().GetEntityPath(),
+				"expiration":   addons.GetAzureSB().GetExpiration(),
 			},
 		}
 	}

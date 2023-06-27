@@ -608,6 +608,46 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"azure_sb": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Azure Storage Bus Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"namespace": {
+										Description: "Your Azure Service Bus namespace. Usually the first segment of " +
+											"your Service Bus URL (for example `https://acme-org.servicebus.windows.net` " +
+											"would be `acme-org`).",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"sas_key_name": {
+										Description: "Your shared access policy name defined in your Service Bus entity.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"sas_key": {
+										Description: "Primary Key associated with your shared access policy.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"entity_path": {
+										Description: "Entity you want to request a token for, such as `my-queue`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"expiration": {
+										Description:  "Optional expiration in minutes for the generated token. Defaults to 5 minutes.",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntAtLeast(0),
+										Optional:     true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

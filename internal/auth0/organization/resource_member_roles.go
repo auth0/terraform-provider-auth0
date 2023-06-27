@@ -52,7 +52,7 @@ func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	if err := assignMemberRoles(data, meta); err != nil {
+	if err := assignMemberRoles(ctx, data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -66,13 +66,13 @@ func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationMemberRoles(ctx, data, meta)
 }
 
-func readOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	memberRoles, err := api.Organization.MemberRoles(organizationID, userID)
+	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -91,7 +91,7 @@ func readOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, m
 }
 
 func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	if err := assignMemberRoles(data, meta); err != nil {
+	if err := assignMemberRoles(ctx, data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -103,7 +103,7 @@ func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationMember(ctx, data, meta)
 }
 
-func deleteOrganizationMemberRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
@@ -119,7 +119,7 @@ func deleteOrganizationMemberRoles(_ context.Context, data *schema.ResourceData,
 		rolesToRemove = append(rolesToRemove, role.(string))
 	}
 
-	if err := api.Organization.DeleteMemberRoles(organizationID, userID, rolesToRemove); err != nil {
+	if err := api.Organization.DeleteMemberRoles(ctx, organizationID, userID, rolesToRemove); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
 		}

@@ -2,6 +2,7 @@ package acctest
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"testing"
 
@@ -65,6 +66,7 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 			management.WithStaticToken("insecure"),
 			management.WithClient(httpRecorder.GetDefaultClient()),
 			management.WithDebug(debug),
+			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
 		}
 
 		if domain != RecordingsDomain {
@@ -75,9 +77,9 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 
 			authenticationOption := management.WithStaticToken(apiToken)
 			if apiToken == "" {
-				authenticationOption = management.WithClientCredentials(clientID, clientSecret)
+				authenticationOption = management.WithClientCredentials(ctx, clientID, clientSecret)
 				if audience != "" {
-					authenticationOption = management.WithClientCredentialsAndAudience(clientID, clientSecret, audience)
+					authenticationOption = management.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience)
 				}
 			}
 

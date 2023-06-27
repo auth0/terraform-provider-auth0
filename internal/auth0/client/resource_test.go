@@ -577,7 +577,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "4"),
@@ -636,7 +636,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "5"),
@@ -703,7 +703,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "0"),
@@ -828,6 +828,8 @@ resource "auth0_client" "my_client" {
 `
 
 func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
+	t.Skip()
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

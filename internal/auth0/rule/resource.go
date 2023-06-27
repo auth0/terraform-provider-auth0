@@ -70,7 +70,7 @@ func NewResource() *schema.Resource {
 func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := expandRule(d.GetRawConfig())
 	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Create(rule); err != nil {
+	if err := api.Rule.Create(ctx, rule); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -79,9 +79,9 @@ func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readRule(ctx, d, m)
 }
 
-func readRule(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	rule, err := api.Rule.Read(d.Id())
+	rule, err := api.Rule.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -105,16 +105,16 @@ func readRule(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	rule := expandRule(d.GetRawConfig())
 	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Update(d.Id(), rule); err != nil {
+	if err := api.Rule.Update(ctx, d.Id(), rule); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readRule(ctx, d, m)
 }
 
-func deleteRule(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Delete(d.Id()); err != nil {
+	if err := api.Rule.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")

@@ -46,12 +46,12 @@ func NewResource() *schema.Resource {
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(d, api)
+	connection, diagnostics := expandConnection(ctx, d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	if err := api.Connection.Create(connection); err != nil {
+	if err := api.Connection.Create(ctx, connection); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 		return diagnostics
 	}
@@ -62,10 +62,10 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	return diagnostics
 }
 
-func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, err := api.Connection.Read(d.Id())
+	connection, err := api.Connection.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -107,12 +107,12 @@ func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) di
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(d, api)
+	connection, diagnostics := expandConnection(ctx, d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	if err := api.Connection.Update(d.Id(), connection); err != nil {
+	if err := api.Connection.Update(ctx, d.Id(), connection); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 		return diagnostics
 	}
@@ -121,10 +121,10 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	return diagnostics
 }
 
-func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Connection.Delete(d.Id()); err != nil {
+	if err := api.Connection.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

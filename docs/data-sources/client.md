@@ -32,7 +32,6 @@ data "auth0_client" "some-client-by-id" {
 
 ### Read-Only
 
-- `addons` (List of Object) Addons enabled for this client and their associated configurations. (see [below for nested schema](#nestedatt--addons))
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
@@ -67,69 +66,6 @@ data "auth0_client" "some-client-by-id" {
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
-
-<a id="nestedatt--addons"></a>
-### Nested Schema for `addons`
-
-Read-Only:
-
-- `aws` (Map of String)
-- `azure_blob` (Map of String)
-- `azure_sb` (Map of String)
-- `box` (Map of String)
-- `cloudbees` (Map of String)
-- `concur` (Map of String)
-- `dropbox` (Map of String)
-- `echosign` (Map of String)
-- `egnyte` (Map of String)
-- `firebase` (Map of String)
-- `layer` (Map of String)
-- `mscrm` (Map of String)
-- `newrelic` (Map of String)
-- `office365` (Map of String)
-- `rms` (Map of String)
-- `salesforce` (Map of String)
-- `salesforce_api` (Map of String)
-- `salesforce_sandbox_api` (Map of String)
-- `samlp` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp))
-- `sap_api` (Map of String)
-- `sentry` (Map of String)
-- `sharepoint` (Map of String)
-- `slack` (Map of String)
-- `springcm` (Map of String)
-- `wams` (Map of String)
-- `wsfed` (Map of String)
-- `zendesk` (Map of String)
-- `zoom` (Map of String)
-
-<a id="nestedobjatt--addons--samlp"></a>
-### Nested Schema for `addons.samlp`
-
-Read-Only:
-
-- `audience` (String)
-- `authn_context_class_ref` (String)
-- `binding` (String)
-- `create_upn_claim` (Boolean)
-- `destination` (String)
-- `digest_algorithm` (String)
-- `include_attribute_name_format` (Boolean)
-- `issuer` (String)
-- `lifetime_in_seconds` (Number)
-- `logout` (Map of String)
-- `map_identities` (Boolean)
-- `map_unknown_claims_as_is` (Boolean)
-- `mappings` (Map of String)
-- `name_identifier_format` (String)
-- `name_identifier_probes` (List of String)
-- `passthrough_claims_with_no_mapping` (Boolean)
-- `recipient` (String)
-- `sign_response` (Boolean)
-- `signature_algorithm` (String)
-- `signing_cert` (String)
-- `typed_attributes` (Boolean)
-
-
 
 <a id="nestedatt--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`

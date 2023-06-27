@@ -31,7 +31,6 @@ PAGE
 
 ### Optional
 
-- `addons` (Block List, Max: 1) Addons enabled for this client and their associated configurations. (see [below for nested schema](#nestedblock--addons))
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
@@ -72,69 +71,6 @@ PAGE
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-
-<a id="nestedblock--addons"></a>
-### Nested Schema for `addons`
-
-Optional:
-
-- `aws` (Map of String)
-- `azure_blob` (Map of String)
-- `azure_sb` (Map of String)
-- `box` (Map of String)
-- `cloudbees` (Map of String)
-- `concur` (Map of String)
-- `dropbox` (Map of String)
-- `echosign` (Map of String)
-- `egnyte` (Map of String)
-- `firebase` (Map of String)
-- `layer` (Map of String)
-- `mscrm` (Map of String)
-- `newrelic` (Map of String)
-- `office365` (Map of String)
-- `rms` (Map of String)
-- `salesforce` (Map of String)
-- `salesforce_api` (Map of String)
-- `salesforce_sandbox_api` (Map of String)
-- `samlp` (Block List, Max: 1) Configuration settings for a SAML add-on. (see [below for nested schema](#nestedblock--addons--samlp))
-- `sap_api` (Map of String)
-- `sentry` (Map of String)
-- `sharepoint` (Map of String)
-- `slack` (Map of String)
-- `springcm` (Map of String)
-- `wams` (Map of String)
-- `wsfed` (Map of String) WS-Fed (WIF) addon indicator. Actual configuration is stored in callback and `client_aliases` properties on the client.
-- `zendesk` (Map of String)
-- `zoom` (Map of String)
-
-<a id="nestedblock--addons--samlp"></a>
-### Nested Schema for `addons.samlp`
-
-Optional:
-
-- `audience` (String) Audience of the SAML Assertion. Default will be the Issuer on SAMLRequest.
-- `authn_context_class_ref` (String) Class reference of the authentication context.
-- `binding` (String) Protocol binding used for SAML logout responses.
-- `create_upn_claim` (Boolean) Indicates whether a UPN claim should be created. Defaults to `true`.
-- `destination` (String) Destination of the SAML Response. If not specified, it will be `AssertionConsumerUrl` of SAMLRequest or callback URL if there was no SAMLRequest.
-- `digest_algorithm` (String) Algorithm used to calculate the digest of the SAML Assertion or response. Options include `sha1` and `sha256`. Defaults to `sha1`.
-- `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to false, the attribute NameFormat is not set in the assertion. Defaults to `true`.
-- `issuer` (String) Issuer of the SAML Assertion.
-- `lifetime_in_seconds` (Number) Number of seconds during which the token is valid.
-- `logout` (Map of String) Configuration settings for logout.
-- `map_identities` (Boolean) Indicates whether or not to add additional identity information in the token, such as the provider used and the `access_token`, if available. Defaults to `true`.
-- `map_unknown_claims_as_is` (Boolean) Indicates whether to add a prefix of `http://schema.auth0.com` to any claims that are not mapped to the common profile when passed through in the output assertion. Defaults to `false`.
-- `mappings` (Map of String) Mappings between the Auth0 user profile property name (`name`) and the output attributes on the SAML attribute in the assertion (`value`).
-- `name_identifier_format` (String) Format of the name identifier.
-- `name_identifier_probes` (List of String) Attributes that can be used for Subject/NameID. Auth0 will try each of the attributes of this array in order and use the first value it finds.
-- `passthrough_claims_with_no_mapping` (Boolean) Indicates whether or not to passthrough claims that are not mapped to the common profile in the output assertion. Defaults to `true`.
-- `recipient` (String) Recipient of the SAML Assertion (SubjectConfirmationData). Default is `AssertionConsumerUrl` on SAMLRequest or callback URL if no SAMLRequest was sent.
-- `sign_response` (Boolean) Indicates whether or not the SAML Response should be signed instead of the SAML Assertion.
-- `signature_algorithm` (String) Algorithm used to sign the SAML Assertion or response. Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.
-- `signing_cert` (String) Optionally indicates the public key certificate used to validate SAML requests. If set, SAML requests will be required to be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n`.
-- `typed_attributes` (Boolean) Indicates whether or not we should infer the `xs:type` of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. Defaults to `true`.
-
-
 
 <a id="nestedblock--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`

@@ -74,7 +74,7 @@ func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	id := d.Get("trigger").(string)
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
 
-	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, id, triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -83,10 +83,10 @@ func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	return readTriggerBinding(ctx, d, m)
 }
 
-func readTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	triggerBindings, err := api.Action.Bindings(d.Id())
+	triggerBindings, err := api.Action.Bindings(ctx, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -103,14 +103,14 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	api := m.(*config.Config).GetAPI()
 
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
-	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, d.Id(), triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readTriggerBinding(ctx, d, m)
 }
 
-func deleteTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	return diag.FromErr(api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}))
+	return diag.FromErr(api.Action.UpdateBindings(ctx, d.Id(), []*management.ActionBinding{}))
 }

@@ -267,280 +267,6 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "HTML form template to be used for WS-Federation.",
 			},
-			"addons": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Addons enabled for this client and their associated configurations.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"aws": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_blob": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_sb": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"rms": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"mscrm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"slack": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sentry": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"box": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"cloudbees": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"concur": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"dropbox": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"echosign": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"egnyte": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"firebase": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"newrelic": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"office365": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_sandbox_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"samlp": {
-							Type:        schema.TypeList,
-							MaxItems:    1,
-							Optional:    true,
-							Description: "Configuration settings for a SAML add-on.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"audience": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Audience of the SAML Assertion. " +
-											"Default will be the Issuer on SAMLRequest.",
-									},
-									"recipient": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
-											"Default is `AssertionConsumerUrl` on SAMLRequest or " +
-											"callback URL if no SAMLRequest was sent.",
-									},
-									"mappings": {
-										Type:     schema.TypeMap,
-										Optional: true,
-										Elem:     schema.TypeString,
-										Description: "Mappings between the Auth0 user profile property " +
-											"name (`name`) and the output attributes on the SAML " +
-											"attribute in the assertion (`value`).",
-									},
-									"create_upn_claim": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether a UPN claim should be created. " +
-											"Defaults to `true`.",
-									},
-									"passthrough_claims_with_no_mapping": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not to passthrough " +
-											"claims that are not mapped to the common profile " +
-											"in the output assertion. Defaults to `true`.",
-									},
-									"map_unknown_claims_as_is": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  false,
-										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
-											"to any claims that are not mapped to the common profile when passed " +
-											"through in the output assertion. Defaults to `false`.",
-									},
-									"map_identities": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not to add additional identity " +
-											"information in the token, such as the provider used and the " +
-											"`access_token`, if available. Defaults to `true`.",
-									},
-									"signature_algorithm": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "rsa-sha1",
-										Description: "Algorithm used to sign the SAML Assertion or response. " +
-											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
-									},
-									"digest_algorithm": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "sha1",
-										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
-											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
-									},
-									"destination": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Destination of the SAML Response. If not specified, " +
-											"it will be `AssertionConsumerUrl` of SAMLRequest " +
-											"or callback URL if there was no SAMLRequest.",
-									},
-									"lifetime_in_seconds": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Default:     3600,
-										Description: "Number of seconds during which the token is valid.",
-									},
-									"sign_response": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Description: "Indicates whether or not the SAML Response should be signed " +
-											"instead of the SAML Assertion.",
-									},
-									"name_identifier_format": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Default:     "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-										Description: "Format of the name identifier.",
-									},
-									"name_identifier_probes": {
-										Type:     schema.TypeList,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-										Optional: true,
-										Description: "Attributes that can be used for Subject/NameID. " +
-											"Auth0 will try each of the attributes of this array in " +
-											"order and use the first value it finds.",
-									},
-									"authn_context_class_ref": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Class reference of the authentication context.",
-									},
-									"typed_attributes": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not we should infer the `xs:type` " +
-											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
-											"and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. " +
-											"Defaults to `true`.",
-									},
-									"include_attribute_name_format": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not we should infer the NameFormat " +
-											"based on the attribute name. If set to false, the attribute " +
-											"NameFormat is not set in the assertion. Defaults to `true`.",
-									},
-									"logout": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: "Configuration settings for logout.",
-									},
-									"binding": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Protocol binding used for SAML logout responses.",
-									},
-									"signing_cert": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Optionally indicates the public key certificate used to " +
-											"validate SAML requests. If set, SAML requests will be required to " +
-											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
-									},
-									"issuer": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Issuer of the SAML Assertion.",
-									},
-								},
-							},
-						},
-						"layer": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sap_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sharepoint": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"springcm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"wams": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"wsfed": {
-							Type:     schema.TypeMap,
-							Optional: true,
-							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored " +
-								"in callback and `client_aliases` properties on the client.",
-						},
-						"zendesk": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"zoom": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-					},
-				},
-			},
 			"token_endpoint_auth_method": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -763,7 +489,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
-	if err := api.Client.Create(client); err != nil {
+	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -772,10 +498,10 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(d.Id())
+	client, err := api.Client.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -815,7 +541,7 @@ func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
-		d.Set("addons", flattenClientAddons(client.Addons)),
+		// D.Set("addons", flattenClientAddons(client.Addons)), TODO: DXCDT-441 Add new go-auth0 v1-beta types.
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
@@ -831,13 +557,13 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	client := expandClient(d)
 	if clientHasChange(client) {
-		if err := api.Client.Update(d.Id(), client); err != nil {
+		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	d.Partial(true)
-	if err := rotateClientSecret(d, m); err != nil {
+	if err := rotateClientSecret(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 	d.Partial(false)
@@ -845,10 +571,10 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Client.Delete(d.Id()); err != nil {
+	if err := api.Client.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -859,14 +585,14 @@ func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
+func rotateClientSecret(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	if !d.HasChange("client_secret_rotation_trigger") {
 		return nil
 	}
 
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.RotateSecret(d.Id())
+	client, err := api.Client.RotateSecret(ctx, d.Id())
 	if err != nil {
 		return err
 	}

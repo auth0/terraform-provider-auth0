@@ -108,9 +108,9 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	// The email template resource doesn't allow deleting templates, so in order
 	// to avoid conflicts, we first attempt to read the template. If it exists
 	// we'll try to update it, if not we'll try to create it.
-	if _, err := api.EmailTemplate.Read(email.GetTemplate()); err == nil {
+	if _, err := api.EmailTemplate.Read(ctx, email.GetTemplate()); err == nil {
 		// We succeeded in reading the template, this means it was created previously.
-		if err := api.EmailTemplate.Update(email.GetTemplate(), email); err != nil {
+		if err := api.EmailTemplate.Update(ctx, email.GetTemplate(), email); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -121,7 +121,7 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 
 	// If we reached this point the template doesn't exist.
 	// Therefore, it is safe to create it.
-	if err := api.EmailTemplate.Create(email); err != nil {
+	if err := api.EmailTemplate.Create(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -130,10 +130,10 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	return readEmailTemplate(ctx, d, m)
 }
 
-func readEmailTemplate(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	email, err := api.EmailTemplate.Read(d.Id())
+	email, err := api.EmailTemplate.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -163,20 +163,20 @@ func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailTemplate(d.GetRawConfig())
-	if err := api.EmailTemplate.Update(d.Id(), email); err != nil {
+	if err := api.EmailTemplate.Update(ctx, d.Id(), email); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readEmailTemplate(ctx, d, m)
 }
 
-func deleteEmailTemplate(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	emailTemplate := &management.EmailTemplate{
 		Template: auth0.String(d.Id()),
 		Enabled:  auth0.Bool(false),
 	}
-	if err := api.EmailTemplate.Update(d.Id(), emailTemplate); err != nil {
+	if err := api.EmailTemplate.Update(ctx, d.Id(), emailTemplate); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")

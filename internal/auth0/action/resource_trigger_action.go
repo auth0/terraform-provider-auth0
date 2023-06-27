@@ -67,7 +67,7 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	actionID := d.Get("action_id").(string)
 	displayName := d.Get("display_name").(string)
 
-	currentBindings, err := api.Action.Bindings(trigger)
+	currentBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -93,7 +93,7 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	if displayName == "" {
-		action, err := api.Action.Read(actionID)
+		action, err := api.Action.Read(ctx, actionID)
 
 		if err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
@@ -113,7 +113,7 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 		DisplayName: &displayName,
 	})
 
-	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -128,7 +128,7 @@ func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	actionID := d.Get("action_id").(string)
 	displayName := d.Get("display_name").(string)
 
-	currentBindings, err := api.Action.Bindings(trigger)
+	currentBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -161,20 +161,20 @@ func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 		return nil
 	}
 
-	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readTriggerAction(ctx, d, m)
 }
 
-func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	trigger := d.Get("trigger").(string)
 	actionID := d.Get("action_id").(string)
 
-	triggerBindings, err := api.Action.Bindings(trigger)
+	triggerBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -193,13 +193,13 @@ func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{})
 	return nil
 }
 
-func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	trigger := d.Get("trigger").(string)
 	actionID := d.Get("action_id").(string)
 
-	triggerBindings, err := api.Action.Bindings(trigger)
+	triggerBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -219,5 +219,5 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		})
 	}
 
-	return diag.FromErr(api.Action.UpdateBindings(trigger, updatedBindings))
+	return diag.FromErr(api.Action.UpdateBindings(ctx, trigger, updatedBindings))
 }

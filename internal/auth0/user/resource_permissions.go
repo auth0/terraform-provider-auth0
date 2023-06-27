@@ -86,7 +86,7 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(rmPermissions) > 0 {
-		if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
+		if err := api.User.RemovePermissions(ctx, userID, rmPermissions); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -106,7 +106,7 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(addPermissions) > 0 {
-		if err := api.User.AssignPermissions(userID, addPermissions); err != nil {
+		if err := api.User.AssignPermissions(ctx, userID, addPermissions); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -121,10 +121,10 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	return readUserPermissions(ctx, data, meta)
 }
 
-func readUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.User.Permissions(data.Id())
+	permissions, err := api.User.Permissions(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -142,7 +142,7 @@ func readUserPermissions(_ context.Context, data *schema.ResourceData, meta inte
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
@@ -158,7 +158,7 @@ func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta in
 		})
 	}
 
-	if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
+	if err := api.User.RemovePermissions(ctx, userID, rmPermissions); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			return nil
 		}

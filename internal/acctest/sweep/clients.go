@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
@@ -14,6 +15,8 @@ func Clients() {
 	resource.AddTestSweepers("auth0_client", &resource.Sweeper{
 		Name: "auth0_client",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
@@ -22,7 +25,7 @@ func Clients() {
 			var page int
 			var result *multierror.Error
 			for {
-				clientList, err := api.Client.List(management.Page(page))
+				clientList, err := api.Client.List(ctx, management.Page(page))
 				if err != nil {
 					return err
 				}
@@ -33,7 +36,7 @@ func Clients() {
 					if strings.Contains(client.GetName(), "Test") {
 						result = multierror.Append(
 							result,
-							api.Client.Delete(client.GetClientID()),
+							api.Client.Delete(ctx, client.GetClientID()),
 						)
 						log.Printf("[DEBUG] ✗ %s", client.GetName())
 					}

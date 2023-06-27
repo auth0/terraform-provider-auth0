@@ -465,13 +465,13 @@ func NewThemeResource() *schema.Resource {
 func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if existingBrandingTheme, err := api.BrandingTheme.Default(); err == nil {
+	if existingBrandingTheme, err := api.BrandingTheme.Default(ctx); err == nil {
 		data.SetId(existingBrandingTheme.GetID())
 		return updateBrandingTheme(ctx, data, meta)
 	}
 
 	brandingTheme := expandBrandingTheme(data)
-	if err := api.BrandingTheme.Create(&brandingTheme); err != nil {
+	if err := api.BrandingTheme.Create(ctx, &brandingTheme); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -480,10 +480,10 @@ func createBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	return readBrandingTheme(ctx, data, meta)
 }
 
-func readBrandingTheme(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	brandingTheme, err := api.BrandingTheme.Default()
+	brandingTheme, err := api.BrandingTheme.Default(ctx)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -511,17 +511,17 @@ func updateBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	api := meta.(*config.Config).GetAPI()
 
 	brandingTheme := expandBrandingTheme(data)
-	if err := api.BrandingTheme.Update(data.Id(), &brandingTheme); err != nil {
+	if err := api.BrandingTheme.Update(ctx, data.Id(), &brandingTheme); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readBrandingTheme(ctx, data, meta)
 }
 
-func deleteBrandingTheme(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteBrandingTheme(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := api.BrandingTheme.Delete(data.Id()); err != nil {
+	if err := api.BrandingTheme.Delete(ctx, data.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				data.SetId("")

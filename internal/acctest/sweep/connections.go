@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
@@ -14,6 +15,8 @@ func Connections() {
 	resource.AddTestSweepers("auth0_connection", &resource.Sweeper{
 		Name: "auth0_connection",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
@@ -23,6 +26,7 @@ func Connections() {
 			var result *multierror.Error
 			for {
 				connectionList, err := api.Connection.List(
+					ctx,
 					management.IncludeFields("id", "name"),
 					management.Page(page),
 				)
@@ -36,7 +40,7 @@ func Connections() {
 					if strings.Contains(connection.GetName(), "Test") {
 						result = multierror.Append(
 							result,
-							api.Connection.Delete(connection.GetID()),
+							api.Connection.Delete(ctx, connection.GetID()),
 						)
 						log.Printf("[DEBUG] ✗ %s", connection.GetName())
 					}

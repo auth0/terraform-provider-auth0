@@ -76,6 +76,7 @@ Read-Only:
 - `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
 - `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
 - `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
+- `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -117,6 +118,14 @@ Read-Only:
 - `namespace` (String)
 - `sas_key` (String)
 - `sas_key_name` (String)
+
+
+<a id="nestedobjatt--addons--rms"></a>
+### Nested Schema for `addons.rms`
+
+Read-Only:
+
+- `url` (String)
 
 
 

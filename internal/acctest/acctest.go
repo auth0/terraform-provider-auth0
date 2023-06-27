@@ -58,7 +58,7 @@ func testFactoriesWithHTTPRecordings(httpRecorder *recorder.Recorder) map[string
 }
 
 func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) schema.ConfigureContextFunc {
-	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		domain := data.Get("domain").(string)
 		debug := data.Get("debug").(bool)
 
@@ -77,6 +77,8 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 
 			authenticationOption := management.WithStaticToken(apiToken)
 			if apiToken == "" {
+				ctx := context.Background()
+
 				authenticationOption = management.WithClientCredentials(ctx, clientID, clientSecret)
 				if audience != "" {
 					authenticationOption = management.WithClientCredentialsAndAudience(ctx, clientID, clientSecret, audience)

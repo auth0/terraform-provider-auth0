@@ -481,6 +481,43 @@ func NewResource() *schema.Resource {
 				Description: "List containing a map of the public cert of the signing key and the public cert " +
 					"of the signing key in PKCS7.",
 			},
+			"addons": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Addons enabled for this client and their associated configurations.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"aws": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "AWS Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"principal": {
+										Description: "AWS principal ARN, for example `arn:aws:iam::010616021751:saml-provider/idpname`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"role": {
+										Description: "AWS role ARN, for example `arn:aws:iam::010616021751:role/foo`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"lifetime_in_seconds": {
+										Description:  "AWS token lifetime in seconds.",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntBetween(900, 43200),
+										Optional:     true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -541,7 +578,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
-		// D.Set("addons", flattenClientAddons(client.Addons)), TODO: DXCDT-441 Add new go-auth0 v1-beta types.
+		d.Set("addons", flattenClientAddons(client.Addons)),
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),

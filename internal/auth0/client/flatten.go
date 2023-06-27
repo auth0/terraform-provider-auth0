@@ -98,6 +98,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"aws":        nil,
 		"azure_blob": nil,
 		"azure_sb":   nil,
+		"rms":        nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -138,6 +139,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"sas_key":      addons.GetAzureSB().GetSASKey(),
 				"entity_path":  addons.GetAzureSB().GetEntityPath(),
 				"expiration":   addons.GetAzureSB().GetExpiration(),
+			},
+		}
+	}
+
+	if addons.GetRMS() != nil {
+		m["rms"] = []interface{}{
+			map[string]interface{}{
+				"url": addons.GetRMS().GetURL(),
 			},
 		}
 	}

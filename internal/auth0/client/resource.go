@@ -648,6 +648,24 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"rms": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Active Directory Rights Management Service SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description: "URL of your Rights Management Server. It can be internal or " +
+											"external, but users will have to be able to reach it.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

@@ -247,6 +247,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
 		addons.AzureBlob = expandClientAddonAzureBlob(addonsCfg.GetAttr("azure_blob"))
 		addons.AzureSB = expandClientAddonAzureSB(addonsCfg.GetAttr("azure_sb"))
+		addons.RMS = expandClientAddonRMS(addonsCfg.GetAttr("rms"))
 		return stop
 	})
 
@@ -315,6 +316,24 @@ func expandClientAddonAzureSB(azureCfg cty.Value) *management.AzureSBClientAddon
 	})
 
 	return &azureAddon
+}
+
+func expandClientAddonRMS(rmsCfg cty.Value) *management.RMSClientAddon {
+	var rmsAddon management.RMSClientAddon
+
+	rmsCfg.ForEachElement(func(_ cty.Value, rmsCfg cty.Value) (stop bool) {
+		rmsAddon = management.RMSClientAddon{
+			URL: value.String(rmsCfg.GetAttr("url")),
+		}
+
+		return stop
+	})
+
+	if rmsAddon == (management.RMSClientAddon{}) {
+		return nil
+	}
+
+	return &rmsAddon
 }
 
 func clientHasChange(c *management.Client) bool {

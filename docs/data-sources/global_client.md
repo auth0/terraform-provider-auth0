@@ -19,6 +19,7 @@ data "auth0_global_client" "global" {}
 
 ### Read-Only
 
+- `addons` (List of Object) Addons enabled for this client and their associated configurations. (see [below for nested schema](#nestedatt--addons))
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
@@ -55,6 +56,24 @@ data "auth0_global_client" "global" {}
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
+
+<a id="nestedatt--addons"></a>
+### Nested Schema for `addons`
+
+Read-Only:
+
+- `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
+
+<a id="nestedobjatt--addons--aws"></a>
+### Nested Schema for `addons.aws`
+
+Read-Only:
+
+- `lifetime_in_seconds` (Number)
+- `principal` (String)
+- `role` (String)
+
+
 
 <a id="nestedatt--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`

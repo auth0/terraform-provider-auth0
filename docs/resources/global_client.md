@@ -31,6 +31,7 @@ PAGE
 
 ### Optional
 
+- `addons` (Block List, Max: 1) Addons enabled for this client and their associated configurations. (see [below for nested schema](#nestedblock--addons))
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
@@ -71,6 +72,24 @@ PAGE
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--addons"></a>
+### Nested Schema for `addons`
+
+Optional:
+
+- `aws` (Block List, Max: 1) AWS Addon configuration. (see [below for nested schema](#nestedblock--addons--aws))
+
+<a id="nestedblock--addons--aws"></a>
+### Nested Schema for `addons.aws`
+
+Optional:
+
+- `lifetime_in_seconds` (Number) AWS token lifetime in seconds.
+- `principal` (String) AWS principal ARN, for example `arn:aws:iam::010616021751:saml-provider/idpname`.
+- `role` (String) AWS role ARN, for example `arn:aws:iam::010616021751:role/foo`.
+
+
 
 <a id="nestedblock--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`

@@ -88,3 +88,25 @@ func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
 
 	return []interface{}{m}
 }
+
+func flattenClientAddons(addons *management.ClientAddons) []interface{} {
+	if addons == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{
+		"aws": nil,
+	}
+
+	if addons.GetAWS() != nil {
+		m["aws"] = []interface{}{
+			map[string]interface{}{
+				"principal":           addons.GetAWS().GetPrincipal(),
+				"role":                addons.GetAWS().GetRole(),
+				"lifetime_in_seconds": addons.GetAWS().GetLifetimeInSeconds(),
+			},
+		}
+	}
+
+	return []interface{}{m}
+}

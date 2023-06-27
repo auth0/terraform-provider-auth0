@@ -42,9 +42,9 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		ClientMetadata:                 expandClientMetadata(d),
 		RefreshToken:                   expandClientRefreshToken(d),
 		JWTConfiguration:               expandClientJWTConfiguration(d),
-		// Addons:                         expandClientAddons(d), TODO: DXCDT-441 Add new go-auth0 v1-beta types.
-		NativeSocialLogin: expandClientNativeSocialLogin(d),
-		Mobile:            expandClientMobile(d),
+		Addons:                         expandClientAddons(d),
+		NativeSocialLogin:              expandClientNativeSocialLogin(d),
+		Mobile:                         expandClientMobile(d),
 	}
 
 	return client
@@ -234,6 +234,44 @@ func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
 	}
 
 	return &newMetadataMap
+}
+
+func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
+	if !d.HasChange("addons") {
+		return nil
+	}
+
+	var addons management.ClientAddons
+
+	d.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
+		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
+
+		return stop
+	})
+
+	if addons == (management.ClientAddons{}) {
+		return nil
+	}
+
+	return &addons
+}
+
+func expandClientAddonAWS(awsCfg cty.Value) *management.AWSClientAddon {
+	var awsAddon management.AWSClientAddon
+
+	awsCfg.ForEachElement(func(_ cty.Value, awsCfg cty.Value) (stop bool) {
+		awsAddon.Principal = value.String(awsCfg.GetAttr("principal"))
+		awsAddon.Role = value.String(awsCfg.GetAttr("role"))
+		awsAddon.LifetimeInSeconds = value.Int(awsCfg.GetAttr("lifetime_in_seconds"))
+
+		return stop
+	})
+
+	if awsAddon == (management.AWSClientAddon{}) {
+		return nil
+	}
+
+	return &awsAddon
 }
 
 func clientHasChange(c *management.Client) bool {

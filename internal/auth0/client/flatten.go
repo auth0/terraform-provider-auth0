@@ -95,7 +95,8 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 	}
 
 	m := map[string]interface{}{
-		"aws": nil,
+		"aws":        nil,
+		"azure_blob": nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -104,6 +105,26 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"principal":           addons.GetAWS().GetPrincipal(),
 				"role":                addons.GetAWS().GetRole(),
 				"lifetime_in_seconds": addons.GetAWS().GetLifetimeInSeconds(),
+			},
+		}
+	}
+
+	if addons.GetAzureBlob() != nil {
+		m["azure_blob"] = []interface{}{
+			map[string]interface{}{
+				"account_name":       addons.GetAzureBlob().GetAccountName(),
+				"storage_access_key": addons.GetAzureBlob().GetStorageAccessKey(),
+				"container_name":     addons.GetAzureBlob().GetContainerName(),
+				"blob_name":          addons.GetAzureBlob().GetBlobName(),
+				"expiration":         addons.GetAzureBlob().GetExpiration(),
+				"signed_identifier":  addons.GetAzureBlob().GetSignedIdentifier(),
+				"blob_read":          addons.GetAzureBlob().GetBlobRead(),
+				"blob_write":         addons.GetAzureBlob().GetBlobWrite(),
+				"blob_delete":        addons.GetAzureBlob().GetBlobDelete(),
+				"container_read":     addons.GetAzureBlob().GetContainerRead(),
+				"container_write":    addons.GetAzureBlob().GetContainerWrite(),
+				"container_delete":   addons.GetAzureBlob().GetContainerDelete(),
+				"container_list":     addons.GetAzureBlob().GetContainerList(),
 			},
 		}
 	}

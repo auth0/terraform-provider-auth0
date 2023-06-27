@@ -515,6 +515,99 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"azure_blob": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Azure Blob Storage Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account_name": {
+										Description: "Your Azure storage account name. Usually first segment in your " +
+											"Azure storage URL, for example `https://acme-org.blob.core.windows.net` would " +
+											"be the account name `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"storage_access_key": {
+										Description: "Access key associated with this storage account.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"container_name": {
+										Description: "Container to request a token for, such as `my-container`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"blob_name": {
+										Description: "Entity to request a token for, such as `my-blob`. If blank the " +
+											"computed SAS will apply to the entire storage container.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"expiration": {
+										Description:  "Expiration in minutes for the generated token (default of 5 minutes).",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntAtLeast(0),
+										Optional:     true,
+									},
+									"signed_identifier": {
+										Description: "Shared access policy identifier defined in your storage account resource.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"blob_read": {
+										Description: "Indicates if the issued token has permission to read the " +
+											"content, properties, metadata and block list. Use the blob as the " +
+											"source of a copy operation.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"blob_write": {
+										Description: "Indicates if the issued token has permission to create or " +
+											"write content, properties, metadata, or block list. Snapshot or lease " +
+											"the blob. Resize the blob (page blob only). Use the blob as the " +
+											"destination of a copy operation within the same account.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"blob_delete": {
+										Description: "Indicates if the issued token has permission to delete the blob.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+									},
+									"container_read": {
+										Description: "Indicates if the issued token has permission to read the " +
+											"content, properties, metadata or block list of any blob in the " +
+											"container. Use any blob in the container as the source of a copy operation.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_write": {
+										Description: "Indicates that for any blob in the container if the issued " +
+											"token has permission to create or write content, properties, metadata, " +
+											"or block list. Snapshot or lease the blob. Resize the blob " +
+											"(page blob only). Use the blob as the destination of a copy operation " +
+											"within the same account.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_delete": {
+										Description: "Indicates if issued token has permission to delete any blob in " +
+											"the container.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_list": {
+										Description: "Indicates if the issued token has permission to list blobs in the container.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

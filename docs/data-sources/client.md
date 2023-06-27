@@ -74,6 +74,7 @@ data "auth0_client" "some-client-by-id" {
 Read-Only:
 
 - `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
+- `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -83,6 +84,26 @@ Read-Only:
 - `lifetime_in_seconds` (Number)
 - `principal` (String)
 - `role` (String)
+
+
+<a id="nestedobjatt--addons--azure_blob"></a>
+### Nested Schema for `addons.azure_blob`
+
+Read-Only:
+
+- `account_name` (String)
+- `blob_delete` (Boolean)
+- `blob_name` (String)
+- `blob_read` (Boolean)
+- `blob_write` (Boolean)
+- `container_delete` (Boolean)
+- `container_list` (Boolean)
+- `container_name` (String)
+- `container_read` (Boolean)
+- `container_write` (Boolean)
+- `expiration` (Number)
+- `signed_identifier` (String)
+- `storage_access_key` (String)
 
 
 

@@ -136,6 +136,7 @@ resource "auth0_client" "my_client" {
 Optional:
 
 - `aws` (Block List, Max: 1) AWS Addon configuration. (see [below for nested schema](#nestedblock--addons--aws))
+- `azure_blob` (Block List, Max: 1) Azure Blob Storage Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_blob))
 
 <a id="nestedblock--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -145,6 +146,26 @@ Optional:
 - `lifetime_in_seconds` (Number) AWS token lifetime in seconds.
 - `principal` (String) AWS principal ARN, for example `arn:aws:iam::010616021751:saml-provider/idpname`.
 - `role` (String) AWS role ARN, for example `arn:aws:iam::010616021751:role/foo`.
+
+
+<a id="nestedblock--addons--azure_blob"></a>
+### Nested Schema for `addons.azure_blob`
+
+Optional:
+
+- `account_name` (String) Your Azure storage account name. Usually first segment in your Azure storage URL, for example `https://acme-org.blob.core.windows.net` would be the account name `acme-org`.
+- `blob_delete` (Boolean) Indicates if the issued token has permission to delete the blob.
+- `blob_name` (String) Entity to request a token for, such as `my-blob`. If blank the computed SAS will apply to the entire storage container.
+- `blob_read` (Boolean) Indicates if the issued token has permission to read the content, properties, metadata and block list. Use the blob as the source of a copy operation.
+- `blob_write` (Boolean) Indicates if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+- `container_delete` (Boolean) Indicates if issued token has permission to delete any blob in the container.
+- `container_list` (Boolean) Indicates if the issued token has permission to list blobs in the container.
+- `container_name` (String) Container to request a token for, such as `my-container`.
+- `container_read` (Boolean) Indicates if the issued token has permission to read the content, properties, metadata or block list of any blob in the container. Use any blob in the container as the source of a copy operation.
+- `container_write` (Boolean) Indicates that for any blob in the container if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+- `expiration` (Number) Expiration in minutes for the generated token (default of 5 minutes).
+- `signed_identifier` (String) Shared access policy identifier defined in your storage account resource.
+- `storage_access_key` (String, Sensitive) Access key associated with this storage account.
 
 
 

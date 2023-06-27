@@ -245,7 +245,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 
 	d.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
 		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
-
+		addons.AzureBlob = expandClientAddonAzureBlob(addonsCfg.GetAttr("azure_blob"))
 		return stop
 	})
 
@@ -260,18 +260,42 @@ func expandClientAddonAWS(awsCfg cty.Value) *management.AWSClientAddon {
 	var awsAddon management.AWSClientAddon
 
 	awsCfg.ForEachElement(func(_ cty.Value, awsCfg cty.Value) (stop bool) {
-		awsAddon.Principal = value.String(awsCfg.GetAttr("principal"))
-		awsAddon.Role = value.String(awsCfg.GetAttr("role"))
-		awsAddon.LifetimeInSeconds = value.Int(awsCfg.GetAttr("lifetime_in_seconds"))
+		awsAddon = management.AWSClientAddon{
+			Principal:         value.String(awsCfg.GetAttr("principal")),
+			Role:              value.String(awsCfg.GetAttr("role")),
+			LifetimeInSeconds: value.Int(awsCfg.GetAttr("lifetime_in_seconds")),
+		}
 
 		return stop
 	})
 
-	if awsAddon == (management.AWSClientAddon{}) {
-		return nil
-	}
-
 	return &awsAddon
+}
+
+func expandClientAddonAzureBlob(azureCfg cty.Value) *management.AzureBlobClientAddon {
+	var azureAddon management.AzureBlobClientAddon
+
+	azureCfg.ForEachElement(func(_ cty.Value, azureCfg cty.Value) (stop bool) {
+		azureAddon = management.AzureBlobClientAddon{
+			AccountName:      value.String(azureCfg.GetAttr("account_name")),
+			StorageAccessKey: value.String(azureCfg.GetAttr("storage_access_key")),
+			ContainerName:    value.String(azureCfg.GetAttr("container_name")),
+			BlobName:         value.String(azureCfg.GetAttr("blob_name")),
+			Expiration:       value.Int(azureCfg.GetAttr("expiration")),
+			SignedIdentifier: value.String(azureCfg.GetAttr("signed_identifier")),
+			BlobRead:         value.Bool(azureCfg.GetAttr("blob_read")),
+			BlobWrite:        value.Bool(azureCfg.GetAttr("blob_write")),
+			BlobDelete:       value.Bool(azureCfg.GetAttr("blob_delete")),
+			ContainerRead:    value.Bool(azureCfg.GetAttr("container_read")),
+			ContainerWrite:   value.Bool(azureCfg.GetAttr("container_write")),
+			ContainerDelete:  value.Bool(azureCfg.GetAttr("container_delete")),
+			ContainerList:    value.Bool(azureCfg.GetAttr("container_list")),
+		}
+
+		return stop
+	})
+
+	return &azureAddon
 }
 
 func clientHasChange(c *management.Client) bool {

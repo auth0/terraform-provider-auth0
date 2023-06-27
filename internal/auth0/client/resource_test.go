@@ -753,6 +753,31 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsAzureBlob = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		azure_blob {
+			account_name       = "acmeorg"
+			storage_access_key = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="
+			container_name     = "my-container"
+			blob_name          = "my-blob"
+			expiration         = 10
+			signed_identifier  = "id123"
+			blob_read          = true
+			blob_write         = true
+			blob_delete        = true
+			container_read     = true
+			container_write    = true
+			container_delete   = true
+			container_list     = true
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -765,6 +790,27 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.principal", "arn:aws:iam::010616021751:saml-provider/idpname"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.role", "arn:aws:iam::010616021751:role/foo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.lifetime_in_seconds", "32000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsAzureBlob, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.account_name", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.storage_access_key", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_name", "my-container"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_name", "my-blob"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.expiration", "10"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.signed_identifier", "id123"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_read", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_write", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_delete", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_read", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_write", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_delete", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_list", "true"),
 				),
 			},
 		},

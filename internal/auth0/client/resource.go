@@ -683,6 +683,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"slack": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "Slack team or workspace name usually first segment in your Slack URL, " +
+								"for example `https://acme-org.slack.com` would be `acme-org`.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"team": {
+										Description: "Slack team name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

@@ -249,6 +249,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.AzureSB = expandClientAddonAzureSB(addonsCfg.GetAttr("azure_sb"))
 		addons.RMS = expandClientAddonRMS(addonsCfg.GetAttr("rms"))
 		addons.MSCRM = expandClientAddonMSCRM(addonsCfg.GetAttr("mscrm"))
+		addons.Slack = expandClientAddonSlack(addonsCfg.GetAttr("slack"))
 		return stop
 	})
 
@@ -353,6 +354,24 @@ func expandClientAddonMSCRM(mscrmCfg cty.Value) *management.MSCRMClientAddon {
 	}
 
 	return &mscrmAddon
+}
+
+func expandClientAddonSlack(slackCfg cty.Value) *management.SlackClientAddon {
+	var slackAddon management.SlackClientAddon
+
+	slackCfg.ForEachElement(func(_ cty.Value, slackCfg cty.Value) (stop bool) {
+		slackAddon = management.SlackClientAddon{
+			Team: value.String(slackCfg.GetAttr("team")),
+		}
+
+		return stop
+	})
+
+	if slackAddon == (management.SlackClientAddon{}) {
+		return nil
+	}
+
+	return &slackAddon
 }
 
 func clientHasChange(c *management.Client) bool {

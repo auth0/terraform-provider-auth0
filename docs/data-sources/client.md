@@ -78,6 +78,7 @@ Read-Only:
 - `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
+- `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -135,6 +136,14 @@ Read-Only:
 Read-Only:
 
 - `url` (String)
+
+
+<a id="nestedobjatt--addons--slack"></a>
+### Nested Schema for `addons.slack`
+
+Read-Only:
+
+- `team` (String)
 
 
 

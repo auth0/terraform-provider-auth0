@@ -66,6 +66,7 @@ Read-Only:
 - `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
 - `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
 - `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
+- `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
@@ -115,6 +116,14 @@ Read-Only:
 
 <a id="nestedobjatt--addons--echosign"></a>
 ### Nested Schema for `addons.echosign`
+
+Read-Only:
+
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--egnyte"></a>
+### Nested Schema for `addons.egnyte`
 
 Read-Only:
 

@@ -741,6 +741,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"egnyte": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Egnyte SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your custom domain found in your Egnyte URL, for example " +
+											"`https://acme-org.echosign.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

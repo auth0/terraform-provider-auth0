@@ -139,6 +139,7 @@ Optional:
 - `azure_blob` (Block List, Max: 1) Azure Blob Storage Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_blob))
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
 - `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
+- `egnyte` (Block List, Max: 1) Egnyte SSO configuration. (see [below for nested schema](#nestedblock--addons--egnyte))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
@@ -192,6 +193,14 @@ Optional:
 Optional:
 
 - `domain` (String) Your custom domain found in your EchoSign URL, for example `https://acme-org.echosign.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--egnyte"></a>
+### Nested Schema for `addons.egnyte`
+
+Optional:
+
+- `domain` (String) Your custom domain found in your Egnyte URL, for example `https://acme-org.echosign.com` would be `acme-org`.
 
 
 <a id="nestedblock--addons--mscrm"></a>

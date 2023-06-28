@@ -250,6 +250,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.RMS = expandClientAddonRMS(addonsCfg.GetAttr("rms"))
 		addons.MSCRM = expandClientAddonMSCRM(addonsCfg.GetAttr("mscrm"))
 		addons.Slack = expandClientAddonSlack(addonsCfg.GetAttr("slack"))
+		addons.Sentry = expandClientAddonSentry(addonsCfg.GetAttr("sentry"))
 		return stop
 	})
 
@@ -372,6 +373,21 @@ func expandClientAddonSlack(slackCfg cty.Value) *management.SlackClientAddon {
 	}
 
 	return &slackAddon
+}
+
+func expandClientAddonSentry(sentryCfg cty.Value) *management.SentryClientAddon {
+	var sentryAddon management.SentryClientAddon
+
+	sentryCfg.ForEachElement(func(_ cty.Value, sentryCfg cty.Value) (stop bool) {
+		sentryAddon = management.SentryClientAddon{
+			OrgSlug: value.String(sentryCfg.GetAttr("org_slug")),
+			BaseURL: value.String(sentryCfg.GetAttr("base_url")),
+		}
+
+		return stop
+	})
+
+	return &sentryAddon
 }
 
 func clientHasChange(c *management.Client) bool {

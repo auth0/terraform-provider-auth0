@@ -834,6 +834,20 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsSentry = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sentry {
+			org_slug = "acmeorg"
+			base_url = ""
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -907,6 +921,16 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.slack.0.team", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSentry, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sentry.0.org_slug", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sentry.0.base_url", ""),
 				),
 			},
 		},

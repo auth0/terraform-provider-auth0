@@ -700,6 +700,30 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"sentry": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Sentry SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"org_slug": {
+										Description: "Generated slug for your Sentry organization. Found in your " +
+											"Sentry URL, for example `https://sentry.acme.com/acme-org/` would be " +
+											"`acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"base_url": {
+										Description:  "URL prefix only if running Sentry Community Edition, otherwise leave empty.",
+										Type:         schema.TypeString,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+										Optional:     true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

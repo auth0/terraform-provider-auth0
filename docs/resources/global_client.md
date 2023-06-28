@@ -81,6 +81,7 @@ Optional:
 - `aws` (Block List, Max: 1) AWS Addon configuration. (see [below for nested schema](#nestedblock--addons--aws))
 - `azure_blob` (Block List, Max: 1) Azure Blob Storage Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_blob))
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
+- `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
@@ -126,6 +127,14 @@ Optional:
 - `namespace` (String) Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (for example `https://acme-org.servicebus.windows.net` would be `acme-org`).
 - `sas_key` (String, Sensitive) Primary Key associated with your shared access policy.
 - `sas_key_name` (String) Your shared access policy name defined in your Service Bus entity.
+
+
+<a id="nestedblock--addons--echosign"></a>
+### Nested Schema for `addons.echosign`
+
+Optional:
+
+- `domain` (String) Your custom domain found in your EchoSign URL, for example `https://acme-org.echosign.com` would be `acme-org`.
 
 
 <a id="nestedblock--addons--mscrm"></a>

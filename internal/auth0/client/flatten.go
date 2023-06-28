@@ -99,6 +99,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"azure_blob": nil,
 		"azure_sb":   nil,
 		"rms":        nil,
+		"mscrm":      nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -147,6 +148,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["rms"] = []interface{}{
 			map[string]interface{}{
 				"url": addons.GetRMS().GetURL(),
+			},
+		}
+	}
+
+	if addons.GetMSCRM() != nil {
+		m["mscrm"] = []interface{}{
+			map[string]interface{}{
+				"url": addons.GetMSCRM().GetURL(),
 			},
 		}
 	}

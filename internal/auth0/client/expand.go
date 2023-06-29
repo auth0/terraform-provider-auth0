@@ -253,6 +253,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Sentry = expandClientAddonSentry(addonsCfg.GetAttr("sentry"))
 		addons.EchoSign = expandClientAddonEchoSign(addonsCfg.GetAttr("echosign"))
 		addons.Egnyte = expandClientAddonEgnyte(addonsCfg.GetAttr("egnyte"))
+		addons.Firebase = expandClientAddonFirebase(addonsCfg.GetAttr("firebase"))
 		return stop
 	})
 
@@ -418,6 +419,24 @@ func expandClientAddonEgnyte(egnyteCfg cty.Value) *management.EgnyteClientAddon 
 	})
 
 	return &egnyteAddon
+}
+
+func expandClientAddonFirebase(firebaseCfg cty.Value) *management.FirebaseClientAddon {
+	var firebaseAddon management.FirebaseClientAddon
+
+	firebaseCfg.ForEachElement(func(_ cty.Value, firebaseCfg cty.Value) (stop bool) {
+		firebaseAddon = management.FirebaseClientAddon{
+			Secret:            value.String(firebaseCfg.GetAttr("secret")),
+			PrivateKeyID:      value.String(firebaseCfg.GetAttr("private_key_id")),
+			PrivateKey:        value.String(firebaseCfg.GetAttr("private_key")),
+			ClientEmail:       value.String(firebaseCfg.GetAttr("client_email")),
+			LifetimeInSeconds: value.Int(firebaseCfg.GetAttr("lifetime_in_seconds")),
+		}
+
+		return stop
+	})
+
+	return &firebaseAddon
 }
 
 func clientHasChange(c *management.Client) bool {

@@ -83,6 +83,7 @@ Optional:
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
 - `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
 - `egnyte` (Block List, Max: 1) Egnyte SSO configuration. (see [below for nested schema](#nestedblock--addons--egnyte))
+- `firebase` (Block List, Max: 1) Google Firebase addon configuration. (see [below for nested schema](#nestedblock--addons--firebase))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
@@ -144,6 +145,18 @@ Optional:
 Optional:
 
 - `domain` (String) Your custom domain found in your Egnyte URL, for example `https://acme-org.echosign.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--firebase"></a>
+### Nested Schema for `addons.firebase`
+
+Optional:
+
+- `client_email` (String) ID of the Service Account you have created (shown as `client_email` in the generated JSON file, SDK v3+ tokens only).
+- `lifetime_in_seconds` (Number) Optional expiration in seconds for the generated token. Defaults to 3600 seconds (SDK v3+ tokens only).
+- `private_key` (String, Sensitive) Private Key for signing the token (SDK v3+ tokens only).
+- `private_key_id` (String, Sensitive) Optional ID of the private key to obtain the `kid` header claim from the issued token (SDK v3+ tokens only).
+- `secret` (String, Sensitive) Google Firebase Secret. (SDK v2 only).
 
 
 <a id="nestedblock--addons--mscrm"></a>

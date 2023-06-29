@@ -78,6 +78,7 @@ Read-Only:
 - `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
 - `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
 - `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
+- `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
@@ -139,6 +140,18 @@ Read-Only:
 Read-Only:
 
 - `domain` (String)
+
+
+<a id="nestedobjatt--addons--firebase"></a>
+### Nested Schema for `addons.firebase`
+
+Read-Only:
+
+- `client_email` (String)
+- `lifetime_in_seconds` (Number)
+- `private_key` (String)
+- `private_key_id` (String)
+- `secret` (String)
 
 
 <a id="nestedobjatt--addons--mscrm"></a>

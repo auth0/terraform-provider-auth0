@@ -102,6 +102,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"mscrm":      nil,
 		"slack":      nil,
 		"sentry":     nil,
+		"echosign":   nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -175,6 +176,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 			map[string]interface{}{
 				"org_slug": addons.GetSentry().GetOrgSlug(),
 				"base_url": addons.GetSentry().GetBaseURL(),
+			},
+		}
+	}
+
+	if addons.GetEchoSign() != nil {
+		m["echosign"] = []interface{}{
+			map[string]interface{}{
+				"domain": addons.GetEchoSign().GetDomain(),
 			},
 		}
 	}

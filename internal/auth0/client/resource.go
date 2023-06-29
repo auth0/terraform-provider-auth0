@@ -724,6 +724,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"echosign": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Adobe EchoSign SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your custom domain found in your EchoSign URL, for example " +
+											"`https://acme-org.echosign.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

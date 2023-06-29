@@ -251,6 +251,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.MSCRM = expandClientAddonMSCRM(addonsCfg.GetAttr("mscrm"))
 		addons.Slack = expandClientAddonSlack(addonsCfg.GetAttr("slack"))
 		addons.Sentry = expandClientAddonSentry(addonsCfg.GetAttr("sentry"))
+		addons.EchoSign = expandClientAddonEchoSign(addonsCfg.GetAttr("echosign"))
 		return stop
 	})
 
@@ -388,6 +389,20 @@ func expandClientAddonSentry(sentryCfg cty.Value) *management.SentryClientAddon 
 	})
 
 	return &sentryAddon
+}
+
+func expandClientAddonEchoSign(echoSignCfg cty.Value) *management.EchoSignClientAddon {
+	var echoSignAddon management.EchoSignClientAddon
+
+	echoSignCfg.ForEachElement(func(_ cty.Value, echoSignCfg cty.Value) (stop bool) {
+		echoSignAddon = management.EchoSignClientAddon{
+			Domain: value.String(echoSignCfg.GetAttr("domain")),
+		}
+
+		return stop
+	})
+
+	return &echoSignAddon
 }
 
 func clientHasChange(c *management.Client) bool {

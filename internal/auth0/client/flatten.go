@@ -114,6 +114,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"sharepoint":             nil,
 		"springcm":               nil,
 		"wams":                   nil,
+		"zendesk":                nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -312,6 +313,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["wams"] = []interface{}{
 			map[string]interface{}{
 				"master_key": addons.GetWAMS().GetMasterkey(),
+			},
+		}
+	}
+
+	if addons.GetZendesk() != nil {
+		m["zendesk"] = []interface{}{
+			map[string]interface{}{
+				"account_name": addons.GetZendesk().GetAccountName(),
 			},
 		}
 	}

@@ -82,6 +82,7 @@ Read-Only:
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 - `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
 - `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
+- `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -281,6 +282,14 @@ Read-Only:
 Read-Only:
 
 - `master_key` (String)
+
+
+<a id="nestedobjatt--addons--zendesk"></a>
+### Nested Schema for `addons.zendesk`
+
+Read-Only:
+
+- `account_name` (String)
 
 
 

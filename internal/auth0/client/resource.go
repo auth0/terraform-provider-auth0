@@ -1068,6 +1068,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"zendesk": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Zendesk SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account_name": {
+										Description: "Zendesk account name. Usually the first segment in your Zendesk URL, " +
+											"for example `https://acme-org.zendesk.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

@@ -1051,6 +1051,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"wams": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Windows Azure Mobile Services addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"master_key": {
+										Description: "Your master key for Windows Azure Mobile Services.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

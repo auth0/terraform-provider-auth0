@@ -980,6 +980,20 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsSharepoint = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sharepoint {
+			url          = "https://example.com:123"
+			external_url = [ "https://example.com/v2" ]
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1158,6 +1172,16 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.scope", "use:api"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.service_password", "123456"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSharepoint, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sharepoint.0.url", "https://example.com:123"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sharepoint.0.external_url.0", "https://example.com/v2"),
 				),
 			},
 		},

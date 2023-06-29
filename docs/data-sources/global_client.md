@@ -78,6 +78,7 @@ Read-Only:
 - `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
 - `sap_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sap_api))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
+- `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 
 <a id="nestedobjatt--addons--aws"></a>
@@ -245,6 +246,15 @@ Read-Only:
 
 - `base_url` (String)
 - `org_slug` (String)
+
+
+<a id="nestedobjatt--addons--sharepoint"></a>
+### Nested Schema for `addons.sharepoint`
+
+Read-Only:
+
+- `external_url` (List of String)
+- `url` (String)
 
 
 <a id="nestedobjatt--addons--slack"></a>

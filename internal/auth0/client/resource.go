@@ -1011,6 +1011,30 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"sharepoint": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SharePoint SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description: "Internal SharePoint application URL.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"external_url": {
+										Description: "External SharePoint application URLs if exposed to the Internet.",
+										Type:        schema.TypeList,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

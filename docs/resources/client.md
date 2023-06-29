@@ -151,6 +151,7 @@ Optional:
 - `salesforce_sandbox_api` (Block List, Max: 1) Salesforce Sandbox addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_sandbox_api))
 - `sap_api` (Block List, Max: 1) SAP API addon configuration. (see [below for nested schema](#nestedblock--addons--sap_api))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
+- `sharepoint` (Block List, Max: 1) SharePoint SSO configuration. (see [below for nested schema](#nestedblock--addons--sharepoint))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 
 <a id="nestedblock--addons--aws"></a>
@@ -321,6 +322,15 @@ Optional:
 
 - `base_url` (String) URL prefix only if running Sentry Community Edition, otherwise leave empty.
 - `org_slug` (String) Generated slug for your Sentry organization. Found in your Sentry URL, for example `https://sentry.acme.com/acme-org/` would be `acme-org`.
+
+
+<a id="nestedblock--addons--sharepoint"></a>
+### Nested Schema for `addons.sharepoint`
+
+Optional:
+
+- `external_url` (List of String) External SharePoint application URLs if exposed to the Internet.
+- `url` (String) Internal SharePoint application URL.
 
 
 <a id="nestedblock--addons--slack"></a>

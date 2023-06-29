@@ -83,6 +83,7 @@ Read-Only:
 - `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
 - `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
 - `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
+- `zoom` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zoom))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -290,6 +291,14 @@ Read-Only:
 Read-Only:
 
 - `account_name` (String)
+
+
+<a id="nestedobjatt--addons--zoom"></a>
+### Nested Schema for `addons.zoom`
+
+Read-Only:
+
+- `account` (String)
 
 
 

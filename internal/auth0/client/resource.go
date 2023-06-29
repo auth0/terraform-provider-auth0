@@ -1085,6 +1085,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"zoom": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Zoom SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account": {
+										Description: "Zoom account name. Usually the first segment of your Zoom URL, for " +
+											"example `https://acme-org.zoom.us` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

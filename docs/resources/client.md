@@ -156,6 +156,7 @@ Optional:
 - `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
 - `wams` (Block List, Max: 1) Windows Azure Mobile Services addon configuration. (see [below for nested schema](#nestedblock--addons--wams))
 - `zendesk` (Block List, Max: 1) Zendesk SSO configuration. (see [below for nested schema](#nestedblock--addons--zendesk))
+- `zoom` (Block List, Max: 1) Zoom SSO configuration. (see [below for nested schema](#nestedblock--addons--zoom))
 
 <a id="nestedblock--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -366,6 +367,14 @@ Optional:
 Optional:
 
 - `account_name` (String) Zendesk account name. Usually the first segment in your Zendesk URL, for example `https://acme-org.zendesk.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--zoom"></a>
+### Nested Schema for `addons.zoom`
+
+Optional:
+
+- `account` (String) Zoom account name. Usually the first segment of your Zoom URL, for example `https://acme-org.zoom.us` would be `acme-org`.
 
 
 

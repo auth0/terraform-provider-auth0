@@ -155,6 +155,7 @@ Optional:
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 - `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
 - `wams` (Block List, Max: 1) Windows Azure Mobile Services addon configuration. (see [below for nested schema](#nestedblock--addons--wams))
+- `zendesk` (Block List, Max: 1) Zendesk SSO configuration. (see [below for nested schema](#nestedblock--addons--zendesk))
 
 <a id="nestedblock--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -357,6 +358,14 @@ Optional:
 Optional:
 
 - `master_key` (String, Sensitive) Your master key for Windows Azure Mobile Services.
+
+
+<a id="nestedblock--addons--zendesk"></a>
+### Nested Schema for `addons.zendesk`
+
+Optional:
+
+- `account_name` (String) Zendesk account name. Usually the first segment in your Zendesk URL, for example `https://acme-org.zendesk.com` would be `acme-org`.
 
 
 

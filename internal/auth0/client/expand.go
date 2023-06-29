@@ -264,6 +264,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.SharePoint = expandClientAddonSharepoint(addonsCfg.GetAttr("sharepoint"))
 		addons.SpringCM = expandClientAddonSpringCM(addonsCfg.GetAttr("springcm"))
 		addons.WAMS = expandClientAddonWAMS(addonsCfg.GetAttr("wams"))
+		addons.Zendesk = expandClientAddonZendesk(addonsCfg.GetAttr("zendesk"))
 		return stop
 	})
 
@@ -608,6 +609,20 @@ func expandClientAddonWAMS(wamsCfg cty.Value) *management.WAMSClientAddon {
 	})
 
 	return &wamsAddon
+}
+
+func expandClientAddonZendesk(zendeskCfg cty.Value) *management.ZendeskClientAddon {
+	var zendeskAddon management.ZendeskClientAddon
+
+	zendeskCfg.ForEachElement(func(_ cty.Value, zendeskCfg cty.Value) (stop bool) {
+		zendeskAddon = management.ZendeskClientAddon{
+			AccountName: value.String(zendeskCfg.GetAttr("account_name")),
+		}
+
+		return stop
+	})
+
+	return &zendeskAddon
 }
 
 func clientHasChange(c *management.Client) bool {

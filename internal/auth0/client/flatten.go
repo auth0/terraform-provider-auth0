@@ -116,6 +116,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"wams":                   nil,
 		"zendesk":                nil,
 		"zoom":                   nil,
+		"sso_integration":        nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -330,6 +331,15 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["zoom"] = []interface{}{
 			map[string]interface{}{
 				"account": addons.GetZoom().GetAccount(),
+			},
+		}
+	}
+
+	if addons.GetSSOIntegration() != nil {
+		m["sso_integration"] = []interface{}{
+			map[string]interface{}{
+				"name":    addons.GetSSOIntegration().GetName(),
+				"version": addons.GetSSOIntegration().GetVersion(),
 			},
 		}
 	}

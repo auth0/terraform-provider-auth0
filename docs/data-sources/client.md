@@ -92,6 +92,7 @@ Read-Only:
 - `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 - `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
+- `sso_integration` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sso_integration))
 - `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
 - `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
 - `zoom` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zoom))
@@ -286,6 +287,15 @@ Read-Only:
 Read-Only:
 
 - `acs_url` (String)
+
+
+<a id="nestedobjatt--addons--sso_integration"></a>
+### Nested Schema for `addons.sso_integration`
+
+Read-Only:
+
+- `name` (String)
+- `version` (String)
 
 
 <a id="nestedobjatt--addons--wams"></a>

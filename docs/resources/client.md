@@ -143,6 +143,7 @@ Optional:
 - `firebase` (Block List, Max: 1) Google Firebase addon configuration. (see [below for nested schema](#nestedblock--addons--firebase))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `newrelic` (Block List, Max: 1) New Relic SSO configuration. (see [below for nested schema](#nestedblock--addons--newrelic))
+- `office365` (Block List, Max: 1) Microsoft Office 365 SSO configuration. (see [below for nested schema](#nestedblock--addons--office365))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
@@ -231,6 +232,15 @@ Optional:
 Optional:
 
 - `account` (String) Your New Relic Account ID found in your New Relic URL after the `/accounts/` path, for example `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.
+
+
+<a id="nestedblock--addons--office365"></a>
+### Nested Schema for `addons.office365`
+
+Optional:
+
+- `connection` (String) Optional Auth0 database connection for testing an already-configured Office 365 tenant.
+- `domain` (String) Your Office 365 domain name, for example `acme-org.com`.
 
 
 <a id="nestedblock--addons--rms"></a>

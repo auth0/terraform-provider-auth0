@@ -817,6 +817,28 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"office365": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Microsoft Office 365 SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your Office 365 domain name, for example `acme-org.com`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"connection": {
+										Description: "Optional Auth0 database connection for testing an " +
+											"already-configured Office 365 tenant.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

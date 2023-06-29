@@ -81,6 +81,7 @@ Read-Only:
 - `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
 - `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
+- `office365` (List of Object) (see [below for nested schema](#nestedobjatt--addons--office365))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
@@ -169,6 +170,15 @@ Read-Only:
 Read-Only:
 
 - `account` (String)
+
+
+<a id="nestedobjatt--addons--office365"></a>
+### Nested Schema for `addons.office365`
+
+Read-Only:
+
+- `connection` (String)
+- `domain` (String)
 
 
 <a id="nestedobjatt--addons--rms"></a>

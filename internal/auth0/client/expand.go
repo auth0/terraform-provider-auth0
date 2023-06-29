@@ -255,6 +255,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Egnyte = expandClientAddonEgnyte(addonsCfg.GetAttr("egnyte"))
 		addons.Firebase = expandClientAddonFirebase(addonsCfg.GetAttr("firebase"))
 		addons.NewRelic = expandClientAddonNewRelic(addonsCfg.GetAttr("newrelic"))
+		addons.Office365 = expandClientAddonOffice365(addonsCfg.GetAttr("office365"))
 		return stop
 	})
 
@@ -452,6 +453,21 @@ func expandClientAddonNewRelic(newRelicCfg cty.Value) *management.NewRelicClient
 	})
 
 	return &newRelicAddon
+}
+
+func expandClientAddonOffice365(office365Cfg cty.Value) *management.Office365ClientAddon {
+	var office365Addon management.Office365ClientAddon
+
+	office365Cfg.ForEachElement(func(_ cty.Value, office365Cfg cty.Value) (stop bool) {
+		office365Addon = management.Office365ClientAddon{
+			Domain:     value.String(office365Cfg.GetAttr("domain")),
+			Connection: value.String(office365Cfg.GetAttr("connection")),
+		}
+
+		return stop
+	})
+
+	return &office365Addon
 }
 
 func clientHasChange(c *management.Client) bool {

@@ -1035,6 +1035,22 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"springcm": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SpringCM SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"acs_url": {
+										Description: "SpringCM ACS URL, for example `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

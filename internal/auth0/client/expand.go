@@ -262,6 +262,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Layer = expandClientAddonLayer(addonsCfg.GetAttr("layer"))
 		addons.SAPAPI = expandClientAddonSAPAPI(addonsCfg.GetAttr("sap_api"))
 		addons.SharePoint = expandClientAddonSharepoint(addonsCfg.GetAttr("sharepoint"))
+		addons.SpringCM = expandClientAddonSpringCM(addonsCfg.GetAttr("springcm"))
 		return stop
 	})
 
@@ -578,6 +579,20 @@ func expandClientAddonSharepoint(sharepointCfg cty.Value) *management.SharePoint
 	})
 
 	return &sharepointAddon
+}
+
+func expandClientAddonSpringCM(springCMCfg cty.Value) *management.SpringCMClientAddon {
+	var springCMAddon management.SpringCMClientAddon
+
+	springCMCfg.ForEachElement(func(_ cty.Value, springCMCfg cty.Value) (stop bool) {
+		springCMAddon = management.SpringCMClientAddon{
+			ACSURL: value.String(springCMCfg.GetAttr("acs_url")),
+		}
+
+		return stop
+	})
+
+	return &springCMAddon
 }
 
 func clientHasChange(c *management.Client) bool {

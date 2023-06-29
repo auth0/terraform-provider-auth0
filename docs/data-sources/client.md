@@ -91,6 +91,7 @@ Read-Only:
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
+- `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -274,6 +275,14 @@ Read-Only:
 Read-Only:
 
 - `team` (String)
+
+
+<a id="nestedobjatt--addons--springcm"></a>
+### Nested Schema for `addons.springcm`
+
+Read-Only:
+
+- `acs_url` (String)
 
 
 

@@ -96,6 +96,7 @@ Optional:
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `sharepoint` (Block List, Max: 1) SharePoint SSO configuration. (see [below for nested schema](#nestedblock--addons--sharepoint))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
+- `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
 
 <a id="nestedblock--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -282,6 +283,14 @@ Optional:
 Optional:
 
 - `team` (String) Slack team name.
+
+
+<a id="nestedblock--addons--springcm"></a>
+### Nested Schema for `addons.springcm`
+
+Optional:
+
+- `acs_url` (String) SpringCM ACS URL, for example `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
 
 
 

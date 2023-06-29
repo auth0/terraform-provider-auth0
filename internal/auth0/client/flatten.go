@@ -103,6 +103,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"slack":      nil,
 		"sentry":     nil,
 		"echosign":   nil,
+		"egnyte":     nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -184,6 +185,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["echosign"] = []interface{}{
 			map[string]interface{}{
 				"domain": addons.GetEchoSign().GetDomain(),
+			},
+		}
+	}
+
+	if addons.GetEgnyte() != nil {
+		m["egnyte"] = []interface{}{
+			map[string]interface{}{
+				"domain": addons.GetEgnyte().GetDomain(),
 			},
 		}
 	}

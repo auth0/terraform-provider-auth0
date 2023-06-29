@@ -252,6 +252,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Slack = expandClientAddonSlack(addonsCfg.GetAttr("slack"))
 		addons.Sentry = expandClientAddonSentry(addonsCfg.GetAttr("sentry"))
 		addons.EchoSign = expandClientAddonEchoSign(addonsCfg.GetAttr("echosign"))
+		addons.Egnyte = expandClientAddonEgnyte(addonsCfg.GetAttr("egnyte"))
 		return stop
 	})
 
@@ -403,6 +404,20 @@ func expandClientAddonEchoSign(echoSignCfg cty.Value) *management.EchoSignClient
 	})
 
 	return &echoSignAddon
+}
+
+func expandClientAddonEgnyte(egnyteCfg cty.Value) *management.EgnyteClientAddon {
+	var egnyteAddon management.EgnyteClientAddon
+
+	egnyteCfg.ForEachElement(func(_ cty.Value, egnyteCfg cty.Value) (stop bool) {
+		egnyteAddon = management.EgnyteClientAddon{
+			Domain: value.String(egnyteCfg.GetAttr("domain")),
+		}
+
+		return stop
+	})
+
+	return &egnyteAddon
 }
 
 func clientHasChange(c *management.Client) bool {

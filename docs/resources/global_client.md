@@ -83,6 +83,7 @@ Optional:
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
+- `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 
 <a id="nestedblock--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -140,6 +141,14 @@ Optional:
 Optional:
 
 - `url` (String) URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+
+
+<a id="nestedblock--addons--slack"></a>
+### Nested Schema for `addons.slack`
+
+Optional:
+
+- `team` (String) Slack team name.
 
 
 

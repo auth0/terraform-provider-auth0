@@ -145,6 +145,9 @@ Optional:
 - `newrelic` (Block List, Max: 1) New Relic SSO configuration. (see [below for nested schema](#nestedblock--addons--newrelic))
 - `office365` (Block List, Max: 1) Microsoft Office 365 SSO configuration. (see [below for nested schema](#nestedblock--addons--office365))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
+- `salesforce` (Block List, Max: 1) Salesforce SSO configuration. (see [below for nested schema](#nestedblock--addons--salesforce))
+- `salesforce_api` (Block List, Max: 1) Salesforce API addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_api))
+- `salesforce_sandbox_api` (Block List, Max: 1) Salesforce Sandbox addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_sandbox_api))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 
@@ -249,6 +252,36 @@ Optional:
 Optional:
 
 - `url` (String) URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+
+
+<a id="nestedblock--addons--salesforce"></a>
+### Nested Schema for `addons.salesforce`
+
+Optional:
+
+- `entity_id` (String) Arbitrary logical URL that identifies the Saleforce resource, for example `https://acme-org.com`.
+
+
+<a id="nestedblock--addons--salesforce_api"></a>
+### Nested Schema for `addons.salesforce_api`
+
+Optional:
+
+- `client_id` (String, Sensitive) Consumer Key assigned by Salesforce to the Connected App.
+- `community_name` (String) Community name.
+- `community_url_section` (String) Community URL section.
+- `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
+
+
+<a id="nestedblock--addons--salesforce_sandbox_api"></a>
+### Nested Schema for `addons.salesforce_sandbox_api`
+
+Optional:
+
+- `client_id` (String, Sensitive) Consumer Key assigned by Salesforce to the Connected App.
+- `community_name` (String) Community name.
+- `community_url_section` (String) Community URL section.
+- `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
 
 
 <a id="nestedblock--addons--sentry"></a>

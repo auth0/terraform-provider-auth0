@@ -256,6 +256,9 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Firebase = expandClientAddonFirebase(addonsCfg.GetAttr("firebase"))
 		addons.NewRelic = expandClientAddonNewRelic(addonsCfg.GetAttr("newrelic"))
 		addons.Office365 = expandClientAddonOffice365(addonsCfg.GetAttr("office365"))
+		addons.Salesforce = expandClientAddonSalesforce(addonsCfg.GetAttr("salesforce"))
+		addons.SalesforceAPI = expandClientAddonSalesforceAPI(addonsCfg.GetAttr("salesforce_api"))
+		addons.SalesforceSandboxAPI = expandClientAddonSalesforceSandboxAPI(addonsCfg.GetAttr("salesforce_sandbox_api"))
 		return stop
 	})
 
@@ -468,6 +471,54 @@ func expandClientAddonOffice365(office365Cfg cty.Value) *management.Office365Cli
 	})
 
 	return &office365Addon
+}
+
+func expandClientAddonSalesforce(salesforceCfg cty.Value) *management.SalesforceClientAddon {
+	var salesforceAddon management.SalesforceClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceClientAddon{
+			EntityID: value.String(salesforceCfg.GetAttr("entity_id")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
+}
+
+func expandClientAddonSalesforceAPI(salesforceCfg cty.Value) *management.SalesforceAPIClientAddon {
+	var salesforceAddon management.SalesforceAPIClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceAPIClientAddon{
+			ClientID:            value.String(salesforceCfg.GetAttr("client_id")),
+			Principal:           value.String(salesforceCfg.GetAttr("principal")),
+			CommunityName:       value.String(salesforceCfg.GetAttr("community_name")),
+			CommunityURLSection: value.String(salesforceCfg.GetAttr("community_url_section")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
+}
+
+func expandClientAddonSalesforceSandboxAPI(salesforceCfg cty.Value) *management.SalesforceSandboxAPIClientAddon {
+	var salesforceAddon management.SalesforceSandboxAPIClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceSandboxAPIClientAddon{
+			ClientID:            value.String(salesforceCfg.GetAttr("client_id")),
+			Principal:           value.String(salesforceCfg.GetAttr("principal")),
+			CommunityName:       value.String(salesforceCfg.GetAttr("community_name")),
+			CommunityURLSection: value.String(salesforceCfg.GetAttr("community_url_section")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
 }
 
 func clientHasChange(c *management.Client) bool {

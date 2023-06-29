@@ -918,6 +918,33 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsSalesforce = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		salesforce {
+			entity_id = "https://acme-org.com"
+		}
+
+		salesforce_api {
+			client_id             = "client-id"
+			principal             = "principal"
+			community_name        = "community-name"
+			community_url_section = "community-url-section"
+		}
+
+		salesforce_sandbox_api {
+			client_id             = "client-id"
+			principal             = "principal"
+			community_name        = "community-name"
+			community_url_section = "community-url-section"
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1051,6 +1078,24 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.office365.0.domain", "acmeorg"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.office365.0.connection", "Username-Password-Authentication"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSalesforce, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce.0.entity_id", "https://acme-org.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.community_name", "community-name"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.community_url_section", "community-url-section"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce.0.entity_id", "https://acme-org.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_name", "community-name"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_url_section", "community-url-section"),
 				),
 			},
 		},

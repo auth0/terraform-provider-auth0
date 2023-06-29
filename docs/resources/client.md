@@ -149,6 +149,7 @@ Optional:
 - `salesforce` (Block List, Max: 1) Salesforce SSO configuration. (see [below for nested schema](#nestedblock--addons--salesforce))
 - `salesforce_api` (Block List, Max: 1) Salesforce API addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_api))
 - `salesforce_sandbox_api` (Block List, Max: 1) Salesforce Sandbox addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_sandbox_api))
+- `sap_api` (Block List, Max: 1) SAP API addon configuration. (see [below for nested schema](#nestedblock--addons--sap_api))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 
@@ -298,6 +299,19 @@ Optional:
 - `community_name` (String) Community name.
 - `community_url_section` (String) Community URL section.
 - `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
+
+
+<a id="nestedblock--addons--sap_api"></a>
+### Nested Schema for `addons.sap_api`
+
+Optional:
+
+- `client_id` (String) If activated in the OAuth 2.0 client configuration (transaction `SOAUTH2) the SAML attribute `client_id` must be set and equal the `client_id` form parameter of the access token request.
+- `name_identifier_format` (String) NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
+- `scope` (String) Requested scope for SAP APIs.
+- `service_password` (String, Sensitive) Service account password to use to authenticate API calls to the token endpoint.
+- `token_endpoint_url` (String) The OAuth2 token endpoint URL of your SAP OData server.
+- `username_attribute` (String) Name of the property in the user object that maps to a SAP username, for example `email`.
 
 
 <a id="nestedblock--addons--sentry"></a>

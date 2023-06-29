@@ -965,6 +965,52 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"sap_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SAP API addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "If activated in the OAuth 2.0 client configuration (transaction `SOAUTH2) " +
+											"the SAML attribute `client_id` must be set and equal the `client_id` form " +
+											"parameter of the access token request.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"username_attribute": {
+										Description: "Name of the property in the user object that maps to a SAP username, for example `email`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"token_endpoint_url": {
+										Description:  "The OAuth2 token endpoint URL of your SAP OData server.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+									"scope": {
+										Description: "Requested scope for SAP APIs.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"service_password": {
+										Description: "Service account password to use to authenticate API calls to the token endpoint.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"name_identifier_format": {
+										Description: "NameID element of the Subject which can be used to express the user's identity. " +
+											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

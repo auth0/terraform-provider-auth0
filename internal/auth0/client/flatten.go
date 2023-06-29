@@ -110,6 +110,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"salesforce_api":         nil,
 		"salesforce_sandbox_api": nil,
 		"layer":                  nil,
+		"sap_api":                nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -270,6 +271,19 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"private_key": addons.GetLayer().GetPrivateKey(),
 				"principal":   addons.GetLayer().GetPrincipal(),
 				"expiration":  addons.GetLayer().GetExpiration(),
+			},
+		}
+	}
+
+	if addons.GetSAPAPI() != nil {
+		m["sap_api"] = []interface{}{
+			map[string]interface{}{
+				"client_id":              addons.GetSAPAPI().GetClientID(),
+				"username_attribute":     addons.GetSAPAPI().GetUsernameAttribute(),
+				"token_endpoint_url":     addons.GetSAPAPI().GetTokenEndpointURL(),
+				"scope":                  addons.GetSAPAPI().GetScope(),
+				"service_password":       addons.GetSAPAPI().GetServicePassword(),
+				"name_identifier_format": addons.GetSAPAPI().GetNameIdentifierFormat(),
 			},
 		}
 	}

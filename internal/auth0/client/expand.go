@@ -260,6 +260,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.SalesforceAPI = expandClientAddonSalesforceAPI(addonsCfg.GetAttr("salesforce_api"))
 		addons.SalesforceSandboxAPI = expandClientAddonSalesforceSandboxAPI(addonsCfg.GetAttr("salesforce_sandbox_api"))
 		addons.Layer = expandClientAddonLayer(addonsCfg.GetAttr("layer"))
+		addons.SAPAPI = expandClientAddonSAPAPI(addonsCfg.GetAttr("sap_api"))
 		return stop
 	})
 
@@ -542,6 +543,25 @@ func expandClientAddonLayer(layerCfg cty.Value) *management.LayerClientAddon {
 	}
 
 	return &layerAddon
+}
+
+func expandClientAddonSAPAPI(sapAPICfg cty.Value) *management.SAPAPIClientAddon {
+	var sapAPIAddon management.SAPAPIClientAddon
+
+	sapAPICfg.ForEachElement(func(_ cty.Value, sapAPICfg cty.Value) (stop bool) {
+		sapAPIAddon = management.SAPAPIClientAddon{
+			ClientID:             value.String(sapAPICfg.GetAttr("client_id")),
+			UsernameAttribute:    value.String(sapAPICfg.GetAttr("username_attribute")),
+			TokenEndpointURL:     value.String(sapAPICfg.GetAttr("token_endpoint_url")),
+			Scope:                value.String(sapAPICfg.GetAttr("scope")),
+			ServicePassword:      value.String(sapAPICfg.GetAttr("service_password")),
+			NameIdentifierFormat: value.String(sapAPICfg.GetAttr("name_identifier_format")),
+		}
+
+		return stop
+	})
+
+	return &sapAPIAddon
 }
 
 func clientHasChange(c *management.Client) bool {

@@ -105,6 +105,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"echosign":   nil,
 		"egnyte":     nil,
 		"firebase":   nil,
+		"office365":  nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -214,6 +215,15 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["newrelic"] = []interface{}{
 			map[string]interface{}{
 				"account": addons.GetNewRelic().GetAccount(),
+			},
+		}
+	}
+
+	if addons.GetOffice365() != nil {
+		m["office365"] = []interface{}{
+			map[string]interface{}{
+				"domain":     addons.GetOffice365().GetDomain(),
+				"connection": addons.GetOffice365().GetConnection(),
 			},
 		}
 	}

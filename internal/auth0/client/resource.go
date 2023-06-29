@@ -1123,6 +1123,175 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"samlp": {
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Optional:    true,
+							Description: "Configuration settings for a SAML add-on.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"audience": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Audience of the SAML Assertion. " +
+											"Default will be the Issuer on SAMLRequest.",
+									},
+									"recipient": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
+											"Default is `AssertionConsumerUrl` on SAMLRequest or " +
+											"callback URL if no SAMLRequest was sent.",
+									},
+									"mappings": {
+										Type:     schema.TypeMap,
+										Optional: true,
+										Elem:     schema.TypeString,
+										Description: "Mappings between the Auth0 user profile property " +
+											"name (`name`) and the output attributes on the SAML " +
+											"attribute in the assertion (`value`).",
+									},
+									"create_upn_claim": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether a UPN claim should be created. " +
+											"Defaults to `true`.",
+									},
+									"passthrough_claims_with_no_mapping": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not to passthrough " +
+											"claims that are not mapped to the common profile " +
+											"in the output assertion. Defaults to `true`.",
+									},
+									"map_unknown_claims_as_is": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  false,
+										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
+											"to any claims that are not mapped to the common profile when passed " +
+											"through in the output assertion. Defaults to `false`.",
+									},
+									"map_identities": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not to add additional identity " +
+											"information in the token, such as the provider used and the " +
+											"`access_token`, if available. Defaults to `true`.",
+									},
+									"signature_algorithm": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "rsa-sha1",
+										Description: "Algorithm used to sign the SAML Assertion or response. " +
+											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
+									},
+									"digest_algorithm": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "sha1",
+										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
+											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
+									},
+									"destination": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Destination of the SAML Response. If not specified, " +
+											"it will be `AssertionConsumerUrl` of SAMLRequest " +
+											"or callback URL if there was no SAMLRequest.",
+									},
+									"lifetime_in_seconds": {
+										Type:        schema.TypeInt,
+										Optional:    true,
+										Default:     3600,
+										Description: "Number of seconds during which the token is valid.",
+									},
+									"sign_response": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Description: "Indicates whether or not the SAML Response should be signed " +
+											"instead of the SAML Assertion.",
+									},
+									"name_identifier_format": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Default:     "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Description: "Format of the name identifier.",
+									},
+									"name_identifier_probes": {
+										Type:     schema.TypeList,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Optional: true,
+										Description: "Attributes that can be used for Subject/NameID. " +
+											"Auth0 will try each of the attributes of this array in " +
+											"order and use the first value it finds.",
+									},
+									"authn_context_class_ref": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Class reference of the authentication context.",
+									},
+									"typed_attributes": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not we should infer the `xs:type` " +
+											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
+											"and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. " +
+											"Defaults to `true`.",
+									},
+									"include_attribute_name_format": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not we should infer the NameFormat " +
+											"based on the attribute name. If set to false, the attribute " +
+											"NameFormat is not set in the assertion. Defaults to `true`.",
+									},
+									"logout": {
+										Type:        schema.TypeList,
+										MaxItems:    1,
+										Optional:    true,
+										Description: "Configuration settings for logout.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"callback": {
+													Description: "The service provider (client application)'s Single Logout Service URL, " +
+														"where Auth0 will send logout requests and responses.",
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"slo_enabled": {
+													Description: "Controls whether Auth0 should notify service providers of session termination.",
+													Type:        schema.TypeBool,
+													Optional:    true,
+												},
+											},
+										},
+									},
+									"binding": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Protocol binding used for SAML logout responses.",
+									},
+									"signing_cert": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Optionally indicates the public key certificate used to " +
+											"validate SAML requests. If set, SAML requests will be required to " +
+											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
+									},
+									"issuer": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Issuer of the SAML Assertion.",
+									},
+								},
+							},
+						},
 					},
 				},
 			},

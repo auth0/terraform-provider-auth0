@@ -117,6 +117,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"zendesk":                nil,
 		"zoom":                   nil,
 		"sso_integration":        nil,
+		"samlp":                  nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -340,6 +341,45 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 			map[string]interface{}{
 				"name":    addons.GetSSOIntegration().GetName(),
 				"version": addons.GetSSOIntegration().GetVersion(),
+			},
+		}
+	}
+
+	if addons.GetSAML2() != nil && addons.GetSAML2().String() != "{}" {
+		var logout interface{}
+
+		if addons.GetSAML2().GetLogout() != nil {
+			logout = []interface{}{
+				map[string]interface{}{
+					"callback":    addons.GetSAML2().GetLogout().GetCallback(),
+					"slo_enabled": addons.GetSAML2().GetLogout().GetSLOEnabled(),
+				},
+			}
+		}
+
+		m["samlp"] = []interface{}{
+			map[string]interface{}{
+				"mappings":                           addons.GetSAML2().GetMappings(),
+				"audience":                           addons.GetSAML2().GetAudience(),
+				"recipient":                          addons.GetSAML2().GetRecipient(),
+				"create_upn_claim":                   addons.GetSAML2().GetCreateUPNClaim(),
+				"map_unknown_claims_as_is":           addons.GetSAML2().GetMapUnknownClaimsAsIs(),
+				"passthrough_claims_with_no_mapping": addons.GetSAML2().GetPassthroughClaimsWithNoMapping(),
+				"map_identities":                     addons.GetSAML2().GetMapIdentities(),
+				"signature_algorithm":                addons.GetSAML2().GetSignatureAlgorithm(),
+				"digest_algorithm":                   addons.GetSAML2().GetDigestAlgorithm(),
+				"issuer":                             addons.GetSAML2().GetIssuer(),
+				"destination":                        addons.GetSAML2().GetDestination(),
+				"lifetime_in_seconds":                addons.GetSAML2().GetLifetimeInSeconds(),
+				"sign_response":                      addons.GetSAML2().GetSignResponse(),
+				"name_identifier_format":             addons.GetSAML2().GetNameIdentifierFormat(),
+				"name_identifier_probes":             addons.GetSAML2().GetNameIdentifierProbes(),
+				"authn_context_class_ref":            addons.GetSAML2().GetAuthnContextClassRef(),
+				"typed_attributes":                   addons.GetSAML2().GetTypedAttributes(),
+				"include_attribute_name_format":      addons.GetSAML2().GetIncludeAttributeNameFormat(),
+				"binding":                            addons.GetSAML2().GetBinding(),
+				"signing_cert":                       addons.GetSAML2().GetSigningCert(),
+				"logout":                             logout,
 			},
 		}
 	}

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -267,6 +268,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Zendesk = expandClientAddonZendesk(addonsCfg.GetAttr("zendesk"))
 		addons.Zoom = expandClientAddonZoom(addonsCfg.GetAttr("zoom"))
 		addons.SSOIntegration = expandClientAddonSSOIntegration(addonsCfg.GetAttr("sso_integration"))
+		addons.SAML2 = expandClientAddonSAMLP(addonsCfg.GetAttr("samlp"))
 		return stop
 	})
 
@@ -654,6 +656,94 @@ func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegratio
 	})
 
 	return &ssoAddon
+}
+
+func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
+	var samlpAddon management.SAML2ClientAddon
+
+	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
+		samlpAddon = management.SAML2ClientAddon{
+			Mappings:                       value.MapOfStrings(samlpCfg.GetAttr("mappings")),
+			Audience:                       value.String(samlpCfg.GetAttr("audience")),
+			Recipient:                      value.String(samlpCfg.GetAttr("recipient")),
+			CreateUPNClaim:                 value.Bool(samlpCfg.GetAttr("create_upn_claim")),
+			MapUnknownClaimsAsIs:           value.Bool(samlpCfg.GetAttr("map_unknown_claims_as_is")),
+			PassthroughClaimsWithNoMapping: value.Bool(samlpCfg.GetAttr("passthrough_claims_with_no_mapping")),
+			MapIdentities:                  value.Bool(samlpCfg.GetAttr("map_identities")),
+			SignatureAlgorithm:             value.String(samlpCfg.GetAttr("signature_algorithm")),
+			DigestAlgorithm:                value.String(samlpCfg.GetAttr("digest_algorithm")),
+			Issuer:                         value.String(samlpCfg.GetAttr("issuer")),
+			Destination:                    value.String(samlpCfg.GetAttr("destination")),
+			LifetimeInSeconds:              value.Int(samlpCfg.GetAttr("lifetime_in_seconds")),
+			SignResponse:                   value.Bool(samlpCfg.GetAttr("sign_response")),
+			NameIdentifierFormat:           value.String(samlpCfg.GetAttr("name_identifier_format")),
+			NameIdentifierProbes:           value.Strings(samlpCfg.GetAttr("name_identifier_probes")),
+			AuthnContextClassRef:           value.String(samlpCfg.GetAttr("authn_context_class_ref")),
+			TypedAttributes:                value.Bool(samlpCfg.GetAttr("typed_attributes")),
+			IncludeAttributeNameFormat:     value.Bool(samlpCfg.GetAttr("include_attribute_name_format")),
+			Binding:                        value.String(samlpCfg.GetAttr("binding")),
+			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
+		}
+
+		if samlpAddon == (management.SAML2ClientAddon{}) {
+			return true
+		}
+
+		var logout management.SAML2ClientAddonLogout
+
+		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {
+			logout = management.SAML2ClientAddonLogout{
+				Callback:   value.String(logoutCfg.GetAttr("callback")),
+				SLOEnabled: value.Bool(logoutCfg.GetAttr("slo_enabled")),
+			}
+
+			return stop
+		})
+
+		if logout != (management.SAML2ClientAddonLogout{}) {
+			samlpAddon.Logout = &logout
+		}
+
+		if samlpAddon.DigestAlgorithm == nil {
+			samlpAddon.DigestAlgorithm = auth0.String("sha1")
+		}
+
+		if samlpAddon.NameIdentifierFormat == nil {
+			samlpAddon.NameIdentifierFormat = auth0.String("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified")
+		}
+
+		if samlpAddon.SignatureAlgorithm == nil {
+			samlpAddon.SignatureAlgorithm = auth0.String("rsa-sha1")
+		}
+
+		if samlpAddon.LifetimeInSeconds == nil {
+			samlpAddon.LifetimeInSeconds = auth0.Int(3600)
+		}
+
+		if samlpAddon.CreateUPNClaim == nil {
+			samlpAddon.CreateUPNClaim = auth0.Bool(true)
+		}
+
+		if samlpAddon.IncludeAttributeNameFormat == nil {
+			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(true)
+		}
+
+		if samlpAddon.MapIdentities == nil {
+			samlpAddon.MapIdentities = auth0.Bool(true)
+		}
+
+		if samlpAddon.MapUnknownClaimsAsIs == nil {
+			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(false)
+		}
+
+		if samlpAddon.PassthroughClaimsWithNoMapping == nil {
+			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
+		}
+
+		return stop
+	})
+
+	return &samlpAddon
 }
 
 func clientHasChange(c *management.Client) bool {

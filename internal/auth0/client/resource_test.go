@@ -1060,6 +1060,42 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithSAMLP = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		samlp {
+			issuer                             = "https://tableau-server-test.domain.eu.com/api/v1"
+			audience                           = "https://tableau-server-test.domain.eu.com/audience-different"
+			destination                        = "https://tableau-server-test.domain.eu.com/destination"
+			digest_algorithm                   = "sha256"
+			lifetime_in_seconds                = 3600
+			name_identifier_format             = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+			name_identifier_probes             = [ "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" ]
+			create_upn_claim                   = false
+			passthrough_claims_with_no_mapping = false
+			map_unknown_claims_as_is           = false
+			map_identities                     = false
+			typed_attributes                   = false
+			recipient                          = "https://tableau-server-test.domain.eu.com/recipient-different"
+			signing_cert                       = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+
+			mappings = {
+				email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+				name  = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+			}
+
+			logout {
+				callback    = "https://example.com/callback"
+				slo_enabled = true
+			}
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1294,6 +1330,34 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sso_integration.0.name", "my-sso"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sso_integration.0.version", "0.1.0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLP, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://tableau-server-test.domain.eu.com/api/v1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://tableau-server-test.domain.eu.com/audience-different"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "https://tableau-server-test.domain.eu.com/destination"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha256"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.lifetime_in_seconds", "3600"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.0", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "https://tableau-server-test.domain.eu.com/recipient-different"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.%", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.email", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.name", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.callback", "https://example.com/callback"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.slo_enabled", "true"),
 				),
 			},
 		},

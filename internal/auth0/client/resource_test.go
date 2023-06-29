@@ -945,6 +945,23 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsLayer = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		layer {
+			provider_id = "provider-id"
+			key_id      = "key-id"
+			private_key = "private-key"
+			principal   = "principal"
+			expiration  = 10
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1096,6 +1113,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.principal", "principal"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_name", "community-name"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_url_section", "community-url-section"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsLayer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.provider_id", "provider-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.key_id", "key-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.private_key", "private-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.expiration", "10"),
 				),
 			},
 		},

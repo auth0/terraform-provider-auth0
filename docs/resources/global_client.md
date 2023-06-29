@@ -84,6 +84,7 @@ Optional:
 - `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
 - `egnyte` (Block List, Max: 1) Egnyte SSO configuration. (see [below for nested schema](#nestedblock--addons--egnyte))
 - `firebase` (Block List, Max: 1) Google Firebase addon configuration. (see [below for nested schema](#nestedblock--addons--firebase))
+- `layer` (Block List, Max: 1) Layer addon configuration. (see [below for nested schema](#nestedblock--addons--layer))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `newrelic` (Block List, Max: 1) New Relic SSO configuration. (see [below for nested schema](#nestedblock--addons--newrelic))
 - `office365` (Block List, Max: 1) Microsoft Office 365 SSO configuration. (see [below for nested schema](#nestedblock--addons--office365))
@@ -162,6 +163,21 @@ Optional:
 - `private_key` (String, Sensitive) Private Key for signing the token (SDK v3+ tokens only).
 - `private_key_id` (String, Sensitive) Optional ID of the private key to obtain the `kid` header claim from the issued token (SDK v3+ tokens only).
 - `secret` (String, Sensitive) Google Firebase Secret. (SDK v2 only).
+
+
+<a id="nestedblock--addons--layer"></a>
+### Nested Schema for `addons.layer`
+
+Required:
+
+- `key_id` (String, Sensitive) Authentication Key identifier used to sign the Layer token.
+- `private_key` (String, Sensitive) Private key for signing the Layer token.
+- `provider_id` (String) Provider ID of your Layer account.
+
+Optional:
+
+- `expiration` (Number) Optional expiration in minutes for the generated token. Defaults to 5 minutes.
+- `principal` (String) Name of the property used as the unique user ID in Layer. If not specified `user_id` is used.
 
 
 <a id="nestedblock--addons--mscrm"></a>

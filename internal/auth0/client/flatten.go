@@ -109,6 +109,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"salesforce":             nil,
 		"salesforce_api":         nil,
 		"salesforce_sandbox_api": nil,
+		"layer":                  nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -257,6 +258,18 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"principal":             addons.GetSalesforceSandboxAPI().GetPrincipal(),
 				"community_name":        addons.GetSalesforceSandboxAPI().GetCommunityName(),
 				"community_url_section": addons.GetSalesforceSandboxAPI().GetCommunityURLSection(),
+			},
+		}
+	}
+
+	if addons.GetLayer() != nil {
+		m["layer"] = []interface{}{
+			map[string]interface{}{
+				"provider_id": addons.GetLayer().GetProviderID(),
+				"key_id":      addons.GetLayer().GetKeyID(),
+				"private_key": addons.GetLayer().GetPrivateKey(),
+				"principal":   addons.GetLayer().GetPrincipal(),
+				"expiration":  addons.GetLayer().GetExpiration(),
 			},
 		}
 	}

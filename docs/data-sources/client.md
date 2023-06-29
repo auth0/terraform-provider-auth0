@@ -79,6 +79,7 @@ Read-Only:
 - `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
 - `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
 - `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
+- `layer` (List of Object) (see [below for nested schema](#nestedobjatt--addons--layer))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
 - `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
 - `office365` (List of Object) (see [below for nested schema](#nestedobjatt--addons--office365))
@@ -157,6 +158,18 @@ Read-Only:
 - `private_key` (String)
 - `private_key_id` (String)
 - `secret` (String)
+
+
+<a id="nestedobjatt--addons--layer"></a>
+### Nested Schema for `addons.layer`
+
+Read-Only:
+
+- `expiration` (Number)
+- `key_id` (String)
+- `principal` (String)
+- `private_key` (String)
+- `provider_id` (String)
 
 
 <a id="nestedobjatt--addons--mscrm"></a>

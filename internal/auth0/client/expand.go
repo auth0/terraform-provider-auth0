@@ -259,6 +259,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Salesforce = expandClientAddonSalesforce(addonsCfg.GetAttr("salesforce"))
 		addons.SalesforceAPI = expandClientAddonSalesforceAPI(addonsCfg.GetAttr("salesforce_api"))
 		addons.SalesforceSandboxAPI = expandClientAddonSalesforceSandboxAPI(addonsCfg.GetAttr("salesforce_sandbox_api"))
+		addons.Layer = expandClientAddonLayer(addonsCfg.GetAttr("layer"))
 		return stop
 	})
 
@@ -519,6 +520,28 @@ func expandClientAddonSalesforceSandboxAPI(salesforceCfg cty.Value) *management.
 	})
 
 	return &salesforceAddon
+}
+
+func expandClientAddonLayer(layerCfg cty.Value) *management.LayerClientAddon {
+	var layerAddon management.LayerClientAddon
+
+	layerCfg.ForEachElement(func(_ cty.Value, layerCfg cty.Value) (stop bool) {
+		layerAddon = management.LayerClientAddon{
+			ProviderID: value.String(layerCfg.GetAttr("provider_id")),
+			KeyID:      value.String(layerCfg.GetAttr("key_id")),
+			PrivateKey: value.String(layerCfg.GetAttr("private_key")),
+			Principal:  value.String(layerCfg.GetAttr("principal")),
+			Expiration: value.Int(layerCfg.GetAttr("expiration")),
+		}
+
+		return stop
+	})
+
+	if layerAddon == (management.LayerClientAddon{}) {
+		return nil
+	}
+
+	return &layerAddon
 }
 
 func clientHasChange(c *management.Client) bool {

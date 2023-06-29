@@ -924,6 +924,47 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"layer": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Layer addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"provider_id": {
+										Description: "Provider ID of your Layer account.",
+										Type:        schema.TypeString,
+										Required:    true,
+									},
+									"key_id": {
+										Description: "Authentication Key identifier used to sign the Layer token.",
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+									},
+									"private_key": {
+										Description: "Private key for signing the Layer token.",
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property used as the unique user ID in Layer. " +
+											"If not specified `user_id` is used.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"expiration": {
+										Description: "Optional expiration in minutes for the generated token. " +
+											"Defaults to 5 minutes.",
+										Type:         schema.TypeInt,
+										Optional:     true,
+										ValidateFunc: validation.IntAtLeast(0),
+									},
+								},
+							},
+						},
 					},
 				},
 			},

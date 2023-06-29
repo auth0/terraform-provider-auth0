@@ -261,6 +261,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.SalesforceSandboxAPI = expandClientAddonSalesforceSandboxAPI(addonsCfg.GetAttr("salesforce_sandbox_api"))
 		addons.Layer = expandClientAddonLayer(addonsCfg.GetAttr("layer"))
 		addons.SAPAPI = expandClientAddonSAPAPI(addonsCfg.GetAttr("sap_api"))
+		addons.SharePoint = expandClientAddonSharepoint(addonsCfg.GetAttr("sharepoint"))
 		return stop
 	})
 
@@ -562,6 +563,21 @@ func expandClientAddonSAPAPI(sapAPICfg cty.Value) *management.SAPAPIClientAddon 
 	})
 
 	return &sapAPIAddon
+}
+
+func expandClientAddonSharepoint(sharepointCfg cty.Value) *management.SharePointClientAddon {
+	var sharepointAddon management.SharePointClientAddon
+
+	sharepointCfg.ForEachElement(func(_ cty.Value, sharepointCfg cty.Value) (stop bool) {
+		sharepointAddon = management.SharePointClientAddon{
+			URL:         value.String(sharepointCfg.GetAttr("url")),
+			ExternalURL: value.Strings(sharepointCfg.GetAttr("external_url")),
+		}
+
+		return stop
+	})
+
+	return &sharepointAddon
 }
 
 func clientHasChange(c *management.Client) bool {

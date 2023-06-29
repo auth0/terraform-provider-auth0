@@ -111,6 +111,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"salesforce_sandbox_api": nil,
 		"layer":                  nil,
 		"sap_api":                nil,
+		"sharepoint":             nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -284,6 +285,15 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 				"scope":                  addons.GetSAPAPI().GetScope(),
 				"service_password":       addons.GetSAPAPI().GetServicePassword(),
 				"name_identifier_format": addons.GetSAPAPI().GetNameIdentifierFormat(),
+			},
+		}
+	}
+
+	if addons.GetSharePoint() != nil {
+		m["sharepoint"] = []interface{}{
+			map[string]interface{}{
+				"url":          addons.GetSharePoint().GetURL(),
+				"external_url": addons.GetSharePoint().GetExternalURL(),
 			},
 		}
 	}

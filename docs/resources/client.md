@@ -140,6 +140,7 @@ Optional:
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
 - `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
 - `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
+- `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 
 <a id="nestedblock--addons--aws"></a>
@@ -198,6 +199,15 @@ Optional:
 Optional:
 
 - `url` (String) URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+
+
+<a id="nestedblock--addons--sentry"></a>
+### Nested Schema for `addons.sentry`
+
+Optional:
+
+- `base_url` (String) URL prefix only if running Sentry Community Edition, otherwise leave empty.
+- `org_slug` (String) Generated slug for your Sentry organization. Found in your Sentry URL, for example `https://sentry.acme.com/acme-org/` would be `acme-org`.
 
 
 <a id="nestedblock--addons--slack"></a>

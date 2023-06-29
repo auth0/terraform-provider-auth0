@@ -101,6 +101,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"rms":        nil,
 		"mscrm":      nil,
 		"slack":      nil,
+		"sentry":     nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -165,6 +166,15 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["slack"] = []interface{}{
 			map[string]interface{}{
 				"team": addons.GetSlack().GetTeam(),
+			},
+		}
+	}
+
+	if addons.GetSentry() != nil {
+		m["sentry"] = []interface{}{
+			map[string]interface{}{
+				"org_slug": addons.GetSentry().GetOrgSlug(),
+				"base_url": addons.GetSentry().GetBaseURL(),
 			},
 		}
 	}

@@ -210,5 +210,13 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		}
 	}
 
+	if addons.GetNewRelic() != nil {
+		m["newrelic"] = []interface{}{
+			map[string]interface{}{
+				"account": addons.GetNewRelic().GetAccount(),
+			},
+		}
+	}
+
 	return []interface{}{m}
 }

@@ -69,6 +69,7 @@ Read-Only:
 - `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
 - `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
 - `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
+- `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
@@ -149,6 +150,14 @@ Read-Only:
 Read-Only:
 
 - `url` (String)
+
+
+<a id="nestedobjatt--addons--newrelic"></a>
+### Nested Schema for `addons.newrelic`
+
+Read-Only:
+
+- `account` (String)
 
 
 <a id="nestedobjatt--addons--rms"></a>

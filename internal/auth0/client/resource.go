@@ -839,6 +839,91 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"salesforce": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"entity_id": {
+										Description:  "Arbitrary logical URL that identifies the Saleforce resource, for example `https://acme-org.com`.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
+						"salesforce_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce API addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "Consumer Key assigned by Salesforce to the Connected App.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property in the user object that maps to a " +
+											"Salesforce username, for example `email`.",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"community_name": {
+										Description: "Community name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"community_url_section": {
+										Description: "Community URL section.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"salesforce_sandbox_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce Sandbox addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "Consumer Key assigned by Salesforce to the Connected App.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property in the user object that maps to a " +
+											"Salesforce username, for example `email`.",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"community_name": {
+										Description: "Community name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"community_url_section": {
+										Description: "Community URL section.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

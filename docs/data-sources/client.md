@@ -83,6 +83,9 @@ Read-Only:
 - `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
 - `office365` (List of Object) (see [below for nested schema](#nestedobjatt--addons--office365))
 - `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
+- `salesforce` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce))
+- `salesforce_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_api))
+- `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 
@@ -187,6 +190,36 @@ Read-Only:
 Read-Only:
 
 - `url` (String)
+
+
+<a id="nestedobjatt--addons--salesforce"></a>
+### Nested Schema for `addons.salesforce`
+
+Read-Only:
+
+- `entity_id` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_api"></a>
+### Nested Schema for `addons.salesforce_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_sandbox_api"></a>
+### Nested Schema for `addons.salesforce_sandbox_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
 
 
 <a id="nestedobjatt--addons--sentry"></a>

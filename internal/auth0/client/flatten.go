@@ -95,17 +95,20 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 	}
 
 	m := map[string]interface{}{
-		"aws":        nil,
-		"azure_blob": nil,
-		"azure_sb":   nil,
-		"rms":        nil,
-		"mscrm":      nil,
-		"slack":      nil,
-		"sentry":     nil,
-		"echosign":   nil,
-		"egnyte":     nil,
-		"firebase":   nil,
-		"office365":  nil,
+		"aws":                    nil,
+		"azure_blob":             nil,
+		"azure_sb":               nil,
+		"rms":                    nil,
+		"mscrm":                  nil,
+		"slack":                  nil,
+		"sentry":                 nil,
+		"echosign":               nil,
+		"egnyte":                 nil,
+		"firebase":               nil,
+		"office365":              nil,
+		"salesforce":             nil,
+		"salesforce_api":         nil,
+		"salesforce_sandbox_api": nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -224,6 +227,36 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 			map[string]interface{}{
 				"domain":     addons.GetOffice365().GetDomain(),
 				"connection": addons.GetOffice365().GetConnection(),
+			},
+		}
+	}
+
+	if addons.GetSalesforce() != nil {
+		m["salesforce"] = []interface{}{
+			map[string]interface{}{
+				"entity_id": addons.GetSalesforce().GetEntityID(),
+			},
+		}
+	}
+
+	if addons.GetSalesforceAPI() != nil {
+		m["salesforce_api"] = []interface{}{
+			map[string]interface{}{
+				"client_id":             addons.GetSalesforceAPI().GetClientID(),
+				"principal":             addons.GetSalesforceAPI().GetPrincipal(),
+				"community_name":        addons.GetSalesforceAPI().GetCommunityName(),
+				"community_url_section": addons.GetSalesforceAPI().GetCommunityURLSection(),
+			},
+		}
+	}
+
+	if addons.GetSalesforceSandboxAPI() != nil {
+		m["salesforce_sandbox_api"] = []interface{}{
+			map[string]interface{}{
+				"client_id":             addons.GetSalesforceSandboxAPI().GetClientID(),
+				"principal":             addons.GetSalesforceSandboxAPI().GetPrincipal(),
+				"community_name":        addons.GetSalesforceSandboxAPI().GetCommunityName(),
+				"community_url_section": addons.GetSalesforceSandboxAPI().GetCommunityURLSection(),
 			},
 		}
 	}

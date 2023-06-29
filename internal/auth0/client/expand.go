@@ -266,6 +266,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.WAMS = expandClientAddonWAMS(addonsCfg.GetAttr("wams"))
 		addons.Zendesk = expandClientAddonZendesk(addonsCfg.GetAttr("zendesk"))
 		addons.Zoom = expandClientAddonZoom(addonsCfg.GetAttr("zoom"))
+		addons.SSOIntegration = expandClientAddonSSOIntegration(addonsCfg.GetAttr("sso_integration"))
 		return stop
 	})
 
@@ -638,6 +639,21 @@ func expandClientAddonZoom(zoomCfg cty.Value) *management.ZoomClientAddon {
 	})
 
 	return &zoomAddon
+}
+
+func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegrationClientAddon {
+	var ssoAddon management.SSOIntegrationClientAddon
+
+	ssoCfg.ForEachElement(func(_ cty.Value, ssoCfg cty.Value) (stop bool) {
+		ssoAddon = management.SSOIntegrationClientAddon{
+			Name:    value.String(ssoCfg.GetAttr("name")),
+			Version: value.String(ssoCfg.GetAttr("version")),
+		}
+
+		return stop
+	})
+
+	return &ssoAddon
 }
 
 func clientHasChange(c *management.Client) bool {

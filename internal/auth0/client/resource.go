@@ -1102,6 +1102,27 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"sso_integration": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Generic SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"name": {
+										Description: "SSO integration name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"version": {
+										Description: "SSO integration version installed.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

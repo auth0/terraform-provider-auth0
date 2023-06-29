@@ -97,6 +97,7 @@ Optional:
 - `sharepoint` (Block List, Max: 1) SharePoint SSO configuration. (see [below for nested schema](#nestedblock--addons--sharepoint))
 - `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
 - `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
+- `sso_integration` (Block List, Max: 1) Generic SSO configuration. (see [below for nested schema](#nestedblock--addons--sso_integration))
 - `wams` (Block List, Max: 1) Windows Azure Mobile Services addon configuration. (see [below for nested schema](#nestedblock--addons--wams))
 - `zendesk` (Block List, Max: 1) Zendesk SSO configuration. (see [below for nested schema](#nestedblock--addons--zendesk))
 - `zoom` (Block List, Max: 1) Zoom SSO configuration. (see [below for nested schema](#nestedblock--addons--zoom))
@@ -294,6 +295,15 @@ Optional:
 Optional:
 
 - `acs_url` (String) SpringCM ACS URL, for example `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
+
+
+<a id="nestedblock--addons--sso_integration"></a>
+### Nested Schema for `addons.sso_integration`
+
+Optional:
+
+- `name` (String) SSO integration name.
+- `version` (String) SSO integration version installed.
 
 
 <a id="nestedblock--addons--wams"></a>

@@ -87,6 +87,7 @@ Read-Only:
 - `salesforce` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce))
 - `salesforce_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_api))
 - `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
+- `sap_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sap_api))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 
@@ -233,6 +234,19 @@ Read-Only:
 - `community_name` (String)
 - `community_url_section` (String)
 - `principal` (String)
+
+
+<a id="nestedobjatt--addons--sap_api"></a>
+### Nested Schema for `addons.sap_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `name_identifier_format` (String)
+- `scope` (String)
+- `service_password` (String)
+- `token_endpoint_url` (String)
+- `username_attribute` (String)
 
 
 <a id="nestedobjatt--addons--sentry"></a>

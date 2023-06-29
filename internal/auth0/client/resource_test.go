@@ -962,6 +962,24 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsSAPAPI = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sap_api {
+			client_id              = "client-id"
+			username_attribute     = "email"
+			token_endpoint_url     = "https://example.com"
+			scope                  = "use:api"
+			service_password       = "123456"
+			name_identifier_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1126,6 +1144,20 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.private_key", "private-key"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.principal", "principal"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.expiration", "10"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSAPAPI, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.username_attribute", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.token_endpoint_url", "https://example.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.scope", "use:api"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.service_password", "123456"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
 				),
 			},
 		},

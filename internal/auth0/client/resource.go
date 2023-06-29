@@ -666,6 +666,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"mscrm": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Microsoft Dynamics CRM SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description:  "Microsoft Dynamics CRM application URL.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

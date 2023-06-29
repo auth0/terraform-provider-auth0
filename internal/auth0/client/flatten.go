@@ -104,6 +104,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"sentry":     nil,
 		"echosign":   nil,
 		"egnyte":     nil,
+		"firebase":   nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -193,6 +194,18 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["egnyte"] = []interface{}{
 			map[string]interface{}{
 				"domain": addons.GetEgnyte().GetDomain(),
+			},
+		}
+	}
+
+	if addons.GetFirebase() != nil {
+		m["firebase"] = []interface{}{
+			map[string]interface{}{
+				"secret":              addons.GetFirebase().GetSecret(),
+				"private_key_id":      addons.GetFirebase().GetPrivateKeyID(),
+				"private_key":         addons.GetFirebase().GetPrivateKey(),
+				"client_email":        addons.GetFirebase().GetClientEmail(),
+				"lifetime_in_seconds": addons.GetFirebase().GetLifetimeInSeconds(),
 			},
 		}
 	}

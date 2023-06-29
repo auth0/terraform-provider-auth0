@@ -874,6 +874,23 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsFirebase = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		firebase {
+			secret              = "secret"
+			private_key_id      = "private-key-id"
+			private_key         = "private-key"
+			client_email        = "service-account"
+			lifetime_in_seconds = 7200
+		}
+	}
+}
+`
+
 func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -975,6 +992,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.egnyte.0.domain", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsFirebase, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.secret", "secret"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.private_key_id", "private-key-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.private_key", "private-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.client_email", "service-account"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.lifetime_in_seconds", "7200"),
 				),
 			},
 		},

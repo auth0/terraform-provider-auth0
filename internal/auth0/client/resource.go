@@ -758,6 +758,48 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"firebase": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Google Firebase addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"secret": {
+										Description: "Google Firebase Secret. (SDK v2 only).",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"private_key_id": {
+										Description: "Optional ID of the private key to obtain the `kid` header " +
+											"claim from the issued token (SDK v3+ tokens only).",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"private_key": {
+										Description: "Private Key for signing the token (SDK v3+ tokens only).",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"client_email": {
+										Description: "ID of the Service Account you have created (shown as " +
+											"`client_email` in the generated JSON file, SDK v3+ tokens only).",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"lifetime_in_seconds": {
+										Description: "Optional expiration in seconds for the generated token. " +
+											"Defaults to 3600 seconds (SDK v3+ tokens only).",
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

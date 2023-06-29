@@ -254,6 +254,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.EchoSign = expandClientAddonEchoSign(addonsCfg.GetAttr("echosign"))
 		addons.Egnyte = expandClientAddonEgnyte(addonsCfg.GetAttr("egnyte"))
 		addons.Firebase = expandClientAddonFirebase(addonsCfg.GetAttr("firebase"))
+		addons.NewRelic = expandClientAddonNewRelic(addonsCfg.GetAttr("newrelic"))
 		return stop
 	})
 
@@ -437,6 +438,20 @@ func expandClientAddonFirebase(firebaseCfg cty.Value) *management.FirebaseClient
 	})
 
 	return &firebaseAddon
+}
+
+func expandClientAddonNewRelic(newRelicCfg cty.Value) *management.NewRelicClientAddon {
+	var newRelicAddon management.NewRelicClientAddon
+
+	newRelicCfg.ForEachElement(func(_ cty.Value, newRelicCfg cty.Value) (stop bool) {
+		newRelicAddon = management.NewRelicClientAddon{
+			Account: value.String(newRelicCfg.GetAttr("account")),
+		}
+
+		return stop
+	})
+
+	return &newRelicAddon
 }
 
 func clientHasChange(c *management.Client) bool {

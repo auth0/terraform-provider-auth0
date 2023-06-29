@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 331
+        content_length: 345
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 356.112708ms
+        duration: 287.083042ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -56,7 +56,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 221.0235ms
+        duration: 313.851875ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -92,7 +92,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,13 +102,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 86.099958ms
+        duration: 101.735625ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -128,7 +128,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -138,33 +138,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{"principal":"arn:aws:iam::010616021751:saml-provider/idpname","role":"arn:aws:iam::010616021751:role/foo","lifetime_in_seconds":32000},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.86825ms
+        duration: 111.654708ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 571
+        content_length: 585
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -174,13 +174,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 260.777292ms
+        duration: 111.7495ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -200,7 +200,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -210,13 +210,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 124.460834ms
+        duration: 93.448334ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -236,7 +236,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -246,13 +246,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.182542ms
+        duration: 126.518084ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -272,7 +272,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,33 +282,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{"accountName":"acmeorg","storageAccessKey":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa==","containerName":"my-container","blobName":"my-blob","expiration":10,"signedIdentifier":"id123","blob_read":true,"blob_write":true,"blob_delete":true,"container_read":true,"container_write":true,"container_delete":true,"container_list":true},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.011333ms
+        duration: 101.300583ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 302
+        content_length: 316
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -318,13 +318,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.114583ms
+        duration: 197.553667ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -344,7 +344,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -354,13 +354,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 99.6395ms
+        duration: 114.535167ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -380,7 +380,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -390,13 +390,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 200.810666ms
+        duration: 110.693334ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -416,7 +416,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -426,33 +426,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{"namespace":"acmeorg","sasKeyName":"my-policy","sasKey":"my-key","entityPath":"my-queue","expiration":10},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 208.509333ms
+        duration: 102.327ms
     - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 234
+        content_length: 248
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"rms":{"url":"https://example.com"},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -462,13 +462,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 91.2535ms
+        duration: 94.340792ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -488,7 +488,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -498,13 +498,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 224.647542ms
+        duration: 102.440666ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -524,7 +524,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -534,13 +534,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 120.242875ms
+        duration: 126.697916ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -560,7 +560,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -570,33 +570,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 85.725583ms
+        duration: 104.109792ms
     - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 236
+        content_length: 250
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -606,13 +606,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 195.829666ms
+        duration: 103.195292ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -632,7 +632,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -642,13 +642,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.036958ms
+        duration: 92.307417ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -668,7 +668,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -678,13 +678,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 87.075166ms
+        duration: 92.892042ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -704,7 +704,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -714,33 +714,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.218291ms
+        duration: 89.474875ms
     - id: 20
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 225
+        content_length: 239
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{},"slack":{"team":"acmeorg"}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{},"slack":{"team":"acmeorg"}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -750,13 +750,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 224.074458ms
+        duration: 111.425417ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -776,7 +776,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -786,13 +786,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 88.739459ms
+        duration: 105.715375ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -812,7 +812,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -822,13 +822,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 85.057584ms
+        duration: 176.218958ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -848,7 +848,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -858,33 +858,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 188.927542ms
+        duration: 105.324917ms
     - id: 24
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 232
+        content_length: 246
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"sentry":{"org_slug":"acmeorg","base_url":""}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{"org_slug":"acmeorg","base_url":""}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -894,13 +894,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 93.114959ms
+        duration: 107.894334ms
     - id: 25
       request:
         proto: HTTP/1.1
@@ -920,7 +920,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -930,13 +930,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.758417ms
+        duration: 136.40475ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -956,7 +956,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -966,13 +966,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 110.804708ms
+        duration: 106.305458ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -992,7 +992,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1002,33 +1002,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{"org_slug":"acmeorg","base_url":""},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 115.237833ms
+        duration: 135.5805ms
     - id: 28
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 216
+        content_length: 230
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1038,13 +1038,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 192.756792ms
+        duration: 137.492875ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1064,7 +1064,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1074,13 +1074,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 200.559833ms
+        duration: 100.777334ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1100,7 +1100,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1110,13 +1110,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.865208ms
+        duration: 92.934459ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1136,7 +1136,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1146,33 +1146,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{"domain":"acmeorg"},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 208.531209ms
+        duration: 91.964166ms
     - id: 32
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 216
+        content_length: 230
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1182,13 +1182,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.673709ms
+        duration: 105.097375ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1208,7 +1208,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1218,13 +1218,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.388125ms
+        duration: 103.880042ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1244,7 +1244,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1254,13 +1254,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 85.647083ms
+        duration: 98.123ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1280,7 +1280,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1290,33 +1290,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{"domain":"acmeorg"},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 81.086333ms
+        duration: 102.750792ms
     - id: 36
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 337
+        content_length: 351
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"sentry":{}}}
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"newrelic":{},"sentry":{}}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1326,13 +1326,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 90.971167ms
+        duration: 95.864958ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1352,7 +1352,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1362,13 +1362,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 423.898125ms
+        duration: 116.311542ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1388,7 +1388,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: GET
       response:
         proto: HTTP/2.0
@@ -1398,14 +1398,158 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"huhsBTugI3shDg9OiB6KOLg0OrbFtKun","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 335.151375ms
+        duration: 140.839ms
     - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{"secret":"secret","private_key_id":"private-key-id","private_key":"private-key","client_email":"service-account","lifetime_in_seconds":7200},"mscrm":{"url":"https://example.com"},"newrelic":{},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 124.07675ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 230
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - SSO Integration - TestAccClientAddons","app_type":"sso_integration","addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"newrelic":{"account":"123456"},"sentry":{}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{"account":"123456"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 108.921333ms
+    - id: 41
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{"account":"123456"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 117.922709ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 5
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            null
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0-SDK/latest
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - SSO Integration - TestAccClientAddons","client_id":"eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt","client_secret":"[REDACTED]","app_type":"sso_integration","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"addons":{"aws":{},"azure_blob":{},"azure_sb":{},"echosign":{},"egnyte":{},"firebase":{},"mscrm":{"url":"https://example.com"},"newrelic":{"account":"123456"},"rms":{"url":"https://example.com"},"sentry":{},"slack":{"team":"acmeorg"}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 102.802209ms
+    - id: 43
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1423,7 +1567,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0-SDK/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/huhsBTugI3shDg9OiB6KOLg0OrbFtKun
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/eIzbpZwSGBlcgpVFRtvQ9zU7pMBXF3Tt
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1439,4 +1583,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 203.700917ms
+        duration: 186.650917ms

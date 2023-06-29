@@ -800,6 +800,23 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"newrelic": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "New Relic SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account": {
+										Description: "Your New Relic Account ID found in your New Relic URL after the " +
+											"`/accounts/` path, for example `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},

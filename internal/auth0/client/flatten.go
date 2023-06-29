@@ -112,6 +112,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"layer":                  nil,
 		"sap_api":                nil,
 		"sharepoint":             nil,
+		"springcm":               nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -294,6 +295,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 			map[string]interface{}{
 				"url":          addons.GetSharePoint().GetURL(),
 				"external_url": addons.GetSharePoint().GetExternalURL(),
+			},
+		}
+	}
+
+	if addons.GetSpringCM() != nil {
+		m["springcm"] = []interface{}{
+			map[string]interface{}{
+				"acs_url": addons.GetSpringCM().GetACSURL(),
 			},
 		}
 	}

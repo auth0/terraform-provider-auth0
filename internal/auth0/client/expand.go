@@ -263,6 +263,7 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.SAPAPI = expandClientAddonSAPAPI(addonsCfg.GetAttr("sap_api"))
 		addons.SharePoint = expandClientAddonSharepoint(addonsCfg.GetAttr("sharepoint"))
 		addons.SpringCM = expandClientAddonSpringCM(addonsCfg.GetAttr("springcm"))
+		addons.WAMS = expandClientAddonWAMS(addonsCfg.GetAttr("wams"))
 		return stop
 	})
 
@@ -593,6 +594,20 @@ func expandClientAddonSpringCM(springCMCfg cty.Value) *management.SpringCMClient
 	})
 
 	return &springCMAddon
+}
+
+func expandClientAddonWAMS(wamsCfg cty.Value) *management.WAMSClientAddon {
+	var wamsAddon management.WAMSClientAddon
+
+	wamsCfg.ForEachElement(func(_ cty.Value, wamsCfg cty.Value) (stop bool) {
+		wamsAddon = management.WAMSClientAddon{
+			Masterkey: value.String(wamsCfg.GetAttr("master_key")),
+		}
+
+		return stop
+	})
+
+	return &wamsAddon
 }
 
 func clientHasChange(c *management.Client) bool {

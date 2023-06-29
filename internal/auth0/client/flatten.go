@@ -113,6 +113,7 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"sap_api":                nil,
 		"sharepoint":             nil,
 		"springcm":               nil,
+		"wams":                   nil,
 	}
 
 	if addons.GetAWS() != nil {
@@ -303,6 +304,14 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		m["springcm"] = []interface{}{
 			map[string]interface{}{
 				"acs_url": addons.GetSpringCM().GetACSURL(),
+			},
+		}
+	}
+
+	if addons.GetWAMS() != nil {
+		m["wams"] = []interface{}{
+			map[string]interface{}{
+				"master_key": addons.GetWAMS().GetMasterkey(),
 			},
 		}
 	}

@@ -92,6 +92,7 @@ Read-Only:
 - `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
 - `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
 - `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
+- `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
 
 <a id="nestedobjatt--addons--aws"></a>
 ### Nested Schema for `addons.aws`
@@ -283,6 +284,14 @@ Read-Only:
 Read-Only:
 
 - `acs_url` (String)
+
+
+<a id="nestedobjatt--addons--wams"></a>
+### Nested Schema for `addons.wams`
+
+Read-Only:
+
+- `master_key` (String)
 
 
 

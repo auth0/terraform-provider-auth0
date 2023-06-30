@@ -269,6 +269,27 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		addons.Zoom = expandClientAddonZoom(addonsCfg.GetAttr("zoom"))
 		addons.SSOIntegration = expandClientAddonSSOIntegration(addonsCfg.GetAttr("sso_integration"))
 		addons.SAML2 = expandClientAddonSAMLP(addonsCfg.GetAttr("samlp"))
+
+		if addonsCfg.GetAttr("box").LengthInt() == 1 {
+			addons.Box = &management.BoxClientAddon{}
+		}
+
+		if addonsCfg.GetAttr("cloudbees").LengthInt() == 1 {
+			addons.CloudBees = &management.CloudBeesClientAddon{}
+		}
+
+		if addonsCfg.GetAttr("concur").LengthInt() == 1 {
+			addons.Concur = &management.ConcurClientAddon{}
+		}
+
+		if addonsCfg.GetAttr("dropbox").LengthInt() == 1 {
+			addons.Dropbox = &management.DropboxClientAddon{}
+		}
+
+		if addonsCfg.GetAttr("wsfed").LengthInt() == 1 {
+			addons.WSFED = &management.WSFEDClientAddon{}
+		}
+
 		return stop
 	})
 

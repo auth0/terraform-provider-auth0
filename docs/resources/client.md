@@ -138,6 +138,10 @@ Optional:
 - `aws` (Block List, Max: 1) AWS Addon configuration. (see [below for nested schema](#nestedblock--addons--aws))
 - `azure_blob` (Block List, Max: 1) Azure Blob Storage Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_blob))
 - `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
+- `box` (Block List, Max: 1) Box SSO indicator (no configuration settings needed for Box SSO). (see [below for nested schema](#nestedblock--addons--box))
+- `cloudbees` (Block List, Max: 1) CloudBees SSO indicator (no configuration settings needed for CloudBees SSO). (see [below for nested schema](#nestedblock--addons--cloudbees))
+- `concur` (Block List, Max: 1) Concur SSO indicator (no configuration settings needed for Concur SSO). (see [below for nested schema](#nestedblock--addons--concur))
+- `dropbox` (Block List, Max: 1) Dropbox SSO indicator (no configuration settings needed for Dropbox SSO). (see [below for nested schema](#nestedblock--addons--dropbox))
 - `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
 - `egnyte` (Block List, Max: 1) Egnyte SSO configuration. (see [below for nested schema](#nestedblock--addons--egnyte))
 - `firebase` (Block List, Max: 1) Google Firebase addon configuration. (see [below for nested schema](#nestedblock--addons--firebase))
@@ -157,6 +161,7 @@ Optional:
 - `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
 - `sso_integration` (Block List, Max: 1) Generic SSO configuration. (see [below for nested schema](#nestedblock--addons--sso_integration))
 - `wams` (Block List, Max: 1) Windows Azure Mobile Services addon configuration. (see [below for nested schema](#nestedblock--addons--wams))
+- `wsfed` (Block List, Max: 1) WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client. (see [below for nested schema](#nestedblock--addons--wsfed))
 - `zendesk` (Block List, Max: 1) Zendesk SSO configuration. (see [below for nested schema](#nestedblock--addons--zendesk))
 - `zoom` (Block List, Max: 1) Zoom SSO configuration. (see [below for nested schema](#nestedblock--addons--zoom))
 
@@ -200,6 +205,22 @@ Optional:
 - `namespace` (String) Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (for example `https://acme-org.servicebus.windows.net` would be `acme-org`).
 - `sas_key` (String, Sensitive) Primary Key associated with your shared access policy.
 - `sas_key_name` (String) Your shared access policy name defined in your Service Bus entity.
+
+
+<a id="nestedblock--addons--box"></a>
+### Nested Schema for `addons.box`
+
+
+<a id="nestedblock--addons--cloudbees"></a>
+### Nested Schema for `addons.cloudbees`
+
+
+<a id="nestedblock--addons--concur"></a>
+### Nested Schema for `addons.concur`
+
+
+<a id="nestedblock--addons--dropbox"></a>
+### Nested Schema for `addons.dropbox`
 
 
 <a id="nestedblock--addons--echosign"></a>
@@ -407,6 +428,10 @@ Optional:
 Optional:
 
 - `master_key` (String, Sensitive) Your master key for Windows Azure Mobile Services.
+
+
+<a id="nestedblock--addons--wsfed"></a>
+### Nested Schema for `addons.wsfed`
 
 
 <a id="nestedblock--addons--zendesk"></a>

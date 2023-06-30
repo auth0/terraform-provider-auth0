@@ -65,6 +65,10 @@ Read-Only:
 - `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
 - `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
 - `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
+- `box` (List of Object) (see [below for nested schema](#nestedobjatt--addons--box))
+- `cloudbees` (List of Object) (see [below for nested schema](#nestedobjatt--addons--cloudbees))
+- `concur` (List of Object) (see [below for nested schema](#nestedobjatt--addons--concur))
+- `dropbox` (List of Object) (see [below for nested schema](#nestedobjatt--addons--dropbox))
 - `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
 - `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
 - `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
@@ -84,6 +88,7 @@ Read-Only:
 - `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
 - `sso_integration` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sso_integration))
 - `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
+- `wsfed` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wsfed))
 - `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
 - `zoom` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zoom))
 
@@ -127,6 +132,34 @@ Read-Only:
 - `namespace` (String)
 - `sas_key` (String)
 - `sas_key_name` (String)
+
+
+<a id="nestedobjatt--addons--box"></a>
+### Nested Schema for `addons.box`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--cloudbees"></a>
+### Nested Schema for `addons.cloudbees`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--concur"></a>
+### Nested Schema for `addons.concur`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--dropbox"></a>
+### Nested Schema for `addons.dropbox`
+
+Read-Only:
+
 
 
 <a id="nestedobjatt--addons--echosign"></a>
@@ -331,6 +364,13 @@ Read-Only:
 Read-Only:
 
 - `master_key` (String)
+
+
+<a id="nestedobjatt--addons--wsfed"></a>
+### Nested Schema for `addons.wsfed`
+
+Read-Only:
+
 
 
 <a id="nestedobjatt--addons--zendesk"></a>

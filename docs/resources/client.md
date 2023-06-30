@@ -149,6 +149,7 @@ Optional:
 - `salesforce` (Block List, Max: 1) Salesforce SSO configuration. (see [below for nested schema](#nestedblock--addons--salesforce))
 - `salesforce_api` (Block List, Max: 1) Salesforce API addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_api))
 - `salesforce_sandbox_api` (Block List, Max: 1) Salesforce Sandbox addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_sandbox_api))
+- `samlp` (Block List, Max: 1) Configuration settings for a SAML add-on. (see [below for nested schema](#nestedblock--addons--samlp))
 - `sap_api` (Block List, Max: 1) SAP API addon configuration. (see [below for nested schema](#nestedblock--addons--sap_api))
 - `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
 - `sharepoint` (Block List, Max: 1) SharePoint SSO configuration. (see [below for nested schema](#nestedblock--addons--sharepoint))
@@ -305,6 +306,43 @@ Optional:
 - `community_name` (String) Community name.
 - `community_url_section` (String) Community URL section.
 - `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
+
+
+<a id="nestedblock--addons--samlp"></a>
+### Nested Schema for `addons.samlp`
+
+Optional:
+
+- `audience` (String) Audience of the SAML Assertion. Default will be the Issuer on SAMLRequest.
+- `authn_context_class_ref` (String) Class reference of the authentication context.
+- `binding` (String) Protocol binding used for SAML logout responses.
+- `create_upn_claim` (Boolean) Indicates whether a UPN claim should be created. Defaults to `true`.
+- `destination` (String) Destination of the SAML Response. If not specified, it will be `AssertionConsumerUrl` of SAMLRequest or callback URL if there was no SAMLRequest.
+- `digest_algorithm` (String) Algorithm used to calculate the digest of the SAML Assertion or response. Options include `sha1` and `sha256`. Defaults to `sha1`.
+- `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to `false`, the attribute NameFormat is not set in the assertion. Defaults to `true`.
+- `issuer` (String) Issuer of the SAML Assertion.
+- `lifetime_in_seconds` (Number) Number of seconds during which the token is valid. Defaults to `3600` seconds.
+- `logout` (Block List, Max: 1) Configuration settings for logout. (see [below for nested schema](#nestedblock--addons--samlp--logout))
+- `map_identities` (Boolean) Indicates whether or not to add additional identity information in the token, such as the provider used and the `access_token`, if available. Defaults to `true`.
+- `map_unknown_claims_as_is` (Boolean) Indicates whether to add a prefix of `http://schema.auth0.com` to any claims that are not mapped to the common profile when passed through in the output assertion. Defaults to `false`.
+- `mappings` (Map of String) Mappings between the Auth0 user profile property name (`name`) and the output attributes on the SAML attribute in the assertion (`value`).
+- `name_identifier_format` (String) Format of the name identifier. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
+- `name_identifier_probes` (List of String) Attributes that can be used for Subject/NameID. Auth0 will try each of the attributes of this array in order and use the first value it finds.
+- `passthrough_claims_with_no_mapping` (Boolean) Indicates whether or not to passthrough claims that are not mapped to the common profile in the output assertion. Defaults to `true`.
+- `recipient` (String) Recipient of the SAML Assertion (SubjectConfirmationData). Default is `AssertionConsumerUrl` on SAMLRequest or callback URL if no SAMLRequest was sent.
+- `sign_response` (Boolean) Indicates whether or not the SAML Response should be signed instead of the SAML Assertion.
+- `signature_algorithm` (String) Algorithm used to sign the SAML Assertion or response. Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.
+- `signing_cert` (String) Optionally indicates the public key certificate used to validate SAML requests. If set, SAML requests will be required to be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n`.
+- `typed_attributes` (Boolean) Indicates whether or not we should infer the `xs:type` of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. Defaults to `true`.
+
+<a id="nestedblock--addons--samlp--logout"></a>
+### Nested Schema for `addons.samlp.logout`
+
+Optional:
+
+- `callback` (String) The service provider (client application)'s Single Logout Service URL, where Auth0 will send logout requests and responses.
+- `slo_enabled` (Boolean) Controls whether Auth0 should notify service providers of session termination.
+
 
 
 <a id="nestedblock--addons--sap_api"></a>

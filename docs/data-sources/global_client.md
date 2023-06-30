@@ -76,6 +76,7 @@ Read-Only:
 - `salesforce` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce))
 - `salesforce_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_api))
 - `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
+- `samlp` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp))
 - `sap_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sap_api))
 - `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
 - `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
@@ -229,6 +230,43 @@ Read-Only:
 - `community_name` (String)
 - `community_url_section` (String)
 - `principal` (String)
+
+
+<a id="nestedobjatt--addons--samlp"></a>
+### Nested Schema for `addons.samlp`
+
+Read-Only:
+
+- `audience` (String)
+- `authn_context_class_ref` (String)
+- `binding` (String)
+- `create_upn_claim` (Boolean)
+- `destination` (String)
+- `digest_algorithm` (String)
+- `include_attribute_name_format` (Boolean)
+- `issuer` (String)
+- `lifetime_in_seconds` (Number)
+- `logout` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp--logout))
+- `map_identities` (Boolean)
+- `map_unknown_claims_as_is` (Boolean)
+- `mappings` (Map of String)
+- `name_identifier_format` (String)
+- `name_identifier_probes` (List of String)
+- `passthrough_claims_with_no_mapping` (Boolean)
+- `recipient` (String)
+- `sign_response` (Boolean)
+- `signature_algorithm` (String)
+- `signing_cert` (String)
+- `typed_attributes` (Boolean)
+
+<a id="nestedobjatt--addons--samlp--logout"></a>
+### Nested Schema for `addons.samlp.logout`
+
+Read-Only:
+
+- `callback` (String)
+- `slo_enabled` (Boolean)
+
 
 
 <a id="nestedobjatt--addons--sap_api"></a>

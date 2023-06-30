@@ -1101,6 +1101,21 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccUpdateClientWithAddonsThatRequireNoConfig = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		box {}
+		cloudbees {}
+		concur {}
+		dropbox {}
+		wsfed {}
+	}
+}
+`
+
 const testAccUpdateClientWithAddonsRemoved = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
@@ -1386,6 +1401,19 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsThatRequireNoConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.box.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.cloudbees.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "1"),
 				),
 			},
 		},

@@ -1204,10 +1204,11 @@ func NewResource() *schema.Resource {
 											"or callback URL if there was no SAMLRequest.",
 									},
 									"lifetime_in_seconds": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Default:     3600,
-										Description: "Number of seconds during which the token is valid.",
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  3600,
+										Description: "Number of seconds during which the token is valid. " +
+											"Defaults to `3600` seconds.",
 									},
 									"sign_response": {
 										Type:     schema.TypeBool,
@@ -1216,10 +1217,11 @@ func NewResource() *schema.Resource {
 											"instead of the SAML Assertion.",
 									},
 									"name_identifier_format": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Default:     "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-										Description: "Format of the name identifier.",
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Description: "Format of the name identifier. " +
+											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
 									},
 									"name_identifier_probes": {
 										Type:     schema.TypeList,
@@ -1240,7 +1242,7 @@ func NewResource() *schema.Resource {
 										Default:  true,
 										Description: "Indicates whether or not we should infer the `xs:type` " +
 											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
-											"and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. " +
+											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. " +
 											"Defaults to `true`.",
 									},
 									"include_attribute_name_format": {
@@ -1248,7 +1250,7 @@ func NewResource() *schema.Resource {
 										Optional: true,
 										Default:  true,
 										Description: "Indicates whether or not we should infer the NameFormat " +
-											"based on the attribute name. If set to false, the attribute " +
+											"based on the attribute name. If set to `false`, the attribute " +
 											"NameFormat is not set in the assertion. Defaults to `true`.",
 									},
 									"logout": {

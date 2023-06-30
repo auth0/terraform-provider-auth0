@@ -1079,8 +1079,13 @@ resource "auth0_client" "my_client" {
 			map_unknown_claims_as_is           = false
 			map_identities                     = false
 			typed_attributes                   = false
+			sign_response                      = false
+			include_attribute_name_format      = false
 			recipient                          = "https://tableau-server-test.domain.eu.com/recipient-different"
 			signing_cert                       = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+			signature_algorithm                = "rsa-sha256"
+			authn_context_class_ref            = "context"
+			binding                            = "binding"
 
 			mappings = {
 				email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
@@ -1093,6 +1098,15 @@ resource "auth0_client" "my_client" {
 			}
 		}
 	}
+}
+`
+
+const testAccUpdateClientWithAddonsRemoved = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {}
 }
 `
 
@@ -1351,13 +1365,27 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "https://tableau-server-test.domain.eu.com/recipient-different"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", "rsa-sha256"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.authn_context_class_ref", "context"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.binding", "binding"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.%", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.email", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.name", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.callback", "https://example.com/callback"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.slo_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "0"),
 				),
 			},
 		},

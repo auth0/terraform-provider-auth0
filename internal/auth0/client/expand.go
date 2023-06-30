@@ -740,6 +740,10 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
 		}
 
+		if samlpAddon.TypedAttributes == nil {
+			samlpAddon.TypedAttributes = auth0.Bool(true)
+		}
+
 		return stop
 	})
 

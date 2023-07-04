@@ -693,7 +693,7 @@ Optional:
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.
-- `type` (String) Value can be `back_channel` or `front_channel`.
+- `type` (String) Value can be `back_channel` or `front_channel`. Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. Back Channel will use `response_type=code`.
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.

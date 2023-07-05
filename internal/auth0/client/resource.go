@@ -160,10 +160,10 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"no_prompt", "pre_login_prompt",
+					"no_prompt", "pre_login_prompt", "post_login_prompt",
 				}, false),
 				Description: "Defines how to proceed during an authentication transaction when " +
-					"`organization_usage = \"require\"`. Can be `no_prompt` (default) or `pre_login_prompt`.",
+					"`organization_usage = \"require\"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.",
 			},
 			"allowed_origins": {
 				Type:     schema.TypeList,

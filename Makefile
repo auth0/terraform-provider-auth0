@@ -101,7 +101,7 @@ check-docs: ## Check that documentation was generated correctly
 
 check-vuln: $(GO_BIN)/govulncheck ## Check go vulnerabilities
 	${call print, "Running govulncheck over project"}
-	@govulncheck -v ./...
+	@govulncheck ./...
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Testing

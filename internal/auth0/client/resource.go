@@ -156,7 +156,7 @@ func NewResource() *schema.Resource {
 				Description: "Defines how to proceed during an authentication transaction with " +
 					"regards to an organization. Can be `deny` (default), `allow` or `require`.",
 			},
-				"organization_require_behavior": {
+			"organization_require_behavior": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ValidateFunc: validation.StringInSlice([]string{

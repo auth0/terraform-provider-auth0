@@ -55,9 +55,9 @@ var resourceSchemaV0 = map[string]*schema.Schema{
 		Type:             schema.TypeMap,
 		Elem:             &schema.Schema{Type: schema.TypeString},
 		Optional:         true,
-		ValidateDiagFunc: validation.MapKeyLenBetween(0, 10),
+		ValidateDiagFunc: validation.MapValueLenBetween(0, 255),
 		Description: "Metadata associated with the connection, in the form of a map of string values " +
-			"(max 255 chars). Maximum of 10 metadata properties allowed.",
+			"(max 255 chars).",
 	},
 	"options": {
 		Type:        schema.TypeList,

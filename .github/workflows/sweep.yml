@@ -1,4 +1,8 @@
-name: Test Sweep
+name: Test Tenant Cleanup
+
+concurrency:
+  group: one-at-time
+  cancel-in-progress: false
 
 on: [workflow_dispatch]
 

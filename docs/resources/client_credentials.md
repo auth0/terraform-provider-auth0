@@ -109,7 +109,7 @@ Required:
 Optional:
 
 - `algorithm` (String) Algorithm which will be used with the credential. Can be one of `RS256`, `RS384`, `PS256`. If not specified, `RS256` will be used.
-- `expires_at` (String) The ISO 8601 formatted date representing the expiration of the credential. It is not possible to set this tonever expire after it has been set. Recreate the certificate if needed.
+- `expires_at` (String) The ISO 8601 formatted date representing the expiration of the credential. It is not possible to set this to never expire after it has been set. Recreate the certificate if needed.
 - `name` (String) Friendly name for a credential.
 - `parse_expiry_from_cert` (Boolean) Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM. If also the `expires_at` is set the credential expiry will be set to the explicit `expires_at` value.
 

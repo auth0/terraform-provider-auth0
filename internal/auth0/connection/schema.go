@@ -567,11 +567,11 @@ var resourceSchemaV0 = map[string]*schema.Schema{
 						"`basic_profile`, `ext_profile`, `ext_nested_groups`, etc.",
 				},
 				"type": {
-					Type:        schema.TypeString,
-					Optional:    true,
+					Type:     schema.TypeString,
+					Optional: true,
 					Description: "Value can be `back_channel` or `front_channel`. " +
 						"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
- 						"Back Channel will use `response_type=code`.",
+						"Back Channel will use `response_type=code`.",
 				},
 				"issuer": {
 					Type:        schema.TypeString,

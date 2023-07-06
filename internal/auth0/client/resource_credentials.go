@@ -136,7 +136,7 @@ func NewCredentialsResource() *schema.Resource {
 										Computed:     true,
 										ValidateFunc: validation.IsRFC3339Time,
 										Description: "The ISO 8601 formatted date representing " +
-											"the expiration of the credential. It is not possible to set this to" +
+											"the expiration of the credential. It is not possible to set this to " +
 											"never expire after it has been set. Recreate the certificate if needed.",
 									},
 								},

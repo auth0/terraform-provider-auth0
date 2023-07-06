@@ -55,9 +55,9 @@ var resourceSchemaV0 = map[string]*schema.Schema{
 		Type:             schema.TypeMap,
 		Elem:             &schema.Schema{Type: schema.TypeString},
 		Optional:         true,
-		ValidateDiagFunc: validation.MapKeyLenBetween(0, 10),
+		ValidateDiagFunc: validation.MapValueLenBetween(0, 255),
 		Description: "Metadata associated with the connection, in the form of a map of string values " +
-			"(max 255 chars). Maximum of 10 metadata properties allowed.",
+			"(max 255 chars).",
 	},
 	"options": {
 		Type:        schema.TypeList,
@@ -567,9 +567,11 @@ var resourceSchemaV0 = map[string]*schema.Schema{
 						"`basic_profile`, `ext_profile`, `ext_nested_groups`, etc.",
 				},
 				"type": {
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: "Value can be `back_channel` or `front_channel`.",
+					Type:     schema.TypeString,
+					Optional: true,
+					Description: "Value can be `back_channel` or `front_channel`. " +
+						"Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. " +
+						"Back Channel will use `response_type=code`.",
 				},
 				"issuer": {
 					Type:        schema.TypeString,

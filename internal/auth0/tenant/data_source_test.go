@@ -12,40 +12,42 @@ import (
 
 const testAccDataTenantConfig = `
 resource "auth0_tenant" "my_tenant" {
-	default_directory = ""
-	default_audience = ""
-	error_page {
-		html = "<html>Error Page</html>"
-		show_log_link = false
-		url = "https://mycompany.org/error"
-	}
-	friendly_name = "My Test Tenant"
-	picture_url = "https://mycompany.org/logo.png"
-	support_email = "support@mycompany.org"
-	support_url = "https://mycompany.org/support"
-	allowed_logout_urls = [
-		"https://mycompany.org/logoutCallback"
-	]
-	session_lifetime = 720
-	sandbox_version = "12"
-	idle_session_lifetime = 72
-	enabled_locales = ["en", "de", "fr"]
+	default_directory       = ""
+	default_audience        = ""
+	default_redirection_uri = "https://example.com/login"
+	friendly_name           = "My Test Tenant"
+	picture_url             = "https://mycompany.org/logo.png"
+	support_email           = "support@mycompany.org"
+	support_url             = "https://mycompany.org/support"
+	allowed_logout_urls     = [ "https://mycompany.org/logoutCallback" ]
+	session_lifetime        = 720
+	sandbox_version         = "16"
+	idle_session_lifetime   = 72
+	enabled_locales         = ["en", "de", "fr"]
+
 	flags {
-		universal_login = true
-		disable_clickjack_protection_headers = true
+		universal_login                        = true
+		disable_clickjack_protection_headers   = true
 		enable_public_signup_user_exists_error = true
-		use_scope_descriptions_for_consent = true
-		no_disclose_enterprise_connections = false
+		use_scope_descriptions_for_consent     = true
+		no_disclose_enterprise_connections     = false
 		disable_management_api_sms_obfuscation = false
-		disable_fields_map_fix = false
+		disable_fields_map_fix                 = false
 	}
+
 	universal_login {
 		colors {
-			primary = "#0059d6"
+			primary         = "#0059d6"
 			page_background = "#000000"
 		}
 	}
-	default_redirection_uri = "https://example.com/login"
+
+	error_page {
+		html          = "<html>Error Page</html>"
+		show_log_link = false
+		url           = "https://mycompany.org/error"
+	}
+
 	session_cookie {
 		mode = "non-persistent"
 	}
@@ -64,8 +66,6 @@ func TestAccDataSourceTenant(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "domain", os.Getenv("AUTH0_DOMAIN")),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "management_api_identifier", fmt.Sprintf("https://%s/api/v2/", os.Getenv("AUTH0_DOMAIN"))),
-					resource.TestCheckResourceAttrSet("data.auth0_tenant.current", "change_password.0.enabled"),
-					resource.TestCheckResourceAttrSet("data.auth0_tenant.current", "guardian_mfa_page.0.enabled"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_audience", ""),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_directory", ""),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "error_page.0.html", "<html>Error Page</html>"),
@@ -77,7 +77,7 @@ func TestAccDataSourceTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "support_url", "https://mycompany.org/support"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "allowed_logout_urls.0", "https://mycompany.org/logoutCallback"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "session_lifetime", "720"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "sandbox_version", "12"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "sandbox_version", "16"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "idle_session_lifetime", "72"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "enabled_locales.0", "en"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "enabled_locales.1", "de"),

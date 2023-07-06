@@ -36,7 +36,7 @@ data "auth0_connection" "some-connection-by-id" {
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
-- `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
+- `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
 - `options` (List of Object) Configuration settings for connection options. (see [below for nested schema](#nestedatt--options))
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.

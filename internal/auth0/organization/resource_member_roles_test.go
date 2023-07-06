@@ -29,6 +29,7 @@ resource "auth0_user" "user" {
 
 	email    = "{{.testName}}@auth0.com"
 	password = "MyPass123$"
+	username = "{{.testName}}"
 }
 
 resource "auth0_organization" "org" {

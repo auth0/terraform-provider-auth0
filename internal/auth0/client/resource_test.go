@@ -577,7 +577,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "4"),
@@ -636,7 +636,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "5"),
@@ -703,7 +703,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "0"),
+
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "0"),
@@ -738,41 +738,362 @@ func TestAccClient(t *testing.T) {
 	})
 }
 
-const testAccCreateClientWithAddons = `
+const testAccCreateClientWithAddonsAWS = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
 	app_type = "sso_integration"
 
 	addons {
-		firebase = {
-			client_email = "john.doe@example.com"
-			lifetime_in_seconds = 1
-			private_key = "wer"
-			private_key_id = "qwreerwerwe"
+		aws {
+			principal           = "arn:aws:iam::010616021751:saml-provider/idpname"
+			role                = "arn:aws:iam::010616021751:role/foo"
+			lifetime_in_seconds = 32000
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsAzureBlob = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		azure_blob {
+			account_name       = "acmeorg"
+			storage_access_key = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="
+			container_name     = "my-container"
+			blob_name          = "my-blob"
+			expiration         = 10
+			signed_identifier  = "id123"
+			blob_read          = true
+			blob_write         = true
+			blob_delete        = true
+			container_read     = true
+			container_write    = true
+			container_delete   = true
+			container_list     = true
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsAzureSB = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		azure_sb {
+			namespace    = "acmeorg"
+			sas_key_name = "my-policy"
+			sas_key      = "my-key"
+			entity_path  = "my-queue"
+			expiration   = 10
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsRMS = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		rms {
+			url = "https://example.com"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsMSCRM = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		mscrm {
+			url = "https://example.com"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSlack = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		slack {
+			team = "acmeorg"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSentry = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sentry {
+			org_slug = "acmeorg"
+			base_url = ""
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsEchoSign = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		echosign {
+			domain = "acmeorg"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsEgnyte = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		egnyte {
+			domain = "acmeorg"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsFirebase = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		firebase {
+			secret              = "secret"
+			private_key_id      = "private-key-id"
+			private_key         = "private-key"
+			client_email        = "service-account"
+			lifetime_in_seconds = 7200
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsNewRelic = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		newrelic {
+			account = "123456"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsOffice365 = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		office365 {
+			domain     = "acmeorg"
+			connection = "Username-Password-Authentication"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSalesforce = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		salesforce {
+			entity_id = "https://acme-org.com"
 		}
 
+		salesforce_api {
+			client_id             = "client-id"
+			principal             = "principal"
+			community_name        = "community-name"
+			community_url_section = "community-url-section"
+		}
+
+		salesforce_sandbox_api {
+			client_id             = "client-id"
+			principal             = "principal"
+			community_name        = "community-name"
+			community_url_section = "community-url-section"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsLayer = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		layer {
+			provider_id = "provider-id"
+			key_id      = "key-id"
+			private_key = "private-key"
+			principal   = "principal"
+			expiration  = 10
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSAPAPI = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sap_api {
+			client_id              = "client-id"
+			username_attribute     = "email"
+			token_endpoint_url     = "https://example.com"
+			scope                  = "use:api"
+			service_password       = "123456"
+			name_identifier_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSharepoint = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sharepoint {
+			url          = "https://example.com:123"
+			external_url = [ "https://example.com/v2" ]
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSpringCM = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		springcm {
+			acs_url = "https://example.com"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsWAMS = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		wams {
+			master_key = "master-key"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsZendesk = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		zendesk {
+			account_name = "acmeorg"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsZoom = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		zoom {
+			account = "acmeorg"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithAddonsSSOIntegration = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		sso_integration {
+			name    = "my-sso"
+			version = "0.1.0"
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithSAMLP = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
 		samlp {
-			issuer = "https://tableau-server-test.domain.eu.com/api/v1"
-			audience = "https://tableau-server-test.domain.eu.com/audience-different"
-			destination = "https://tableau-server-test.domain.eu.com/destination"
-			digest_algorithm = "sha256"
-			lifetime_in_seconds = 3600
-			name_identifier_format = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-			name_identifier_probes = [
-				"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-			]
-			create_upn_claim = false
+			issuer                             = "https://tableau-server-test.domain.eu.com/api/v1"
+			audience                           = "https://tableau-server-test.domain.eu.com/audience-different"
+			destination                        = "https://tableau-server-test.domain.eu.com/destination"
+			digest_algorithm                   = "sha256"
+			lifetime_in_seconds                = 3600
+			name_identifier_format             = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+			name_identifier_probes             = [ "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" ]
+			create_upn_claim                   = false
 			passthrough_claims_with_no_mapping = false
-			map_unknown_claims_as_is = false
-			map_identities = false
-			recipient = "https://tableau-server-test.domain.eu.com/recipient-different"
-			signing_cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+			map_unknown_claims_as_is           = false
+			map_identities                     = false
+			typed_attributes                   = false
+			sign_response                      = false
+			include_attribute_name_format      = false
+			recipient                          = "https://tableau-server-test.domain.eu.com/recipient-different"
+			signing_cert                       = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
+			signature_algorithm                = "rsa-sha256"
+			authn_context_class_ref            = "context"
+			binding                            = "binding"
+
 			mappings = {
 				email = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-				name = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+				name  = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
 			}
-			logout = {
-				callback = "https://example.com/callback"
+
+			logout {
+				callback    = "https://example.com/callback"
 				slo_enabled = true
 			}
 		}
@@ -780,68 +1101,272 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccCreateClientWithAddonsAndEmptyFields = `
+const testAccUpdateClientWithAddonsThatRequireNoConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
 	app_type = "sso_integration"
 
 	addons {
-		firebase = {
-			client_email = "john.doe@example.com"
-			lifetime_in_seconds = 1
-			private_key = "wer"
-			private_key_id = "qwreerwerwe"
-		}
-
-		samlp {
-			issuer = "https://tableau-server-test.domain.eu.com/api/v3"
-			audience = "https://tableau-server-test.domain.eu.com/audience-different"
-			destination = "https://tableau-server-test.domain.eu.com/destination"
-			digest_algorithm = "sha256"
-			lifetime_in_seconds = 3600
-			name_identifier_format = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-			name_identifier_probes = []
-			create_upn_claim = false
-			passthrough_claims_with_no_mapping = false
-			map_unknown_claims_as_is = false
-			map_identities = false
-			recipient = "https://tableau-server-test.domain.eu.com/recipient-different"
-			signing_cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
-			mappings = {}
-			logout = {}
-		}
+		box {}
+		cloudbees {}
+		concur {}
+		dropbox {}
+		wsfed {}
 	}
 }
 `
 
-const testAccCreateClientWithAddonsRemovedFromConfig = `
+const testAccUpdateClientWithAddonsRemoved = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
 	app_type = "sso_integration"
 
-	# Unfortunately we can't set firebase and
-	# samlp addons set above, to empty.
-	# This is because we don't have properly
-	# defined structs for them in the Go SDK
-	# and neither here in the terraform provider.
+	addons {}
 }
 `
 
-func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
+func TestAccClientAddons(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccCreateClientWithAddons, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithAddonsAWS, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.%", "4"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.client_email", "john.doe@example.com"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.lifetime_in_seconds", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key", "wer"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key_id", "qwreerwerwe"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.principal", "arn:aws:iam::010616021751:saml-provider/idpname"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.role", "arn:aws:iam::010616021751:role/foo"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.0.lifetime_in_seconds", "32000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsAzureBlob, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.account_name", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.storage_access_key", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_name", "my-container"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_name", "my-blob"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.expiration", "10"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.signed_identifier", "id123"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_read", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_write", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.blob_delete", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_read", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_write", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_delete", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.0.container_list", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsAzureSB, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.namespace", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.sas_key_name", "my-policy"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.sas_key", "my-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.entity_path", "my-queue"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.0.expiration", "10"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsRMS, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.rms.0.url", "https://example.com"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsMSCRM, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.mscrm.0.url", "https://example.com"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSlack, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.slack.0.team", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSentry, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sentry.0.org_slug", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sentry.0.base_url", ""),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsEchoSign, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.echosign.0.domain", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsEgnyte, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.egnyte.0.domain", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsFirebase, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.secret", "secret"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.private_key_id", "private-key-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.private_key", "private-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.client_email", "service-account"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.0.lifetime_in_seconds", "7200"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsNewRelic, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.newrelic.0.account", "123456"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsOffice365, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.office365.0.domain", "acmeorg"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.office365.0.connection", "Username-Password-Authentication"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSalesforce, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce.0.entity_id", "https://acme-org.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.community_name", "community-name"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.0.community_url_section", "community-url-section"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce.0.entity_id", "https://acme-org.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_name", "community-name"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.0.community_url_section", "community-url-section"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsLayer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.provider_id", "provider-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.key_id", "key-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.private_key", "private-key"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.principal", "principal"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.0.expiration", "10"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSAPAPI, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.client_id", "client-id"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.username_attribute", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.token_endpoint_url", "https://example.com"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.scope", "use:api"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.service_password", "123456"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSharepoint, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sharepoint.0.url", "https://example.com:123"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sharepoint.0.external_url.0", "https://example.com/v2"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSpringCM, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.springcm.0.acs_url", "https://example.com"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsWAMS, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wams.0.master_key", "master-key"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsZendesk, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.zendesk.0.account_name", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsZoom, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.zoom.0.account", "acmeorg"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsSSOIntegration, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sso_integration.0.name", "my-sso"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sso_integration.0.version", "0.1.0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLP, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://tableau-server-test.domain.eu.com/api/v1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://tableau-server-test.domain.eu.com/audience-different"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "https://tableau-server-test.domain.eu.com/destination"),
@@ -854,53 +1379,41 @@ func TestAccClientSSOIntegrationWithSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "https://tableau-server-test.domain.eu.com/recipient-different"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", "rsa-sha256"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.authn_context_class_ref", "context"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.binding", "binding"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.%", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.email", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.name", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.%", "2"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.callback", "https://example.com/callback"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.slo_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.callback", "https://example.com/callback"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.slo_enabled", "true"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccCreateClientWithAddonsAndEmptyFields, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsRemoved, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.%", "4"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.client_email", "john.doe@example.com"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.lifetime_in_seconds", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key", "wer"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.private_key_id", "qwreerwerwe"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.issuer", "https://tableau-server-test.domain.eu.com/api/v3"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.audience", "https://tableau-server-test.domain.eu.com/audience-different"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.destination", "https://tableau-server-test.domain.eu.com/destination"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha256"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.lifetime_in_seconds", "3600"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_probes.#", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "false"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "false"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "false"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.recipient", "https://tableau-server-test.domain.eu.com/recipient-different"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signing_cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.%", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.%", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "0"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccCreateClientWithAddonsRemovedFromConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithAddonsThatRequireNoConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.%", "4"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.box.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.cloudbees.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "1"),
 				),
 			},
 		},

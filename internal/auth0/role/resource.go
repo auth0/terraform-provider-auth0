@@ -81,14 +81,14 @@ func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	api := m.(*config.Config).GetAPI()
 
 	role := expandRole(d)
-	if err := api.Role.Create(role); err != nil {
+	if err := api.Role.Create(ctx, role); err != nil {
 		return diag.FromErr(err)
 	}
 
 	d.SetId(role.GetID())
 
 	d.Partial(true)
-	if err := assignRolePermissions(d, m); err != nil {
+	if err := assignRolePermissions(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 	d.Partial(false)
@@ -96,10 +96,10 @@ func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readRole(ctx, d, m)
 }
 
-func readRole(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	role, err := api.Role.Read(d.Id())
+	role, err := api.Role.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -116,7 +116,7 @@ func readRole(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	var permissions []*management.Permission
 	var page int
 	for {
-		permissionList, err := api.Role.Permissions(d.Id(), management.Page(page))
+		permissionList, err := api.Role.Permissions(ctx, d.Id(), management.Page(page))
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -142,12 +142,12 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	api := m.(*config.Config).GetAPI()
 
 	role := expandRole(d)
-	if err := api.Role.Update(d.Id(), role); err != nil {
+	if err := api.Role.Update(ctx, d.Id(), role); err != nil {
 		return diag.FromErr(err)
 	}
 
 	d.Partial(true)
-	if err := assignRolePermissions(d, m); err != nil {
+	if err := assignRolePermissions(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 	d.Partial(false)
@@ -155,10 +155,10 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readRole(ctx, d, m)
 }
 
-func deleteRole(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Role.Delete(d.Id()); err != nil {
+	if err := api.Role.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -179,17 +179,8 @@ func expandRole(d *schema.ResourceData) *management.Role {
 	}
 }
 
-func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
+func assignRolePermissions(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	toAdd, toRemove := value.Difference(d, "permissions")
-
-	var addPermissions []*management.Permission
-	for _, addPermission := range toAdd {
-		permission := addPermission.(map[string]interface{})
-		addPermissions = append(addPermissions, &management.Permission{
-			Name:                     auth0.String(permission["name"].(string)),
-			ResourceServerIdentifier: auth0.String(permission["resource_server_identifier"].(string)),
-		})
-	}
 
 	var rmPermissions []*management.Permission
 	for _, rmPermission := range toRemove {
@@ -200,16 +191,25 @@ func assignRolePermissions(d *schema.ResourceData, m interface{}) error {
 		})
 	}
 
+	var addPermissions []*management.Permission
+	for _, addPermission := range toAdd {
+		permission := addPermission.(map[string]interface{})
+		addPermissions = append(addPermissions, &management.Permission{
+			Name:                     auth0.String(permission["name"].(string)),
+			ResourceServerIdentifier: auth0.String(permission["resource_server_identifier"].(string)),
+		})
+	}
+
 	api := m.(*config.Config).GetAPI()
 
 	if len(rmPermissions) > 0 {
-		if err := api.Role.RemovePermissions(d.Id(), rmPermissions); err != nil {
+		if err := api.Role.RemovePermissions(ctx, d.Id(), rmPermissions); err != nil {
 			return err
 		}
 	}
 
 	if len(addPermissions) > 0 {
-		if err := api.Role.AssociatePermissions(d.Id(), addPermissions); err != nil {
+		if err := api.Role.AssociatePermissions(ctx, d.Id(), addPermissions); err != nil {
 			return err
 		}
 	}

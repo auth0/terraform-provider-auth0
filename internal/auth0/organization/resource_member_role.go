@@ -63,7 +63,7 @@ func createOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	if err := api.Organization.AssignMemberRoles(organizationID, userID, []string{roleID}); err != nil {
+	if err := api.Organization.AssignMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
 		}
@@ -76,13 +76,13 @@ func createOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	return readOrganizationMemberRole(ctx, data, meta)
 }
 
-func readOrganizationMemberRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	memberRoles, err := api.Organization.MemberRoles(organizationID, userID)
+	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -107,14 +107,14 @@ func readOrganizationMemberRole(_ context.Context, data *schema.ResourceData, me
 	return nil
 }
 
-func deleteOrganizationMemberRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	if err := api.Organization.DeleteMemberRoles(organizationID, userID, []string{roleID}); err != nil {
+	if err := api.Organization.DeleteMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
 		}

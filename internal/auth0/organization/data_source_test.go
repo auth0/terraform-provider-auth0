@@ -16,6 +16,7 @@ resource "auth0_user" "user" {
 	connection_name = "Username-Password-Authentication"
 	email           = "{{.testName}}@auth0.com"
 	password        = "MyPass123$"
+	username        = "{{.testName}}"
 }
 
 resource "auth0_connection" "my_connection" {

@@ -26,7 +26,7 @@ const testAccActionConfigUpdateAllFields = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
 	code = "exports.onContinuePostLogin = async (event, api) => {};"
-	runtime = "node18"
+	runtime = "node16"
 	deploy = true
 
 	supported_triggers {
@@ -109,7 +109,7 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "false"),
 					resource.TestCheckNoResourceAttr("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
@@ -122,7 +122,7 @@ func TestAccAction(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {};"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "true"),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
@@ -141,7 +141,7 @@ func TestAccAction(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "true"),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
@@ -164,7 +164,7 @@ func TestAccAction(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_action.my_action", "name", fmt.Sprintf("Test Action %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onContinuePostLogin = async (event, api) => {\n\tconsole.log(event)\n};\"\n"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
 					resource.TestCheckResourceAttrSet("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.0.id", "post-login"),

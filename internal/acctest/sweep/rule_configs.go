@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
@@ -13,12 +14,14 @@ func RuleConfigs() {
 	resource.AddTestSweepers("auth0_rule_config", &resource.Sweeper{
 		Name: "auth0_rule_config",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
 			}
 
-			configurations, err := api.RuleConfig.List()
+			configurations, err := api.RuleConfig.List(ctx)
 			if err != nil {
 				return err
 			}
@@ -29,7 +32,7 @@ func RuleConfigs() {
 				if strings.Contains(c.GetKey(), "test") {
 					result = multierror.Append(
 						result,
-						api.RuleConfig.Delete(c.GetKey()),
+						api.RuleConfig.Delete(ctx, c.GetKey()),
 					)
 					log.Printf("[DEBUG] ✗ %s", c.GetKey())
 				}

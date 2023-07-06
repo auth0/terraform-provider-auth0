@@ -78,7 +78,7 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
-	if err := api.Organization.Create(organization); err != nil {
+	if err := api.Organization.Create(ctx, organization); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -87,10 +87,10 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	return readOrganization(ctx, d, m)
 }
 
-func readOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	organization, err := api.Organization.Read(d.Id())
+	organization, err := api.Organization.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -113,17 +113,17 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
-	if err := api.Organization.Update(d.Id(), organization); err != nil {
+	if err := api.Organization.Update(ctx, d.Id(), organization); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readOrganization(ctx, d, m)
 }
 
-func deleteOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Organization.Delete(d.Id()); err != nil {
+	if err := api.Organization.Delete(ctx, d.Id()); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

@@ -63,7 +63,7 @@ func createRolePermission(ctx context.Context, data *schema.ResourceData, meta i
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	if err := api.Role.AssociatePermissions(roleID, []*management.Permission{
+	if err := api.Role.AssociatePermissions(ctx, roleID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerID,
 			Name:                     &permissionName,
@@ -81,14 +81,14 @@ func createRolePermission(ctx context.Context, data *schema.ResourceData, meta i
 	return readRolePermission(ctx, data, meta)
 }
 
-func readRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	existingPermissions, err := api.Role.Permissions(roleID)
+	existingPermissions, err := api.Role.Permissions(ctx, roleID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -113,7 +113,7 @@ func readRolePermission(_ context.Context, data *schema.ResourceData, meta inter
 	return nil
 }
 
-func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
@@ -121,6 +121,7 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
 	if err := api.Role.RemovePermissions(
+		ctx,
 		roleID,
 		[]*management.Permission{
 			{

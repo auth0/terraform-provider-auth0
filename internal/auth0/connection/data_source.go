@@ -48,6 +48,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	page := 0
 	for {
 		connections, err := api.Connection.List(
+			ctx,
 			management.IncludeFields("id", "name"),
 			management.Page(page),
 		)

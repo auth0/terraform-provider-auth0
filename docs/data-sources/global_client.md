@@ -62,34 +62,208 @@ data "auth0_global_client" "global" {}
 
 Read-Only:
 
-- `aws` (Map of String)
-- `azure_blob` (Map of String)
-- `azure_sb` (Map of String)
-- `box` (Map of String)
-- `cloudbees` (Map of String)
-- `concur` (Map of String)
-- `dropbox` (Map of String)
-- `echosign` (Map of String)
-- `egnyte` (Map of String)
-- `firebase` (Map of String)
-- `layer` (Map of String)
-- `mscrm` (Map of String)
-- `newrelic` (Map of String)
-- `office365` (Map of String)
-- `rms` (Map of String)
-- `salesforce` (Map of String)
-- `salesforce_api` (Map of String)
-- `salesforce_sandbox_api` (Map of String)
+- `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
+- `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
+- `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
+- `box` (List of Object) (see [below for nested schema](#nestedobjatt--addons--box))
+- `cloudbees` (List of Object) (see [below for nested schema](#nestedobjatt--addons--cloudbees))
+- `concur` (List of Object) (see [below for nested schema](#nestedobjatt--addons--concur))
+- `dropbox` (List of Object) (see [below for nested schema](#nestedobjatt--addons--dropbox))
+- `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
+- `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
+- `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
+- `layer` (List of Object) (see [below for nested schema](#nestedobjatt--addons--layer))
+- `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
+- `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
+- `office365` (List of Object) (see [below for nested schema](#nestedobjatt--addons--office365))
+- `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
+- `salesforce` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce))
+- `salesforce_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_api))
+- `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
 - `samlp` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp))
-- `sap_api` (Map of String)
-- `sentry` (Map of String)
-- `sharepoint` (Map of String)
-- `slack` (Map of String)
-- `springcm` (Map of String)
-- `wams` (Map of String)
-- `wsfed` (Map of String)
-- `zendesk` (Map of String)
-- `zoom` (Map of String)
+- `sap_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sap_api))
+- `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
+- `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
+- `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
+- `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
+- `sso_integration` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sso_integration))
+- `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
+- `wsfed` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wsfed))
+- `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
+- `zoom` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zoom))
+
+<a id="nestedobjatt--addons--aws"></a>
+### Nested Schema for `addons.aws`
+
+Read-Only:
+
+- `lifetime_in_seconds` (Number)
+- `principal` (String)
+- `role` (String)
+
+
+<a id="nestedobjatt--addons--azure_blob"></a>
+### Nested Schema for `addons.azure_blob`
+
+Read-Only:
+
+- `account_name` (String)
+- `blob_delete` (Boolean)
+- `blob_name` (String)
+- `blob_read` (Boolean)
+- `blob_write` (Boolean)
+- `container_delete` (Boolean)
+- `container_list` (Boolean)
+- `container_name` (String)
+- `container_read` (Boolean)
+- `container_write` (Boolean)
+- `expiration` (Number)
+- `signed_identifier` (String)
+- `storage_access_key` (String)
+
+
+<a id="nestedobjatt--addons--azure_sb"></a>
+### Nested Schema for `addons.azure_sb`
+
+Read-Only:
+
+- `entity_path` (String)
+- `expiration` (Number)
+- `namespace` (String)
+- `sas_key` (String)
+- `sas_key_name` (String)
+
+
+<a id="nestedobjatt--addons--box"></a>
+### Nested Schema for `addons.box`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--cloudbees"></a>
+### Nested Schema for `addons.cloudbees`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--concur"></a>
+### Nested Schema for `addons.concur`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--dropbox"></a>
+### Nested Schema for `addons.dropbox`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--echosign"></a>
+### Nested Schema for `addons.echosign`
+
+Read-Only:
+
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--egnyte"></a>
+### Nested Schema for `addons.egnyte`
+
+Read-Only:
+
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--firebase"></a>
+### Nested Schema for `addons.firebase`
+
+Read-Only:
+
+- `client_email` (String)
+- `lifetime_in_seconds` (Number)
+- `private_key` (String)
+- `private_key_id` (String)
+- `secret` (String)
+
+
+<a id="nestedobjatt--addons--layer"></a>
+### Nested Schema for `addons.layer`
+
+Read-Only:
+
+- `expiration` (Number)
+- `key_id` (String)
+- `principal` (String)
+- `private_key` (String)
+- `provider_id` (String)
+
+
+<a id="nestedobjatt--addons--mscrm"></a>
+### Nested Schema for `addons.mscrm`
+
+Read-Only:
+
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--newrelic"></a>
+### Nested Schema for `addons.newrelic`
+
+Read-Only:
+
+- `account` (String)
+
+
+<a id="nestedobjatt--addons--office365"></a>
+### Nested Schema for `addons.office365`
+
+Read-Only:
+
+- `connection` (String)
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--rms"></a>
+### Nested Schema for `addons.rms`
+
+Read-Only:
+
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--salesforce"></a>
+### Nested Schema for `addons.salesforce`
+
+Read-Only:
+
+- `entity_id` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_api"></a>
+### Nested Schema for `addons.salesforce_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_sandbox_api"></a>
+### Nested Schema for `addons.salesforce_sandbox_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
+
 
 <a id="nestedobjatt--addons--samlp"></a>
 ### Nested Schema for `addons.samlp`
@@ -105,7 +279,7 @@ Read-Only:
 - `include_attribute_name_format` (Boolean)
 - `issuer` (String)
 - `lifetime_in_seconds` (Number)
-- `logout` (Map of String)
+- `logout` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp--logout))
 - `map_identities` (Boolean)
 - `map_unknown_claims_as_is` (Boolean)
 - `mappings` (Map of String)
@@ -117,6 +291,102 @@ Read-Only:
 - `signature_algorithm` (String)
 - `signing_cert` (String)
 - `typed_attributes` (Boolean)
+
+<a id="nestedobjatt--addons--samlp--logout"></a>
+### Nested Schema for `addons.samlp.logout`
+
+Read-Only:
+
+- `callback` (String)
+- `slo_enabled` (Boolean)
+
+
+
+<a id="nestedobjatt--addons--sap_api"></a>
+### Nested Schema for `addons.sap_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `name_identifier_format` (String)
+- `scope` (String)
+- `service_password` (String)
+- `token_endpoint_url` (String)
+- `username_attribute` (String)
+
+
+<a id="nestedobjatt--addons--sentry"></a>
+### Nested Schema for `addons.sentry`
+
+Read-Only:
+
+- `base_url` (String)
+- `org_slug` (String)
+
+
+<a id="nestedobjatt--addons--sharepoint"></a>
+### Nested Schema for `addons.sharepoint`
+
+Read-Only:
+
+- `external_url` (List of String)
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--slack"></a>
+### Nested Schema for `addons.slack`
+
+Read-Only:
+
+- `team` (String)
+
+
+<a id="nestedobjatt--addons--springcm"></a>
+### Nested Schema for `addons.springcm`
+
+Read-Only:
+
+- `acs_url` (String)
+
+
+<a id="nestedobjatt--addons--sso_integration"></a>
+### Nested Schema for `addons.sso_integration`
+
+Read-Only:
+
+- `name` (String)
+- `version` (String)
+
+
+<a id="nestedobjatt--addons--wams"></a>
+### Nested Schema for `addons.wams`
+
+Read-Only:
+
+- `master_key` (String)
+
+
+<a id="nestedobjatt--addons--wsfed"></a>
+### Nested Schema for `addons.wsfed`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--zendesk"></a>
+### Nested Schema for `addons.zendesk`
+
+Read-Only:
+
+- `account_name` (String)
+
+
+<a id="nestedobjatt--addons--zoom"></a>
+### Nested Schema for `addons.zoom`
+
+Read-Only:
+
+- `account` (String)
 
 
 

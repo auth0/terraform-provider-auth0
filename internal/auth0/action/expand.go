@@ -1,6 +1,7 @@
 package action
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
@@ -96,12 +97,12 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	return triggerBindings
 }
 
-func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Management) diag.Diagnostics {
+func preventErasingUnmanagedSecrets(ctx context.Context, d *schema.ResourceData, api *management.Management) diag.Diagnostics {
 	if !d.HasChange("secrets") {
 		return nil
 	}
 
-	preUpdateAction, err := api.Action.Read(d.Id())
+	preUpdateAction, err := api.Action.Read(ctx, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}

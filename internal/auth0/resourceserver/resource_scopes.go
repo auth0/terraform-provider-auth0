@@ -62,7 +62,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
-	existingResourceServer, err := api.ResourceServer.Read(resourceServerIdentifier)
+	existingResourceServer, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -85,7 +85,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 		return diagnostics
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, updatedResourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, updatedResourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -99,10 +99,10 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	return readResourceServerScopes(ctx, data, meta)
 }
 
-func readResourceServerScopes(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readResourceServerScopes(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	resourceServer, err := api.ResourceServer.Read(data.Id())
+	resourceServer, err := api.ResourceServer.Read(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -129,7 +129,7 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, updatedResourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, updatedResourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -141,14 +141,14 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	return readResourceServerScopes(ctx, data, meta)
 }
 
-func deleteResourceServerScopes(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteResourceServerScopes(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServer := &management.ResourceServer{
 		Scopes: &[]management.ResourceServerScope{},
 	}
 
-	if err := api.ResourceServer.Update(data.Id(), resourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil

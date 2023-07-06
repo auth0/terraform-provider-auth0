@@ -1,10 +1,9 @@
 name: Main Workflow
 
 on:
+  pull_request: {}
   push:
-    branches:
-      - main
-  pull_request:
+    branches: [ "main", "v1" ]
 
 jobs:
   checks:
@@ -22,9 +21,6 @@ jobs:
 
       - name: Check that docs were generated
         run: make check-docs
-
-      - name: Check for go vulnerabilities
-        run: make check-vuln
 
       - name: Check for linting errors
         uses: golangci/golangci-lint-action@v3

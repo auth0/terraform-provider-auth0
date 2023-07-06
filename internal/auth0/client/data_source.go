@@ -50,6 +50,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 	var page int
 	for {
 		clients, err := api.Client.List(
+			ctx,
 			management.IncludeFields("client_id", "name"),
 			management.Page(page),
 		)

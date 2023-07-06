@@ -12,8 +12,8 @@ import (
 
 const testAccDataSourceCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type = "auth0_managed_certs"
+	domain     = "{{.testName}}.auth.terraform-provider-auth0.com"
+	type       = "auth0_managed_certs"
 	tls_policy = "recommended"
 }
 
@@ -26,7 +26,6 @@ func TestAccDataSourceCustomDomain(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
 				Config: acctest.ParseTestName(testAccDataSourceCustomDomain, testName),

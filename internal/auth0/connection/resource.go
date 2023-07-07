@@ -27,7 +27,7 @@ func NewResource() *schema.Resource {
 			"passwordless authentication methods. This resource allows you to configure " +
 			"and manage connections to be used with your clients and users.",
 		Schema:        resourceSchema,
-		SchemaVersion: 2,
+		SchemaVersion: 0,
 	}
 }
 

@@ -1,5 +1,88 @@
 # Migration Guide
 
+## Upgrading from v0.49.0 → v0.50.0
+
+There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
+automated workflows before upgrading.
+
+### Deprecations
+
+- [Auth0 Pages](#auth0-pages)
+
+#### Auth0 Pages
+
+The `custom_login_page` on the `auth0_global_client` and the `change_password`, `guardian_mfa_page` and `error_page`
+fields on the `auth0_tenant` have been deprecated in favour of managing them on a brand new `auth0_pages` resource.
+To ensure a smooth transition when we eventually remove the capability to manage the custom 
+Auth0 pages through the `auth0_global_client` and `auth0_tenant` resources, we recommend proactively migrating to the 
+newly introduced `auth0_pages` resource. This will help you stay prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.49.0)</th>
+<th>After (v0.50.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource "auth0_global_client" "global" {
+  custom_login_page_on = true
+  custom_login_page    = "<html>My Custom Login Page</html>"
+}
+
+resource "auth0_tenant" "my_tenant" {
+  change_password {
+    enabled = true
+    html    = "<html>My Custom Reset Password Page</html>"
+  }
+
+  guardian_mfa_page {
+    enabled = true
+    html    = "<html>My Custom MFA Page</html>"
+  }
+
+  error_page {
+    html          = "<html>My Custom Error Page</html>"
+    show_log_link = true
+    url           = "https://example.com/errors"
+  }
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource "auth0_pages" "my_pages" {
+  login {
+    enabled = true
+    html    = "<html><body>My Custom Login Page</body></html>"
+  }
+
+  change_password {
+    enabled = true
+    html    = "<html><body>My Custom Reset Password Page</body></html>"
+  }
+
+  guardian_mfa {
+    enabled = true
+    html    = "<html><body>My Custom MFA Page</body></html>"
+  }
+
+  error {
+    show_log_link = true
+    html          = "<html><body>My Custom Error Page</body></html>"
+    url           = "https://example.com"
+  }
+}
+```
+
+</td>
+</tr>
+</table>
+
+
 ## Upgrading from v0.48.0 → v0.49.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential

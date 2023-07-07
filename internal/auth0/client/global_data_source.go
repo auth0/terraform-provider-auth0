@@ -15,6 +15,9 @@ func NewGlobalDataSource() *schema.Resource {
 		ReadContext: readDataGlobalClient,
 		Schema:      globalDataSourceSchema(),
 		Description: "Retrieve a tenant's global Auth0 application client.",
+		DeprecationMessage: "This resource has been deprecated in favour of the newly introduced `auth0_pages` " +
+			"resource and it will be removed in a future version." +
+			"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info.",
 	}
 }
 

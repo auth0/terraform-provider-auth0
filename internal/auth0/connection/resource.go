@@ -28,18 +28,6 @@ func NewResource() *schema.Resource {
 			"and manage connections to be used with your clients and users.",
 		Schema:        resourceSchema,
 		SchemaVersion: 2,
-		StateUpgraders: []schema.StateUpgrader{
-			{
-				Type:    connectionSchemaV0().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV0,
-				Version: 0,
-			},
-			{
-				Type:    connectionSchemaV1().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV1,
-				Version: 1,
-			},
-		},
 	}
 }
 

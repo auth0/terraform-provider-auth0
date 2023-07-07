@@ -54,7 +54,7 @@ resource "auth0_pages" "my_pages" {
 
 Required:
 
-- `enabled` (Boolean) Indicates whether to use the custom Reset Password HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.
+- `enabled` (Boolean) Indicates whether to use the custom Reset Password HTML (`true`) or the default Auth0 page (`false`).
 - `html` (String) Customized content for the Reset Password page. HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).
 
 
@@ -63,11 +63,11 @@ Required:
 
 Required:
 
-- `html` (String) Customized content for the Error page. HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).
-- `show_log_link` (Boolean) Indicates whether to show the link to logs as part of the default error page. Defaults to `true`.
+- `show_log_link` (Boolean) Indicates whether to show the link to logs as part of the default error page.
 
 Optional:
 
+- `html` (String) Customized content for the Error page. HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).
 - `url` (String) URL to redirect to when an error occurs, instead of showing the default error page.
 
 
@@ -76,7 +76,7 @@ Optional:
 
 Required:
 
-- `enabled` (Boolean) Indicates whether to use the custom Guardian MFA HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.
+- `enabled` (Boolean) Indicates whether to use the custom Guardian MFA HTML (`true`) or the default Auth0 page (`false`).
 - `html` (String) Customized content for the Guardian MFA page. HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).
 
 
@@ -85,7 +85,7 @@ Required:
 
 Required:
 
-- `enabled` (Boolean) Indicates whether to use the custom Login page HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.
+- `enabled` (Boolean) Indicates whether to use the custom Login page HTML (`true`) or the default Auth0 page (`false`).
 - `html` (String) Customized content for the Login page. HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).
 
 ## Import

@@ -408,7 +408,7 @@ func NewResource() *schema.Resource {
 
 func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	d.SetId(id.UniqueId())
-	return updateTenant(ctx, d, m)
+	return readTenant(ctx, d, m)
 }
 
 func readTenant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

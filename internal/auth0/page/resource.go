@@ -40,7 +40,7 @@ func NewResource() *schema.Resource {
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: "Indicates whether to use the custom Login page HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.",
+							Description: "Indicates whether to use the custom Login page HTML (`true`) or the default Auth0 page (`false`).",
 						},
 						"html": {
 							Type:     schema.TypeString,
@@ -62,7 +62,7 @@ func NewResource() *schema.Resource {
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: "Indicates whether to use the custom Reset Password HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.",
+							Description: "Indicates whether to use the custom Reset Password HTML (`true`) or the default Auth0 page (`false`).",
 						},
 						"html": {
 							Type:     schema.TypeString,
@@ -84,7 +84,7 @@ func NewResource() *schema.Resource {
 						"enabled": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: "Indicates whether to use the custom Guardian MFA HTML (`true`) or the default Auth0 page (`false`). Defaults to `false`.",
+							Description: "Indicates whether to use the custom Guardian MFA HTML (`true`) or the default Auth0 page (`false`).",
 						},
 						"html": {
 							Type:     schema.TypeString,
@@ -105,14 +105,14 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"html": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 							Description: "Customized content for the Error page. " +
 								"HTML format with supported [Liquid syntax](https://github.com/Shopify/liquid/wiki/Liquid-for-Designers).",
 						},
 						"show_log_link": {
 							Type:        schema.TypeBool,
 							Required:    true,
-							Description: "Indicates whether to show the link to logs as part of the default error page. Defaults to `true`.",
+							Description: "Indicates whether to show the link to logs as part of the default error page.",
 						},
 						"url": {
 							Type:         schema.TypeString,
@@ -204,6 +204,7 @@ func deletePages(_ context.Context, _ *schema.ResourceData, meta interface{}) di
 		ErrorPage: &management.TenantErrorPage{
 			ShowLogLink: auth0.Bool(false),
 			URL:         auth0.String(""),
+			HTML:        auth0.String(""),
 		},
 		GuardianMFAPage: &management.TenantGuardianMFAPage{
 			Enabled: auth0.Bool(false),

@@ -7,15 +7,18 @@ automated workflows before upgrading.
 
 ### Deprecations
 
-- [Auth0 Pages](#auth0-pages)
+- [Auth0 Global Client](#auth0-global-client)
+- [Auth0 Tenant Pages](#auth0-tenant-pages)
 
-#### Auth0 Pages
+#### Auth0 Global Client
 
-The `custom_login_page` on the `auth0_global_client` and the `change_password`, `guardian_mfa_page` and `error_page`
-fields on the `auth0_tenant` have been deprecated in favour of managing them on a brand new `auth0_pages` resource.
+The `auth0_global_client` resource and data source were introduced primarily to allow managing the `custom_login_page`
+and `custom_login_page_on` attributes in order to manage the custom login page of a tenant. These are now deprecated in
+favour of the `auth0_pages` resource.
+
 To ensure a smooth transition when we eventually remove the capability to manage the custom 
-Auth0 pages through the `auth0_global_client` and `auth0_tenant` resources, we recommend proactively migrating to the 
-newly introduced `auth0_pages` resource. This will help you stay prepared for future changes.
+login page through the `auth0_global_client`, we recommend proactively migrating to the `auth0_pages` resource. 
+This will help you stay prepared for future changes.
 
 <table>
 <tr>
@@ -30,7 +33,42 @@ resource "auth0_global_client" "global" {
   custom_login_page_on = true
   custom_login_page    = "<html>My Custom Login Page</html>"
 }
+```
 
+</td>
+<td>
+
+```terraform
+resource "auth0_pages" "my_pages" {
+  login {
+    enabled = true
+    html    = "<html><body>My Custom Login Page</body></html>"
+  }
+}
+```
+
+</td>
+</tr>
+</table>
+
+#### Auth0 Tenant Pages
+
+The `change_password`, `guardian_mfa_page` and `error_page` attributes on the `auth0_tenant` have been deprecated in
+favour of managing them with the `auth0_pages` resource. 
+
+To ensure a smooth transition when we eventually remove the capability to manage these custom Auth0 pages through the
+`auth0_tenant` resource, we recommend proactively migrating to the `auth0_pages` resource. This will help you stay
+prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.49.0)</th>
+<th>After (v0.50.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
 resource "auth0_tenant" "my_tenant" {
   change_password {
     enabled = true
@@ -55,11 +93,6 @@ resource "auth0_tenant" "my_tenant" {
 
 ```terraform
 resource "auth0_pages" "my_pages" {
-  login {
-    enabled = true
-    html    = "<html><body>My Custom Login Page</body></html>"
-  }
-
   change_password {
     enabled = true
     html    = "<html><body>My Custom Reset Password Page</body></html>"

@@ -18,7 +18,7 @@ import (
 )
 
 var errNoCustomDomain = fmt.Errorf(
-	"managing the universal login body through the 'auth0_branding' resource requires at least one custom domain " +
+	"managing the Universal Login body through the 'auth0_branding' resource requires at least one custom domain " +
 		"to be configured for the tenant.\n\nUse the 'auth0_custom_domain' resource to set one up",
 )
 

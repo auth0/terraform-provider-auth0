@@ -112,7 +112,7 @@ func TestAccBranding(t *testing.T) {
 			{
 				Config: testAccTenantDisallowsUniversalLoginCustomizationWhenNoCustomDomainSet,
 				ExpectError: regexp.MustCompile(
-					"managing the universal login body through the 'auth0_branding' resource " +
+					"managing the Universal Login body through the 'auth0_branding' resource " +
 						"requires at least one custom domain to be configured for the tenant",
 				),
 			},

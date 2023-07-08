@@ -346,7 +346,8 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: "Configuration settings for Universal Login.",
+				Description: "Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource.",
+				Deprecated:  "These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"colors": {

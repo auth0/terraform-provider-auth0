@@ -86,7 +86,7 @@ resource "auth0_tenant" "my_tenant" {
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
-- `universal_login` (Block List, Max: 1) Configuration settings for Universal Login. (see [below for nested schema](#nestedblock--universal_login))
+- `universal_login` (Block List, Max: 1, Deprecated) Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. (see [below for nested schema](#nestedblock--universal_login))
 
 ### Read-Only
 

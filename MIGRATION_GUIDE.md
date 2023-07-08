@@ -9,6 +9,7 @@ automated workflows before upgrading.
 
 - [Auth0 Global Client](#auth0-global-client)
 - [Auth0 Tenant Pages](#auth0-tenant-pages)
+- [Auth0 Tenant Universal Login](#auth0-tenant-universal-login)
 
 #### Auth0 Global Client
 
@@ -115,6 +116,48 @@ resource "auth0_pages" "my_pages" {
 </tr>
 </table>
 
+#### Auth0 Tenant Universal Login
+
+The `universal_login` settings on the `auth0_tenant` have been deprecated in favour of managing them through the `auth0_branding` resource.
+
+To ensure a smooth transition when we eventually remove the capability to manage these settings through the
+`auth0_tenant` resource, we recommend proactively migrating to the `auth0_branding` resource. This will help you stay
+prepared for future changes.
+
+<table>
+<tr>
+<th>Before (v0.49.0)</th>
+<th>After (v0.50.0)</th>
+</tr>
+<tr>
+<td>
+
+```terraform
+resource "auth0_tenant" "my_tenant" {
+  universal_login {
+    colors {
+      primary         = "#0059d6"
+      page_background = "#000000"
+    }
+  }
+}
+```
+
+</td>
+<td>
+
+```terraform
+resource "auth0_branding" "my_branding" {
+  colors {
+    primary         = "#0059d6"
+    page_background = "#000000"
+  } 
+}
+```
+
+</td>
+</tr>
+</table>
 
 ## Upgrading from v0.48.0 → v0.49.0
 

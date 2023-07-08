@@ -39,7 +39,7 @@ data "auth0_tenant" "my_tenant" {}
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
-- `universal_login` (List of Object) Configuration settings for Universal Login. (see [below for nested schema](#nestedatt--universal_login))
+- `universal_login` (List of Object) Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. (see [below for nested schema](#nestedatt--universal_login))
 
 <a id="nestedatt--change_password"></a>
 ### Nested Schema for `change_password`

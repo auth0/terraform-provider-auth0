@@ -152,7 +152,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
-				Description: "Set of IDs of roles assigned to the user." +
+				Description: "Set of IDs of roles assigned to the user. " +
 					"Managing roles through this attribute is deprecated and it will be removed in a future major version. " +
 					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
 					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.",
@@ -163,7 +163,7 @@ func NewResource() *schema.Resource {
 			"permissions": {
 				Type:     schema.TypeSet,
 				Computed: true,
-				Description: "List of API permissions granted to the user." +
+				Description: "List of API permissions granted to the user. " +
 					"Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +
 					"Use the `auth0_user` data source instead.",
 				Deprecated: "Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +

@@ -57,7 +57,7 @@ resource "auth0_role" "my_role" {
 ### Optional
 
 - `description` (String) Description of the role.
-- `permissions` (Block Set, Deprecated) Configuration settings for permissions (scopes) attached to the role.Managing permissions through the `permissions` attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_role_permission` or `auth0_role_permissions` resource to manage role permissions instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#role-permissions) for more info. (see [below for nested schema](#nestedblock--permissions))
+- `permissions` (Block Set, Deprecated) Configuration settings for permissions (scopes) attached to the role. Managing permissions through the `permissions` attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_role_permission` or `auth0_role_permissions` resource to manage role permissions instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#role-permissions) for more info. (see [below for nested schema](#nestedblock--permissions))
 
 ### Read-Only
 

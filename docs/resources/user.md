@@ -51,7 +51,7 @@ resource "auth0_role" "admin" {
 - `phone_number` (String) Phone number for the user; follows the E.164 recommendation. Used for SMS connections.
 - `phone_verified` (Boolean) Indicates whether the phone number has been verified.
 - `picture` (String) Picture of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).
-- `roles` (Set of String, Deprecated) Set of IDs of roles assigned to the user.Managing roles through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.
+- `roles` (Set of String, Deprecated) Set of IDs of roles assigned to the user. Managing roles through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.
 - `user_id` (String) ID of the user.
 - `user_metadata` (String) Custom fields that store info about the user that does not impact a user's core functionality. Examples include work address, home address, and user preferences.
 - `username` (String) Username of the user. Only valid if the connection requires a username.
@@ -60,7 +60,7 @@ resource "auth0_role" "admin" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-- `permissions` (Set of Object, Deprecated) List of API permissions granted to the user.Reading permissions through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_user` data source instead. (see [below for nested schema](#nestedatt--permissions))
+- `permissions` (Set of Object, Deprecated) List of API permissions granted to the user. Reading permissions through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_user` data source instead. (see [below for nested schema](#nestedatt--permissions))
 
 <a id="nestedatt--permissions"></a>
 ### Nested Schema for `permissions`

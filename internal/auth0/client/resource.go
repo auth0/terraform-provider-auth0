@@ -553,7 +553,7 @@ func NewResource() *schema.Resource {
 				Description: "Defines the requested authentication method for the token endpoint. " +
 					"Options include `none` (public client without a client secret), " +
 					"`client_secret_post` (client uses HTTP POST parameters), " +
-					"`client_secret_basic` (client uses HTTP Basic)." +
+					"`client_secret_basic` (client uses HTTP Basic). " +
 					"Managing the authentication method through this attribute is deprecated and it will be " +
 					"removed in a future major version. Migrate to the `auth0_client_credentials` resource to " +
 					"manage a client's authentication method instead. Check the " +

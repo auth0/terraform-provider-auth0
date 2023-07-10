@@ -34,10 +34,10 @@ func NewResource() *schema.Resource {
 				MaxItems: 1,
 				Computed: true,
 				Description: "Configuration settings for change password page. This attribute is deprecated " +
-					"in favour of the `auth0_pages` resource and it will be removed in a future major" +
+					"in favor of the `auth0_pages` resource and it will be removed in a future major" +
 					"version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
-				Deprecated: "This attribute is deprecated in favour of the `auth0_pages` " +
-					"resource and it will be removed in a future major version." +
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
 					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -61,10 +61,10 @@ func NewResource() *schema.Resource {
 				MaxItems: 1,
 				Computed: true,
 				Description: "Configuration settings for the Guardian MFA page. This attribute is deprecated " +
-					"in favour of the `auth0_pages` resource and it will be removed in a future major" +
+					"in favor of the `auth0_pages` resource and it will be removed in a future major" +
 					"version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
-				Deprecated: "This attribute is deprecated in favour of the `auth0_pages` " +
-					"resource and it will be removed in a future major version." +
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
 					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,11 +102,11 @@ func NewResource() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				MaxItems: 1,
-				Description: "Configuration settings for error pages. This attribute is deprecated in favour " +
+				Description: "Configuration settings for error pages. This attribute is deprecated in favor " +
 					"of the `auth0_pages` resource and it will be removed in a future major version. " +
 					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
-				Deprecated: "This attribute is deprecated in favour of the `auth0_pages` " +
-					"resource and it will be removed in a future major version." +
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
 					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

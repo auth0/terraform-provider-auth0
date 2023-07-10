@@ -2,6 +2,7 @@ package client_test
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -59,6 +60,25 @@ func TestAccDataClientById(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_client.test", "name"),
 					resource.TestCheckResourceAttr("data.auth0_client.test", "signing_keys.#", "1"),
 					resource.TestCheckNoResourceAttr("data.auth0_client.test", "client_secret_rotation_trigger"),
+				),
+			},
+		},
+	})
+}
+
+const testAccDataSourceClientNonexistentID = `
+data "auth0_client" "test" {
+	client_id = "this-client-does-not-exist"
+}
+`
+
+func TestAccDataSourceClientNonexistentID(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceClientNonexistentID, t.Name()),
+				ExpectError: regexp.MustCompile(
+					`data source with that identifier not found \((404\))`,
 				),
 			},
 		},

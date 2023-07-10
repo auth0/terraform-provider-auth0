@@ -232,3 +232,24 @@ func TestAccDataResourceServerAuth0APIManagement(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataResourceServerNonexistentIdentifier = testAccGivenAResourceServer + `
+data "auth0_resource_server" "test" {
+	depends_on = [ auth0_resource_server.my_api ]
+
+	identifier = "this-resource-server-does-not-exist"
+}
+`
+
+func TestAccDataSourceResourceServerNonexistentIdentifier(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataResourceServerNonexistentIdentifier, t.Name()),
+				ExpectError: regexp.MustCompile(
+					"404 Not Found: The resource server does not exist",
+				),
+			},
+		},
+	})
+}

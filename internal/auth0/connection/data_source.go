@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -40,7 +41,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	connectionID := data.Get("connection_id").(string)
 	if connectionID != "" {
 		data.SetId(connectionID)
-		return readConnection(ctx, data, meta)
+		return auth0.CheckFor404Error(ctx, readConnection, data, meta)
 	}
 
 	api := meta.(*config.Config).GetAPI()
@@ -59,7 +60,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				return readConnection(ctx, data, meta)
+				return auth0.CheckFor404Error(ctx, readConnection, data, meta)
 			}
 		}
 

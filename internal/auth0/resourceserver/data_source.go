@@ -2,10 +2,8 @@ package resourceserver
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -49,10 +47,6 @@ func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceD
 	api := meta.(*config.Config).GetAPI()
 	resourceServer, err := api.ResourceServer.Read(ctx, resourceServerID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 

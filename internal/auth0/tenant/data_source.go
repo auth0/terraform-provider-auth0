@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -59,5 +60,5 @@ func readTenantForDataSource(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(result.ErrorOrNil())
 	}
 
-	return readTenant(ctx, data, meta)
+	return auth0.CheckFor404Error(ctx, readTenant, data, meta)
 }

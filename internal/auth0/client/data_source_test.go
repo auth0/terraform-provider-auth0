@@ -78,7 +78,7 @@ func TestAccDataSourceClientNonexistentID(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataSourceClientNonexistentID, t.Name()),
 				ExpectError: regexp.MustCompile(
-					`data source with that identifier not found \((404\))`,
+					"data source with that identifier not found /(404)/",
 				),
 			},
 		},

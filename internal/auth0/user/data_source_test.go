@@ -96,7 +96,7 @@ func TestAccDataSourceUserDoesNotExist(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataSourceUserDoesNotExist, testName),
 				ExpectError: regexp.MustCompile(
-					`data source with that identifier not found \((404\))`,
+					`no resource found with that identifier \((404\))`,
 				),
 			},
 		},

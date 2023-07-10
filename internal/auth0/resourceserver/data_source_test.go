@@ -247,7 +247,7 @@ func TestAccDataSourceResourceServerNonexistentIdentifier(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataResourceServerNonexistentIdentifier, t.Name()),
 				ExpectError: regexp.MustCompile(
-					"404 Not Found: The resource server does not exist",
+					`404 Not Found: The resource server does not exist`,
 				),
 			},
 		},

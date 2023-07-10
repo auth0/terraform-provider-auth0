@@ -16,7 +16,7 @@ func CheckFor404Error(ctx context.Context, readFunc func(ctx context.Context, d 
 		return diags
 	}
 	if d.Id() == "" {
-		return diag.FromErr(errors.New("data source with that identifier not found (404)"))
+		return diag.FromErr(errors.New("no resource found with that identifier (404)"))
 	}
 	return nil
 }

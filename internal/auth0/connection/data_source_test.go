@@ -115,7 +115,7 @@ func TestAccDataSourceConnectionNonexistentID(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataConnectionNonexistentID, t.Name()),
 				ExpectError: regexp.MustCompile(
-					`data source with that identifier not found \((404\))`,
+					`no resource found with that identifier \((404\))`,
 				),
 			},
 		},

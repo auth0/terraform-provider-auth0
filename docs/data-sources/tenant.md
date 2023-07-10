@@ -20,7 +20,7 @@ data "auth0_tenant" "my_tenant" {}
 ### Read-Only
 
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
-- `change_password` (List of Object) Configuration settings for change password page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future majorversion. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedatt--change_password))
+- `change_password` (List of Object) Configuration settings for change password page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedatt--change_password))
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
@@ -29,7 +29,7 @@ data "auth0_tenant" "my_tenant" {}
 - `error_page` (List of Object) Configuration settings for error pages. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedatt--error_page))
 - `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
 - `friendly_name` (String) Friendly name for the tenant.
-- `guardian_mfa_page` (List of Object) Configuration settings for the Guardian MFA page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future majorversion. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedatt--guardian_mfa_page))
+- `guardian_mfa_page` (List of Object) Configuration settings for the Guardian MFA page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedatt--guardian_mfa_page))
 - `id` (String) The ID of this resource.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.

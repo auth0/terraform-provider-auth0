@@ -557,12 +557,12 @@ func NewResource() *schema.Resource {
 					"Managing the authentication method through this attribute is deprecated and it will be " +
 					"removed in a future major version. Migrate to the `auth0_client_credentials` resource to " +
 					"manage a client's authentication method instead. Check the " +
-					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) " +
+					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) " +
 					"on how to do that.",
 				Deprecated: "Managing the authentication method through this attribute is deprecated and it will be " +
 					"changed to read-only in a future version. Migrate to the `auth0_client_credentials` resource to " +
 					"manage a client's authentication method instead. Check the " +
-					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) " +
+					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) " +
 					"on how to do that.",
 			},
 			"client_metadata": {

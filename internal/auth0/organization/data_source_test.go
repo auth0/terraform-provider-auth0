@@ -133,3 +133,22 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceOrganizationNonexistentID = testAccGivenAnOrganizationWithConnectionsAndMembers + `
+data "auth0_organization" "test" {
+	organization_id = "org_XXXXXXXXXXXXXXXX"
+}
+`
+
+func TestAccDataSourceOrganizationNonexistentID(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationNonexistentID, t.Name()),
+				ExpectError: regexp.MustCompile(
+					"404 Not Found: No organization found by that id or name",
+				),
+			},
+		},
+	})
+}

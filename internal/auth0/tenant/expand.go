@@ -26,9 +26,9 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		SessionLifetime:       &sessionLifetime,
 		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
-		ChangePassword:        expandTenantChangePassword(config.GetAttr("change_password")),
-		GuardianMFAPage:       expandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
-		ErrorPage:             expandTenantErrorPage(config.GetAttr("error_page")),
+		ChangePassword:        ExpandTenantChangePassword(config.GetAttr("change_password")),
+		GuardianMFAPage:       ExpandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
+		ErrorPage:             ExpandTenantErrorPage(config.GetAttr("error_page")),
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
 		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
@@ -41,7 +41,8 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 	return tenant
 }
 
-func expandTenantChangePassword(config cty.Value) *management.TenantChangePassword {
+// ExpandTenantChangePassword expands the change password page config.
+func ExpandTenantChangePassword(config cty.Value) *management.TenantChangePassword {
 	var changePassword management.TenantChangePassword
 
 	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
@@ -57,7 +58,8 @@ func expandTenantChangePassword(config cty.Value) *management.TenantChangePasswo
 	return &changePassword
 }
 
-func expandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFAPage {
+// ExpandTenantGuardianMFAPage expands the guardian mfa page config.
+func ExpandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFAPage {
 	var mfa management.TenantGuardianMFAPage
 
 	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
@@ -73,7 +75,8 @@ func expandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFA
 	return &mfa
 }
 
-func expandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
+// ExpandTenantErrorPage expands the error page config.
+func ExpandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
 	var errorPage management.TenantErrorPage
 
 	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {

@@ -16,6 +16,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
@@ -114,6 +115,7 @@ func New() *schema.Provider {
 			"auth0_organization_member_role":   organization.NewMemberRoleResource(),
 			"auth0_organization_member_roles":  organization.NewMemberRolesResource(),
 			"auth0_organization_members":       organization.NewMembersResource(),
+			"auth0_pages":                      page.NewResource(),
 			"auth0_prompt":                     prompt.NewResource(),
 			"auth0_prompt_custom_text":         prompt.NewCustomTextResource(),
 			"auth0_resource_server":            resourceserver.NewResource(),

@@ -50,10 +50,10 @@ func NewResource() *schema.Resource {
 				Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
 					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
 					"empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow " +
-					"managing it directly.",
+					"managing it directly or use the `auth0_client` data source to read this property.",
 				Deprecated: "Reading the client secret through this attribute is deprecated and it will be " +
 					"removed in a future version. Migrate to the `auth0_client_credentials` resource to " +
-					"manage a client's secret instead.",
+					"manage a client's secret instead or use the `auth0_client` data source to read this property.",
 			},
 			"client_secret_rotation_trigger": {
 				Type:     schema.TypeMap,
@@ -68,7 +68,7 @@ func NewResource() *schema.Resource {
 				Deprecated: "Rotating a client's secret through this attribute is deprecated and it will be removed" +
 					" in a future version. Migrate to the `auth0_client_credentials` resource to manage a client's " +
 					"secret instead. " +
-					"Refer to the [client secret rotation guide](Refer to the [client secret rotation guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation) " +
+					"Refer to the [client secret rotation guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation) " +
 					"for instructions on how to rotate client secrets with zero downtime.",
 			},
 			"client_aliases": {
@@ -553,7 +553,12 @@ func NewResource() *schema.Resource {
 				Description: "Defines the requested authentication method for the token endpoint. " +
 					"Options include `none` (public client without a client secret), " +
 					"`client_secret_post` (client uses HTTP POST parameters), " +
-					"`client_secret_basic` (client uses HTTP Basic).",
+					"`client_secret_basic` (client uses HTTP Basic)." +
+					"Managing the authentication method through this attribute is deprecated and it will be " +
+					"removed in a future major version. Migrate to the `auth0_client_credentials` resource to " +
+					"manage a client's authentication method instead. Check the " +
+					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) " +
+					"on how to do that.",
 				Deprecated: "Managing the authentication method through this attribute is deprecated and it will be " +
 					"changed to read-only in a future version. Migrate to the `auth0_client_credentials` resource to " +
 					"manage a client's authentication method instead. Check the " +

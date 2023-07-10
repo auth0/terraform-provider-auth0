@@ -24,7 +24,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 	dataSourceSchema["resource_server_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -36,6 +36,9 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["identifier"].Description = "The unique identifier for the resource server. " +
 		"If not provided, `resource_server_id` must be set."
 	dataSourceSchema["identifier"].AtLeastOneOf = []string{"resource_server_id", "identifier"}
+
+	dataSourceSchema["scopes"].Deprecated = ""
+	dataSourceSchema["scopes"].Description = "List of permissions (scopes) used by this resource server."
 
 	return dataSourceSchema
 }

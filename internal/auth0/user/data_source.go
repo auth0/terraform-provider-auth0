@@ -19,12 +19,17 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "user_id")
 	dataSourceSchema["user_id"].Required = true
 	dataSourceSchema["user_id"].Computed = false
 	dataSourceSchema["user_id"].Optional = false
+
+	dataSourceSchema["permissions"].Deprecated = ""
+	dataSourceSchema["permissions"].Description = "List of API permissions granted to the user."
+	dataSourceSchema["roles"].Deprecated = ""
+	dataSourceSchema["roles"].Description = "Set of IDs of roles assigned to the user."
 
 	return dataSourceSchema
 }

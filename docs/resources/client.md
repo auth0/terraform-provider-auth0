@@ -120,13 +120,13 @@ resource "auth0_client" "my_client" {
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
-- `token_endpoint_auth_method` (String, Deprecated) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
+- `token_endpoint_auth_method` (String, Deprecated) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).Managing the authentication method through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_client_credentials` resource to manage a client's authentication method instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) on how to do that.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 ### Read-Only
 
 - `client_id` (String) The ID of the client.
-- `client_secret` (String, Sensitive, Deprecated) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly.
+- `client_secret` (String, Sensitive, Deprecated) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly or use the `auth0_client` data source to read this property.
 - `id` (String) The ID of this resource.
 - `signing_keys` (List of Map of String, Sensitive) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 

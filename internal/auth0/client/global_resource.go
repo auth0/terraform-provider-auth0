@@ -20,6 +20,8 @@ func NewGlobalResource() *schema.Resource {
 		"resource and it will be removed in a future version." +
 		"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info."
 
+	client.Description = client.Description + "\n\n!> " + client.DeprecationMessage
+
 	exclude := []string{"client_secret_rotation_trigger"}
 
 	// Mark all values computed and optional,

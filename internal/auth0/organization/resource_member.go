@@ -38,13 +38,18 @@ func NewMemberResource() *schema.Resource {
 				Description: "ID of the user to add as an organization member.",
 			},
 			"roles": {
-				Type:        schema.TypeSet,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "The role ID(s) to assign to the organization member.",
-				Optional:    true,
+				Type: schema.TypeSet,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional: true,
+				Description: "The role ID(s) to assign to the organization member." +
+					"Managing roles through this attribute is deprecated and it will be removed in a future version. " +
+					"Migrate to the `auth0_organization_member_roles` or the `auth0_organization_member_role` resource to manage organization member roles instead. " +
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#organization-member-roles) on how to do that.",
 				Deprecated: "Managing roles through this attribute is deprecated and it will be removed in a future version. " +
 					"Migrate to the `auth0_organization_member_roles` or the `auth0_organization_member_role` resource to manage organization member roles instead. " +
-					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) on how to do that.",
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#organization-member-roles) on how to do that.",
 			},
 		},
 	}

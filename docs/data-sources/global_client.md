@@ -2,11 +2,14 @@
 page_title: "Data Source: auth0_global_client"
 description: |-
   Retrieve a tenant's global Auth0 application client.
+  !> This resource has been deprecated in favour of the auth0_pages resource and it will be removed in a future version.Check the MIGRATION_GUIDE https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md for more info.
 ---
 
 # Data Source: auth0_global_client
 
 Retrieve a tenant's global Auth0 application client.
+
+!> This resource has been deprecated in favour of the `auth0_pages` resource and it will be removed in a future version.Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) for more info.
 
 ## Example Usage
 
@@ -28,7 +31,7 @@ data "auth0_global_client" "global" {}
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_id` (String) The ID of the client.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
-- `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly.
+- `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly or use the `auth0_client` data source to read this property.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`). Requires the `coa_toggle_enabled` feature flag to be enabled on the tenant by the support team.
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
@@ -54,7 +57,7 @@ data "auth0_global_client" "global" {}
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
-- `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
+- `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).Managing the authentication method through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_client_credentials` resource to manage a client's authentication method instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) on how to do that.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>

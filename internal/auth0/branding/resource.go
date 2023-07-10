@@ -11,9 +11,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
+)
+
+var errNoCustomDomain = fmt.Errorf(
+	"managing the Universal Login body through the 'auth0_branding' resource requires at least one custom domain " +
+		"to be configured for the tenant.\n\nUse the 'auth0_custom_domain' resource to set one up",
 )
 
 // NewResource will return a new auth0_branding resource.
@@ -32,6 +38,7 @@ func NewResource() *schema.Resource {
 			"colors": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Configuration settings for colors for branding.",
 				Elem: &schema.Resource{
@@ -66,6 +73,7 @@ func NewResource() *schema.Resource {
 			"font": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Configuration settings to customize the font.",
 				Elem: &schema.Resource{
@@ -87,10 +95,10 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"body": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Computed:    true,
-							Description: "The body of login pages.",
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "The html template for the New Universal Login Experience.",
 						},
 					},
 				},
@@ -115,18 +123,12 @@ func readBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag
 	result := multierror.Append(
 		d.Set("favicon_url", branding.GetFaviconURL()),
 		d.Set("logo_url", branding.GetLogoURL()),
+		d.Set("colors", flattenBrandingColors(branding.GetColors())),
+		d.Set("font", flattenBrandingFont(branding.GetFont())),
+		d.Set("universal_login", nil),
 	)
-	if _, ok := d.GetOk("colors"); ok {
-		result = multierror.Append(result, d.Set("colors", flattenBrandingColors(branding.GetColors())))
-	}
-	if _, ok := d.GetOk("font"); ok {
-		result = multierror.Append(result, d.Set("font", flattenBrandingFont(branding.GetFont())))
-	}
-	if _, ok := d.GetOk("universal_login"); ok {
-		if err := checkForCustomDomains(api); err != nil {
-			return diag.FromErr(err)
-		}
 
+	if err := checkForCustomDomains(api); err == nil {
 		brandingUniversalLogin, err := flattenBrandingUniversalLogin(api)
 		if err != nil {
 			return diag.FromErr(err)
@@ -147,6 +149,19 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		}
 	}
 
+	oldUL, newUL := d.GetChange("universal_login")
+	oldUniversalLogin := oldUL.([]interface{})
+	newUniversalLogin := newUL.([]interface{})
+
+	// This indicates that a removal of the block happened, and we need to delete the template.
+	if len(newUniversalLogin) == 0 && len(oldUniversalLogin) != 0 {
+		if err := api.Branding.DeleteUniversalLogin(); err != nil {
+			return diag.FromErr(err)
+		}
+
+		return readBranding(ctx, d, m)
+	}
+
 	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
 		if err := checkForCustomDomains(api); err != nil {
 			return diag.FromErr(err)
@@ -160,44 +175,31 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return readBranding(ctx, d, m)
 }
 
-func deleteBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteBranding(_ context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if _, ok := d.GetOk("universal_login"); !ok {
-		d.SetId("")
-		return nil
-	}
-
 	if err := checkForCustomDomains(api); err != nil {
-		d.SetId("")
-		return diag.Diagnostics{
-			{
-				Severity: diag.Warning,
-				Summary:  "No custom domains configured",
-				Detail: "Failed to properly destroy the 'auth0_branding' resource " +
-					"because no custom domains are available on the tenant.",
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "universal_login"}},
-			},
+		if err == errNoCustomDomain {
+			return nil
 		}
+
+		return diag.FromErr(err)
 	}
 
 	if err := api.Branding.DeleteUniversalLogin(); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId("")
 	return nil
 }
 
 func expandBranding(config cty.Value) *management.Branding {
-	branding := &management.Branding{
+	return &management.Branding{
 		FaviconURL: value.String(config.GetAttr("favicon_url")),
 		LogoURL:    value.String(config.GetAttr("logo_url")),
 		Colors:     expandBrandingColors(config.GetAttr("colors")),
 		Font:       expandBrandingFont(config.GetAttr("font")),
 	}
-
-	return branding
 }
 
 func expandBrandingColors(config cty.Value) *management.BrandingColors {
@@ -267,10 +269,6 @@ func flattenBrandingUniversalLogin(api *management.Management) ([]interface{}, e
 		return nil, err
 	}
 
-	if universalLogin == nil {
-		return nil, nil
-	}
-
 	flattenedUniversalLogin := []interface{}{
 		map[string]interface{}{
 			"body": universalLogin.GetBody(),
@@ -284,6 +282,7 @@ func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
 	if brandingFont == nil {
 		return nil
 	}
+
 	return []interface{}{
 		map[string]interface{}{
 			"url": brandingFont.GetURL(),
@@ -298,11 +297,7 @@ func checkForCustomDomains(api *management.Management) error {
 	}
 
 	if len(customDomains) < 1 {
-		return fmt.Errorf(
-			"managing the universal login body through the 'auth0_branding' resource requires at least " +
-				"one custom domain to be configured for the tenant.\n\n" +
-				"Use the 'auth0_custom_domain' resource to set one up.",
-		)
+		return errNoCustomDomain
 	}
 
 	return nil

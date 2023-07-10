@@ -110,7 +110,7 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Computed:    true,
-				Description: "Indicates whether the token endpoint IP header is trusted.",
+				Description: "Indicates whether the token endpoint IP header is trusted. This attribute can only be updated after the client gets created.",
 			},
 			"oidc_conformant": {
 				Type:        schema.TypeBool,

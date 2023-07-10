@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
@@ -965,6 +966,56 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Metadata - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
+				),
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue = `
+resource "auth0_client" "my_client" {
+  name = "Test IP Header Trusted - {{.testName}}"
+
+  is_token_endpoint_ip_header_trusted = true
+}
+
+resource "auth0_client_credentials" "my_client-credentials" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "client_secret_post"
+}
+`
+
+func TestAccClientGetsCreatedWithoutSettingIsTokenEndpointIPHeaderTrustedOnCreate(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:             acctest.ParseTestName(testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue, t.Name()),
+				ExpectNonEmptyPlan: true,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction("auth0_client.my_client", plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "false"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client-credentials", "client_id", "auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_client-credentials", "authentication_method", "client_secret_post"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue, t.Name()),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client-credentials", "client_id", "auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_client-credentials", "authentication_method", "client_secret_post"),
 				),
 			},
 		},

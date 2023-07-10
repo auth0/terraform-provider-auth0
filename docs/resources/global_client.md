@@ -52,7 +52,7 @@ PAGE
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
-- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. This attribute will get updated only after the client gets created.
+- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. This attribute can only be updated after the client gets created.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (Block List, Max: 1) Additional configuration for native mobile apps. (see [below for nested schema](#nestedblock--mobile))

@@ -977,7 +977,6 @@ resource "auth0_client" "my_client" {
   name = "Test IP Header Trusted - {{.testName}}"
 
   is_token_endpoint_ip_header_trusted = true
-  # token_endpoint_auth_method = "client_secret_post"
 }
 
 resource "auth0_client_credentials" "my_client-credentials" {

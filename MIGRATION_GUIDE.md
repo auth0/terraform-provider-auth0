@@ -7,15 +7,15 @@ automated workflows before upgrading.
 
 ### Deprecations
 
-- [Auth0 Global Client](#auth0-global-client)
-- [Auth0 Tenant Pages](#auth0-tenant-pages)
-- [Auth0 Tenant Universal Login](#auth0-tenant-universal-login)
+- [Global Client](#global-client)
+- [Tenant Pages](#tenant-pages)
+- [Tenant Universal Login](#tenant-universal-login)
 
-#### Auth0 Global Client
+#### Global Client
 
 The `auth0_global_client` resource and data source were introduced primarily to allow managing the `custom_login_page`
 and `custom_login_page_on` attributes in order to manage the custom login page of a tenant. These are now deprecated in
-favour of the `auth0_pages` resource.
+favor of the `auth0_pages` resource.
 
 To ensure a smooth transition when we eventually remove the capability to manage the custom 
 login page through the `auth0_global_client`, we recommend proactively migrating to the `auth0_pages` resource. 
@@ -52,10 +52,10 @@ resource "auth0_pages" "my_pages" {
 </tr>
 </table>
 
-#### Auth0 Tenant Pages
+#### Tenant Pages
 
 The `change_password`, `guardian_mfa_page` and `error_page` attributes on the `auth0_tenant` have been deprecated in
-favour of managing them with the `auth0_pages` resource. 
+favor of managing them with the `auth0_pages` resource. 
 
 To ensure a smooth transition when we eventually remove the capability to manage these custom Auth0 pages through the
 `auth0_tenant` resource, we recommend proactively migrating to the `auth0_pages` resource. This will help you stay
@@ -116,9 +116,9 @@ resource "auth0_pages" "my_pages" {
 </tr>
 </table>
 
-#### Auth0 Tenant Universal Login
+#### Tenant Universal Login
 
-The `universal_login` settings on the `auth0_tenant` have been deprecated in favour of managing them through the `auth0_branding` resource.
+The `universal_login` settings on the `auth0_tenant` have been deprecated in favor of managing them through the `auth0_branding` resource.
 
 To ensure a smooth transition when we eventually remove the capability to manage these settings through the
 `auth0_tenant` resource, we recommend proactively migrating to the `auth0_branding` resource. This will help you stay

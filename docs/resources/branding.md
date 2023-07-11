@@ -62,9 +62,9 @@ Optional:
 <a id="nestedblock--universal_login"></a>
 ### Nested Schema for `universal_login`
 
-Optional:
+Required:
 
-- `body` (String) The body of login pages.
+- `body` (String) The html template for the New Universal Login Experience.
 
 ## Import
 

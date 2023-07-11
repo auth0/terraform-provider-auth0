@@ -149,18 +149,25 @@ func NewResource() *schema.Resource {
 					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"roles": {
-				Type:        schema.TypeSet,
-				Optional:    true,
-				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Set of IDs of roles assigned to the user.",
-				Deprecated: "Managing roles through this attribute is deprecated and it will be changed to read-only in a future version. " +
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+				Description: "Set of IDs of roles assigned to the user. " +
+					"Managing roles through this attribute is deprecated and it will be removed in a future major version. " +
 					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
-					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) on how to do that.",
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.",
+				Deprecated: "Managing roles through this attribute is deprecated and it will be removed in a future major version. " +
+					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
+					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.",
 			},
 			"permissions": {
-				Type:        schema.TypeSet,
-				Computed:    true,
-				Description: "List of API permissions granted to the user.",
+				Type:     schema.TypeSet,
+				Computed: true,
+				Description: "List of API permissions granted to the user. " +
+					"Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +
+					"Use the `auth0_user` data source instead.",
+				Deprecated: "Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +
+					"Use the `auth0_user` data source instead.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

@@ -4,7 +4,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 )
 
-func flattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
+// FlattenTenantChangePassword flattens the change password page data.
+func FlattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
 	if changePassword == nil {
 		return nil
 	}
@@ -16,7 +17,8 @@ func flattenTenantChangePassword(changePassword *management.TenantChangePassword
 	return []interface{}{m}
 }
 
-func flattenTenantGuardianMFAPage(mfa *management.TenantGuardianMFAPage) []interface{} {
+// FlattenTenantGuardianMFAPage flattens the guardian mfa page data.
+func FlattenTenantGuardianMFAPage(mfa *management.TenantGuardianMFAPage) []interface{} {
 	if mfa == nil {
 		return nil
 	}
@@ -28,7 +30,8 @@ func flattenTenantGuardianMFAPage(mfa *management.TenantGuardianMFAPage) []inter
 	return []interface{}{m}
 }
 
-func flattenTenantErrorPage(errorPage *management.TenantErrorPage) []interface{} {
+// FlattenTenantErrorPage flattens the error page data.
+func FlattenTenantErrorPage(errorPage *management.TenantErrorPage) []interface{} {
 	if errorPage == nil {
 		return nil
 	}

@@ -16,6 +16,11 @@ func NewGlobalResource() *schema.Resource {
 	client.Description = "Use a tenant's global Auth0 Application client."
 	client.CreateContext = createGlobalClient
 	client.DeleteContext = deleteGlobalClient
+	client.DeprecationMessage = "This resource has been deprecated in favor of the newly introduced `auth0_pages` " +
+		"resource and it will be removed in a future version. " +
+		"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#global-client) for more info."
+
+	client.Description = client.Description + "\n\n!> " + client.DeprecationMessage
 
 	exclude := []string{"client_secret_rotation_trigger"}
 

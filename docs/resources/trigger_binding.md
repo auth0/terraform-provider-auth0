@@ -2,13 +2,14 @@
 page_title: "Resource: auth0_trigger_binding"
 description: |-
   With this resource, you can bind actions to a trigger. Once actions are created and deployed, they can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.
+  !> This resource has been renamed to auth0_trigger_actions. The auth0_trigger_binding alias will be removed in the next major version release. Check the [MIGRATIONGUIDE]https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATIONGUIDE.md#trigger-binding-renaming for more info.
 ---
 
 # Resource: auth0_trigger_binding
 
 With this resource, you can bind actions to a trigger. Once actions are created and deployed, they can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow. The list of actions reflects the order in which they will be executed during the appropriate flow.
 
-!> This resource has been deprecated in favor of the `auth0_trigger_actions` resource.
+!> This resource has been renamed to `auth0_trigger_actions`. The `auth0_trigger_binding` alias will be removed in the next major version release. Check the [MIGRATION_GUIDE]https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#trigger-binding-renaming for more info.
 
 ## Example Usage
 

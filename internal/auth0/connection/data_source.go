@@ -22,7 +22,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 	dataSourceSchema["connection_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -33,6 +33,9 @@ func dataSourceSchema() map[string]*schema.Schema {
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name")
 	dataSourceSchema["name"].Description = "The name of the connection. If not provided, `connection_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"connection_id", "name"}
+
+	dataSourceSchema["enabled_clients"].Deprecated = ""
+	dataSourceSchema["enabled_clients"].Description = "IDs of the clients for which the connection is enabled."
 
 	return dataSourceSchema
 }

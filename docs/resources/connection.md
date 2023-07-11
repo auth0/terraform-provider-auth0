@@ -241,7 +241,7 @@ resource "auth0_connection" "salesforce" {
 
 ### OAuth2 Connection
 
-Also applies to following connection strategies: `dropbox`, `bitbucket`, `paypal`, `twitter`, `amazon`, `yahoo`, `box`, `wordpress`, `discord`, `imgur`, `spotify`, `shopify`, `figma`, `slack-oauth-2`, `digitalocean`, `twitch`, `vimeo`, `custom`
+Also applies to following connection strategies: `dropbox`, `bitbucket`, `paypal`, `twitter`, `amazon`, `yahoo`, `box`, `wordpress`, `shopify`, `custom`
 
 ```terraform
 # This is an example of an OAuth2 connection.
@@ -602,14 +602,14 @@ resource "auth0_connection" "okta" {
 
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
-- `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars). Maximum of 10 metadata properties allowed.
+- `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
 - `options` (Block List, Max: 1) Configuration settings for connection options. (see [below for nested schema](#nestedblock--options))
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 
 ### Read-Only
 
-- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
+- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled. Reading the enabled clients through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_connection` data source instead.
 - `id` (String) The ID of this resource.
 
 <a id="nestedblock--options"></a>
@@ -693,7 +693,7 @@ Optional:
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.
-- `type` (String) Value can be `back_channel` or `front_channel`.
+- `type` (String) Value can be `back_channel` or `front_channel`. Front Channel will use OIDC protocol with `response_mode=form_post` and `response_type=id_token`. Back Channel will use `response_type=code`.
 - `upstream_params` (String) You can pass provider-specific parameters to an identity provider during authentication. The values can either be static per connection or dynamic per user.
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.

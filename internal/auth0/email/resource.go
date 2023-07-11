@@ -61,7 +61,7 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Deprecated:  "This field is not accepted by the API any more so it will be removed soon.",
-							Description: "API User for your email service.",
+							Description: "API User for your email service. This field is not accepted by the API any more so it will be removed in a future major version.",
 						},
 						"api_key": {
 							Type:         schema.TypeString,

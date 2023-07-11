@@ -29,11 +29,16 @@ func NewResource() *schema.Resource {
 			"information, setting error pages, and configuring default tenant behaviors.",
 		Schema: map[string]*schema.Schema{
 			"change_password": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Computed:    true,
-				Description: "Configuration settings for change password page.",
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Computed: true,
+				Description: "Configuration settings for change password page. This attribute is deprecated " +
+					"in favor of the `auth0_pages` resource and it will be removed in a future major " +
+					"version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
+					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -51,11 +56,16 @@ func NewResource() *schema.Resource {
 				},
 			},
 			"guardian_mfa_page": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Computed:    true,
-				Description: "Configuration settings for the Guardian MFA page.",
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Computed: true,
+				Description: "Configuration settings for the Guardian MFA page. This attribute is deprecated " +
+					"in favor of the `auth0_pages` resource and it will be removed in a future major " +
+					"version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
+					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enabled": {
@@ -88,11 +98,16 @@ func NewResource() *schema.Resource {
 					"Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.",
 			},
 			"error_page": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Configuration settings for error pages.",
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				MaxItems: 1,
+				Description: "Configuration settings for error pages. This attribute is deprecated in favor " +
+					"of the `auth0_pages` resource and it will be removed in a future major version. " +
+					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
+				Deprecated: "This attribute is deprecated in favor of the `auth0_pages` " +
+					"resource and it will be removed in a future major version. " +
+					"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"html": {
@@ -331,7 +346,8 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				MaxItems:    1,
-				Description: "Configuration settings for Universal Login.",
+				Description: "Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info.",
+				Deprecated:  "These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"colors": {
@@ -409,8 +425,8 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	}
 
 	result := multierror.Append(
-		d.Set("change_password", flattenTenantChangePassword(tenant.GetChangePassword())),
-		d.Set("guardian_mfa_page", flattenTenantGuardianMFAPage(tenant.GetGuardianMFAPage())),
+		d.Set("change_password", FlattenTenantChangePassword(tenant.GetChangePassword())),
+		d.Set("guardian_mfa_page", FlattenTenantGuardianMFAPage(tenant.GetGuardianMFAPage())),
 		d.Set("default_audience", tenant.GetDefaultAudience()),
 		d.Set("default_directory", tenant.GetDefaultDirectory()),
 		d.Set("default_redirection_uri", tenant.GetDefaultRedirectionURI()),
@@ -423,7 +439,7 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
 		d.Set("sandbox_version", tenant.GetSandboxVersion()),
 		d.Set("enabled_locales", tenant.GetEnabledLocales()),
-		d.Set("error_page", flattenTenantErrorPage(tenant.GetErrorPage())),
+		d.Set("error_page", FlattenTenantErrorPage(tenant.GetErrorPage())),
 		d.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		d.Set("universal_login", flattenTenantUniversalLogin(tenant.GetUniversalLogin())),
 		d.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),

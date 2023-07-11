@@ -11,11 +11,17 @@ import (
 
 // NewGlobalDataSource will return a new auth0_global_client data source.
 func NewGlobalDataSource() *schema.Resource {
-	return &schema.Resource{
+	resource := &schema.Resource{
 		ReadContext: readDataGlobalClient,
 		Schema:      globalDataSourceSchema(),
-		Description: "Retrieve a tenant's global Auth0 application client.",
+		Description: "Retrieve a tenant's global Auth0 application client. ",
+		DeprecationMessage: "This resource has been deprecated in favor of the `auth0_pages` resource and it will be removed in a future version." +
+			"Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#global-client) for more info.",
 	}
+
+	resource.Description = resource.Description + "\n\n!> " + resource.DeprecationMessage
+
+	return resource
 }
 
 func globalDataSourceSchema() map[string]*schema.Schema {

@@ -1,28 +1,3 @@
-## 0.50.0
-
-FEATURES:
-
-- `auth0_pages`: Add new resource to manage Auth0 pages (`change_password`, `error`, `guardian_mfa`, `login`) ([#691](https://github.com/auth0/terraform-provider-auth0/pull/691))
-
-ENHANCEMENTS: 
-
-- `resource/auth0_client`: Add `post_login_prompt` to available options for the `organization_require_behavior` attribute ([#680](https://github.com/auth0/terraform-provider-auth0/pull/680))
-- `resource/auth0_connection`: Relax `metadata` validation by not requiring key length to be between 0 and 10 characters ([#685](https://github.com/auth0/terraform-provider-auth0/pull/685))
-
-BUG FIXES:
-
-- `resource/auth0_organization_connections`, `resource/auth0_organization_members`: Address a bug causing inconsistencies in the safeguarding process, ensuring reliable protection against erasing unintended modifications ([#645](https://github.com/auth0/terraform-provider-auth0/pull/645))
-- `resource/auth0_organization_members`: Address a bug that prevented the creation of organization members when the member list was empty ([#646](https://github.com/auth0/terraform-provider-auth0/pull/646))
-- `resource/auth0_connection`, `resource/auth0_organization_member`,`resource/auth0_user`: Update diffing algorithm to address a bug where the order of additions and removals was causing incorrect results ([#650](https://github.com/auth0/terraform-provider-auth0/pull/650))
-- `resource/auth0_connection`: Remove invalid connection strategies ([#694](https://github.com/auth0/terraform-provider-auth0/pull/694))
-- `resource/auth0_client`: Modify the behavior to only allow the update of the `is_token_endpoint_ip_header_trusted` setting after the client has been created successfully ([#696](https://github.com/auth0/terraform-provider-auth0/pull/696))
-- `resource/auth0_branding`: Addressed a bug that prevented the deletion of the template when the universal login block was removed ([#695](https://github.com/auth0/terraform-provider-auth0/pull/695))
-
-NOTES:
-
-- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the deprecations that were added in this release.
-
-
 ## 0.49.0
 
 FEATURES:

@@ -1,6 +1,7 @@
 package email
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -23,7 +24,7 @@ func TestEmailProviderIsConfigured(t *testing.T) {
 		api, err := management.New(testServer.URL, management.WithInsecure())
 		assert.NoError(t, err)
 
-		actual := emailProviderIsConfigured(api)
+		actual := emailProviderIsConfigured(context.Background(), api)
 		assert.True(t, actual)
 	})
 
@@ -40,7 +41,7 @@ func TestEmailProviderIsConfigured(t *testing.T) {
 		api, err := management.New(testServer.URL, management.WithInsecure())
 		assert.NoError(t, err)
 
-		actual := emailProviderIsConfigured(api)
+		actual := emailProviderIsConfigured(context.Background(), api)
 		assert.False(t, actual)
 	})
 }

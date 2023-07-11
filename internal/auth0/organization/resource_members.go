@@ -49,7 +49,7 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	organizationID := data.Get("organization_id").(string)
 
 	api := meta.(*config.Config).GetAPI()
-	alreadyMembers, err := api.Organization.Members(organizationID)
+	alreadyMembers, err := api.Organization.Members(ctx, organizationID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -73,7 +73,7 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(membersToAdd) > len(alreadyMembers.Members) {
-		if err := api.Organization.AddMembers(organizationID, membersToAdd); err != nil {
+		if err := api.Organization.AddMembers(ctx, organizationID, membersToAdd); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -81,10 +81,10 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	return readOrganizationMembers(ctx, data, meta)
 }
 
-func readOrganizationMembers(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	members, err := api.Organization.Members(data.Id())
+	members, err := api.Organization.Members(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -115,7 +115,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(removeMembers) > 0 {
-		if err := api.Organization.DeleteMember(organizationID, removeMembers); err != nil {
+		if err := api.Organization.DeleteMembers(ctx, organizationID, removeMembers); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -131,7 +131,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(addMembers) > 0 {
-		if err := api.Organization.AddMembers(organizationID, addMembers); err != nil {
+		if err := api.Organization.AddMembers(ctx, organizationID, addMembers); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -144,7 +144,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	return readOrganizationMembers(ctx, data, meta)
 }
 
-func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Id()
@@ -154,7 +154,7 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 		return nil
 	}
 
-	if err := api.Organization.DeleteMember(organizationID, membersToRemove); err != nil {
+	if err := api.Organization.DeleteMembers(ctx, organizationID, membersToRemove); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			return nil
 		}

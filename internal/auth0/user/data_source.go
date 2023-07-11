@@ -6,6 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -37,5 +38,5 @@ func dataSourceSchema() map[string]*schema.Schema {
 func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
-	return readUser(ctx, data, meta)
+	return auth0.CheckFor404Error(ctx, readUser, data, meta)
 }

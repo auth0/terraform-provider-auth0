@@ -25,13 +25,13 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
 }
 
-func readBrandingForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readBrandingForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
 
 	api := meta.(*config.Config).GetAPI()
 
-	branding, err := api.Branding.Read()
+	branding, err := api.Branding.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -43,8 +43,8 @@ func readBrandingForDataSource(_ context.Context, data *schema.ResourceData, met
 		data.Set("font", flattenBrandingFont(branding.GetFont())),
 	)
 
-	if err := checkForCustomDomains(api); err == nil {
-		brandingUniversalLogin, err := flattenBrandingUniversalLogin(api)
+	if err := checkForCustomDomains(ctx, api); err == nil {
+		brandingUniversalLogin, err := flattenBrandingUniversalLogin(ctx, api)
 		if err != nil {
 			return diag.FromErr(err)
 		}

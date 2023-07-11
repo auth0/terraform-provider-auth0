@@ -197,10 +197,10 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func readUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	user, err := api.User.Read(d.Id())
+	user, err := api.User.Read(ctx, d.Id())
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -243,13 +243,13 @@ func readUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	}
 	result = multierror.Append(result, d.Set("app_metadata", appMeta))
 
-	roleList, err := api.User.Roles(d.Id())
+	roleList, err := api.User.Roles(ctx, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
 
-	permissions, err := api.User.Permissions(user.GetID())
+	permissions, err := api.User.Permissions(ctx, user.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -266,13 +266,13 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	if err := api.User.Create(user); err != nil {
+	if err := api.User.Create(ctx, user); err != nil {
 		return diag.FromErr(err)
 	}
 
 	d.SetId(user.GetID())
 
-	if err = persistUserRoles(d, m); err != nil {
+	if err = persistUserRoles(ctx, d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return readUser(ctx, d, m)
 		}
@@ -295,12 +295,12 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	api := m.(*config.Config).GetAPI()
 	if userHasChange(user) {
-		if err := api.User.Update(d.Id(), user); err != nil {
+		if err := api.User.Update(ctx, d.Id(), user); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	if err = persistUserRoles(d, m); err != nil {
+	if err = persistUserRoles(ctx, d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return readUser(ctx, d, m)
 		}
@@ -311,9 +311,9 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readUser(ctx, d, m)
 }
 
-func deleteUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.User.Delete(d.Id()); err != nil {
+	if err := api.User.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -488,21 +488,21 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 	}
 }
 
-func persistUserRoles(d *schema.ResourceData, meta interface{}) error {
+func persistUserRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
 	if !d.HasChange("roles") {
 		return nil
 	}
 
 	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
 
-	if err := removeUserRoles(meta, d.Id(), rolesToRemove); err != nil {
+	if err := removeUserRoles(ctx, meta, d.Id(), rolesToRemove); err != nil {
 		return err
 	}
 
-	return assignUserRoles(meta, d.Id(), rolesToAdd)
+	return assignUserRoles(ctx, meta, d.Id(), rolesToAdd)
 }
 
-func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interface{}) error {
+func removeUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToRemove []interface{}) error {
 	if len(userRolesToRemove) == 0 {
 		return nil
 	}
@@ -515,10 +515,10 @@ func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interf
 
 	api := meta.(*config.Config).GetAPI()
 
-	return api.User.RemoveRoles(userID, rmRoles)
+	return api.User.RemoveRoles(ctx, userID, rmRoles)
 }
 
-func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface{}) error {
+func assignUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToAdd []interface{}) error {
 	if len(userRolesToAdd) == 0 {
 		return nil
 	}
@@ -532,7 +532,7 @@ func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface
 
 	api := meta.(*config.Config).GetAPI()
 
-	return api.User.AssignRoles(userID, addRoles)
+	return api.User.AssignRoles(ctx, userID, addRoles)
 }
 
 func userHasChange(u *management.User) bool {

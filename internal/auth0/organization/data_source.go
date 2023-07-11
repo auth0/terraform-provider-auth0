@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -79,10 +78,6 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 	if organizationID != "" {
 		foundOrganization, err = api.Organization.Read(ctx, organizationID)
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
 			return diag.FromErr(err)
 		}
 	} else {

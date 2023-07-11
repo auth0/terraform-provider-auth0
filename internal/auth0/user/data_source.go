@@ -6,6 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -19,12 +20,17 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "user_id")
 	dataSourceSchema["user_id"].Required = true
 	dataSourceSchema["user_id"].Computed = false
 	dataSourceSchema["user_id"].Optional = false
+
+	dataSourceSchema["permissions"].Deprecated = ""
+	dataSourceSchema["permissions"].Description = "List of API permissions granted to the user."
+	dataSourceSchema["roles"].Deprecated = ""
+	dataSourceSchema["roles"].Description = "Set of IDs of roles assigned to the user."
 
 	return dataSourceSchema
 }
@@ -32,5 +38,5 @@ func dataSourceSchema() map[string]*schema.Schema {
 func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
-	return readUser(ctx, data, meta)
+	return auth0.CheckFor404Error(ctx, readUser, data, meta)
 }

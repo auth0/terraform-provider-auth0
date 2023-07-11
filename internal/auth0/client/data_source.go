@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	auth0 "github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -21,7 +22,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
 	delete(dataSourceSchema, "client_secret_rotation_trigger")
 
@@ -30,6 +31,11 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
 	dataSourceSchema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
 
+	dataSourceSchema["client_secret"].Deprecated = ""
+	dataSourceSchema["client_secret"].Description = "Secret for the client. Keep this private. To access this attribute you need to add the " +
+		"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
+		"empty string."
+
 	return dataSourceSchema
 }
 
@@ -37,7 +43,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 	clientID := d.Get("client_id").(string)
 	if clientID != "" {
 		d.SetId(clientID)
-		return readClient(ctx, d, m)
+		return auth0.CheckFor404Error(ctx, readClient, d, m)
 	}
 
 	name := d.Get("name").(string)
@@ -61,7 +67,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 		for _, client := range clients.Clients {
 			if client.GetName() == name {
 				d.SetId(client.GetClientID())
-				return readClient(ctx, d, m)
+				return auth0.CheckFor404Error(ctx, readClient, d, m)
 			}
 		}
 

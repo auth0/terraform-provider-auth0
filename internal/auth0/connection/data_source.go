@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -21,7 +22,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 	dataSourceSchema["connection_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -33,6 +34,9 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the connection. If not provided, `connection_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"connection_id", "name"}
 
+	dataSourceSchema["enabled_clients"].Deprecated = ""
+	dataSourceSchema["enabled_clients"].Description = "IDs of the clients for which the connection is enabled."
+
 	return dataSourceSchema
 }
 
@@ -40,7 +44,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	connectionID := data.Get("connection_id").(string)
 	if connectionID != "" {
 		data.SetId(connectionID)
-		return readConnection(ctx, data, meta)
+		return auth0.CheckFor404Error(ctx, readConnection, data, meta)
 	}
 
 	api := meta.(*config.Config).GetAPI()
@@ -59,7 +63,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				return readConnection(ctx, data, meta)
+				return auth0.CheckFor404Error(ctx, readConnection, data, meta)
 			}
 		}
 

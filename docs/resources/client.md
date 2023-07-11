@@ -108,25 +108,25 @@ resource "auth0_client" "my_client" {
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
-- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted.
+- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. This attribute can only be updated after the client gets created.
 - `jwt_configuration` (Block List, Max: 1) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedblock--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (Block List, Max: 1) Additional configuration for native mobile apps. (see [below for nested schema](#nestedblock--mobile))
 - `native_social_login` (Block List, Max: 1) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedblock--native_social_login))
 - `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
-- `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default) or `pre_login_prompt`.
+- `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
-- `token_endpoint_auth_method` (String, Deprecated) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic).
+- `token_endpoint_auth_method` (String, Deprecated) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic). Managing the authentication method through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_client_credentials` resource to manage a client's authentication method instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) on how to do that.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 ### Read-Only
 
 - `client_id` (String) The ID of the client.
-- `client_secret` (String, Sensitive, Deprecated) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly.
+- `client_secret` (String, Sensitive, Deprecated) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow managing it directly or use the `auth0_client` data source to read this property.
 - `id` (String) The ID of this resource.
 - `signing_keys` (List of Map of String, Sensitive) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 

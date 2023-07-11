@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -75,6 +76,27 @@ func TestAccDataSourceUser(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "0"),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "user_metadata", `{"baz":"qux","foo":"bar"}`),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "app_metadata", `{"baz":"qux","foo":"bar"}`),
+				),
+			},
+		},
+	})
+}
+
+const testAccDataSourceUserDoesNotExist = `
+data "auth0_user" "test" {
+	user_id = "auth0|this-user-id-does-not-exist"
+}
+`
+
+func TestAccDataSourceUserDoesNotExist(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceUserDoesNotExist, testName),
+				ExpectError: regexp.MustCompile(
+					`no resource found with that identifier \((404\))`,
 				),
 			},
 		},

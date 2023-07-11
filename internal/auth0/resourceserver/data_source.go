@@ -2,10 +2,8 @@ package resourceserver
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -24,7 +22,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 	dataSourceSchema["resource_server_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -36,6 +34,9 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["identifier"].Description = "The unique identifier for the resource server. " +
 		"If not provided, `resource_server_id` must be set."
 	dataSourceSchema["identifier"].AtLeastOneOf = []string{"resource_server_id", "identifier"}
+
+	dataSourceSchema["scopes"].Deprecated = ""
+	dataSourceSchema["scopes"].Description = "List of permissions (scopes) used by this resource server."
 
 	return dataSourceSchema
 }
@@ -49,10 +50,6 @@ func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceD
 	api := meta.(*config.Config).GetAPI()
 	resourceServer, err := api.ResourceServer.Read(ctx, resourceServerID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 

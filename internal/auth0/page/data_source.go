@@ -14,7 +14,7 @@ import (
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readPagesForDataSource,
-		Description: "Read custom HTML for the login, reset password, multi-factor authentication and error pages.",
+		Description: "Use this data source to access the HTML for the login, reset password, multi-factor authentication and error pages.",
 		Schema:      dataSourceSchema(),
 	}
 }

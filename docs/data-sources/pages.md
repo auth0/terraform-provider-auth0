@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_pages"
 description: |-
-  Read custom HTML for the login, reset password, multi-factor authentication and error pages.
+  Use this data source to access the HTML for the login, reset password, multi-factor authentication and error pages.
 ---
 
 # Data Source: auth0_pages
 
-Read custom HTML for the login, reset password, multi-factor authentication and error pages.
+Use this data source to access the HTML for the login, reset password, multi-factor authentication and error pages.
 
 ## Example Usage
 

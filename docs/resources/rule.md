@@ -2,11 +2,14 @@
 page_title: "Resource: auth0_rule"
 description: |-
   With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox as part of your authentication pipeline, which are otherwise known as rules. This resource allows you to create and manage rules. You can create global variable for use with rules by using the auth0_rule_config resource.
+  !> This resource is deprecated. Refer to the guide on how to migrate from rules to actions https://auth0.com/docs/customize/actions/migrate/migrate-from-rules-to-actions and manage your actions using the auth0_action resource.
 ---
 
 # Resource: auth0_rule
 
 With Auth0, you can create custom Javascript snippets that run in a secure, isolated sandbox as part of your authentication pipeline, which are otherwise known as rules. This resource allows you to create and manage rules. You can create global variable for use with rules by using the `auth0_rule_config` resource.
+
+!> This resource is deprecated. Refer to the [guide on how to migrate from rules to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-rules-to-actions) and manage your actions using the `auth0_action` resource.
 
 !> This resource is deprecated. Refer to the [guide on how to migrate from hooks to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-hooks-to-actions)
 and manage your actions using the `auth0_action` resource.

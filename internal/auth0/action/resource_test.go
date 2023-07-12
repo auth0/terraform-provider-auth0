@@ -186,7 +186,7 @@ func TestAccAction(t *testing.T) {
 const testAccActionConfigCreateWithFailedBuild = `
 resource auth0_action my_action {
 	name = "Test Action {{.testName}}"
-	runtime = "node18"
+	runtime = "node18-actions"
 	deploy = true
 	code = <<-EOT
 		exports.onContinuePostLogin = async (event, api) => {

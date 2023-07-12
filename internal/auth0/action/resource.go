@@ -137,7 +137,7 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	action := expandAction(d.GetRawConfig())
-	if err := api.Action.Create(action); err != nil {
+	if err := api.Action.Create(ctx, action); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -150,10 +150,10 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readAction(ctx, d, m)
 }
 
-func readAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	action, err := api.Action.Read(d.Id())
+	action, err := api.Action.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -182,13 +182,13 @@ func readAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	diagnostics := preventErasingUnmanagedSecrets(d, api)
+	diagnostics := preventErasingUnmanagedSecrets(ctx, d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
 	action := expandAction(d.GetRawConfig())
-	if err := api.Action.Update(d.Id(), action); err != nil {
+	if err := api.Action.Update(ctx, d.Id(), action); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -199,10 +199,10 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readAction(ctx, d, m)
 }
 
-func deleteAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Action.Delete(d.Id()); err != nil {
+	if err := api.Action.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -223,7 +223,7 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		action, err := api.Action.Read(d.Id())
+		action, err := api.Action.Read(ctx, d.Id())
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
@@ -260,7 +260,7 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		)
 	}
 
-	actionVersion, err := api.Action.Deploy(d.Id())
+	actionVersion, err := api.Action.Deploy(ctx, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}

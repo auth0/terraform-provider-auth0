@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	auth0 "github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -42,7 +43,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 	clientID := d.Get("client_id").(string)
 	if clientID != "" {
 		d.SetId(clientID)
-		return readClient(ctx, d, m)
+		return auth0.CheckFor404Error(ctx, readClient, d, m)
 	}
 
 	name := d.Get("name").(string)
@@ -55,6 +56,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 	var page int
 	for {
 		clients, err := api.Client.List(
+			ctx,
 			management.IncludeFields("client_id", "name"),
 			management.Page(page),
 		)
@@ -65,7 +67,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 		for _, client := range clients.Clients {
 			if client.GetName() == name {
 				d.SetId(client.GetClientID())
-				return readClient(ctx, d, m)
+				return auth0.CheckFor404Error(ctx, readClient, d, m)
 			}
 		}
 

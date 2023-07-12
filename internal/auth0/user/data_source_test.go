@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -10,8 +11,41 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
+const testAccDataSourceUserDoesNotExist = `
+data "auth0_user" "user" {
+	user_id = "auth0|this-user-id-does-not-exist"
+}
+`
+
 const testAccDataSourceUser = `
+resource "auth0_resource_server" "resource_server" {
+	name       = "Acceptance Test - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+
+	lifecycle {
+		ignore_changes = [ scopes ]
+	}
+}
+
+resource "auth0_resource_server_scopes" "my_scopes" {
+	depends_on = [ auth0_resource_server.resource_server ]
+
+	resource_server_identifier = auth0_resource_server.resource_server.identifier
+
+	scopes {
+		name        = "read:foo"
+		description = "Can read Foo"
+	}
+
+	scopes {
+		name        = "create:foo"
+		description = "Can create Foo"
+	}
+}
+
 resource "auth0_role" "owner" {
+	depends_on = [ auth0_resource_server_scopes.my_scopes ]
+
 	name        = "Test Owner {{.testName}}"
 	description = "Owner {{.testName}}"
 }
@@ -36,7 +70,6 @@ resource "auth0_user" "user" {
 	family_name     = "Lastname"
 	nickname        = "{{.testName}}"
 	picture         = "https://www.example.com/picture.jpg"
-	roles           = [ auth0_role.owner.id, auth0_role.admin.id ]
 	user_metadata   = jsonencode({
 		"foo": "bar",
 		"baz": "qux"
@@ -47,8 +80,31 @@ resource "auth0_user" "user" {
 	})
 }
 
-data "auth0_user" "test" {
+resource "auth0_user_permissions" "user_permissions" {
 	depends_on = [ auth0_user.user ]
+
+	user_id = auth0_user.user.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "read:foo"
+	}
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.resource_server.identifier
+		name                       = "create:foo"
+	}
+}
+
+resource "auth0_user_roles" "user_roles" {
+	depends_on = [ auth0_user_permissions.user_permissions ]
+
+	user_id = auth0_user.user.id
+	roles   = [ auth0_role.owner.id, auth0_role.admin.id ]
+}
+
+data "auth0_user" "test" {
+	depends_on = [ auth0_user_roles.user_roles ]
 
 	user_id = auth0_user.user.id
 }
@@ -59,6 +115,10 @@ func TestAccDataSourceUser(t *testing.T) {
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccDataSourceUserDoesNotExist, testName),
+				ExpectError: regexp.MustCompile(`Error: 404 Not Found: The user does not exist.`),
+			},
 			{
 				Config: acctest.ParseTestName(testAccDataSourceUser, testName),
 				Check: resource.ComposeTestCheckFunc(
@@ -72,7 +132,7 @@ func TestAccDataSourceUser(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_user.test", "nickname", testName),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "picture", "https://www.example.com/picture.jpg"),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "roles.#", "2"),
-					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "2"),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "user_metadata", `{"baz":"qux","foo":"bar"}`),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "app_metadata", `{"baz":"qux","foo":"bar"}`),
 				),

@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -40,7 +41,7 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 	roleID := data.Get("role_id").(string)
 	if roleID != "" {
 		data.SetId(roleID)
-		return readRole(ctx, data, meta)
+		return auth0.CheckFor404Error(ctx, readRole, data, meta)
 	}
 
 	api := meta.(*config.Config).GetAPI()
@@ -48,6 +49,7 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 	page := 0
 	for {
 		roles, err := api.Role.List(
+			ctx,
 			management.Page(page),
 			management.PerPage(100),
 			management.Parameter("name_filter", name),
@@ -59,7 +61,7 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		for _, role := range roles.Roles {
 			if role.GetName() == name {
 				data.SetId(role.GetID())
-				return readRole(ctx, data, meta)
+				return auth0.CheckFor404Error(ctx, readRole, data, meta)
 			}
 		}
 

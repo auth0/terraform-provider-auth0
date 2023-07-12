@@ -112,10 +112,10 @@ func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return updateBranding(ctx, d, m)
 }
 
-func readBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	branding, err := api.Branding.Read()
+	branding, err := api.Branding.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -128,8 +128,8 @@ func readBranding(_ context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("universal_login", nil),
 	)
 
-	if err := checkForCustomDomains(api); err == nil {
-		brandingUniversalLogin, err := flattenBrandingUniversalLogin(api)
+	if err := checkForCustomDomains(ctx, api); err == nil {
+		brandingUniversalLogin, err := flattenBrandingUniversalLogin(ctx, api)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -144,7 +144,7 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	api := m.(*config.Config).GetAPI()
 
 	if branding := expandBranding(d.GetRawConfig()); branding.String() != "{}" {
-		if err := api.Branding.Update(branding); err != nil {
+		if err := api.Branding.Update(ctx, branding); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -155,7 +155,7 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 
 	// This indicates that a removal of the block happened, and we need to delete the template.
 	if len(newUniversalLogin) == 0 && len(oldUniversalLogin) != 0 {
-		if err := api.Branding.DeleteUniversalLogin(); err != nil {
+		if err := api.Branding.DeleteUniversalLogin(ctx); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -163,11 +163,11 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	}
 
 	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
-		if err := checkForCustomDomains(api); err != nil {
+		if err := checkForCustomDomains(ctx, api); err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := api.Branding.SetUniversalLogin(universalLogin); err != nil {
+		if err := api.Branding.SetUniversalLogin(ctx, universalLogin); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -175,10 +175,10 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return readBranding(ctx, d, m)
 }
 
-func deleteBranding(_ context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteBranding(ctx context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := checkForCustomDomains(api); err != nil {
+	if err := checkForCustomDomains(ctx, api); err != nil {
 		if err == errNoCustomDomain {
 			return nil
 		}
@@ -186,7 +186,7 @@ func deleteBranding(_ context.Context, _ *schema.ResourceData, m interface{}) di
 		return diag.FromErr(err)
 	}
 
-	if err := api.Branding.DeleteUniversalLogin(); err != nil {
+	if err := api.Branding.DeleteUniversalLogin(ctx); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -260,8 +260,8 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 	}
 }
 
-func flattenBrandingUniversalLogin(api *management.Management) ([]interface{}, error) {
-	universalLogin, err := api.Branding.UniversalLogin()
+func flattenBrandingUniversalLogin(ctx context.Context, api *management.Management) ([]interface{}, error) {
+	universalLogin, err := api.Branding.UniversalLogin(ctx)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			return nil, nil
@@ -290,8 +290,8 @@ func flattenBrandingFont(brandingFont *management.BrandingFont) []interface{} {
 	}
 }
 
-func checkForCustomDomains(api *management.Management) error {
-	customDomains, err := api.CustomDomain.List()
+func checkForCustomDomains(ctx context.Context, api *management.Management) error {
+	customDomains, err := api.CustomDomain.List(ctx)
 	if err != nil {
 		return err
 	}

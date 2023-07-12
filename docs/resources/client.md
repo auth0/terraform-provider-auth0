@@ -135,34 +135,199 @@ resource "auth0_client" "my_client" {
 
 Optional:
 
-- `aws` (Map of String)
-- `azure_blob` (Map of String)
-- `azure_sb` (Map of String)
-- `box` (Map of String)
-- `cloudbees` (Map of String)
-- `concur` (Map of String)
-- `dropbox` (Map of String)
-- `echosign` (Map of String)
-- `egnyte` (Map of String)
-- `firebase` (Map of String)
-- `layer` (Map of String)
-- `mscrm` (Map of String)
-- `newrelic` (Map of String)
-- `office365` (Map of String)
-- `rms` (Map of String)
-- `salesforce` (Map of String)
-- `salesforce_api` (Map of String)
-- `salesforce_sandbox_api` (Map of String)
+- `aws` (Block List, Max: 1) AWS Addon configuration. (see [below for nested schema](#nestedblock--addons--aws))
+- `azure_blob` (Block List, Max: 1) Azure Blob Storage Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_blob))
+- `azure_sb` (Block List, Max: 1) Azure Storage Bus Addon configuration. (see [below for nested schema](#nestedblock--addons--azure_sb))
+- `box` (Block List, Max: 1) Box SSO indicator (no configuration settings needed for Box SSO). (see [below for nested schema](#nestedblock--addons--box))
+- `cloudbees` (Block List, Max: 1) CloudBees SSO indicator (no configuration settings needed for CloudBees SSO). (see [below for nested schema](#nestedblock--addons--cloudbees))
+- `concur` (Block List, Max: 1) Concur SSO indicator (no configuration settings needed for Concur SSO). (see [below for nested schema](#nestedblock--addons--concur))
+- `dropbox` (Block List, Max: 1) Dropbox SSO indicator (no configuration settings needed for Dropbox SSO). (see [below for nested schema](#nestedblock--addons--dropbox))
+- `echosign` (Block List, Max: 1) Adobe EchoSign SSO configuration. (see [below for nested schema](#nestedblock--addons--echosign))
+- `egnyte` (Block List, Max: 1) Egnyte SSO configuration. (see [below for nested schema](#nestedblock--addons--egnyte))
+- `firebase` (Block List, Max: 1) Google Firebase addon configuration. (see [below for nested schema](#nestedblock--addons--firebase))
+- `layer` (Block List, Max: 1) Layer addon configuration. (see [below for nested schema](#nestedblock--addons--layer))
+- `mscrm` (Block List, Max: 1) Microsoft Dynamics CRM SSO configuration. (see [below for nested schema](#nestedblock--addons--mscrm))
+- `newrelic` (Block List, Max: 1) New Relic SSO configuration. (see [below for nested schema](#nestedblock--addons--newrelic))
+- `office365` (Block List, Max: 1) Microsoft Office 365 SSO configuration. (see [below for nested schema](#nestedblock--addons--office365))
+- `rms` (Block List, Max: 1) Active Directory Rights Management Service SSO configuration. (see [below for nested schema](#nestedblock--addons--rms))
+- `salesforce` (Block List, Max: 1) Salesforce SSO configuration. (see [below for nested schema](#nestedblock--addons--salesforce))
+- `salesforce_api` (Block List, Max: 1) Salesforce API addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_api))
+- `salesforce_sandbox_api` (Block List, Max: 1) Salesforce Sandbox addon configuration. (see [below for nested schema](#nestedblock--addons--salesforce_sandbox_api))
 - `samlp` (Block List, Max: 1) Configuration settings for a SAML add-on. (see [below for nested schema](#nestedblock--addons--samlp))
-- `sap_api` (Map of String)
-- `sentry` (Map of String)
-- `sharepoint` (Map of String)
-- `slack` (Map of String)
-- `springcm` (Map of String)
-- `wams` (Map of String)
-- `wsfed` (Map of String) WS-Fed (WIF) addon indicator. Actual configuration is stored in callback and `client_aliases` properties on the client.
-- `zendesk` (Map of String)
-- `zoom` (Map of String)
+- `sap_api` (Block List, Max: 1) SAP API addon configuration. (see [below for nested schema](#nestedblock--addons--sap_api))
+- `sentry` (Block List, Max: 1) Sentry SSO configuration. (see [below for nested schema](#nestedblock--addons--sentry))
+- `sharepoint` (Block List, Max: 1) SharePoint SSO configuration. (see [below for nested schema](#nestedblock--addons--sharepoint))
+- `slack` (Block List, Max: 1) Slack team or workspace name usually first segment in your Slack URL, for example `https://acme-org.slack.com` would be `acme-org`. (see [below for nested schema](#nestedblock--addons--slack))
+- `springcm` (Block List, Max: 1) SpringCM SSO configuration. (see [below for nested schema](#nestedblock--addons--springcm))
+- `sso_integration` (Block List, Max: 1) Generic SSO configuration. (see [below for nested schema](#nestedblock--addons--sso_integration))
+- `wams` (Block List, Max: 1) Windows Azure Mobile Services addon configuration. (see [below for nested schema](#nestedblock--addons--wams))
+- `wsfed` (Block List, Max: 1) WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client. (see [below for nested schema](#nestedblock--addons--wsfed))
+- `zendesk` (Block List, Max: 1) Zendesk SSO configuration. (see [below for nested schema](#nestedblock--addons--zendesk))
+- `zoom` (Block List, Max: 1) Zoom SSO configuration. (see [below for nested schema](#nestedblock--addons--zoom))
+
+<a id="nestedblock--addons--aws"></a>
+### Nested Schema for `addons.aws`
+
+Optional:
+
+- `lifetime_in_seconds` (Number) AWS token lifetime in seconds.
+- `principal` (String) AWS principal ARN, for example `arn:aws:iam::010616021751:saml-provider/idpname`.
+- `role` (String) AWS role ARN, for example `arn:aws:iam::010616021751:role/foo`.
+
+
+<a id="nestedblock--addons--azure_blob"></a>
+### Nested Schema for `addons.azure_blob`
+
+Optional:
+
+- `account_name` (String) Your Azure storage account name. Usually first segment in your Azure storage URL, for example `https://acme-org.blob.core.windows.net` would be the account name `acme-org`.
+- `blob_delete` (Boolean) Indicates if the issued token has permission to delete the blob.
+- `blob_name` (String) Entity to request a token for, such as `my-blob`. If blank the computed SAS will apply to the entire storage container.
+- `blob_read` (Boolean) Indicates if the issued token has permission to read the content, properties, metadata and block list. Use the blob as the source of a copy operation.
+- `blob_write` (Boolean) Indicates if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+- `container_delete` (Boolean) Indicates if issued token has permission to delete any blob in the container.
+- `container_list` (Boolean) Indicates if the issued token has permission to list blobs in the container.
+- `container_name` (String) Container to request a token for, such as `my-container`.
+- `container_read` (Boolean) Indicates if the issued token has permission to read the content, properties, metadata or block list of any blob in the container. Use any blob in the container as the source of a copy operation.
+- `container_write` (Boolean) Indicates that for any blob in the container if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account.
+- `expiration` (Number) Expiration in minutes for the generated token (default of 5 minutes).
+- `signed_identifier` (String) Shared access policy identifier defined in your storage account resource.
+- `storage_access_key` (String, Sensitive) Access key associated with this storage account.
+
+
+<a id="nestedblock--addons--azure_sb"></a>
+### Nested Schema for `addons.azure_sb`
+
+Optional:
+
+- `entity_path` (String) Entity you want to request a token for, such as `my-queue`.
+- `expiration` (Number) Optional expiration in minutes for the generated token. Defaults to 5 minutes.
+- `namespace` (String) Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (for example `https://acme-org.servicebus.windows.net` would be `acme-org`).
+- `sas_key` (String, Sensitive) Primary Key associated with your shared access policy.
+- `sas_key_name` (String) Your shared access policy name defined in your Service Bus entity.
+
+
+<a id="nestedblock--addons--box"></a>
+### Nested Schema for `addons.box`
+
+
+<a id="nestedblock--addons--cloudbees"></a>
+### Nested Schema for `addons.cloudbees`
+
+
+<a id="nestedblock--addons--concur"></a>
+### Nested Schema for `addons.concur`
+
+
+<a id="nestedblock--addons--dropbox"></a>
+### Nested Schema for `addons.dropbox`
+
+
+<a id="nestedblock--addons--echosign"></a>
+### Nested Schema for `addons.echosign`
+
+Optional:
+
+- `domain` (String) Your custom domain found in your EchoSign URL, for example `https://acme-org.echosign.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--egnyte"></a>
+### Nested Schema for `addons.egnyte`
+
+Optional:
+
+- `domain` (String) Your custom domain found in your Egnyte URL, for example `https://acme-org.echosign.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--firebase"></a>
+### Nested Schema for `addons.firebase`
+
+Optional:
+
+- `client_email` (String) ID of the Service Account you have created (shown as `client_email` in the generated JSON file, SDK v3+ tokens only).
+- `lifetime_in_seconds` (Number) Optional expiration in seconds for the generated token. Defaults to 3600 seconds (SDK v3+ tokens only).
+- `private_key` (String, Sensitive) Private Key for signing the token (SDK v3+ tokens only).
+- `private_key_id` (String, Sensitive) Optional ID of the private key to obtain the `kid` header claim from the issued token (SDK v3+ tokens only).
+- `secret` (String, Sensitive) Google Firebase Secret. (SDK v2 only).
+
+
+<a id="nestedblock--addons--layer"></a>
+### Nested Schema for `addons.layer`
+
+Required:
+
+- `key_id` (String, Sensitive) Authentication Key identifier used to sign the Layer token.
+- `private_key` (String, Sensitive) Private key for signing the Layer token.
+- `provider_id` (String) Provider ID of your Layer account.
+
+Optional:
+
+- `expiration` (Number) Optional expiration in minutes for the generated token. Defaults to 5 minutes.
+- `principal` (String) Name of the property used as the unique user ID in Layer. If not specified `user_id` is used.
+
+
+<a id="nestedblock--addons--mscrm"></a>
+### Nested Schema for `addons.mscrm`
+
+Optional:
+
+- `url` (String) Microsoft Dynamics CRM application URL.
+
+
+<a id="nestedblock--addons--newrelic"></a>
+### Nested Schema for `addons.newrelic`
+
+Optional:
+
+- `account` (String) Your New Relic Account ID found in your New Relic URL after the `/accounts/` path, for example `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.
+
+
+<a id="nestedblock--addons--office365"></a>
+### Nested Schema for `addons.office365`
+
+Optional:
+
+- `connection` (String) Optional Auth0 database connection for testing an already-configured Office 365 tenant.
+- `domain` (String) Your Office 365 domain name, for example `acme-org.com`.
+
+
+<a id="nestedblock--addons--rms"></a>
+### Nested Schema for `addons.rms`
+
+Optional:
+
+- `url` (String) URL of your Rights Management Server. It can be internal or external, but users will have to be able to reach it.
+
+
+<a id="nestedblock--addons--salesforce"></a>
+### Nested Schema for `addons.salesforce`
+
+Optional:
+
+- `entity_id` (String) Arbitrary logical URL that identifies the Saleforce resource, for example `https://acme-org.com`.
+
+
+<a id="nestedblock--addons--salesforce_api"></a>
+### Nested Schema for `addons.salesforce_api`
+
+Optional:
+
+- `client_id` (String, Sensitive) Consumer Key assigned by Salesforce to the Connected App.
+- `community_name` (String) Community name.
+- `community_url_section` (String) Community URL section.
+- `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
+
+
+<a id="nestedblock--addons--salesforce_sandbox_api"></a>
+### Nested Schema for `addons.salesforce_sandbox_api`
+
+Optional:
+
+- `client_id` (String, Sensitive) Consumer Key assigned by Salesforce to the Connected App.
+- `community_name` (String) Community name.
+- `community_url_section` (String) Community URL section.
+- `principal` (String, Sensitive) Name of the property in the user object that maps to a Salesforce username, for example `email`.
+
 
 <a id="nestedblock--addons--samlp"></a>
 ### Nested Schema for `addons.samlp`
@@ -175,21 +340,114 @@ Optional:
 - `create_upn_claim` (Boolean) Indicates whether a UPN claim should be created. Defaults to `true`.
 - `destination` (String) Destination of the SAML Response. If not specified, it will be `AssertionConsumerUrl` of SAMLRequest or callback URL if there was no SAMLRequest.
 - `digest_algorithm` (String) Algorithm used to calculate the digest of the SAML Assertion or response. Options include `sha1` and `sha256`. Defaults to `sha1`.
-- `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to false, the attribute NameFormat is not set in the assertion. Defaults to `true`.
+- `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to `false`, the attribute NameFormat is not set in the assertion. Defaults to `true`.
 - `issuer` (String) Issuer of the SAML Assertion.
-- `lifetime_in_seconds` (Number) Number of seconds during which the token is valid.
-- `logout` (Map of String) Configuration settings for logout.
+- `lifetime_in_seconds` (Number) Number of seconds during which the token is valid. Defaults to `3600` seconds.
+- `logout` (Block List, Max: 1) Configuration settings for logout. (see [below for nested schema](#nestedblock--addons--samlp--logout))
 - `map_identities` (Boolean) Indicates whether or not to add additional identity information in the token, such as the provider used and the `access_token`, if available. Defaults to `true`.
 - `map_unknown_claims_as_is` (Boolean) Indicates whether to add a prefix of `http://schema.auth0.com` to any claims that are not mapped to the common profile when passed through in the output assertion. Defaults to `false`.
 - `mappings` (Map of String) Mappings between the Auth0 user profile property name (`name`) and the output attributes on the SAML attribute in the assertion (`value`).
-- `name_identifier_format` (String) Format of the name identifier.
+- `name_identifier_format` (String) Format of the name identifier. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
 - `name_identifier_probes` (List of String) Attributes that can be used for Subject/NameID. Auth0 will try each of the attributes of this array in order and use the first value it finds.
 - `passthrough_claims_with_no_mapping` (Boolean) Indicates whether or not to passthrough claims that are not mapped to the common profile in the output assertion. Defaults to `true`.
 - `recipient` (String) Recipient of the SAML Assertion (SubjectConfirmationData). Default is `AssertionConsumerUrl` on SAMLRequest or callback URL if no SAMLRequest was sent.
 - `sign_response` (Boolean) Indicates whether or not the SAML Response should be signed instead of the SAML Assertion.
 - `signature_algorithm` (String) Algorithm used to sign the SAML Assertion or response. Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.
 - `signing_cert` (String) Optionally indicates the public key certificate used to validate SAML requests. If set, SAML requests will be required to be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n`.
-- `typed_attributes` (Boolean) Indicates whether or not we should infer the `xs:type` of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. Defaults to `true`.
+- `typed_attributes` (Boolean) Indicates whether or not we should infer the `xs:type` of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. Defaults to `true`.
+
+<a id="nestedblock--addons--samlp--logout"></a>
+### Nested Schema for `addons.samlp.logout`
+
+Optional:
+
+- `callback` (String) The service provider (client application)'s Single Logout Service URL, where Auth0 will send logout requests and responses.
+- `slo_enabled` (Boolean) Controls whether Auth0 should notify service providers of session termination.
+
+
+
+<a id="nestedblock--addons--sap_api"></a>
+### Nested Schema for `addons.sap_api`
+
+Optional:
+
+- `client_id` (String) If activated in the OAuth 2.0 client configuration (transaction `SOAUTH2) the SAML attribute `client_id` must be set and equal the `client_id` form parameter of the access token request.
+- `name_identifier_format` (String) NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.
+- `scope` (String) Requested scope for SAP APIs.
+- `service_password` (String, Sensitive) Service account password to use to authenticate API calls to the token endpoint.
+- `token_endpoint_url` (String) The OAuth2 token endpoint URL of your SAP OData server.
+- `username_attribute` (String) Name of the property in the user object that maps to a SAP username, for example `email`.
+
+
+<a id="nestedblock--addons--sentry"></a>
+### Nested Schema for `addons.sentry`
+
+Optional:
+
+- `base_url` (String) URL prefix only if running Sentry Community Edition, otherwise leave empty.
+- `org_slug` (String) Generated slug for your Sentry organization. Found in your Sentry URL, for example `https://sentry.acme.com/acme-org/` would be `acme-org`.
+
+
+<a id="nestedblock--addons--sharepoint"></a>
+### Nested Schema for `addons.sharepoint`
+
+Optional:
+
+- `external_url` (List of String) External SharePoint application URLs if exposed to the Internet.
+- `url` (String) Internal SharePoint application URL.
+
+
+<a id="nestedblock--addons--slack"></a>
+### Nested Schema for `addons.slack`
+
+Optional:
+
+- `team` (String) Slack team name.
+
+
+<a id="nestedblock--addons--springcm"></a>
+### Nested Schema for `addons.springcm`
+
+Optional:
+
+- `acs_url` (String) SpringCM ACS URL, for example `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.
+
+
+<a id="nestedblock--addons--sso_integration"></a>
+### Nested Schema for `addons.sso_integration`
+
+Optional:
+
+- `name` (String) SSO integration name.
+- `version` (String) SSO integration version installed.
+
+
+<a id="nestedblock--addons--wams"></a>
+### Nested Schema for `addons.wams`
+
+Optional:
+
+- `master_key` (String, Sensitive) Your master key for Windows Azure Mobile Services.
+
+
+<a id="nestedblock--addons--wsfed"></a>
+### Nested Schema for `addons.wsfed`
+
+
+<a id="nestedblock--addons--zendesk"></a>
+### Nested Schema for `addons.zendesk`
+
+Optional:
+
+- `account_name` (String) Zendesk account name. Usually the first segment in your Zendesk URL, for example `https://acme-org.zendesk.com` would be `acme-org`.
+
+
+<a id="nestedblock--addons--zoom"></a>
+### Nested Schema for `addons.zoom`
+
+Optional:
+
+- `account` (String) Zoom account name. Usually the first segment of your Zoom URL, for example `https://acme-org.zoom.us` would be `acme-org`.
 
 
 

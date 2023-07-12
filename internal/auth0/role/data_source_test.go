@@ -101,3 +101,23 @@ func TestAccDataSourceRoleByID(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceNonexistentRole = testAccGivenAResourceServer + `
+data "auth0_role" "test" {
+	name = "this-role-does-not-exist"
+}
+`
+
+func TestAccDataSourceRoleDoesNotExist(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataSourceNonexistentRole, t.Name()),
+				ExpectError: regexp.MustCompile(
+					`No role found with "name" = "this-role-does-not-exist"`,
+				),
+			},
+		},
+	})
+}

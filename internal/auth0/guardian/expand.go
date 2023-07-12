@@ -1,6 +1,8 @@
 package guardian
 
 import (
+	"context"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -8,7 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func updatePolicy(d *schema.ResourceData, api *management.Management) error {
+func updatePolicy(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("policy") {
 		return nil
 	}
@@ -21,37 +23,37 @@ func updatePolicy(d *schema.ResourceData, api *management.Management) error {
 	}
 
 	// If the policy is "never" then the slice needs to be empty.
-	return api.Guardian.MultiFactor.UpdatePolicy(&multiFactorPolicies)
+	return api.Guardian.MultiFactor.UpdatePolicy(ctx, &multiFactorPolicies)
 }
 
-func updateEmailFactor(d *schema.ResourceData, api *management.Management) error {
+func updateEmailFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("email") {
 		return nil
 	}
 
 	enabled := d.Get("email").(bool)
-	return api.Guardian.MultiFactor.Email.Enable(enabled)
+	return api.Guardian.MultiFactor.Email.Enable(ctx, enabled)
 }
 
-func updateOTPFactor(d *schema.ResourceData, api *management.Management) error {
+func updateOTPFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("otp") {
 		return nil
 	}
 
 	enabled := d.Get("otp").(bool)
-	return api.Guardian.MultiFactor.OTP.Enable(enabled)
+	return api.Guardian.MultiFactor.OTP.Enable(ctx, enabled)
 }
 
-func updateRecoveryCodeFactor(d *schema.ResourceData, api *management.Management) error {
+func updateRecoveryCodeFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("recovery_code") {
 		return nil
 	}
 
 	enabled := d.Get("recovery_code").(bool)
-	return api.Guardian.MultiFactor.RecoveryCode.Enable(enabled)
+	return api.Guardian.MultiFactor.RecoveryCode.Enable(ctx, enabled)
 }
 
-func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error {
+func updatePhoneFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("phone") {
 		return nil
 	}
@@ -60,35 +62,35 @@ func updatePhoneFactor(d *schema.ResourceData, api *management.Management) error
 
 	// Always enable phone factor before configuring it.
 	// Otherwise, we encounter an error with message_types.
-	if err := api.Guardian.MultiFactor.Phone.Enable(enabled); err != nil {
+	if err := api.Guardian.MultiFactor.Phone.Enable(ctx, enabled); err != nil {
 		return err
 	}
 	if !enabled {
 		return nil
 	}
 
-	return configurePhone(d.GetRawConfig(), api)
+	return configurePhone(ctx, d.GetRawConfig(), api)
 }
 
-func configurePhone(config cty.Value, api *management.Management) error {
+func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
 	var err error
 
 	config.GetAttr("phone").ForEachElement(func(_ cty.Value, phone cty.Value) (stop bool) {
 		mfaProvider := &management.MultiFactorProvider{
 			Provider: value.String(phone.GetAttr("provider")),
 		}
-		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(mfaProvider); err != nil {
+		if err = api.Guardian.MultiFactor.Phone.UpdateProvider(ctx, mfaProvider); err != nil {
 			return true
 		}
 
 		options := phone.GetAttr("options")
 		switch mfaProvider.GetProvider() {
 		case "twilio":
-			if err = updateTwilioOptions(options, api); err != nil {
+			if err = updateTwilioOptions(ctx, options, api); err != nil {
 				return true
 			}
 		case "auth0", "phone-message-hook":
-			if err = updateAuth0Options(options, api); err != nil {
+			if err = updateAuth0Options(ctx, options, api); err != nil {
 				return true
 			}
 		}
@@ -96,7 +98,7 @@ func configurePhone(config cty.Value, api *management.Management) error {
 		messageTypes := &management.PhoneMessageTypes{
 			MessageTypes: value.Strings(phone.GetAttr("message_types")),
 		}
-		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(messageTypes); err != nil {
+		if err = api.Guardian.MultiFactor.Phone.UpdateMessageTypes(ctx, messageTypes); err != nil {
 			return true
 		}
 
@@ -106,11 +108,12 @@ func configurePhone(config cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateAuth0Options(options cty.Value, api *management.Management) error {
+func updateAuth0Options(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
+			ctx,
 			&management.MultiFactorSMSTemplate{
 				EnrollmentMessage:   value.String(config.GetAttr("enrollment_message")),
 				VerificationMessage: value.String(config.GetAttr("verification_message")),
@@ -123,11 +126,12 @@ func updateAuth0Options(options cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateTwilioOptions(options cty.Value, api *management.Management) error {
+func updateTwilioOptions(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		if err = api.Guardian.MultiFactor.SMS.UpdateTwilio(
+			ctx,
 			&management.MultiFactorProviderTwilio{
 				From:                value.String(config.GetAttr("from")),
 				MessagingServiceSid: value.String(config.GetAttr("messaging_service_sid")),
@@ -139,6 +143,7 @@ func updateTwilioOptions(options cty.Value, api *management.Management) error {
 		}
 
 		if err = api.Guardian.MultiFactor.SMS.UpdateTemplate(
+			ctx,
 			&management.MultiFactorSMSTemplate{
 				EnrollmentMessage:   value.String(config.GetAttr("enrollment_message")),
 				VerificationMessage: value.String(config.GetAttr("verification_message")),
@@ -153,13 +158,13 @@ func updateTwilioOptions(options cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) error {
+func updateWebAuthnRoaming(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("webauthn_roaming") {
 		return nil
 	}
 
 	enabled := d.Get("webauthn_roaming.0.enabled").(bool)
-	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(enabled); err != nil {
+	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(ctx, enabled); err != nil {
 		return err
 	}
 	if !enabled {
@@ -175,7 +180,7 @@ func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) e
 		}
 
 		if webAuthnSettings.String() != "{}" {
-			err = api.Guardian.MultiFactor.WebAuthnRoaming.Update(webAuthnSettings)
+			err = api.Guardian.MultiFactor.WebAuthnRoaming.Update(ctx, webAuthnSettings)
 		}
 
 		return stop
@@ -184,13 +189,13 @@ func updateWebAuthnRoaming(d *schema.ResourceData, api *management.Management) e
 	return err
 }
 
-func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) error {
+func updateWebAuthnPlatform(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("webauthn_platform") {
 		return nil
 	}
 
 	enabled := d.Get("webauthn_platform.0.enabled").(bool)
-	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(enabled); err != nil {
+	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(ctx, enabled); err != nil {
 		return err
 	}
 	if !enabled {
@@ -205,7 +210,7 @@ func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) 
 		}
 
 		if webAuthnSettings.String() != "{}" {
-			err = api.Guardian.MultiFactor.WebAuthnPlatform.Update(webAuthnSettings)
+			err = api.Guardian.MultiFactor.WebAuthnPlatform.Update(ctx, webAuthnSettings)
 		}
 
 		return stop
@@ -214,13 +219,13 @@ func updateWebAuthnPlatform(d *schema.ResourceData, api *management.Management) 
 	return err
 }
 
-func updateDUO(d *schema.ResourceData, api *management.Management) error {
+func updateDUO(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("duo") {
 		return nil
 	}
 
 	enabled := d.Get("duo.0.enabled").(bool)
-	if err := api.Guardian.MultiFactor.DUO.Enable(enabled); err != nil {
+	if err := api.Guardian.MultiFactor.DUO.Enable(ctx, enabled); err != nil {
 		return err
 	}
 	if !enabled {
@@ -237,7 +242,7 @@ func updateDUO(d *schema.ResourceData, api *management.Management) error {
 			}
 
 			if duoSettings.String() != "{}" {
-				err = api.Guardian.MultiFactor.DUO.Update(duoSettings)
+				err = api.Guardian.MultiFactor.DUO.Update(ctx, duoSettings)
 			}
 
 			return stop
@@ -247,13 +252,13 @@ func updateDUO(d *schema.ResourceData, api *management.Management) error {
 	return err
 }
 
-func updatePush(d *schema.ResourceData, api *management.Management) error {
+func updatePush(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
 	if !d.HasChange("push") {
 		return nil
 	}
 
 	enabled := d.Get("push.0.enabled").(bool)
-	if err := api.Guardian.MultiFactor.Push.Enable(enabled); err != nil {
+	if err := api.Guardian.MultiFactor.Push.Enable(ctx, enabled); err != nil {
 		return err
 	}
 	if !enabled {
@@ -265,30 +270,30 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 		mfaProvider := &management.MultiFactorProvider{
 			Provider: value.String(push.GetAttr("provider")),
 		}
-		if err = api.Guardian.MultiFactor.Push.UpdateProvider(mfaProvider); err != nil {
+		if err = api.Guardian.MultiFactor.Push.UpdateProvider(ctx, mfaProvider); err != nil {
 			return true
 		}
 
 		if d.HasChange("push.0.custom_app") {
-			if err = updateCustomApp(push.GetAttr("custom_app"), api); err != nil {
+			if err = updateCustomApp(ctx, push.GetAttr("custom_app"), api); err != nil {
 				return true
 			}
 		}
 
 		if d.HasChange("push.0.direct_apns") {
-			if err = updateDirectAPNS(push.GetAttr("direct_apns"), api); err != nil {
+			if err = updateDirectAPNS(ctx, push.GetAttr("direct_apns"), api); err != nil {
 				return true
 			}
 		}
 
 		if d.HasChange("push.0.direct_fcm") {
-			if err = updateDirectFCM(push.GetAttr("direct_fcm"), api); err != nil {
+			if err = updateDirectFCM(ctx, push.GetAttr("direct_fcm"), api); err != nil {
 				return true
 			}
 		}
 
 		if d.HasChange("push.0.amazon_sns") {
-			if err = updateAmazonSNS(push.GetAttr("amazon_sns"), api); err != nil {
+			if err = updateAmazonSNS(ctx, push.GetAttr("amazon_sns"), api); err != nil {
 				return true
 			}
 		}
@@ -298,11 +303,12 @@ func updatePush(d *schema.ResourceData, api *management.Management) error {
 	return err
 }
 
-func updateAmazonSNS(options cty.Value, api *management.Management) error {
+func updateAmazonSNS(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		err = api.Guardian.MultiFactor.Push.UpdateAmazonSNS(
+			ctx,
 			&management.MultiFactorProviderAmazonSNS{
 				AccessKeyID:                value.String(config.GetAttr("aws_access_key_id")),
 				SecretAccessKeyID:          value.String(config.GetAttr("aws_secret_access_key")),
@@ -318,11 +324,12 @@ func updateAmazonSNS(options cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateCustomApp(options cty.Value, api *management.Management) error {
+func updateCustomApp(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		err = api.Guardian.MultiFactor.Push.UpdateCustomApp(
+			ctx,
 			&management.MultiFactorPushCustomApp{
 				AppName:       value.String(config.GetAttr("app_name")),
 				AppleAppLink:  value.String(config.GetAttr("apple_app_link")),
@@ -336,11 +343,12 @@ func updateCustomApp(options cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateDirectAPNS(options cty.Value, api *management.Management) error {
+func updateDirectAPNS(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		err = api.Guardian.MultiFactor.Push.UpdateDirectAPNS(
+			ctx,
 			&management.MultiFactorPushDirectAPNS{
 				Sandbox:  value.Bool(config.GetAttr("sandbox")),
 				BundleID: value.String(config.GetAttr("bundle_id")),
@@ -354,11 +362,12 @@ func updateDirectAPNS(options cty.Value, api *management.Management) error {
 	return err
 }
 
-func updateDirectFCM(options cty.Value, api *management.Management) error {
+func updateDirectFCM(ctx context.Context, options cty.Value, api *management.Management) error {
 	var err error
 
 	options.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		err = api.Guardian.MultiFactor.Push.UpdateDirectFCM(
+			ctx,
 			&management.MultiFactorPushDirectFCM{
 				ServerKey: value.String(config.GetAttr("server_key")),
 			},

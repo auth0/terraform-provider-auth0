@@ -58,10 +58,10 @@ func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return updatePrompt(ctx, d, m)
 }
 
-func readPrompt(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	prompt, err := api.Prompt.Read()
+	prompt, err := api.Prompt.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -79,7 +79,7 @@ func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	prompt := expandPrompt(d.GetRawConfig())
-	if err := api.Prompt.Update(prompt); err != nil {
+	if err := api.Prompt.Update(ctx, prompt); err != nil {
 		return diag.FromErr(err)
 	}
 

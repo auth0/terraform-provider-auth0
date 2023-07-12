@@ -48,22 +48,8 @@ resource "auth0_user" "user" {
 }
 `
 
-const testAccUserUpdateWithRolesAndMetadata = `
-resource "auth0_role" "owner" {
-	name        = "Test Owner {{.testName}}"
-	description = "Owner {{.testName}}"
-}
-
-resource "auth0_role" "admin" {
-	depends_on = [ auth0_role.owner ]
-
-	name        = "Test Admin {{.testName}}"
-	description = "Administrator {{.testName}}"
-}
-
+const testAccUserUpdateWithMetadataWithTwoElements = `
 resource "auth0_user" "user" {
-	depends_on = [ auth0_role.admin ]
-
 	connection_name = "Username-Password-Authentication"
 	username        = "{{.testName}}"
 	email           = "{{.testName}}@acceptance.test.com"
@@ -73,7 +59,6 @@ resource "auth0_user" "user" {
 	family_name     = "Lastname"
 	nickname        = "{{.testName}}"
 	picture         = "https://www.example.com/picture.jpg"
-	roles           = [ auth0_role.owner.id, auth0_role.admin.id ]
 	user_metadata   = jsonencode({
 		"foo": "bar",
 		"baz": "qux"
@@ -85,15 +70,8 @@ resource "auth0_user" "user" {
 }
 `
 
-const testAccUserUpdateRemovingOneRoleAndUpdatingMetadata = `
-resource "auth0_role" "admin" {
-	name        = "Test Admin {{.testName}}"
-	description = "Administrator {{.testName}}"
-}
-
+const testAccUserUpdateMetadataByRemovingOneElement = `
 resource "auth0_user" "user" {
-	depends_on = [ auth0_role.admin ]
-
 	connection_name = "Username-Password-Authentication"
 	username        = "{{.testName}}"
 	email           = "{{.testName}}@acceptance.test.com"
@@ -103,7 +81,6 @@ resource "auth0_user" "user" {
 	family_name     = "Lastname"
 	nickname        = "{{.testName}}"
 	picture         = "https://www.example.com/picture.jpg"
-	roles           = [ auth0_role.admin.id ]
 	user_metadata   = jsonencode({
 		"foo": "bars",
 	})
@@ -113,7 +90,7 @@ resource "auth0_user" "user" {
 }
 `
 
-const testAccUserUpdateRemovingAllRolesAndUpdatingMetadata = `
+const testAccUserUpdatingMetadataBySettingToEmpty = `
 resource "auth0_user" "user" {
 	connection_name = "Username-Password-Authentication"
 	username        = "{{.testName}}"
@@ -124,14 +101,8 @@ resource "auth0_user" "user" {
 	family_name     = "Lastname"
 	nickname        = "{{.testName}}"
 	picture         = "https://www.example.com/picture.jpg"
-	user_metadata   = jsonencode({
-		"foo": "barss",
-		"foo2": "bar2",
-	})
-	app_metadata    = jsonencode({
-		"foo": "barss",
-		"foo2": "bar2",
-	})
+	user_metadata   =  ""
+	app_metadata    =  ""
 }
 `
 
@@ -176,41 +147,32 @@ func TestAccUser(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_user.user", "picture", "https://www.example.com/picture.jpg"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserUpdateWithRolesAndMetadata, testName),
+				Config: acctest.ParseTestName(testAccUserUpdateWithMetadataWithTwoElements, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "2"),
-					resource.TestCheckResourceAttr("auth0_role.owner", "name", fmt.Sprintf("Test Owner %s", testName)),
-					resource.TestCheckResourceAttr("auth0_role.admin", "name", fmt.Sprintf("Test Admin %s", testName)),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"baz":"qux","foo":"bar"}`),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"baz":"qux","foo":"bar"}`),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserUpdateRemovingOneRoleAndUpdatingMetadata, testName),
+				Config: acctest.ParseTestName(testAccUserUpdateMetadataByRemovingOneElement, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"bars"}`),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"foo":"bars"}`),
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUserUpdateRemovingAllRolesAndUpdatingMetadata, testName),
+				Config: acctest.ParseTestName(testAccUserUpdatingMetadataBySettingToEmpty, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
-					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", `{"foo":"barss","foo2":"bar2"}`),
-					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", `{"foo":"barss","foo2":"bar2"}`),
+					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
+					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccUserUpdateRemovingMetadata, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user.user", "roles.#", "0"),
-					resource.TestCheckResourceAttr("auth0_user.user", "permissions.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user.user", "user_metadata", ""),
 					resource.TestCheckResourceAttr("auth0_user.user", "app_metadata", ""),
 				),

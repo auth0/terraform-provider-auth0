@@ -26,9 +26,6 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		SessionLifetime:       &sessionLifetime,
 		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
-		ChangePassword:        ExpandTenantChangePassword(config.GetAttr("change_password")),
-		GuardianMFAPage:       ExpandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
-		ErrorPage:             ExpandTenantErrorPage(config.GetAttr("error_page")),
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
 		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
@@ -39,58 +36,6 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 	}
 
 	return tenant
-}
-
-// ExpandTenantChangePassword expands the change password page config.
-func ExpandTenantChangePassword(config cty.Value) *management.TenantChangePassword {
-	var changePassword management.TenantChangePassword
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		changePassword.Enabled = value.Bool(d.GetAttr("enabled"))
-		changePassword.HTML = value.String(d.GetAttr("html"))
-		return stop
-	})
-
-	if changePassword == (management.TenantChangePassword{}) {
-		return nil
-	}
-
-	return &changePassword
-}
-
-// ExpandTenantGuardianMFAPage expands the guardian mfa page config.
-func ExpandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFAPage {
-	var mfa management.TenantGuardianMFAPage
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		mfa.Enabled = value.Bool(d.GetAttr("enabled"))
-		mfa.HTML = value.String(d.GetAttr("html"))
-		return stop
-	})
-
-	if mfa == (management.TenantGuardianMFAPage{}) {
-		return nil
-	}
-
-	return &mfa
-}
-
-// ExpandTenantErrorPage expands the error page config.
-func ExpandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
-	var errorPage management.TenantErrorPage
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		errorPage.HTML = value.String(d.GetAttr("html"))
-		errorPage.ShowLogLink = value.Bool(d.GetAttr("show_log_link"))
-		errorPage.URL = value.String(d.GetAttr("url"))
-		return stop
-	})
-
-	if errorPage == (management.TenantErrorPage{}) {
-		return nil
-	}
-
-	return &errorPage
 }
 
 func expandTenantFlags(config cty.Value) *management.TenantFlags {

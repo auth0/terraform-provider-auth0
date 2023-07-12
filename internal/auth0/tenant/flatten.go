@@ -4,46 +4,6 @@ import (
 	"github.com/auth0/go-auth0/management"
 )
 
-// FlattenTenantChangePassword flattens the change password page data.
-func FlattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
-	if changePassword == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["enabled"] = changePassword.Enabled
-	m["html"] = changePassword.HTML
-
-	return []interface{}{m}
-}
-
-// FlattenTenantGuardianMFAPage flattens the guardian mfa page data.
-func FlattenTenantGuardianMFAPage(mfa *management.TenantGuardianMFAPage) []interface{} {
-	if mfa == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["enabled"] = mfa.Enabled
-	m["html"] = mfa.HTML
-
-	return []interface{}{m}
-}
-
-// FlattenTenantErrorPage flattens the error page data.
-func FlattenTenantErrorPage(errorPage *management.TenantErrorPage) []interface{} {
-	if errorPage == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["html"] = errorPage.HTML
-	m["show_log_link"] = errorPage.ShowLogLink
-	m["url"] = errorPage.URL
-
-	return []interface{}{m}
-}
-
 func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	if flags == nil {
 		return nil

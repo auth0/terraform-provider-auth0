@@ -28,15 +28,7 @@ resource "auth0_tenant" "my_tenant" {
     mode = "non-persistent"
   }
 
-  universal_login {
-    colors {
-      primary         = "#0059d6"
-      page_background = "#000000"
-    }
-  }
-
   flags {
-    universal_login                        = true
     disable_clickjack_protection_headers   = true
     enable_public_signup_user_exists_error = true
     use_scope_descriptions_for_consent     = true
@@ -66,7 +58,6 @@ resource "auth0_tenant" "my_tenant" {
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
-- `universal_login` (Block List, Max: 1, Deprecated) Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info. (see [below for nested schema](#nestedblock--universal_login))
 
 ### Read-Only
 
@@ -98,7 +89,6 @@ Optional:
 - `mfa_show_factor_list_on_enrollment` (Boolean) Used to allow users to pick which factor to enroll with from the list of available MFA factors.
 - `no_disclose_enterprise_connections` (Boolean) Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
 - `revoke_refresh_token_grant` (Boolean) Delete underlying grant when a refresh token is revoked via the Authentication API.
-- `universal_login` (Boolean, Deprecated) Indicates whether the New Universal Login Experience is enabled.
 - `use_scope_descriptions_for_consent` (Boolean) Indicates whether to use scope descriptions for consent.
 
 
@@ -108,22 +98,6 @@ Optional:
 Optional:
 
 - `mode` (String) Behavior of tenant session cookie. Accepts either "persistent" or "non-persistent".
-
-
-<a id="nestedblock--universal_login"></a>
-### Nested Schema for `universal_login`
-
-Optional:
-
-- `colors` (Block List, Max: 1) Configuration settings for Universal Login colors. (see [below for nested schema](#nestedblock--universal_login--colors))
-
-<a id="nestedblock--universal_login--colors"></a>
-### Nested Schema for `universal_login.colors`
-
-Optional:
-
-- `page_background` (String) Background color of login pages in hexadecimal.
-- `primary` (String) Primary button background color in hexadecimal.
 
 ## Import
 

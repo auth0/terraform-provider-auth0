@@ -31,10 +31,6 @@ resource "auth0_user" "user" {
 	email           = "{{.testName}}@acceptance.test.com"
 	password        = "passpass$12$12"
 	username        = "{{.testName}}"
-
-	lifecycle {
-		ignore_changes = [roles]
-	}
 }
 `
 

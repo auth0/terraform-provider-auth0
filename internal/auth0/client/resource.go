@@ -267,280 +267,6 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "HTML form template to be used for WS-Federation.",
 			},
-			"addons": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Addons enabled for this client and their associated configurations.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"aws": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_blob": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"azure_sb": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"rms": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"mscrm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"slack": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sentry": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"box": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"cloudbees": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"concur": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"dropbox": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"echosign": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"egnyte": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"firebase": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"newrelic": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"office365": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"salesforce_sandbox_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"samlp": {
-							Type:        schema.TypeList,
-							MaxItems:    1,
-							Optional:    true,
-							Description: "Configuration settings for a SAML add-on.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"audience": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Audience of the SAML Assertion. " +
-											"Default will be the Issuer on SAMLRequest.",
-									},
-									"recipient": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
-											"Default is `AssertionConsumerUrl` on SAMLRequest or " +
-											"callback URL if no SAMLRequest was sent.",
-									},
-									"mappings": {
-										Type:     schema.TypeMap,
-										Optional: true,
-										Elem:     schema.TypeString,
-										Description: "Mappings between the Auth0 user profile property " +
-											"name (`name`) and the output attributes on the SAML " +
-											"attribute in the assertion (`value`).",
-									},
-									"create_upn_claim": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether a UPN claim should be created. " +
-											"Defaults to `true`.",
-									},
-									"passthrough_claims_with_no_mapping": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not to passthrough " +
-											"claims that are not mapped to the common profile " +
-											"in the output assertion. Defaults to `true`.",
-									},
-									"map_unknown_claims_as_is": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  false,
-										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
-											"to any claims that are not mapped to the common profile when passed " +
-											"through in the output assertion. Defaults to `false`.",
-									},
-									"map_identities": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not to add additional identity " +
-											"information in the token, such as the provider used and the " +
-											"`access_token`, if available. Defaults to `true`.",
-									},
-									"signature_algorithm": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "rsa-sha1",
-										Description: "Algorithm used to sign the SAML Assertion or response. " +
-											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
-									},
-									"digest_algorithm": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Default:  "sha1",
-										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
-											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
-									},
-									"destination": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Destination of the SAML Response. If not specified, " +
-											"it will be `AssertionConsumerUrl` of SAMLRequest " +
-											"or callback URL if there was no SAMLRequest.",
-									},
-									"lifetime_in_seconds": {
-										Type:        schema.TypeInt,
-										Optional:    true,
-										Default:     3600,
-										Description: "Number of seconds during which the token is valid.",
-									},
-									"sign_response": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Description: "Indicates whether or not the SAML Response should be signed " +
-											"instead of the SAML Assertion.",
-									},
-									"name_identifier_format": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Default:     "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-										Description: "Format of the name identifier.",
-									},
-									"name_identifier_probes": {
-										Type:     schema.TypeList,
-										Elem:     &schema.Schema{Type: schema.TypeString},
-										Optional: true,
-										Description: "Attributes that can be used for Subject/NameID. " +
-											"Auth0 will try each of the attributes of this array in " +
-											"order and use the first value it finds.",
-									},
-									"authn_context_class_ref": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Class reference of the authentication context.",
-									},
-									"typed_attributes": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not we should infer the `xs:type` " +
-											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
-											"and `xs:anyType`. When set to false, all `xs:type` are `xs:anyType`. " +
-											"Defaults to `true`.",
-									},
-									"include_attribute_name_format": {
-										Type:     schema.TypeBool,
-										Optional: true,
-										Default:  true,
-										Description: "Indicates whether or not we should infer the NameFormat " +
-											"based on the attribute name. If set to false, the attribute " +
-											"NameFormat is not set in the assertion. Defaults to `true`.",
-									},
-									"logout": {
-										Type:        schema.TypeMap,
-										Optional:    true,
-										Description: "Configuration settings for logout.",
-									},
-									"binding": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Protocol binding used for SAML logout responses.",
-									},
-									"signing_cert": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Description: "Optionally indicates the public key certificate used to " +
-											"validate SAML requests. If set, SAML requests will be required to " +
-											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
-									},
-									"issuer": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "Issuer of the SAML Assertion.",
-									},
-								},
-							},
-						},
-						"layer": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sap_api": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"sharepoint": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"springcm": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"wams": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"wsfed": {
-							Type:     schema.TypeMap,
-							Optional: true,
-							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored " +
-								"in callback and `client_aliases` properties on the client.",
-						},
-						"zendesk": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-						"zoom": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-					},
-				},
-			},
 			"token_endpoint_auth_method": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -760,6 +486,863 @@ func NewResource() *schema.Resource {
 				Description: "List containing a map of the public cert of the signing key and the public cert " +
 					"of the signing key in PKCS7.",
 			},
+			"addons": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Addons enabled for this client and their associated configurations.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"aws": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "AWS Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"principal": {
+										Description: "AWS principal ARN, for example `arn:aws:iam::010616021751:saml-provider/idpname`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"role": {
+										Description: "AWS role ARN, for example `arn:aws:iam::010616021751:role/foo`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"lifetime_in_seconds": {
+										Description:  "AWS token lifetime in seconds.",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntBetween(900, 43200),
+										Optional:     true,
+									},
+								},
+							},
+						},
+						"azure_blob": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Azure Blob Storage Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account_name": {
+										Description: "Your Azure storage account name. Usually first segment in your " +
+											"Azure storage URL, for example `https://acme-org.blob.core.windows.net` would " +
+											"be the account name `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"storage_access_key": {
+										Description: "Access key associated with this storage account.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"container_name": {
+										Description: "Container to request a token for, such as `my-container`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"blob_name": {
+										Description: "Entity to request a token for, such as `my-blob`. If blank the " +
+											"computed SAS will apply to the entire storage container.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"expiration": {
+										Description:  "Expiration in minutes for the generated token (default of 5 minutes).",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntAtLeast(0),
+										Optional:     true,
+									},
+									"signed_identifier": {
+										Description: "Shared access policy identifier defined in your storage account resource.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"blob_read": {
+										Description: "Indicates if the issued token has permission to read the " +
+											"content, properties, metadata and block list. Use the blob as the " +
+											"source of a copy operation.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"blob_write": {
+										Description: "Indicates if the issued token has permission to create or " +
+											"write content, properties, metadata, or block list. Snapshot or lease " +
+											"the blob. Resize the blob (page blob only). Use the blob as the " +
+											"destination of a copy operation within the same account.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"blob_delete": {
+										Description: "Indicates if the issued token has permission to delete the blob.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+									},
+									"container_read": {
+										Description: "Indicates if the issued token has permission to read the " +
+											"content, properties, metadata or block list of any blob in the " +
+											"container. Use any blob in the container as the source of a copy operation.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_write": {
+										Description: "Indicates that for any blob in the container if the issued " +
+											"token has permission to create or write content, properties, metadata, " +
+											"or block list. Snapshot or lease the blob. Resize the blob " +
+											"(page blob only). Use the blob as the destination of a copy operation " +
+											"within the same account.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_delete": {
+										Description: "Indicates if issued token has permission to delete any blob in " +
+											"the container.",
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+									"container_list": {
+										Description: "Indicates if the issued token has permission to list blobs in the container.",
+										Type:        schema.TypeBool,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"azure_sb": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Azure Storage Bus Addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"namespace": {
+										Description: "Your Azure Service Bus namespace. Usually the first segment of " +
+											"your Service Bus URL (for example `https://acme-org.servicebus.windows.net` " +
+											"would be `acme-org`).",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"sas_key_name": {
+										Description: "Your shared access policy name defined in your Service Bus entity.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"sas_key": {
+										Description: "Primary Key associated with your shared access policy.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"entity_path": {
+										Description: "Entity you want to request a token for, such as `my-queue`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"expiration": {
+										Description:  "Optional expiration in minutes for the generated token. Defaults to 5 minutes.",
+										Type:         schema.TypeInt,
+										ValidateFunc: validation.IntAtLeast(0),
+										Optional:     true,
+									},
+								},
+							},
+						},
+						"rms": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Active Directory Rights Management Service SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description: "URL of your Rights Management Server. It can be internal or " +
+											"external, but users will have to be able to reach it.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
+						"mscrm": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Microsoft Dynamics CRM SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description:  "Microsoft Dynamics CRM application URL.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
+						"slack": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "Slack team or workspace name usually first segment in your Slack URL, " +
+								"for example `https://acme-org.slack.com` would be `acme-org`.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"team": {
+										Description: "Slack team name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"sentry": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Sentry SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"org_slug": {
+										Description: "Generated slug for your Sentry organization. Found in your " +
+											"Sentry URL, for example `https://sentry.acme.com/acme-org/` would be " +
+											"`acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"base_url": {
+										Description:  "URL prefix only if running Sentry Community Edition, otherwise leave empty.",
+										Type:         schema.TypeString,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+										Optional:     true,
+									},
+								},
+							},
+						},
+						"echosign": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Adobe EchoSign SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your custom domain found in your EchoSign URL, for example " +
+											"`https://acme-org.echosign.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"egnyte": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Egnyte SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your custom domain found in your Egnyte URL, for example " +
+											"`https://acme-org.echosign.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"firebase": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Google Firebase addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"secret": {
+										Description: "Google Firebase Secret. (SDK v2 only).",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"private_key_id": {
+										Description: "Optional ID of the private key to obtain the `kid` header " +
+											"claim from the issued token (SDK v3+ tokens only).",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"private_key": {
+										Description: "Private Key for signing the token (SDK v3+ tokens only).",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"client_email": {
+										Description: "ID of the Service Account you have created (shown as " +
+											"`client_email` in the generated JSON file, SDK v3+ tokens only).",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"lifetime_in_seconds": {
+										Description: "Optional expiration in seconds for the generated token. " +
+											"Defaults to 3600 seconds (SDK v3+ tokens only).",
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"newrelic": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "New Relic SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account": {
+										Description: "Your New Relic Account ID found in your New Relic URL after the " +
+											"`/accounts/` path, for example `https://rpm.newrelic.com/accounts/123456/query` would be `123456`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"office365": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Microsoft Office 365 SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"domain": {
+										Description: "Your Office 365 domain name, for example `acme-org.com`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"connection": {
+										Description: "Optional Auth0 database connection for testing an " +
+											"already-configured Office 365 tenant.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"salesforce": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"entity_id": {
+										Description:  "Arbitrary logical URL that identifies the Saleforce resource, for example `https://acme-org.com`.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+								},
+							},
+						},
+						"salesforce_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce API addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "Consumer Key assigned by Salesforce to the Connected App.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property in the user object that maps to a " +
+											"Salesforce username, for example `email`.",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"community_name": {
+										Description: "Community name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"community_url_section": {
+										Description: "Community URL section.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"salesforce_sandbox_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Salesforce Sandbox addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "Consumer Key assigned by Salesforce to the Connected App.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property in the user object that maps to a " +
+											"Salesforce username, for example `email`.",
+										Type:      schema.TypeString,
+										Optional:  true,
+										Sensitive: true,
+									},
+									"community_name": {
+										Description: "Community name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"community_url_section": {
+										Description: "Community URL section.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"layer": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Layer addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"provider_id": {
+										Description: "Provider ID of your Layer account.",
+										Type:        schema.TypeString,
+										Required:    true,
+									},
+									"key_id": {
+										Description: "Authentication Key identifier used to sign the Layer token.",
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+									},
+									"private_key": {
+										Description: "Private key for signing the Layer token.",
+										Type:        schema.TypeString,
+										Required:    true,
+										Sensitive:   true,
+									},
+									"principal": {
+										Description: "Name of the property used as the unique user ID in Layer. " +
+											"If not specified `user_id` is used.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"expiration": {
+										Description: "Optional expiration in minutes for the generated token. " +
+											"Defaults to 5 minutes.",
+										Type:         schema.TypeInt,
+										Optional:     true,
+										ValidateFunc: validation.IntAtLeast(0),
+									},
+								},
+							},
+						},
+						"sap_api": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SAP API addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"client_id": {
+										Description: "If activated in the OAuth 2.0 client configuration (transaction `SOAUTH2) " +
+											"the SAML attribute `client_id` must be set and equal the `client_id` form " +
+											"parameter of the access token request.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"username_attribute": {
+										Description: "Name of the property in the user object that maps to a SAP username, for example `email`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"token_endpoint_url": {
+										Description:  "The OAuth2 token endpoint URL of your SAP OData server.",
+										Type:         schema.TypeString,
+										Optional:     true,
+										ValidateFunc: internalValidation.IsURLWithHTTPSorEmptyString,
+									},
+									"scope": {
+										Description: "Requested scope for SAP APIs.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"service_password": {
+										Description: "Service account password to use to authenticate API calls to the token endpoint.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+									"name_identifier_format": {
+										Description: "NameID element of the Subject which can be used to express the user's identity. " +
+											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"sharepoint": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SharePoint SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"url": {
+										Description: "Internal SharePoint application URL.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"external_url": {
+										Description: "External SharePoint application URLs if exposed to the Internet.",
+										Type:        schema.TypeList,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+										Optional: true,
+									},
+								},
+							},
+						},
+						"springcm": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "SpringCM SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"acs_url": {
+										Description: "SpringCM ACS URL, for example `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"wams": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Windows Azure Mobile Services addon configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"master_key": {
+										Description: "Your master key for Windows Azure Mobile Services.",
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+									},
+								},
+							},
+						},
+						"zendesk": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Zendesk SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account_name": {
+										Description: "Zendesk account name. Usually the first segment in your Zendesk URL, " +
+											"for example `https://acme-org.zendesk.com` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"zoom": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Zoom SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"account": {
+										Description: "Zoom account name. Usually the first segment of your Zoom URL, for " +
+											"example `https://acme-org.zoom.us` would be `acme-org`.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"sso_integration": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Generic SSO configuration.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"name": {
+										Description: "SSO integration name.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+									"version": {
+										Description: "SSO integration version installed.",
+										Type:        schema.TypeString,
+										Optional:    true,
+									},
+								},
+							},
+						},
+						"samlp": {
+							Type:        schema.TypeList,
+							MaxItems:    1,
+							Optional:    true,
+							Description: "Configuration settings for a SAML add-on.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"audience": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Audience of the SAML Assertion. " +
+											"Default will be the Issuer on SAMLRequest.",
+									},
+									"recipient": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Recipient of the SAML Assertion (SubjectConfirmationData). " +
+											"Default is `AssertionConsumerUrl` on SAMLRequest or " +
+											"callback URL if no SAMLRequest was sent.",
+									},
+									"mappings": {
+										Type:     schema.TypeMap,
+										Optional: true,
+										Elem:     schema.TypeString,
+										Description: "Mappings between the Auth0 user profile property " +
+											"name (`name`) and the output attributes on the SAML " +
+											"attribute in the assertion (`value`).",
+									},
+									"create_upn_claim": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether a UPN claim should be created. " +
+											"Defaults to `true`.",
+									},
+									"passthrough_claims_with_no_mapping": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not to passthrough " +
+											"claims that are not mapped to the common profile " +
+											"in the output assertion. Defaults to `true`.",
+									},
+									"map_unknown_claims_as_is": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  false,
+										Description: "Indicates whether to add a prefix of `http://schema.auth0.com` " +
+											"to any claims that are not mapped to the common profile when passed " +
+											"through in the output assertion. Defaults to `false`.",
+									},
+									"map_identities": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not to add additional identity " +
+											"information in the token, such as the provider used and the " +
+											"`access_token`, if available. Defaults to `true`.",
+									},
+									"signature_algorithm": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "rsa-sha1",
+										Description: "Algorithm used to sign the SAML Assertion or response. " +
+											"Options include `rsa-sha1` and `rsa-sha256`. Defaults to `rsa-sha1`.",
+									},
+									"digest_algorithm": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "sha1",
+										Description: "Algorithm used to calculate the digest of the SAML Assertion " +
+											"or response. Options include `sha1` and `sha256`. Defaults to `sha1`.",
+									},
+									"destination": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Destination of the SAML Response. If not specified, " +
+											"it will be `AssertionConsumerUrl` of SAMLRequest " +
+											"or callback URL if there was no SAMLRequest.",
+									},
+									"lifetime_in_seconds": {
+										Type:     schema.TypeInt,
+										Optional: true,
+										Default:  3600,
+										Description: "Number of seconds during which the token is valid. " +
+											"Defaults to `3600` seconds.",
+									},
+									"sign_response": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Description: "Indicates whether or not the SAML Response should be signed " +
+											"instead of the SAML Assertion.",
+									},
+									"name_identifier_format": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Default:  "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+										Description: "Format of the name identifier. " +
+											"Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`.",
+									},
+									"name_identifier_probes": {
+										Type:     schema.TypeList,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Optional: true,
+										Description: "Attributes that can be used for Subject/NameID. " +
+											"Auth0 will try each of the attributes of this array in " +
+											"order and use the first value it finds.",
+									},
+									"authn_context_class_ref": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Class reference of the authentication context.",
+									},
+									"typed_attributes": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not we should infer the `xs:type` " +
+											"of the element. Types include `xs:string`, `xs:boolean`, `xs:double`, " +
+											"and `xs:anyType`. When set to `false`, all `xs:type` are `xs:anyType`. " +
+											"Defaults to `true`.",
+									},
+									"include_attribute_name_format": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										Default:  true,
+										Description: "Indicates whether or not we should infer the NameFormat " +
+											"based on the attribute name. If set to `false`, the attribute " +
+											"NameFormat is not set in the assertion. Defaults to `true`.",
+									},
+									"logout": {
+										Type:        schema.TypeList,
+										MaxItems:    1,
+										Optional:    true,
+										Description: "Configuration settings for logout.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"callback": {
+													Description: "The service provider (client application)'s Single Logout Service URL, " +
+														"where Auth0 will send logout requests and responses.",
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"slo_enabled": {
+													Description: "Controls whether Auth0 should notify service providers of session termination.",
+													Type:        schema.TypeBool,
+													Optional:    true,
+												},
+											},
+										},
+									},
+									"binding": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Protocol binding used for SAML logout responses.",
+									},
+									"signing_cert": {
+										Type:     schema.TypeString,
+										Optional: true,
+										Description: "Optionally indicates the public key certificate used to " +
+											"validate SAML requests. If set, SAML requests will be required to " +
+											"be signed. A sample value would be `-----BEGIN PUBLIC KEY-----\\nMIGf...bpP/t3\\n+JGNGIRMj1hF1rnb6QIDAQAB\\n-----END PUBLIC KEY-----\\n`.",
+									},
+									"issuer": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Issuer of the SAML Assertion.",
+									},
+								},
+							},
+						},
+						"box": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Box SSO indicator (no configuration settings needed for Box SSO).",
+							Elem:        &schema.Resource{},
+						},
+						"cloudbees": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "CloudBees SSO indicator (no configuration settings needed for CloudBees SSO).",
+							Elem:        &schema.Resource{},
+						},
+						"concur": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Concur SSO indicator (no configuration settings needed for Concur SSO).",
+							Elem:        &schema.Resource{},
+						},
+						"dropbox": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Dropbox SSO indicator (no configuration settings needed for Dropbox SSO).",
+							Elem:        &schema.Resource{},
+						},
+						"wsfed": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` " +
+								"and `client_aliases` properties on the client.",
+							Elem: &schema.Resource{},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -768,7 +1351,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
-	if err := api.Client.Create(client); err != nil {
+	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -777,10 +1360,10 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func readClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(d.Id())
+	client, err := api.Client.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -836,13 +1419,13 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	client := expandClient(d)
 	if clientHasChange(client) {
-		if err := api.Client.Update(d.Id(), client); err != nil {
+		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	d.Partial(true)
-	if err := rotateClientSecret(d, m); err != nil {
+	if err := rotateClientSecret(ctx, d, m); err != nil {
 		return diag.FromErr(err)
 	}
 	d.Partial(false)
@@ -850,10 +1433,10 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readClient(ctx, d, m)
 }
 
-func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Client.Delete(d.Id()); err != nil {
+	if err := api.Client.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
@@ -864,14 +1447,14 @@ func deleteClient(_ context.Context, d *schema.ResourceData, m interface{}) diag
 	return nil
 }
 
-func rotateClientSecret(d *schema.ResourceData, m interface{}) error {
+func rotateClientSecret(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	if !d.HasChange("client_secret_rotation_trigger") {
 		return nil
 	}
 
 	api := m.(*config.Config).GetAPI()
 
-	client, err := api.Client.RotateSecret(d.Id())
+	client, err := api.Client.RotateSecret(ctx, d.Id())
 	if err != nil {
 		return err
 	}

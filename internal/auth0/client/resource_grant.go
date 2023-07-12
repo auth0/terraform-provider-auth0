@@ -54,6 +54,7 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	api := m.(*config.Config).GetAPI()
 
 	grantList, err := api.ClientGrant.List(
+		ctx,
 		management.Parameter("audience", d.Get("audience").(string)),
 		management.Parameter("client_id", d.Get("client_id").(string)),
 	)
@@ -67,7 +68,7 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	}
 
 	clientGrant := expandClientGrant(d)
-	if err := api.ClientGrant.Create(clientGrant); err != nil {
+	if err := api.ClientGrant.Create(ctx, clientGrant); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -76,10 +77,10 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	return readClientGrant(ctx, d, m)
 }
 
-func readClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	clientGrant, err := api.ClientGrant.Read(d.Id())
+	clientGrant, err := api.ClientGrant.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -102,7 +103,7 @@ func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 
 	clientGrant := expandClientGrant(d)
 	if clientGrantHasChange(clientGrant) {
-		if err := api.ClientGrant.Update(d.Id(), clientGrant); err != nil {
+		if err := api.ClientGrant.Update(ctx, d.Id(), clientGrant); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -110,10 +111,10 @@ func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	return readClientGrant(ctx, d, m)
 }
 
-func deleteClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.ClientGrant.Delete(d.Id()); err != nil {
+	if err := api.ClientGrant.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

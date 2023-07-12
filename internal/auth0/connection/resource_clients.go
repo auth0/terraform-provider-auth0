@@ -59,6 +59,7 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	connectionID := data.Get("connection_id").(string)
 
 	connection, err := api.Connection.Read(
+		ctx,
 		connectionID,
 		management.IncludeFields("enabled_clients", "strategy", "name"),
 	)
@@ -86,6 +87,7 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	data.SetId(connection.GetID())
 
 	if err := api.Connection.Update(
+		ctx,
 		connectionID,
 		&management.Connection{EnabledClients: enabledClients},
 	); err != nil {
@@ -95,10 +97,11 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	return readConnectionClients(ctx, data, meta)
 }
 
-func readConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connection, err := api.Connection.Read(
+		ctx,
 		data.Id(),
 		management.IncludeFields("enabled_clients", "strategy", "name"),
 	)
@@ -125,6 +128,7 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 
 	if err := api.Connection.Update(
+		ctx,
 		data.Id(),
 		&management.Connection{EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))},
 	); err != nil {
@@ -139,12 +143,13 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	return readConnectionClients(ctx, data, meta)
 }
 
-func deleteConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	enabledClients := make([]string, 0)
 
 	if err := api.Connection.Update(
+		ctx,
 		data.Id(),
 		&management.Connection{EnabledClients: &enabledClients},
 	); err != nil {

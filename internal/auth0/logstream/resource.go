@@ -266,7 +266,7 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	api := m.(*config.Config).GetAPI()
 
 	logStream := expandLogStream(d)
-	if err := api.LogStream.Create(logStream); err != nil {
+	if err := api.LogStream.Create(ctx, logStream); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -277,7 +277,7 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	// we perform an additional operation to modify it.
 	status := d.Get("status").(string)
 	if status != "" && status != logStream.GetStatus() {
-		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: &status}); err != nil {
+		if err := api.LogStream.Update(ctx, logStream.GetID(), &management.LogStream{Status: &status}); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -285,10 +285,10 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	return readLogStream(ctx, d, m)
 }
 
-func readLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	logStream, err := api.LogStream.Read(d.Id())
+	logStream, err := api.LogStream.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -312,17 +312,17 @@ func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	api := m.(*config.Config).GetAPI()
 
 	logStream := expandLogStream(d)
-	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
+	if err := api.LogStream.Update(ctx, d.Id(), logStream); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readLogStream(ctx, d, m)
 }
 
-func deleteLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.LogStream.Delete(d.Id()); err != nil {
+	if err := api.LogStream.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil

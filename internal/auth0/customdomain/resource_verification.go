@@ -60,7 +60,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 	api := m.(*config.Config).GetAPI()
 
 	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
+		customDomainVerification, err := api.CustomDomain.Verify(ctx, d.Get("custom_domain_id").(string))
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
@@ -91,10 +91,10 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 	return readCustomDomainVerification(ctx, d, m)
 }
 
-func readCustomDomainVerification(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	customDomain, err := api.CustomDomain.Read(d.Id())
+	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")

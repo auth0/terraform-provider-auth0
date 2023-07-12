@@ -66,7 +66,7 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Get("organization_id").(string)
 
-	alreadyEnabledConnections, err := api.Organization.Connections(organizationID)
+	alreadyEnabledConnections, err := api.Organization.Connections(ctx, organizationID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -93,7 +93,7 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		var result *multierror.Error
 
 		for _, connection := range connectionsToAdd {
-			if err := api.Organization.AddConnection(organizationID, connection); err != nil {
+			if err := api.Organization.AddConnection(ctx, organizationID, connection); err != nil {
 				result = multierror.Append(result, err)
 			}
 		}
@@ -106,10 +106,10 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationConnections(ctx, data, meta)
 }
 
-func readOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connections, err := api.Organization.Connections(data.Id())
+	connections, err := api.Organization.Connections(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -138,7 +138,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, rmConnection := range toRemove {
 		connection := rmConnection.(map[string]interface{})
 
-		if err := api.Organization.DeleteConnection(organizationID, connection["connection_id"].(string)); err != nil {
+		if err := api.Organization.DeleteConnection(ctx, organizationID, connection["connection_id"].(string)); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -151,7 +151,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
 
-		if err := api.Organization.AddConnection(organizationID, &management.OrganizationConnection{
+		if err := api.Organization.AddConnection(ctx, organizationID, &management.OrganizationConnection{
 			ConnectionID:            auth0.String(connection["connection_id"].(string)),
 			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
 		}); err != nil {
@@ -171,7 +171,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationConnections(ctx, data, meta)
 }
 
-func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Id()
@@ -180,7 +180,7 @@ func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData,
 
 	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	for _, conn := range connections {
-		err := api.Organization.DeleteConnection(organizationID, conn.GetConnectionID())
+		err := api.Organization.DeleteConnection(ctx, organizationID, conn.GetConnectionID())
 		result = multierror.Append(result, err)
 	}
 

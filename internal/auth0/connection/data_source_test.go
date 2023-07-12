@@ -102,3 +102,22 @@ func TestAccDataSourceConnectionByID(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataConnectionNonexistentID = `
+data "auth0_connection" "test" {
+	connection_id = "con_xxxxxxxxxxxxxxxx"
+}
+`
+
+func TestAccDataSourceConnectionNonexistentID(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataConnectionNonexistentID, t.Name()),
+				ExpectError: regexp.MustCompile(
+					`no resource found with that identifier \((404\))`,
+				),
+			},
+		},
+	})
+}

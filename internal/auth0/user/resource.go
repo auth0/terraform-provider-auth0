@@ -148,114 +148,26 @@ func NewResource() *schema.Resource {
 					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
 					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
-			"roles": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
-				Description: "Set of IDs of roles assigned to the user. " +
-					"Managing roles through this attribute is deprecated and it will be removed in a future major version. " +
-					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
-					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.",
-				Deprecated: "Managing roles through this attribute is deprecated and it will be removed in a future major version. " +
-					"Migrate to the `auth0_user_roles` or the `auth0_user_role` resource to manage user roles instead. " +
-					"Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#user-roles) on how to do that.",
-			},
-			"permissions": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Description: "List of API permissions granted to the user. " +
-					"Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +
-					"Use the `auth0_user` data source instead.",
-				Deprecated: "Reading permissions through this attribute is deprecated and it will be removed in a future major version. " +
-					"Use the `auth0_user` data source instead.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "Name of permission.",
-						},
-						"description": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "Description of the permission.",
-						},
-						"resource_server_identifier": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "Resource server identifier associated with the permission.",
-						},
-						"resource_server_name": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "Name of resource server that the permission is associated with.",
-						},
-					},
-				},
-			},
 		},
 	}
 }
 
-func readUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	user, err := api.User.Read(d.Id())
+	user, err := api.User.Read(ctx, d.Id())
 	if err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			d.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		d.Set("user_id", user.GetID()),
-		d.Set("username", user.GetUsername()),
-		d.Set("name", user.GetName()),
-		d.Set("family_name", user.GetFamilyName()),
-		d.Set("given_name", user.GetGivenName()),
-		d.Set("nickname", user.GetNickname()),
-		d.Set("email", user.GetEmail()),
-		d.Set("email_verified", user.GetEmailVerified()),
-		d.Set("verify_email", user.GetVerifyEmail()),
-		d.Set("phone_number", user.GetPhoneNumber()),
-		d.Set("phone_verified", user.GetPhoneVerified()),
-		d.Set("blocked", user.GetBlocked()),
-		d.Set("picture", user.GetPicture()),
-	)
+	err = flattenUser(d, user)
 
-	var userMeta string
-	if user.UserMetadata != nil {
-		userMeta, err = structure.FlattenJsonToString(*user.UserMetadata)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	result = multierror.Append(result, d.Set("user_metadata", userMeta))
-
-	var appMeta string
-	if user.AppMetadata != nil {
-		appMeta, err = structure.FlattenJsonToString(*user.AppMetadata)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	result = multierror.Append(result, d.Set("app_metadata", appMeta))
-
-	roleList, err := api.User.Roles(d.Id())
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	result = multierror.Append(result, d.Set("roles", flattenUserRoles(roleList)))
-
-	permissions, err := api.User.Permissions(user.GetID())
-	if err != nil {
-		return diag.FromErr(err)
-	}
-	result = multierror.Append(result, d.Set("permissions", flattenUserPermissions(permissions)))
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(err)
 }
 
 func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -266,13 +178,13 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	if err := api.User.Create(user); err != nil {
+	if err := api.User.Create(ctx, user); err != nil {
 		return diag.FromErr(err)
 	}
 
 	d.SetId(user.GetID())
 
-	if err = persistUserRoles(d, m); err != nil {
+	if err = persistUserRoles(ctx, d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return readUser(ctx, d, m)
 		}
@@ -295,12 +207,12 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	api := m.(*config.Config).GetAPI()
 	if userHasChange(user) {
-		if err := api.User.Update(d.Id(), user); err != nil {
+		if err := api.User.Update(ctx, d.Id(), user); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	if err = persistUserRoles(d, m); err != nil {
+	if err = persistUserRoles(ctx, d, m); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return readUser(ctx, d, m)
 		}
@@ -311,9 +223,9 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readUser(ctx, d, m)
 }
 
-func deleteUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.User.Delete(d.Id()); err != nil {
+	if err := api.User.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -324,124 +236,6 @@ func deleteUser(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 	}
 
 	return nil
-}
-
-func expandUser(d *schema.ResourceData) (*management.User, error) {
-	config := d.GetRawConfig()
-
-	user := &management.User{}
-
-	if d.IsNewResource() {
-		user.ID = value.String(config.GetAttr("user_id"))
-	}
-	if d.HasChange("email") {
-		user.Email = value.String(config.GetAttr("email"))
-	}
-	if d.HasChange("username") {
-		user.Username = value.String(config.GetAttr("username"))
-	}
-	if d.HasChange("password") {
-		user.Password = value.String(config.GetAttr("password"))
-	}
-	if d.HasChange("phone_number") {
-		user.PhoneNumber = value.String(config.GetAttr("phone_number"))
-	}
-	if d.HasChange("email_verified") {
-		user.EmailVerified = value.Bool(config.GetAttr("email_verified"))
-	}
-	if d.HasChange("verify_email") {
-		user.VerifyEmail = value.Bool(config.GetAttr("verify_email"))
-	}
-	if d.HasChange("phone_verified") {
-		user.PhoneVerified = value.Bool(config.GetAttr("phone_verified"))
-	}
-	if d.HasChange("given_name") {
-		user.GivenName = value.String(config.GetAttr("given_name"))
-	}
-	if d.HasChange("family_name") {
-		user.FamilyName = value.String(config.GetAttr("family_name"))
-	}
-	if d.HasChange("nickname") {
-		user.Nickname = value.String(config.GetAttr("nickname"))
-	}
-	if d.HasChange("name") {
-		user.Name = value.String(config.GetAttr("name"))
-	}
-	if d.HasChange("picture") {
-		user.Picture = value.String(config.GetAttr("picture"))
-	}
-	if d.HasChange("blocked") {
-		user.Blocked = value.Bool(config.GetAttr("blocked"))
-	}
-	if d.HasChange("connection_name") {
-		user.Connection = value.String(config.GetAttr("connection_name"))
-	}
-	if d.HasChange("user_metadata") {
-		userMetadata, err := expandMetadata(d, "user")
-		if err != nil {
-			return nil, err
-		}
-		user.UserMetadata = &userMetadata
-	}
-	if d.HasChange("app_metadata") {
-		appMetadata, err := expandMetadata(d, "app")
-		if err != nil {
-			return nil, err
-		}
-		user.AppMetadata = &appMetadata
-	}
-
-	return user, nil
-}
-
-func expandMetadata(d *schema.ResourceData, metadataType string) (map[string]interface{}, error) {
-	oldMetadata, newMetadata := d.GetChange(metadataType + "_metadata")
-	if oldMetadata == "" {
-		return value.MapFromJSON(d.GetRawConfig().GetAttr(metadataType + "_metadata"))
-	}
-
-	if newMetadata == "" {
-		return map[string]interface{}{}, nil
-	}
-
-	oldMap, err := structure.ExpandJsonFromString(oldMetadata.(string))
-	if err != nil {
-		return map[string]interface{}{}, err
-	}
-
-	newMap, err := structure.ExpandJsonFromString(newMetadata.(string))
-	if err != nil {
-		return map[string]interface{}{}, err
-	}
-
-	for key := range oldMap {
-		if _, ok := newMap[key]; !ok {
-			newMap[key] = nil
-		}
-	}
-
-	return newMap, nil
-}
-
-func flattenUserRoles(roleList *management.RoleList) []interface{} {
-	var roles []interface{}
-	for _, role := range roleList.Roles {
-		roles = append(roles, role.GetID())
-	}
-	return roles
-}
-
-func flattenUserPermissions(permissionList *management.PermissionList) []interface{} {
-	var permissions []interface{}
-	for _, p := range permissionList.Permissions {
-		permissions = append(permissions, map[string]string{
-			"name":                       p.GetName(),
-			"resource_server_identifier": p.GetResourceServerIdentifier(),
-			"description":                p.GetDescription(),
-			"resource_server_name":       p.GetResourceServerName(),
-		})
-	}
-	return permissions
 }
 
 func validateUser(user *management.User) error {
@@ -488,21 +282,21 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 	}
 }
 
-func persistUserRoles(d *schema.ResourceData, meta interface{}) error {
+func persistUserRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
 	if !d.HasChange("roles") {
 		return nil
 	}
 
 	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
 
-	if err := removeUserRoles(meta, d.Id(), rolesToRemove); err != nil {
+	if err := removeUserRoles(ctx, meta, d.Id(), rolesToRemove); err != nil {
 		return err
 	}
 
-	return assignUserRoles(meta, d.Id(), rolesToAdd)
+	return assignUserRoles(ctx, meta, d.Id(), rolesToAdd)
 }
 
-func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interface{}) error {
+func removeUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToRemove []interface{}) error {
 	if len(userRolesToRemove) == 0 {
 		return nil
 	}
@@ -515,10 +309,10 @@ func removeUserRoles(meta interface{}, userID string, userRolesToRemove []interf
 
 	api := meta.(*config.Config).GetAPI()
 
-	return api.User.RemoveRoles(userID, rmRoles)
+	return api.User.RemoveRoles(ctx, userID, rmRoles)
 }
 
-func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface{}) error {
+func assignUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToAdd []interface{}) error {
 	if len(userRolesToAdd) == 0 {
 		return nil
 	}
@@ -532,7 +326,7 @@ func assignUserRoles(meta interface{}, userID string, userRolesToAdd []interface
 
 	api := meta.(*config.Config).GetAPI()
 
-	return api.User.AssignRoles(userID, addRoles)
+	return api.User.AssignRoles(ctx, userID, addRoles)
 }
 
 func userHasChange(u *management.User) bool {

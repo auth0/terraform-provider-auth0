@@ -87,7 +87,7 @@ func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	api := m.(*config.Config).GetAPI()
 
 	hook := expandHook(d)
-	if err := api.Hook.Create(hook); err != nil {
+	if err := api.Hook.Create(ctx, hook); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -100,9 +100,9 @@ func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readHook(ctx, d, m)
 }
 
-func readHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	hook, err := api.Hook.Read(d.Id())
+	hook, err := api.Hook.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -113,7 +113,7 @@ func readHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 		return diag.FromErr(err)
 	}
 
-	hookSecrets, err := api.Hook.Secrets(d.Id())
+	hookSecrets, err := api.Hook.Secrets(ctx, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -139,7 +139,7 @@ func readHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	hook := expandHook(d)
 	api := m.(*config.Config).GetAPI()
-	if err := api.Hook.Update(d.Id(), hook); err != nil {
+	if err := api.Hook.Update(ctx, d.Id(), hook); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -150,9 +150,9 @@ func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	return readHook(ctx, d, m)
 }
 
-func deleteHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.Hook.Delete(d.Id()); err != nil {
+	if err := api.Hook.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")
@@ -165,7 +165,7 @@ func deleteHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 	return nil
 }
 
-func upsertHookSecrets(_ context.Context, d *schema.ResourceData, m interface{}) error {
+func upsertHookSecrets(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	if d.IsNewResource() || d.HasChange("secrets") {
 		api := m.(*config.Config).GetAPI()
 
@@ -174,7 +174,7 @@ func upsertHookSecrets(_ context.Context, d *schema.ResourceData, m interface{})
 			return nil
 		}
 
-		return api.Hook.ReplaceSecrets(d.Id(), *hookSecrets)
+		return api.Hook.ReplaceSecrets(ctx, d.Id(), *hookSecrets)
 	}
 
 	return nil

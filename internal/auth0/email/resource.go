@@ -190,22 +190,22 @@ func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	d.SetId(id.UniqueId())
 
 	api := m.(*config.Config).GetAPI()
-	if emailProviderIsConfigured(api) {
+	if emailProviderIsConfigured(ctx, api) {
 		return updateEmail(ctx, d, m)
 	}
 
 	email := expandEmailProvider(d.GetRawConfig())
-	if err := api.EmailProvider.Create(email); err != nil {
+	if err := api.EmailProvider.Create(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readEmail(ctx, d, m)
 }
 
-func readEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	email, err := api.EmailProvider.Read()
+	email, err := api.EmailProvider.Read(ctx)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			d.SetId("")
@@ -230,17 +230,17 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailProvider(d.GetRawConfig())
-	if err := api.EmailProvider.Update(email); err != nil {
+	if err := api.EmailProvider.Update(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readEmail(ctx, d, m)
 }
 
-func deleteEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.EmailProvider.Delete(); err != nil {
+	if err := api.EmailProvider.Delete(ctx); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -48,7 +48,7 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	key := auth0.StringValue(ruleConfig.Key)
 	ruleConfig.Key = nil
 	api := m.(*config.Config).GetAPI()
-	if err := api.RuleConfig.Upsert(key, ruleConfig); err != nil {
+	if err := api.RuleConfig.Upsert(ctx, key, ruleConfig); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -57,9 +57,9 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	return readRuleConfig(ctx, d, m)
 }
 
-func readRuleConfig(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	ruleConfig, err := api.RuleConfig.Read(d.Id())
+	ruleConfig, err := api.RuleConfig.Read(ctx, d.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
@@ -77,16 +77,16 @@ func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	ruleConfig.Key = nil
 	api := m.(*config.Config).GetAPI()
-	if err := api.RuleConfig.Upsert(d.Id(), ruleConfig); err != nil {
+	if err := api.RuleConfig.Upsert(ctx, d.Id(), ruleConfig); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readRuleConfig(ctx, d, m)
 }
 
-func deleteRuleConfig(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	if err := api.RuleConfig.Delete(d.Id()); err != nil {
+	if err := api.RuleConfig.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok {
 			if mErr.Status() == http.StatusNotFound {
 				d.SetId("")

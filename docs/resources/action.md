@@ -67,7 +67,7 @@ resource "auth0_action" "my_action" {
 
 - `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedblock--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
-- `runtime` (String) The Node runtime. Defaults to `node12`. Possible values are: `node12`, `node16` or `node18`.
+- `runtime` (String) The Node runtime. Defaults to `node12`. Possible values are: `node12`, `node16` or `node18-actions`.
 - `secrets` (Block List) List of secrets that are included in an action or a version of an action. (see [below for nested schema](#nestedblock--secrets))
 
 ### Read-Only

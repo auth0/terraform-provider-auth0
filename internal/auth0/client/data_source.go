@@ -24,8 +24,6 @@ func NewDataSource() *schema.Resource {
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
-	delete(dataSourceSchema, "client_secret_rotation_trigger")
-
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name", "client_id")
 
 	dataSourceSchema["name"].Description = "The name of the client. If not provided, `client_id` must be set."

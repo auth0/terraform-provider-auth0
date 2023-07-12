@@ -30,45 +30,6 @@ func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 	})
 }
 
-const testAccClientConfigRotateSecret = `
-resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Rotate Secret - {{.testName}}"
-}
-`
-
-const testAccClientConfigRotateSecretUpdate = `
-resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Rotate Secret - {{.testName}}"
-
-	client_secret_rotation_trigger = {
-		triggered_at = "2021-10-01T23:12:01Z"
-		triggered_by = "dx-cdt"
-	}
-}
-`
-
-func TestAccClientRotateSecret(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccClientConfigRotateSecret, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Rotate Secret - %s", t.Name())),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccClientConfigRotateSecretUpdate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Rotate Secret - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger.triggered_at", "2021-10-01T23:12:01Z"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger.triggered_by", "dx-cdt"),
-				),
-			},
-		},
-	})
-}
-
 const testAccClientValidationOnMobile = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
@@ -601,7 +562,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.leeway", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_logout_urls.#", "0"),
@@ -661,7 +621,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.leeway", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.0", "https://example.com/audience"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "1"),
@@ -723,7 +682,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.leeway", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.token_lifetime", "2592000"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "client_secret_rotation_trigger"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_aliases.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "callbacks.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "allowed_logout_urls.#", "0"),

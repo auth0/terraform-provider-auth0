@@ -36,7 +36,6 @@ data "auth0_tenant" "my_tenant" {}
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
-- `universal_login` (List of Object) Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info. (see [below for nested schema](#nestedatt--universal_login))
 
 <a id="nestedatt--flags"></a>
 ### Nested Schema for `flags`
@@ -64,7 +63,6 @@ Read-Only:
 - `mfa_show_factor_list_on_enrollment` (Boolean)
 - `no_disclose_enterprise_connections` (Boolean)
 - `revoke_refresh_token_grant` (Boolean)
-- `universal_login` (Boolean)
 - `use_scope_descriptions_for_consent` (Boolean)
 
 
@@ -74,21 +72,5 @@ Read-Only:
 Read-Only:
 
 - `mode` (String)
-
-
-<a id="nestedatt--universal_login"></a>
-### Nested Schema for `universal_login`
-
-Read-Only:
-
-- `colors` (List of Object) (see [below for nested schema](#nestedobjatt--universal_login--colors))
-
-<a id="nestedobjatt--universal_login--colors"></a>
-### Nested Schema for `universal_login.colors`
-
-Read-Only:
-
-- `page_background` (String)
-- `primary` (String)
 
 

@@ -142,14 +142,6 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Indicates whether the tenant allows custom domains in emails.",
 						},
-						"universal_login": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Computed: true,
-							Deprecated: "This attribute is deprecated. Use the `universal_login_experience` attribute" +
-								" on the `auth0_prompt` resource to toggle the new or classic experience instead.",
-							Description: "Indicates whether the New Universal Login Experience is enabled.",
-						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
@@ -255,40 +247,6 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
-			"universal_login": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				Computed:    true,
-				MaxItems:    1,
-				Description: "Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info.",
-				Deprecated:  "These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"colors": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							MaxItems:    1,
-							Description: "Configuration settings for Universal Login colors.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"primary": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Computed:    true,
-										Description: "Primary button background color in hexadecimal.",
-									},
-									"page_background": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Computed:    true,
-										Description: "Background color of login pages in hexadecimal.",
-									},
-								},
-							},
-						},
-					},
-				},
-			},
 			"default_redirection_uri": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -352,7 +310,6 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		d.Set("sandbox_version", tenant.GetSandboxVersion()),
 		d.Set("enabled_locales", tenant.GetEnabledLocales()),
 		d.Set("flags", flattenTenantFlags(tenant.GetFlags())),
-		d.Set("universal_login", flattenTenantUniversalLogin(tenant.GetUniversalLogin())),
 		d.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 	)
 

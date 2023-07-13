@@ -10,6 +10,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewMemberRolesResource will return a new auth0_organization_member_roles (1:many) resource.
@@ -100,7 +101,7 @@ func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	return readOrganizationMember(ctx, data, meta)
+	return readOrganizationMemberRoles(ctx, data, meta)
 }
 
 func deleteOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -128,4 +129,51 @@ func deleteOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	}
 
 	return nil
+}
+
+func assignMemberRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
+	if !d.HasChange("roles") {
+		return nil
+	}
+
+	userID := d.Get("user_id").(string)
+	organizationID := d.Get("organization_id").(string)
+
+	toAdd, toRemove := value.Difference(d, "roles")
+
+	if err := removeMemberRoles(ctx, meta, organizationID, userID, toRemove); err != nil {
+		return err
+	}
+
+	return addMemberRoles(ctx, meta, organizationID, userID, toAdd)
+}
+
+func removeMemberRoles(ctx context.Context, meta interface{}, organizationID string, userID string, roles []interface{}) error {
+	if len(roles) == 0 {
+		return nil
+	}
+
+	var rolesToRemove []string
+	for _, role := range roles {
+		rolesToRemove = append(rolesToRemove, role.(string))
+	}
+
+	api := meta.(*config.Config).GetAPI()
+
+	return api.Organization.DeleteMemberRoles(ctx, organizationID, userID, rolesToRemove)
+}
+
+func addMemberRoles(ctx context.Context, meta interface{}, organizationID string, userID string, roles []interface{}) error {
+	if len(roles) == 0 {
+		return nil
+	}
+
+	var rolesToAssign []string
+	for _, role := range roles {
+		rolesToAssign = append(rolesToAssign, role.(string))
+	}
+
+	api := meta.(*config.Config).GetAPI()
+
+	return api.Organization.AssignMemberRoles(ctx, organizationID, userID, rolesToAssign)
 }

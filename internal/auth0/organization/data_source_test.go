@@ -27,14 +27,14 @@ resource "auth0_connection" "my_connection" {
 }
 
 resource "auth0_organization" "my_organization" {
-	depends_on = [auth0_connection.my_connection]
+	depends_on = [ auth0_connection.my_connection ]
 
 	name         = "test-{{.testName}}"
 	display_name = "Acme Inc. {{.testName}}"
 }
 
 resource "auth0_organization_connection" "my_org_conn" {
-	depends_on = [auth0_organization.my_organization]
+	depends_on = [ auth0_organization.my_organization ]
 
 	organization_id = auth0_organization.my_organization.id
 	connection_id   = auth0_connection.my_connection.id
@@ -50,13 +50,23 @@ resource "auth0_organization_member" "org_member" {
 
 const testAccDataSourceOrganizationConfigByName = testAccGivenAnOrganizationWithConnectionsAndMembers + `
 data "auth0_organization" "test" {
+	depends_on = [ auth0_organization_member.org_member ]
+
 	name = "test-{{.testName}}"
 }
 `
 
 const testAccDataSourceOrganizationConfigByID = testAccGivenAnOrganizationWithConnectionsAndMembers + `
 data "auth0_organization" "test" {
+	depends_on = [ auth0_organization_member.org_member ]
+
 	organization_id = auth0_organization.my_organization.id
+}
+`
+
+const testAccDataSourceOrganizationNonexistentID = `
+data "auth0_organization" "test" {
+	organization_id = "org_XXXXXXXXXXXXXXXX"
 }
 `
 
@@ -72,21 +82,16 @@ func TestAccDataSourceOrganizationRequiredArguments(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceOrganizationByName(t *testing.T) {
+func TestAccDataSourceOrganization(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	acctest.Test(t, resource.TestCase{
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
-					resource.TestCheckResourceAttr("auth0_organization.my_organization", "name", fmt.Sprintf("test-%s", testName)),
-					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "connection_id"),
-					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationNonexistentID, t.Name()),
+				ExpectError: regexp.MustCompile(
+					"404 Not Found: No organization found by that id or name",
 				),
 			},
 			{
@@ -99,27 +104,6 @@ func TestAccDataSourceOrganizationByName(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "members.#", "1"),
 				),
 			},
-		},
-	})
-}
-
-func TestAccDataSourceOrganizationByID(t *testing.T) {
-	testName := strings.ToLower(t.Name())
-
-	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccGivenAnOrganizationWithConnectionsAndMembers, testName),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
-					resource.TestCheckResourceAttr("auth0_organization.my_organization", "name", fmt.Sprintf("test-%s", testName)),
-					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "connection_id"),
-					resource.TestCheckResourceAttrSet("auth0_organization_connection.my_org_conn", "organization_id"),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", testName)),
-					resource.TestCheckResourceAttr("auth0_organization_connection.my_org_conn", "strategy", "auth0"),
-				),
-			},
 			{
 				Config: acctest.ParseTestName(testAccDataSourceOrganizationConfigByID, testName),
 				Check: resource.ComposeTestCheckFunc(
@@ -128,25 +112,6 @@ func TestAccDataSourceOrganizationByID(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "connections.#", "1"),
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "connections.0.connection_id"),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "members.#", "1"),
-				),
-			},
-		},
-	})
-}
-
-const testAccDataSourceOrganizationNonexistentID = testAccGivenAnOrganizationWithConnectionsAndMembers + `
-data "auth0_organization" "test" {
-	organization_id = "org_XXXXXXXXXXXXXXXX"
-}
-`
-
-func TestAccDataSourceOrganizationNonexistentID(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccDataSourceOrganizationNonexistentID, t.Name()),
-				ExpectError: regexp.MustCompile(
-					"404 Not Found: No organization found by that id or name",
 				),
 			},
 		},

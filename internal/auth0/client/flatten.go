@@ -2,6 +2,8 @@ package client
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocialLogin) []interface{} {
@@ -495,4 +497,54 @@ func flattenClientAddonWithNoConfig(addon interface{}) []interface{} {
 	}
 
 	return []interface{}{map[string]interface{}{}}
+}
+
+func flattenClient(d *schema.ResourceData, client management.Client) error {
+	result := multierror.Append(
+		d.Set("client_id", client.GetClientID()),
+		d.Set("client_aliases", client.GetClientAliases()),
+		d.Set("name", client.GetName()),
+		d.Set("description", client.GetDescription()),
+		d.Set("app_type", client.GetAppType()),
+		d.Set("logo_uri", client.GetLogoURI()),
+		d.Set("is_first_party", client.GetIsFirstParty()),
+		d.Set("is_token_endpoint_ip_header_trusted", client.GetIsTokenEndpointIPHeaderTrusted()),
+		d.Set("oidc_conformant", client.GetOIDCConformant()),
+		d.Set("callbacks", client.GetCallbacks()),
+		d.Set("allowed_logout_urls", client.GetAllowedLogoutURLs()),
+		d.Set("allowed_origins", client.GetAllowedOrigins()),
+		d.Set("allowed_clients", client.GetAllowedClients()),
+		d.Set("grant_types", client.GetGrantTypes()),
+		d.Set("organization_usage", client.GetOrganizationUsage()),
+		d.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
+		d.Set("web_origins", client.GetWebOrigins()),
+		d.Set("sso", client.GetSSO()),
+		d.Set("sso_disabled", client.GetSSODisabled()),
+		d.Set("cross_origin_auth", client.GetCrossOriginAuth()),
+		d.Set("cross_origin_loc", client.GetCrossOriginLocation()),
+		d.Set("custom_login_page_on", client.GetCustomLoginPageOn()),
+		d.Set("custom_login_page", client.GetCustomLoginPage()),
+		d.Set("form_template", client.GetFormTemplate()),
+		d.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
+		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
+		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
+		d.Set("encryption_key", client.GetEncryptionKey()),
+		d.Set("addons", flattenClientAddons(client.Addons)),
+		d.Set("mobile", flattenClientMobile(client.GetMobile())),
+		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
+		d.Set("signing_keys", client.SigningKeys),
+		d.Set("client_metadata", client.ClientMetadata),
+		d.Set("oidc_backchannel_logout_urls", client.OIDCBackchannelLogout.GetBackChannelLogoutURLs()),
+	)
+	return result.ErrorOrNil()
+}
+
+func flattenClientForDataSource(d *schema.ResourceData, client management.Client) error {
+	result := multierror.Append(
+		flattenClient(d, client),
+		d.Set("client_secret", client.GetClientSecret()),
+		d.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
+	)
+
+	return result.ErrorOrNil()
 }

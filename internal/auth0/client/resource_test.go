@@ -456,7 +456,6 @@ resource "auth0_client" "my_client" {
 	cross_origin_loc = "https://example.com/cross-origin-loc"
 	custom_login_page = "test"
 	form_template = "test"
-	token_endpoint_auth_method = "client_secret_post"
 	initiate_login_uri = "https://example.com/login"
 	logo_uri = "https://example.com/logoUri"
 	organization_require_behavior = "no_prompt"
@@ -489,7 +488,6 @@ resource "auth0_client" "my_client" {
 	cross_origin_loc = "https://example.com/cross-origin-loc"
 	custom_login_page = ""
 	form_template = ""
-	token_endpoint_auth_method = "client_secret_post"
 	initiate_login_uri = ""
 	logo_uri = "https://another-example.com/logoUri"
 	organization_require_behavior = "no_prompt"
@@ -520,13 +518,11 @@ func TestAccClient(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "description", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_loc", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "form_template", ""),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "logo_uri", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", ""),
@@ -539,7 +535,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "4"),
@@ -578,13 +573,11 @@ func TestAccClient(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "description", "Test Application Long Description"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_loc", "https://example.com/cross-origin-loc"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", "test"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "form_template", "test"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "logo_uri", "https://example.com/logoUri"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
@@ -644,13 +637,11 @@ func TestAccClient(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_secret"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "description", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_loc", "https://example.com/cross-origin-loc"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "form_template", ""),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "initiate_login_uri", ""),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "logo_uri", "https://another-example.com/logoUri"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),

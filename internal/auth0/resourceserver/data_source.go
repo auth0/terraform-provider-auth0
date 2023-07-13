@@ -23,6 +23,7 @@ func NewDataSource() *schema.Resource {
 
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
+
 	dataSourceSchema["resource_server_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -30,13 +31,33 @@ func dataSourceSchema() map[string]*schema.Schema {
 		AtLeastOneOf: []string{"resource_server_id", "identifier"},
 	}
 
-	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "identifier")
-	dataSourceSchema["identifier"].Description = "The unique identifier for the resource server. " +
-		"If not provided, `resource_server_id` must be set."
-	dataSourceSchema["identifier"].AtLeastOneOf = []string{"resource_server_id", "identifier"}
+	dataSourceSchema["identifier"] = &schema.Schema{
+		Type:     schema.TypeString,
+		Optional: true,
+		Description: "Unique identifier for the resource server. Used as the audience parameter " +
+			"for authorization calls. If not provided, `resource_server_id` must be set. ",
+		AtLeastOneOf: []string{"resource_server_id", "identifier"},
+	}
 
-	dataSourceSchema["scopes"].Deprecated = ""
-	dataSourceSchema["scopes"].Description = "List of permissions (scopes) used by this resource server."
+	dataSourceSchema["scopes"] = &schema.Schema{
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "List of permissions (scopes) used by this resource server.",
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Name of the permission (scope). Examples include `read:appointments` or `delete:appointments`.",
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Description of the permission (scope).",
+				},
+			},
+		},
+	}
 
 	return dataSourceSchema
 }

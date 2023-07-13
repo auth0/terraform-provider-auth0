@@ -38,27 +38,43 @@ resource "auth0_role" "the_one" {
 
 	name        = "The One - Acceptance Test - {{.testName}}"
 	description = "The One - Acceptance Test"
+}
 
-	permissions {
+resource "auth0_role_permissions" "role_permissions" {
+	depends_on = [ auth0_role.the_one ]
+
+	role_id = auth0_role.the_one.id
+
+	permissions  {
+		resource_server_identifier = auth0_resource_server.matrix.identifier
 		name                       = "stop:bullets"
-		resource_server_identifier = auth0_resource_server.matrix.identifier
 	}
 
-	permissions {
-		name                       = "bring:peace"
+	permissions  {
 		resource_server_identifier = auth0_resource_server.matrix.identifier
+		name                       = "bring:peace"
 	}
+}
+`
+
+const testAccDataSourceNonExistentRole = `
+data "auth0_role" "test" {
+	name = "this-role-does-not-exist"
 }
 `
 
 const testAccDataSourceRoleByName = testAccGivenAResourceServer + `
 data "auth0_role" "test" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
 	name = auth0_role.the_one.name
 }
 `
 
 const testAccDataSourceRoleByID = testAccGivenAResourceServer + `
 data "auth0_role" "test" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
 	role_id = auth0_role.the_one.id
 }
 `
@@ -75,56 +91,33 @@ func TestAccDataSourceRoleRequiredArguments(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceRoleByName(t *testing.T) {
+func TestAccDataSourceRole(t *testing.T) {
+	testName := strings.ToLower(t.Name())
+
 	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccDataSourceRoleByName, t.Name()),
+				Config: acctest.ParseTestName(testAccDataSourceNonExistentRole, testName),
+				ExpectError: regexp.MustCompile(
+					`No role found with "name" = "this-role-does-not-exist"`,
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataSourceRoleByName, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckNoResourceAttr("data.auth0_role.test", "role_id"),
-					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "permissions.#", "2"),
 				),
 			},
-		},
-	})
-}
-
-func TestAccDataSourceRoleByID(t *testing.T) {
-	testName := strings.ToLower(t.Name())
-
-	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
 			{
 				Config: acctest.ParseTestName(testAccDataSourceRoleByID, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_role.test", "role_id"),
-					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "description", "The One - Acceptance Test"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "permissions.#", "2"),
-				),
-			},
-		},
-	})
-}
-
-const testAccDataSourceNonexistentRole = `
-data "auth0_role" "test" {
-	name = "this-role-does-not-exist"
-}
-`
-
-func TestAccDataSourceRoleDoesNotExist(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccDataSourceNonexistentRole, t.Name()),
-				ExpectError: regexp.MustCompile(
-					`No role found with "name" = "this-role-does-not-exist"`,
 				),
 			},
 		},

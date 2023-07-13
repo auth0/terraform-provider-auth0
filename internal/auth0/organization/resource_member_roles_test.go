@@ -44,10 +44,6 @@ resource "auth0_organization_member" "member" {
 
 	organization_id = auth0_organization.org.id
 	user_id         = auth0_user.user.id
-
-	lifecycle {
-		ignore_changes = [ roles ]
-	}
 }
 `
 

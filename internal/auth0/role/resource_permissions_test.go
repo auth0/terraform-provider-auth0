@@ -39,10 +39,6 @@ resource "auth0_role" "role" {
 
 	name        = "Acceptance Test - {{.testName}}"
 	description = "Acceptance Test Role - {{.testName}}"
-
-	lifecycle {
-		ignore_changes = [ permissions ]
-	}
 }
 `
 

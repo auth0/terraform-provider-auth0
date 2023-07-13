@@ -11,7 +11,7 @@ Auth0 uses various grant types, or methods by which you grant limited access to 
 ## Example Usage
 
 ```terraform
-# The following example grants a client the "create:foo" permission (scope).
+# The following example grants a client the "create:foo" and "create:bar" permissions (scopes).
 
 resource "auth0_client" "my_client" {
   name = "Example Application - Client Grant (Managed by Terraform)"
@@ -35,7 +35,7 @@ resource "auth0_resource_server" "my_resource_server" {
 resource "auth0_client_grant" "my_client_grant" {
   client_id = auth0_client.my_client.id
   audience  = auth0_resource_server.my_resource_server.identifier
-  scope     = ["create:foo"]
+  scopes    = ["create:foo", "create:bar"]
 }
 ```
 
@@ -46,7 +46,7 @@ resource "auth0_client_grant" "my_client_grant" {
 
 - `audience` (String) Audience or API Identifier for this grant.
 - `client_id` (String) ID of the client for this grant.
-- `scope` (List of String) Permissions (scopes) included in this grant.
+- `scopes` (List of String) Permissions (scopes) included in this grant.
 
 ### Read-Only
 

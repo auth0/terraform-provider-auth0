@@ -133,5 +133,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_attack_protection.my_protection 24940d4b-4bd4-44e7-894e-f92e4de36a40
+terraform import auth0_attack_protection.my_protection "24940d4b-4bd4-44e7-894e-f92e4de36a40"
 ```

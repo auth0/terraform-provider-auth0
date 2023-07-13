@@ -534,8 +534,8 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-# A client can be imported using the client's ID.
+# This resource can be imported by specifying the client ID.
 #
 # Example:
-terraform import auth0_client.my_client AaiyAPdpYdesoKnqjj8HJqRn4T5titww
+terraform import auth0_client.my_client "AaiyAPdpYdesoKnqjj8HJqRn4T5titww"
 ```

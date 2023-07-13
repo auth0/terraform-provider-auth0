@@ -22,7 +22,7 @@ func NewMemberRolesResource() *schema.Resource {
 		UpdateContext: updateOrganizationMemberRoles,
 		DeleteContext: deleteOrganizationMemberRoles,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "organization_id", "user_id"),
+			StateContext: internalSchema.ImportResourceGroupID("organization_id", "user_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -62,7 +62,7 @@ func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	data.SetId(organizationID + ":" + userID)
+	internalSchema.SetResourceGroupID(data, organizationID, userID)
 
 	return readOrganizationMemberRoles(ctx, data, meta)
 }

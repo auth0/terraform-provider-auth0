@@ -40,5 +40,5 @@ Import is supported using the following syntax:
 # Existing roles can be imported using their ID.
 #
 # Example:
-terraform import auth0_role.my_role XXXXXXXXXXXXXXXXXXXXXXX
+terraform import auth0_role.my_role "XXXXXXXXXXXXXXXXXXXXXXX"
 ```

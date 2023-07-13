@@ -55,22 +55,6 @@ func NewResource() *schema.Resource {
 					"removed in a future version. Migrate to the `auth0_client_credentials` resource to " +
 					"manage a client's secret instead or use the `auth0_client` data source to read this property.",
 			},
-			"client_secret_rotation_trigger": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Description: "Custom metadata for the rotation. " +
-					"The contents of this map are arbitrary and are hashed by the provider. When the hash changes, a rotation is triggered. " +
-					"For example, the map could contain the user making the change, the date of the change, and a text reason for the change. " +
-					"For more info: [rotate-client-secret](https://auth0.com/docs/get-started/applications/rotate-client-secret). " +
-					"Migrate to the `auth0_client_credentials` resource to manage a client's secret directly instead. " +
-					"Refer to the [client secret rotation guide](Refer to the [client secret rotation guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation) " +
-					"for instructions on how to rotate client secrets with zero downtime.",
-				Deprecated: "Rotating a client's secret through this attribute is deprecated and it will be removed" +
-					" in a future version. Migrate to the `auth0_client_credentials` resource to manage a client's " +
-					"secret instead. " +
-					"Refer to the [client secret rotation guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation) " +
-					"for instructions on how to rotate client secrets with zero downtime.",
-			},
 			"client_aliases": {
 				Type: schema.TypeList,
 				Elem: &schema.Schema{
@@ -1424,12 +1408,6 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		}
 	}
 
-	d.Partial(true)
-	if err := rotateClientSecret(ctx, d, m); err != nil {
-		return diag.FromErr(err)
-	}
-	d.Partial(false)
-
 	return readClient(ctx, d, m)
 }
 
@@ -1445,19 +1423,4 @@ func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	d.SetId("")
 	return nil
-}
-
-func rotateClientSecret(ctx context.Context, d *schema.ResourceData, m interface{}) error {
-	if !d.HasChange("client_secret_rotation_trigger") {
-		return nil
-	}
-
-	api := m.(*config.Config).GetAPI()
-
-	client, err := api.Client.RotateSecret(ctx, d.Id())
-	if err != nil {
-		return err
-	}
-
-	return d.Set("client_secret", client.GetClientSecret())
 }

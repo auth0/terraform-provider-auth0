@@ -26,20 +26,12 @@ resource "auth0_tenant" "my_tenant" {
 	enabled_locales         = ["en", "de", "fr"]
 
 	flags {
-		universal_login                        = true
 		disable_clickjack_protection_headers   = true
 		enable_public_signup_user_exists_error = true
 		use_scope_descriptions_for_consent     = true
 		no_disclose_enterprise_connections     = false
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix                 = false
-	}
-
-	universal_login {
-		colors {
-			primary         = "#0059d6"
-			page_background = "#000000"
-		}
 	}
 
 	session_cookie {
@@ -73,12 +65,9 @@ func TestAccDataSourceTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "enabled_locales.0", "en"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "enabled_locales.1", "de"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "enabled_locales.2", "fr"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "flags.0.universal_login", "true"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "flags.0.disable_clickjack_protection_headers", "true"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "flags.0.use_scope_descriptions_for_consent", "true"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "universal_login.0.colors.0.primary", "#0059d6"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "universal_login.0.colors.0.page_background", "#000000"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "session_cookie.0.mode", "non-persistent"),
 				),

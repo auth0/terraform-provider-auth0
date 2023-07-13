@@ -15,7 +15,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
-	m["universal_login"] = flags.UniversalLogin
 	m["enable_legacy_logs_search_v2"] = flags.EnableLegacyLogsSearchV2
 	m["disable_clickjack_protection_headers"] = flags.DisableClickjackProtectionHeaders
 	m["enable_public_signup_user_exists_error"] = flags.EnablePublicSignupUserExistsError
@@ -33,25 +32,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["dashboard_insights_view"] = flags.DashboardInsightsView
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
-
-	return []interface{}{m}
-}
-
-func flattenTenantUniversalLogin(universalLogin *management.TenantUniversalLogin) []interface{} {
-	if universalLogin == nil {
-		return nil
-	}
-	if universalLogin.Colors == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["colors"] = []interface{}{
-		map[string]interface{}{
-			"primary":         universalLogin.Colors.Primary,
-			"page_background": universalLogin.Colors.PageBackground,
-		},
-	}
 
 	return []interface{}{m}
 }

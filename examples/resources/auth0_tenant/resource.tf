@@ -12,15 +12,7 @@ resource "auth0_tenant" "my_tenant" {
     mode = "non-persistent"
   }
 
-  universal_login {
-    colors {
-      primary         = "#0059d6"
-      page_background = "#000000"
-    }
-  }
-
   flags {
-    universal_login                        = true
     disable_clickjack_protection_headers   = true
     enable_public_signup_user_exists_error = true
     use_scope_descriptions_for_consent     = true

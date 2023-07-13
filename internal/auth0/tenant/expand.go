@@ -27,7 +27,6 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
-		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
 	}
 
@@ -48,7 +47,6 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			EnablePipeline2:                    value.Bool(flags.GetAttr("enable_pipeline2")),
 			EnableDynamicClientRegistration:    value.Bool(flags.GetAttr("enable_dynamic_client_registration")),
 			EnableCustomDomainInEmails:         value.Bool(flags.GetAttr("enable_custom_domain_in_emails")),
-			UniversalLogin:                     value.Bool(flags.GetAttr("universal_login")),
 			EnableLegacyLogsSearchV2:           value.Bool(flags.GetAttr("enable_legacy_logs_search_v2")),
 			DisableClickjackProtectionHeaders:  value.Bool(flags.GetAttr("disable_clickjack_protection_headers")),
 			EnablePublicSignupUserExistsError:  value.Bool(flags.GetAttr("enable_public_signup_user_exists_error")),
@@ -72,29 +70,6 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 	})
 
 	return tenantFlags
-}
-
-func expandTenantUniversalLogin(config cty.Value) *management.TenantUniversalLogin {
-	var universalLogin management.TenantUniversalLogin
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		colors := d.GetAttr("colors")
-
-		colors.ForEachElement(func(_ cty.Value, color cty.Value) (stop bool) {
-			universalLogin.Colors = &management.TenantUniversalLoginColors{
-				Primary:        value.String(color.GetAttr("primary")),
-				PageBackground: value.String(color.GetAttr("page_background")),
-			}
-			return stop
-		})
-		return stop
-	})
-
-	if universalLogin == (management.TenantUniversalLogin{}) {
-		return nil
-	}
-
-	return &universalLogin
 }
 
 func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie {

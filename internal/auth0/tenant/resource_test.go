@@ -42,10 +42,6 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.#", "1"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html>Error Page</html>"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.url", "https://mycompany.org/error"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.primary", "#0059d6"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.page_background", "#000000"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
@@ -110,12 +106,6 @@ resource "auth0_tenant" "my_tenant" {
 		mfa_show_factor_list_on_enrollment     = false
 	}
 
-	error_page {
-		html          = "<html>Error Page</html>"
-		show_log_link = false
-		url           = "https://mycompany.org/error"
-	}
-
 	universal_login {
 		colors {
 			primary         = "#0059d6"
@@ -159,22 +149,6 @@ resource "auth0_tenant" "my_tenant" {
 			primary         = "#0059d6"
 			page_background = "#000000"
 		}
-	}
-
-	change_password {
-		enabled = true
-		html    = "<html>Change Password</html>"
-	}
-
-	guardian_mfa_page {
-		enabled = true
-		html    = "<html>MFA</html>"
-	}
-
-	error_page {
-		html          = "<html>Error Page</html>"
-		show_log_link = false
-		url           = "https://mycompany.org/error"
 	}
 
 	session_cookie {

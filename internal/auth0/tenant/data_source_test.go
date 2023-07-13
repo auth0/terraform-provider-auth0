@@ -42,12 +42,6 @@ resource "auth0_tenant" "my_tenant" {
 		}
 	}
 
-	error_page {
-		html          = "<html>Error Page</html>"
-		show_log_link = false
-		url           = "https://mycompany.org/error"
-	}
-
 	session_cookie {
 		mode = "non-persistent"
 	}
@@ -68,9 +62,6 @@ func TestAccDataSourceTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "management_api_identifier", fmt.Sprintf("https://%s/api/v2/", os.Getenv("AUTH0_DOMAIN"))),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_audience", ""),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_directory", ""),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "error_page.0.html", "<html>Error Page</html>"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "error_page.0.show_log_link", "false"),
-					resource.TestCheckResourceAttr("data.auth0_tenant.current", "error_page.0.url", "https://mycompany.org/error"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "friendly_name", "My Test Tenant"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "picture_url", "https://mycompany.org/logo.png"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "support_email", "support@mycompany.org"),

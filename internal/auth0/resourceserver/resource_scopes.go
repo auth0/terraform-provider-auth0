@@ -7,13 +7,11 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewScopesResource will return a new auth0_resource_server_scopes (1:many) resource.
@@ -73,7 +71,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	}
 
 	updatedResourceServer := &management.ResourceServer{
-		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
+		Scopes: expandResourceServerScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
 
 	if diagnostics := guardAgainstErasingUnwantedScopes(
@@ -114,7 +112,7 @@ func readResourceServerScopes(ctx context.Context, data *schema.ResourceData, me
 
 	result := multierror.Append(
 		data.Set("resource_server_identifier", resourceServer.GetIdentifier()),
-		data.Set("scopes", flattenAPIScopes(resourceServer.GetScopes())),
+		data.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -126,7 +124,7 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
 	updatedResourceServer := &management.ResourceServer{
-		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
+		Scopes: expandResourceServerScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
 
 	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, updatedResourceServer); err != nil {
@@ -185,32 +183,4 @@ func guardAgainstErasingUnwantedScopes(
 					"Run: 'terraform import auth0_resource_server_scopes.<given-name> %s'.", apiIdentifier),
 		},
 	}
-}
-
-func expandAPIScopes(scopes cty.Value) *[]management.ResourceServerScope {
-	resourceServerScopes := make([]management.ResourceServerScope, 0)
-
-	scopes.ForEachElement(func(_ cty.Value, scope cty.Value) (stop bool) {
-		resourceServerScopes = append(resourceServerScopes, management.ResourceServerScope{
-			Value:       value.String(scope.GetAttr("name")),
-			Description: value.String(scope.GetAttr("description")),
-		})
-
-		return stop
-	})
-
-	return &resourceServerScopes
-}
-
-func flattenAPIScopes(resourceServerScopes []management.ResourceServerScope) []map[string]interface{} {
-	scopes := make([]map[string]interface{}, len(resourceServerScopes))
-
-	for index, scope := range resourceServerScopes {
-		scopes[index] = map[string]interface{}{
-			"name":        scope.GetValue(),
-			"description": scope.GetDescription(),
-		}
-	}
-
-	return scopes
 }

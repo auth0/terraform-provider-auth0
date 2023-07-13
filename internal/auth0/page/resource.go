@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
@@ -152,9 +151,9 @@ func readPages(ctx context.Context, data *schema.ResourceData, meta interface{})
 
 	result := multierror.Append(
 		data.Set("login", flattenLoginPage(clientWithLoginPage)),
-		data.Set("change_password", tenant.FlattenTenantChangePassword(tenantPages.GetChangePassword())),
-		data.Set("guardian_mfa", tenant.FlattenTenantGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
-		data.Set("error", tenant.FlattenTenantErrorPage(tenantPages.GetErrorPage())),
+		data.Set("change_password", flattenChangePasswordPage(tenantPages.GetChangePassword())),
+		data.Set("guardian_mfa", flattenGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
+		data.Set("error", flattenErrorPage(tenantPages.GetErrorPage())),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

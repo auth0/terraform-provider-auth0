@@ -42,12 +42,12 @@ func dataSourceSchema() map[string]*schema.Schema {
 				"name": {
 					Type:        schema.TypeString,
 					Computed:    true,
-					Description: "Name of the permission (scope) configured on the resource server.",
+					Description: "Name of the permission (scope) configured on the resource server (API).",
 				},
 				"resource_server_identifier": {
 					Type:        schema.TypeString,
 					Computed:    true,
-					Description: "Unique identifier for the resource server.",
+					Description: "Unique identifier for the resource server (API).",
 				},
 				"description": {
 					Type:        schema.TypeString,
@@ -57,7 +57,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 				"resource_server_name": {
 					Type:        schema.TypeString,
 					Computed:    true,
-					Description: "Name of resource server that the permission is associated with.",
+					Description: "Name of resource server (API) that the permission is associated with.",
 				},
 			},
 		},

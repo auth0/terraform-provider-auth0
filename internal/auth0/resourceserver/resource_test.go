@@ -10,6 +10,45 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
+const testAccResourceServerConfigEmpty = `
+resource "auth0_resource_server" "my_resource_server" {
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+`
+
+const testAccResourceServerConfigCreate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = true
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = true
+}
+`
+
+const testAccResourceServerConfigUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = false # <--- set to false
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = true
+}
+`
+
+const testAccResourceServerConfigEmptyAgain = `
+resource "auth0_resource_server" "my_resource_server" {
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	name       = "Acceptance Test - {{.testName}}"
+}
+`
+
 func TestAccResourceServer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -18,7 +57,6 @@ func TestAccResourceServer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", ""),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "0"),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "signing_alg"),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_lifetime_for_web"),
 				),
@@ -34,38 +72,12 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_web", "3600"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "true"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
-					resource.TestCheckTypeSetElemNestedAttrs(
-						"auth0_resource_server.my_resource_server",
-						"scopes.*",
-						map[string]string{
-							"value":       "create:foo",
-							"description": "Create foos",
-						},
-					),
-					resource.TestCheckTypeSetElemNestedAttrs(
-						"auth0_resource_server.my_resource_server",
-						"scopes.*",
-						map[string]string{
-							"value":       "create:bar",
-							"description": "Create bars",
-						},
-					),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccResourceServerConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "2"),
-					resource.TestCheckTypeSetElemNestedAttrs(
-						"auth0_resource_server.my_resource_server",
-						"scopes.*",
-						map[string]string{
-							"value":       "create:bar",
-							"description": "Create bars for bar reasons",
-						},
-					),
 				),
 			},
 			{
@@ -73,7 +85,6 @@ func TestAccResourceServer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "scopes.#", "0"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "signing_alg", "RS256"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
@@ -85,62 +96,16 @@ func TestAccResourceServer(t *testing.T) {
 	})
 }
 
-const testAccResourceServerConfigEmpty = `
-resource "auth0_resource_server" "my_resource_server" {
-	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+const testAccAuth0ManagementAPIResourceImport = `
+resource "auth0_resource_server" "auth0" {
+	name                                            = "Auth0 Management API"
+	identifier                                      = "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"
+	token_lifetime                                  = 86400
+	skip_consent_for_verifiable_first_party_clients = false
 }
 `
 
-const testAccResourceServerConfigCreate = `
-resource "auth0_resource_server" "my_resource_server" {
-	name = "Acceptance Test - {{.testName}}"
-	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-	signing_alg = "RS256"
-	scopes {
-		value = "create:foo"
-		description = "Create foos"
-	}
-	scopes {
-		value = "create:bar"
-		description = "Create bars"
-	}
-	allow_offline_access = true
-	token_lifetime = 7200
-	token_lifetime_for_web = 3600
-	skip_consent_for_verifiable_first_party_clients = true
-	enforce_policies = true
-}
-`
-
-const testAccResourceServerConfigUpdate = `
-resource "auth0_resource_server" "my_resource_server" {
-	name = "Acceptance Test - {{.testName}}"
-	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-	signing_alg = "RS256"
-	scopes {
-		value = "create:foo"
-		description = "Create foos"
-	}
-	scopes {
-		value = "create:bar"
-		description = "Create bars for bar reasons"
-	}
-	allow_offline_access = false # <--- set to false
-	token_lifetime = 7200
-	token_lifetime_for_web = 3600
-	skip_consent_for_verifiable_first_party_clients = true
-	enforce_policies = true
-}
-`
-
-const testAccResourceServerConfigEmptyAgain = `
-resource "auth0_resource_server" "my_resource_server" {
-	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-	name = "Acceptance Test - {{.testName}}"
-}
-`
-
-func TestAccResourceServerAuth0APIManagement(t *testing.T) {
+func TestAccResourceServerAuth0APIManagementImport(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		t.Skip()
 	}
@@ -148,28 +113,14 @@ func TestAccResourceServerAuth0APIManagement(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: `
-resource "auth0_resource_server" "auth0" {
-	name = "Auth0 Management API"
-	identifier = "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"
-	token_lifetime = 86400
-	skip_consent_for_verifiable_first_party_clients = false
-}
-`,
+				Config:             testAccAuth0ManagementAPIResourceImport,
 				ResourceName:       "auth0_resource_server.auth0",
 				ImportState:        true,
 				ImportStateId:      "xxxxxxxxxxxxxxxxxxxx",
 				ImportStatePersist: true,
 			},
 			{
-				Config: `
-resource "auth0_resource_server" "auth0" {
-	name = "Auth0 Management API"
-	identifier = "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"
-	token_lifetime = 86400
-	skip_consent_for_verifiable_first_party_clients = false
-}
-`,
+				Config: testAccAuth0ManagementAPIResourceImport,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "name", "Auth0 Management API"),
 					resource.TestCheckResourceAttr("auth0_resource_server.auth0", "identifier", "https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/"),

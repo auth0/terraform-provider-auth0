@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -20,6 +21,10 @@ func expandAction(config cty.Value) *management.Action {
 		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
 		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
 		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
+	}
+
+	if action.GetRuntime() == "node18" {
+		action.Runtime = auth0.String("node18-actions")
 	}
 
 	return action

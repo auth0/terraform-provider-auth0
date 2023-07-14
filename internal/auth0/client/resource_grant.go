@@ -40,9 +40,11 @@ func NewGrantResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "Audience or API Identifier for this grant.",
 			},
-			"scope": {
-				Type:        schema.TypeList,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+			"scopes": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Required:    true,
 				Description: "Permissions (scopes) included in this grant.",
 			},
@@ -86,13 +88,14 @@ func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{})
 			d.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
 		d.Set("client_id", clientGrant.GetClientID()),
 		d.Set("audience", clientGrant.GetAudience()),
-		d.Set("scope", clientGrant.Scope),
+		d.Set("scopes", clientGrant.Scope),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -116,28 +119,26 @@ func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 
 	if err := api.ClientGrant.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
 			return nil
 		}
 		return diag.FromErr(err)
 	}
 
-	d.SetId("")
 	return nil
 }
 
 func expandClientGrant(d *schema.ResourceData) *management.ClientGrant {
-	config := d.GetRawConfig()
+	cfg := d.GetRawConfig()
 
 	clientGrant := &management.ClientGrant{}
 
 	if d.IsNewResource() {
-		clientGrant.ClientID = value.String(config.GetAttr("client_id"))
-		clientGrant.Audience = value.String(config.GetAttr("audience"))
+		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
+		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
 	}
 
-	if d.IsNewResource() || d.HasChange("scope") {
-		scopeListFromConfig := d.Get("scope").([]interface{})
+	if d.HasChange("scopes") {
+		scopeListFromConfig := d.Get("scopes").([]interface{})
 		scopeList := make([]string, 0)
 		for _, scope := range scopeListFromConfig {
 			scopeList = append(scopeList, scope.(string))

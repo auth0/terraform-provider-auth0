@@ -125,10 +125,10 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-# A client credentials resource can be imported using the client's ID.
+# This resource can be imported by specifying the client ID.
 #
 # Example:
-terraform import auth0_client_credentials.my_creds AaiyAPdpYdesoKnqjj8HJqRn4T5titww
+terraform import auth0_client_credentials.my_creds "AaiyAPdpYdesoKnqjj8HJqRn4T5titww"
 ```
 
 ~> Importing this resource when the `authentication_method` is set to `private_key_jwt` will force the resource to be recreated.

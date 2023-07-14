@@ -19,16 +19,6 @@ resource "auth0_resource_server" "my_resource_server" {
   allow_offline_access                            = true
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
-
-  scopes {
-    value       = "create:foo"
-    description = "Create foos"
-  }
-
-  scopes {
-    value       = "create:bar"
-    description = "Create bars"
-  }
 }
 ```
 
@@ -64,5 +54,5 @@ Import is supported using the following syntax:
 # Existing resource servers can be imported using their ID.
 #
 # Example:
-terraform import auth0_resource_server.my_resource_server XXXXXXXXXXXXXXXXXXXXXXX
+terraform import auth0_resource_server.my_resource_server "XXXXXXXXXXXXXXXXXXXXXXX"
 ```

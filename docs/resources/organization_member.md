@@ -41,10 +41,6 @@ resource "auth0_organization_member" "my_org_member" {
 - `organization_id` (String) The ID of the organization to assign the member to.
 - `user_id` (String) ID of the user to add as an organization member.
 
-### Optional
-
-- `roles` (Set of String, Deprecated) The role ID(s) to assign to the organization member. Managing roles through this attribute is deprecated and it will be removed in a future version. Migrate to the `auth0_organization_member_roles` or the `auth0_organization_member_role` resource to manage organization member roles instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#organization-member-roles) on how to do that.
-
 ### Read-Only
 
 - `id` (String) The ID of this resource.
@@ -55,8 +51,9 @@ Import is supported using the following syntax:
 
 ```shell
 # This resource can be imported by specifying the
-# organization ID and user ID separated by ":".
+# organization ID and user ID separated by "::" (note the double colon)
+# <organizationID>::<userID>
 #
 # Example:
-terraform import auth0_organization_member.my_org_member "org_XXXXX:auth0|XXXXX"
+terraform import auth0_organization_member.my_org_member "org_XXXXX::auth0|XXXXX"
 ```

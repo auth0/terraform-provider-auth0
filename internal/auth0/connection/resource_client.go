@@ -44,7 +44,7 @@ func NewClientResource() *schema.Resource {
 		ReadContext:   readConnectionClient,
 		DeleteContext: deleteConnectionClient,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "connection_id", "client_id"),
+			StateContext: internalSchema.ImportResourceGroupID("connection_id", "client_id"),
 		},
 		Description: "With this resource, you can enable a single client on a connection.",
 	}
@@ -75,7 +75,7 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 		return diag.FromErr(err)
 	}
 
-	data.SetId(connectionID + ":" + clientID)
+	internalSchema.SetResourceGroupID(data, connectionID, clientID)
 
 	return readConnectionClient(ctx, data, meta)
 }

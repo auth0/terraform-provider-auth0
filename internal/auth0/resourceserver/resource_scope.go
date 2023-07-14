@@ -40,7 +40,7 @@ func NewScopeResource() *schema.Resource {
 		ReadContext:   readResourceServerScope,
 		DeleteContext: deleteResourceServerScope,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "resource_server_identifier", "scope"),
+			StateContext: internalSchema.ImportResourceGroupID("resource_server_identifier", "scope"),
 		},
 		Description: "With this resource, you can manage scopes (permissions) associated with a resource server (API).",
 	}
@@ -67,7 +67,7 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 		return diag.FromErr(err)
 	}
 
-	data.SetId(fmt.Sprintf(`%s::%s`, resourceServerIdentifier, scope))
+	internalSchema.SetResourceGroupID(data, resourceServerIdentifier, scope)
 
 	for _, apiScope := range existingAPI.GetScopes() {
 		if apiScope.GetValue() == scope {

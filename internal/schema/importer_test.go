@@ -13,41 +13,36 @@ func TestImportResourceGroupID(t *testing.T) {
 	var testCases = []struct {
 		testName           string
 		givenID            string
-		givenSeparator     string
 		expectedAttributes map[int]map[string]string
 		expectedError      error
 	}{
 		{
-			testName:       "it correctly parses the resource ID (org:conn)",
-			givenID:        "org_1234:conn_5678",
-			givenSeparator: ":",
+			testName: "it correctly parses the resource ID (org::conn)",
+			givenID:  "org_1234::conn_5678",
 			expectedAttributes: map[int]map[string]string{
 				1: {"organization_id": "org_1234"},
 				2: {"connection_id": "conn_5678"},
 			},
 		},
 		{
-			testName:       "it correctly parses the resource ID (org:user)",
-			givenID:        "org_1234:auth0|62d82",
-			givenSeparator: ":",
+			testName: "it correctly parses the resource ID (org::user)",
+			givenID:  "org_1234::auth0|62d82",
 			expectedAttributes: map[int]map[string]string{
 				1: {"organization_id": "org_1234"},
 				2: {"user_id": "auth0|62d82"},
 			},
 		},
 		{
-			testName:       "it correctly parses the resource ID (conn:client)",
-			givenID:        "conn_5678::client_1234",
-			givenSeparator: "::",
+			testName: "it correctly parses the resource ID (conn::client)",
+			givenID:  "conn_5678::client_1234",
 			expectedAttributes: map[int]map[string]string{
 				1: {"connection_id": "conn_5678"},
 				2: {"client_id": "client_1234"},
 			},
 		},
 		{
-			testName:       "it correctly parses the resource ID (org:member:role)",
-			givenID:        "org_5678:user_1234:role_5341",
-			givenSeparator: ":",
+			testName: "it correctly parses the resource ID (org::member::role)",
+			givenID:  "org_5678::user_1234::role_5341",
 			expectedAttributes: map[int]map[string]string{
 				1: {"organization_id": "org_5678"},
 				2: {"user_id": "user_1234"},
@@ -55,9 +50,8 @@ func TestImportResourceGroupID(t *testing.T) {
 			},
 		},
 		{
-			testName:       "it correctly parses the resource ID (user:api:permission)",
-			givenID:        "user_5678::https://api::read:books",
-			givenSeparator: "::",
+			testName: "it correctly parses the resource ID (user::api::permission)",
+			givenID:  "user_5678::https://api::read:books",
 			expectedAttributes: map[int]map[string]string{
 				1: {"user_id": "user_5678"},
 				2: {"resource_server_identifier": "https://api"},
@@ -70,24 +64,22 @@ func TestImportResourceGroupID(t *testing.T) {
 			expectedError: fmt.Errorf("ID cannot be empty"),
 		},
 		{
-			testName:       "it fails when the given ID does not have \":\" as a separator",
-			givenID:        "org_1234conn_5678",
-			givenSeparator: ":",
+			testName: "it fails when the given ID does not have \"::\" as a separator",
+			givenID:  "org_1234conn_5678",
 			expectedAttributes: map[int]map[string]string{
 				1: {"organization_id": ""},
 				2: {"connection_id": ""},
 			},
-			expectedError: fmt.Errorf("ID must be formatted as <organization_id>:<connection_id>"),
+			expectedError: fmt.Errorf("ID must be formatted as <organization_id>::<connection_id>"),
 		},
 		{
-			testName:       "it fails when the given ID has too many separators",
-			givenID:        "org_1234:conn_5678:",
-			givenSeparator: ":",
+			testName: "it fails when the given ID has too many separators",
+			givenID:  "org_1234::conn_5678::",
 			expectedAttributes: map[int]map[string]string{
 				1: {"organization_id": ""},
 				2: {"connection_id": ""},
 			},
-			expectedError: fmt.Errorf("ID must be formatted as <organization_id>:<connection_id>"),
+			expectedError: fmt.Errorf("ID must be formatted as <organization_id>::<connection_id>"),
 		},
 	}
 
@@ -109,7 +101,7 @@ func TestImportResourceGroupID(t *testing.T) {
 			data := schema.TestResourceDataRaw(t, testSchema, nil)
 			data.SetId(testCase.givenID)
 
-			importFunc := ImportResourceGroupID(testCase.givenSeparator, resourceKeys...)
+			importFunc := ImportResourceGroupID(resourceKeys...)
 			actualData, err := importFunc(context.Background(), data, nil)
 
 			if testCase.expectedError != nil {

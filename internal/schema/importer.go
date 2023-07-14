@@ -9,19 +9,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-const (
-	// SeparatorColon used for imports that use ":".
-	SeparatorColon = ":"
-
-	// SeparatorDoubleColon used for imports that use "::".
-	SeparatorDoubleColon = "::"
-)
+const separator = "::"
 
 var errEmptyID = fmt.Errorf("ID cannot be empty")
 
 // ImportResourceGroupID deconstructs the given ID when terraform import
 // runs, so the attribute groups can be set within the terraform state.
-func ImportResourceGroupID(separator string, resourceGroup ...string) schema.StateContextFunc {
+func ImportResourceGroupID(resourceGroup ...string) schema.StateContextFunc {
 	return func(_ context.Context, data *schema.ResourceData, _ interface{}) ([]*schema.ResourceData, error) {
 		givenRawID := data.Id()
 		if givenRawID == "" {
@@ -29,12 +23,12 @@ func ImportResourceGroupID(separator string, resourceGroup ...string) schema.Sta
 		}
 
 		if !strings.Contains(givenRawID, separator) {
-			return nil, errInvalidID(separator, resourceGroup...)
+			return nil, errInvalidID(resourceGroup...)
 		}
 
 		idGroup := strings.Split(givenRawID, separator)
 		if len(idGroup) != len(resourceGroup) {
-			return nil, errInvalidID(separator, resourceGroup...)
+			return nil, errInvalidID(resourceGroup...)
 		}
 
 		var result *multierror.Error
@@ -46,7 +40,13 @@ func ImportResourceGroupID(separator string, resourceGroup ...string) schema.Sta
 	}
 }
 
-func errInvalidID(separator string, resourceGroup ...string) error {
+// SetResourceGroupID sets the ID of the resource when the ID is a combination of
+// multiple resource IDs. If the value is blank, then the resource is destroyed.
+func SetResourceGroupID(data *schema.ResourceData, resourceGroup ...string) {
+	data.SetId(strings.Join(resourceGroup, separator))
+}
+
+func errInvalidID(resourceGroup ...string) error {
 	var formattedErrorMessage []string
 	for _, s := range resourceGroup {
 		formattedErrorMessage = append(formattedErrorMessage, "<"+s+">")

@@ -40,7 +40,7 @@ func NewCustomTextResource() *schema.Resource {
 		UpdateContext: updatePromptCustomText,
 		DeleteContext: deletePromptCustomText,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "prompt", "language"),
+			StateContext: internalSchema.ImportResourceGroupID("prompt", "language"),
 		},
 		Description: "With this resource, you can manage custom text on your Auth0 prompts. You can read more about " +
 			"custom texts [here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts).",
@@ -72,7 +72,11 @@ func NewCustomTextResource() *schema.Resource {
 }
 
 func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(d.Get("prompt").(string) + ":" + d.Get("language").(string))
+	prompt := d.Get("prompt").(string)
+	language := d.Get("language").(string)
+
+	internalSchema.SetResourceGroupID(d, prompt, language)
+
 	return updatePromptCustomText(ctx, d, m)
 }
 

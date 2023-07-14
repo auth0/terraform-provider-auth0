@@ -124,18 +124,31 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 func readRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.Role.Permissions(ctx, data.Id())
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var permissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
+		if err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
+			return diag.FromErr(err)
 		}
-		return diag.FromErr(err)
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	result := multierror.Append(
 		data.Set("role_id", data.Id()),
-		data.Set("permissions", flattenRolePermissions(permissions.Permissions)),
+		data.Set("permissions", flattenRolePermissions(permissions)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

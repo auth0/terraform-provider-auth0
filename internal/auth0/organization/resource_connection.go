@@ -22,7 +22,7 @@ func NewConnectionResource() *schema.Resource {
 		UpdateContext: updateOrganizationConnection,
 		DeleteContext: deleteOrganizationConnection,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "organization_id", "connection_id"),
+			StateContext: internalSchema.ImportResourceGroupID("organization_id", "connection_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -74,7 +74,7 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 		return diag.FromErr(err)
 	}
 
-	data.SetId(organizationID + ":" + connectionID)
+	internalSchema.SetResourceGroupID(data, organizationID, connectionID)
 
 	return readOrganizationConnection(ctx, data, meta)
 }

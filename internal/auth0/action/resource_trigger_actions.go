@@ -38,12 +38,16 @@ func NewTriggerActionsResource() *schema.Resource {
 					"post-user-registration",
 					"post-change-password",
 					"send-phone-message",
+					"password-reset-post-challenge",
 					"iga-approval",
 					"iga-certification",
 					"iga-fulfillment-assignment",
 					"iga-fulfillment-execution",
 				}, false),
-				Description: "The ID of the trigger to bind with.",
+				Description: "The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, " +
+					"`pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, " +
+					"`password-reset-post-challenge`, `iga-approval` , `iga-certification` , `iga-fulfillment-assignment`, " +
+					"`iga-fulfillment-execution`.",
 			},
 			"actions": {
 				Type:     schema.TypeList,

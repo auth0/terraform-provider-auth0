@@ -39,8 +39,7 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     false,
+							Required:    true,
 							Description: "Whether breached password detection is active.",
 						},
 						"shields": {
@@ -55,7 +54,10 @@ func NewResource() *schema.Resource {
 									"admin_notification",
 								}, false),
 							},
-							Description: "Action to take when a breached password is detected.",
+							Description: "Action to take when a breached password is detected. " +
+								"Options include: `block` (block compromised user accounts), " +
+								"`user_notification` (send an email to user when we detect that they are using compromised credentials) " +
+								"and `admin_notification` (send an email with a summary of the number of accounts logging in with compromised credentials).",
 						},
 						"admin_notification_frequency": {
 							Type:     schema.TypeSet,
@@ -70,7 +72,8 @@ func NewResource() *schema.Resource {
 									"monthly",
 								}, false),
 							},
-							Description: "When \"admin_notification\" is enabled, " +
+							RequiredWith: []string{"breached_password_detection.0.shields"},
+							Description: "When `admin_notification` is enabled within the `shields` property, " +
 								"determines how often email notifications are sent. " +
 								"Possible values: `immediately`, `daily`, `weekly`, `monthly`.",
 						},
@@ -105,7 +108,8 @@ func NewResource() *schema.Resource {
 											}, false),
 										},
 										Description: "Action to take when a breached password is detected during " +
-											"a signup. Possible values: `block`, `admin_notification`.",
+											"a signup. Possible values: `block` (block compromised credentials for new accounts), " +
+											"`admin_notification` (send an email notification with a summary of compromised credentials in new accounts).",
 									},
 								},
 							},
@@ -124,8 +128,7 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     false,
+							Required:    true,
 							Description: "Whether brute force attack protections are active.",
 						},
 						"shields": {
@@ -140,7 +143,8 @@ func NewResource() *schema.Resource {
 								}, false),
 							},
 							Description: "Action to take when a brute force protection threshold is violated. " +
-								"Possible values: `block`, `user_notification`",
+								"Possible values: `block` (block login attempts for a flagged user account), " +
+								"`user_notification` (send an email to user when their account has been blocked).",
 						},
 						"allowlist": {
 							Type:     schema.TypeSet,
@@ -149,8 +153,9 @@ func NewResource() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "List of trusted IP addresses that will not " +
-								"have attack protection enforced against them.",
+							Description: "List of trusted IP addresses that will not have attack protection enforced " +
+								"against them. This field allows you to specify multiple IP addresses, or ranges. " +
+								"You can use IPv4 or IPv6 addresses and CIDR notation.",
 						},
 						"mode": {
 							Type:     schema.TypeString,
@@ -160,14 +165,16 @@ func NewResource() *schema.Resource {
 								"count_per_identifier_and_ip", "count_per_identifier",
 							}, false),
 							Description: "Determines whether the IP address is used when counting failed attempts. " +
-								"Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.",
+								"Possible values: `count_per_identifier_and_ip` (lockout an account from a given IP Address) " +
+								"or `count_per_identifier` (lockout an account regardless of IP Address).",
 						},
 						"max_attempts": {
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Computed:     true,
 							ValidateFunc: validation.IntAtLeast(0),
-							Description:  "Maximum number of unsuccessful attempts. Only available on public tenants.",
+							Description: "Maximum number of consecutive failed login attempts from a single user " +
+								"before blocking is triggered. Only available on public tenants.",
 						},
 					},
 				},
@@ -183,8 +190,7 @@ func NewResource() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:        schema.TypeBool,
-							Optional:    true,
-							Default:     false,
+							Required:    true,
 							Description: "Whether suspicious IP throttling attack protections are active.",
 						},
 						"shields": {
@@ -199,7 +205,8 @@ func NewResource() *schema.Resource {
 								}, false),
 							},
 							Description: "Action to take when a suspicious IP throttling threshold is violated. " +
-								"Possible values: `block`, `admin_notification`",
+								"Possible values: `block` (throttle traffic from an IP address when there is a high number of login attempts targeting too many different accounts), " +
+								"`admin_notification` (send an email notification when traffic is throttled on one or more IP addresses due to high-velocity traffic).",
 						},
 						"allowlist": {
 							Type:     schema.TypeSet,
@@ -208,8 +215,9 @@ func NewResource() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							Description: "List of trusted IP addresses that will not have " +
-								"attack protection enforced against them.",
+							Description: "List of trusted IP addresses that will not have attack protection enforced " +
+								"against them. This field allows you to specify multiple IP addresses, or ranges. " +
+								"You can use IPv4 or IPv6 addresses and CIDR notation.",
 						},
 						"pre_login": {
 							Type:     schema.TypeList,
@@ -225,15 +233,16 @@ func NewResource() *schema.Resource {
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description:  "Total number of attempts allowed per day.",
+										Description:  "The maximum number of failed login attempts allowed from a single IP address.",
 									},
 									"rate": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description: "Interval of time, given in milliseconds, " +
-											"at which new attempts are granted.",
+										Description: "Interval of time, given in milliseconds at which new login tokens " +
+											"will become available after they have been used by an IP address. " +
+											"Each login attempt will be added on the defined throttling rate.",
 									},
 								},
 							},
@@ -252,15 +261,16 @@ func NewResource() *schema.Resource {
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description:  "Total number of attempts allowed.",
+										Description:  "The maximum number of sign up attempts allowed from a single IP address.",
 									},
 									"rate": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
 										ValidateFunc: validation.IntAtLeast(0),
-										Description: "Interval of time, given in milliseconds, " +
-											"at which new attempts are granted.",
+										Description: "Interval of time, given in milliseconds " +
+											"at which new sign up tokens will become available after they have been used " +
+											"by an IP address. Each sign up attempt will be added on the defined throttling rate.",
 									},
 								},
 							},

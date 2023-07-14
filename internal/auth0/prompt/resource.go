@@ -29,25 +29,28 @@ func NewResource() *schema.Resource {
 			"including choosing the login experience version.",
 		Schema: map[string]*schema.Schema{
 			"universal_login_experience": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"new", "classic",
-				}, false),
-				Description: "Which login experience to use. Options include `classic` and `new`.",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"new", "classic"}, false),
+				AtLeastOneOf: []string{"identifier_first", "webauthn_platform_first_factor"},
+				Description:  "Which login experience to use. Options include `classic` and `new`.",
 			},
 			"identifier_first": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:         schema.TypeBool,
+				Optional:     true,
+				Computed:     true,
+				AtLeastOneOf: []string{"universal_login_experience", "webauthn_platform_first_factor"},
 				Description: "Indicates whether the identifier first is used when " +
 					"using the new Universal Login experience.",
 			},
 			"webauthn_platform_first_factor": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Determines if the login screen uses identifier and biometrics first.",
+				Type:         schema.TypeBool,
+				Optional:     true,
+				Computed:     true,
+				AtLeastOneOf: []string{"universal_login_experience", "identifier_first"},
+				Description: "Determines if the login screen uses identifier and biometrics first. " +
+					"Setting this property to `true`, requires MFA factors enabled for enrollment; use the `auth0_guardian` resource to set one up.",
 			},
 		},
 	}
@@ -86,8 +89,7 @@ func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readPrompt(ctx, d, m)
 }
 
-func deletePrompt(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
-	d.SetId("")
+func deletePrompt(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
 }
 
@@ -97,9 +99,9 @@ func expandPrompt(d cty.Value) *management.Prompt {
 		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),
 	}
 
-	ule := d.GetAttr("universal_login_experience")
-	if !ule.IsNull() {
-		prompt.UniversalLoginExperience = ule.AsString()
+	ulExp := d.GetAttr("universal_login_experience")
+	if !ulExp.IsNull() {
+		prompt.UniversalLoginExperience = ulExp.AsString()
 	}
 
 	return &prompt

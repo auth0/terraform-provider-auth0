@@ -47,7 +47,7 @@ func NewRoleResource() *schema.Resource {
 		ReadContext:   readUserRole,
 		DeleteContext: deleteUserRole,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "user_id", "role_id"),
+			StateContext: internalSchema.ImportResourceGroupID("user_id", "role_id"),
 		},
 		Description: "With this resource, you can manage assigned roles for a user.",
 	}
@@ -67,7 +67,7 @@ func createUserRole(ctx context.Context, data *schema.ResourceData, meta interfa
 		return diag.FromErr(err)
 	}
 
-	data.SetId(userID + internalSchema.SeparatorDoubleColon + roleID)
+	internalSchema.SetResourceGroupID(data, userID, roleID)
 
 	return readUserRole(ctx, data, meta)
 }

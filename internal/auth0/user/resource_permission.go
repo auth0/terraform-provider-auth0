@@ -50,7 +50,7 @@ func NewPermissionResource() *schema.Resource {
 		ReadContext:   readUserPermission,
 		DeleteContext: deleteUserPermission,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "user_id", "resource_server_identifier", "permission"),
+			StateContext: internalSchema.ImportResourceGroupID("user_id", "resource_server_identifier", "permission"),
 		},
 		Description: "With this resource, you can manage user permissions.",
 	}
@@ -76,7 +76,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
-	data.SetId(userID + internalSchema.SeparatorDoubleColon + resourceServerID + internalSchema.SeparatorDoubleColon + permissionName)
+	internalSchema.SetResourceGroupID(data, userID, resourceServerID, permissionName)
 
 	return readUserPermission(ctx, data, meta)
 }

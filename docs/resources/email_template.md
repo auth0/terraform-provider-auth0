@@ -74,5 +74,5 @@ Import is supported using the following syntax:
 # for legacy scenarios.
 #
 # Example:
-terraform import auth0_email_template.my_email_template welcome_email
+terraform import auth0_email_template.my_email_template "welcome_email"
 ```

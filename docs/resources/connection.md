@@ -807,8 +807,8 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-# Connections can be imported using their ID.
+# This resource can be imported by specifying the connection ID.
 #
 # Example:
-terraform import auth0_connection.google con_a17f21fdb24d48a0
+terraform import auth0_connection.google "con_a17f21fdb24d48a0"
 ```

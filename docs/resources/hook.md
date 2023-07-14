@@ -59,8 +59,8 @@ resource "auth0_hook" "my_hook" {
 Import is supported using the following syntax:
 
 ```shell
-# A hook can be imported using the hook's ID.
+# This resource can be imported by specifying the hook ID.
 #
 # Example:
-terraform import auth0_hook.my_hook 00001
+terraform import auth0_hook.my_hook "00001"
 ```

@@ -499,7 +499,7 @@ func flattenClientAddonWithNoConfig(addon interface{}) []interface{} {
 	return []interface{}{map[string]interface{}{}}
 }
 
-func flattenClient(d *schema.ResourceData, client management.Client) error {
+func flattenClient(d *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		d.Set("client_id", client.GetClientID()),
 		d.Set("client_aliases", client.GetClientAliases()),
@@ -539,7 +539,7 @@ func flattenClient(d *schema.ResourceData, client management.Client) error {
 	return result.ErrorOrNil()
 }
 
-func flattenClientForDataSource(d *schema.ResourceData, client management.Client) error {
+func flattenClientForDataSource(d *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		flattenClient(d, client),
 		d.Set("client_secret", client.GetClientSecret()),

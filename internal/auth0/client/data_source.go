@@ -62,7 +62,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 			return diag.FromErr(err)
 		}
 
-		err = flattenClientForDataSource(d, *client)
+		err = flattenClientForDataSource(d, client)
 
 		return diag.FromErr(err)
 	}
@@ -85,7 +85,7 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 		for _, client := range clients.Clients {
 			if client.GetName() == name {
 				d.SetId(client.GetClientID())
-				err = flattenClientForDataSource(d, *client)
+				err = flattenClientForDataSource(d, client)
 				return diag.FromErr(err)
 			}
 		}

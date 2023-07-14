@@ -1319,7 +1319,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	err = flattenClient(d, *client)
+	err = flattenClient(d, client)
 	return diag.FromErr(err)
 }
 

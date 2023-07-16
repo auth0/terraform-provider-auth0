@@ -370,7 +370,6 @@ func TestAccClientAuthenticationMethods(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Client Credentials - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.alg", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "token_endpoint_auth_method", "client_secret_post"),
 				),
 			},
 		},
@@ -417,7 +416,6 @@ const testAccImportClientWithSecretPost = `
 resource "auth0_client" "my_test_client_secret" {
 	name 	                   = "Acceptance Test - Client Credentials Import"
 	app_type                   = "non_interactive"
-	token_endpoint_auth_method = "client_secret_post"
 }
 
 resource "auth0_client_credentials" "test_simple_client" {

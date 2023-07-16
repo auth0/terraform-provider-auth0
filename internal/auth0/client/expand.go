@@ -35,7 +35,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		CustomLoginPageOn:           value.Bool(config.GetAttr("custom_login_page_on")),
 		CustomLoginPage:             value.String(config.GetAttr("custom_login_page")),
 		FormTemplate:                value.String(config.GetAttr("form_template")),
-		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		InitiateLoginURI:            value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:               value.MapOfStrings(config.GetAttr("encryption_key")),
 		OIDCBackchannelLogout:       expandOIDCBackchannelLogout(d),

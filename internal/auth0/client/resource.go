@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -42,18 +41,6 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "The ID of the client.",
-			},
-			"client_secret": {
-				Type:      schema.TypeString,
-				Computed:  true,
-				Sensitive: true,
-				Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
-					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
-					"empty string. Use this attribute on the `auth0_client_credentials` resource instead, to allow " +
-					"managing it directly or use the `auth0_client` data source to read this property.",
-				Deprecated: "Reading the client secret through this attribute is deprecated and it will be " +
-					"removed in a future version. Migrate to the `auth0_client_credentials` resource to " +
-					"manage a client's secret instead or use the `auth0_client` data source to read this property.",
 			},
 			"client_aliases": {
 				Type: schema.TypeList,
@@ -250,30 +237,6 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "HTML form template to be used for WS-Federation.",
-			},
-			"token_endpoint_auth_method": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"none",
-					"client_secret_post",
-					"client_secret_basic",
-				}, false),
-				Description: "Defines the requested authentication method for the token endpoint. " +
-					"Options include `none` (public client without a client secret), " +
-					"`client_secret_post` (client uses HTTP POST parameters), " +
-					"`client_secret_basic` (client uses HTTP Basic). " +
-					"Managing the authentication method through this attribute is deprecated and it will be " +
-					"removed in a future major version. Migrate to the `auth0_client_credentials` resource to " +
-					"manage a client's authentication method instead. Check the " +
-					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) " +
-					"on how to do that.",
-				Deprecated: "Managing the authentication method through this attribute is deprecated and it will be " +
-					"changed to read-only in a future version. Migrate to the `auth0_client_credentials` resource to " +
-					"manage a client's authentication method instead. Check the " +
-					"[MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) " +
-					"on how to do that.",
 			},
 			"client_metadata": {
 				Type:     schema.TypeMap,
@@ -1356,46 +1319,8 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		d.Set("client_id", client.GetClientID()),
-		d.Set("client_secret", client.GetClientSecret()),
-		d.Set("client_aliases", client.GetClientAliases()),
-		d.Set("name", client.GetName()),
-		d.Set("description", client.GetDescription()),
-		d.Set("app_type", client.GetAppType()),
-		d.Set("logo_uri", client.GetLogoURI()),
-		d.Set("is_first_party", client.GetIsFirstParty()),
-		d.Set("is_token_endpoint_ip_header_trusted", client.GetIsTokenEndpointIPHeaderTrusted()),
-		d.Set("oidc_conformant", client.GetOIDCConformant()),
-		d.Set("callbacks", client.GetCallbacks()),
-		d.Set("allowed_logout_urls", client.GetAllowedLogoutURLs()),
-		d.Set("allowed_origins", client.GetAllowedOrigins()),
-		d.Set("allowed_clients", client.GetAllowedClients()),
-		d.Set("grant_types", client.GetGrantTypes()),
-		d.Set("organization_usage", client.GetOrganizationUsage()),
-		d.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
-		d.Set("web_origins", client.GetWebOrigins()),
-		d.Set("sso", client.GetSSO()),
-		d.Set("sso_disabled", client.GetSSODisabled()),
-		d.Set("cross_origin_auth", client.GetCrossOriginAuth()),
-		d.Set("cross_origin_loc", client.GetCrossOriginLocation()),
-		d.Set("custom_login_page_on", client.GetCustomLoginPageOn()),
-		d.Set("custom_login_page", client.GetCustomLoginPage()),
-		d.Set("form_template", client.GetFormTemplate()),
-		d.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
-		d.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
-		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
-		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
-		d.Set("encryption_key", client.GetEncryptionKey()),
-		d.Set("addons", flattenClientAddons(client.Addons)),
-		d.Set("mobile", flattenClientMobile(client.GetMobile())),
-		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
-		d.Set("signing_keys", client.SigningKeys),
-		d.Set("client_metadata", client.ClientMetadata),
-		d.Set("oidc_backchannel_logout_urls", client.OIDCBackchannelLogout.GetBackChannelLogoutURLs()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	err = flattenClient(d, client)
+	return diag.FromErr(err)
 }
 
 func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

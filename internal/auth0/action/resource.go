@@ -200,9 +200,11 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	err := api.Action.Delete(ctx, d.Id())
+	if err := api.Action.Delete(ctx, d.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
+	}
 
-	return diag.FromErr(internalError.HandleAPIError(d, err))
+	return nil
 }
 
 func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

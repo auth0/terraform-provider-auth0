@@ -247,5 +247,5 @@ func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 
 func emailProviderIsConfigured(ctx context.Context, api *management.Management) bool {
 	_, err := api.EmailProvider.Read(ctx)
-	return internalError.IsStatusNotFound(err)
+	return !internalError.IsStatusNotFound(err)
 }

@@ -2,7 +2,6 @@ package email
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -12,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewTemplateResource will return a new auth0_email_template resource.
@@ -109,14 +109,8 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	// to avoid conflicts, we first attempt to read the template. If it exists
 	// we'll try to update it, if not we'll try to create it.
 	if _, err := api.EmailTemplate.Read(ctx, email.GetTemplate()); err == nil {
-		// We succeeded in reading the template, this means it was created previously.
-		if err := api.EmailTemplate.Update(ctx, email.GetTemplate(), email); err != nil {
-			return diag.FromErr(err)
-		}
-
 		d.SetId(email.GetTemplate())
-
-		return nil
+		return updateEmailTemplate(ctx, d, m)
 	}
 
 	// If we reached this point the template doesn't exist.
@@ -135,14 +129,8 @@ func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{
 
 	email, err := api.EmailTemplate.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
-
-	d.SetId(email.GetTemplate())
 
 	result := multierror.Append(
 		d.Set("template", email.GetTemplate()),
@@ -163,8 +151,9 @@ func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailTemplate(d.GetRawConfig())
+
 	if err := api.EmailTemplate.Update(ctx, d.Id(), email); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readEmailTemplate(ctx, d, m)
@@ -172,17 +161,14 @@ func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 
 func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+
 	emailTemplate := &management.EmailTemplate{
 		Template: auth0.String(d.Id()),
 		Enabled:  auth0.Bool(false),
 	}
+
 	if err := api.EmailTemplate.Update(ctx, d.Id(), emailTemplate); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

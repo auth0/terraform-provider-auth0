@@ -2,7 +2,6 @@ package role
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -87,12 +87,9 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 
 	if len(rmPermissions) > 0 {
 		if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
+			if !internalError.IsStatusNotFound(err) {
+				return diag.FromErr(err)
 			}
-
-			return diag.FromErr(err)
 		}
 	}
 
@@ -107,11 +104,6 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 
 	if len(addPermissions) > 0 {
 		if err := api.Role.AssociatePermissions(ctx, roleID, addPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
 			return diag.FromErr(err)
 		}
 	}
@@ -129,12 +121,7 @@ func readRolePermissions(ctx context.Context, data *schema.ResourceData, meta in
 	for {
 		permissionList, err := api.Role.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
-			return diag.FromErr(err)
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 
 		permissions = append(permissions, permissionList.Permissions...)
@@ -172,11 +159,7 @@ func deleteRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

@@ -3,14 +3,13 @@ package resourceserver
 import (
 	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 const auth0ManagementAPIName = "Auth0 Management API"
@@ -136,12 +135,7 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 
 	resourceServer, err := api.ResourceServer.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	// Ensuring the ID is the resource server ID and not the identifier,
@@ -159,7 +153,7 @@ func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	resourceServer := expandResourceServer(d)
 
 	if err := api.ResourceServer.Update(ctx, d.Id(), resourceServer); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readResourceServer(ctx, d, m)
@@ -173,11 +167,7 @@ func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interfa
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.ResourceServer.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

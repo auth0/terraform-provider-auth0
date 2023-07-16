@@ -317,28 +317,27 @@ func readAttackProtection(ctx context.Context, d *schema.ResourceData, m interfa
 func updateAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
+	var result *multierror.Error
 	if ipt := expandSuspiciousIPThrottling(d); ipt != nil {
-		if err := api.AttackProtection.UpdateSuspiciousIPThrottling(ctx, ipt); err != nil {
-			return diag.FromErr(err)
-		}
+		result = multierror.Append(result, api.AttackProtection.UpdateSuspiciousIPThrottling(ctx, ipt))
 	}
 
 	if bfp := expandBruteForceProtection(d); bfp != nil {
-		if err := api.AttackProtection.UpdateBruteForceProtection(ctx, bfp); err != nil {
-			return diag.FromErr(err)
-		}
+		result = multierror.Append(result, api.AttackProtection.UpdateBruteForceProtection(ctx, bfp))
 	}
 
 	if bpd := expandBreachedPasswordDetection(d); bpd != nil {
-		if err := api.AttackProtection.UpdateBreachedPasswordDetection(ctx, bpd); err != nil {
-			return diag.FromErr(err)
-		}
+		result = multierror.Append(result, api.AttackProtection.UpdateBreachedPasswordDetection(ctx, bpd))
+	}
+
+	if result.ErrorOrNil() != nil {
+		return diag.FromErr(result.ErrorOrNil())
 	}
 
 	return readAttackProtection(ctx, d, m)
 }
 
-func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteAttackProtection(ctx context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	enabled := false
@@ -363,12 +362,8 @@ func deleteAttackProtection(ctx context.Context, d *schema.ResourceData, m inter
 			},
 		),
 	)
-	if err := result.ErrorOrNil(); err != nil {
-		return diag.FromErr(err)
-	}
 
-	d.SetId("")
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func flattenSuspiciousIPThrottling(ipt *management.SuspiciousIPThrottling) []interface{} {

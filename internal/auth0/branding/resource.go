@@ -3,7 +3,6 @@ package branding
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -14,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -263,9 +263,10 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 func flattenBrandingUniversalLogin(ctx context.Context, api *management.Management) ([]interface{}, error) {
 	universalLogin, err := api.Branding.UniversalLogin(ctx)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+		if internalError.IsStatusNotFound(err) {
 			return nil, nil
 		}
+
 		return nil, err
 	}
 

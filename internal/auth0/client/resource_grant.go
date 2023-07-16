@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -70,6 +70,7 @@ func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	}
 
 	clientGrant := expandClientGrant(d)
+
 	if err := api.ClientGrant.Create(ctx, clientGrant); err != nil {
 		return diag.FromErr(err)
 	}
@@ -84,12 +85,7 @@ func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{})
 
 	clientGrant, err := api.ClientGrant.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -104,10 +100,9 @@ func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{})
 func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	clientGrant := expandClientGrant(d)
-	if clientGrantHasChange(clientGrant) {
+	if clientGrant := expandClientGrant(d); clientGrantHasChange(clientGrant) {
 		if err := api.ClientGrant.Update(ctx, d.Id(), clientGrant); err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(internalError.HandleAPIError(d, err))
 		}
 	}
 
@@ -118,10 +113,7 @@ func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.ClientGrant.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

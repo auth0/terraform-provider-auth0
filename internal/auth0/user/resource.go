@@ -3,9 +3,7 @@ package user
 import (
 	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -14,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 type validateUserFunc func(*management.User) error
@@ -152,24 +150,6 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-
-	user, err := api.User.Read(ctx, d.Id())
-	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
-	}
-
-	err = flattenUser(d, user)
-
-	return diag.FromErr(err)
-}
-
 func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
@@ -184,15 +164,20 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	d.SetId(user.GetID())
 
-	if err = persistUserRoles(ctx, d, m); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return readUser(ctx, d, m)
-		}
+	return readUser(ctx, d, m)
+}
 
-		return diag.FromErr(err)
+func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*config.Config).GetAPI()
+
+	user, err := api.User.Read(ctx, d.Id())
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	return readUser(ctx, d, m)
+	err = flattenUser(d, user)
+
+	return diag.FromErr(err)
 }
 
 func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -208,16 +193,8 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	api := m.(*config.Config).GetAPI()
 	if userHasChange(user) {
 		if err := api.User.Update(ctx, d.Id(), user); err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(internalError.HandleAPIError(d, err))
 		}
-	}
-
-	if err = persistUserRoles(ctx, d, m); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return readUser(ctx, d, m)
-		}
-
-		return diag.FromErr(err)
 	}
 
 	return readUser(ctx, d, m)
@@ -225,14 +202,9 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+
 	if err := api.User.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil
@@ -280,53 +252,6 @@ func validateNoPasswordAndEmailVerifiedSimultaneously() validateUserFunc {
 		}
 		return nil
 	}
-}
-
-func persistUserRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
-	if !d.HasChange("roles") {
-		return nil
-	}
-
-	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
-
-	if err := removeUserRoles(ctx, meta, d.Id(), rolesToRemove); err != nil {
-		return err
-	}
-
-	return assignUserRoles(ctx, meta, d.Id(), rolesToAdd)
-}
-
-func removeUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToRemove []interface{}) error {
-	if len(userRolesToRemove) == 0 {
-		return nil
-	}
-
-	var rmRoles []*management.Role
-	for _, rmRole := range userRolesToRemove {
-		role := &management.Role{ID: auth0.String(rmRole.(string))}
-		rmRoles = append(rmRoles, role)
-	}
-
-	api := meta.(*config.Config).GetAPI()
-
-	return api.User.RemoveRoles(ctx, userID, rmRoles)
-}
-
-func assignUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToAdd []interface{}) error {
-	if len(userRolesToAdd) == 0 {
-		return nil
-	}
-
-	var addRoles []*management.Role
-	for _, addRole := range userRolesToAdd {
-		roleID := addRole.(string)
-		role := &management.Role{ID: &roleID}
-		addRoles = append(addRoles, role)
-	}
-
-	api := meta.(*config.Config).GetAPI()
-
-	return api.User.AssignRoles(ctx, userID, addRoles)
 }
 
 func userHasChange(u *management.User) bool {

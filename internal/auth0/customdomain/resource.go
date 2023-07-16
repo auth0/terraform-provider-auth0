@@ -2,7 +2,6 @@ package customdomain
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -104,6 +104,7 @@ func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
+
 	if err := api.CustomDomain.Create(ctx, customDomain); err != nil {
 		return diag.FromErr(err)
 	}
@@ -118,11 +119,7 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 
 	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -148,12 +145,9 @@ func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
+
 	if err := api.CustomDomain.Update(ctx, d.Id(), customDomain); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readCustomDomain(ctx, d, m)
@@ -163,14 +157,9 @@ func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.CustomDomain.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }
 

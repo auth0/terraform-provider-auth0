@@ -2,14 +2,13 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -64,10 +63,6 @@ func createOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	roleID := data.Get("role_id").(string)
 
 	if err := api.Organization.AssignMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -84,12 +79,7 @@ func readOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, 
 
 	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	roleID := data.Get("role_id").(string)
@@ -115,11 +105,7 @@ func deleteOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	roleID := data.Get("role_id").(string)
 
 	if err := api.Organization.DeleteMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

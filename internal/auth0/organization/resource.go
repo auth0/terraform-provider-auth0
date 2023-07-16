@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -78,6 +78,7 @@ func createOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
+
 	if err := api.Organization.Create(ctx, organization); err != nil {
 		return diag.FromErr(err)
 	}
@@ -92,11 +93,7 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 
 	organization, err := api.Organization.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -113,8 +110,9 @@ func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	organization := expandOrganization(d)
+
 	if err := api.Organization.Update(ctx, d.Id(), organization); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readOrganization(ctx, d, m)
@@ -124,14 +122,9 @@ func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Organization.Delete(ctx, d.Id()); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }
 

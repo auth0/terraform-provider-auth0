@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewTriggerActionsResource will return a new auth0_trigger_actions resource.
@@ -92,7 +93,7 @@ func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface
 
 	triggerBindings, err := api.Action.Bindings(ctx, d.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -107,8 +108,9 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 	api := m.(*config.Config).GetAPI()
 
 	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
+
 	if err := api.Action.UpdateBindings(ctx, d.Id(), triggerBindings); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readTriggerBinding(ctx, d, m)
@@ -116,5 +118,10 @@ func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interfa
 
 func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	return diag.FromErr(api.Action.UpdateBindings(ctx, d.Id(), []*management.ActionBinding{}))
+
+	if err := api.Action.UpdateBindings(ctx, d.Id(), []*management.ActionBinding{}); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
+	}
+
+	return nil
 }

@@ -2,9 +2,7 @@ package tenant
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
@@ -285,14 +283,9 @@ func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+
 	tenant, err := api.Tenant.Read(ctx)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
 		return diag.FromErr(err)
 	}
 
@@ -317,8 +310,10 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 }
 
 func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	tenant := expandTenant(d)
 	api := m.(*config.Config).GetAPI()
+
+	tenant := expandTenant(d)
+
 	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
@@ -326,7 +321,6 @@ func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return readTenant(ctx, d, m)
 }
 
-func deleteTenant(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
-	d.SetId("")
+func deleteTenant(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
 }

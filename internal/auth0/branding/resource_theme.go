@@ -2,7 +2,6 @@ package branding
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -485,12 +485,7 @@ func readBrandingTheme(ctx context.Context, data *schema.ResourceData, meta inte
 
 	brandingTheme, err := api.BrandingTheme.Default(ctx)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	data.SetId(brandingTheme.GetID())
@@ -511,8 +506,9 @@ func updateBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	api := meta.(*config.Config).GetAPI()
 
 	brandingTheme := expandBrandingTheme(data)
+
 	if err := api.BrandingTheme.Update(ctx, data.Id(), &brandingTheme); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readBrandingTheme(ctx, data, meta)
@@ -522,14 +518,7 @@ func deleteBrandingTheme(ctx context.Context, data *schema.ResourceData, meta in
 	api := meta.(*config.Config).GetAPI()
 
 	if err := api.BrandingTheme.Delete(ctx, data.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

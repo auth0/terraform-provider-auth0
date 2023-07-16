@@ -2,14 +2,13 @@ package role
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_role resource.
@@ -59,12 +58,7 @@ func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 
 	role, err := api.Role.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -81,7 +75,7 @@ func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	role := expandRole(d)
 
 	if err := api.Role.Update(ctx, d.Id(), role); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readRole(ctx, d, m)
@@ -91,11 +85,7 @@ func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Role.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

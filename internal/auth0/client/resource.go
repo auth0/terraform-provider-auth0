@@ -2,14 +2,15 @@ package client
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
@@ -1298,6 +1299,7 @@ func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	client := expandClient(d)
+
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
@@ -1312,11 +1314,7 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	client, err := api.Client.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	err = flattenClient(d, client)
@@ -1326,10 +1324,9 @@ func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	client := expandClient(d)
-	if clientHasChange(client) {
+	if client := expandClient(d); clientHasChange(client) {
 		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
-			return diag.FromErr(err)
+			return diag.FromErr(internalError.HandleAPIError(d, err))
 		}
 	}
 
@@ -1340,12 +1337,8 @@ func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Client.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }

@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -69,10 +69,6 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 			Name:                     &permissionName,
 		},
 	}); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -90,12 +86,7 @@ func readUserPermission(ctx context.Context, data *schema.ResourceData, meta int
 
 	existingPermissions, err := api.User.Permissions(ctx, userID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	for _, p := range existingPermissions.Permissions {
@@ -130,11 +121,7 @@ func deleteUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 			},
 		},
 	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

@@ -1,6 +1,7 @@
 package email
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/auth0/go-auth0/management"
@@ -149,8 +150,8 @@ func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	return emailTemplate
 }
 
-func emailProviderIsConfigured(api *management.Management) bool {
-	_, err := api.EmailProvider.Read()
+func emailProviderIsConfigured(ctx context.Context, api *management.Management) bool {
+	_, err := api.EmailProvider.Read(ctx)
 	if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 		return false
 	}

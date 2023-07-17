@@ -1,4 +1,4 @@
-# The following example grants a client the "create:foo" permission (scope).
+# The following example grants a client the "create:foo" and "create:bar" permissions (scopes).
 
 resource "auth0_client" "my_client" {
   name = "Example Application - Client Grant (Managed by Terraform)"
@@ -22,5 +22,5 @@ resource "auth0_resource_server" "my_resource_server" {
 resource "auth0_client_grant" "my_client_grant" {
   client_id = auth0_client.my_client.id
   audience  = auth0_resource_server.my_resource_server.identifier
-  scope     = ["create:foo"]
+  scopes    = ["create:foo", "create:bar"]
 }

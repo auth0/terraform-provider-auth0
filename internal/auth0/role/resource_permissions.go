@@ -86,7 +86,7 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(rmPermissions) > 0 {
-		if err := api.Role.RemovePermissions(roleID, rmPermissions); err != nil {
+		if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -106,7 +106,7 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(addPermissions) > 0 {
-		if err := api.Role.AssociatePermissions(roleID, addPermissions); err != nil {
+		if err := api.Role.AssociatePermissions(ctx, roleID, addPermissions); err != nil {
 			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 				data.SetId("")
 				return nil
@@ -121,27 +121,40 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	return readRolePermissions(ctx, data, meta)
 }
 
-func readRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.Role.Permissions(data.Id())
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var permissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
+		if err != nil {
+			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
+				data.SetId("")
+				return nil
+			}
+
+			return diag.FromErr(err)
 		}
-		return diag.FromErr(err)
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	result := multierror.Append(
 		data.Set("role_id", data.Id()),
-		data.Set("permissions", flattenRolePermissions(permissions.Permissions)),
+		data.Set("permissions", flattenRolePermissions(permissions)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
@@ -158,7 +171,7 @@ func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta in
 		rmPermissions = append(rmPermissions, role)
 	}
 
-	if err := api.Role.RemovePermissions(roleID, rmPermissions); err != nil {
+	if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			return nil
 		}

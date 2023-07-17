@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
@@ -132,29 +131,29 @@ func createPages(ctx context.Context, data *schema.ResourceData, meta interface{
 	return updatePages(ctx, data, meta)
 }
 
-func readPages(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readPages(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	globalClientID, err := fetchGlobalClientID(api)
+	globalClientID, err := fetchGlobalClientID(ctx, api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	clientWithLoginPage, err := api.Client.Read(globalClientID)
+	clientWithLoginPage, err := api.Client.Read(ctx, globalClientID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	tenantPages, err := api.Tenant.Read()
+	tenantPages, err := api.Tenant.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
 		data.Set("login", flattenLoginPage(clientWithLoginPage)),
-		data.Set("change_password", tenant.FlattenTenantChangePassword(tenantPages.GetChangePassword())),
-		data.Set("guardian_mfa", tenant.FlattenTenantGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
-		data.Set("error", tenant.FlattenTenantErrorPage(tenantPages.GetErrorPage())),
+		data.Set("change_password", flattenChangePasswordPage(tenantPages.GetChangePassword())),
+		data.Set("guardian_mfa", flattenGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
+		data.Set("error", flattenErrorPage(tenantPages.GetErrorPage())),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -164,18 +163,18 @@ func updatePages(ctx context.Context, data *schema.ResourceData, meta interface{
 	api := meta.(*config.Config).GetAPI()
 
 	if clientWithLoginPage := expandLoginPage(data); clientWithLoginPage != nil {
-		globalClientID, err := fetchGlobalClientID(api)
+		globalClientID, err := fetchGlobalClientID(ctx, api)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := api.Client.Update(globalClientID, clientWithLoginPage); err != nil {
+		if err := api.Client.Update(ctx, globalClientID, clientWithLoginPage); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if tenantPages := expandTenantPages(data.GetRawConfig()); tenantPages != nil {
-		if err := api.Tenant.Update(tenantPages); err != nil {
+		if err := api.Tenant.Update(ctx, tenantPages); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -183,21 +182,21 @@ func updatePages(ctx context.Context, data *schema.ResourceData, meta interface{
 	return readPages(ctx, data, meta)
 }
 
-func deletePages(_ context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deletePages(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	globalClientID, err := fetchGlobalClientID(api)
+	globalClientID, err := fetchGlobalClientID(ctx, api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := api.Client.Update(globalClientID, &management.Client{
+	if err := api.Client.Update(ctx, globalClientID, &management.Client{
 		CustomLoginPageOn: auth0.Bool(false),
 	}); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := api.Tenant.Update(&management.Tenant{
+	if err := api.Tenant.Update(ctx, &management.Tenant{
 		ChangePassword: &management.TenantChangePassword{
 			Enabled: auth0.Bool(false),
 		},
@@ -216,8 +215,9 @@ func deletePages(_ context.Context, _ *schema.ResourceData, meta interface{}) di
 	return nil
 }
 
-func fetchGlobalClientID(api *management.Management) (string, error) {
+func fetchGlobalClientID(ctx context.Context, api *management.Management) (string, error) {
 	clientList, err := api.Client.List(
+		ctx,
 		management.Parameter("is_global", "true"),
 		management.IncludeFields("client_id"),
 	)

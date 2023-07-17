@@ -50,7 +50,7 @@ func NewPermissionResource() *schema.Resource {
 		ReadContext:   readUserPermission,
 		DeleteContext: deleteUserPermission,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "user_id", "resource_server_identifier", "permission"),
+			StateContext: internalSchema.ImportResourceGroupID("user_id", "resource_server_identifier", "permission"),
 		},
 		Description: "With this resource, you can manage user permissions.",
 	}
@@ -63,7 +63,7 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	if err := api.User.AssignPermissions(userID, []*management.Permission{
+	if err := api.User.AssignPermissions(ctx, userID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerID,
 			Name:                     &permissionName,
@@ -76,19 +76,19 @@ func createUserPermission(ctx context.Context, data *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
-	data.SetId(userID + internalSchema.SeparatorDoubleColon + resourceServerID + internalSchema.SeparatorDoubleColon + permissionName)
+	internalSchema.SetResourceGroupID(data, userID, resourceServerID, permissionName)
 
 	return readUserPermission(ctx, data, meta)
 }
 
-func readUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	existingPermissions, err := api.User.Permissions(userID)
+	existingPermissions, err := api.User.Permissions(ctx, userID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -113,7 +113,7 @@ func readUserPermission(_ context.Context, data *schema.ResourceData, meta inter
 	return nil
 }
 
-func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteUserPermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
@@ -121,6 +121,7 @@ func deleteUserPermission(_ context.Context, data *schema.ResourceData, meta int
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
 	if err := api.User.RemovePermissions(
+		ctx,
 		userID,
 		[]*management.Permission{
 			{

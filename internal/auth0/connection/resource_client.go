@@ -44,7 +44,7 @@ func NewClientResource() *schema.Resource {
 		ReadContext:   readConnectionClient,
 		DeleteContext: deleteConnectionClient,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "connection_id", "client_id"),
+			StateContext: internalSchema.ImportResourceGroupID("connection_id", "client_id"),
 		},
 		Description: "With this resource, you can enable a single client on a connection.",
 	}
@@ -59,7 +59,7 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -68,24 +68,25 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	enabledClients := append(connection.GetEnabledClients(), clientID)
 
 	if err := api.Connection.Update(
+		ctx,
 		connectionID,
 		&management.Connection{EnabledClients: &enabledClients},
 	); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(connectionID + ":" + clientID)
+	internalSchema.SetResourceGroupID(data, connectionID, clientID)
 
 	return readConnectionClient(ctx, data, meta)
 }
 
-func readConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -113,7 +114,7 @@ func readConnectionClient(_ context.Context, data *schema.ResourceData, meta int
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
@@ -122,7 +123,7 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -141,6 +142,7 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 	}
 
 	if err := api.Connection.Update(
+		ctx,
 		connectionID,
 		&management.Connection{EnabledClients: &enabledClients},
 	); err != nil {

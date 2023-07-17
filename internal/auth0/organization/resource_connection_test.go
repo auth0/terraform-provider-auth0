@@ -166,7 +166,7 @@ func TestAccOrganizationConnection(t *testing.T) {
 					connID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_connection.my_connection_1", "id")
 					assert.NoError(t, err)
 
-					return orgID + ":" + connID, nil
+					return orgID + "::" + connID, nil
 				},
 				ImportStatePersist: true,
 			},
@@ -181,7 +181,7 @@ func TestAccOrganizationConnection(t *testing.T) {
 					connID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_connection.my_connection_2", "id")
 					assert.NoError(t, err)
 
-					return orgID + ":" + connID, nil
+					return orgID + "::" + connID, nil
 				},
 				ImportStatePersist: true,
 			},

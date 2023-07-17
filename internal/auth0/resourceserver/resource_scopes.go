@@ -7,13 +7,11 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewScopesResource will return a new auth0_resource_server_scopes (1:many) resource.
@@ -62,7 +60,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
-	existingResourceServer, err := api.ResourceServer.Read(resourceServerIdentifier)
+	existingResourceServer, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -73,7 +71,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	}
 
 	updatedResourceServer := &management.ResourceServer{
-		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
+		Scopes: expandResourceServerScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
 
 	if diagnostics := guardAgainstErasingUnwantedScopes(
@@ -85,7 +83,7 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 		return diagnostics
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, updatedResourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, updatedResourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -99,10 +97,10 @@ func createResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	return readResourceServerScopes(ctx, data, meta)
 }
 
-func readResourceServerScopes(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readResourceServerScopes(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	resourceServer, err := api.ResourceServer.Read(data.Id())
+	resourceServer, err := api.ResourceServer.Read(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -114,7 +112,7 @@ func readResourceServerScopes(_ context.Context, data *schema.ResourceData, meta
 
 	result := multierror.Append(
 		data.Set("resource_server_identifier", resourceServer.GetIdentifier()),
-		data.Set("scopes", flattenAPIScopes(resourceServer.GetScopes())),
+		data.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -126,10 +124,10 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	resourceServerIdentifier := data.Get("resource_server_identifier").(string)
 
 	updatedResourceServer := &management.ResourceServer{
-		Scopes: expandAPIScopes(data.GetRawConfig().GetAttr("scopes")),
+		Scopes: expandResourceServerScopes(data.GetRawConfig().GetAttr("scopes")),
 	}
 
-	if err := api.ResourceServer.Update(resourceServerIdentifier, updatedResourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, updatedResourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -141,14 +139,14 @@ func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, 
 	return readResourceServerScopes(ctx, data, meta)
 }
 
-func deleteResourceServerScopes(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteResourceServerScopes(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServer := &management.ResourceServer{
 		Scopes: &[]management.ResourceServerScope{},
 	}
 
-	if err := api.ResourceServer.Update(data.Id(), resourceServer); err != nil {
+	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -185,32 +183,4 @@ func guardAgainstErasingUnwantedScopes(
 					"Run: 'terraform import auth0_resource_server_scopes.<given-name> %s'.", apiIdentifier),
 		},
 	}
-}
-
-func expandAPIScopes(scopes cty.Value) *[]management.ResourceServerScope {
-	resourceServerScopes := make([]management.ResourceServerScope, 0)
-
-	scopes.ForEachElement(func(_ cty.Value, scope cty.Value) (stop bool) {
-		resourceServerScopes = append(resourceServerScopes, management.ResourceServerScope{
-			Value:       value.String(scope.GetAttr("name")),
-			Description: value.String(scope.GetAttr("description")),
-		})
-
-		return stop
-	})
-
-	return &resourceServerScopes
-}
-
-func flattenAPIScopes(resourceServerScopes []management.ResourceServerScope) []map[string]interface{} {
-	scopes := make([]map[string]interface{}, len(resourceServerScopes))
-
-	for index, scope := range resourceServerScopes {
-		scopes[index] = map[string]interface{}{
-			"name":        scope.GetValue(),
-			"description": scope.GetDescription(),
-		}
-	}
-
-	return scopes
 }

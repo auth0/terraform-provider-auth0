@@ -48,7 +48,7 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 	userID := data.Get("user_id").(string)
 	data.SetId(userID)
 
-	if err := persistUserRoles(data, meta); err != nil {
+	if err := persistUserRoles(ctx, data, meta); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			data.SetId("")
 			return nil
@@ -60,10 +60,10 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 	return readUserRoles(ctx, data, meta)
 }
 
-func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	rolesList, err := api.User.Roles(data.Id())
+	rolesList, err := api.User.Roles(ctx, data.Id())
 	if err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
 			data.SetId("")
@@ -86,7 +86,7 @@ func readUserRoles(_ context.Context, data *schema.ResourceData, meta interface{
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Id()
@@ -98,7 +98,7 @@ func deleteUserRoles(_ context.Context, data *schema.ResourceData, meta interfac
 		rmRoles = append(rmRoles, role)
 	}
 
-	if err := api.User.RemoveRoles(userID, rmRoles); err != nil {
+	if err := api.User.RemoveRoles(ctx, userID, rmRoles); err != nil {
 		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
 			return nil
 		}

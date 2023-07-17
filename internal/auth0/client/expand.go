@@ -1,8 +1,7 @@
 package client
 
 import (
-	"strconv"
-
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -36,7 +35,6 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		CustomLoginPageOn:           value.Bool(config.GetAttr("custom_login_page_on")),
 		CustomLoginPage:             value.String(config.GetAttr("custom_login_page")),
 		FormTemplate:                value.String(config.GetAttr("form_template")),
-		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
 		InitiateLoginURI:            value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:               value.MapOfStrings(config.GetAttr("encryption_key")),
 		OIDCBackchannelLogout:       expandOIDCBackchannelLogout(d),
@@ -241,174 +239,538 @@ func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
 	return &newMetadataMap
 }
 
-func expandClientAddons(d *schema.ResourceData) map[string]interface{} {
+func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 	if !d.HasChange("addons") {
 		return nil
 	}
 
-	addons := make(map[string]interface{})
-	var allowedAddons = []string{
-		"aws", "azure_blob", "azure_sb", "rms", "mscrm", "slack", "sentry",
-		"box", "cloudbees", "concur", "dropbox", "echosign", "egnyte",
-		"firebase", "newrelic", "office365", "salesforce", "salesforce_api",
-		"salesforce_sandbox_api", "layer", "sap_api", "sharepoint",
-		"springcm", "wams", "wsfed", "zendesk", "zoom",
-	}
-	for _, name := range allowedAddons {
-		if _, ok := d.GetOk("addons.0." + name); ok {
-			addons[name] = mapFromState(d.Get("addons.0." + name).(map[string]interface{}))
+	var addons management.ClientAddons
+
+	d.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
+		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
+		addons.AzureBlob = expandClientAddonAzureBlob(addonsCfg.GetAttr("azure_blob"))
+		addons.AzureSB = expandClientAddonAzureSB(addonsCfg.GetAttr("azure_sb"))
+		addons.RMS = expandClientAddonRMS(addonsCfg.GetAttr("rms"))
+		addons.MSCRM = expandClientAddonMSCRM(addonsCfg.GetAttr("mscrm"))
+		addons.Slack = expandClientAddonSlack(addonsCfg.GetAttr("slack"))
+		addons.Sentry = expandClientAddonSentry(addonsCfg.GetAttr("sentry"))
+		addons.EchoSign = expandClientAddonEchoSign(addonsCfg.GetAttr("echosign"))
+		addons.Egnyte = expandClientAddonEgnyte(addonsCfg.GetAttr("egnyte"))
+		addons.Firebase = expandClientAddonFirebase(addonsCfg.GetAttr("firebase"))
+		addons.NewRelic = expandClientAddonNewRelic(addonsCfg.GetAttr("newrelic"))
+		addons.Office365 = expandClientAddonOffice365(addonsCfg.GetAttr("office365"))
+		addons.Salesforce = expandClientAddonSalesforce(addonsCfg.GetAttr("salesforce"))
+		addons.SalesforceAPI = expandClientAddonSalesforceAPI(addonsCfg.GetAttr("salesforce_api"))
+		addons.SalesforceSandboxAPI = expandClientAddonSalesforceSandboxAPI(addonsCfg.GetAttr("salesforce_sandbox_api"))
+		addons.Layer = expandClientAddonLayer(addonsCfg.GetAttr("layer"))
+		addons.SAPAPI = expandClientAddonSAPAPI(addonsCfg.GetAttr("sap_api"))
+		addons.SharePoint = expandClientAddonSharepoint(addonsCfg.GetAttr("sharepoint"))
+		addons.SpringCM = expandClientAddonSpringCM(addonsCfg.GetAttr("springcm"))
+		addons.WAMS = expandClientAddonWAMS(addonsCfg.GetAttr("wams"))
+		addons.Zendesk = expandClientAddonZendesk(addonsCfg.GetAttr("zendesk"))
+		addons.Zoom = expandClientAddonZoom(addonsCfg.GetAttr("zoom"))
+		addons.SSOIntegration = expandClientAddonSSOIntegration(addonsCfg.GetAttr("sso_integration"))
+		addons.SAML2 = expandClientAddonSAMLP(addonsCfg.GetAttr("samlp"))
+
+		if addonsCfg.GetAttr("box").LengthInt() == 1 {
+			addons.Box = &management.BoxClientAddon{}
 		}
-	}
 
-	addonsConfig := d.GetRawConfig().GetAttr("addons")
-	if addonsConfig.IsNull() {
-		return addons
-	}
-
-	addonsConfig.ForEachElement(func(_ cty.Value, addonsConfig cty.Value) (stop bool) {
-		samlpConfig := addonsConfig.GetAttr("samlp")
-		if samlpConfig.IsNull() {
-			return stop
+		if addonsCfg.GetAttr("cloudbees").LengthInt() == 1 {
+			addons.CloudBees = &management.CloudBeesClientAddon{}
 		}
 
-		samlp := make(map[string]interface{})
+		if addonsCfg.GetAttr("concur").LengthInt() == 1 {
+			addons.Concur = &management.ConcurClientAddon{}
+		}
 
-		samlpConfig.ForEachElement(func(_ cty.Value, samlpConfig cty.Value) (stop bool) {
-			if issuer := value.String(samlpConfig.GetAttr("issuer")); issuer != nil {
-				samlp["issuer"] = issuer
-			}
-			if audience := value.String(samlpConfig.GetAttr("audience")); audience != nil {
-				samlp["audience"] = audience
-			}
-			if authnContextClassRef := value.String(samlpConfig.GetAttr("authn_context_class_ref")); authnContextClassRef != nil {
-				samlp["authnContextClassRef"] = authnContextClassRef
-			}
-			if binding := value.String(samlpConfig.GetAttr("binding")); binding != nil {
-				samlp["binding"] = binding
-			}
-			if signingCert := value.String(samlpConfig.GetAttr("signing_cert")); signingCert != nil {
-				samlp["signingCert"] = signingCert
-			}
-			if destination := value.String(samlpConfig.GetAttr("destination")); destination != nil {
-				samlp["destination"] = destination
-			}
+		if addonsCfg.GetAttr("dropbox").LengthInt() == 1 {
+			addons.Dropbox = &management.DropboxClientAddon{}
+		}
 
-			digestAlgorithm := value.String(samlpConfig.GetAttr("digest_algorithm"))
-			samlp["digestAlgorithm"] = digestAlgorithm
-			if digestAlgorithm == nil {
-				samlp["digestAlgorithm"] = "sha1"
-			}
-
-			nameIdentifierFormat := value.String(samlpConfig.GetAttr("name_identifier_format"))
-			samlp["nameIdentifierFormat"] = nameIdentifierFormat
-			if nameIdentifierFormat == nil {
-				samlp["nameIdentifierFormat"] = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-			}
-
-			if recipient := value.String(samlpConfig.GetAttr("recipient")); recipient != nil {
-				samlp["recipient"] = recipient
-			}
-
-			signatureAlgorithm := value.String(samlpConfig.GetAttr("signature_algorithm"))
-			samlp["signatureAlgorithm"] = signatureAlgorithm
-			if signatureAlgorithm == nil {
-				samlp["signatureAlgorithm"] = "rsa-sha1"
-			}
-
-			createUpnClaim := value.Bool(samlpConfig.GetAttr("create_upn_claim"))
-			samlp["createUpnClaim"] = createUpnClaim
-			if createUpnClaim == nil {
-				samlp["createUpnClaim"] = true
-			}
-
-			includeAttributeNameFormat := value.Bool(samlpConfig.GetAttr("include_attribute_name_format"))
-			samlp["includeAttributeNameFormat"] = includeAttributeNameFormat
-			if includeAttributeNameFormat == nil {
-				samlp["includeAttributeNameFormat"] = true
-			}
-
-			mapIdentities := value.Bool(samlpConfig.GetAttr("map_identities"))
-			samlp["mapIdentities"] = mapIdentities
-			if mapIdentities == nil {
-				samlp["mapIdentities"] = true
-			}
-
-			mapUnknownClaimsAsIs := value.Bool(samlpConfig.GetAttr("map_unknown_claims_as_is"))
-			samlp["mapUnknownClaimsAsIs"] = mapUnknownClaimsAsIs
-			if mapUnknownClaimsAsIs == nil {
-				samlp["mapUnknownClaimsAsIs"] = false
-			}
-
-			passthroughClaimsWithNoMapping := value.Bool(samlpConfig.GetAttr("passthrough_claims_with_no_mapping"))
-			samlp["passthroughClaimsWithNoMapping"] = passthroughClaimsWithNoMapping
-			if passthroughClaimsWithNoMapping == nil {
-				samlp["passthroughClaimsWithNoMapping"] = true
-			}
-
-			if signResponse := value.Bool(samlpConfig.GetAttr("sign_response")); signResponse != nil {
-				samlp["signResponse"] = signResponse
-			}
-
-			typedAttributes := value.Bool(samlpConfig.GetAttr("typed_attributes"))
-			samlp["typedAttributes"] = typedAttributes
-			if typedAttributes == nil {
-				samlp["typedAttributes"] = true
-			}
-
-			lifetimeInSeconds := value.Int(samlpConfig.GetAttr("lifetime_in_seconds"))
-			samlp["lifetimeInSeconds"] = lifetimeInSeconds
-			if lifetimeInSeconds == nil {
-				samlp["lifetimeInSeconds"] = 3600
-			}
-
-			if mappings := value.MapOfStrings(samlpConfig.GetAttr("mappings")); mappings != nil {
-				samlp["mappings"] = mappings
-			}
-			if nameIdentifierProbes := value.Strings(samlpConfig.GetAttr("name_identifier_probes")); nameIdentifierProbes != nil {
-				samlp["nameIdentifierProbes"] = nameIdentifierProbes
-			}
-			if logout := mapFromState(d.Get("addons.0.samlp.0.logout").(map[string]interface{})); len(logout) != 0 {
-				samlp["logout"] = logout
-			}
-
-			return stop
-		})
-
-		if len(samlp) > 0 {
-			addons["samlp"] = samlp
+		if addonsCfg.GetAttr("wsfed").LengthInt() == 1 {
+			addons.WSFED = &management.WSFEDClientAddon{}
 		}
 
 		return stop
 	})
 
-	return addons
-}
-
-func mapFromState(input map[string]interface{}) map[string]interface{} {
-	output := make(map[string]interface{})
-
-	for key, val := range input {
-		switch v := val.(type) {
-		case string:
-			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
-				output[key] = i
-			} else if f, err := strconv.ParseFloat(v, 64); err == nil {
-				output[key] = f
-			} else if b, err := strconv.ParseBool(v); err == nil {
-				output[key] = b
-			} else {
-				output[key] = v
-			}
-		case map[string]interface{}:
-			output[key] = mapFromState(v)
-		case []interface{}:
-			output[key] = v
-		default:
-			output[key] = v
-		}
+	if addons == (management.ClientAddons{}) {
+		return nil
 	}
 
-	return output
+	return &addons
+}
+
+func expandClientAddonAWS(awsCfg cty.Value) *management.AWSClientAddon {
+	var awsAddon management.AWSClientAddon
+
+	awsCfg.ForEachElement(func(_ cty.Value, awsCfg cty.Value) (stop bool) {
+		awsAddon = management.AWSClientAddon{
+			Principal:         value.String(awsCfg.GetAttr("principal")),
+			Role:              value.String(awsCfg.GetAttr("role")),
+			LifetimeInSeconds: value.Int(awsCfg.GetAttr("lifetime_in_seconds")),
+		}
+
+		return stop
+	})
+
+	return &awsAddon
+}
+
+func expandClientAddonAzureBlob(azureCfg cty.Value) *management.AzureBlobClientAddon {
+	var azureAddon management.AzureBlobClientAddon
+
+	azureCfg.ForEachElement(func(_ cty.Value, azureCfg cty.Value) (stop bool) {
+		azureAddon = management.AzureBlobClientAddon{
+			AccountName:      value.String(azureCfg.GetAttr("account_name")),
+			StorageAccessKey: value.String(azureCfg.GetAttr("storage_access_key")),
+			ContainerName:    value.String(azureCfg.GetAttr("container_name")),
+			BlobName:         value.String(azureCfg.GetAttr("blob_name")),
+			Expiration:       value.Int(azureCfg.GetAttr("expiration")),
+			SignedIdentifier: value.String(azureCfg.GetAttr("signed_identifier")),
+			BlobRead:         value.Bool(azureCfg.GetAttr("blob_read")),
+			BlobWrite:        value.Bool(azureCfg.GetAttr("blob_write")),
+			BlobDelete:       value.Bool(azureCfg.GetAttr("blob_delete")),
+			ContainerRead:    value.Bool(azureCfg.GetAttr("container_read")),
+			ContainerWrite:   value.Bool(azureCfg.GetAttr("container_write")),
+			ContainerDelete:  value.Bool(azureCfg.GetAttr("container_delete")),
+			ContainerList:    value.Bool(azureCfg.GetAttr("container_list")),
+		}
+
+		return stop
+	})
+
+	return &azureAddon
+}
+
+func expandClientAddonAzureSB(azureCfg cty.Value) *management.AzureSBClientAddon {
+	var azureAddon management.AzureSBClientAddon
+
+	azureCfg.ForEachElement(func(_ cty.Value, azureCfg cty.Value) (stop bool) {
+		azureAddon = management.AzureSBClientAddon{
+			Namespace:  value.String(azureCfg.GetAttr("namespace")),
+			SASKeyName: value.String(azureCfg.GetAttr("sas_key_name")),
+			SASKey:     value.String(azureCfg.GetAttr("sas_key")),
+			EntityPath: value.String(azureCfg.GetAttr("entity_path")),
+			Expiration: value.Int(azureCfg.GetAttr("expiration")),
+		}
+
+		return stop
+	})
+
+	return &azureAddon
+}
+
+func expandClientAddonRMS(rmsCfg cty.Value) *management.RMSClientAddon {
+	var rmsAddon management.RMSClientAddon
+
+	rmsCfg.ForEachElement(func(_ cty.Value, rmsCfg cty.Value) (stop bool) {
+		rmsAddon = management.RMSClientAddon{
+			URL: value.String(rmsCfg.GetAttr("url")),
+		}
+
+		return stop
+	})
+
+	if rmsAddon == (management.RMSClientAddon{}) {
+		return nil
+	}
+
+	return &rmsAddon
+}
+
+func expandClientAddonMSCRM(mscrmCfg cty.Value) *management.MSCRMClientAddon {
+	var mscrmAddon management.MSCRMClientAddon
+
+	mscrmCfg.ForEachElement(func(_ cty.Value, mscrmCfg cty.Value) (stop bool) {
+		mscrmAddon = management.MSCRMClientAddon{
+			URL: value.String(mscrmCfg.GetAttr("url")),
+		}
+
+		return stop
+	})
+
+	if mscrmAddon == (management.MSCRMClientAddon{}) {
+		return nil
+	}
+
+	return &mscrmAddon
+}
+
+func expandClientAddonSlack(slackCfg cty.Value) *management.SlackClientAddon {
+	var slackAddon management.SlackClientAddon
+
+	slackCfg.ForEachElement(func(_ cty.Value, slackCfg cty.Value) (stop bool) {
+		slackAddon = management.SlackClientAddon{
+			Team: value.String(slackCfg.GetAttr("team")),
+		}
+
+		return stop
+	})
+
+	if slackAddon == (management.SlackClientAddon{}) {
+		return nil
+	}
+
+	return &slackAddon
+}
+
+func expandClientAddonSentry(sentryCfg cty.Value) *management.SentryClientAddon {
+	var sentryAddon management.SentryClientAddon
+
+	sentryCfg.ForEachElement(func(_ cty.Value, sentryCfg cty.Value) (stop bool) {
+		sentryAddon = management.SentryClientAddon{
+			OrgSlug: value.String(sentryCfg.GetAttr("org_slug")),
+			BaseURL: value.String(sentryCfg.GetAttr("base_url")),
+		}
+
+		return stop
+	})
+
+	return &sentryAddon
+}
+
+func expandClientAddonEchoSign(echoSignCfg cty.Value) *management.EchoSignClientAddon {
+	var echoSignAddon management.EchoSignClientAddon
+
+	echoSignCfg.ForEachElement(func(_ cty.Value, echoSignCfg cty.Value) (stop bool) {
+		echoSignAddon = management.EchoSignClientAddon{
+			Domain: value.String(echoSignCfg.GetAttr("domain")),
+		}
+
+		return stop
+	})
+
+	return &echoSignAddon
+}
+
+func expandClientAddonEgnyte(egnyteCfg cty.Value) *management.EgnyteClientAddon {
+	var egnyteAddon management.EgnyteClientAddon
+
+	egnyteCfg.ForEachElement(func(_ cty.Value, egnyteCfg cty.Value) (stop bool) {
+		egnyteAddon = management.EgnyteClientAddon{
+			Domain: value.String(egnyteCfg.GetAttr("domain")),
+		}
+
+		return stop
+	})
+
+	return &egnyteAddon
+}
+
+func expandClientAddonFirebase(firebaseCfg cty.Value) *management.FirebaseClientAddon {
+	var firebaseAddon management.FirebaseClientAddon
+
+	firebaseCfg.ForEachElement(func(_ cty.Value, firebaseCfg cty.Value) (stop bool) {
+		firebaseAddon = management.FirebaseClientAddon{
+			Secret:            value.String(firebaseCfg.GetAttr("secret")),
+			PrivateKeyID:      value.String(firebaseCfg.GetAttr("private_key_id")),
+			PrivateKey:        value.String(firebaseCfg.GetAttr("private_key")),
+			ClientEmail:       value.String(firebaseCfg.GetAttr("client_email")),
+			LifetimeInSeconds: value.Int(firebaseCfg.GetAttr("lifetime_in_seconds")),
+		}
+
+		return stop
+	})
+
+	return &firebaseAddon
+}
+
+func expandClientAddonNewRelic(newRelicCfg cty.Value) *management.NewRelicClientAddon {
+	var newRelicAddon management.NewRelicClientAddon
+
+	newRelicCfg.ForEachElement(func(_ cty.Value, newRelicCfg cty.Value) (stop bool) {
+		newRelicAddon = management.NewRelicClientAddon{
+			Account: value.String(newRelicCfg.GetAttr("account")),
+		}
+
+		return stop
+	})
+
+	return &newRelicAddon
+}
+
+func expandClientAddonOffice365(office365Cfg cty.Value) *management.Office365ClientAddon {
+	var office365Addon management.Office365ClientAddon
+
+	office365Cfg.ForEachElement(func(_ cty.Value, office365Cfg cty.Value) (stop bool) {
+		office365Addon = management.Office365ClientAddon{
+			Domain:     value.String(office365Cfg.GetAttr("domain")),
+			Connection: value.String(office365Cfg.GetAttr("connection")),
+		}
+
+		return stop
+	})
+
+	return &office365Addon
+}
+
+func expandClientAddonSalesforce(salesforceCfg cty.Value) *management.SalesforceClientAddon {
+	var salesforceAddon management.SalesforceClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceClientAddon{
+			EntityID: value.String(salesforceCfg.GetAttr("entity_id")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
+}
+
+func expandClientAddonSalesforceAPI(salesforceCfg cty.Value) *management.SalesforceAPIClientAddon {
+	var salesforceAddon management.SalesforceAPIClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceAPIClientAddon{
+			ClientID:            value.String(salesforceCfg.GetAttr("client_id")),
+			Principal:           value.String(salesforceCfg.GetAttr("principal")),
+			CommunityName:       value.String(salesforceCfg.GetAttr("community_name")),
+			CommunityURLSection: value.String(salesforceCfg.GetAttr("community_url_section")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
+}
+
+func expandClientAddonSalesforceSandboxAPI(salesforceCfg cty.Value) *management.SalesforceSandboxAPIClientAddon {
+	var salesforceAddon management.SalesforceSandboxAPIClientAddon
+
+	salesforceCfg.ForEachElement(func(_ cty.Value, salesforceCfg cty.Value) (stop bool) {
+		salesforceAddon = management.SalesforceSandboxAPIClientAddon{
+			ClientID:            value.String(salesforceCfg.GetAttr("client_id")),
+			Principal:           value.String(salesforceCfg.GetAttr("principal")),
+			CommunityName:       value.String(salesforceCfg.GetAttr("community_name")),
+			CommunityURLSection: value.String(salesforceCfg.GetAttr("community_url_section")),
+		}
+
+		return stop
+	})
+
+	return &salesforceAddon
+}
+
+func expandClientAddonLayer(layerCfg cty.Value) *management.LayerClientAddon {
+	var layerAddon management.LayerClientAddon
+
+	layerCfg.ForEachElement(func(_ cty.Value, layerCfg cty.Value) (stop bool) {
+		layerAddon = management.LayerClientAddon{
+			ProviderID: value.String(layerCfg.GetAttr("provider_id")),
+			KeyID:      value.String(layerCfg.GetAttr("key_id")),
+			PrivateKey: value.String(layerCfg.GetAttr("private_key")),
+			Principal:  value.String(layerCfg.GetAttr("principal")),
+			Expiration: value.Int(layerCfg.GetAttr("expiration")),
+		}
+
+		return stop
+	})
+
+	if layerAddon == (management.LayerClientAddon{}) {
+		return nil
+	}
+
+	return &layerAddon
+}
+
+func expandClientAddonSAPAPI(sapAPICfg cty.Value) *management.SAPAPIClientAddon {
+	var sapAPIAddon management.SAPAPIClientAddon
+
+	sapAPICfg.ForEachElement(func(_ cty.Value, sapAPICfg cty.Value) (stop bool) {
+		sapAPIAddon = management.SAPAPIClientAddon{
+			ClientID:             value.String(sapAPICfg.GetAttr("client_id")),
+			UsernameAttribute:    value.String(sapAPICfg.GetAttr("username_attribute")),
+			TokenEndpointURL:     value.String(sapAPICfg.GetAttr("token_endpoint_url")),
+			Scope:                value.String(sapAPICfg.GetAttr("scope")),
+			ServicePassword:      value.String(sapAPICfg.GetAttr("service_password")),
+			NameIdentifierFormat: value.String(sapAPICfg.GetAttr("name_identifier_format")),
+		}
+
+		return stop
+	})
+
+	return &sapAPIAddon
+}
+
+func expandClientAddonSharepoint(sharepointCfg cty.Value) *management.SharePointClientAddon {
+	var sharepointAddon management.SharePointClientAddon
+
+	sharepointCfg.ForEachElement(func(_ cty.Value, sharepointCfg cty.Value) (stop bool) {
+		sharepointAddon = management.SharePointClientAddon{
+			URL:         value.String(sharepointCfg.GetAttr("url")),
+			ExternalURL: value.Strings(sharepointCfg.GetAttr("external_url")),
+		}
+
+		return stop
+	})
+
+	return &sharepointAddon
+}
+
+func expandClientAddonSpringCM(springCMCfg cty.Value) *management.SpringCMClientAddon {
+	var springCMAddon management.SpringCMClientAddon
+
+	springCMCfg.ForEachElement(func(_ cty.Value, springCMCfg cty.Value) (stop bool) {
+		springCMAddon = management.SpringCMClientAddon{
+			ACSURL: value.String(springCMCfg.GetAttr("acs_url")),
+		}
+
+		return stop
+	})
+
+	return &springCMAddon
+}
+
+func expandClientAddonWAMS(wamsCfg cty.Value) *management.WAMSClientAddon {
+	var wamsAddon management.WAMSClientAddon
+
+	wamsCfg.ForEachElement(func(_ cty.Value, wamsCfg cty.Value) (stop bool) {
+		wamsAddon = management.WAMSClientAddon{
+			Masterkey: value.String(wamsCfg.GetAttr("master_key")),
+		}
+
+		return stop
+	})
+
+	return &wamsAddon
+}
+
+func expandClientAddonZendesk(zendeskCfg cty.Value) *management.ZendeskClientAddon {
+	var zendeskAddon management.ZendeskClientAddon
+
+	zendeskCfg.ForEachElement(func(_ cty.Value, zendeskCfg cty.Value) (stop bool) {
+		zendeskAddon = management.ZendeskClientAddon{
+			AccountName: value.String(zendeskCfg.GetAttr("account_name")),
+		}
+
+		return stop
+	})
+
+	return &zendeskAddon
+}
+
+func expandClientAddonZoom(zoomCfg cty.Value) *management.ZoomClientAddon {
+	var zoomAddon management.ZoomClientAddon
+
+	zoomCfg.ForEachElement(func(_ cty.Value, zoomCfg cty.Value) (stop bool) {
+		zoomAddon = management.ZoomClientAddon{
+			Account: value.String(zoomCfg.GetAttr("account")),
+		}
+
+		return stop
+	})
+
+	return &zoomAddon
+}
+
+func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegrationClientAddon {
+	var ssoAddon management.SSOIntegrationClientAddon
+
+	ssoCfg.ForEachElement(func(_ cty.Value, ssoCfg cty.Value) (stop bool) {
+		ssoAddon = management.SSOIntegrationClientAddon{
+			Name:    value.String(ssoCfg.GetAttr("name")),
+			Version: value.String(ssoCfg.GetAttr("version")),
+		}
+
+		return stop
+	})
+
+	return &ssoAddon
+}
+
+func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
+	var samlpAddon management.SAML2ClientAddon
+
+	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
+		samlpAddon = management.SAML2ClientAddon{
+			Mappings:                       value.MapOfStrings(samlpCfg.GetAttr("mappings")),
+			Audience:                       value.String(samlpCfg.GetAttr("audience")),
+			Recipient:                      value.String(samlpCfg.GetAttr("recipient")),
+			CreateUPNClaim:                 value.Bool(samlpCfg.GetAttr("create_upn_claim")),
+			MapUnknownClaimsAsIs:           value.Bool(samlpCfg.GetAttr("map_unknown_claims_as_is")),
+			PassthroughClaimsWithNoMapping: value.Bool(samlpCfg.GetAttr("passthrough_claims_with_no_mapping")),
+			MapIdentities:                  value.Bool(samlpCfg.GetAttr("map_identities")),
+			SignatureAlgorithm:             value.String(samlpCfg.GetAttr("signature_algorithm")),
+			DigestAlgorithm:                value.String(samlpCfg.GetAttr("digest_algorithm")),
+			Issuer:                         value.String(samlpCfg.GetAttr("issuer")),
+			Destination:                    value.String(samlpCfg.GetAttr("destination")),
+			LifetimeInSeconds:              value.Int(samlpCfg.GetAttr("lifetime_in_seconds")),
+			SignResponse:                   value.Bool(samlpCfg.GetAttr("sign_response")),
+			NameIdentifierFormat:           value.String(samlpCfg.GetAttr("name_identifier_format")),
+			NameIdentifierProbes:           value.Strings(samlpCfg.GetAttr("name_identifier_probes")),
+			AuthnContextClassRef:           value.String(samlpCfg.GetAttr("authn_context_class_ref")),
+			TypedAttributes:                value.Bool(samlpCfg.GetAttr("typed_attributes")),
+			IncludeAttributeNameFormat:     value.Bool(samlpCfg.GetAttr("include_attribute_name_format")),
+			Binding:                        value.String(samlpCfg.GetAttr("binding")),
+			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
+		}
+
+		if samlpAddon == (management.SAML2ClientAddon{}) {
+			return true
+		}
+
+		var logout management.SAML2ClientAddonLogout
+
+		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {
+			logout = management.SAML2ClientAddonLogout{
+				Callback:   value.String(logoutCfg.GetAttr("callback")),
+				SLOEnabled: value.Bool(logoutCfg.GetAttr("slo_enabled")),
+			}
+
+			return stop
+		})
+
+		if logout != (management.SAML2ClientAddonLogout{}) {
+			samlpAddon.Logout = &logout
+		}
+
+		if samlpAddon.DigestAlgorithm == nil {
+			samlpAddon.DigestAlgorithm = auth0.String("sha1")
+		}
+
+		if samlpAddon.NameIdentifierFormat == nil {
+			samlpAddon.NameIdentifierFormat = auth0.String("urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified")
+		}
+
+		if samlpAddon.SignatureAlgorithm == nil {
+			samlpAddon.SignatureAlgorithm = auth0.String("rsa-sha1")
+		}
+
+		if samlpAddon.LifetimeInSeconds == nil {
+			samlpAddon.LifetimeInSeconds = auth0.Int(3600)
+		}
+
+		if samlpAddon.CreateUPNClaim == nil {
+			samlpAddon.CreateUPNClaim = auth0.Bool(true)
+		}
+
+		if samlpAddon.IncludeAttributeNameFormat == nil {
+			samlpAddon.IncludeAttributeNameFormat = auth0.Bool(true)
+		}
+
+		if samlpAddon.MapIdentities == nil {
+			samlpAddon.MapIdentities = auth0.Bool(true)
+		}
+
+		if samlpAddon.MapUnknownClaimsAsIs == nil {
+			samlpAddon.MapUnknownClaimsAsIs = auth0.Bool(false)
+		}
+
+		if samlpAddon.PassthroughClaimsWithNoMapping == nil {
+			samlpAddon.PassthroughClaimsWithNoMapping = auth0.Bool(true)
+		}
+
+		if samlpAddon.TypedAttributes == nil {
+			samlpAddon.TypedAttributes = auth0.Bool(true)
+		}
+
+		return stop
+	})
+
+	return &samlpAddon
 }
 
 func clientHasChange(c *management.Client) bool {

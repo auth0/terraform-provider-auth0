@@ -125,7 +125,7 @@ func TestAccOrganizationMemberRole(t *testing.T) {
 						return "", err
 					}
 
-					return organizationID + ":" + userID, nil
+					return organizationID + "::" + userID, nil
 				},
 				ImportStatePersist: true,
 			},

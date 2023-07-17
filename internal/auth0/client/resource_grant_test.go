@@ -9,84 +9,106 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccClientGrantAuxConfig = `
+const testAccGivenAClientAndAResourceServerWithScopes = `
 resource "auth0_client" "my_client" {
-	name = "Acceptance Test - Client Grant - {{.testName}}"
+	name                 = "Acceptance Test - Client Grant - {{.testName}}"
 	custom_login_page_on = true
-	is_first_party = true
+	is_first_party       = true
 }
 
 resource "auth0_resource_server" "my_resource_server" {
-	name = "Acceptance Test - Client Grant - {{.testName}}"
+	name       = "Acceptance Test - Client Grant - {{.testName}}"
 	identifier = "https://uat.tf.terraform-provider-auth0.com/client-grant/{{.testName}}"
+}
+
+resource "auth0_resource_server_scopes" "my_api_scopes" {
+	depends_on = [ auth0_resource_server.my_resource_server ]
+
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+
 	scopes {
-		value = "create:foo"
+		name        = "create:foo"
 		description = "Create foos"
 	}
+
 	scopes {
-		value = "create:bar"
+		name        = "create:bar"
 		description = "Create bars"
 	}
 }
 `
 
-const testAccClientGrantConfigCreate = testAccClientGrantAuxConfig + `
+const testAccClientGrantConfigCreate = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client_grant" "my_client_grant" {
-	client_id = "${auth0_client.my_client.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ ]
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	client_id = auth0_client.my_client.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
 }
 `
 
-const testAccClientGrantConfigUpdate = testAccClientGrantAuxConfig + `
+const testAccClientGrantConfigUpdate = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client_grant" "my_client_grant" {
-	client_id = "${auth0_client.my_client.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ "create:foo" ]
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	client_id = auth0_client.my_client.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ "create:foo" ]
 }
 `
 
-const testAccClientGrantConfigUpdateAgain = testAccClientGrantAuxConfig + `
+const testAccClientGrantConfigUpdateAgain = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client_grant" "my_client_grant" {
-	client_id = "${auth0_client.my_client.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ ]
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	client_id = auth0_client.my_client.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
 }
 `
 
-const testAccClientGrantConfigUpdateChangeClient = testAccClientGrantAuxConfig + `
+const testAccClientGrantConfigUpdateChangeClient = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client" "my_client_alt" {
-	name = "Acceptance Test - Client Grant Alt - {{.testName}}"
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	name                 = "Acceptance Test - Client Grant Alt - {{.testName}}"
 	custom_login_page_on = true
-	is_first_party = true
+	is_first_party       = true
 }
 
 resource "auth0_client_grant" "my_client_grant" {
-	client_id = "${auth0_client.my_client_alt.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ ]
+	depends_on = [ auth0_client.my_client_alt ]
+
+	client_id = auth0_client.my_client_alt.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
 }
 `
 
-const testAccAlreadyExistingGrantWillNotConflict = testAccClientGrantAuxConfig + `
+const testAccAlreadyExistingGrantWillNotConflict = testAccGivenAClientAndAResourceServerWithScopes + `
 resource "auth0_client" "my_client_alt" {
-	name = "Acceptance Test - Client Grant Alt - {{.testName}}"
+	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
+
+	name                 = "Acceptance Test - Client Grant Alt - {{.testName}}"
 	custom_login_page_on = true
-	is_first_party = true
+	is_first_party       = true
 }
 
 resource "auth0_client_grant" "my_client_grant" {
-	client_id = "${auth0_client.my_client_alt.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ ]
+	depends_on = [ auth0_client.my_client_alt ]
+
+	client_id = auth0_client.my_client_alt.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
 }
 
 resource "auth0_client_grant" "no_conflict_client_grant" {
 	depends_on = [ auth0_client_grant.my_client_grant ]
 
-	client_id = "${auth0_client.my_client_alt.id}"
-	audience = "${auth0_resource_server.my_resource_server.identifier}"
-	scope = [ ]
+	client_id = auth0_client.my_client_alt.id
+	audience  = auth0_resource_server.my_resource_server.identifier
+	scopes    = [ ]
 }
 `
 
@@ -97,32 +119,32 @@ func TestAccClientGrant(t *testing.T) {
 				Config: acctest.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", fmt.Sprintf("https://uat.tf.terraform-provider-auth0.com/client-grant/%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "0"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccClientGrantConfigUpdate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.0", "create:foo"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.0", "create:foo"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateAgain, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "0"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccClientGrantConfigUpdateChangeClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scope.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "0"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccAlreadyExistingGrantWillNotConflict, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client_grant.no_conflict_client_grant", "scope.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_grant.no_conflict_client_grant", "scopes.#", "0"),
 				),
 			},
 		},

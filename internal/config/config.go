@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -59,6 +60,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
+			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -87,17 +89,20 @@ func userAgent(terraformVersion *string) string {
 
 // authenticationOption computes the desired authentication option for the *management.Management client.
 func authenticationOption(clientID, clientSecret, apiToken, audience string) management.Option {
+	ctx := context.Background()
+
 	if apiToken != "" {
 		return management.WithStaticToken(apiToken)
 	}
 
 	if audience != "" {
 		return management.WithClientCredentialsAndAudience(
+			ctx,
 			clientID,
 			clientSecret,
 			audience,
 		)
 	}
 
-	return management.WithClientCredentials(clientID, clientSecret)
+	return management.WithClientCredentials(ctx, clientID, clientSecret)
 }

@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
@@ -11,7 +12,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandConnection(d *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
+func expandConnection(ctx context.Context, d *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
 	config := d.GetRawConfig()
 
 	connection := &management.Connection{
@@ -40,7 +41,7 @@ func expandConnection(d *schema.ResourceData, api *management.Management) (*mana
 	config.GetAttr("options").ForEachElement(func(_ cty.Value, options cty.Value) (stop bool) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			connection.Options, diagnostics = expandConnectionOptionsAuth0(d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsAuth0(ctx, d, options, api)
 		case management.ConnectionStrategyGoogleOAuth2:
 			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(d, options)
 		case management.ConnectionStrategyGoogleApps:
@@ -136,6 +137,7 @@ func expandConnectionOptionsGitHub(
 }
 
 func expandConnectionOptionsAuth0(
+	ctx context.Context,
 	d *schema.ResourceData,
 	config cty.Value,
 	api *management.Management,
@@ -275,7 +277,7 @@ func expandConnectionOptionsAuth0(
 	}
 
 	if !d.IsNewResource() {
-		apiConn, err := api.Connection.Read(d.Id())
+		apiConn, err := api.Connection.Read(ctx, d.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}

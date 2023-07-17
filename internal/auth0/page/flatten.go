@@ -2,7 +2,20 @@ package page
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
+
+func flattenPages(data *schema.ResourceData, loginPage *management.Client, tenantPages *management.Tenant) error {
+	result := multierror.Append(
+		data.Set("login", flattenLoginPage(loginPage)),
+		data.Set("change_password", flattenChangePasswordPage(tenantPages.GetChangePassword())),
+		data.Set("guardian_mfa", flattenGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
+		data.Set("error", flattenErrorPage(tenantPages.GetErrorPage())),
+	)
+
+	return result.ErrorOrNil()
+}
 
 func flattenLoginPage(clientWithLoginPage *management.Client) []interface{} {
 	return []interface{}{

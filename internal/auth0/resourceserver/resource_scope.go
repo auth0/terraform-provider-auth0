@@ -141,8 +141,7 @@ func readResourceServerScope(ctx context.Context, data *schema.ResourceData, met
 
 	for _, existingScope := range existingAPI.GetScopes() {
 		if existingScope.GetValue() == scope {
-			err := data.Set("description", existingScope.GetDescription())
-			return diag.FromErr(err)
+			return diag.FromErr(data.Set("description", existingScope.GetDescription()))
 		}
 	}
 

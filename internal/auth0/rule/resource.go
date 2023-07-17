@@ -4,7 +4,6 @@ import (
 	"context"
 	"regexp"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -87,14 +86,7 @@ func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", rule.Name),
-		d.Set("script", rule.Script),
-		d.Set("order", rule.Order),
-		d.Set("enabled", rule.Enabled),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenRule(d, rule))
 }
 
 func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

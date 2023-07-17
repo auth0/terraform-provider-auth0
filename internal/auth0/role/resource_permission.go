@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -89,14 +88,9 @@ func readRolePermission(ctx context.Context, data *schema.ResourceData, meta int
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	for _, p := range existingPermissions.Permissions {
-		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerID {
-			result := multierror.Append(
-				data.Set("description", p.GetDescription()),
-				data.Set("resource_server_name", p.GetResourceServerName()),
-			)
-
-			return diag.FromErr(result.ErrorOrNil())
+	for _, permission := range existingPermissions.Permissions {
+		if permission.GetName() == permissionName && permission.GetResourceServerIdentifier() == resourceServerID {
+			return diag.FromErr(flattenRolePermission(data, permission))
 		}
 	}
 

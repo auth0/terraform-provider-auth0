@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -142,8 +141,8 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	d.SetId(action.GetID())
 
-	if result := deployAction(ctx, d, m); result.HasError() {
-		return result
+	if err := deployAction(ctx, d, m); err != nil {
+		return diag.FromErr(err)
 	}
 
 	return readAction(ctx, d, m)
@@ -157,23 +156,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", action.GetName()),
-		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
-		d.Set("code", action.GetCode()),
-		d.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
-		d.Set("runtime", action.GetRuntime()),
-	)
-
-	if action.GetRuntime() == "node18-actions" {
-		result = multierror.Append(result, d.Set("runtime", "node18"))
-	}
-
-	if action.DeployedVersion != nil {
-		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenAction(d, action))
 }
 
 func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -190,8 +173,8 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	if result := deployAction(ctx, d, m); result.HasError() {
-		return result
+	if err := deployAction(ctx, d, m); err != nil {
+		return diag.FromErr(err)
 	}
 
 	return readAction(ctx, d, m)
@@ -207,7 +190,7 @@ func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	return nil
 }
 
-func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) error {
 	deployExists := d.Get("deploy").(bool)
 	if !deployExists {
 		return nil
@@ -223,40 +206,26 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 		if action.GetStatus() == management.ActionStatusFailed {
 			return retry.NonRetryableError(
-				fmt.Errorf(
-					"action %q failed to build, check the Auth0 UI for errors",
-					action.GetName(),
-				),
+				fmt.Errorf("action %q failed to build, check the Auth0 UI for errors", action.GetName()),
 			)
 		}
 
 		if action.GetStatus() != management.ActionStatusBuilt {
 			return retry.RetryableError(
-				fmt.Errorf(
-					"expected action %q status %q to equal %q",
-					action.GetName(),
-					action.GetStatus(),
-					"built",
-				),
+				fmt.Errorf("expected action %q status %q to equal %q", action.GetName(), action.GetStatus(), "built"),
 			)
 		}
 
 		return nil
 	})
 	if err != nil {
-		return diag.FromErr(
-			fmt.Errorf(
-				"action %q never reached built state: %w",
-				d.Get("name").(string),
-				err,
-			),
-		)
+		return fmt.Errorf("action %q never reached built state: %w", d.Get("name").(string), err)
 	}
 
 	actionVersion, err := api.Action.Deploy(ctx, d.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return err
 	}
 
-	return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
+	return d.Set("version_id", actionVersion.GetID())
 }

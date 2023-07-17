@@ -120,7 +120,7 @@ func readRoleByID(
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenRole(data, role, permissions))
+	return diag.FromErr(flattenRoleForDataSource(data, role, permissions))
 }
 
 func readRoleByName(
@@ -150,7 +150,7 @@ func readRoleByName(
 					return diag.FromErr(err)
 				}
 
-				return diag.FromErr(flattenRole(data, role, permissions))
+				return diag.FromErr(flattenRoleForDataSource(data, role, permissions))
 			}
 		}
 

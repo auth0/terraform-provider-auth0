@@ -3,15 +3,11 @@ package organization
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewResource will return a new auth0_organization resource.
@@ -96,14 +92,7 @@ func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", organization.GetName()),
-		d.Set("display_name", organization.GetDisplayName()),
-		d.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
-		d.Set("metadata", organization.GetMetadata()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganization(d, organization))
 }
 
 func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -126,48 +115,4 @@ func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface
 	}
 
 	return nil
-}
-
-func expandOrganization(d *schema.ResourceData) *management.Organization {
-	config := d.GetRawConfig()
-
-	organization := &management.Organization{
-		Name:        value.String(config.GetAttr("name")),
-		DisplayName: value.String(config.GetAttr("display_name")),
-		Branding:    expandOrganizationBranding(config.GetAttr("branding")),
-	}
-
-	if d.HasChange("metadata") {
-		organization.Metadata = value.MapOfStrings(config.GetAttr("metadata"))
-	}
-
-	return organization
-}
-
-func expandOrganizationBranding(brandingList cty.Value) *management.OrganizationBranding {
-	var organizationBranding *management.OrganizationBranding
-
-	brandingList.ForEachElement(func(_ cty.Value, branding cty.Value) (stop bool) {
-		organizationBranding = &management.OrganizationBranding{
-			LogoURL: value.String(branding.GetAttr("logo_url")),
-			Colors:  value.MapOfStrings(branding.GetAttr("colors")),
-		}
-
-		return stop
-	})
-
-	return organizationBranding
-}
-
-func flattenOrganizationBranding(organizationBranding *management.OrganizationBranding) []interface{} {
-	if organizationBranding == nil {
-		return nil
-	}
-
-	return []interface{}{
-		map[string]interface{}{
-			"logo_url": organizationBranding.GetLogoURL(),
-			"colors":   organizationBranding.GetColors(),
-		},
-	}
 }

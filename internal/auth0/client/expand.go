@@ -776,3 +776,25 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 func clientHasChange(c *management.Client) bool {
 	return c.String() != "{}"
 }
+
+func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
+	cfg := data.GetRawConfig()
+
+	clientGrant := &management.ClientGrant{}
+
+	if data.IsNewResource() {
+		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
+		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
+	}
+
+	if data.IsNewResource() || data.HasChange("scopes") {
+		scopeListFromConfig := data.Get("scopes").([]interface{})
+		scopeList := make([]string, 0)
+		for _, scope := range scopeListFromConfig {
+			scopeList = append(scopeList, scope.(string))
+		}
+		clientGrant.Scope = scopeList
+	}
+
+	return clientGrant
+}

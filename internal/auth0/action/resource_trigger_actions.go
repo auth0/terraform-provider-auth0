@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -96,12 +95,7 @@ func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("trigger", d.Id()),
-		d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenTriggerBinding(d, triggerBindings.Bindings))
 }
 
 func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

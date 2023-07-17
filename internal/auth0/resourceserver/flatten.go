@@ -33,7 +33,28 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 	return result.ErrorOrNil()
 }
 
-func flattenResourceServerScopes(resourceServerScopes []management.ResourceServerScope) []map[string]interface{} {
+func flattenResourceServerForDataSource(data *schema.ResourceData, resourceServer *management.ResourceServer) error {
+	result := multierror.Append(
+		flattenResourceServer(data, resourceServer),
+		data.Set("verification_location", resourceServer.GetVerificationLocation()),
+		data.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
+		data.Set("token_dialect", resourceServer.GetTokenDialect()),
+		data.Set("scopes", flattenResourceServerScopesSlice(resourceServer.GetScopes())),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenResourceServerScopes(data *schema.ResourceData, resourceServer *management.ResourceServer) error {
+	result := multierror.Append(
+		data.Set("resource_server_identifier", resourceServer.GetIdentifier()),
+		data.Set("scopes", flattenResourceServerScopesSlice(resourceServer.GetScopes())),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenResourceServerScopesSlice(resourceServerScopes []management.ResourceServerScope) []map[string]interface{} {
 	scopes := make([]map[string]interface{}, len(resourceServerScopes))
 
 	for index, scope := range resourceServerScopes {

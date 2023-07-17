@@ -3,7 +3,6 @@ package role
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -61,12 +60,7 @@ func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", role.GetName()),
-		d.Set("description", role.GetDescription()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenRole(d, role))
 }
 
 func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

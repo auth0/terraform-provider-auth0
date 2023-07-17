@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -93,11 +92,5 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		flattenUser(data, user),
-		data.Set("roles", flattenUserRoles(roles)),
-		data.Set("permissions", flattenUserPermissions(permissions)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenUserForDataSource(data, user, roles.Roles, permissions.Permissions))
 }

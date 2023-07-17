@@ -6,7 +6,6 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -98,14 +97,7 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("connection_id", connection.GetID()),
-		data.Set("name", connection.GetName()),
-		data.Set("strategy", connection.GetStrategy()),
-		data.Set("enabled_clients", connection.GetEnabledClients()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenConnectionClients(data, connection))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

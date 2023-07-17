@@ -2,7 +2,29 @@ package action
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
+
+func flattenAction(data *schema.ResourceData, action *management.Action) error {
+	result := multierror.Append(
+		data.Set("name", action.GetName()),
+		data.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
+		data.Set("code", action.GetCode()),
+		data.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
+		data.Set("runtime", action.GetRuntime()),
+	)
+
+	if action.GetRuntime() == "node18-actions" {
+		result = multierror.Append(result, data.Set("runtime", "node18"))
+	}
+
+	if action.GetDeployedVersion() != nil {
+		result = multierror.Append(result, data.Set("version_id", action.GetDeployedVersion().GetID()))
+	}
+
+	return result.ErrorOrNil()
+}
 
 func flattenActionTriggers(triggers []management.ActionTrigger) []interface{} {
 	var result []interface{}
@@ -28,6 +50,15 @@ func flattenActionDependencies(dependencies []management.ActionDependency) []int
 	}
 
 	return result
+}
+
+func flattenTriggerBinding(data *schema.ResourceData, bindings []*management.ActionBinding) error {
+	result := multierror.Append(
+		data.Set("trigger", data.Id()),
+		data.Set("actions", flattenTriggerBindingActions(bindings)),
+	)
+
+	return result.ErrorOrNil()
 }
 
 func flattenTriggerBindingActions(bindings []*management.ActionBinding) []interface{} {

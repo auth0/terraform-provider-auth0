@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -122,16 +121,7 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		data.Set("name", foundOrganization.GetName()),
-		data.Set("display_name", foundOrganization.GetDisplayName()),
-		data.Set("branding", flattenOrganizationBranding(foundOrganization.GetBranding())),
-		data.Set("metadata", foundOrganization.GetMetadata()),
-		data.Set("connections", flattenOrganizationConnections(foundConnections)),
-		data.Set("members", foundMembers),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers))
 }
 
 func fetchAllOrganizationConnections(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {
@@ -178,20 +168,4 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 	}
 
 	return foundMembers, nil
-}
-
-func flattenOrganizationConnections(connections []*management.OrganizationConnection) []interface{} {
-	if connections == nil {
-		return nil
-	}
-
-	result := make([]interface{}, len(connections))
-	for index, connection := range connections {
-		result[index] = map[string]interface{}{
-			"connection_id":              connection.GetConnectionID(),
-			"assign_membership_on_login": connection.GetAssignMembershipOnLogin(),
-		}
-	}
-
-	return result
 }

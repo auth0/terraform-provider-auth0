@@ -175,9 +175,7 @@ func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	err = flattenUser(d, user)
-
-	return diag.FromErr(err)
+	return diag.FromErr(flattenUser(d, user))
 }
 
 func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

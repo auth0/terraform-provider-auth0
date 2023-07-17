@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -82,12 +81,7 @@ func readUserRole(ctx context.Context, data *schema.ResourceData, meta interface
 	roleID := data.Get("role_id").(string)
 	for _, role := range rolesList.Roles {
 		if role.GetID() == roleID {
-			result := multierror.Append(
-				data.Set("role_name", role.GetName()),
-				data.Set("role_description", role.GetDescription()),
-			)
-
-			return diag.FromErr(result.ErrorOrNil())
+			return diag.FromErr(flattenUserRole(data, role))
 		}
 	}
 

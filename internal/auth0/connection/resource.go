@@ -3,8 +3,6 @@ package connection
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -56,33 +54,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
-	if diags.HasError() {
-		return diags
-	}
-
-	result := multierror.Append(
-		d.Set("name", connection.GetName()),
-		d.Set("display_name", connection.GetDisplayName()),
-		d.Set("is_domain_connection", connection.GetIsDomainConnection()),
-		d.Set("strategy", connection.GetStrategy()),
-		d.Set("options", connectionOptions),
-		d.Set("realms", connection.GetRealms()),
-		d.Set("metadata", connection.GetMetadata()),
-		d.Set("enabled_clients", connection.GetEnabledClients()),
-	)
-
-	switch connection.GetStrategy() {
-	case management.ConnectionStrategyGoogleApps,
-		management.ConnectionStrategyOIDC,
-		management.ConnectionStrategyAD,
-		management.ConnectionStrategyAzureAD,
-		management.ConnectionStrategySAML,
-		management.ConnectionStrategyADFS:
-		result = multierror.Append(result, d.Set("show_as_button", connection.GetShowAsButton()))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return flattenConnection(d, connection)
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

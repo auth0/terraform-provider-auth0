@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -212,15 +211,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", email.GetName()),
-		d.Set("enabled", email.GetEnabled()),
-		d.Set("default_from_address", email.GetDefaultFromAddress()),
-		d.Set("credentials", flattenEmailProviderCredentials(d, email)),
-		d.Set("settings", flattenEmailProviderSettings(email)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenEmailProvider(d, email))
 }
 
 func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

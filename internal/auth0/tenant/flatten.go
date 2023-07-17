@@ -2,7 +2,30 @@ package tenant
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
+
+func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
+	result := multierror.Append(
+		data.Set("default_audience", tenant.GetDefaultAudience()),
+		data.Set("default_directory", tenant.GetDefaultDirectory()),
+		data.Set("default_redirection_uri", tenant.GetDefaultRedirectionURI()),
+		data.Set("friendly_name", tenant.GetFriendlyName()),
+		data.Set("picture_url", tenant.GetPictureURL()),
+		data.Set("support_email", tenant.GetSupportEmail()),
+		data.Set("support_url", tenant.GetSupportURL()),
+		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
+		data.Set("session_lifetime", tenant.GetSessionLifetime()),
+		data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
+		data.Set("sandbox_version", tenant.GetSandboxVersion()),
+		data.Set("enabled_locales", tenant.GetEnabledLocales()),
+		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
+		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
+	)
+
+	return result.ErrorOrNil()
+}
 
 func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	if flags == nil {

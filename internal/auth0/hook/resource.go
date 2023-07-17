@@ -3,7 +3,6 @@ package hook
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -116,15 +115,7 @@ func readHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.D
 
 	diagnostics := checkForUntrackedHookSecrets(hookSecrets, configSecrets)
 
-	result := multierror.Append(
-		d.Set("name", hook.Name),
-		d.Set("dependencies", hook.Dependencies),
-		d.Set("script", hook.Script),
-		d.Set("trigger_id", hook.TriggerID),
-		d.Set("enabled", hook.Enabled),
-	)
-
-	if err = result.ErrorOrNil(); err != nil {
+	if err := flattenHook(d, hook); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 	}
 

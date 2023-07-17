@@ -2,8 +2,20 @@ package logstream
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
+
+func flattenLogStream(data *schema.ResourceData, logStream *management.LogStream) error {
+	result := multierror.Append(
+		data.Set("name", logStream.GetName()),
+		data.Set("status", logStream.GetStatus()),
+		data.Set("type", logStream.GetType()),
+		data.Set("filters", logStream.Filters),
+		data.Set("sink", flattenLogStreamSink(data, logStream.Sink)),
+	)
+	return result.ErrorOrNil()
+}
 
 func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{} {
 	var m interface{}

@@ -6,7 +6,6 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -85,12 +84,7 @@ func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("organization_id", data.Id()),
-		data.Set("members", flattenOrganizationMembers(members.Members)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationMembers(data, members.Members))
 }
 
 func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -171,17 +165,4 @@ func guardAgainstErasingUnwantedMembers(
 					"Run: 'terraform import auth0_organization_members.<given-name> %s'.", organizationID),
 		},
 	}
-}
-
-func flattenOrganizationMembers(members []management.OrganizationMember) []string {
-	if len(members) == 0 {
-		return nil
-	}
-
-	flattenedMembers := make([]string, 0)
-	for _, member := range members {
-		flattenedMembers = append(flattenedMembers, member.GetUserID())
-	}
-
-	return flattenedMembers
 }

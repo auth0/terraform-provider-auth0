@@ -1,5 +1,5 @@
 # This is an example on how to set up the email provider with Amazon SES.
-resource "auth0_email" "amazon_ses_email_provider" {
+resource "auth0_email_provider" "amazon_ses_email_provider" {
   name                 = "ses"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -12,7 +12,7 @@ resource "auth0_email" "amazon_ses_email_provider" {
 }
 
 # This is an example on how to set up the email provider with SMTP.
-resource "auth0_email" "smtp_email_provider" {
+resource "auth0_email_provider" "smtp_email_provider" {
   name                 = "smtp"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -26,7 +26,7 @@ resource "auth0_email" "smtp_email_provider" {
 }
 
 # This is an example on how to set up the email provider with Sendgrid.
-resource "auth0_email" "sendgrid_email_provider" {
+resource "auth0_email_provider" "sendgrid_email_provider" {
   name                 = "sendgrid"
   enabled              = true
   default_from_address = "accounts@example.com"

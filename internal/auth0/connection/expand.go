@@ -56,7 +56,7 @@ func expandConnection(ctx context.Context, d *schema.ResourceData, api *manageme
 			management.ConnectionStrategyYahoo,
 			management.ConnectionStrategyBox,
 			management.ConnectionStrategyWordpress,
-			management.ConnectionStrategySpotify,
+			management.ConnectionStrategyShopify,
 			management.ConnectionStrategyCustom:
 			connection.Options, diagnostics = expandConnectionOptionsOAuth2(d, options)
 		case management.ConnectionStrategyFacebook:

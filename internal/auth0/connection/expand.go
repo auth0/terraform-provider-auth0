@@ -55,7 +55,7 @@ func expandConnection(d *schema.ResourceData, api *management.Management) (*mana
 			management.ConnectionStrategyYahoo,
 			management.ConnectionStrategyBox,
 			management.ConnectionStrategyWordpress,
-			management.ConnectionStrategySpotify,
+			management.ConnectionStrategyShopify,
 			management.ConnectionStrategyCustom:
 			connection.Options, diagnostics = expandConnectionOptionsOAuth2(d, options)
 		case management.ConnectionStrategyFacebook:

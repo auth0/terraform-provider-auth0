@@ -25,7 +25,6 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("options", connectionOptions),
 		data.Set("realms", connection.GetRealms()),
 		data.Set("metadata", connection.GetMetadata()),
-		data.Set("enabled_clients", connection.GetEnabledClients()),
 	)
 
 	switch connection.GetStrategy() {
@@ -39,6 +38,16 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 	}
 
 	return diag.FromErr(result.ErrorOrNil())
+}
+
+func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection) diag.Diagnostics {
+	diags := flattenConnection(data, connection)
+
+	err := data.Set("enabled_clients", connection.GetEnabledClients())
+
+	diags = append(diags, diag.FromErr(err)...)
+
+	return diags
 }
 
 func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {

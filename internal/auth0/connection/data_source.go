@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -34,28 +33,37 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema["name"].Description = "The name of the connection. If not provided, `connection_id` must be set."
 	dataSourceSchema["name"].AtLeastOneOf = []string{"connection_id", "name"}
 
-	dataSourceSchema["enabled_clients"].Deprecated = ""
-	dataSourceSchema["enabled_clients"].Description = "IDs of the clients for which the connection is enabled."
+	dataSourceSchema["enabled_clients"] = &schema.Schema{
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "IDs of the clients for which the connection is enabled.",
+	}
 
 	return dataSourceSchema
 }
 
 func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
 	connectionID := data.Get("connection_id").(string)
 	if connectionID != "" {
+		connection, err := api.Connection.Read(ctx, connectionID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
 		data.SetId(connectionID)
-		return auth0.CheckFor404Error(ctx, readConnection, data, meta)
+
+		return flattenConnectionForDataSource(data, connection)
 	}
 
-	api := meta.(*config.Config).GetAPI()
 	name := data.Get("name").(string)
 	page := 0
 	for {
-		connections, err := api.Connection.List(
-			ctx,
-			management.IncludeFields("id", "name"),
-			management.Page(page),
-		)
+		connections, err := api.Connection.List(ctx, management.Page(page))
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -63,7 +71,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				return auth0.CheckFor404Error(ctx, readConnection, data, meta)
+				return flattenConnectionForDataSource(data, connection)
 			}
 		}
 

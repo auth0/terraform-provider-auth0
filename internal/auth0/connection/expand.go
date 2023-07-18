@@ -30,10 +30,6 @@ func expandConnection(ctx context.Context, d *schema.ResourceData, api *manageme
 		connection.Realms = value.Strings(config.GetAttr("realms"))
 	}
 
-	if d.HasChange("enabled_clients") {
-		connection.EnabledClients = value.Strings(config.GetAttr("enabled_clients"))
-	}
-
 	var diagnostics diag.Diagnostics
 	strategy := d.Get("strategy").(string)
 	showAsButton := value.Bool(config.GetAttr("show_as_button"))

@@ -11,9 +11,6 @@ Hooks are secure, self-contained functions that allow you to customize the behav
 
 !> This resource is deprecated. Refer to the [guide on how to migrate from hooks to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-hooks-to-actions) and manage your actions using the `auth0_action` resource.
 
-!> This resource is deprecated. Refer to the [guide on how to migrate from rules to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-rules-to-actions)
-and manage your actions using the `auth0_action` resource.
-
 ## Example Usage
 
 ```terraform

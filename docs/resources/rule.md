@@ -11,9 +11,6 @@ With Auth0, you can create custom Javascript snippets that run in a secure, isol
 
 !> This resource is deprecated. Refer to the [guide on how to migrate from rules to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-rules-to-actions) and manage your actions using the `auth0_action` resource.
 
-!> This resource is deprecated. Refer to the [guide on how to migrate from hooks to actions](https://auth0.com/docs/customize/actions/migrate/migrate-from-hooks-to-actions)
-and manage your actions using the `auth0_action` resource.
-
 ## Example Usage
 
 ```terraform

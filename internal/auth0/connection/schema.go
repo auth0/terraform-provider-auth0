@@ -768,13 +768,4 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
-	"enabled_clients": {
-		Type: schema.TypeSet,
-		Elem: &schema.Schema{
-			Type: schema.TypeString,
-		},
-		Computed: true,
-		Description: "IDs of the clients for which the connection is enabled. " +
-			"Reading the enabled clients through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_connection` data source instead.",
-	},
 }

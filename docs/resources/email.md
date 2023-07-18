@@ -75,7 +75,6 @@ Optional:
 
 - `access_key_id` (String, Sensitive) AWS Access Key ID. Used only for AWS.
 - `api_key` (String, Sensitive) API Key for your email service. Will always be encrypted in our database.
-- `api_user` (String, Deprecated) API User for your email service. This field is not accepted by the API any more so it will be removed in a future major version.
 - `domain` (String) Domain name.
 - `region` (String) Default region. Used only for AWS, Mailgun, and SparkPost.
 - `secret_access_key` (String, Sensitive) AWS Secret Key. Will always be encrypted in our database. Used only for AWS.

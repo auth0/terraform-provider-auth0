@@ -464,7 +464,6 @@ resource "auth0_client" "my_client" {
 	sso_disabled = false
 	custom_login_page_on = true
 	is_first_party = true
-	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
 	client_aliases = [ "https://example.com/audience" ]
 	callbacks = [ "https://example.com/callback" ]
@@ -496,7 +495,6 @@ resource "auth0_client" "my_client" {
 	sso_disabled = true
 	custom_login_page_on = true
 	is_first_party = true
-	is_token_endpoint_ip_header_trusted = true
 	oidc_conformant = true
 	client_aliases = [ ]
 	callbacks = [ ]
@@ -586,11 +584,10 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "5"),
@@ -650,11 +647,10 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "cross_origin_auth", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "0"),
-
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "signing_keys.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "0"),

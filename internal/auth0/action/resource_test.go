@@ -138,7 +138,7 @@ func TestAccAction(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_action.my_action", "code", "exports.onExecutePostLogin = async (event, api) => {};"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "secrets.#", "0"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "dependencies.#", "0"),
-					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node16"),
+					resource.TestCheckResourceAttr("auth0_action.my_action", "runtime", "node18"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "deploy", "false"),
 					resource.TestCheckNoResourceAttr("auth0_action.my_action", "version_id"),
 					resource.TestCheckResourceAttr("auth0_action.my_action", "supported_triggers.#", "1"),

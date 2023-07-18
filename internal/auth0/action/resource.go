@@ -90,7 +90,7 @@ func NewResource() *schema.Resource {
 					"node16",
 					"node18",
 				}, false),
-				Description: "The Node runtime. Defaults to `node16`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
+				Description: "The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
 			},
 			"secrets": {
 				Type:        schema.TypeList,

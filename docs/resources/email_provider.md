@@ -1,10 +1,10 @@
 ---
-page_title: "Resource: auth0_email"
+page_title: "Resource: auth0_email_provider"
 description: |-
   With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email providers, so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
 ---
 
-# Resource: auth0_email
+# Resource: auth0_email_provider
 
 With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email providers, so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
 
@@ -12,7 +12,7 @@ With Auth0, you can have standard welcome, password reset, and account verificat
 
 ```terraform
 # This is an example on how to set up the email provider with Amazon SES.
-resource "auth0_email" "amazon_ses_email_provider" {
+resource "auth0_email_provider" "amazon_ses_email_provider" {
   name                 = "ses"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -25,7 +25,7 @@ resource "auth0_email" "amazon_ses_email_provider" {
 }
 
 # This is an example on how to set up the email provider with SMTP.
-resource "auth0_email" "smtp_email_provider" {
+resource "auth0_email_provider" "smtp_email_provider" {
   name                 = "smtp"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -39,7 +39,7 @@ resource "auth0_email" "smtp_email_provider" {
 }
 
 # This is an example on how to set up the email provider with Sendgrid.
-resource "auth0_email" "sendgrid_email_provider" {
+resource "auth0_email_provider" "sendgrid_email_provider" {
   name                 = "sendgrid"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -120,5 +120,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_email.my_email_provider "b4213dc2-2eed-42c3-9516-c6131a9ce0b0"
+terraform import auth0_email_provider.my_email_provider "b4213dc2-2eed-42c3-9516-c6131a9ce0b0"
 ```

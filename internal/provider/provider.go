@@ -101,7 +101,7 @@ func New() *schema.Provider {
 			"auth0_connection_clients":         connection.NewClientsResource(),
 			"auth0_custom_domain":              customdomain.NewResource(),
 			"auth0_custom_domain_verification": customdomain.NewVerificationResource(),
-			"auth0_email":                      email.NewResource(),
+			"auth0_email_provider":             email.NewResource(),
 			"auth0_email_template":             email.NewTemplateResource(),
 			"auth0_guardian":                   guardian.NewResource(),
 			"auth0_hook":                       hook.NewResource(),

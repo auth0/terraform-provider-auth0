@@ -2,7 +2,6 @@ package connection
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -66,12 +66,9 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 
 	clientID := data.Get("client_id").(string)
 	enabledClients := append(connection.GetEnabledClients(), clientID)
+	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
 
-	if err := api.Connection.Update(
-		ctx,
-		connectionID,
-		&management.Connection{EnabledClients: &enabledClients},
-	); err != nil {
+	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -88,11 +85,7 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 
 	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	found := false
@@ -125,11 +118,7 @@ func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 
 	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	clientID := data.Get("client_id").(string)
@@ -141,18 +130,11 @@ func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 		enabledClients = append(enabledClients, enabledClientID)
 	}
 
-	if err := api.Connection.Update(
-		ctx,
-		connectionID,
-		&management.Connection{EnabledClients: &enabledClients},
-	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
+
+	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId("")
 	return nil
 }

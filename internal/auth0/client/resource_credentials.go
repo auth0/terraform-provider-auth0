@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -165,11 +166,6 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 	// Check that client exists.
 	if _, err := api.Client.Read(ctx, clientID, management.IncludeFields("client_id")); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -212,12 +208,7 @@ func readClientCredentials(ctx context.Context, data *schema.ResourceData, meta 
 		),
 	)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	privateKeyJWT, err := flattenPrivateKeyJWT(ctx, api, data, client.GetClientAuthenticationMethods())
@@ -240,12 +231,7 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 	// Check that client exists.
 	if _, err := api.Client.Read(ctx, data.Id(), management.IncludeFields("client_id")); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	authenticationMethod := data.Get("authentication_method").(string)
@@ -276,12 +262,7 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 	client, err := api.Client.Read(ctx, data.Id(), management.IncludeFields("client_id", "app_type"))
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	tokenEndpointAuthMethod := ""
@@ -311,7 +292,6 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 			}
 		}
 
-		data.SetId("")
 		return nil
 	}
 
@@ -321,7 +301,6 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		return diag.FromErr(err)
 	}
 
-	data.SetId("")
 	return nil
 }
 

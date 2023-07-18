@@ -2,7 +2,6 @@ package connection
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_connection resource.
@@ -40,14 +40,12 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	}
 
 	if err := api.Connection.Create(ctx, connection); err != nil {
-		diagnostics = append(diagnostics, diag.FromErr(err)...)
-		return diagnostics
+		return diag.FromErr(err)
 	}
 
 	d.SetId(connection.GetID())
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
-	return diagnostics
+	return readConnection(ctx, d, m)
 }
 
 func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -55,11 +53,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 
 	connection, err := api.Connection.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
@@ -88,8 +82,7 @@ func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		result = multierror.Append(result, d.Set("show_as_button", connection.GetShowAsButton()))
 	}
 
-	diags = append(diags, diag.FromErr(result.ErrorOrNil())...)
-	return diags
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -101,25 +94,18 @@ func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 	}
 
 	if err := api.Connection.Update(ctx, d.Id(), connection); err != nil {
-		diagnostics = append(diagnostics, diag.FromErr(err)...)
-		return diagnostics
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
-	return diagnostics
+	return readConnection(ctx, d, m)
 }
 
 func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Connection.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }

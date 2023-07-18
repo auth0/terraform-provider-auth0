@@ -82,6 +82,7 @@ func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	prompt := expandPrompt(d.GetRawConfig())
+
 	if err := api.Prompt.Update(ctx, prompt); err != nil {
 		return diag.FromErr(err)
 	}

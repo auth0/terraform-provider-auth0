@@ -2,14 +2,13 @@ package resourceserver
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -59,11 +58,6 @@ func createResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -103,11 +97,7 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	updatedScopes := make([]management.ResourceServerScope, 0)
@@ -130,10 +120,10 @@ func updateResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 	if err := api.ResourceServer.Update(ctx, resourceServerIdentifier, &management.ResourceServer{
 		Scopes: &updatedScopes,
 	}); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId(fmt.Sprintf(`%s::%s`, resourceServerIdentifier, scope))
+	internalSchema.SetResourceGroupID(data, resourceServerIdentifier, scope)
 
 	return readResourceServerScope(ctx, data, meta)
 }
@@ -146,11 +136,7 @@ func readResourceServerScope(ctx context.Context, data *schema.ResourceData, met
 
 	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	for _, existingScope := range existingAPI.GetScopes() {
@@ -176,11 +162,7 @@ func deleteResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 
 	existingAPI, err := api.ResourceServer.Read(ctx, resourceServerIdentifier)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	updateScopes := make([]management.ResourceServerScope, 0)
@@ -197,14 +179,8 @@ func deleteResourceServerScope(ctx context.Context, data *schema.ResourceData, m
 			Scopes: &updateScopes,
 		},
 	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId("")
 	return nil
 }

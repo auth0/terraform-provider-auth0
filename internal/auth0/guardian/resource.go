@@ -501,7 +501,7 @@ func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 	return readGuardian(ctx, d, m)
 }
 
-func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteGuardian(ctx context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	result := multierror.Append(
@@ -515,10 +515,6 @@ func deleteGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		api.Guardian.MultiFactor.DUO.Enable(ctx, false),
 		api.Guardian.MultiFactor.Push.Enable(ctx, false),
 	)
-	if err := result.ErrorOrNil(); err != nil {
-		return diag.FromErr(err)
-	}
 
-	d.SetId("")
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }

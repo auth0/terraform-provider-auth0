@@ -2,13 +2,12 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -54,11 +53,6 @@ func createOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	userID := data.Get("user_id").(string)
 
 	if err := assignMemberRoles(ctx, data, meta); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -75,12 +69,7 @@ func readOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData,
 
 	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	var rolesToSet []string
@@ -93,12 +82,7 @@ func readOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData,
 
 func updateOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if err := assignMemberRoles(ctx, data, meta); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readOrganizationMemberRoles(ctx, data, meta)
@@ -121,11 +105,7 @@ func deleteOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	}
 
 	if err := api.Organization.DeleteMemberRoles(ctx, organizationID, userID, rolesToRemove); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
@@ -142,7 +122,9 @@ func assignMemberRoles(ctx context.Context, d *schema.ResourceData, meta interfa
 	toAdd, toRemove := value.Difference(d, "roles")
 
 	if err := removeMemberRoles(ctx, meta, organizationID, userID, toRemove); err != nil {
-		return err
+		if !internalError.IsStatusNotFound(err) {
+			return err
+		}
 	}
 
 	return addMemberRoles(ctx, meta, organizationID, userID, toAdd)

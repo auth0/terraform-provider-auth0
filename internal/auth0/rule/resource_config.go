@@ -2,14 +2,12 @@ package rule
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0"
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewConfigResource will return a new auth0_rule_config resource.
@@ -44,41 +42,40 @@ func NewConfigResource() *schema.Resource {
 }
 
 func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	ruleConfig := expandRuleConfig(d.GetRawConfig())
-	key := auth0.StringValue(ruleConfig.Key)
-	ruleConfig.Key = nil
 	api := m.(*config.Config).GetAPI()
+
+	ruleConfig := expandRuleConfig(d.GetRawConfig())
+	key := ruleConfig.GetKey()
+	ruleConfig.Key = nil
+
 	if err := api.RuleConfig.Upsert(ctx, key, ruleConfig); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(ruleConfig.Key))
+	d.SetId(ruleConfig.GetKey())
 
 	return readRuleConfig(ctx, d, m)
 }
 
 func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+
 	ruleConfig, err := api.RuleConfig.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	return diag.FromErr(d.Set("key", ruleConfig.Key))
+	return diag.FromErr(d.Set("key", ruleConfig.GetKey()))
 }
 
 func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*config.Config).GetAPI()
+
 	ruleConfig := expandRuleConfig(d.GetRawConfig())
 	ruleConfig.Key = nil
-	api := m.(*config.Config).GetAPI()
+
 	if err := api.RuleConfig.Upsert(ctx, d.Id(), ruleConfig); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readRuleConfig(ctx, d, m)
@@ -86,13 +83,9 @@ func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 
 func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
+
 	if err := api.RuleConfig.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

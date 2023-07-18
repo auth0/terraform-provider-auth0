@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -109,7 +110,7 @@ func preventErasingUnmanagedSecrets(ctx context.Context, d *schema.ResourceData,
 
 	preUpdateAction, err := api.Action.Read(ctx, d.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	// We need to also include the secrets that we're about to remove

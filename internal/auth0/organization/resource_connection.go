@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -10,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -87,11 +87,7 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 
 	organizationConnection, err := api.Organization.Connection(ctx, organizationID, connectionID)
 	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	result := multierror.Append(
@@ -116,7 +112,7 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	}
 
 	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readOrganizationConnection(ctx, data, meta)
@@ -126,17 +122,11 @@ func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
 	connectionID := data.Get("connection_id").(string)
 
 	if err := api.Organization.DeleteConnection(ctx, organizationID, connectionID); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId("")
 	return nil
 }

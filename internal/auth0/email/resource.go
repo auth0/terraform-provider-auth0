@@ -3,7 +3,6 @@ package email
 import (
 	"context"
 	"math"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -13,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_email resource.
@@ -187,14 +187,16 @@ func NewResource() *schema.Resource {
 }
 
 func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	api := m.(*config.Config).GetAPI()
+
 	d.SetId(id.UniqueId())
 
-	api := m.(*config.Config).GetAPI()
 	if emailProviderIsConfigured(ctx, api) {
 		return updateEmail(ctx, d, m)
 	}
 
 	email := expandEmailProvider(d.GetRawConfig())
+
 	if err := api.EmailProvider.Create(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
@@ -207,12 +209,7 @@ func readEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.
 
 	email, err := api.EmailProvider.Read(ctx)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -230,8 +227,9 @@ func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	api := m.(*config.Config).GetAPI()
 
 	email := expandEmailProvider(d.GetRawConfig())
+
 	if err := api.EmailProvider.Update(ctx, email); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readEmail(ctx, d, m)
@@ -241,9 +239,13 @@ func deleteEmail(ctx context.Context, d *schema.ResourceData, m interface{}) dia
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.EmailProvider.Delete(ctx); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
+}
+
+func emailProviderIsConfigured(ctx context.Context, api *management.Management) bool {
+	_, err := api.EmailProvider.Read(ctx)
+	return !internalError.IsStatusNotFound(err)
 }

@@ -3,7 +3,6 @@ package organization
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -14,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -68,11 +68,6 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	alreadyEnabledConnections, err := api.Organization.Connections(ctx, organizationID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -93,9 +88,8 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		var result *multierror.Error
 
 		for _, connection := range connectionsToAdd {
-			if err := api.Organization.AddConnection(ctx, organizationID, connection); err != nil {
-				result = multierror.Append(result, err)
-			}
+			err := api.Organization.AddConnection(ctx, organizationID, connection)
+			result = multierror.Append(result, err)
 		}
 
 		if result.ErrorOrNil() != nil {
@@ -111,12 +105,7 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 
 	connections, err := api.Organization.Connections(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	result := multierror.Append(
@@ -132,36 +121,30 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
-	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
+	var result *multierror.Error
 
 	for _, rmConnection := range toRemove {
 		connection := rmConnection.(map[string]interface{})
+		connectionID := connection["connection_id"].(string)
 
-		if err := api.Organization.DeleteConnection(ctx, organizationID, connection["connection_id"].(string)); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
-			result = multierror.Append(result, err)
+		err := api.Organization.DeleteConnection(ctx, organizationID, connectionID)
+		if internalError.IsStatusNotFound(err) {
+			err = nil
 		}
+
+		result = multierror.Append(result, err)
 	}
 
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
-
-		if err := api.Organization.AddConnection(ctx, organizationID, &management.OrganizationConnection{
+		connectionToAdd := &management.OrganizationConnection{
 			ConnectionID:            auth0.String(connection["connection_id"].(string)),
 			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
-		}); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
-			result = multierror.Append(result, err)
 		}
+
+		err := api.Organization.AddConnection(ctx, organizationID, connectionToAdd)
+		result = multierror.Append(result, err)
 	}
 
 	if result.ErrorOrNil() != nil {
@@ -174,22 +157,19 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	organizationID := data.Id()
-
+	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	var result *multierror.Error
 
-	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	for _, conn := range connections {
-		err := api.Organization.DeleteConnection(ctx, organizationID, conn.GetConnectionID())
+		err := api.Organization.DeleteConnection(ctx, data.Id(), conn.GetConnectionID())
+		if internalError.IsStatusNotFound(err) {
+			err = nil
+		}
+
 		result = multierror.Append(result, err)
 	}
 
-	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
-	}
-
-	data.SetId("")
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func guardAgainstErasingUnwantedConnections(

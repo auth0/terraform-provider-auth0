@@ -3,7 +3,6 @@ package action
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -13,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_action resource.
@@ -135,6 +135,7 @@ func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	action := expandAction(d.GetRawConfig())
+
 	if err := api.Action.Create(ctx, action); err != nil {
 		return diag.FromErr(err)
 	}
@@ -153,13 +154,7 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	action, err := api.Action.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	result := multierror.Append(
@@ -190,8 +185,9 @@ func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	}
 
 	action := expandAction(d.GetRawConfig())
+
 	if err := api.Action.Update(ctx, d.Id(), action); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	if result := deployAction(ctx, d, m); result.HasError() {
@@ -205,11 +201,7 @@ func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	if err := api.Action.Delete(ctx, d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return nil

@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -69,10 +69,6 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 
 	currentBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -80,7 +76,7 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	for _, binding := range currentBindings.Bindings {
 		if binding.Action.GetID() == actionID {
 			internalSchema.SetResourceGroupID(d, trigger, actionID)
-			return nil
+			return readTriggerAction(ctx, d, m)
 		}
 
 		updatedBindings = append(updatedBindings, &management.ActionBinding{
@@ -94,14 +90,10 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 
 	if displayName == "" {
 		action, err := api.Action.Read(ctx, actionID)
-
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
 			return diag.FromErr(err)
 		}
+
 		displayName = action.GetName()
 	}
 
@@ -118,6 +110,7 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	internalSchema.SetResourceGroupID(d, trigger, actionID)
+
 	return readTriggerAction(ctx, d, m)
 }
 
@@ -130,7 +123,7 @@ func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 
 	currentBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	found := false
@@ -162,7 +155,7 @@ func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	if err := api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readTriggerAction(ctx, d, m)
@@ -176,7 +169,7 @@ func readTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{
 
 	triggerBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	for _, binding := range triggerBindings.Bindings {
@@ -197,7 +190,7 @@ func deleteTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 
 	triggerBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	updatedBindings := make([]*management.ActionBinding, 0)
@@ -215,5 +208,7 @@ func deleteTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 		})
 	}
 
-	return diag.FromErr(api.Action.UpdateBindings(ctx, trigger, updatedBindings))
+	err = api.Action.UpdateBindings(ctx, trigger, updatedBindings)
+
+	return diag.FromErr(internalError.HandleAPIError(d, err))
 }

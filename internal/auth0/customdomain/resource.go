@@ -3,15 +3,12 @@ package customdomain
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewResource will return a new auth0_custom_domain resource.
@@ -122,23 +119,7 @@ func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("domain", customDomain.GetDomain()),
-		d.Set("type", customDomain.GetType()),
-		d.Set("primary", customDomain.GetPrimary()),
-		d.Set("status", customDomain.GetStatus()),
-		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
-		d.Set("custom_client_ip_header", customDomain.GetCustomClientIPHeader()),
-		d.Set("tls_policy", customDomain.GetTLSPolicy()),
-	)
-
-	if customDomain.Verification != nil {
-		result = multierror.Append(result, d.Set("verification", []map[string]interface{}{
-			{"methods": customDomain.Verification.Methods},
-		}))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenCustomDomain(d, customDomain))
 }
 
 func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -161,20 +142,4 @@ func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	}
 
 	return nil
-}
-
-func expandCustomDomain(d *schema.ResourceData) *management.CustomDomain {
-	config := d.GetRawConfig()
-
-	customDomain := &management.CustomDomain{
-		TLSPolicy:            value.String(config.GetAttr("tls_policy")),
-		CustomClientIPHeader: value.String(config.GetAttr("custom_client_ip_header")),
-	}
-
-	if d.IsNewResource() {
-		customDomain.Domain = value.String(config.GetAttr("domain"))
-		customDomain.Type = value.String(config.GetAttr("type"))
-	}
-
-	return customDomain
 }

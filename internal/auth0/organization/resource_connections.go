@@ -7,7 +7,6 @@ import (
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -108,12 +107,7 @@ func readOrganizationConnections(ctx context.Context, data *schema.ResourceData,
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("organization_id", data.Id()),
-		data.Set("enabled_connections", flattenOrganizationConnections(connections.OrganizationConnections)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationConnections(data, connections.OrganizationConnections))
 }
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -205,19 +199,4 @@ func guardAgainstErasingUnwantedConnections(
 					"Run: 'terraform import auth0_organization_connections.<given-name> %s'.", organizationID),
 		},
 	}
-}
-
-func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConnection {
-	connections := make([]*management.OrganizationConnection, 0)
-
-	cfg.ForEachElement(func(_ cty.Value, connectionCfg cty.Value) (stop bool) {
-		connections = append(connections, &management.OrganizationConnection{
-			ConnectionID:            value.String(connectionCfg.GetAttr("connection_id")),
-			AssignMembershipOnLogin: value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
-		})
-
-		return stop
-	})
-
-	return connections
 }

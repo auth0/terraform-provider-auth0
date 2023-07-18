@@ -529,12 +529,12 @@ func flattenClient(d *schema.ResourceData, client *management.Client) error {
 		d.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		d.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
 		d.Set("encryption_key", client.GetEncryptionKey()),
-		d.Set("addons", flattenClientAddons(client.Addons)),
+		d.Set("addons", flattenClientAddons(client.GetAddons())),
 		d.Set("mobile", flattenClientMobile(client.GetMobile())),
 		d.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		d.Set("signing_keys", client.SigningKeys),
-		d.Set("client_metadata", client.ClientMetadata),
-		d.Set("oidc_backchannel_logout_urls", client.OIDCBackchannelLogout.GetBackChannelLogoutURLs()),
+		d.Set("client_metadata", client.GetClientMetadata()),
+		d.Set("oidc_backchannel_logout_urls", client.GetOIDCBackchannelLogout().GetBackChannelLogoutURLs()),
 	)
 	return result.ErrorOrNil()
 }
@@ -544,6 +544,16 @@ func flattenClientForDataSource(d *schema.ResourceData, client *management.Clien
 		flattenClient(d, client),
 		d.Set("client_secret", client.GetClientSecret()),
 		d.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {
+	result := multierror.Append(
+		data.Set("client_id", clientGrant.GetClientID()),
+		data.Set("audience", clientGrant.GetAudience()),
+		data.Set("scopes", clientGrant.Scope),
 	)
 
 	return result.ErrorOrNil()

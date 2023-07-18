@@ -4,13 +4,11 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewGrantResource will return a new auth0_client_grant resource.
@@ -88,13 +86,7 @@ func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{})
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("client_id", clientGrant.GetClientID()),
-		d.Set("audience", clientGrant.GetAudience()),
-		d.Set("scopes", clientGrant.Scope),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenClientGrant(d, clientGrant))
 }
 
 func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -117,28 +109,6 @@ func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{
 	}
 
 	return nil
-}
-
-func expandClientGrant(d *schema.ResourceData) *management.ClientGrant {
-	cfg := d.GetRawConfig()
-
-	clientGrant := &management.ClientGrant{}
-
-	if d.IsNewResource() {
-		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
-		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
-	}
-
-	if d.IsNewResource() || d.HasChange("scopes") {
-		scopeListFromConfig := d.Get("scopes").([]interface{})
-		scopeList := make([]string, 0)
-		for _, scope := range scopeListFromConfig {
-			scopeList = append(scopeList, scope.(string))
-		}
-		clientGrant.Scope = scopeList
-	}
-
-	return clientGrant
 }
 
 func clientGrantHasChange(clientGrant *management.ClientGrant) bool {

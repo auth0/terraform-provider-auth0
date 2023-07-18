@@ -6,7 +6,6 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -95,12 +94,7 @@ func readResourceServerScopes(ctx context.Context, data *schema.ResourceData, me
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("resource_server_identifier", resourceServer.GetIdentifier()),
-		data.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenResourceServerScopes(data, resourceServer))
 }
 
 func updateResourceServerScopes(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

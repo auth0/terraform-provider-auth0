@@ -6,7 +6,6 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -149,14 +148,7 @@ func readPages(ctx context.Context, data *schema.ResourceData, meta interface{})
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		data.Set("login", flattenLoginPage(clientWithLoginPage)),
-		data.Set("change_password", flattenChangePasswordPage(tenantPages.GetChangePassword())),
-		data.Set("guardian_mfa", flattenGuardianMFAPage(tenantPages.GetGuardianMFAPage())),
-		data.Set("error", flattenErrorPage(tenantPages.GetErrorPage())),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenPages(data, clientWithLoginPage, tenantPages))
 }
 
 func updatePages(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

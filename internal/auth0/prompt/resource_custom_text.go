@@ -1,10 +1,8 @@
 package prompt
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -87,12 +85,7 @@ func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interfa
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	body, err := marshalCustomTextBody(customText)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	return diag.FromErr(d.Set("body", body))
+	return diag.FromErr(flattenPromptCustomText(d, customText))
 }
 
 func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -124,19 +117,4 @@ func deletePromptCustomText(ctx context.Context, d *schema.ResourceData, m inter
 	}
 
 	return updatePromptCustomText(ctx, d, m)
-}
-
-func marshalCustomTextBody(b map[string]interface{}) (string, error) {
-	bodyBytes, err := json.Marshal(b)
-	if err != nil {
-		return "", fmt.Errorf("failed to serialize the custom texts to JSON: %w", err)
-	}
-
-	var buffer bytes.Buffer
-	const jsonIndentation = "    "
-	if err := json.Indent(&buffer, bodyBytes, "", jsonIndentation); err != nil {
-		return "", fmt.Errorf("failed to format the custom texts JSON: %w", err)
-	}
-
-	return buffer.String(), nil
 }

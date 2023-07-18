@@ -3,10 +3,8 @@ package customdomain
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -70,8 +68,6 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 			)
 		}
 
-		log.Printf("[INFO] Custom domain %s verified", customDomainVerification.GetDomain())
-
 		d.SetId(customDomainVerification.GetID())
 
 		// The cname_api_key field is only given once: when verification
@@ -98,12 +94,7 @@ func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("custom_domain_id", customDomain.GetID()),
-		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenCustomDomainVerification(d, customDomain))
 }
 
 func deleteCustomDomainVerification(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {

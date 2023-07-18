@@ -3,16 +3,12 @@ package prompt
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewResource will return a new auth0_prompt resource.
@@ -69,13 +65,7 @@ func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
-		d.Set("identifier_first", prompt.GetIdentifierFirst()),
-		d.Set("webauthn_platform_first_factor", prompt.GetWebAuthnPlatformFirstFactor()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenPrompt(d, prompt))
 }
 
 func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -92,18 +82,4 @@ func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 func deletePrompt(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
-}
-
-func expandPrompt(d cty.Value) *management.Prompt {
-	prompt := management.Prompt{
-		IdentifierFirst:             value.Bool(d.GetAttr("identifier_first")),
-		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),
-	}
-
-	ulExp := d.GetAttr("universal_login_experience")
-	if !ulExp.IsNull() {
-		prompt.UniversalLoginExperience = ulExp.AsString()
-	}
-
-	return &prompt
 }

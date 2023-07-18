@@ -142,9 +142,7 @@ func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface
 	// as both can be used to find a resource server with the Read() func.
 	d.SetId(resourceServer.GetID())
 
-	err = flattenResourceServer(d, resourceServer)
-
-	return diag.FromErr(err)
+	return diag.FromErr(flattenResourceServer(d, resourceServer))
 }
 
 func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

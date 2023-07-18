@@ -5,7 +5,6 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -133,12 +132,7 @@ func readRolePermissions(ctx context.Context, data *schema.ResourceData, meta in
 		page++
 	}
 
-	result := multierror.Append(
-		data.Set("role_id", data.Id()),
-		data.Set("permissions", flattenRolePermissions(permissions)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenRolePermissions(data, permissions))
 }
 
 func deleteRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -292,15 +291,7 @@ func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) d
 		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", logStream.GetName()),
-		d.Set("status", logStream.GetStatus()),
-		d.Set("type", logStream.GetType()),
-		d.Set("filters", logStream.Filters),
-		d.Set("sink", flattenLogStreamSink(d, logStream.Sink)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenLogStream(d, logStream))
 }
 
 func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

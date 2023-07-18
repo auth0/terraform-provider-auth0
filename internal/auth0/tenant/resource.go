@@ -3,7 +3,6 @@ package tenant
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -289,24 +288,7 @@ func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		d.Set("default_audience", tenant.GetDefaultAudience()),
-		d.Set("default_directory", tenant.GetDefaultDirectory()),
-		d.Set("default_redirection_uri", tenant.GetDefaultRedirectionURI()),
-		d.Set("friendly_name", tenant.GetFriendlyName()),
-		d.Set("picture_url", tenant.GetPictureURL()),
-		d.Set("support_email", tenant.GetSupportEmail()),
-		d.Set("support_url", tenant.GetSupportURL()),
-		d.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
-		d.Set("session_lifetime", tenant.GetSessionLifetime()),
-		d.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
-		d.Set("sandbox_version", tenant.GetSandboxVersion()),
-		d.Set("enabled_locales", tenant.GetEnabledLocales()),
-		d.Set("flags", flattenTenantFlags(tenant.GetFlags())),
-		d.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenTenant(d, tenant))
 }
 
 func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {

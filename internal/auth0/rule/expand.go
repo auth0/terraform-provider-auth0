@@ -7,18 +7,18 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandRule(d cty.Value) *management.Rule {
+func expandRule(data cty.Value) *management.Rule {
 	return &management.Rule{
-		Name:    value.String(d.GetAttr("name")),
-		Script:  value.String(d.GetAttr("script")),
-		Order:   value.Int(d.GetAttr("order")),
-		Enabled: value.Bool(d.GetAttr("enabled")),
+		Name:    value.String(data.GetAttr("name")),
+		Script:  value.String(data.GetAttr("script")),
+		Order:   value.Int(data.GetAttr("order")),
+		Enabled: value.Bool(data.GetAttr("enabled")),
 	}
 }
 
-func expandRuleConfig(d cty.Value) *management.RuleConfig {
+func expandRuleConfig(data cty.Value) *management.RuleConfig {
 	return &management.RuleConfig{
-		Key:   value.String(d.GetAttr("key")),
-		Value: value.String(d.GetAttr("value")),
+		Key:   value.String(data.GetAttr("key")),
+		Value: value.String(data.GetAttr("value")),
 	}
 }

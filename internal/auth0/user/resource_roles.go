@@ -5,7 +5,6 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -64,17 +63,7 @@ func readUserRoles(ctx context.Context, data *schema.ResourceData, meta interfac
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	var userRoles []string
-	for _, role := range rolesList.Roles {
-		userRoles = append(userRoles, role.GetID())
-	}
-
-	result := multierror.Append(
-		data.Set("user_id", data.Id()),
-		data.Set("roles", userRoles),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenUserRoles(data, rolesList.Roles))
 }
 
 func deleteUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

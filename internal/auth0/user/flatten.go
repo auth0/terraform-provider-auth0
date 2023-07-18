@@ -39,23 +39,74 @@ func flattenUser(data *schema.ResourceData, user *management.User) (err error) {
 	return result.ErrorOrNil()
 }
 
-func flattenUserRoles(roleList *management.RoleList) []interface{} {
-	var roles []interface{}
-	for _, role := range roleList.Roles {
-		roles = append(roles, role.GetID())
-	}
-	return roles
+func flattenUserForDataSource(
+	data *schema.ResourceData,
+	user *management.User,
+	roles []*management.Role,
+	permissions []*management.Permission,
+) error {
+	result := multierror.Append(
+		flattenUser(data, user),
+		data.Set("roles", flattenUserRolesSlice(roles)),
+		data.Set("permissions", flattenUserPermissionsSlice(permissions)),
+	)
+
+	return result.ErrorOrNil()
 }
 
-func flattenUserPermissions(permissionList *management.PermissionList) []interface{} {
-	var permissions []interface{}
-	for _, permission := range permissionList.Permissions {
-		permissions = append(permissions, map[string]string{
+func flattenUserPermissions(data *schema.ResourceData, permissions []*management.Permission) error {
+	result := multierror.Append(
+		data.Set("user_id", data.Id()),
+		data.Set("permissions", flattenUserPermissionsSlice(permissions)),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenUserPermissionsSlice(permissions []*management.Permission) []interface{} {
+	var userPermissions []interface{}
+	for _, permission := range permissions {
+		userPermissions = append(userPermissions, map[string]string{
 			"name":                       permission.GetName(),
 			"resource_server_identifier": permission.GetResourceServerIdentifier(),
 			"description":                permission.GetDescription(),
 			"resource_server_name":       permission.GetResourceServerName(),
 		})
 	}
-	return permissions
+	return userPermissions
+}
+
+func flattenUserPermission(data *schema.ResourceData, permission *management.Permission) error {
+	result := multierror.Append(
+		data.Set("description", permission.GetDescription()),
+		data.Set("resource_server_name", permission.GetResourceServerName()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenUserRole(data *schema.ResourceData, role *management.Role) error {
+	result := multierror.Append(
+		data.Set("role_name", role.GetName()),
+		data.Set("role_description", role.GetDescription()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenUserRoles(data *schema.ResourceData, roles []*management.Role) error {
+	result := multierror.Append(
+		data.Set("user_id", data.Id()),
+		data.Set("roles", flattenUserRolesSlice(roles)),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenUserRolesSlice(roles []*management.Role) []string {
+	var userRoles []string
+	for _, role := range roles {
+		userRoles = append(userRoles, role.GetID())
+	}
+	return userRoles
 }

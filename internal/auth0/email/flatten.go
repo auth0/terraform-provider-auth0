@@ -2,8 +2,21 @@ package email
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
+
+func flattenEmailProvider(data *schema.ResourceData, emailProvider *management.EmailProvider) error {
+	result := multierror.Append(
+		data.Set("name", emailProvider.GetName()),
+		data.Set("enabled", emailProvider.GetEnabled()),
+		data.Set("default_from_address", emailProvider.GetDefaultFromAddress()),
+		data.Set("credentials", flattenEmailProviderCredentials(data, emailProvider)),
+		data.Set("settings", flattenEmailProviderSettings(emailProvider)),
+	)
+
+	return result.ErrorOrNil()
+}
 
 func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *management.EmailProvider) []interface{} {
 	if emailProvider.Credentials == nil {

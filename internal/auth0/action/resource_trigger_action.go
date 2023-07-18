@@ -208,7 +208,9 @@ func deleteTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 		})
 	}
 
-	err = api.Action.UpdateBindings(ctx, trigger, updatedBindings)
+	if err = api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
+	}
 
-	return diag.FromErr(internalError.HandleAPIError(d, err))
+	return nil
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -90,13 +89,7 @@ func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("assign_membership_on_login", organizationConnection.GetAssignMembershipOnLogin()),
-		data.Set("name", organizationConnection.GetConnection().GetName()),
-		data.Set("strategy", organizationConnection.GetConnection().GetStrategy()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationConnection(data, organizationConnection))
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

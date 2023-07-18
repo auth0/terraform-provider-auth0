@@ -5,10 +5,41 @@ import (
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
+
+func flattenConnection(data *schema.ResourceData, connection *management.Connection) diag.Diagnostics {
+	connectionOptions, diags := flattenConnectionOptions(data, connection.Options)
+	if diags.HasError() {
+		return diags
+	}
+
+	result := multierror.Append(
+		data.Set("name", connection.GetName()),
+		data.Set("display_name", connection.GetDisplayName()),
+		data.Set("is_domain_connection", connection.GetIsDomainConnection()),
+		data.Set("strategy", connection.GetStrategy()),
+		data.Set("options", connectionOptions),
+		data.Set("realms", connection.GetRealms()),
+		data.Set("metadata", connection.GetMetadata()),
+		data.Set("enabled_clients", connection.GetEnabledClients()),
+	)
+
+	switch connection.GetStrategy() {
+	case management.ConnectionStrategyGoogleApps,
+		management.ConnectionStrategyOIDC,
+		management.ConnectionStrategyAD,
+		management.ConnectionStrategyAzureAD,
+		management.ConnectionStrategySAML,
+		management.ConnectionStrategyADFS:
+		result = multierror.Append(result, data.Set("show_as_button", connection.GetShowAsButton()))
+	}
+
+	return diag.FromErr(result.ErrorOrNil())
+}
 
 func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
 	if options == nil {
@@ -665,4 +696,24 @@ func flattenConnectionOptionsPingFederate(
 	m["upstream_params"] = upstreamParams
 
 	return m, nil
+}
+
+func flattenConnectionClient(data *schema.ResourceData, connection *management.Connection) error {
+	result := multierror.Append(
+		data.Set("name", connection.GetName()),
+		data.Set("strategy", connection.GetStrategy()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenConnectionClients(data *schema.ResourceData, connection *management.Connection) error {
+	result := multierror.Append(
+		data.Set("connection_id", connection.GetID()),
+		data.Set("name", connection.GetName()),
+		data.Set("strategy", connection.GetStrategy()),
+		data.Set("enabled_clients", connection.GetEnabledClients()),
+	)
+
+	return result.ErrorOrNil()
 }

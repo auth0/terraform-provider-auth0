@@ -3,12 +3,10 @@ package branding
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -26,31 +24,6 @@ func dataSourceSchema() map[string]*schema.Schema {
 }
 
 func readBrandingForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	// This resource is not identified by an id in the Auth0 management API.
 	data.SetId(id.UniqueId())
-
-	api := meta.(*config.Config).GetAPI()
-
-	branding, err := api.Branding.Read(ctx)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	result := multierror.Append(
-		data.Set("favicon_url", branding.GetFaviconURL()),
-		data.Set("logo_url", branding.GetLogoURL()),
-		data.Set("colors", flattenBrandingColors(branding.GetColors())),
-		data.Set("font", flattenBrandingFont(branding.GetFont())),
-	)
-
-	if err := checkForCustomDomains(ctx, api); err == nil {
-		brandingUniversalLogin, err := flattenBrandingUniversalLogin(ctx, api)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-
-		result = multierror.Append(result, data.Set("universal_login", brandingUniversalLogin))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return readBranding(ctx, data, meta)
 }

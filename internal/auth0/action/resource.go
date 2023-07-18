@@ -89,11 +89,9 @@ func NewResource() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"node12",
 					"node16",
-					"node18",         // Node 18 beta.
-					"node18-actions", // Node 18 GA.
+					"node18",
 				}, false),
-				Description: "The Node runtime. Defaults to `node12`. Possible values are: " +
-					"`node12`, `node16` or `node18-actions`.",
+				Description: "The Node runtime. Defaults to `node16`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
 			},
 			"secrets": {
 				Type:        schema.TypeList,
@@ -165,12 +163,16 @@ func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	}
 
 	result := multierror.Append(
-		d.Set("name", action.Name),
+		d.Set("name", action.GetName()),
 		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
-		d.Set("code", action.Code),
+		d.Set("code", action.GetCode()),
 		d.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
-		d.Set("runtime", action.Runtime),
+		d.Set("runtime", action.GetRuntime()),
 	)
+
+	if action.GetRuntime() == "node18-actions" {
+		result = multierror.Append(result, d.Set("runtime", "node18"))
+	}
 
 	if action.DeployedVersion != nil {
 		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
@@ -204,13 +206,12 @@ func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) di
 
 	if err := api.Action.Delete(ctx, d.Id()); err != nil {
 		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
 			return nil
 		}
+
 		return diag.FromErr(err)
 	}
 
-	d.SetId("")
 	return nil
 }
 

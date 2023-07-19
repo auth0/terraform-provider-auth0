@@ -3,7 +3,7 @@ name: Main Workflow
 on:
   pull_request: {}
   push:
-    branches: [ "main", "v1" ]
+    branches: ["main", "v1"]
 
 jobs:
   checks:
@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4.0
         with:
           go-version-file: go.mod
           check-latest: true
@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4.0
         with:
           go-version-file: go.mod
           check-latest: true

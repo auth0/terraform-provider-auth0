@@ -472,7 +472,7 @@ The `token_endpoint_auth_method` property on the `auth0_client` resource has bee
 authentication method can be achieved through the `auth0_client_credentials` resource instead.
 
 Furthermore, it is generally recommended to manage any client authentication configuration, including client secret and
-public key, through the `auth0_client_credentials` resource.
+public key through the `auth0_client_credentials` resource.
 
 <table>
 <tr>
@@ -783,8 +783,8 @@ resource "auth0_role_permission" "write_posts_permission" {
 
 ### Client Grant Scopes
 
-The `scope` property on the `auth0_client_grant` resource has been renamed to `scopes` to reflect the fact that multiple
-scopes can be managed per client grant.
+The `scope` property on the `auth0_client_grant` resource has been renamed to `scopes` to reflect that multiple scopes
+can be managed per client grant.
 
 <table>
 <tr>
@@ -820,7 +820,7 @@ resource "auth0_client_grant" "my_client_grant" {
 
 The Node 18 Beta runtime option for actions has been removed.
 
-Now, you can opt in to the GA version of Node 18 actions runtime instead.
+Now, you will be opted in to the GA version of Node 18 actions runtime instead.
 
 [Back to Table of Contents](#migration-guide)
 

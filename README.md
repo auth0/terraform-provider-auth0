@@ -22,7 +22,7 @@ The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant co
 ## Documentation
 
 - [Official Docs](https://registry.terraform.io/providers/auth0/auth0/latest/docs)
-- [Guides]
+- Guides
   - [Quickstart](./docs/guides/quickstart.md)
   - [List available triggers for actions](./docs/guides/action_triggers.md)
   - [Zero downtime client credentials rotation](./docs/guides/client_secret_rotation.md)
@@ -44,7 +44,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = ">= 0.47.0" # Refer to docs for latest version
+      version = "1.0.0-beta.0" # Refer to docs for latest version
     }
   }
 }

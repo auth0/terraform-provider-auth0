@@ -1,8 +1,6 @@
 package email
 
 import (
-	"net/http"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 
@@ -147,13 +145,4 @@ func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	}
 
 	return emailTemplate
-}
-
-func emailProviderIsConfigured(api *management.Management) bool {
-	_, err := api.EmailProvider.Read()
-	if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-		return false
-	}
-
-	return true
 }

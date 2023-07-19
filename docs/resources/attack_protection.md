@@ -65,53 +65,62 @@ resource "auth0_attack_protection" "my_protection" {
 <a id="nestedblock--breached_password_detection"></a>
 ### Nested Schema for `breached_password_detection`
 
+Required:
+
+- `enabled` (Boolean) Whether breached password detection is active.
+
 Optional:
 
-- `admin_notification_frequency` (Set of String) When "admin_notification" is enabled, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
-- `enabled` (Boolean) Whether breached password detection is active.
+- `admin_notification_frequency` (Set of String) When `admin_notification` is enabled within the `shields` property, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
 - `method` (String) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
 - `pre_user_registration` (Block List, Max: 1) Configuration options that apply before every user registration attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--breached_password_detection--pre_user_registration))
-- `shields` (Set of String) Action to take when a breached password is detected.
+- `shields` (Set of String) Action to take when a breached password is detected. Options include: `block` (block compromised user accounts), `user_notification` (send an email to user when we detect that they are using compromised credentials) and `admin_notification` (send an email with a summary of the number of accounts logging in with compromised credentials).
 
 <a id="nestedblock--breached_password_detection--pre_user_registration"></a>
 ### Nested Schema for `breached_password_detection.pre_user_registration`
 
 Optional:
 
-- `shields` (Set of String) Action to take when a breached password is detected during a signup. Possible values: `block`, `admin_notification`.
+- `shields` (Set of String) Action to take when a breached password is detected during a signup. Possible values: `block` (block compromised credentials for new accounts), `admin_notification` (send an email notification with a summary of compromised credentials in new accounts).
 
 
 
 <a id="nestedblock--brute_force_protection"></a>
 ### Nested Schema for `brute_force_protection`
 
+Required:
+
+- `enabled` (Boolean) Whether brute force attack protections are active.
+
 Optional:
 
-- `allowlist` (Set of String) List of trusted IP addresses that will not have attack protection enforced against them.
-- `enabled` (Boolean) Whether brute force attack protections are active.
-- `max_attempts` (Number) Maximum number of unsuccessful attempts. Only available on public tenants.
-- `mode` (String) Determines whether the IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` or `count_per_identifier`.
-- `shields` (Set of String) Action to take when a brute force protection threshold is violated. Possible values: `block`, `user_notification`
+- `allowlist` (Set of String) List of trusted IP addresses that will not have attack protection enforced against them. This field allows you to specify multiple IP addresses, or ranges. You can use IPv4 or IPv6 addresses and CIDR notation.
+- `max_attempts` (Number) Maximum number of consecutive failed login attempts from a single user before blocking is triggered. Only available on public tenants.
+- `mode` (String) Determines whether the IP address is used when counting failed attempts. Possible values: `count_per_identifier_and_ip` (lockout an account from a given IP Address) or `count_per_identifier` (lockout an account regardless of IP Address).
+- `shields` (Set of String) Action to take when a brute force protection threshold is violated. Possible values: `block` (block login attempts for a flagged user account), `user_notification` (send an email to user when their account has been blocked).
 
 
 <a id="nestedblock--suspicious_ip_throttling"></a>
 ### Nested Schema for `suspicious_ip_throttling`
 
+Required:
+
+- `enabled` (Boolean) Whether suspicious IP throttling attack protections are active.
+
 Optional:
 
-- `allowlist` (Set of String) List of trusted IP addresses that will not have attack protection enforced against them.
-- `enabled` (Boolean) Whether suspicious IP throttling attack protections are active.
+- `allowlist` (Set of String) List of trusted IP addresses that will not have attack protection enforced against them. This field allows you to specify multiple IP addresses, or ranges. You can use IPv4 or IPv6 addresses and CIDR notation.
 - `pre_login` (Block List, Max: 1) Configuration options that apply before every login attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--suspicious_ip_throttling--pre_login))
 - `pre_user_registration` (Block List, Max: 1) Configuration options that apply before every user registration attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--suspicious_ip_throttling--pre_user_registration))
-- `shields` (Set of String) Action to take when a suspicious IP throttling threshold is violated. Possible values: `block`, `admin_notification`
+- `shields` (Set of String) Action to take when a suspicious IP throttling threshold is violated. Possible values: `block` (throttle traffic from an IP address when there is a high number of login attempts targeting too many different accounts), `admin_notification` (send an email notification when traffic is throttled on one or more IP addresses due to high-velocity traffic).
 
 <a id="nestedblock--suspicious_ip_throttling--pre_login"></a>
 ### Nested Schema for `suspicious_ip_throttling.pre_login`
 
 Optional:
 
-- `max_attempts` (Number) Total number of attempts allowed per day.
-- `rate` (Number) Interval of time, given in milliseconds, at which new attempts are granted.
+- `max_attempts` (Number) The maximum number of failed login attempts allowed from a single IP address.
+- `rate` (Number) Interval of time, given in milliseconds at which new login tokens will become available after they have been used by an IP address. Each login attempt will be added on the defined throttling rate.
 
 
 <a id="nestedblock--suspicious_ip_throttling--pre_user_registration"></a>
@@ -119,8 +128,8 @@ Optional:
 
 Optional:
 
-- `max_attempts` (Number) Total number of attempts allowed.
-- `rate` (Number) Interval of time, given in milliseconds, at which new attempts are granted.
+- `max_attempts` (Number) The maximum number of sign up attempts allowed from a single IP address.
+- `rate` (Number) Interval of time, given in milliseconds at which new sign up tokens will become available after they have been used by an IP address. Each sign up attempt will be added on the defined throttling rate.
 
 ## Import
 
@@ -133,5 +142,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_attack_protection.my_protection 24940d4b-4bd4-44e7-894e-f92e4de36a40
+terraform import auth0_attack_protection.my_protection "24940d4b-4bd4-44e7-894e-f92e4de36a40"
 ```

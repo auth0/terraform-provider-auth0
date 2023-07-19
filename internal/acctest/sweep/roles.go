@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
@@ -14,6 +15,8 @@ func Roles() {
 	resource.AddTestSweepers("auth0_role", &resource.Sweeper{
 		Name: "auth0_role",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
@@ -22,7 +25,7 @@ func Roles() {
 			var page int
 			var result *multierror.Error
 			for {
-				roleList, err := api.Role.List(management.Page(page))
+				roleList, err := api.Role.List(ctx, management.Page(page))
 				if err != nil {
 					return err
 				}
@@ -32,7 +35,7 @@ func Roles() {
 					if strings.Contains(role.GetName(), "Test") {
 						result = multierror.Append(
 							result,
-							api.Role.Delete(role.GetID()),
+							api.Role.Delete(ctx, role.GetID()),
 						)
 						log.Printf("[DEBUG] ✗ %s", role.GetName())
 					}

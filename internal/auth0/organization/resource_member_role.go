@@ -2,14 +2,12 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -21,7 +19,7 @@ func NewMemberRoleResource() *schema.Resource {
 		ReadContext:   readOrganizationMemberRole,
 		DeleteContext: deleteOrganizationMemberRole,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "organization_id", "user_id", "role_id"),
+			StateContext: internalSchema.ImportResourceGroupID("organization_id", "user_id", "role_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -63,43 +61,30 @@ func createOrganizationMemberRole(ctx context.Context, data *schema.ResourceData
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	if err := api.Organization.AssignMemberRoles(organizationID, userID, []string{roleID}); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-
+	if err := api.Organization.AssignMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(organizationID + internalSchema.SeparatorDoubleColon + userID + internalSchema.SeparatorDoubleColon + roleID)
+	internalSchema.SetResourceGroupID(data, organizationID, userID, roleID)
 
 	return readOrganizationMemberRole(ctx, data, meta)
 }
 
-func readOrganizationMemberRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	memberRoles, err := api.Organization.MemberRoles(organizationID, userID)
+	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	roleID := data.Get("role_id").(string)
 	for _, role := range memberRoles.Roles {
 		if role.GetID() == roleID {
-			result := multierror.Append(
-				data.Set("role_name", role.GetName()),
-				data.Set("role_description", role.GetDescription()),
-			)
-			return diag.FromErr(result.ErrorOrNil())
+			return diag.FromErr(flattenOrganizationMemberRole(data, role))
 		}
 	}
 
@@ -107,19 +92,15 @@ func readOrganizationMemberRole(_ context.Context, data *schema.ResourceData, me
 	return nil
 }
 
-func deleteOrganizationMemberRole(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationMemberRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 	roleID := data.Get("role_id").(string)
 
-	if err := api.Organization.DeleteMemberRoles(organizationID, userID, []string{roleID}); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+	if err := api.Organization.DeleteMemberRoles(ctx, organizationID, userID, []string{roleID}); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

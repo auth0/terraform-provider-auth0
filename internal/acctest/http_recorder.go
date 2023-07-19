@@ -116,10 +116,11 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 		!strings.Contains(i.Request.URL, "credentials") &&
 		i.Request.Method == http.MethodPatch
 
-	rotateSecret := strings.Contains(i.Request.URL, "clients") &&
-		strings.Contains(i.Request.URL, "/rotate-secret")
+	if create || read || update {
+		if i.Response.Code == http.StatusNotFound {
+			return
+		}
 
-	if create || read || update || rotateSecret {
 		var client management.Client
 		err := json.Unmarshal([]byte(i.Response.Body), &client)
 		require.NoError(t, err)

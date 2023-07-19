@@ -609,7 +609,6 @@ resource "auth0_connection" "okta" {
 
 ### Read-Only
 
-- `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled. Reading the enabled clients through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_connection` data source instead.
 - `id` (String) The ID of this resource.
 
 <a id="nestedblock--options"></a>
@@ -658,7 +657,7 @@ Optional:
 - `max_groups_to_retrieve` (String) Maximum number of groups to retrieve.
 - `messaging_service_sid` (String) SID for Copilot. Used when SMS Source is Copilot.
 - `metadata_url` (String) The URL of the SAML metadata document.
-- `metadata_xml` (String) The XML content for the SAML metadata document.
+- `metadata_xml` (String) The XML content for the SAML metadata document. Values within the xml will take precedence over other attributes set on the options block.
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
@@ -807,8 +806,8 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-# Connections can be imported using their ID.
+# This resource can be imported by specifying the connection ID.
 #
 # Example:
-terraform import auth0_connection.google con_a17f21fdb24d48a0
+terraform import auth0_connection.google "con_a17f21fdb24d48a0"
 ```

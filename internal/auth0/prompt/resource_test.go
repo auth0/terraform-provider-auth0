@@ -16,25 +16,25 @@ resource "auth0_prompt" "prompt" {
 
 const testAccPromptCreate = `
 resource "auth0_prompt" "prompt" {
-  universal_login_experience = "classic"
-  identifier_first = false
-  webauthn_platform_first_factor = false
+	universal_login_experience     = "classic"
+	identifier_first               = false
+	webauthn_platform_first_factor = false
 }
 `
 
 const testAccPromptUpdate = `
 resource "auth0_prompt" "prompt" {
-  universal_login_experience = "new"
-  identifier_first = true
-  webauthn_platform_first_factor = false
+	universal_login_experience     = "new"
+	identifier_first               = true
+	webauthn_platform_first_factor = false
 }
 `
 
 const testAccPromptUpdateAgain = `
 resource "auth0_prompt" "prompt" {
-  universal_login_experience = "new"
-  identifier_first = false
-  webauthn_platform_first_factor = true
+	universal_login_experience     = "new"
+	identifier_first               = false
+	webauthn_platform_first_factor = true
 }
 `
 

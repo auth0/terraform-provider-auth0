@@ -2,14 +2,13 @@ package connection
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -44,7 +43,7 @@ func NewClientResource() *schema.Resource {
 		ReadContext:   readConnectionClient,
 		DeleteContext: deleteConnectionClient,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "connection_id", "client_id"),
+			StateContext: internalSchema.ImportResourceGroupID("connection_id", "client_id"),
 		},
 		Description: "With this resource, you can enable a single client on a connection.",
 	}
@@ -59,39 +58,33 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	clientID := data.Get("client_id").(string)
 	enabledClients := append(connection.GetEnabledClients(), clientID)
+	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
 
-	if err := api.Connection.Update(
-		connectionID,
-		&management.Connection{EnabledClients: &enabledClients},
-	); err != nil {
+	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(connectionID + ":" + clientID)
+	internalSchema.SetResourceGroupID(data, connectionID, clientID)
 
 	return readConnectionClient(ctx, data, meta)
 }
 
-func readConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	found := false
@@ -105,15 +98,10 @@ func readConnectionClient(_ context.Context, data *schema.ResourceData, meta int
 		return nil
 	}
 
-	result := multierror.Append(
-		data.Set("name", connection.GetName()),
-		data.Set("strategy", connection.GetStrategy()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenConnectionClient(data, connection))
 }
 
-func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
@@ -122,13 +110,9 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(connectionID)
+	connection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	clientID := data.Get("client_id").(string)
@@ -140,17 +124,11 @@ func deleteConnectionClient(_ context.Context, data *schema.ResourceData, meta i
 		enabledClients = append(enabledClients, enabledClientID)
 	}
 
-	if err := api.Connection.Update(
-		connectionID,
-		&management.Connection{EnabledClients: &enabledClients},
-	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
+
+	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId("")
 	return nil
 }

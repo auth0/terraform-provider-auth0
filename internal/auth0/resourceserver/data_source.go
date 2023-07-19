@@ -2,11 +2,8 @@ package resourceserver
 
 import (
 	"context"
-	"net/http"
 	"net/url"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -25,6 +22,7 @@ func NewDataSource() *schema.Resource {
 
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
+
 	dataSourceSchema["resource_server_id"] = &schema.Schema{
 		Type:         schema.TypeString,
 		Optional:     true,
@@ -32,30 +30,46 @@ func dataSourceSchema() map[string]*schema.Schema {
 		AtLeastOneOf: []string{"resource_server_id", "identifier"},
 	}
 
-	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "identifier")
-	dataSourceSchema["identifier"].Description = "The unique identifier for the resource server. " +
-		"If not provided, `resource_server_id` must be set."
-	dataSourceSchema["identifier"].AtLeastOneOf = []string{"resource_server_id", "identifier"}
+	dataSourceSchema["identifier"] = &schema.Schema{
+		Type:     schema.TypeString,
+		Optional: true,
+		Description: "Unique identifier for the resource server. Used as the audience parameter " +
+			"for authorization calls. If not provided, `resource_server_id` must be set. ",
+		AtLeastOneOf: []string{"resource_server_id", "identifier"},
+	}
 
-	dataSourceSchema["scopes"].Deprecated = ""
-	dataSourceSchema["scopes"].Description = "List of permissions (scopes) used by this resource server."
+	dataSourceSchema["scopes"] = &schema.Schema{
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "List of permissions (scopes) used by this resource server.",
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"name": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Name of the permission (scope). Examples include `read:appointments` or `delete:appointments`.",
+				},
+				"description": {
+					Type:        schema.TypeString,
+					Computed:    true,
+					Description: "Description of the permission (scope).",
+				},
+			},
+		},
+	}
 
 	return dataSourceSchema
 }
 
-func readResourceServerForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readResourceServerForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	resourceServerID := data.Get("resource_server_id").(string)
 	if resourceServerID == "" {
 		resourceServerID = url.PathEscape(data.Get("identifier").(string))
 	}
 
 	api := meta.(*config.Config).GetAPI()
-	resourceServer, err := api.ResourceServer.Read(resourceServerID)
+	resourceServer, err := api.ResourceServer.Read(ctx, resourceServerID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
@@ -63,23 +77,5 @@ func readResourceServerForDataSource(_ context.Context, data *schema.ResourceDat
 	// as both can be used to find a resource server with the Read() func.
 	data.SetId(resourceServer.GetID())
 
-	result := multierror.Append(
-		data.Set("name", resourceServer.GetName()),
-		data.Set("identifier", resourceServer.GetIdentifier()),
-		data.Set("token_lifetime", resourceServer.GetTokenLifetime()),
-		data.Set("allow_offline_access", resourceServer.GetAllowOfflineAccess()),
-		data.Set("token_lifetime_for_web", resourceServer.GetTokenLifetimeForWeb()),
-		data.Set("signing_alg", resourceServer.GetSigningAlgorithm()),
-		data.Set("signing_secret", resourceServer.GetSigningSecret()),
-		data.Set(
-			"skip_consent_for_verifiable_first_party_clients",
-			resourceServer.GetSkipConsentForVerifiableFirstPartyClients(),
-		),
-		data.Set("verification_location", resourceServer.GetVerificationLocation()),
-		data.Set("enforce_policies", resourceServer.GetEnforcePolicies()),
-		data.Set("token_dialect", resourceServer.GetTokenDialect()),
-		data.Set("scopes", flattenResourceServerScopes(resourceServer.GetScopes())),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenResourceServerForDataSource(data, resourceServer))
 }

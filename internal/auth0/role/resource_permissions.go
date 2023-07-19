@@ -2,15 +2,14 @@ package role
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -86,13 +85,10 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(rmPermissions) > 0 {
-		if err := api.Role.RemovePermissions(roleID, rmPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
+		if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
+			if !internalError.IsStatusNotFound(err) {
+				return diag.FromErr(err)
 			}
-
-			return diag.FromErr(err)
 		}
 	}
 
@@ -106,12 +102,7 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(addPermissions) > 0 {
-		if err := api.Role.AssociatePermissions(roleID, addPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
+		if err := api.Role.AssociatePermissions(ctx, roleID, addPermissions); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -121,27 +112,30 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	return readRolePermissions(ctx, data, meta)
 }
 
-func readRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.Role.Permissions(data.Id())
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var permissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
-		return diag.FromErr(err)
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	result := multierror.Append(
-		data.Set("role_id", data.Id()),
-		data.Set("permissions", flattenRolePermissions(permissions.Permissions)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenRolePermissions(data, permissions))
 }
 
-func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
@@ -158,12 +152,8 @@ func deleteRolePermissions(_ context.Context, data *schema.ResourceData, meta in
 		rmPermissions = append(rmPermissions, role)
 	}
 
-	if err := api.Role.RemovePermissions(roleID, rmPermissions); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+	if err := api.Role.RemovePermissions(ctx, roleID, rmPermissions); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

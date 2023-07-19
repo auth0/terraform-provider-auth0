@@ -27,7 +27,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 
 ### Optional
 
-- `identifier` (String) The unique identifier for the resource server. If not provided, `resource_server_id` must be set.
+- `identifier` (String) Unique identifier for the resource server. Used as the audience parameter for authorization calls. If not provided, `resource_server_id` must be set.
 - `resource_server_id` (String) The ID of the resource server. If not provided, `identifier` must be set.
 
 ### Read-Only
@@ -51,6 +51,6 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 Read-Only:
 
 - `description` (String)
-- `value` (String)
+- `name` (String)
 
 

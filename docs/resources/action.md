@@ -13,7 +13,7 @@ Actions are secure, tenant-specific, versioned functions written in Node.js that
 ```terraform
 resource "auth0_action" "my_action" {
   name    = format("Test Action %s", timestamp())
-  runtime = "node16"
+  runtime = "node18"
   deploy  = true
   code    = <<-EOT
   /**
@@ -67,7 +67,7 @@ resource "auth0_action" "my_action" {
 
 - `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedblock--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
-- `runtime` (String) The Node runtime. Defaults to `node12`. Possible values are: `node12`, `node16` or `node18`.
+- `runtime` (String) The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).
 - `secrets` (Block List) List of secrets that are included in an action or a version of an action. (see [below for nested schema](#nestedblock--secrets))
 
 ### Read-Only
@@ -106,10 +106,10 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-# An action can be imported using the action's ID.
+# This resource can be imported by specifying the action ID.
 #
 # Example:
-terraform import auth0_action.my_action 12f4f21b-017a-319d-92e7-2291c1ca36c4
+terraform import auth0_action.my_action "12f4f21b-017a-319d-92e7-2291c1ca36c4"
 ```
 
 ~> For security reasons importing `secrets` is not allowed. Therefore, it is advised to import

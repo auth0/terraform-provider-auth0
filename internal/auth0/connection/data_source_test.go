@@ -10,6 +10,12 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
+const testAccDataConnectionNonExistentID = `
+data "auth0_connection" "test" {
+	connection_id = "con_xxxxxxxxxxxxxxxx"
+}
+`
+
 const testAccGivenAConnection = `
 resource "auth0_connection" "my_connection" {
 	name     = "Acceptance-Test-Connection-{{.testName}}"
@@ -59,9 +65,13 @@ func TestAccDataSourceConnectionRequiredArguments(t *testing.T) {
 	})
 }
 
-func TestAccDataSourceConnectionByName(t *testing.T) {
+func TestAccDataSourceConnection(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccDataConnectionNonExistentID, t.Name()),
+				ExpectError: regexp.MustCompile("404 Not Found: The connection does not exist"),
+			},
 			{
 				Config: acctest.ParseTestName(testAccDataConnectionConfigByName, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -77,13 +87,6 @@ func TestAccDataSourceConnectionByName(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_connection.test", "enabled_clients.#", "1"),
 				),
 			},
-		},
-	})
-}
-
-func TestAccDataSourceConnectionByID(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
 			{
 				Config: acctest.ParseTestName(testAccDataConnectionConfigByID, t.Name()),
 				Check: resource.ComposeTestCheckFunc(

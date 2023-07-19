@@ -1,13 +1,16 @@
 package action
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -19,6 +22,10 @@ func expandAction(config cty.Value) *management.Action {
 		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
 		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
 		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
+	}
+
+	if action.GetRuntime() == "node18" {
+		action.Runtime = auth0.String("node18-actions")
 	}
 
 	return action
@@ -96,14 +103,14 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	return triggerBindings
 }
 
-func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Management) diag.Diagnostics {
+func preventErasingUnmanagedSecrets(ctx context.Context, d *schema.ResourceData, api *management.Management) diag.Diagnostics {
 	if !d.HasChange("secrets") {
 		return nil
 	}
 
-	preUpdateAction, err := api.Action.Read(d.Id())
+	preUpdateAction, err := api.Action.Read(ctx, d.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	// We need to also include the secrets that we're about to remove

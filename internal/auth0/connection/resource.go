@@ -2,14 +2,12 @@ package connection
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_connection resource.
@@ -27,111 +25,59 @@ func NewResource() *schema.Resource {
 			"passwordless authentication methods. This resource allows you to configure " +
 			"and manage connections to be used with your clients and users.",
 		Schema:        resourceSchema,
-		SchemaVersion: 2,
-		StateUpgraders: []schema.StateUpgrader{
-			{
-				Type:    connectionSchemaV0().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV0,
-				Version: 0,
-			},
-			{
-				Type:    connectionSchemaV1().CoreConfigSchema().ImpliedType(),
-				Upgrade: connectionSchemaUpgradeV1,
-				Version: 1,
-			},
-		},
+		SchemaVersion: 3,
 	}
 }
 
 func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(d, api)
+	connection, diagnostics := expandConnection(ctx, d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	if err := api.Connection.Create(connection); err != nil {
-		diagnostics = append(diagnostics, diag.FromErr(err)...)
-		return diagnostics
+	if err := api.Connection.Create(ctx, connection); err != nil {
+		return diag.FromErr(err)
 	}
 
 	d.SetId(connection.GetID())
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
-	return diagnostics
+	return readConnection(ctx, d, m)
 }
 
-func readConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, err := api.Connection.Read(d.Id())
+	connection, err := api.Connection.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	connectionOptions, diags := flattenConnectionOptions(d, connection.Options)
-	if diags.HasError() {
-		return diags
-	}
-
-	result := multierror.Append(
-		d.Set("name", connection.GetName()),
-		d.Set("display_name", connection.GetDisplayName()),
-		d.Set("is_domain_connection", connection.GetIsDomainConnection()),
-		d.Set("strategy", connection.GetStrategy()),
-		d.Set("options", connectionOptions),
-		d.Set("realms", connection.GetRealms()),
-		d.Set("metadata", connection.GetMetadata()),
-		d.Set("enabled_clients", connection.GetEnabledClients()),
-	)
-
-	switch connection.GetStrategy() {
-	case management.ConnectionStrategyGoogleApps,
-		management.ConnectionStrategyOIDC,
-		management.ConnectionStrategyAD,
-		management.ConnectionStrategyAzureAD,
-		management.ConnectionStrategySAML,
-		management.ConnectionStrategyADFS:
-		result = multierror.Append(result, d.Set("show_as_button", connection.GetShowAsButton()))
-	}
-
-	diags = append(diags, diag.FromErr(result.ErrorOrNil())...)
-	return diags
+	return flattenConnection(d, connection)
 }
 
 func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(d, api)
+	connection, diagnostics := expandConnection(ctx, d, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	if err := api.Connection.Update(d.Id(), connection); err != nil {
-		diagnostics = append(diagnostics, diag.FromErr(err)...)
-		return diagnostics
+	if err := api.Connection.Update(ctx, d.Id(), connection); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	diagnostics = append(diagnostics, readConnection(ctx, d, m)...)
-	return diagnostics
+	return readConnection(ctx, d, m)
 }
 
-func deleteConnection(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.Connection.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.Connection.Delete(ctx, d.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }

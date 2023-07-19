@@ -3,17 +3,16 @@ package organization
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -66,13 +65,8 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Get("organization_id").(string)
 
-	alreadyEnabledConnections, err := api.Organization.Connections(organizationID)
+	alreadyEnabledConnections, err := api.Organization.Connections(ctx, organizationID)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
@@ -93,9 +87,8 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 		var result *multierror.Error
 
 		for _, connection := range connectionsToAdd {
-			if err := api.Organization.AddConnection(organizationID, connection); err != nil {
-				result = multierror.Append(result, err)
-			}
+			err := api.Organization.AddConnection(ctx, organizationID, connection)
+			result = multierror.Append(result, err)
 		}
 
 		if result.ErrorOrNil() != nil {
@@ -106,25 +99,15 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationConnections(ctx, data, meta)
 }
 
-func readOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connections, err := api.Organization.Connections(data.Id())
+	connections, err := api.Organization.Connections(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("organization_id", data.Id()),
-		data.Set("enabled_connections", flattenOrganizationConnections(connections.OrganizationConnections)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationConnections(data, connections.OrganizationConnections))
 }
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -132,36 +115,30 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
-	var result *multierror.Error
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
+	var result *multierror.Error
 
 	for _, rmConnection := range toRemove {
 		connection := rmConnection.(map[string]interface{})
+		connectionID := connection["connection_id"].(string)
 
-		if err := api.Organization.DeleteConnection(organizationID, connection["connection_id"].(string)); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
-			result = multierror.Append(result, err)
+		err := api.Organization.DeleteConnection(ctx, organizationID, connectionID)
+		if internalError.IsStatusNotFound(err) {
+			err = nil
 		}
+
+		result = multierror.Append(result, err)
 	}
 
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
-
-		if err := api.Organization.AddConnection(organizationID, &management.OrganizationConnection{
+		connectionToAdd := &management.OrganizationConnection{
 			ConnectionID:            auth0.String(connection["connection_id"].(string)),
 			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
-		}); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
-			result = multierror.Append(result, err)
 		}
+
+		err := api.Organization.AddConnection(ctx, organizationID, connectionToAdd)
+		result = multierror.Append(result, err)
 	}
 
 	if result.ErrorOrNil() != nil {
@@ -171,25 +148,22 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 	return readOrganizationConnections(ctx, data, meta)
 }
 
-func deleteOrganizationConnections(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	organizationID := data.Id()
-
+	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	var result *multierror.Error
 
-	connections := expandOrganizationConnections(data.GetRawState().GetAttr("enabled_connections"))
 	for _, conn := range connections {
-		err := api.Organization.DeleteConnection(organizationID, conn.GetConnectionID())
+		err := api.Organization.DeleteConnection(ctx, data.Id(), conn.GetConnectionID())
+		if internalError.IsStatusNotFound(err) {
+			err = nil
+		}
+
 		result = multierror.Append(result, err)
 	}
 
-	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
-	}
-
-	data.SetId("")
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }
 
 func guardAgainstErasingUnwantedConnections(
@@ -225,19 +199,4 @@ func guardAgainstErasingUnwantedConnections(
 					"Run: 'terraform import auth0_organization_connections.<given-name> %s'.", organizationID),
 		},
 	}
-}
-
-func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConnection {
-	connections := make([]*management.OrganizationConnection, 0)
-
-	cfg.ForEachElement(func(_ cty.Value, connectionCfg cty.Value) (stop bool) {
-		connections = append(connections, &management.OrganizationConnection{
-			ConnectionID:            value.String(connectionCfg.GetAttr("connection_id")),
-			AssignMembershipOnLogin: value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
-		})
-
-		return stop
-	})
-
-	return connections
 }

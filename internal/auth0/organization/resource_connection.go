@@ -2,14 +2,13 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -22,7 +21,7 @@ func NewConnectionResource() *schema.Resource {
 		UpdateContext: updateOrganizationConnection,
 		DeleteContext: deleteOrganizationConnection,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "organization_id", "connection_id"),
+			StateContext: internalSchema.ImportResourceGroupID("organization_id", "connection_id"),
 		},
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
@@ -70,37 +69,27 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 		AssignMembershipOnLogin: &assignMembershipOnLogin,
 	}
 
-	if err := api.Organization.AddConnection(organizationID, organizationConnection); err != nil {
+	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(organizationID + ":" + connectionID)
+	internalSchema.SetResourceGroupID(data, organizationID, connectionID)
 
 	return readOrganizationConnection(ctx, data, meta)
 }
 
-func readOrganizationConnection(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 	connectionID := data.Get("connection_id").(string)
 
-	organizationConnection, err := api.Organization.Connection(organizationID, connectionID)
+	organizationConnection, err := api.Organization.Connection(ctx, organizationID, connectionID)
 	if err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("assign_membership_on_login", organizationConnection.GetAssignMembershipOnLogin()),
-		data.Set("name", organizationConnection.GetConnection().GetName()),
-		data.Set("strategy", organizationConnection.GetConnection().GetStrategy()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationConnection(data, organizationConnection))
 }
 
 func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -115,28 +104,22 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 		AssignMembershipOnLogin: &assignMembershipOnLogin,
 	}
 
-	if err := api.Organization.UpdateConnection(organizationID, connectionID, organizationConnection); err != nil {
-		return diag.FromErr(err)
+	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readOrganizationConnection(ctx, data, meta)
 }
 
-func deleteOrganizationConnection(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
 	connectionID := data.Get("connection_id").(string)
 
-	if err := api.Organization.DeleteConnection(organizationID, connectionID); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.Organization.DeleteConnection(ctx, organizationID, connectionID); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	data.SetId("")
 	return nil
 }

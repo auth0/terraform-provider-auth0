@@ -2,16 +2,13 @@ package customdomain
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_custom_domain resource.
@@ -104,7 +101,8 @@ func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
-	if err := api.CustomDomain.Create(customDomain); err != nil {
+
+	if err := api.CustomDomain.Create(ctx, customDomain); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -113,79 +111,35 @@ func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface
 	return readCustomDomain(ctx, d, m)
 }
 
-func readCustomDomain(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	customDomain, err := api.CustomDomain.Read(d.Id())
+	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("domain", customDomain.GetDomain()),
-		d.Set("type", customDomain.GetType()),
-		d.Set("primary", customDomain.GetPrimary()),
-		d.Set("status", customDomain.GetStatus()),
-		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
-		d.Set("custom_client_ip_header", customDomain.GetCustomClientIPHeader()),
-		d.Set("tls_policy", customDomain.GetTLSPolicy()),
-	)
-
-	if customDomain.Verification != nil {
-		result = multierror.Append(result, d.Set("verification", []map[string]interface{}{
-			{"methods": customDomain.Verification.Methods},
-		}))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenCustomDomain(d, customDomain))
 }
 
 func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	customDomain := expandCustomDomain(d)
-	if err := api.CustomDomain.Update(d.Id(), customDomain); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+
+	if err := api.CustomDomain.Update(ctx, d.Id(), customDomain); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readCustomDomain(ctx, d, m)
 }
 
-func deleteCustomDomain(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.CustomDomain.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.CustomDomain.Delete(ctx, d.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
-}
-
-func expandCustomDomain(d *schema.ResourceData) *management.CustomDomain {
-	config := d.GetRawConfig()
-
-	customDomain := &management.CustomDomain{
-		TLSPolicy:            value.String(config.GetAttr("tls_policy")),
-		CustomClientIPHeader: value.String(config.GetAttr("custom_client_ip_header")),
-	}
-
-	if d.IsNewResource() {
-		customDomain.Domain = value.String(config.GetAttr("domain"))
-		customDomain.Type = value.String(config.GetAttr("type"))
-	}
-
-	return customDomain
 }

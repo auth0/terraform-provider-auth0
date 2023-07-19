@@ -2,15 +2,14 @@ package user
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -86,13 +85,10 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(rmPermissions) > 0 {
-		if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
+		if err := api.User.RemovePermissions(ctx, userID, rmPermissions); err != nil {
+			if !internalError.IsStatusNotFound(err) {
+				return diag.FromErr(err)
 			}
-
-			return diag.FromErr(err)
 		}
 	}
 
@@ -106,12 +102,7 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	}
 
 	if len(addPermissions) > 0 {
-		if err := api.User.AssignPermissions(userID, addPermissions); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
+		if err := api.User.AssignPermissions(ctx, userID, addPermissions); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -121,28 +112,18 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 	return readUserPermissions(ctx, data, meta)
 }
 
-func readUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.User.Permissions(data.Id())
+	permissions, err := api.User.Permissions(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("user_id", data.Id()),
-		data.Set("permissions", flattenUserPermissions(permissions)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenUserPermissions(data, permissions.Permissions))
 }
 
-func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	userID := data.Get("user_id").(string)
@@ -158,12 +139,8 @@ func deleteUserPermissions(_ context.Context, data *schema.ResourceData, meta in
 		})
 	}
 
-	if err := api.User.RemovePermissions(userID, rmPermissions); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+	if err := api.User.RemovePermissions(ctx, userID, rmPermissions); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

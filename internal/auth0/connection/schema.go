@@ -1,14 +1,8 @@
 package connection
 
 import (
-	"context"
-	"log"
-	"strconv"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-
-	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 var resourceSchema = map[string]*schema.Schema{
@@ -701,7 +695,7 @@ var resourceSchema = map[string]*schema.Schema{
 				"metadata_xml": {
 					Type:          schema.TypeString,
 					Optional:      true,
-					Description:   "The XML content for the SAML metadata document.",
+					Description:   "The XML content for the SAML metadata document. Values within the xml will take precedence over other attributes set on the options block.",
 					ConflictsWith: []string{"options.0.metadata_url"},
 				},
 				"metadata_url": {
@@ -774,105 +768,4 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
-	"enabled_clients": {
-		Type: schema.TypeSet,
-		Elem: &schema.Schema{
-			Type: schema.TypeString,
-		},
-		Computed: true,
-		Description: "IDs of the clients for which the connection is enabled. " +
-			"Reading the enabled clients through this attribute is deprecated and it will be removed in a future major version. Use the `auth0_connection` data source instead.",
-	},
-}
-
-func connectionSchemaV0() *schema.Resource {
-	s := internalSchema.Clone(resourceSchema)
-	s["strategy_version"] = &schema.Schema{
-		Type:     schema.TypeString,
-		Optional: true,
-		Computed: true,
-	}
-	return &schema.Resource{Schema: s}
-}
-
-func connectionSchemaV1() *schema.Resource {
-	s := internalSchema.Clone(resourceSchema)
-	s["validation"] = &schema.Schema{
-		Type:     schema.TypeMap,
-		Elem:     &schema.Schema{Type: schema.TypeString},
-		Optional: true,
-	}
-	return &schema.Resource{Schema: s}
-}
-
-func connectionSchemaUpgradeV0(
-	_ context.Context,
-	state map[string]interface{},
-	_ interface{},
-) (map[string]interface{}, error) {
-	options, ok := state["options"]
-	if !ok {
-		return state, nil
-	}
-
-	optionsList, ok := options.([]interface{})
-	if ok && len(optionsList) > 0 {
-		m := optionsList[0].(map[string]interface{})
-
-		strategyVersion, ok := m["strategy_version"]
-		if !ok {
-			return state, nil
-		}
-
-		strategyVersionString, ok := strategyVersion.(string)
-		if !ok {
-			return state, nil
-		}
-
-		strategyVersionInt, err := strconv.Atoi(strategyVersionString)
-		if err == nil {
-			m["strategy_version"] = strategyVersionInt
-		} else {
-			m["strategy_version"] = 0
-		}
-
-		state["options"] = []interface{}{m}
-
-		log.Printf("[DEBUG] Schema upgrade: options.strategy_version has been migrated to %d", strategyVersionInt)
-	}
-
-	return state, nil
-}
-
-func connectionSchemaUpgradeV1(
-	_ context.Context,
-	state map[string]interface{},
-	_ interface{},
-) (map[string]interface{}, error) {
-	options, ok := state["options"]
-	if !ok {
-		return state, nil
-	}
-
-	optionsList, ok := options.([]interface{})
-	if ok && len(optionsList) > 0 {
-		m := optionsList[0].(map[string]interface{})
-
-		validationOption, ok := m["validation"]
-		if !ok {
-			return state, nil
-		}
-
-		m["validation"] = []map[string][]interface{}{
-			{
-				"username": []interface{}{validationOption},
-			},
-		}
-
-		state["options"] = []interface{}{m}
-
-		log.Print("[DEBUG] Schema upgrade: options.validation has been migrated to options.validation.user")
-	}
-
-	return state, nil
 }

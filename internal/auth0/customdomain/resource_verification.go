@@ -3,17 +3,14 @@ package customdomain
 import (
 	"context"
 	"fmt"
-	"log"
-	"net/http"
 	"time"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewVerificationResource will return a new auth0_custom_domain_verification resource.
@@ -60,7 +57,7 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 	api := m.(*config.Config).GetAPI()
 
 	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		customDomainVerification, err := api.CustomDomain.Verify(d.Get("custom_domain_id").(string))
+		customDomainVerification, err := api.CustomDomain.Verify(ctx, d.Get("custom_domain_id").(string))
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
@@ -70,8 +67,6 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 				fmt.Errorf("custom domain has status %q", customDomainVerification.GetStatus()),
 			)
 		}
-
-		log.Printf("[INFO] Custom domain %s verified", customDomainVerification.GetDomain())
 
 		d.SetId(customDomainVerification.GetID())
 
@@ -91,27 +86,17 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 	return readCustomDomainVerification(ctx, d, m)
 }
 
-func readCustomDomainVerification(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	customDomain, err := api.CustomDomain.Read(d.Id())
+	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("custom_domain_id", customDomain.GetID()),
-		d.Set("origin_domain_name", customDomain.GetOriginDomainName()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenCustomDomainVerification(d, customDomain))
 }
 
-func deleteCustomDomainVerification(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
-	d.SetId("")
+func deleteCustomDomainVerification(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
 }

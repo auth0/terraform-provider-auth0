@@ -2,16 +2,15 @@ package logstream
 
 import (
 	"context"
-	"net/http"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 var validLogStreamTypes = []string{
@@ -65,7 +64,12 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
-					" If omitted or empty, all events will be delivered.",
+					" If omitted or empty, all events will be delivered. " +
+					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +
+					"`auth.login.notification`, `auth.login.success`, `auth.logout.fail`, `auth.logout.success`, " +
+					"`auth.signup.fail`, `auth.signup.success`, `auth.silent_auth.fail`, `auth.silent_auth.success`, " +
+					"`auth.token_exchange.fail`, `auth.token_exchange.success`, `management.fail`, `management.success`, " +
+					"`system.notification`, `user.fail`, `user.notification`, `user.success`, `other`.",
 				Elem: &schema.Schema{
 					Type: schema.TypeMap,
 					Elem: &schema.Schema{
@@ -266,7 +270,8 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	api := m.(*config.Config).GetAPI()
 
 	logStream := expandLogStream(d)
-	if err := api.LogStream.Create(logStream); err != nil {
+
+	if err := api.LogStream.Create(ctx, logStream); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -275,60 +280,43 @@ func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{})
 	// The Management API only allows updating a log stream's status.
 	// Therefore, if the status field was present in the configuration,
 	// we perform an additional operation to modify it.
-	status := d.Get("status").(string)
-	if status != "" && status != logStream.GetStatus() {
-		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: &status}); err != nil {
-			return diag.FromErr(err)
-		}
+	if status := d.Get("status").(string); status != "" && status != logStream.GetStatus() {
+		logStreamWithStatus := &management.LogStream{Status: &status}
+		return diag.FromErr(api.LogStream.Update(ctx, logStream.GetID(), logStreamWithStatus))
 	}
 
 	return readLogStream(ctx, d, m)
 }
 
-func readLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	logStream, err := api.LogStream.Read(d.Id())
+	logStream, err := api.LogStream.Read(ctx, d.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", logStream.GetName()),
-		d.Set("status", logStream.GetStatus()),
-		d.Set("type", logStream.GetType()),
-		d.Set("filters", logStream.Filters),
-		d.Set("sink", flattenLogStreamSink(d, logStream.Sink)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenLogStream(d, logStream))
 }
 
 func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
 	logStream := expandLogStream(d)
-	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
-		return diag.FromErr(err)
+
+	if err := api.LogStream.Update(ctx, d.Id(), logStream); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
 	return readLogStream(ctx, d, m)
 }
 
-func deleteLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.LogStream.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
+	if err := api.LogStream.Delete(ctx, d.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(d, err))
 	}
 
-	d.SetId("")
 	return nil
 }

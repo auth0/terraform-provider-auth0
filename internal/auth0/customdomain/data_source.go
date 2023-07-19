@@ -3,7 +3,6 @@ package customdomain
 import (
 	"context"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -24,10 +23,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
 }
 
-func readCustomDomainForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	customDomains, err := api.CustomDomain.List()
+	customDomains, err := api.CustomDomain.List(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -38,21 +37,5 @@ func readCustomDomainForDataSource(_ context.Context, data *schema.ResourceData,
 
 	data.SetId(customDomain.GetID())
 
-	result := multierror.Append(
-		data.Set("domain", customDomain.GetDomain()),
-		data.Set("type", customDomain.GetType()),
-		data.Set("primary", customDomain.GetPrimary()),
-		data.Set("status", customDomain.GetStatus()),
-		data.Set("origin_domain_name", customDomain.GetOriginDomainName()),
-		data.Set("custom_client_ip_header", customDomain.GetCustomClientIPHeader()),
-		data.Set("tls_policy", customDomain.GetTLSPolicy()),
-	)
-
-	if customDomain.Verification != nil {
-		result = multierror.Append(result, data.Set("verification", []map[string]interface{}{
-			{"methods": customDomain.Verification.Methods},
-		}))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenCustomDomain(data, customDomain))
 }

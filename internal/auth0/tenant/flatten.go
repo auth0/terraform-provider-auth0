@@ -2,46 +2,29 @@ package tenant
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// FlattenTenantChangePassword flattens the change password page data.
-func FlattenTenantChangePassword(changePassword *management.TenantChangePassword) []interface{} {
-	if changePassword == nil {
-		return nil
-	}
+func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
+	result := multierror.Append(
+		data.Set("default_audience", tenant.GetDefaultAudience()),
+		data.Set("default_directory", tenant.GetDefaultDirectory()),
+		data.Set("default_redirection_uri", tenant.GetDefaultRedirectionURI()),
+		data.Set("friendly_name", tenant.GetFriendlyName()),
+		data.Set("picture_url", tenant.GetPictureURL()),
+		data.Set("support_email", tenant.GetSupportEmail()),
+		data.Set("support_url", tenant.GetSupportURL()),
+		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
+		data.Set("session_lifetime", tenant.GetSessionLifetime()),
+		data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()),
+		data.Set("sandbox_version", tenant.GetSandboxVersion()),
+		data.Set("enabled_locales", tenant.GetEnabledLocales()),
+		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
+		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
+	)
 
-	m := make(map[string]interface{})
-	m["enabled"] = changePassword.Enabled
-	m["html"] = changePassword.HTML
-
-	return []interface{}{m}
-}
-
-// FlattenTenantGuardianMFAPage flattens the guardian mfa page data.
-func FlattenTenantGuardianMFAPage(mfa *management.TenantGuardianMFAPage) []interface{} {
-	if mfa == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["enabled"] = mfa.Enabled
-	m["html"] = mfa.HTML
-
-	return []interface{}{m}
-}
-
-// FlattenTenantErrorPage flattens the error page data.
-func FlattenTenantErrorPage(errorPage *management.TenantErrorPage) []interface{} {
-	if errorPage == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["html"] = errorPage.HTML
-	m["show_log_link"] = errorPage.ShowLogLink
-	m["url"] = errorPage.URL
-
-	return []interface{}{m}
+	return result.ErrorOrNil()
 }
 
 func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
@@ -55,7 +38,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
-	m["universal_login"] = flags.UniversalLogin
 	m["enable_legacy_logs_search_v2"] = flags.EnableLegacyLogsSearchV2
 	m["disable_clickjack_protection_headers"] = flags.DisableClickjackProtectionHeaders
 	m["enable_public_signup_user_exists_error"] = flags.EnablePublicSignupUserExistsError
@@ -73,25 +55,6 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["dashboard_insights_view"] = flags.DashboardInsightsView
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
-
-	return []interface{}{m}
-}
-
-func flattenTenantUniversalLogin(universalLogin *management.TenantUniversalLogin) []interface{} {
-	if universalLogin == nil {
-		return nil
-	}
-	if universalLogin.Colors == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["colors"] = []interface{}{
-		map[string]interface{}{
-			"primary":         universalLogin.Colors.Primary,
-			"page_background": universalLogin.Colors.PageBackground,
-		},
-	}
 
 	return []interface{}{m}
 }

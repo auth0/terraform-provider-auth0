@@ -10,7 +10,7 @@
 
 ## Upgrading from v0.x → v1.0
 
-Several breaking changes have been introduced with v1.0. Please refer to the sections below on how to migration from v0.x.
+Several breaking changes have been introduced with v1.0. Please refer to the sections below on how to migrate from v0.x.
 
 - [Importing Multi-ID Resources](#importing-multi-id-resources)
 - [Global Client](#global-client)
@@ -33,7 +33,7 @@ Several breaking changes have been introduced with v1.0. Please refer to the sec
 
 Importing of resources that are comprised of multiple IDs (ex: `auth0_user_role` - user ID and role ID) will be
 separated by a double colon (`::`) instead of the previous single colon `:` separator. This change establishes a
-convention for all resource import while enabling IDs with colons in them.
+convention for all resource imports while enabling IDs with colons in them.
 
 <table>
 <tr>
@@ -62,7 +62,7 @@ terraform import auth0_user_role.user_role "auth0|111111111111111111111111::role
 
 The `auth0_global_client` resource and data source have been removed. They primarily managed the custom login page via
 the `custom_login_page` and `custom_login_page_on` attributes. Instead, this functionality has moved to the
-`auth0_pages` resource and datasource. This change elevates the custom login pages as a more prominent feature.
+`auth0_pages` resource and data source. This change elevates the custom login pages as a more prominent feature.
 
 <table>
 <tr>
@@ -218,7 +218,7 @@ resource "auth0_client" "my_client" {
 ### Email Provider
 
 The `auth0_email` resource has been renamed to `auth0_email_provider` to disambiguate from email templates and generally
-provide a descriptive name and the `api_user` field has been removed.
+provide a more descriptive name. Also, the `api_user` field has been removed.
 
 <table>
 <tr>
@@ -253,7 +253,7 @@ Rotation of client secrets through the `client_secret_rotation_trigger` property
 removed. Instead, follow the [Client Secret Rotation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation)
 to achieve this functionality.
 
-The removal of the `client_secret_rotation_trigger` property ensures best practice for a more secure Auth0 tenant.
+The removal of the `client_secret_rotation_trigger` property follows the best practices for a more secure Auth0 tenant.
 
 ### Reading Client Secret
 
@@ -283,11 +283,11 @@ output "my_client_secret" {
 
 ```terraform
 data "auth0_client" "my_client" {
-  client_id = auth0_client.my_client.client_secret
+  client_id = auth0_client.my_client.id
 }
 
 output "my_client_secret" {
-  value = data.auth0_client.my_client
+  value = data.auth0_client.my_client.client_secret
 }
 ```
 
@@ -372,7 +372,7 @@ resource "auth0_trigger_actions" "login_flow" {
 
 The `roles` property on the `auth0_organization_member` resource has been removed. To manage an organization member's
 roles, leverage the `auth0_organization_member_role` or `auth0_organization_member_roles` resources instead.
-The`auth0_organization_member_role` resource (singular) manages a 1:1 relationship between a member and a role while the
+The `auth0_organization_member_role` resource (singular) manages a 1:1 relationship between a member and a role while the
 `auth0_organization_member_roles` resource (plural) manages a 1:many relationship between a member and their roles.
 
 <table>
@@ -471,7 +471,7 @@ resource "auth0_organization_member_role" "role2" {
 The `token_endpoint_auth_method` property on the `auth0_client` resource has been removed. Managing a client's
 authentication method can be achieved through the `auth0_client_credentials` resource instead.
 
-Further, it is generally recommended to manage any client authentication configuration, including client secret and
+Furthermore, it is generally recommended to manage any client authentication configuration, including client secret and
 public key through the `auth0_client_credentials` resource.
 
 <table>
@@ -673,7 +673,7 @@ resource auth0_user_role user_owner {
 
 ### Role Permissions
 
-The `permissions` property on the `auth0_role` resource has been removed. Managing permissions associated with a role,
+The `permissions` property on the `auth0_role` resource has been removed. To manage permissions associated with a role,
 leverage the `auth0_role_permission` and `auth0_role_permissions` resources instead. The `auth0_role_permission`
 resource (singular) manages a 1:1 relationship between a role and a permission while the `auth0_role_permissions`
 resource (plural) manages a 1:many relationship between a role and its permissions.
@@ -820,7 +820,7 @@ resource "auth0_client_grant" "my_client_grant" {
 
 The Node 18 Beta runtime option for actions has been removed.
 
-Now, users will be opt-in to the GA version of Node 18 actions runtime.
+Now, you will be opted in to the GA version of Node 18 actions runtime instead.
 
 [Back to Table of Contents](#migration-guide)
 

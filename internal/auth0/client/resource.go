@@ -255,11 +255,12 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"android": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: "Configuration settings for Android native apps.",
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							Description:  "Configuration settings for Android native apps.",
+							AtLeastOneOf: []string{"mobile.0.ios"},
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"app_package_name": {
@@ -283,11 +284,12 @@ func NewResource() *schema.Resource {
 							},
 						},
 						"ios": {
-							Type:        schema.TypeList,
-							Optional:    true,
-							Computed:    true,
-							MaxItems:    1,
-							Description: "Configuration settings for i0S native apps.",
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							Description:  "Configuration settings for i0S native apps.",
+							AtLeastOneOf: []string{"mobile.0.android"},
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"team_id": {

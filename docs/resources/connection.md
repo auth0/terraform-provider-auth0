@@ -657,7 +657,7 @@ Optional:
 - `max_groups_to_retrieve` (String) Maximum number of groups to retrieve.
 - `messaging_service_sid` (String) SID for Copilot. Used when SMS Source is Copilot.
 - `metadata_url` (String) The URL of the SAML metadata document.
-- `metadata_xml` (String) The XML content for the SAML metadata document.
+- `metadata_xml` (String) The XML content for the SAML metadata document. Values within the xml will take precedence over other attributes set on the options block.
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.

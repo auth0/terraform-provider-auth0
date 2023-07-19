@@ -1,5 +1,13 @@
 ## v1.0.0-beta.0
 
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+
+FEATURES:
+
+- `data-source/auth0_pages`: Add new data source to retrieve Auth0 pages ([#706](https://github.com/auth0/terraform-provider-auth0/pull/706))
+
 ENHANCEMENTS:
 
 - `resource/auth0_action`: Add support for GA version of Node 18 within `runtime` field ([#709](https://github.com/auth0/terraform-provider-auth0/pull/709), [#722](https://github.com/auth0/terraform-provider-auth0/pull/722))
@@ -34,16 +42,12 @@ BREAKING CHANGES:
 - `resource/auth0_trigger_binding`: Remove resource ([#730](https://github.com/auth0/terraform-provider-auth0/pull/730))
 - `resource/auth0_email`: Rename resource to `auth0_email_provider` ([#731](https://github.com/auth0/terraform-provider-auth0/pull/731))
 
-NOTES:
-
-- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
-
 
 ## 0.50.0
 
 FEATURES:
 
-- `auth0_pages`: Add new resource to manage Auth0 pages (`change_password`, `error`, `guardian_mfa`, `login`) ([#691](https://github.com/auth0/terraform-provider-auth0/pull/691))
+- `resource/auth0_pages`: Add new resource to manage Auth0 pages (`change_password`, `error`, `guardian_mfa`, `login`) ([#691](https://github.com/auth0/terraform-provider-auth0/pull/691))
 
 ENHANCEMENTS: 
 

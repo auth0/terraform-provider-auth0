@@ -695,7 +695,7 @@ var resourceSchema = map[string]*schema.Schema{
 				"metadata_xml": {
 					Type:          schema.TypeString,
 					Optional:      true,
-					Description:   "The XML content for the SAML metadata document.",
+					Description:   "The XML content for the SAML metadata document. Values within the xml will take precedence over other attributes set on the options block.",
 					ConflictsWith: []string{"options.0.metadata_url"},
 				},
 				"metadata_url": {

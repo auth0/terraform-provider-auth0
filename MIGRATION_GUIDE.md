@@ -1,10 +1,10 @@
 # Migration Guide
 
-- [Upgrading from v0.x → v1.0](#upgrading-from-v0x-→-v10)
-- [Upgrading from v0.49.0 → v0.50.0](#upgrading-from-v0490-→-v0500)
-- [Upgrading from v0.48.0 → v0.49.0](#upgrading-from-v0480-→-v0490)
-- [Upgrading from v0.47.0 → v0.48.0](#upgrading-from-v0470-→-v0480)
-- [Upgrading from v0.46.0 → v0.47.0](#upgrading-from-v0460-→-v0470)
+- [Upgrading from v0.x → v1.0](#upgrading-from-v0x--v10)
+- [Upgrading from v0.49.0 → v0.50.0](#upgrading-from-v0490--v0500)
+- [Upgrading from v0.48.0 → v0.49.0](#upgrading-from-v0480--v0490)
+- [Upgrading from v0.47.0 → v0.48.0](#upgrading-from-v0470--v0480)
+- [Upgrading from v0.46.0 → v0.47.0](#upgrading-from-v0460--v0470)
 
 ---
 
@@ -12,13 +12,13 @@
 
 Several breaking changes have been introduced with v1.0. Please refer to the sections below on how to migration from v0.x.
 
-- [Importing Multipart Resources](#importing-multipart-resources)
+- [Importing Multi-ID Resources](#importing-multi-id-resources)
 - [Global Client](#global-client)
 - [Tenant Pages](#tenant-pages)
 - [Client Addons](#client-addons)
 - [Email Provider](#email-provider)
-- [Client Secret Rotation](#secret-rotation)
-- [Reading Client Secret](#reading-secret-rotation)
+- [Client Secret Rotation](#client-secret-rotation)
+- [Reading Client Secret](#reading-client-secret)
 - [Tenant Universal Login](#tenant-universal-login)
 - [Trigger Bindings](#trigger-bindings)
 - [Organization Member Roles](#organization-member-roles)
@@ -31,7 +31,9 @@ Several breaking changes have been introduced with v1.0. Please refer to the sec
 
 ### Importing Multi-ID Resources
 
-Importing of resources that are comprised of multiple IDs (ex: `auth0_user_role` - user ID and role ID) will be separated by a double colon (`::`) instead of the previous single colon `:` separator. This change establishes a convention for all resource import while enabling IDs with colons in them.
+Importing of resources that are comprised of multiple IDs (ex: `auth0_user_role` - user ID and role ID) will be
+separated by a double colon (`::`) instead of the previous single colon `:` separator. This change establishes a
+convention for all resource import while enabling IDs with colons in them.
 
 <table>
 <tr>
@@ -58,7 +60,9 @@ terraform import auth0_user_role.user_role "auth0|111111111111111111111111::role
 
 ### Global Client
 
-The `auth0_global_client` resource and data source have been removed. They primarily managed the custom login page via the `custom_login_page` and `custom_login_page_on` attributes. Instead, this functionality has moved to the `auth0_pages` resource and datasource. This change elevates the custom login pages as a more prominent feature.
+The `auth0_global_client` resource and data source have been removed. They primarily managed the custom login page via
+the `custom_login_page` and `custom_login_page_on` attributes. Instead, this functionality has moved to the
+`auth0_pages` resource and datasource. This change elevates the custom login pages as a more prominent feature.
 
 <table>
 <tr>
@@ -93,7 +97,9 @@ resource "auth0_pages" "my_pages" {
 
 ### Tenant Pages
 
-The change password, guardian MFA enrollment and error pages managed by the `change_password`, `guardian_mfa_page` and `error_page` attributes respectively on the `auth0_tenant` have been removed in favor of the `auth0_pages` resource. This change elevates these pages to first-class features within the provider.
+The change password, guardian MFA enrollment and error pages managed by the `change_password`, `guardian_mfa_page` and
+`error_page` attributes respectively on the `auth0_tenant` have been removed in favor of the `auth0_pages` resource.
+This change elevates these pages to first-class features within the provider.
 
 <table>
 <tr>
@@ -152,7 +158,9 @@ resource "auth0_pages" "my_pages" {
 
 ### Client Addons
 
-SSO integrations facilitated through the sub-properties on the `addons` property on the `auth0_client` resource have been more formally typed. These integrations are still supported but need to adhere to the defined schema. In most cases, this will simply require the removal of the `=` block assignment.
+SSO integrations facilitated through the sub-properties on the `addons` property on the `auth0_client` resource have
+been more formally typed. These integrations are still supported but need to adhere to the defined schema. In most
+cases, this will simply require the removal of the `=` block assignment.
 
 <table>
 <tr>
@@ -170,6 +178,13 @@ resource "auth0_client" "my_client" {
     slack = {
       team = "travel0"
     }
+    
+    samlp {
+      logout = {
+        callback = "https://example.com/callback"
+        slo_enabled = "true"
+      }
+    }
   }
 }
 ```
@@ -185,6 +200,13 @@ resource "auth0_client" "my_client" {
     slack { # Note removal of `=`
       team = "travel0"
     }
+
+    samlp {
+      logout {
+        callback = "https://example.com/callback"
+        slo_enabled = true
+      }
+    }
   }
 }
 ```
@@ -195,7 +217,8 @@ resource "auth0_client" "my_client" {
 
 ### Email Provider
 
-The `auth0_email` resource has been renamed to `auth0_email_provider` to disambiguate from email templates and generally provide a descriptive name.
+The `auth0_email` resource has been renamed to `auth0_email_provider` to disambiguate from email templates and generally
+provide a descriptive name and the `api_user` field has been removed.
 
 <table>
 <tr>
@@ -226,13 +249,16 @@ resource "auth0_email_provider" "my_email_provider" {
 
 ### Client Secret Rotation
 
-Rotation of client secrets through the `client_secret_rotation_trigger` property on the `auth0_client` resource has been removed. Instead, follow the [Client Secret Rotation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation) to achieve this functionality.
+Rotation of client secrets through the `client_secret_rotation_trigger` property on the `auth0_client` resource has been
+removed. Instead, follow the [Client Secret Rotation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/client_secret_rotation)
+to achieve this functionality.
 
 The removal of the `client_secret_rotation_trigger` property ensures best practice for a more secure Auth0 tenant.
 
 ### Reading Client Secret
 
-The read-only `client_secret` property on the `auth0_client` resource has been removed. Instead, the client secret can be read through the corresponding `auth0_client` data source.
+The read-only `client_secret` property on the `auth0_client` resource has been removed. Instead, the client secret can
+be read through the corresponding `auth0_client` data source.
 
 <table>
 <tr>
@@ -271,7 +297,8 @@ output "my_client_secret" {
 
 ### Tenant Universal Login
 
-The `universal_login` property on the `auth0_tenant` resource has been removed. Instead, those configurations can be managed through the `auth0_branding` resource.
+The `universal_login` property on the `auth0_tenant` resource has been removed. Instead, those configurations can be
+managed through the `auth0_branding` resource.
 
 <table>
 <tr>
@@ -310,7 +337,9 @@ resource "auth0_branding" "my_branding" {
 
 ### Trigger Bindings
 
-The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions` for clarity and consistency with the `auth0_trigger_action` (1:1) resource. To migrate, simply rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions`.
+The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions` for clarity and consistency with the
+`auth0_trigger_action` (1:1) resource. To migrate, simply rename the resource from `auth0_trigger_binding` to
+`auth0_trigger_actions`.
 
 <table>
 <tr>
@@ -321,7 +350,7 @@ The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions`
 <td>
 
 ```terraform
-resource auth0_trigger_binding login_flow {
+resource "auth0_trigger_binding" "login_flow" {
 	#...
 }
 ```
@@ -330,7 +359,7 @@ resource auth0_trigger_binding login_flow {
 <td>
 
 ```terraform
-resource auth0_trigger_actions login_flow {
+resource "auth0_trigger_actions" "login_flow" {
 	#...
 }
 ```
@@ -341,7 +370,10 @@ resource auth0_trigger_actions login_flow {
 
 ### Organization Member Roles
 
-The `roles` property on the `auth0_organization_member` resource has been removed. To manage an organization member's roles, leverage the `auth0_organization_member_role` or `auth0_organization_member_roles` resources instead. The `auth0_organization_member_role` resource (singular) manages a 1:1 relationship between a member and a role while the `auth0_organization_member_roles` resource (plural) manages a 1:many relationship between a member and their roles.
+The `roles` property on the `auth0_organization_member` resource has been removed. To manage an organization member's
+roles, leverage the `auth0_organization_member_role` or `auth0_organization_member_roles` resources instead.
+The`auth0_organization_member_role` resource (singular) manages a 1:1 relationship between a member and a role while the
+`auth0_organization_member_roles` resource (plural) manages a 1:many relationship between a member and their roles.
 
 <table>
 <tr>
@@ -436,9 +468,11 @@ resource "auth0_organization_member_role" "role2" {
 
 ### Client Authentication Method
 
-The `token_endpoint_auth_method` property on the `auth0_client` resource has been removed. Managing a client's authentication method can be achieved through the `auth0_client_credentials` resource instead.
+The `token_endpoint_auth_method` property on the `auth0_client` resource has been removed. Managing a client's
+authentication method can be achieved through the `auth0_client_credentials` resource instead.
 
-Further, it is generally recommended to manage any client authentication configuration, including client secret and public key through the `auth0_client_credentials` resource.
+Further, it is generally recommended to manage any client authentication configuration, including client secret and
+public key through the `auth0_client_credentials` resource.
 
 <table>
 <tr>
@@ -480,7 +514,14 @@ resource "auth0_client_credentials" "test" {
 ### Resource Server Scopes
 
 The `scopes` property on the `auth0_resource_server` resource has been removed.
-Managing scopes on a resource server can be accomplished through the `auth0_resource_server_scope` or `auth0_resource_server_scopes` resource instead. The `auth0_resource_server_scope` resource (singular) manages a 1:1 relationship between a resource server and a scope while the `auth0_resource_server_scopes` resource (plural) manages a 1:many relationship between a resource server and its scopes.
+
+Managing scopes on a resource server can be accomplished through the `auth0_resource_server_scope` or
+`auth0_resource_server_scopes` resource instead. The `auth0_resource_server_scope` resource (singular) manages a 1:1
+relationship between a resource server and a scope while the `auth0_resource_server_scopes` resource (plural) manages a
+1:many relationship between a resource server and its scopes.
+
+When reading the `scopes` property through the `auth0_resource_server` data source, the `value` attribute of a scope has 
+been renamed to `name`.
 
 <table>
 <tr>
@@ -553,7 +594,10 @@ resource auth0_resource_server_scope write_posts {
 
 ### User Roles
 
-The `roles` property on the `auth0_user` resource has been removed. Managing user roles can be accomplished with the `auth0_user_roles` or `auth0_user_role` resources instead. The `auth0_user_role` resource (singular) manages a 1:1 relationship between a user and a role while the `auth0_user_roles` resource (plural) manages a 1:many relationship between a user and their roles.
+The `roles` property on the `auth0_user` resource has been removed. Managing user roles can be accomplished with the
+`auth0_user_roles` or `auth0_user_role` resources instead. The `auth0_user_role` resource (singular) manages a 1:1
+relationship between a user and a role while the `auth0_user_roles` resource (plural) manages a 1:many relationship
+between a user and their roles.
 
 <table>
 <tr>
@@ -629,7 +673,10 @@ resource auth0_user_role user_owner {
 
 ### Role Permissions
 
-The `permissions` property on the `auth0_role` resource has been removed. Managing permissions associated with a role, leverage the `auth0_role_permission` and `auth0_role_permissions` resources instead. The `auth0_role_permission` resource (singular) manages a 1:1 relationship between a role and a permission while the `auth0_role_permissions` resource (plural) manages a 1:many relationship between a role and its permissions.
+The `permissions` property on the `auth0_role` resource has been removed. Managing permissions associated with a role,
+leverage the `auth0_role_permission` and `auth0_role_permissions` resources instead. The `auth0_role_permission`
+resource (singular) manages a 1:1 relationship between a role and a permission while the `auth0_role_permissions`
+resource (plural) manages a 1:many relationship between a role and its permissions.
 
 <table>
 <tr>
@@ -640,7 +687,7 @@ The `permissions` property on the `auth0_role` resource has been removed. Managi
 <td>
 
 ```terraform
-resource auth0_resource_server api {
+resource "auth0_resource_server" "api" {
   name       = "Example API"
   identifier = "https://api.travel0.com/"
 
@@ -655,7 +702,7 @@ resource auth0_resource_server api {
   }
 }
 
-resource auth0_role content_editor {
+resource "auth0_role" "content_editor" {
   name        = "Content Editor"
   description = "Elevated roles for editing content"
 
@@ -675,17 +722,21 @@ resource auth0_role content_editor {
 <td>
 
 ```terraform
-resource auth0_resource_server api {
+resource "auth0_resource_server" "api" {
   name       = "Example API"
   identifier = "https://api.travel0.com/"
+}
+
+resource "auth0_resource_server_scopes" "my_api_scopes" {
+  resource_server_identifier = auth0_resource_server.api.identifier
 
   scopes {
-    value       = "read:posts"
+    name        = "read:posts"
     description = "Can read posts"
   }
 
   scopes {
-    value       = "write:posts"
+    name        = "write:posts"
     description = "Can write posts"
   }
 }
@@ -732,7 +783,8 @@ resource "auth0_role_permission" "write_posts_permission" {
 
 ### Client Grant Scopes
 
-The `scope` property on the `auth0_client_grant` resource has been renamed to `scopes` to reflect that multiple scopes can be managed per client grant.
+The `scope` property on the `auth0_client_grant` resource has been renamed to `scopes` to reflect that multiple scopes
+can be managed per client grant.
 
 <table>
 <tr>
@@ -763,13 +815,14 @@ resource "auth0_client_grant" "my_client_grant" {
 </tr>
 </table>
 
-````
 
 ### Actions Node 18 Runtime Beta
 
 The Node 18 Beta runtime option for actions has been removed.
 
 Now, users will be opt-in to the GA version of Node 18 actions runtime.
+
+[Back to Table of Contents](#migration-guide)
 
 ---
 
@@ -932,6 +985,10 @@ resource "auth0_branding" "my_branding" {
 </tr>
 </table>
 
+[Back to Table of Contents](#migration-guide)
+
+---
+
 ## Upgrading from v0.48.0 → v0.49.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
@@ -1088,6 +1145,10 @@ resource "auth0_organization_member_role" "role2" {
 </tr>
 </table>
 
+[Back to Table of Contents](#migration-guide)
+
+---
+
 ## Upgrading from v0.47.0 → v0.48.0
 
 There are deprecations in this update. Please ensure you read this guide thoroughly and prepare your potential
@@ -1218,6 +1279,10 @@ resource auth0_resource_server_scope write_posts {
 </td>
 </tr>
 </table>
+
+[Back to Table of Contents](#migration-guide)
+
+---
 
 ## Upgrading from v0.46.0 → v0.47.0
 
@@ -1427,3 +1492,5 @@ resource "auth0_role_permission" "write_posts_permission" {
 </td>
 </tr>
 </table>
+
+[Back to Table of Contents](#migration-guide)

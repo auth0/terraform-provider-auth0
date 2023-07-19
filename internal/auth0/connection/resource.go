@@ -24,7 +24,8 @@ func NewResource() *schema.Resource {
 			"which may include identity providers (such as Google or LinkedIn), databases, or " +
 			"passwordless authentication methods. This resource allows you to configure " +
 			"and manage connections to be used with your clients and users.",
-		Schema: resourceSchema,
+		Schema:        resourceSchema,
+		SchemaVersion: 3,
 	}
 }
 

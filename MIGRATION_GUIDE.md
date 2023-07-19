@@ -283,11 +283,11 @@ output "my_client_secret" {
 
 ```terraform
 data "auth0_client" "my_client" {
-  client_id = auth0_client.my_client.client_secret
+  client_id = auth0_client.my_client.id
 }
 
 output "my_client_secret" {
-  value = data.auth0_client.my_client
+  value = data.auth0_client.my_client.client_secret
 }
 ```
 

@@ -126,6 +126,54 @@ resource "auth0_email_provider" "my_email_provider" {
 }
 `
 
+const testAccCreateAzureCSEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "azure_cs"
+	enabled = true
+	default_from_address = "accounts@example.com"
+	credentials {
+		azure_cs_connection_string = "azure_cs_connection_string"
+	}
+}
+`
+
+const testAccUpdateAzureCSEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "azure_cs"
+	enabled = false
+	default_from_address = ""
+	credentials {
+		azure_cs_connection_string = "azure_cs_updated_connection_string"
+	}
+}
+`
+
+const testAccCreateMS365EmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "ms365"
+	enabled = true
+	default_from_address = "accounts@example.com"
+	credentials {
+		ms365_tenant_id     = "ms365_tenant_id"
+		ms365_client_id     = "ms365_client_id"
+		ms365_client_secret = "ms365_client_secret"
+	}
+}
+`
+
+const testAccUpdateMS365EmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "ms365"
+	enabled = false
+	default_from_address = ""
+	credentials {
+		ms365_tenant_id     = "ms365_updated_tenant_id"
+		ms365_client_id     = "ms365_updated_client_id"
+		ms365_client_secret = "ms365_updated_client_secret"
+	}
+}
+`
+
 const testAccAlreadyConfiguredEmailProviderWillNotConflict = `
 resource "auth0_email_provider" "my_email_provider" {
 	name = "mailgun"
@@ -253,6 +301,46 @@ func TestAccEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "eu"),
+				),
+			},
+			{
+				Config: testAccCreateAzureCSEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "azure_cs"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.azure_cs_connection_string", "azure_cs_connection_string"),
+				),
+			},
+			{
+				Config: testAccUpdateAzureCSEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "azure_cs"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.azure_cs_connection_string", "azure_cs_updated_connection_string"),
+				),
+			},
+			{
+				Config: testAccCreateMS365EmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ms365"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_tenant_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_client_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_client_secret"),
+				),
+			},
+			{
+				Config: testAccUpdateMS365EmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ms365"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_updated_tenant_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_updated_client_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_updated_client_secret"),
 				),
 			},
 			{

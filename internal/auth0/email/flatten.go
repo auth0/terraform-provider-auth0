@@ -57,6 +57,16 @@ func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *mana
 			"smtp_user": credentialsType.GetSMTPUser(),
 			"smtp_pass": d.Get("credentials.0.smtp_pass").(string),
 		}
+	case *management.EmailProviderCredentialsAzureCS:
+		credentials = map[string]interface{}{
+			"azure_cs_connection_string": d.Get("credentials.0.azure_cs_connection_string").(string),
+		}
+	case *management.EmailProviderCredentialsMS365:
+		credentials = map[string]interface{}{
+			"ms365_tenant_id":     d.Get("credentials.0.ms365_tenant_id").(string),
+			"ms365_client_id":     d.Get("credentials.0.ms365_client_id").(string),
+			"ms365_client_secret": d.Get("credentials.0.ms365_client_secret").(string),
+		}
 	}
 
 	return []interface{}{credentials}

@@ -271,6 +271,24 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"sessions": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Sessions related settings for the tenant.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"oidc_logout_prompt_enabled": {
+							Type:     schema.TypeBool,
+							Required: true,
+							Description: "When active, users will be presented with a consent prompt to confirm the " +
+								"logout request if the request is not trustworthy. Turn off the consent prompt to " +
+								"bypass user confirmation.",
+						},
+					},
+				},
+			},
 		},
 	}
 }

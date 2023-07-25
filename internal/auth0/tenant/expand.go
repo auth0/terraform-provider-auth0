@@ -28,6 +28,7 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
+		Sessions:              expandTenantSessions(config.GetAttr("sessions")),
 	}
 
 	if d.IsNewResource() || d.HasChange("idle_session_lifetime") {
@@ -85,4 +86,19 @@ func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie
 	}
 
 	return &sessionCookie
+}
+
+func expandTenantSessions(config cty.Value) *management.TenantSessions {
+	var sessions management.TenantSessions
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		sessions.OIDCLogoutPromptEnabled = value.Bool(cfg.GetAttr("oidc_logout_prompt_enabled"))
+		return stop
+	})
+
+	if sessions == (management.TenantSessions{}) {
+		return nil
+	}
+
+	return &sessions
 }

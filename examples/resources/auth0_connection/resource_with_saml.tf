@@ -27,17 +27,25 @@ resource "auth0_connection" "samlp" {
         <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_in"/>
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
-    EOF 
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultanteously 
+    EOF
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
+
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
       "email" : ["emailaddress", "nameidentifier"]
       "family_name" : "surname"
     })
+
     signing_key {
       key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
     }
+
+    decryption_key {
+      key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
+      cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+    }
+
     idp_initiated {
       client_id              = "client_id"
       client_protocol        = "samlp"

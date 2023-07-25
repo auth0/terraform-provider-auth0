@@ -484,17 +484,25 @@ resource "auth0_connection" "samlp" {
         <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml.provider/sign_in"/>
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
-    EOF 
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml but not simultanteously 
+    EOF
+    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
+
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
       "email" : ["emailaddress", "nameidentifier"]
       "family_name" : "surname"
     })
+
     signing_key {
       key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
       cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
     }
+
+    decryption_key {
+      key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
+      cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+    }
+
     idp_initiated {
       client_id              = "client_id"
       client_protocol        = "samlp"
@@ -629,6 +637,7 @@ Optional:
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
+- `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
 - `disable_cache` (Boolean) Indicates whether to disable the cache or not.
 - `disable_self_service_change_password` (Boolean) Indicates whether to remove the forgot password link within the New Universal Login.
@@ -702,6 +711,15 @@ Optional:
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
 - `waad_common_endpoint` (Boolean) Indicates whether to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
 - `waad_protocol` (String) Protocol to use.
+
+<a id="nestedblock--options--decryption_key"></a>
+### Nested Schema for `options.decryption_key`
+
+Required:
+
+- `cert` (String)
+- `key` (String)
+
 
 <a id="nestedblock--options--gateway_authentication"></a>
 ### Nested Schema for `options.gateway_authentication`

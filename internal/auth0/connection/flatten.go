@@ -643,8 +643,17 @@ func flattenConnectionOptionsSAML(
 	if options.SigningKey != nil {
 		m["signing_key"] = []interface{}{
 			map[string]interface{}{
-				"key":  options.SigningKey.GetKey(),
-				"cert": options.SigningKey.GetCert(),
+				"key":  options.GetSigningKey().GetKey(),
+				"cert": options.GetSigningKey().GetCert(),
+			},
+		}
+	}
+
+	if options.DecryptionKey != nil {
+		m["decryption_key"] = []interface{}{
+			map[string]interface{}{
+				"key":  options.GetDecryptionKey().GetKey(),
+				"cert": options.GetDecryptionKey().GetCert(),
 			},
 		}
 	}

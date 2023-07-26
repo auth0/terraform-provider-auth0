@@ -15,10 +15,16 @@ func flattenRole(data *schema.ResourceData, role *management.Role) error {
 	return result.ErrorOrNil()
 }
 
-func flattenRoleForDataSource(data *schema.ResourceData, role *management.Role, permissions []*management.Permission) error {
+func flattenRoleForDataSource(
+	data *schema.ResourceData,
+	role *management.Role,
+	permissions []*management.Permission,
+	users []*management.User,
+) error {
 	result := multierror.Append(
 		flattenRole(data, role),
 		data.Set("permissions", flattenRolePermissionsSlice(permissions)),
+		data.Set("users", flattenRoleUsersSlice(users)),
 	)
 
 	return result.ErrorOrNil()
@@ -42,6 +48,14 @@ func flattenRolePermissionsSlice(permissions []*management.Permission) []interfa
 			"resource_server_identifier": permission.GetResourceServerIdentifier(),
 			"resource_server_name":       permission.GetResourceServerName(),
 		})
+	}
+	return result
+}
+
+func flattenRoleUsersSlice(users []*management.User) []interface{} {
+	var result []interface{}
+	for _, user := range users {
+		result = append(result, user.GetID())
 	}
 	return result
 }

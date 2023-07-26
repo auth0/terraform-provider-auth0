@@ -55,6 +55,38 @@ resource "auth0_role_permissions" "role_permissions" {
 		name                       = "bring:peace"
 	}
 }
+
+resource "auth0_user" "user_1" {
+	depends_on = [ auth0_role_permissions.role_permissions ]
+
+	connection_name = "Username-Password-Authentication"
+	email           = "{{.testName}}1@acceptance.test.com"
+	password        = "passpass$12$12"
+	username        = "{{.testName}}1"
+}
+
+resource "auth0_user_role" "user_role_1" {
+	depends_on = [ auth0_user.user_1 ]
+
+	user_id = auth0_user.user_1.id
+	role_id = auth0_role.the_one.id
+}
+
+resource "auth0_user" "user_2" {
+	depends_on = [ auth0_user_role.user_role_1 ]
+
+	connection_name = "Username-Password-Authentication"
+	email           = "{{.testName}}2@acceptance.test.com"
+	password        = "passpass$12$12"
+	username        = "{{.testName}}2"
+}
+
+resource "auth0_user_role" "user_role_2" {
+	depends_on = [ auth0_user.user_2 ]
+
+	user_id = auth0_user.user_2.id
+	role_id = auth0_role.the_one.id
+}
 `
 
 const testAccDataSourceNonExistentRole = `
@@ -65,7 +97,7 @@ data "auth0_role" "test" {
 
 const testAccDataSourceRoleByName = testAccGivenAResourceServer + `
 data "auth0_role" "test" {
-	depends_on = [ auth0_role_permissions.role_permissions ]
+	depends_on = [ auth0_user_role.user_role_2 ]
 
 	name = auth0_role.the_one.name
 }
@@ -73,7 +105,7 @@ data "auth0_role" "test" {
 
 const testAccDataSourceRoleByID = testAccGivenAResourceServer + `
 data "auth0_role" "test" {
-	depends_on = [ auth0_role_permissions.role_permissions ]
+	depends_on = [ auth0_user_role.user_role_2 ]
 
 	role_id = auth0_role.the_one.id
 }
@@ -108,7 +140,20 @@ func TestAccDataSourceRole(t *testing.T) {
 					resource.TestCheckNoResourceAttr("data.auth0_role.test", "role_id"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "description", "The One - Acceptance Test"),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "users.#", "2"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "permissions.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_role.test", "permissions.*", map[string]string{
+						"name":                       "stop:bullets",
+						"resource_server_identifier": fmt.Sprintf("https://%s.matrix.com/", testName),
+						"description":                "Stop bullets",
+						"resource_server_name":       fmt.Sprintf("Role - Acceptance Test - %s", testName),
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_role.test", "permissions.*", map[string]string{
+						"name":                       "bring:peace",
+						"resource_server_identifier": fmt.Sprintf("https://%s.matrix.com/", testName),
+						"description":                "Bring peace",
+						"resource_server_name":       fmt.Sprintf("Role - Acceptance Test - %s", testName),
+					}),
 				),
 			},
 			{
@@ -117,7 +162,20 @@ func TestAccDataSourceRole(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_role.test", "role_id"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "name", fmt.Sprintf("The One - Acceptance Test - %s", testName)),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "description", "The One - Acceptance Test"),
+					resource.TestCheckResourceAttr("data.auth0_role.test", "users.#", "2"),
 					resource.TestCheckResourceAttr("data.auth0_role.test", "permissions.#", "2"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_role.test", "permissions.*", map[string]string{
+						"name":                       "stop:bullets",
+						"resource_server_identifier": fmt.Sprintf("https://%s.matrix.com/", testName),
+						"description":                "Stop bullets",
+						"resource_server_name":       fmt.Sprintf("Role - Acceptance Test - %s", testName),
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_role.test", "permissions.*", map[string]string{
+						"name":                       "bring:peace",
+						"resource_server_identifier": fmt.Sprintf("https://%s.matrix.com/", testName),
+						"description":                "Bring peace",
+						"resource_server_name":       fmt.Sprintf("Role - Acceptance Test - %s", testName),
+					}),
 				),
 			},
 		},

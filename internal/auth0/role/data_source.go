@@ -63,6 +63,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		},
 	}
 
+	dataSourceSchema["users"] = &schema.Schema{
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "List of users assigned to this role. Retrieves a maximum of 1000 users.",
+	}
+
 	return dataSourceSchema
 }
 
@@ -77,31 +86,6 @@ func readRoleForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 
 	roleName := data.Get("name").(string)
 	return readRoleByName(ctx, data, api, roleName)
-}
-
-func getAllRolePermissions(
-	ctx context.Context,
-	api *management.Management,
-	roleID string,
-) ([]*management.Permission, error) {
-	var permissions []*management.Permission
-	var page int
-	for {
-		permissionList, err := api.Role.Permissions(ctx, roleID, management.Page(page), management.PerPage(100))
-		if err != nil {
-			return nil, err
-		}
-
-		permissions = append(permissions, permissionList.Permissions...)
-
-		if !permissionList.HasNext() {
-			break
-		}
-
-		page++
-	}
-
-	return permissions, nil
 }
 
 func readRoleByID(
@@ -120,7 +104,12 @@ func readRoleByID(
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenRoleForDataSource(data, role, permissions))
+	users, err := getAllRoleUsers(ctx, api, role.GetID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))
 }
 
 func readRoleByName(
@@ -150,7 +139,12 @@ func readRoleByName(
 					return diag.FromErr(err)
 				}
 
-				return diag.FromErr(flattenRoleForDataSource(data, role, permissions))
+				users, err := getAllRoleUsers(ctx, api, role.GetID())
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				return diag.FromErr(flattenRoleForDataSource(data, role, permissions, users))
 			}
 		}
 
@@ -162,4 +156,54 @@ func readRoleByName(
 	}
 
 	return diag.Errorf("No role found with \"name\" = %q", roleName)
+}
+
+func getAllRolePermissions(
+	ctx context.Context,
+	api *management.Management,
+	roleID string,
+) ([]*management.Permission, error) {
+	var permissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, roleID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return nil, err
+		}
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
+	}
+
+	return permissions, nil
+}
+
+func getAllRoleUsers(
+	ctx context.Context,
+	api *management.Management,
+	roleID string,
+) ([]*management.User, error) {
+	var users []*management.User
+	var page int
+	for {
+		userList, err := api.Role.Users(ctx, roleID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, userList.Users...)
+
+		if !userList.HasNext() {
+			break
+		}
+
+		page++
+	}
+
+	return users, nil
 }

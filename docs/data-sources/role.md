@@ -35,6 +35,7 @@ data "auth0_role" "some-role-by-id" {
 - `description` (String) The description of the role.
 - `id` (String) The ID of this resource.
 - `permissions` (Set of Object) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedatt--permissions))
+- `users` (Set of String) List of users assigned to this role. Retrieves a maximum of 1000 users.
 
 <a id="nestedatt--permissions"></a>
 ### Nested Schema for `permissions`

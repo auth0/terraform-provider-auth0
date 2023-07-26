@@ -250,6 +250,11 @@ func NewResource() *schema.Resource {
 					"alphanumeric and may only include the following special characters: " +
 					"`:,-+=_*?\"/\\()<>@ [Tab] [Space]`.",
 			},
+			"require_pushed_authorization_requests": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Makes the use of Pushed Authorization Requests mandatory for this client.",
+			},
 			"mobile": {
 				Type:        schema.TypeList,
 				Optional:    true,

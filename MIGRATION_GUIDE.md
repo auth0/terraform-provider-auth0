@@ -220,7 +220,7 @@ resource "auth0_client" "my_client" {
 The `auth0_email` resource has been renamed to `auth0_email_provider` to disambiguate from email templates and generally
 provide a more descriptive name. Also, the `api_user` field has been removed.
 
-Before upgrading while still on v0.50.0, run a `terraform state rm auth0_email.<resource_name>` and then rename inside
+Before upgrading, run a `terraform state rm auth0_email.<resource_name>` and then rename inside
 your config `auth0_email` to `auth0_email_provider`. Then upgrade to `v1.0.0-beta.0` and re-import the email provider
 resource using `terraform import auth0_email_provider.<resource_name> <anyUUID for example: b4213dc2-2eed-42c3-9516-c6131a9ce0b0>`.
 

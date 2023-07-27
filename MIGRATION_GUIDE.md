@@ -826,7 +826,7 @@ The Node 18 Beta runtime option for actions has been removed.
 
 Now, you will be opted in to the GA version of Node 18 actions runtime instead.
 
-Ensure that the versions of the trigger types you are using are allowed to use the `node18 runtime. You can retrieve 
+Ensure that the versions of the trigger types you are using are allowed to use the `node18` runtime. You can retrieve 
 the triggers available within actions and their supported runtimes following this guide: [Retrieve triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers).
 
 [Back to Table of Contents](#migration-guide)

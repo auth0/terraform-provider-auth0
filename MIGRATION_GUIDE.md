@@ -220,6 +220,10 @@ resource "auth0_client" "my_client" {
 The `auth0_email` resource has been renamed to `auth0_email_provider` to disambiguate from email templates and generally
 provide a more descriptive name. Also, the `api_user` field has been removed.
 
+Before upgrading, run a `terraform state rm auth0_email.<resource_name>` and then rename inside
+your config `auth0_email` to `auth0_email_provider`. Then upgrade to `v1.0.0-beta.0` and re-import the email provider
+resource using `terraform import auth0_email_provider.<resource_name> <anyUUID for example: b4213dc2-2eed-42c3-9516-c6131a9ce0b0>`.
+
 <table>
 <tr>
 <th>Before (v0.x)</th>
@@ -821,6 +825,9 @@ resource "auth0_client_grant" "my_client_grant" {
 The Node 18 Beta runtime option for actions has been removed.
 
 Now, you will be opted in to the GA version of Node 18 actions runtime instead.
+
+Ensure that the versions of the trigger types you are using are allowed to use the `node18` runtime. You can retrieve 
+the triggers available within actions and their supported runtimes following this guide: [Retrieve triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers).
 
 [Back to Table of Contents](#migration-guide)
 

@@ -69,7 +69,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 			Type: schema.TypeString,
 		},
 		Computed:    true,
-		Description: "List of users assigned to this role. Retrieves a maximum of 1000 users.",
+		Description: "List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs.",
 	}
 
 	return dataSourceSchema

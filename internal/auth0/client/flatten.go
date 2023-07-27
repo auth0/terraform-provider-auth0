@@ -121,11 +121,26 @@ func flattenClientAddons(addons *management.ClientAddons) []interface{} {
 		"zoom":                   flattenClientAddonZoom(addons.GetZoom()),
 		"sso_integration":        flattenClientAddonSSOIntegration(addons.GetSSOIntegration()),
 		"samlp":                  flattenClientAddonSAML2(addons.GetSAML2()),
-		"box":                    flattenClientAddonWithNoConfig(addons.GetBox()),
-		"cloudbees":              flattenClientAddonWithNoConfig(addons.GetCloudBees()),
-		"concur":                 flattenClientAddonWithNoConfig(addons.GetConcur()),
-		"dropbox":                flattenClientAddonWithNoConfig(addons.GetDropbox()),
-		"wsfed":                  flattenClientAddonWithNoConfig(addons.GetWSFED()),
+	}
+
+	if addons.GetBox() != nil {
+		m["box"] = []interface{}{map[string]interface{}{}}
+	}
+
+	if addons.GetCloudBees() != nil {
+		m["cloudbees"] = []interface{}{map[string]interface{}{}}
+	}
+
+	if addons.GetConcur() != nil {
+		m["concur"] = []interface{}{map[string]interface{}{}}
+	}
+
+	if addons.GetDropbox() != nil {
+		m["dropbox"] = []interface{}{map[string]interface{}{}}
+	}
+
+	if addons.GetWSFED() != nil {
+		m["wsfed"] = []interface{}{map[string]interface{}{}}
 	}
 
 	return []interface{}{m}
@@ -489,14 +504,6 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 			"logout":                             logout,
 		},
 	}
-}
-
-func flattenClientAddonWithNoConfig(addon interface{}) []interface{} {
-	if addon == nil {
-		return nil
-	}
-
-	return []interface{}{map[string]interface{}{}}
 }
 
 func flattenClient(d *schema.ResourceData, client *management.Client) error {

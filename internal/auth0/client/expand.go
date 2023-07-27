@@ -295,10 +295,6 @@ func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
 		return stop
 	})
 
-	if addons == (management.ClientAddons{}) {
-		return nil
-	}
-
 	return &addons
 }
 
@@ -314,6 +310,10 @@ func expandClientAddonAWS(awsCfg cty.Value) *management.AWSClientAddon {
 
 		return stop
 	})
+
+	if awsAddon == (management.AWSClientAddon{}) {
+		return nil
+	}
 
 	return &awsAddon
 }
@@ -341,6 +341,10 @@ func expandClientAddonAzureBlob(azureCfg cty.Value) *management.AzureBlobClientA
 		return stop
 	})
 
+	if azureAddon == (management.AzureBlobClientAddon{}) {
+		return nil
+	}
+
 	return &azureAddon
 }
 
@@ -358,6 +362,10 @@ func expandClientAddonAzureSB(azureCfg cty.Value) *management.AzureSBClientAddon
 
 		return stop
 	})
+
+	if azureAddon == (management.AzureSBClientAddon{}) {
+		return nil
+	}
 
 	return &azureAddon
 }
@@ -428,6 +436,10 @@ func expandClientAddonSentry(sentryCfg cty.Value) *management.SentryClientAddon 
 		return stop
 	})
 
+	if sentryAddon == (management.SentryClientAddon{}) {
+		return nil
+	}
+
 	return &sentryAddon
 }
 
@@ -442,6 +454,10 @@ func expandClientAddonEchoSign(echoSignCfg cty.Value) *management.EchoSignClient
 		return stop
 	})
 
+	if echoSignAddon == (management.EchoSignClientAddon{}) {
+		return nil
+	}
+
 	return &echoSignAddon
 }
 
@@ -455,6 +471,10 @@ func expandClientAddonEgnyte(egnyteCfg cty.Value) *management.EgnyteClientAddon 
 
 		return stop
 	})
+
+	if egnyteAddon == (management.EgnyteClientAddon{}) {
+		return nil
+	}
 
 	return &egnyteAddon
 }
@@ -474,6 +494,10 @@ func expandClientAddonFirebase(firebaseCfg cty.Value) *management.FirebaseClient
 		return stop
 	})
 
+	if firebaseAddon == (management.FirebaseClientAddon{}) {
+		return nil
+	}
+
 	return &firebaseAddon
 }
 
@@ -487,6 +511,10 @@ func expandClientAddonNewRelic(newRelicCfg cty.Value) *management.NewRelicClient
 
 		return stop
 	})
+
+	if newRelicAddon == (management.NewRelicClientAddon{}) {
+		return nil
+	}
 
 	return &newRelicAddon
 }
@@ -503,6 +531,10 @@ func expandClientAddonOffice365(office365Cfg cty.Value) *management.Office365Cli
 		return stop
 	})
 
+	if office365Addon == (management.Office365ClientAddon{}) {
+		return nil
+	}
+
 	return &office365Addon
 }
 
@@ -516,6 +548,10 @@ func expandClientAddonSalesforce(salesforceCfg cty.Value) *management.Salesforce
 
 		return stop
 	})
+
+	if salesforceAddon == (management.SalesforceClientAddon{}) {
+		return nil
+	}
 
 	return &salesforceAddon
 }
@@ -534,6 +570,10 @@ func expandClientAddonSalesforceAPI(salesforceCfg cty.Value) *management.Salesfo
 		return stop
 	})
 
+	if salesforceAddon == (management.SalesforceAPIClientAddon{}) {
+		return nil
+	}
+
 	return &salesforceAddon
 }
 
@@ -550,6 +590,10 @@ func expandClientAddonSalesforceSandboxAPI(salesforceCfg cty.Value) *management.
 
 		return stop
 	})
+
+	if salesforceAddon == (management.SalesforceSandboxAPIClientAddon{}) {
+		return nil
+	}
 
 	return &salesforceAddon
 }
@@ -592,6 +636,10 @@ func expandClientAddonSAPAPI(sapAPICfg cty.Value) *management.SAPAPIClientAddon 
 		return stop
 	})
 
+	if sapAPIAddon == (management.SAPAPIClientAddon{}) {
+		return nil
+	}
+
 	return &sapAPIAddon
 }
 
@@ -607,6 +655,10 @@ func expandClientAddonSharepoint(sharepointCfg cty.Value) *management.SharePoint
 		return stop
 	})
 
+	if sharepointAddon == (management.SharePointClientAddon{}) {
+		return nil
+	}
+
 	return &sharepointAddon
 }
 
@@ -620,6 +672,10 @@ func expandClientAddonSpringCM(springCMCfg cty.Value) *management.SpringCMClient
 
 		return stop
 	})
+
+	if springCMAddon == (management.SpringCMClientAddon{}) {
+		return nil
+	}
 
 	return &springCMAddon
 }
@@ -635,6 +691,10 @@ func expandClientAddonWAMS(wamsCfg cty.Value) *management.WAMSClientAddon {
 		return stop
 	})
 
+	if wamsAddon == (management.WAMSClientAddon{}) {
+		return nil
+	}
+
 	return &wamsAddon
 }
 
@@ -648,6 +708,10 @@ func expandClientAddonZendesk(zendeskCfg cty.Value) *management.ZendeskClientAdd
 
 		return stop
 	})
+
+	if zendeskAddon == (management.ZendeskClientAddon{}) {
+		return nil
+	}
 
 	return &zendeskAddon
 }
@@ -663,6 +727,10 @@ func expandClientAddonZoom(zoomCfg cty.Value) *management.ZoomClientAddon {
 		return stop
 	})
 
+	if zoomAddon == (management.ZoomClientAddon{}) {
+		return nil
+	}
+
 	return &zoomAddon
 }
 
@@ -677,6 +745,10 @@ func expandClientAddonSSOIntegration(ssoCfg cty.Value) *management.SSOIntegratio
 
 		return stop
 	})
+
+	if ssoAddon == (management.SSOIntegrationClientAddon{}) {
+		return nil
+	}
 
 	return &ssoAddon
 }
@@ -769,6 +841,10 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 
 		return stop
 	})
+
+	if samlpAddon == (management.SAML2ClientAddon{}) {
+		return nil
+	}
 
 	return &samlpAddon
 }

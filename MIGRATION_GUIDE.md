@@ -162,6 +162,9 @@ SSO integrations facilitated through the sub-properties on the `addons` property
 been more formally typed. These integrations are still supported but need to adhere to the defined schema. In most
 cases, this will simply require the removal of the `=` block assignment.
 
+Before upgrading, run a `terraform state rm auth0_client.<resource_name>`. Then upgrade to `v1.0.0-beta.x` and re-import
+the client resource using `terraform import auth0_client.<resource_name> <client_id>`.
+
 <table>
 <tr>
 <th>Before (v0.x)</th>
@@ -221,7 +224,7 @@ The `auth0_email` resource has been renamed to `auth0_email_provider` to disambi
 provide a more descriptive name. Also, the `api_user` field has been removed.
 
 Before upgrading, run a `terraform state rm auth0_email.<resource_name>` and then rename inside
-your config `auth0_email` to `auth0_email_provider`. Then upgrade to `v1.0.0-beta.0` and re-import the email provider
+your config `auth0_email` to `auth0_email_provider`. Then upgrade to `v1.0.0-beta.x` and re-import the email provider
 resource using `terraform import auth0_email_provider.<resource_name> <anyUUID for example: b4213dc2-2eed-42c3-9516-c6131a9ce0b0>`.
 
 <table>
@@ -342,8 +345,11 @@ resource "auth0_branding" "my_branding" {
 ### Trigger Bindings
 
 The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions` for clarity and consistency with the
-`auth0_trigger_action` (1:1) resource. To migrate, simply rename the resource from `auth0_trigger_binding` to
-`auth0_trigger_actions`.
+`auth0_trigger_action` (1:1) resource.
+
+Before upgrading, run a `terraform state rm auth0_trigger_binding.<resource_name>`. Then upgrade to `v1.0.0-beta.x` and
+rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions` and re-import the resource using 
+`terraform import auth0_trigger_actions.<resource_name> <trigger_id>`.
 
 <table>
 <tr>

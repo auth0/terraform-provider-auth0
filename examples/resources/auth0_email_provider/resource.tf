@@ -35,3 +35,29 @@ resource "auth0_email_provider" "sendgrid_email_provider" {
     api_key = "secretAPIKey"
   }
 }
+
+
+# This is an example on how to set up the email provider with Azure CS.
+resource "auth0_email_provider" "smtp_email_provider" {
+  name                 = "azure_cs"
+  enabled              = true
+  default_from_address = "accounts@example.com"
+
+  credentials {
+    azure_cs_connection_string = "azure_cs_connection_string"
+  }
+}
+
+
+# This is an example on how to set up the email provider with MS365.
+resource "auth0_email_provider" "smtp_email_provider" {
+  name                 = "ms365"
+  enabled              = true
+  default_from_address = "accounts@example.com"
+
+  credentials {
+    ms365_tenant_id     = "ms365_tenant_id"
+    ms365_client_id     = "ms365_client_id"
+    ms365_client_secret = "ms365_client_secret"
+  }
+}

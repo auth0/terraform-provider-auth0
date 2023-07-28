@@ -34,6 +34,7 @@ data "auth0_tenant" "my_tenant" {}
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
 - `session_cookie` (List of Object) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedatt--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
+- `sessions` (List of Object) Sessions related settings for the tenant. (see [below for nested schema](#nestedatt--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 
@@ -72,5 +73,13 @@ Read-Only:
 Read-Only:
 
 - `mode` (String)
+
+
+<a id="nestedatt--sessions"></a>
+### Nested Schema for `sessions`
+
+Read-Only:
+
+- `oidc_logout_prompt_enabled` (Boolean)
 
 

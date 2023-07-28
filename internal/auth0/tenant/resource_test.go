@@ -43,6 +43,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
 				),
 			},
 			{
@@ -58,6 +59,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "true"),
 				),
 			},
 			{
@@ -105,6 +107,10 @@ resource "auth0_tenant" "my_tenant" {
 	session_cookie {
 		mode = "non-persistent"
 	}
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+	}
 }
 `
 
@@ -134,6 +140,10 @@ resource "auth0_tenant" "my_tenant" {
 
 	session_cookie {
 		mode = "persistent"
+	}
+
+	sessions {
+		oidc_logout_prompt_enabled = true
 	}
 }
 `

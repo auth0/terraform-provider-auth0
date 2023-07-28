@@ -8,9 +8,6 @@ resource "auth0_tenant" "my_tenant" {
   sandbox_version         = "12"
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
-  session_cookie {
-    mode = "non-persistent"
-  }
 
   flags {
     disable_clickjack_protection_headers   = true
@@ -19,5 +16,13 @@ resource "auth0_tenant" "my_tenant" {
     no_disclose_enterprise_connections     = false
     disable_management_api_sms_obfuscation = false
     disable_fields_map_fix                 = false
+  }
+
+  session_cookie {
+    mode = "non-persistent"
+  }
+
+  sessions {
+    oidc_logout_prompt_enabled = false
   }
 }

@@ -22,6 +22,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("enabled_locales", tenant.GetEnabledLocales()),
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
+		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
 	)
 
 	return result.ErrorOrNil()
@@ -62,6 +63,13 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) []interface{} {
 	m := make(map[string]interface{})
 	m["mode"] = sessionCookie.GetMode()
+
+	return []interface{}{m}
+}
+
+func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
+	m := make(map[string]interface{})
+	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
 
 	return []interface{}{m}
 }

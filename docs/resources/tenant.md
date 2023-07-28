@@ -24,9 +24,6 @@ resource "auth0_tenant" "my_tenant" {
   sandbox_version         = "12"
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
-  session_cookie {
-    mode = "non-persistent"
-  }
 
   flags {
     disable_clickjack_protection_headers   = true
@@ -35,6 +32,14 @@ resource "auth0_tenant" "my_tenant" {
     no_disclose_enterprise_connections     = false
     disable_management_api_sms_obfuscation = false
     disable_fields_map_fix                 = false
+  }
+
+  session_cookie {
+    mode = "non-persistent"
+  }
+
+  sessions {
+    oidc_logout_prompt_enabled = false
   }
 }
 ```
@@ -56,6 +61,7 @@ resource "auth0_tenant" "my_tenant" {
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
+- `sessions` (Block List, Max: 1) Sessions related settings for the tenant. (see [below for nested schema](#nestedblock--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 
@@ -98,6 +104,14 @@ Optional:
 Optional:
 
 - `mode` (String) Behavior of tenant session cookie. Accepts either "persistent" or "non-persistent".
+
+
+<a id="nestedblock--sessions"></a>
+### Nested Schema for `sessions`
+
+Required:
+
+- `oidc_logout_prompt_enabled` (Boolean) When active, users will be presented with a consent prompt to confirm the logout request if the request is not trustworthy. Turn off the consent prompt to bypass user confirmation.
 
 ## Import
 

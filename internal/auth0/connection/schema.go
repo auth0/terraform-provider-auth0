@@ -633,6 +633,25 @@ var resourceSchema = map[string]*schema.Schema{
 						},
 					},
 				},
+				"decryption_key": {
+					Type:     schema.TypeList,
+					Optional: true,
+					MaxItems: 1,
+					Description: "The key used to decrypt encrypted responses from the connection. " +
+						"Uses the `key` and `cert` properties to provide the private key and certificate respectively.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"key": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+							"cert": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
+					},
+				},
 				"protocol_binding": {
 					Type:        schema.TypeString,
 					Optional:    true,

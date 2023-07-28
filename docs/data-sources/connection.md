@@ -60,6 +60,7 @@ Read-Only:
 - `configuration` (Map of String)
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
+- `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))
 - `digest_algorithm` (String)
 - `disable_cache` (Boolean)
 - `disable_self_service_change_password` (Boolean)
@@ -133,6 +134,15 @@ Read-Only:
 - `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--validation))
 - `waad_common_endpoint` (Boolean)
 - `waad_protocol` (String)
+
+<a id="nestedobjatt--options--decryption_key"></a>
+### Nested Schema for `options.decryption_key`
+
+Read-Only:
+
+- `cert` (String)
+- `key` (String)
+
 
 <a id="nestedobjatt--options--gateway_authentication"></a>
 ### Nested Schema for `options.gateway_authentication`

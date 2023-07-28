@@ -1,3 +1,21 @@
+## v1.0.0-beta.1
+
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+
+ENHANCEMENTS:
+
+- `data-source/auth0_role`: Add ability to retrieve users assigned to a role ([#758](https://github.com/auth0/terraform-provider-auth0/pull/758))
+- `resource/auth0_email_provider`: Add support for `azure_cs` and `ms365` email providers ([#752](https://github.com/auth0/terraform-provider-auth0/pull/752))
+- `resource/auth0_connection`: Add support for `decryption_key` on SAML Connection Options ([#755](https://github.com/auth0/terraform-provider-auth0/pull/755))
+- `resource/auth0_tenant`: Add support for `OIDCLogoutPrompt` toggle ([#754](https://github.com/auth0/terraform-provider-auth0/pull/754))
+
+BUG FIXES:
+
+- `resource/auth0_client`: Prevent sending empty payloads for client addons ([#759](https://github.com/auth0/terraform-provider-auth0/pull/759))
+
+
 ## v1.0.0-beta.0
 
 NOTES:

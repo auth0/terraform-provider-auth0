@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -444,7 +445,6 @@ func NewResource() *schema.Resource {
 						"aws": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "AWS Addon configuration.",
 							Elem: &schema.Resource{
@@ -471,7 +471,6 @@ func NewResource() *schema.Resource {
 						"azure_blob": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Azure Blob Storage Addon configuration.",
 							Elem: &schema.Resource{
@@ -564,7 +563,6 @@ func NewResource() *schema.Resource {
 						"azure_sb": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Azure Storage Bus Addon configuration.",
 							Elem: &schema.Resource{
@@ -604,7 +602,6 @@ func NewResource() *schema.Resource {
 						"rms": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Active Directory Rights Management Service SSO configuration.",
 							Elem: &schema.Resource{
@@ -622,7 +619,6 @@ func NewResource() *schema.Resource {
 						"mscrm": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Microsoft Dynamics CRM SSO configuration.",
 							Elem: &schema.Resource{
@@ -639,7 +635,6 @@ func NewResource() *schema.Resource {
 						"slack": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Computed: true,
 							MaxItems: 1,
 							Description: "Slack team or workspace name usually first segment in your Slack URL, " +
 								"for example `https://acme-org.slack.com` would be `acme-org`.",
@@ -656,7 +651,6 @@ func NewResource() *schema.Resource {
 						"sentry": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Sentry SSO configuration.",
 							Elem: &schema.Resource{
@@ -680,7 +674,6 @@ func NewResource() *schema.Resource {
 						"echosign": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Adobe EchoSign SSO configuration.",
 							Elem: &schema.Resource{
@@ -697,7 +690,6 @@ func NewResource() *schema.Resource {
 						"egnyte": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Egnyte SSO configuration.",
 							Elem: &schema.Resource{
@@ -714,7 +706,6 @@ func NewResource() *schema.Resource {
 						"firebase": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Google Firebase addon configuration.",
 							Elem: &schema.Resource{
@@ -756,7 +747,6 @@ func NewResource() *schema.Resource {
 						"newrelic": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "New Relic SSO configuration.",
 							Elem: &schema.Resource{
@@ -773,7 +763,6 @@ func NewResource() *schema.Resource {
 						"office365": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Microsoft Office 365 SSO configuration.",
 							Elem: &schema.Resource{
@@ -795,7 +784,6 @@ func NewResource() *schema.Resource {
 						"salesforce": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Salesforce SSO configuration.",
 							Elem: &schema.Resource{
@@ -812,7 +800,6 @@ func NewResource() *schema.Resource {
 						"salesforce_api": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Salesforce API addon configuration.",
 							Elem: &schema.Resource{
@@ -846,7 +833,6 @@ func NewResource() *schema.Resource {
 						"salesforce_sandbox_api": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Salesforce Sandbox addon configuration.",
 							Elem: &schema.Resource{
@@ -880,7 +866,6 @@ func NewResource() *schema.Resource {
 						"layer": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Layer addon configuration.",
 							Elem: &schema.Resource{
@@ -921,7 +906,6 @@ func NewResource() *schema.Resource {
 						"sap_api": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "SAP API addon configuration.",
 							Elem: &schema.Resource{
@@ -967,7 +951,6 @@ func NewResource() *schema.Resource {
 						"sharepoint": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "SharePoint SSO configuration.",
 							Elem: &schema.Resource{
@@ -991,7 +974,6 @@ func NewResource() *schema.Resource {
 						"springcm": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "SpringCM SSO configuration.",
 							Elem: &schema.Resource{
@@ -1007,7 +989,6 @@ func NewResource() *schema.Resource {
 						"wams": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Windows Azure Mobile Services addon configuration.",
 							Elem: &schema.Resource{
@@ -1024,7 +1005,6 @@ func NewResource() *schema.Resource {
 						"zendesk": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Zendesk SSO configuration.",
 							Elem: &schema.Resource{
@@ -1041,7 +1021,6 @@ func NewResource() *schema.Resource {
 						"zoom": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Zoom SSO configuration.",
 							Elem: &schema.Resource{
@@ -1058,7 +1037,6 @@ func NewResource() *schema.Resource {
 						"sso_integration": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Generic SSO configuration.",
 							Elem: &schema.Resource{
@@ -1250,7 +1228,6 @@ func NewResource() *schema.Resource {
 						"box": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Box SSO indicator (no configuration settings needed for Box SSO).",
 							Elem:        &schema.Resource{},
@@ -1258,7 +1235,6 @@ func NewResource() *schema.Resource {
 						"cloudbees": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "CloudBees SSO indicator (no configuration settings needed for CloudBees SSO).",
 							Elem:        &schema.Resource{},
@@ -1266,7 +1242,6 @@ func NewResource() *schema.Resource {
 						"concur": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Concur SSO indicator (no configuration settings needed for Concur SSO).",
 							Elem:        &schema.Resource{},
@@ -1274,7 +1249,6 @@ func NewResource() *schema.Resource {
 						"dropbox": {
 							Type:        schema.TypeList,
 							Optional:    true,
-							Computed:    true,
 							MaxItems:    1,
 							Description: "Dropbox SSO indicator (no configuration settings needed for Dropbox SSO).",
 							Elem:        &schema.Resource{},
@@ -1282,7 +1256,6 @@ func NewResource() *schema.Resource {
 						"wsfed": {
 							Type:     schema.TypeList,
 							Optional: true,
-							Computed: true,
 							MaxItems: 1,
 							Description: "WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` " +
 								"and `client_aliases` properties on the client.",
@@ -1325,6 +1298,16 @@ func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) di
 	api := m.(*config.Config).GetAPI()
 
 	if client := expandClient(d); clientHasChange(client) {
+		if client.GetAddons() != nil {
+			// In case we are switching addons, we need to be able to clear out the previous config.
+			resetAddons := &management.Client{
+				Addons: &management.ClientAddons{},
+			}
+			if err := api.Client.Update(ctx, d.Id(), resetAddons); err != nil {
+				return diag.FromErr(internalError.HandleAPIError(d, err))
+			}
+		}
+
 		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
 			return diag.FromErr(internalError.HandleAPIError(d, err))
 		}

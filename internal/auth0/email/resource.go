@@ -33,11 +33,11 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice(
-					[]string{"mailgun", "mandrill", "sendgrid", "ses", "smtp", "sparkpost"},
+					[]string{"azure_cs", "mailgun", "mandrill", "ms365", "sendgrid", "ses", "smtp", "sparkpost"},
 					false,
 				),
 				Description: "Name of the email provider. " +
-					"Options include `mailgun`, `mandrill`, `sendgrid`, `ses`, `smtp`, and `sparkpost`.",
+					"Options include `azure_cs`, `mailgun`, `mandrill`, `ms365`, `sendgrid`, `ses`, `smtp` and `sparkpost`.",
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
@@ -113,6 +113,34 @@ func NewResource() *schema.Resource {
 							Sensitive:    true,
 							ValidateFunc: validation.StringIsNotEmpty,
 							Description:  "SMTP password. Used only for SMTP.",
+						},
+						"azure_cs_connection_string": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Azure Communication Services Connection String.",
+						},
+						"ms365_tenant_id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Tenant ID.",
+						},
+						"ms365_client_id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Client ID.",
+						},
+						"ms365_client_secret": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Client Secret.",
 						},
 					},
 				},

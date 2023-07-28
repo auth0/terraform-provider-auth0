@@ -701,6 +701,15 @@ func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOption
 		return stop
 	})
 
+	config.GetAttr("decryption_key").ForEachElement(func(_ cty.Value, key cty.Value) (stop bool) {
+		options.DecryptionKey = &management.ConnectionOptionsSAMLDecryptionKey{
+			Cert: value.String(key.GetAttr("cert")),
+			Key:  value.String(key.GetAttr("key")),
+		}
+
+		return stop
+	})
+
 	var err error
 
 	options.FieldsMap, err = value.MapFromJSON(config.GetAttr("fields_map"))

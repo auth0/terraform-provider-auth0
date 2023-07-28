@@ -1712,6 +1712,9 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.key", "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
 				),
@@ -1733,6 +1736,9 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.key", "-----BEGIN PRIVATE KEY-----\n...{your updated private key here}...\n-----END PRIVATE KEY-----"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your updated public key cert here}...\n-----END CERTIFICATE-----"),
 				),
 			},
 		},
@@ -1741,40 +1747,51 @@ func TestAccConnectionSAML(t *testing.T) {
 
 const testConnectionSAMLConfigCreate = `
 resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-SAML-{{.testName}}"
-	display_name = "Acceptance-Test-SAML-{{.testName}}"
-	strategy = "samlp"
+	name           = "Acceptance-Test-SAML-{{.testName}}"
+	display_name   = "Acceptance-Test-SAML-{{.testName}}"
+	strategy       = "samlp"
 	show_as_button = false
+
 	options {
 		signing_key {
 			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
        		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
 		}
-		disable_sign_out = false
-		user_id_attribute = "https://saml.provider/imi/ns/identity-200810"
-		tenant_domain = "example.com"
-		domain_aliases = ["example.com", "example.coz"]
-		protocol_binding = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-		request_template = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-		signature_algorithm = "rsa-sha256"
-		digest_algorithm = "sha256"
-		icon_url = "https://example.com/logo.svg"
+
+		decryption_key {
+			key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
+			cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+		}
+
+		disable_sign_out         = false
+		user_id_attribute        = "https://saml.provider/imi/ns/identity-200810"
+		tenant_domain            = "example.com"
+		domain_aliases           = ["example.com", "example.coz"]
+		protocol_binding         = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+		request_template         = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+		signature_algorithm      = "rsa-sha256"
+		digest_algorithm         = "sha256"
+		icon_url                 = "https://example.com/logo.svg"
 		set_user_root_attributes = "on_each_login"
+
 		fields_map = jsonencode({
 			"name": ["name", "nameidentifier"]
 			"email": ["emailaddress", "nameidentifier"]
 			"family_name": "surname"
 		})
+
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
 			}
 		})
+
 		idp_initiated {
-			client_id = "client_id"
-			client_protocol = "samlp"
+			client_id              = "client_id"
+			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=30"
 		}
+
 		metadata_xml = <<EOF
 		<?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://example.com">
@@ -1818,30 +1835,38 @@ resource "auth0_connection" "my_connection" {
 
 const testConnectionSAMLConfigUpdate = `
 resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-SAML-{{.testName}}"
-	display_name = "Acceptance-Test-SAML-{{.testName}}"
-	strategy = "samlp"
+	name           = "Acceptance-Test-SAML-{{.testName}}"
+	display_name   = "Acceptance-Test-SAML-{{.testName}}"
+	strategy       = "samlp"
 	show_as_button = true
+
 	options {
-		disable_sign_out = true
-		tenant_domain = "example.com"
-		domain_aliases = ["example.com", "example.coz"]
-		protocol_binding = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-		signature_algorithm = "rsa-sha256"
-		digest_algorithm = "sha256"
-		entity_id = "example"
+		disable_sign_out         = true
+		tenant_domain            = "example.com"
+		domain_aliases           = ["example.com", "example.coz"]
+		protocol_binding         = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+		signature_algorithm      = "rsa-sha256"
+		digest_algorithm         = "sha256"
+		entity_id                = "example"
 		set_user_root_attributes = "on_first_login"
+		metadata_url             = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
+
 		fields_map = jsonencode({
 			"name": ["name"]
 			"email": ["emailaddress", "nameidentifier"]
 			"family_name": "appelido"
 		})
+
 		idp_initiated {
-			client_id = "client_id"
-			client_protocol = "samlp"
+			client_id              = "client_id"
+			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=60"
 		}
-		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
+
+		decryption_key {
+			key  = "-----BEGIN PRIVATE KEY-----\n...{your updated private key here}...\n-----END PRIVATE KEY-----"
+			cert = "-----BEGIN CERTIFICATE-----\n...{your updated public key cert here}...\n-----END CERTIFICATE-----"
+		}
 	}
 }
 `

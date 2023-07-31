@@ -41,10 +41,10 @@ func NewConfigResource() *schema.Resource {
 	}
 }
 
-func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createRuleConfig(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	ruleConfig := expandRuleConfig(d.GetRawConfig())
+	ruleConfig := expandRuleConfig(data.GetRawConfig())
 	key := ruleConfig.GetKey()
 	ruleConfig.Key = nil
 
@@ -52,40 +52,40 @@ func createRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	d.SetId(ruleConfig.GetKey())
+	data.SetId(ruleConfig.GetKey())
 
-	return readRuleConfig(ctx, d, m)
+	return readRuleConfig(ctx, data, meta)
 }
 
-func readRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readRuleConfig(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	ruleConfig, err := api.RuleConfig.Read(ctx, d.Id())
+	ruleConfig, err := api.RuleConfig.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(d.Set("key", ruleConfig.GetKey()))
+	return diag.FromErr(data.Set("key", ruleConfig.GetKey()))
 }
 
-func updateRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateRuleConfig(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	ruleConfig := expandRuleConfig(d.GetRawConfig())
+	ruleConfig := expandRuleConfig(data.GetRawConfig())
 	ruleConfig.Key = nil
 
-	if err := api.RuleConfig.Upsert(ctx, d.Id(), ruleConfig); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.RuleConfig.Upsert(ctx, data.Id(), ruleConfig); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readRuleConfig(ctx, d, m)
+	return readRuleConfig(ctx, data, meta)
 }
 
-func deleteRuleConfig(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteRuleConfig(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.RuleConfig.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.RuleConfig.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

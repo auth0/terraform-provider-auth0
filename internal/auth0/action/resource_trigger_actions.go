@@ -72,49 +72,49 @@ func NewTriggerActionsResource() *schema.Resource {
 	}
 }
 
-func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	id := d.Get("trigger").(string)
-	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
+	id := data.Get("trigger").(string)
+	triggerBindings := expandTriggerBindings(data.GetRawConfig().GetAttr("actions"))
 
 	if err := api.Action.UpdateBindings(ctx, id, triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(id)
+	data.SetId(id)
 
-	return readTriggerBinding(ctx, d, m)
+	return readTriggerBinding(ctx, data, meta)
 }
 
-func readTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	triggerBindings, err := api.Action.Bindings(ctx, d.Id())
+	triggerBindings, err := api.Action.Bindings(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenTriggerBinding(d, triggerBindings.Bindings))
+	return diag.FromErr(flattenTriggerBinding(data, triggerBindings.Bindings))
 }
 
-func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
+	triggerBindings := expandTriggerBindings(data.GetRawConfig().GetAttr("actions"))
 
-	if err := api.Action.UpdateBindings(ctx, d.Id(), triggerBindings); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Action.UpdateBindings(ctx, data.Id(), triggerBindings); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readTriggerBinding(ctx, d, m)
+	return readTriggerBinding(ctx, data, meta)
 }
 
-func deleteTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Action.UpdateBindings(ctx, d.Id(), []*management.ActionBinding{}); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Action.UpdateBindings(ctx, data.Id(), []*management.ActionBinding{}); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

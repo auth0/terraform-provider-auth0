@@ -8,11 +8,11 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandTenant(d *schema.ResourceData) *management.Tenant {
-	config := d.GetRawConfig()
+func expandTenant(data *schema.ResourceData) *management.Tenant {
+	config := data.GetRawConfig()
 
-	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
 	tenant := &management.Tenant{
 		DefaultAudience:       value.String(config.GetAttr("default_audience")),
@@ -31,7 +31,7 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		Sessions:              expandTenantSessions(config.GetAttr("sessions")),
 	}
 
-	if d.IsNewResource() || d.HasChange("idle_session_lifetime") {
+	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
 

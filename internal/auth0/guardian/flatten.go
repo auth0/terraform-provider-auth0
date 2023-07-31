@@ -156,7 +156,7 @@ func flattenDUO(ctx context.Context, enabled bool, api *management.Management) (
 	return []interface{}{duoData}, nil
 }
 
-func flattenPush(ctx context.Context, d *schema.ResourceData, enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenPush(ctx context.Context, data *schema.ResourceData, enabled bool, api *management.Management) ([]interface{}, error) {
 	pushData := make(map[string]interface{})
 	pushData["enabled"] = enabled
 
@@ -191,7 +191,7 @@ func flattenPush(ctx context.Context, d *schema.ResourceData, enabled bool, api 
 	pushData["direct_apns"] = []interface{}{
 		map[string]interface{}{
 			"sandbox":   directAPNS.GetSandbox(),
-			"p12":       d.Get("push.0.direct_apns.0.p12"), // Does not get read back.
+			"p12":       data.Get("push.0.direct_apns.0.p12"), // Does not get read back.
 			"bundle_id": directAPNS.GetBundleID(),
 			"enabled":   directAPNS.GetEnabled(),
 		},
@@ -199,7 +199,7 @@ func flattenPush(ctx context.Context, d *schema.ResourceData, enabled bool, api 
 
 	pushData["direct_fcm"] = []interface{}{
 		map[string]interface{}{
-			"server_key": d.Get("push.0.direct_fcm.0.server_key"), // Does not get read back.
+			"server_key": data.Get("push.0.direct_fcm.0.server_key"), // Does not get read back.
 		},
 	}
 
@@ -213,7 +213,7 @@ func flattenPush(ctx context.Context, d *schema.ResourceData, enabled bool, api 
 			map[string]interface{}{
 				"aws_access_key_id":                 amazonSNS.GetAccessKeyID(),
 				"aws_region":                        amazonSNS.GetRegion(),
-				"aws_secret_access_key":             d.Get("push.0.amazon_sns.0.aws_secret_access_key"), // Does not get read back.
+				"aws_secret_access_key":             data.Get("push.0.amazon_sns.0.aws_secret_access_key"), // Does not get read back.
 				"sns_apns_platform_application_arn": amazonSNS.GetAPNSPlatformApplicationARN(),
 				"sns_gcm_platform_application_arn":  amazonSNS.GetGCMPlatformApplicationARN(),
 			},

@@ -1268,59 +1268,59 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	client := expandClient(d)
+	client := expandClient(data)
 
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(client.GetClientID())
+	data.SetId(client.GetClientID())
 
-	return readClient(ctx, d, m)
+	return readClient(ctx, data, meta)
 }
 
-func readClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(ctx, d.Id())
+	client, err := api.Client.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	err = flattenClient(d, client)
+	err = flattenClient(data, client)
 	return diag.FromErr(err)
 }
 
-func updateClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if client := expandClient(d); clientHasChange(client) {
+	if client := expandClient(data); clientHasChange(client) {
 		if client.GetAddons() != nil {
 			// In case we are switching addons, we need to be able to clear out the previous config.
 			resetAddons := &management.Client{
 				Addons: &management.ClientAddons{},
 			}
-			if err := api.Client.Update(ctx, d.Id(), resetAddons); err != nil {
-				return diag.FromErr(internalError.HandleAPIError(d, err))
+			if err := api.Client.Update(ctx, data.Id(), resetAddons); err != nil {
+				return diag.FromErr(internalError.HandleAPIError(data, err))
 			}
 		}
 
-		if err := api.Client.Update(ctx, d.Id(), client); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(d, err))
+		if err := api.Client.Update(ctx, data.Id(), client); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 	}
 
-	return readClient(ctx, d, m)
+	return readClient(ctx, data, meta)
 }
 
-func deleteClient(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Client.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Client.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

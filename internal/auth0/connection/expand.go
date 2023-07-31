@@ -12,8 +12,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandConnection(ctx context.Context, d *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
-	config := d.GetRawConfig()
+func expandConnection(ctx context.Context, data *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
+	config := data.GetRawConfig()
 
 	connection := &management.Connection{
 		DisplayName:        value.String(config.GetAttr("display_name")),
@@ -21,28 +21,28 @@ func expandConnection(ctx context.Context, d *schema.ResourceData, api *manageme
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
 	}
 
-	if d.IsNewResource() {
+	if data.IsNewResource() {
 		connection.Name = value.String(config.GetAttr("name"))
 		connection.Strategy = value.String(config.GetAttr("strategy"))
 	}
 
-	if d.HasChange("realms") {
+	if data.HasChange("realms") {
 		connection.Realms = value.Strings(config.GetAttr("realms"))
 	}
 
 	var diagnostics diag.Diagnostics
-	strategy := d.Get("strategy").(string)
+	strategy := data.Get("strategy").(string)
 	showAsButton := value.Bool(config.GetAttr("show_as_button"))
 
 	config.GetAttr("options").ForEachElement(func(_ cty.Value, options cty.Value) (stop bool) {
 		switch strategy {
 		case management.ConnectionStrategyAuth0:
-			connection.Options, diagnostics = expandConnectionOptionsAuth0(ctx, d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsAuth0(ctx, data, options, api)
 		case management.ConnectionStrategyGoogleOAuth2:
-			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(data, options)
 		case management.ConnectionStrategyGoogleApps:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsGoogleApps(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsGoogleApps(data, options)
 		case management.ConnectionStrategyOAuth2,
 			management.ConnectionStrategyDropbox,
 			management.ConnectionStrategyBitBucket,
@@ -54,35 +54,35 @@ func expandConnection(ctx context.Context, d *schema.ResourceData, api *manageme
 			management.ConnectionStrategyWordpress,
 			management.ConnectionStrategyShopify,
 			management.ConnectionStrategyCustom:
-			connection.Options, diagnostics = expandConnectionOptionsOAuth2(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsOAuth2(data, options)
 		case management.ConnectionStrategyFacebook:
-			connection.Options, diagnostics = expandConnectionOptionsFacebook(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsFacebook(data, options)
 		case management.ConnectionStrategyApple:
-			connection.Options, diagnostics = expandConnectionOptionsApple(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsApple(data, options)
 		case management.ConnectionStrategyLinkedin:
-			connection.Options, diagnostics = expandConnectionOptionsLinkedin(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsLinkedin(data, options)
 		case management.ConnectionStrategyGitHub:
-			connection.Options, diagnostics = expandConnectionOptionsGitHub(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsGitHub(data, options)
 		case management.ConnectionStrategyWindowsLive:
-			connection.Options, diagnostics = expandConnectionOptionsWindowsLive(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsWindowsLive(data, options)
 		case management.ConnectionStrategySalesforce,
 			management.ConnectionStrategySalesforceCommunity,
 			management.ConnectionStrategySalesforceSandbox:
-			connection.Options, diagnostics = expandConnectionOptionsSalesforce(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsSalesforce(data, options)
 		case management.ConnectionStrategySMS:
 			connection.Options, diagnostics = expandConnectionOptionsSMS(options)
 		case management.ConnectionStrategyOIDC:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsOIDC(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsOIDC(data, options)
 		case management.ConnectionStrategyOkta:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsOkta(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsOkta(data, options)
 		case management.ConnectionStrategyAD:
 			connection.ShowAsButton = showAsButton
 			connection.Options, diagnostics = expandConnectionOptionsAD(options)
 		case management.ConnectionStrategyAzureAD:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAzureAD(d, options)
+			connection.Options, diagnostics = expandConnectionOptionsAzureAD(data, options)
 		case management.ConnectionStrategyEmail:
 			connection.Options, diagnostics = expandConnectionOptionsEmail(options)
 		case management.ConnectionStrategySAML:
@@ -114,7 +114,7 @@ func expandConnection(ctx context.Context, d *schema.ResourceData, api *manageme
 }
 
 func expandConnectionOptionsGitHub(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsGitHub, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGitHub{
@@ -124,7 +124,7 @@ func expandConnectionOptionsGitHub(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -134,7 +134,7 @@ func expandConnectionOptionsGitHub(
 
 func expandConnectionOptionsAuth0(
 	ctx context.Context,
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 	api *management.Management,
 ) (*management.ConnectionOptions, diag.Diagnostics) {
@@ -272,8 +272,8 @@ func expandConnectionOptionsAuth0(
 		return nil, diag.FromErr(err)
 	}
 
-	if !d.IsNewResource() {
-		apiConn, err := api.Connection.Read(ctx, d.Id())
+	if !data.IsNewResource() {
+		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
@@ -292,7 +292,7 @@ func expandConnectionOptionsAuth0(
 }
 
 func expandConnectionOptionsGoogleOAuth2(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsGoogleOAuth2, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleOAuth2{
@@ -303,7 +303,7 @@ func expandConnectionOptionsGoogleOAuth2(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -312,7 +312,7 @@ func expandConnectionOptionsGoogleOAuth2(
 }
 
 func expandConnectionOptionsGoogleApps(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsGoogleApps, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleApps{
@@ -331,7 +331,7 @@ func expandConnectionOptionsGoogleApps(
 		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -340,7 +340,7 @@ func expandConnectionOptionsGoogleApps(
 }
 
 func expandConnectionOptionsOAuth2(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsOAuth2, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOAuth2{
@@ -355,7 +355,7 @@ func expandConnectionOptionsOAuth2(
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -364,7 +364,7 @@ func expandConnectionOptionsOAuth2(
 }
 
 func expandConnectionOptionsFacebook(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsFacebook, diag.Diagnostics) {
 	options := &management.ConnectionOptionsFacebook{
@@ -374,7 +374,7 @@ func expandConnectionOptionsFacebook(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -383,7 +383,7 @@ func expandConnectionOptionsFacebook(
 }
 
 func expandConnectionOptionsApple(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsApple, diag.Diagnostics) {
 	options := &management.ConnectionOptionsApple{
@@ -395,7 +395,7 @@ func expandConnectionOptionsApple(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -404,7 +404,7 @@ func expandConnectionOptionsApple(
 }
 
 func expandConnectionOptionsLinkedin(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsLinkedin, diag.Diagnostics) {
 	options := &management.ConnectionOptionsLinkedin{
@@ -415,7 +415,7 @@ func expandConnectionOptionsLinkedin(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -424,7 +424,7 @@ func expandConnectionOptionsLinkedin(
 }
 
 func expandConnectionOptionsSalesforce(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsSalesforce, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSalesforce{
@@ -435,7 +435,7 @@ func expandConnectionOptionsSalesforce(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -444,7 +444,7 @@ func expandConnectionOptionsSalesforce(
 }
 
 func expandConnectionOptionsWindowsLive(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsWindowsLive, diag.Diagnostics) {
 	options := &management.ConnectionOptionsWindowsLive{
@@ -455,7 +455,7 @@ func expandConnectionOptionsWindowsLive(
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -565,7 +565,7 @@ func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsA
 }
 
 func expandConnectionOptionsAzureAD(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsAzureAD, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAzureAD{
@@ -591,7 +591,7 @@ func expandConnectionOptionsAzureAD(
 		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -600,7 +600,7 @@ func expandConnectionOptionsAzureAD(
 }
 
 func expandConnectionOptionsOIDC(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsOIDC, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
@@ -620,7 +620,7 @@ func expandConnectionOptionsOIDC(
 		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -629,7 +629,7 @@ func expandConnectionOptionsOIDC(
 }
 
 func expandConnectionOptionsOkta(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	config cty.Value,
 ) (*management.ConnectionOptionsOkta, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOkta{
@@ -647,7 +647,7 @@ func expandConnectionOptionsOkta(
 		LogoURL:               value.String(config.GetAttr("icon_url")),
 	}
 
-	expandConnectionOptionsScopes(d, options)
+	expandConnectionOptionsScopes(data, options)
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
@@ -787,10 +787,10 @@ type scoper interface {
 	SetScopes(enable bool, scopes ...string)
 }
 
-func expandConnectionOptionsScopes(d *schema.ResourceData, s scoper) {
-	scopesList := d.Get("options.0.scopes").(*schema.Set).List()
+func expandConnectionOptionsScopes(data *schema.ResourceData, s scoper) {
+	scopesList := data.Get("options.0.scopes").(*schema.Set).List()
 
-	_, scopesToDisable := value.Difference(d, "options.0.scopes")
+	_, scopesToDisable := value.Difference(data, "options.0.scopes")
 
 	for _, scope := range scopesToDisable {
 		s.SetScopes(false, scope.(string))

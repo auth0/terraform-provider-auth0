@@ -8,65 +8,65 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandUser(d *schema.ResourceData) (*management.User, error) {
-	cfg := d.GetRawConfig()
+func expandUser(data *schema.ResourceData) (*management.User, error) {
+	cfg := data.GetRawConfig()
 
 	user := &management.User{}
 
-	if d.IsNewResource() {
+	if data.IsNewResource() {
 		user.ID = value.String(cfg.GetAttr("user_id"))
 	}
-	if d.HasChange("email") {
+	if data.HasChange("email") {
 		user.Email = value.String(cfg.GetAttr("email"))
 	}
-	if d.HasChange("username") {
+	if data.HasChange("username") {
 		user.Username = value.String(cfg.GetAttr("username"))
 	}
-	if d.HasChange("password") {
+	if data.HasChange("password") {
 		user.Password = value.String(cfg.GetAttr("password"))
 	}
-	if d.HasChange("phone_number") {
+	if data.HasChange("phone_number") {
 		user.PhoneNumber = value.String(cfg.GetAttr("phone_number"))
 	}
-	if d.HasChange("email_verified") {
+	if data.HasChange("email_verified") {
 		user.EmailVerified = value.Bool(cfg.GetAttr("email_verified"))
 	}
-	if d.HasChange("verify_email") {
+	if data.HasChange("verify_email") {
 		user.VerifyEmail = value.Bool(cfg.GetAttr("verify_email"))
 	}
-	if d.HasChange("phone_verified") {
+	if data.HasChange("phone_verified") {
 		user.PhoneVerified = value.Bool(cfg.GetAttr("phone_verified"))
 	}
-	if d.HasChange("given_name") {
+	if data.HasChange("given_name") {
 		user.GivenName = value.String(cfg.GetAttr("given_name"))
 	}
-	if d.HasChange("family_name") {
+	if data.HasChange("family_name") {
 		user.FamilyName = value.String(cfg.GetAttr("family_name"))
 	}
-	if d.HasChange("nickname") {
+	if data.HasChange("nickname") {
 		user.Nickname = value.String(cfg.GetAttr("nickname"))
 	}
-	if d.HasChange("name") {
+	if data.HasChange("name") {
 		user.Name = value.String(cfg.GetAttr("name"))
 	}
-	if d.HasChange("picture") {
+	if data.HasChange("picture") {
 		user.Picture = value.String(cfg.GetAttr("picture"))
 	}
-	if d.HasChange("blocked") {
+	if data.HasChange("blocked") {
 		user.Blocked = value.Bool(cfg.GetAttr("blocked"))
 	}
-	if d.HasChange("connection_name") {
+	if data.HasChange("connection_name") {
 		user.Connection = value.String(cfg.GetAttr("connection_name"))
 	}
-	if d.HasChange("user_metadata") {
-		userMetadata, err := expandMetadata(d, "user")
+	if data.HasChange("user_metadata") {
+		userMetadata, err := expandMetadata(data, "user")
 		if err != nil {
 			return nil, err
 		}
 		user.UserMetadata = &userMetadata
 	}
-	if d.HasChange("app_metadata") {
-		appMetadata, err := expandMetadata(d, "app")
+	if data.HasChange("app_metadata") {
+		appMetadata, err := expandMetadata(data, "app")
 		if err != nil {
 			return nil, err
 		}
@@ -76,10 +76,10 @@ func expandUser(d *schema.ResourceData) (*management.User, error) {
 	return user, nil
 }
 
-func expandMetadata(d *schema.ResourceData, metadataType string) (map[string]interface{}, error) {
-	oldMetadata, newMetadata := d.GetChange(metadataType + "_metadata")
+func expandMetadata(data *schema.ResourceData, metadataType string) (map[string]interface{}, error) {
+	oldMetadata, newMetadata := data.GetChange(metadataType + "_metadata")
 	if oldMetadata == "" {
-		return value.MapFromJSON(d.GetRawConfig().GetAttr(metadataType + "_metadata"))
+		return value.MapFromJSON(data.GetRawConfig().GetAttr(metadataType + "_metadata"))
 	}
 
 	if newMetadata == "" {

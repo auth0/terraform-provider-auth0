@@ -52,32 +52,32 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
-	return updatePrompt(ctx, d, m)
+func createPrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	data.SetId(id.UniqueId())
+	return updatePrompt(ctx, data, meta)
 }
 
-func readPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readPrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	prompt, err := api.Prompt.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenPrompt(d, prompt))
+	return diag.FromErr(flattenPrompt(data, prompt))
 }
 
-func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updatePrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	prompt := expandPrompt(d.GetRawConfig())
+	prompt := expandPrompt(data.GetRawConfig())
 
 	if err := api.Prompt.Update(ctx, prompt); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readPrompt(ctx, d, m)
+	return readPrompt(ctx, data, meta)
 }
 
 func deletePrompt(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {

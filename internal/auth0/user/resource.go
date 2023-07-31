@@ -34,7 +34,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				DiffSuppressFunc: func(k, old, new string, data *schema.ResourceData) bool {
 					return old == "auth0|"+new
 				},
 				Description: "ID of the user.",
@@ -150,10 +150,10 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	user, err := expandUser(d)
+	user, err := expandUser(data)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -162,24 +162,24 @@ func createUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	d.SetId(user.GetID())
+	data.SetId(user.GetID())
 
-	return readUser(ctx, d, m)
+	return readUser(ctx, data, meta)
 }
 
-func readUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	user, err := api.User.Read(ctx, d.Id())
+	user, err := api.User.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenUser(d, user))
+	return diag.FromErr(flattenUser(data, user))
 }
 
-func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	user, err := expandUser(d)
+func updateUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	user, err := expandUser(data)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -188,21 +188,21 @@ func updateUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 		return diag.FromErr(err)
 	}
 
-	api := m.(*config.Config).GetAPI()
+	api := meta.(*config.Config).GetAPI()
 	if userHasChange(user) {
-		if err := api.User.Update(ctx, d.Id(), user); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(d, err))
+		if err := api.User.Update(ctx, data.Id(), user); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 	}
 
-	return readUser(ctx, d, m)
+	return readUser(ctx, data, meta)
 }
 
-func deleteUser(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.User.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.User.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

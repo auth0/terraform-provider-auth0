@@ -100,17 +100,17 @@ func NewTemplateResource() *schema.Resource {
 	}
 }
 
-func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailTemplate(d.GetRawConfig())
+	email := expandEmailTemplate(data.GetRawConfig())
 
 	// The email template resource doesn't allow deleting templates, so in order
 	// to avoid conflicts, we first attempt to read the template. If it exists
 	// we'll try to update it, if not we'll try to create it.
 	if _, err := api.EmailTemplate.Read(ctx, email.GetTemplate()); err == nil {
-		d.SetId(email.GetTemplate())
-		return updateEmailTemplate(ctx, d, m)
+		data.SetId(email.GetTemplate())
+		return updateEmailTemplate(ctx, data, meta)
 	}
 
 	// If we reached this point the template doesn't exist.
@@ -119,56 +119,56 @@ func createEmailTemplate(ctx context.Context, d *schema.ResourceData, m interfac
 		return diag.FromErr(err)
 	}
 
-	d.SetId(email.GetTemplate())
+	data.SetId(email.GetTemplate())
 
-	return readEmailTemplate(ctx, d, m)
+	return readEmailTemplate(ctx, data, meta)
 }
 
-func readEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email, err := api.EmailTemplate.Read(ctx, d.Id())
+	email, err := api.EmailTemplate.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	result := multierror.Append(
-		d.Set("template", email.GetTemplate()),
-		d.Set("body", email.GetBody()),
-		d.Set("from", email.GetFrom()),
-		d.Set("result_url", email.GetResultURL()),
-		d.Set("subject", email.GetSubject()),
-		d.Set("syntax", email.GetSyntax()),
-		d.Set("url_lifetime_in_seconds", email.GetURLLifetimeInSecoonds()),
-		d.Set("enabled", email.GetEnabled()),
-		d.Set("include_email_in_redirect", email.GetIncludeEmailInRedirect()),
+		data.Set("template", email.GetTemplate()),
+		data.Set("body", email.GetBody()),
+		data.Set("from", email.GetFrom()),
+		data.Set("result_url", email.GetResultURL()),
+		data.Set("subject", email.GetSubject()),
+		data.Set("syntax", email.GetSyntax()),
+		data.Set("url_lifetime_in_seconds", email.GetURLLifetimeInSecoonds()),
+		data.Set("enabled", email.GetEnabled()),
+		data.Set("include_email_in_redirect", email.GetIncludeEmailInRedirect()),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailTemplate(d.GetRawConfig())
+	email := expandEmailTemplate(data.GetRawConfig())
 
-	if err := api.EmailTemplate.Update(ctx, d.Id(), email); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.EmailTemplate.Update(ctx, data.Id(), email); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readEmailTemplate(ctx, d, m)
+	return readEmailTemplate(ctx, data, meta)
 }
 
-func deleteEmailTemplate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteEmailTemplate(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	emailTemplate := &management.EmailTemplate{
-		Template: auth0.String(d.Id()),
+		Template: auth0.String(data.Id()),
 		Enabled:  auth0.Bool(false),
 	}
 
-	if err := api.EmailTemplate.Update(ctx, d.Id(), emailTemplate); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.EmailTemplate.Update(ctx, data.Id(), emailTemplate); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

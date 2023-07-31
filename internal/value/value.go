@@ -121,13 +121,13 @@ func MapFromJSON(rawValue cty.Value) (map[string]interface{}, error) {
 // Difference accesses the value held by key and type asserts it to a set. It then
 // compares its changes if any and returns what needs to be added and what
 // needs to be removed.
-func Difference(d *schema.ResourceData, key string) ([]interface{}, []interface{}) {
+func Difference(data *schema.ResourceData, key string) ([]interface{}, []interface{}) {
 	// Zero the add and rm sets. These may be modified if the diff observed any changes.
-	toAdd := d.Get(key).(*schema.Set)
+	toAdd := data.Get(key).(*schema.Set)
 	toRemove := &schema.Set{}
 
-	if d.HasChange(key) {
-		oldValue, newValue := d.GetChange(key)
+	if data.HasChange(key) {
+		oldValue, newValue := data.GetChange(key)
 		toAdd = newValue.(*schema.Set).Difference(oldValue.(*schema.Set))
 		toRemove = oldValue.(*schema.Set).Difference(newValue.(*schema.Set))
 	}

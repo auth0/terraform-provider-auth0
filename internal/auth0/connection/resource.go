@@ -29,10 +29,10 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(ctx, d, api)
+	connection, diagnostics := expandConnection(ctx, data, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
@@ -41,42 +41,42 @@ func createConnection(ctx context.Context, d *schema.ResourceData, m interface{}
 		return diag.FromErr(err)
 	}
 
-	d.SetId(connection.GetID())
+	data.SetId(connection.GetID())
 
-	return readConnection(ctx, d, m)
+	return readConnection(ctx, data, meta)
 }
 
-func readConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	connection, err := api.Connection.Read(ctx, d.Id())
+	connection, err := api.Connection.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return flattenConnection(d, connection)
+	return flattenConnection(data, connection)
 }
 
-func updateConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	connection, diagnostics := expandConnection(ctx, d, api)
+	connection, diagnostics := expandConnection(ctx, data, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	if err := api.Connection.Update(ctx, d.Id(), connection); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Connection.Update(ctx, data.Id(), connection); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readConnection(ctx, d, m)
+	return readConnection(ctx, data, meta)
 }
 
-func deleteConnection(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Connection.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Connection.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

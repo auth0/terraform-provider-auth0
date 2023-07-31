@@ -103,19 +103,19 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	return triggerBindings
 }
 
-func preventErasingUnmanagedSecrets(ctx context.Context, d *schema.ResourceData, api *management.Management) diag.Diagnostics {
-	if !d.HasChange("secrets") {
+func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceData, api *management.Management) diag.Diagnostics {
+	if !data.HasChange("secrets") {
 		return nil
 	}
 
-	preUpdateAction, err := api.Action.Read(ctx, d.Id())
+	preUpdateAction, err := api.Action.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	// We need to also include the secrets that we're about to remove
 	// against the checks, not just the ones with which we are left.
-	oldSecrets, newSecrets := d.GetChange("secrets")
+	oldSecrets, newSecrets := data.GetChange("secrets")
 	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
 	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())

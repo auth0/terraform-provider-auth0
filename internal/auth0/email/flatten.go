@@ -18,7 +18,7 @@ func flattenEmailProvider(data *schema.ResourceData, emailProvider *management.E
 	return result.ErrorOrNil()
 }
 
-func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *management.EmailProvider) []interface{} {
+func flattenEmailProviderCredentials(data *schema.ResourceData, emailProvider *management.EmailProvider) []interface{} {
 	if emailProvider.Credentials == nil {
 		return nil
 	}
@@ -27,26 +27,26 @@ func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *mana
 	switch credentialsType := emailProvider.Credentials.(type) {
 	case *management.EmailProviderCredentialsMandrill:
 		credentials = map[string]interface{}{
-			"api_key": d.Get("credentials.0.api_key").(string),
+			"api_key": data.Get("credentials.0.api_key").(string),
 		}
 	case *management.EmailProviderCredentialsSES:
 		credentials = map[string]interface{}{
-			"access_key_id":     d.Get("credentials.0.access_key_id").(string),
-			"secret_access_key": d.Get("credentials.0.secret_access_key").(string),
+			"access_key_id":     data.Get("credentials.0.access_key_id").(string),
+			"secret_access_key": data.Get("credentials.0.secret_access_key").(string),
 			"region":            credentialsType.GetRegion(),
 		}
 	case *management.EmailProviderCredentialsSendGrid:
 		credentials = map[string]interface{}{
-			"api_key": d.Get("credentials.0.api_key").(string),
+			"api_key": data.Get("credentials.0.api_key").(string),
 		}
 	case *management.EmailProviderCredentialsSparkPost:
 		credentials = map[string]interface{}{
-			"api_key": d.Get("credentials.0.api_key").(string),
+			"api_key": data.Get("credentials.0.api_key").(string),
 			"region":  credentialsType.GetRegion(),
 		}
 	case *management.EmailProviderCredentialsMailgun:
 		credentials = map[string]interface{}{
-			"api_key": d.Get("credentials.0.api_key").(string),
+			"api_key": data.Get("credentials.0.api_key").(string),
 			"domain":  credentialsType.GetDomain(),
 			"region":  credentialsType.GetRegion(),
 		}
@@ -55,17 +55,17 @@ func flattenEmailProviderCredentials(d *schema.ResourceData, emailProvider *mana
 			"smtp_host": credentialsType.GetSMTPHost(),
 			"smtp_port": credentialsType.GetSMTPPort(),
 			"smtp_user": credentialsType.GetSMTPUser(),
-			"smtp_pass": d.Get("credentials.0.smtp_pass").(string),
+			"smtp_pass": data.Get("credentials.0.smtp_pass").(string),
 		}
 	case *management.EmailProviderCredentialsAzureCS:
 		credentials = map[string]interface{}{
-			"azure_cs_connection_string": d.Get("credentials.0.azure_cs_connection_string").(string),
+			"azure_cs_connection_string": data.Get("credentials.0.azure_cs_connection_string").(string),
 		}
 	case *management.EmailProviderCredentialsMS365:
 		credentials = map[string]interface{}{
-			"ms365_tenant_id":     d.Get("credentials.0.ms365_tenant_id").(string),
-			"ms365_client_id":     d.Get("credentials.0.ms365_client_id").(string),
-			"ms365_client_secret": d.Get("credentials.0.ms365_client_secret").(string),
+			"ms365_tenant_id":     data.Get("credentials.0.ms365_tenant_id").(string),
+			"ms365_client_id":     data.Get("credentials.0.ms365_client_id").(string),
+			"ms365_client_secret": data.Get("credentials.0.ms365_client_secret").(string),
 		}
 	}
 

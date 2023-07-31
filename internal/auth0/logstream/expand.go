@@ -10,19 +10,19 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandLogStream(d *schema.ResourceData) *management.LogStream {
-	config := d.GetRawConfig()
+func expandLogStream(data *schema.ResourceData) *management.LogStream {
+	config := data.GetRawConfig()
 
 	logStream := &management.LogStream{
 		Name: value.String(config.GetAttr("name")),
 	}
 
 	logStreamType := value.String(config.GetAttr("type"))
-	if d.IsNewResource() {
+	if data.IsNewResource() {
 		logStream.Type = logStreamType
 	}
 
-	if !d.IsNewResource() {
+	if !data.IsNewResource() {
 		logStream.Status = value.String(config.GetAttr("status"))
 	}
 
@@ -42,12 +42,12 @@ func expandLogStream(d *schema.ResourceData) *management.LogStream {
 		switch *logStreamType {
 		case management.LogStreamTypeAmazonEventBridge:
 			// LogStreamTypeAmazonEventBridge cannot be updated.
-			if d.IsNewResource() {
+			if data.IsNewResource() {
 				logStream.Sink = expandLogStreamSinkAmazonEventBridge(sink)
 			}
 		case management.LogStreamTypeAzureEventGrid:
 			// LogStreamTypeAzureEventGrid cannot be updated.
-			if d.IsNewResource() {
+			if data.IsNewResource() {
 				logStream.Sink = expandLogStreamSinkAzureEventGrid(sink)
 			}
 		case management.LogStreamTypeHTTP:

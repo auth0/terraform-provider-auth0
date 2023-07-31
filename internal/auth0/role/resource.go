@@ -38,48 +38,48 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	role := expandRole(d)
+	role := expandRole(data)
 
 	if err := api.Role.Create(ctx, role); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(role.GetID())
+	data.SetId(role.GetID())
 
-	return readRole(ctx, d, m)
+	return readRole(ctx, data, meta)
 }
 
-func readRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	role, err := api.Role.Read(ctx, d.Id())
+	role, err := api.Role.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenRole(d, role))
+	return diag.FromErr(flattenRole(data, role))
 }
 
-func updateRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	role := expandRole(d)
+	role := expandRole(data)
 
-	if err := api.Role.Update(ctx, d.Id(), role); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Role.Update(ctx, data.Id(), role); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readRole(ctx, d, m)
+	return readRole(ctx, data, meta)
 }
 
-func deleteRole(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteRole(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Role.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Role.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

@@ -116,56 +116,56 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	resourceServer := expandResourceServer(d)
+	resourceServer := expandResourceServer(data)
 
 	if err := api.ResourceServer.Create(ctx, resourceServer); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(resourceServer.GetID())
+	data.SetId(resourceServer.GetID())
 
-	return readResourceServer(ctx, d, m)
+	return readResourceServer(ctx, data, meta)
 }
 
-func readResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	resourceServer, err := api.ResourceServer.Read(ctx, d.Id())
+	resourceServer, err := api.ResourceServer.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	// Ensuring the ID is the resource server ID and not the identifier,
 	// as both can be used to find a resource server with the Read() func.
-	d.SetId(resourceServer.GetID())
+	data.SetId(resourceServer.GetID())
 
-	return diag.FromErr(flattenResourceServer(d, resourceServer))
+	return diag.FromErr(flattenResourceServer(data, resourceServer))
 }
 
-func updateResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	resourceServer := expandResourceServer(d)
+	resourceServer := expandResourceServer(data)
 
-	if err := api.ResourceServer.Update(ctx, d.Id(), resourceServer); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readResourceServer(ctx, d, m)
+	return readResourceServer(ctx, data, meta)
 }
 
-func deleteResourceServer(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	if resourceServerIsAuth0ManagementAPI(d.GetRawState()) {
+func deleteResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	if resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		return nil
 	}
 
-	api := m.(*config.Config).GetAPI()
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.ResourceServer.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.ResourceServer.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

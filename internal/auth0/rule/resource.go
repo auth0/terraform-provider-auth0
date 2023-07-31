@@ -65,47 +65,47 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	rule := expandRule(d.GetRawConfig())
+	rule := expandRule(data.GetRawConfig())
 
 	if err := api.Rule.Create(ctx, rule); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(rule.GetID())
+	data.SetId(rule.GetID())
 
-	return readRule(ctx, d, m)
+	return readRule(ctx, data, meta)
 }
 
-func readRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	rule, err := api.Rule.Read(ctx, d.Id())
+func readRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+	rule, err := api.Rule.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenRule(d, rule))
+	return diag.FromErr(flattenRule(data, rule))
 }
 
-func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	rule := expandRule(d.GetRawConfig())
+	rule := expandRule(data.GetRawConfig())
 
-	if err := api.Rule.Update(ctx, d.Id(), rule); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Rule.Update(ctx, data.Id(), rule); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readRule(ctx, d, m)
+	return readRule(ctx, data, meta)
 }
 
-func deleteRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Rule.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Rule.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

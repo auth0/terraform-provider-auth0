@@ -50,62 +50,62 @@ func NewGrantResource() *schema.Resource {
 	}
 }
 
-func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	grantList, err := api.ClientGrant.List(
 		ctx,
-		management.Parameter("audience", d.Get("audience").(string)),
-		management.Parameter("client_id", d.Get("client_id").(string)),
+		management.Parameter("audience", data.Get("audience").(string)),
+		management.Parameter("client_id", data.Get("client_id").(string)),
 	)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	if len(grantList.ClientGrants) != 0 {
-		d.SetId(grantList.ClientGrants[0].GetID())
-		return readClientGrant(ctx, d, m)
+		data.SetId(grantList.ClientGrants[0].GetID())
+		return readClientGrant(ctx, data, meta)
 	}
 
-	clientGrant := expandClientGrant(d)
+	clientGrant := expandClientGrant(data)
 
 	if err := api.ClientGrant.Create(ctx, clientGrant); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(clientGrant.GetID())
+	data.SetId(clientGrant.GetID())
 
-	return readClientGrant(ctx, d, m)
+	return readClientGrant(ctx, data, meta)
 }
 
-func readClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	clientGrant, err := api.ClientGrant.Read(ctx, d.Id())
+	clientGrant, err := api.ClientGrant.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenClientGrant(d, clientGrant))
+	return diag.FromErr(flattenClientGrant(data, clientGrant))
 }
 
-func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if clientGrant := expandClientGrant(d); clientGrantHasChange(clientGrant) {
-		if err := api.ClientGrant.Update(ctx, d.Id(), clientGrant); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(d, err))
+	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
+		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 	}
 
-	return readClientGrant(ctx, d, m)
+	return readClientGrant(ctx, data, meta)
 }
 
-func deleteClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.ClientGrant.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.ClientGrant.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

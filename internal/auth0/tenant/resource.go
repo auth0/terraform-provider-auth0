@@ -293,32 +293,32 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
-	return updateTenant(ctx, d, m)
+func createTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	data.SetId(id.UniqueId())
+	return updateTenant(ctx, data, meta)
 }
 
-func readTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	tenant, err := api.Tenant.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenTenant(d, tenant))
+	return diag.FromErr(flattenTenant(data, tenant))
 }
 
-func updateTenant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	tenant := expandTenant(d)
+	tenant := expandTenant(data)
 
 	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readTenant(ctx, d, m)
+	return readTenant(ctx, data, meta)
 }
 
 func deleteTenant(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {

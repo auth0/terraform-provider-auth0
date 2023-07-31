@@ -104,13 +104,13 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
-	return updateBranding(ctx, d, m)
+func createBranding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	data.SetId(id.UniqueId())
+	return updateBranding(ctx, data, meta)
 }
 
-func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readBranding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	branding, err := api.Branding.Read(ctx)
 	if err != nil {
@@ -125,19 +125,19 @@ func readBranding(ctx context.Context, d *schema.ResourceData, m interface{}) di
 		}
 	}
 
-	return diag.FromErr(flattenBranding(d, branding, universalLoginTemplate))
+	return diag.FromErr(flattenBranding(data, branding, universalLoginTemplate))
 }
 
-func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateBranding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if branding := expandBranding(d.GetRawConfig()); branding.String() != "{}" {
+	if branding := expandBranding(data.GetRawConfig()); branding.String() != "{}" {
 		if err := api.Branding.Update(ctx, branding); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	oldUL, newUL := d.GetChange("universal_login")
+	oldUL, newUL := data.GetChange("universal_login")
 	oldUniversalLogin := oldUL.([]interface{})
 	newUniversalLogin := newUL.([]interface{})
 
@@ -147,10 +147,10 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 			return diag.FromErr(err)
 		}
 
-		return readBranding(ctx, d, m)
+		return readBranding(ctx, data, meta)
 	}
 
-	if universalLogin := expandBrandingUniversalLogin(d.GetRawConfig()); universalLogin.GetBody() != "" {
+	if universalLogin := expandBrandingUniversalLogin(data.GetRawConfig()); universalLogin.GetBody() != "" {
 		if err := checkForCustomDomains(ctx, api); err != nil {
 			return diag.FromErr(err)
 		}
@@ -160,11 +160,11 @@ func updateBranding(ctx context.Context, d *schema.ResourceData, m interface{}) 
 		}
 	}
 
-	return readBranding(ctx, d, m)
+	return readBranding(ctx, data, meta)
 }
 
-func deleteBranding(ctx context.Context, _ *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteBranding(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	if err := checkForCustomDomains(ctx, api); err != nil {
 		if err == errNoCustomDomain {

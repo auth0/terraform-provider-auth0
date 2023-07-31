@@ -266,56 +266,56 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream := expandLogStream(d)
+	logStream := expandLogStream(data)
 
 	if err := api.LogStream.Create(ctx, logStream); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(logStream.GetID())
+	data.SetId(logStream.GetID())
 
 	// The Management API only allows updating a log stream's status.
 	// Therefore, if the status field was present in the configuration,
 	// we perform an additional operation to modify it.
-	if status := d.Get("status").(string); status != "" && status != logStream.GetStatus() {
+	if status := data.Get("status").(string); status != "" && status != logStream.GetStatus() {
 		logStreamWithStatus := &management.LogStream{Status: &status}
 		return diag.FromErr(api.LogStream.Update(ctx, logStream.GetID(), logStreamWithStatus))
 	}
 
-	return readLogStream(ctx, d, m)
+	return readLogStream(ctx, data, meta)
 }
 
-func readLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream, err := api.LogStream.Read(ctx, d.Id())
+	logStream, err := api.LogStream.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenLogStream(d, logStream))
+	return diag.FromErr(flattenLogStream(data, logStream))
 }
 
-func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream := expandLogStream(d)
+	logStream := expandLogStream(data)
 
-	if err := api.LogStream.Update(ctx, d.Id(), logStream); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.LogStream.Update(ctx, data.Id(), logStream); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readLogStream(ctx, d, m)
+	return readLogStream(ctx, data, meta)
 }
 
-func deleteLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.LogStream.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.LogStream.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

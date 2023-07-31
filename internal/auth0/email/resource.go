@@ -207,52 +207,52 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createEmailProvider(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	d.SetId(id.UniqueId())
+	data.SetId(id.UniqueId())
 
 	if emailProviderIsConfigured(ctx, api) {
-		return updateEmailProvider(ctx, d, m)
+		return updateEmailProvider(ctx, data, meta)
 	}
 
-	email := expandEmailProvider(d.GetRawConfig())
+	email := expandEmailProvider(data.GetRawConfig())
 
 	if err := api.EmailProvider.Create(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readEmailProvider(ctx, d, m)
+	return readEmailProvider(ctx, data, meta)
 }
 
-func readEmailProvider(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	email, err := api.EmailProvider.Read(ctx)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenEmailProvider(d, email))
+	return diag.FromErr(flattenEmailProvider(data, email))
 }
 
-func updateEmailProvider(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailProvider(d.GetRawConfig())
+	email := expandEmailProvider(data.GetRawConfig())
 
 	if err := api.EmailProvider.Update(ctx, email); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readEmailProvider(ctx, d, m)
+	return readEmailProvider(ctx, data, meta)
 }
 
-func deleteEmailProvider(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	if err := api.EmailProvider.Delete(ctx); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

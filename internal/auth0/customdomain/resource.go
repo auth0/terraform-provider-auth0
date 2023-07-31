@@ -97,48 +97,48 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createCustomDomain(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	customDomain := expandCustomDomain(d)
+	customDomain := expandCustomDomain(data)
 
 	if err := api.CustomDomain.Create(ctx, customDomain); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(customDomain.GetID())
+	data.SetId(customDomain.GetID())
 
-	return readCustomDomain(ctx, d, m)
+	return readCustomDomain(ctx, data, meta)
 }
 
-func readCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readCustomDomain(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
+	customDomain, err := api.CustomDomain.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenCustomDomain(d, customDomain))
+	return diag.FromErr(flattenCustomDomain(data, customDomain))
 }
 
-func updateCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateCustomDomain(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	customDomain := expandCustomDomain(d)
+	customDomain := expandCustomDomain(data)
 
-	if err := api.CustomDomain.Update(ctx, d.Id(), customDomain); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.CustomDomain.Update(ctx, data.Id(), customDomain); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readCustomDomain(ctx, d, m)
+	return readCustomDomain(ctx, data, meta)
 }
 
-func deleteCustomDomain(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteCustomDomain(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.CustomDomain.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.CustomDomain.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

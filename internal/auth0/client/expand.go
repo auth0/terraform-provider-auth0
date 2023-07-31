@@ -9,8 +9,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandClient(d *schema.ResourceData) *management.Client {
-	config := d.GetRawConfig()
+func expandClient(data *schema.ResourceData) *management.Client {
+	config := data.GetRawConfig()
 
 	client := &management.Client{
 		Name:                        value.String(config.GetAttr("name")),
@@ -37,24 +37,24 @@ func expandClient(d *schema.ResourceData) *management.Client {
 		FormTemplate:                value.String(config.GetAttr("form_template")),
 		InitiateLoginURI:            value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:               value.MapOfStrings(config.GetAttr("encryption_key")),
-		OIDCBackchannelLogout:       expandOIDCBackchannelLogout(d),
-		ClientMetadata:              expandClientMetadata(d),
-		RefreshToken:                expandClientRefreshToken(d),
-		JWTConfiguration:            expandClientJWTConfiguration(d),
-		Addons:                      expandClientAddons(d),
-		NativeSocialLogin:           expandClientNativeSocialLogin(d),
-		Mobile:                      expandClientMobile(d),
+		OIDCBackchannelLogout:       expandOIDCBackchannelLogout(data),
+		ClientMetadata:              expandClientMetadata(data),
+		RefreshToken:                expandClientRefreshToken(data),
+		JWTConfiguration:            expandClientJWTConfiguration(data),
+		Addons:                      expandClientAddons(data),
+		NativeSocialLogin:           expandClientNativeSocialLogin(data),
+		Mobile:                      expandClientMobile(data),
 	}
 
-	if !d.IsNewResource() {
+	if !data.IsNewResource() {
 		client.IsTokenEndpointIPHeaderTrusted = value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted"))
 	}
 
 	return client
 }
 
-func expandOIDCBackchannelLogout(d *schema.ResourceData) *management.OIDCBackchannelLogout {
-	raw := d.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
+func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
+	raw := data.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
 
 	logoutUrls := value.Strings(raw)
 
@@ -67,8 +67,8 @@ func expandOIDCBackchannelLogout(d *schema.ResourceData) *management.OIDCBackcha
 	}
 }
 
-func expandClientRefreshToken(d *schema.ResourceData) *management.ClientRefreshToken {
-	refreshTokenConfig := d.GetRawConfig().GetAttr("refresh_token")
+func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {
+	refreshTokenConfig := data.GetRawConfig().GetAttr("refresh_token")
 	if refreshTokenConfig.IsNull() {
 		return nil
 	}
@@ -93,8 +93,8 @@ func expandClientRefreshToken(d *schema.ResourceData) *management.ClientRefreshT
 	return &refreshToken
 }
 
-func expandClientJWTConfiguration(d *schema.ResourceData) *management.ClientJWTConfiguration {
-	jwtConfig := d.GetRawConfig().GetAttr("jwt_configuration")
+func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJWTConfiguration {
+	jwtConfig := data.GetRawConfig().GetAttr("jwt_configuration")
 	if jwtConfig.IsNull() {
 		return nil
 	}
@@ -106,7 +106,7 @@ func expandClientJWTConfiguration(d *schema.ResourceData) *management.ClientJWTC
 		jwt.Algorithm = value.String(config.GetAttr("alg"))
 		jwt.Scopes = value.MapOfStrings(config.GetAttr("scopes"))
 
-		if d.IsNewResource() {
+		if data.IsNewResource() {
 			jwt.SecretEncoded = value.Bool(config.GetAttr("secret_encoded"))
 		}
 
@@ -120,8 +120,8 @@ func expandClientJWTConfiguration(d *schema.ResourceData) *management.ClientJWTC
 	return &jwt
 }
 
-func expandClientNativeSocialLogin(d *schema.ResourceData) *management.ClientNativeSocialLogin {
-	nativeSocialLoginConfig := d.GetRawConfig().GetAttr("native_social_login")
+func expandClientNativeSocialLogin(data *schema.ResourceData) *management.ClientNativeSocialLogin {
+	nativeSocialLoginConfig := data.GetRawConfig().GetAttr("native_social_login")
 	if nativeSocialLoginConfig.IsNull() {
 		return nil
 	}
@@ -160,8 +160,8 @@ func expandClientNativeSocialLoginSupportEnabled(config cty.Value) *management.C
 	return &support
 }
 
-func expandClientMobile(d *schema.ResourceData) *management.ClientMobile {
-	mobileConfig := d.GetRawConfig().GetAttr("mobile")
+func expandClientMobile(data *schema.ResourceData) *management.ClientMobile {
+	mobileConfig := data.GetRawConfig().GetAttr("mobile")
 	if mobileConfig.IsNull() {
 		return nil
 	}
@@ -221,12 +221,12 @@ func expandClientMobileIOS(iosConfig cty.Value) *management.ClientMobileIOS {
 	return &ios
 }
 
-func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
-	if !d.HasChange("client_metadata") {
+func expandClientMetadata(data *schema.ResourceData) *map[string]interface{} {
+	if !data.HasChange("client_metadata") {
 		return nil
 	}
 
-	oldMetadata, newMetadata := d.GetChange("client_metadata")
+	oldMetadata, newMetadata := data.GetChange("client_metadata")
 	oldMetadataMap := oldMetadata.(map[string]interface{})
 	newMetadataMap := newMetadata.(map[string]interface{})
 
@@ -239,14 +239,14 @@ func expandClientMetadata(d *schema.ResourceData) *map[string]interface{} {
 	return &newMetadataMap
 }
 
-func expandClientAddons(d *schema.ResourceData) *management.ClientAddons {
-	if !d.HasChange("addons") {
+func expandClientAddons(data *schema.ResourceData) *management.ClientAddons {
+	if !data.HasChange("addons") {
 		return nil
 	}
 
 	var addons management.ClientAddons
 
-	d.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
+	data.GetRawConfig().GetAttr("addons").ForEachElement(func(_ cty.Value, addonsCfg cty.Value) (stop bool) {
 		addons.AWS = expandClientAddonAWS(addonsCfg.GetAttr("aws"))
 		addons.AzureBlob = expandClientAddonAzureBlob(addonsCfg.GetAttr("azure_blob"))
 		addons.AzureSB = expandClientAddonAzureSB(addonsCfg.GetAttr("azure_sb"))

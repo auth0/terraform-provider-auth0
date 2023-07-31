@@ -10,14 +10,14 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func updatePolicy(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("policy") {
+func updatePolicy(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("policy") {
 		return nil
 	}
 
 	multiFactorPolicies := management.MultiFactorPolicies{}
 
-	policy := d.Get("policy").(string)
+	policy := data.Get("policy").(string)
 	if policy != "never" {
 		multiFactorPolicies = append(multiFactorPolicies, policy)
 	}
@@ -26,39 +26,39 @@ func updatePolicy(ctx context.Context, d *schema.ResourceData, api *management.M
 	return api.Guardian.MultiFactor.UpdatePolicy(ctx, &multiFactorPolicies)
 }
 
-func updateEmailFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("email") {
+func updateEmailFactor(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("email") {
 		return nil
 	}
 
-	enabled := d.Get("email").(bool)
+	enabled := data.Get("email").(bool)
 	return api.Guardian.MultiFactor.Email.Enable(ctx, enabled)
 }
 
-func updateOTPFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("otp") {
+func updateOTPFactor(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("otp") {
 		return nil
 	}
 
-	enabled := d.Get("otp").(bool)
+	enabled := data.Get("otp").(bool)
 	return api.Guardian.MultiFactor.OTP.Enable(ctx, enabled)
 }
 
-func updateRecoveryCodeFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("recovery_code") {
+func updateRecoveryCodeFactor(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("recovery_code") {
 		return nil
 	}
 
-	enabled := d.Get("recovery_code").(bool)
+	enabled := data.Get("recovery_code").(bool)
 	return api.Guardian.MultiFactor.RecoveryCode.Enable(ctx, enabled)
 }
 
-func updatePhoneFactor(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("phone") {
+func updatePhoneFactor(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("phone") {
 		return nil
 	}
 
-	enabled := d.Get("phone.0.enabled").(bool)
+	enabled := data.Get("phone.0.enabled").(bool)
 
 	// Always enable phone factor before configuring it.
 	// Otherwise, we encounter an error with message_types.
@@ -69,7 +69,7 @@ func updatePhoneFactor(ctx context.Context, d *schema.ResourceData, api *managem
 		return nil
 	}
 
-	return configurePhone(ctx, d.GetRawConfig(), api)
+	return configurePhone(ctx, data.GetRawConfig(), api)
 }
 
 func configurePhone(ctx context.Context, config cty.Value, api *management.Management) error {
@@ -158,12 +158,12 @@ func updateTwilioOptions(ctx context.Context, options cty.Value, api *management
 	return err
 }
 
-func updateWebAuthnRoaming(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("webauthn_roaming") {
+func updateWebAuthnRoaming(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("webauthn_roaming") {
 		return nil
 	}
 
-	enabled := d.Get("webauthn_roaming.0.enabled").(bool)
+	enabled := data.Get("webauthn_roaming.0.enabled").(bool)
 	if err := api.Guardian.MultiFactor.WebAuthnRoaming.Enable(ctx, enabled); err != nil {
 		return err
 	}
@@ -172,7 +172,7 @@ func updateWebAuthnRoaming(ctx context.Context, d *schema.ResourceData, api *man
 	}
 
 	var err error
-	d.GetRawConfig().GetAttr("webauthn_roaming").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+	data.GetRawConfig().GetAttr("webauthn_roaming").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		webAuthnSettings := &management.MultiFactorWebAuthnSettings{
 			UserVerification:       value.String(config.GetAttr("user_verification")),
 			OverrideRelyingParty:   value.Bool(config.GetAttr("override_relying_party")),
@@ -189,12 +189,12 @@ func updateWebAuthnRoaming(ctx context.Context, d *schema.ResourceData, api *man
 	return err
 }
 
-func updateWebAuthnPlatform(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("webauthn_platform") {
+func updateWebAuthnPlatform(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("webauthn_platform") {
 		return nil
 	}
 
-	enabled := d.Get("webauthn_platform.0.enabled").(bool)
+	enabled := data.Get("webauthn_platform.0.enabled").(bool)
 	if err := api.Guardian.MultiFactor.WebAuthnPlatform.Enable(ctx, enabled); err != nil {
 		return err
 	}
@@ -203,7 +203,7 @@ func updateWebAuthnPlatform(ctx context.Context, d *schema.ResourceData, api *ma
 	}
 
 	var err error
-	d.GetRawConfig().GetAttr("webauthn_platform").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+	data.GetRawConfig().GetAttr("webauthn_platform").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		webAuthnSettings := &management.MultiFactorWebAuthnSettings{
 			OverrideRelyingParty:   value.Bool(config.GetAttr("override_relying_party")),
 			RelyingPartyIdentifier: value.String(config.GetAttr("relying_party_identifier")),
@@ -219,12 +219,12 @@ func updateWebAuthnPlatform(ctx context.Context, d *schema.ResourceData, api *ma
 	return err
 }
 
-func updateDUO(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("duo") {
+func updateDUO(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("duo") {
 		return nil
 	}
 
-	enabled := d.Get("duo.0.enabled").(bool)
+	enabled := data.Get("duo.0.enabled").(bool)
 	if err := api.Guardian.MultiFactor.DUO.Enable(ctx, enabled); err != nil {
 		return err
 	}
@@ -233,7 +233,7 @@ func updateDUO(ctx context.Context, d *schema.ResourceData, api *management.Mana
 	}
 
 	var err error
-	d.GetRawConfig().GetAttr("duo").ForEachElement(
+	data.GetRawConfig().GetAttr("duo").ForEachElement(
 		func(_ cty.Value, config cty.Value) (stop bool) {
 			duoSettings := &management.MultiFactorDUOSettings{
 				SecretKey:      value.String(config.GetAttr("secret_key")),
@@ -252,12 +252,12 @@ func updateDUO(ctx context.Context, d *schema.ResourceData, api *management.Mana
 	return err
 }
 
-func updatePush(ctx context.Context, d *schema.ResourceData, api *management.Management) error {
-	if !d.HasChange("push") {
+func updatePush(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if !data.HasChange("push") {
 		return nil
 	}
 
-	enabled := d.Get("push.0.enabled").(bool)
+	enabled := data.Get("push.0.enabled").(bool)
 	if err := api.Guardian.MultiFactor.Push.Enable(ctx, enabled); err != nil {
 		return err
 	}
@@ -266,7 +266,7 @@ func updatePush(ctx context.Context, d *schema.ResourceData, api *management.Man
 	}
 
 	var err error
-	d.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
+	data.GetRawConfig().GetAttr("push").ForEachElement(func(_ cty.Value, push cty.Value) (stop bool) {
 		mfaProvider := &management.MultiFactorProvider{
 			Provider: value.String(push.GetAttr("provider")),
 		}
@@ -274,25 +274,25 @@ func updatePush(ctx context.Context, d *schema.ResourceData, api *management.Man
 			return true
 		}
 
-		if d.HasChange("push.0.custom_app") {
+		if data.HasChange("push.0.custom_app") {
 			if err = updateCustomApp(ctx, push.GetAttr("custom_app"), api); err != nil {
 				return true
 			}
 		}
 
-		if d.HasChange("push.0.direct_apns") {
+		if data.HasChange("push.0.direct_apns") {
 			if err = updateDirectAPNS(ctx, push.GetAttr("direct_apns"), api); err != nil {
 				return true
 			}
 		}
 
-		if d.HasChange("push.0.direct_fcm") {
+		if data.HasChange("push.0.direct_fcm") {
 			if err = updateDirectFCM(ctx, push.GetAttr("direct_fcm"), api); err != nil {
 				return true
 			}
 		}
 
-		if d.HasChange("push.0.amazon_sns") {
+		if data.HasChange("push.0.amazon_sns") {
 			if err = updateAmazonSNS(ctx, push.GetAttr("amazon_sns"), api); err != nil {
 				return true
 			}

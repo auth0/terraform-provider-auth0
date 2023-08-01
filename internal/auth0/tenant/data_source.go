@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/auth0/terraform-provider-auth0/internal/auth0"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
@@ -44,21 +43,23 @@ func dataSourceSchema() map[string]*schema.Schema {
 func readTenantForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	u, err := url.Parse(api.URI())
+	tenant, err := api.Tenant.Read(ctx)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	data.SetId(id.UniqueId())
+
+	apiURL, err := url.Parse(api.URI())
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to determine management API URL: %w", err))
 	}
 
-	// This resource is not identified by an id in the Auth0 management API.
-	data.SetId(id.UniqueId())
-
 	result := multierror.Append(
-		data.Set("domain", u.Hostname()),
-		data.Set("management_api_identifier", u.String()),
+		data.Set("domain", apiURL.Hostname()),
+		data.Set("management_api_identifier", apiURL.String()),
+		flattenTenant(data, tenant),
 	)
-	if result.ErrorOrNil() != nil {
-		return diag.FromErr(result.ErrorOrNil())
-	}
 
-	return auth0.CheckFor404Error(ctx, readTenant, data, meta)
+	return diag.FromErr(result.ErrorOrNil())
 }

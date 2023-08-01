@@ -130,76 +130,76 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	action := expandAction(d.GetRawConfig())
+	action := expandAction(data.GetRawConfig())
 
 	if err := api.Action.Create(ctx, action); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(action.GetID())
+	data.SetId(action.GetID())
 
-	if err := deployAction(ctx, d, m); err != nil {
+	if err := deployAction(ctx, data, meta); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readAction(ctx, d, m)
+	return readAction(ctx, data, meta)
 }
 
-func readAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	action, err := api.Action.Read(ctx, d.Id())
+	action, err := api.Action.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenAction(d, action))
+	return diag.FromErr(flattenAction(data, action))
 }
 
-func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	diagnostics := preventErasingUnmanagedSecrets(ctx, d, api)
+	diagnostics := preventErasingUnmanagedSecrets(ctx, data, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	action := expandAction(d.GetRawConfig())
+	action := expandAction(data.GetRawConfig())
 
-	if err := api.Action.Update(ctx, d.Id(), action); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Action.Update(ctx, data.Id(), action); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if err := deployAction(ctx, d, m); err != nil {
+	if err := deployAction(ctx, data, meta); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readAction(ctx, d, m)
+	return readAction(ctx, data, meta)
 }
 
-func deleteAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Action.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Action.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
 }
 
-func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) error {
-	deployExists := d.Get("deploy").(bool)
+func deployAction(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
+	deployExists := data.Get("deploy").(bool)
 	if !deployExists {
 		return nil
 	}
 
-	api := m.(*config.Config).GetAPI()
+	api := meta.(*config.Config).GetAPI()
 
-	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		action, err := api.Action.Read(ctx, d.Id())
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
+		action, err := api.Action.Read(ctx, data.Id())
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
@@ -219,13 +219,13 @@ func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) er
 		return nil
 	})
 	if err != nil {
-		return fmt.Errorf("action %q never reached built state: %w", d.Get("name").(string), err)
+		return fmt.Errorf("action %q never reached built state: %w", data.Get("name").(string), err)
 	}
 
-	actionVersion, err := api.Action.Deploy(ctx, d.Id())
+	actionVersion, err := api.Action.Deploy(ctx, data.Id())
 	if err != nil {
 		return err
 	}
 
-	return d.Set("version_id", actionVersion.GetID())
+	return data.Set("version_id", actionVersion.GetID())
 }

@@ -68,32 +68,32 @@ func NewCustomTextResource() *schema.Resource {
 	}
 }
 
-func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	prompt := d.Get("prompt").(string)
-	language := d.Get("language").(string)
+func createPromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	prompt := data.Get("prompt").(string)
+	language := data.Get("language").(string)
 
-	internalSchema.SetResourceGroupID(d, prompt, language)
+	internalSchema.SetResourceGroupID(data, prompt, language)
 
-	return updatePromptCustomText(ctx, d, m)
+	return updatePromptCustomText(ctx, data, meta)
 }
 
-func readPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readPromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	customText, err := api.Prompt.CustomText(ctx, d.Get("prompt").(string), d.Get("language").(string))
+	customText, err := api.Prompt.CustomText(ctx, data.Get("prompt").(string), data.Get("language").(string))
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenPromptCustomText(d, customText))
+	return diag.FromErr(flattenPromptCustomText(data, customText))
 }
 
-func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updatePromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	prompt := d.Get("prompt").(string)
-	language := d.Get("language").(string)
-	body := d.Get("body").(string)
+	prompt := data.Get("prompt").(string)
+	language := data.Get("language").(string)
+	body := data.Get("body").(string)
 
 	if body == "" {
 		return nil
@@ -108,13 +108,13 @@ func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	return readPromptCustomText(ctx, d, m)
+	return readPromptCustomText(ctx, data, meta)
 }
 
-func deletePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	if err := d.Set("body", "{}"); err != nil {
+func deletePromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	if err := data.Set("body", "{}"); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return updatePromptCustomText(ctx, d, m)
+	return updatePromptCustomText(ctx, data, meta)
 }

@@ -17,7 +17,7 @@ func flattenLogStream(data *schema.ResourceData, logStream *management.LogStream
 	return result.ErrorOrNil()
 }
 
-func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{} {
+func flattenLogStreamSink(data *schema.ResourceData, sink interface{}) []interface{} {
 	var m interface{}
 
 	switch sinkType := sink.(type) {
@@ -34,7 +34,7 @@ func flattenLogStreamSink(d *schema.ResourceData, sink interface{}) []interface{
 	case *management.LogStreamSinkSumo:
 		m = flattenLogStreamSinkSumo(sinkType)
 	case *management.LogStreamSinkMixpanel:
-		m = flattenLogStreamSinkMixpanel(d, sinkType)
+		m = flattenLogStreamSinkMixpanel(data, sinkType)
 	case *management.LogStreamSinkSegment:
 		m = flattenLogStreamSinkSegment(sinkType)
 	}
@@ -97,11 +97,11 @@ func flattenLogStreamSinkSumo(o *management.LogStreamSinkSumo) interface{} {
 	}
 }
 
-func flattenLogStreamSinkMixpanel(d *schema.ResourceData, o *management.LogStreamSinkMixpanel) interface{} {
+func flattenLogStreamSinkMixpanel(data *schema.ResourceData, o *management.LogStreamSinkMixpanel) interface{} {
 	return map[string]interface{}{
 		"mixpanel_region":                   o.GetRegion(),
 		"mixpanel_project_id":               o.GetProjectID(),
 		"mixpanel_service_account_username": o.GetServiceAccountUsername(),
-		"mixpanel_service_account_password": d.Get("sink.0.mixpanel_service_account_password").(string), // Value does not get read back.
+		"mixpanel_service_account_password": data.Get("sink.0.mixpanel_service_account_password").(string), // Value does not get read back.
 	}
 }

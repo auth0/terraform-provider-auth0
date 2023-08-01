@@ -53,11 +53,11 @@ func NewVerificationResource() *schema.Resource {
 	}
 }
 
-func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createCustomDomainVerification(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		customDomainVerification, err := api.CustomDomain.Verify(ctx, d.Get("custom_domain_id").(string))
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
+		customDomainVerification, err := api.CustomDomain.Verify(ctx, data.Get("custom_domain_id").(string))
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
@@ -68,12 +68,12 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 			)
 		}
 
-		d.SetId(customDomainVerification.GetID())
+		data.SetId(customDomainVerification.GetID())
 
 		// The cname_api_key field is only given once: when verification
 		// succeeds for the first time. Therefore, we set it on the resource in
 		// the creation routine only, and never touch it again.
-		if err := d.Set("cname_api_key", customDomainVerification.GetCNAMEAPIKey()); err != nil {
+		if err := data.Set("cname_api_key", customDomainVerification.GetCNAMEAPIKey()); err != nil {
 			return retry.NonRetryableError(err)
 		}
 
@@ -83,18 +83,18 @@ func createCustomDomainVerification(ctx context.Context, d *schema.ResourceData,
 		return diag.FromErr(err)
 	}
 
-	return readCustomDomainVerification(ctx, d, m)
+	return readCustomDomainVerification(ctx, data, meta)
 }
 
-func readCustomDomainVerification(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readCustomDomainVerification(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	customDomain, err := api.CustomDomain.Read(ctx, d.Id())
+	customDomain, err := api.CustomDomain.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenCustomDomainVerification(d, customDomain))
+	return diag.FromErr(flattenCustomDomainVerification(data, customDomain))
 }
 
 func deleteCustomDomainVerification(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {

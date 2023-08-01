@@ -59,14 +59,14 @@ func expandSuspiciousIPThrottling(data *schema.ResourceData) *management.Suspici
 	return ipt
 }
 
-func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForceProtection {
-	if !d.HasChange("brute_force_protection") {
+func expandBruteForceProtection(data *schema.ResourceData) *management.BruteForceProtection {
+	if !data.HasChange("brute_force_protection") {
 		return nil
 	}
 
 	var bfp *management.BruteForceProtection
 
-	d.GetRawConfig().GetAttr("brute_force_protection").ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+	data.GetRawConfig().GetAttr("brute_force_protection").ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		bfp = &management.BruteForceProtection{
 			Enabled:     value.Bool(cfg.GetAttr("enabled")),
 			Mode:        value.String(cfg.GetAttr("mode")),
@@ -81,14 +81,14 @@ func expandBruteForceProtection(d *schema.ResourceData) *management.BruteForcePr
 	return bfp
 }
 
-func expandBreachedPasswordDetection(d *schema.ResourceData) *management.BreachedPasswordDetection {
-	if !d.HasChange("breached_password_detection") {
+func expandBreachedPasswordDetection(data *schema.ResourceData) *management.BreachedPasswordDetection {
+	if !data.HasChange("breached_password_detection") {
 		return nil
 	}
 
 	var bpd *management.BreachedPasswordDetection
 
-	d.GetRawConfig().GetAttr("breached_password_detection").ForEachElement(
+	data.GetRawConfig().GetAttr("breached_password_detection").ForEachElement(
 		func(_ cty.Value, breach cty.Value) (stop bool) {
 			bpd = &management.BreachedPasswordDetection{
 				Enabled:                    value.Bool(breach.GetAttr("enabled")),

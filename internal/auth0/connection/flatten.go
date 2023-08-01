@@ -50,7 +50,7 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	return diags
 }
 
-func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
+func flattenConnectionOptions(data *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
 	if options == nil {
 		return nil, nil
 	}
@@ -59,7 +59,7 @@ func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]in
 	var diags diag.Diagnostics
 	switch connectionOptions := options.(type) {
 	case *management.ConnectionOptions:
-		m, diags = flattenConnectionOptionsAuth0(d, connectionOptions)
+		m, diags = flattenConnectionOptionsAuth0(data, connectionOptions)
 	case *management.ConnectionOptionsGoogleOAuth2:
 		m, diags = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
 	case *management.ConnectionOptionsGoogleApps:
@@ -95,7 +95,7 @@ func flattenConnectionOptions(d *schema.ResourceData, options interface{}) ([]in
 	case *management.ConnectionOptionsPingFederate:
 		m, diags = flattenConnectionOptionsPingFederate(connectionOptions)
 	case *management.ConnectionOptionsSAML:
-		m, diags = flattenConnectionOptionsSAML(d, connectionOptions)
+		m, diags = flattenConnectionOptionsSAML(data, connectionOptions)
 	}
 
 	return []interface{}{m}, diags
@@ -139,10 +139,10 @@ func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWi
 }
 
 func flattenConnectionOptionsAuth0(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	options *management.ConnectionOptions,
 ) (interface{}, diag.Diagnostics) {
-	dbSecretConfig, ok := d.GetOk("options.0.configuration")
+	dbSecretConfig, ok := data.GetOk("options.0.configuration")
 	if !ok {
 		dbSecretConfig = make(map[string]interface{})
 	}
@@ -601,7 +601,7 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (in
 }
 
 func flattenConnectionOptionsSAML(
-	d *schema.ResourceData,
+	data *schema.ResourceData,
 	options *management.ConnectionOptionsSAML,
 ) (interface{}, diag.Diagnostics) {
 	m := map[string]interface{}{
@@ -622,7 +622,7 @@ func flattenConnectionOptionsSAML(
 		"non_persistent_attrs": options.GetNonPersistentAttrs(),
 		"entity_id":            options.GetEntityID(),
 		"metadata_url":         options.GetMetadataURL(),
-		"metadata_xml":         d.Get("options.0.metadata_xml").(string), // Does not get read back.
+		"metadata_xml":         data.Get("options.0.metadata_xml").(string), // Does not get read back.
 	}
 
 	m["set_user_root_attributes"] = options.GetSetUserAttributes()

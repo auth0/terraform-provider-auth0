@@ -50,24 +50,24 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return dataSourceSchema
 }
 
-func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readClientForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	clientID := d.Get("client_id").(string)
+	clientID := data.Get("client_id").(string)
 	if clientID != "" {
-		d.SetId(clientID)
+		data.SetId(clientID)
 
-		client, err := api.Client.Read(ctx, d.Id())
+		client, err := api.Client.Read(ctx, data.Id())
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		err = flattenClientForDataSource(d, client)
+		err = flattenClientForDataSource(data, client)
 
 		return diag.FromErr(err)
 	}
 
-	name := d.Get("name").(string)
+	name := data.Get("name").(string)
 	if name == "" {
 		return diag.Errorf("One of 'client_id' or 'name' is required.")
 	}
@@ -84,8 +84,8 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 
 		for _, client := range clients.Clients {
 			if client.GetName() == name {
-				d.SetId(client.GetClientID())
-				err = flattenClientForDataSource(d, client)
+				data.SetId(client.GetClientID())
+				err = flattenClientForDataSource(data, client)
 				return diag.FromErr(err)
 			}
 		}

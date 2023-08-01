@@ -38,23 +38,23 @@ func NewMemberResource() *schema.Resource {
 	}
 }
 
-func createOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createOrganizationMember(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	userID := d.Get("user_id").(string)
-	organizationID := d.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
+	organizationID := data.Get("organization_id").(string)
 
 	if err := api.Organization.AddMembers(ctx, organizationID, []string{userID}); err != nil {
 		return diag.FromErr(err)
 	}
 
-	internalSchema.SetResourceGroupID(d, organizationID, userID)
+	internalSchema.SetResourceGroupID(data, organizationID, userID)
 
-	return readOrganizationMember(ctx, d, m)
+	return readOrganizationMember(ctx, data, meta)
 }
 
-func readOrganizationMember(ctx context.Context, data *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
 
@@ -74,14 +74,14 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, m in
 	return nil
 }
 
-func deleteOrganizationMember(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteOrganizationMember(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organizationID := d.Get("organization_id").(string)
-	userID := d.Get("user_id").(string)
+	organizationID := data.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
 
 	if err := api.Organization.DeleteMembers(ctx, organizationID, []string{userID}); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

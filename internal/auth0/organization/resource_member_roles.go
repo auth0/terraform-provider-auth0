@@ -111,15 +111,15 @@ func deleteOrganizationMemberRoles(ctx context.Context, data *schema.ResourceDat
 	return nil
 }
 
-func assignMemberRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
-	if !d.HasChange("roles") {
+func assignMemberRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
+	if !data.HasChange("roles") {
 		return nil
 	}
 
-	userID := d.Get("user_id").(string)
-	organizationID := d.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
+	organizationID := data.Get("organization_id").(string)
 
-	toAdd, toRemove := value.Difference(d, "roles")
+	toAdd, toRemove := value.Difference(data, "roles")
 
 	if err := removeMemberRoles(ctx, meta, organizationID, userID, toRemove); err != nil {
 		if !internalError.IsStatusNotFound(err) {

@@ -70,48 +70,48 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization := expandOrganization(d)
+	organization := expandOrganization(data)
 
 	if err := api.Organization.Create(ctx, organization); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(organization.GetID())
+	data.SetId(organization.GetID())
 
-	return readOrganization(ctx, d, m)
+	return readOrganization(ctx, data, meta)
 }
 
-func readOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization, err := api.Organization.Read(ctx, d.Id())
+	organization, err := api.Organization.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenOrganization(d, organization))
+	return diag.FromErr(flattenOrganization(data, organization))
 }
 
-func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization := expandOrganization(d)
+	organization := expandOrganization(data)
 
-	if err := api.Organization.Update(ctx, d.Id(), organization); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Organization.Update(ctx, data.Id(), organization); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readOrganization(ctx, d, m)
+	return readOrganization(ctx, data, meta)
 }
 
-func deleteOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Organization.Delete(ctx, d.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(d, err))
+	if err := api.Organization.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

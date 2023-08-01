@@ -21,7 +21,7 @@ func NewRolesResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				DiffSuppressFunc: func(k, old, new string, data *schema.ResourceData) bool {
 					return old == "auth0|"+new
 				},
 				Description: "ID of the user.",
@@ -85,20 +85,20 @@ func deleteUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 	return nil
 }
 
-func persistUserRoles(ctx context.Context, d *schema.ResourceData, meta interface{}) error {
-	if !d.HasChange("roles") {
+func persistUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
+	if !data.HasChange("roles") {
 		return nil
 	}
 
-	rolesToAdd, rolesToRemove := value.Difference(d, "roles")
+	rolesToAdd, rolesToRemove := value.Difference(data, "roles")
 
-	if err := removeUserRoles(ctx, meta, d.Id(), rolesToRemove); err != nil {
+	if err := removeUserRoles(ctx, meta, data.Id(), rolesToRemove); err != nil {
 		if !internalError.IsStatusNotFound(err) {
 			return err
 		}
 	}
 
-	return assignUserRoles(ctx, meta, d.Id(), rolesToAdd)
+	return assignUserRoles(ctx, meta, data.Id(), rolesToAdd)
 }
 
 func removeUserRoles(ctx context.Context, meta interface{}, userID string, userRolesToRemove []interface{}) error {

@@ -13,8 +13,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandHook(d *schema.ResourceData) *management.Hook {
-	config := d.GetRawConfig()
+func expandHook(data *schema.ResourceData) *management.Hook {
+	config := data.GetRawConfig()
 
 	hook := &management.Hook{
 		Name:         value.String(config.GetAttr("name")),
@@ -23,7 +23,7 @@ func expandHook(d *schema.ResourceData) *management.Hook {
 		Dependencies: value.MapOfStrings(config.GetAttr("dependencies")),
 	}
 
-	if d.IsNewResource() {
+	if data.IsNewResource() {
 		hook.TriggerID = value.String(config.GetAttr("trigger_id"))
 	}
 

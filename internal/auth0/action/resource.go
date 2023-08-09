@@ -91,7 +91,7 @@ func NewResource() *schema.Resource {
 					"node18", // beta
 					"node18-actions", // GA
 				}, false),
-				Description: "The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), `node18` (not recommended) or `node18-actions` (recommended).",
+				Description: "The Node runtime. Defaults to `node18-actions`. Possible values are: `node16` (not recommended), `node18` (not recommended) or `node18-actions` (recommended).",
 			},
 			"secrets": {
 				Type:        schema.TypeList,

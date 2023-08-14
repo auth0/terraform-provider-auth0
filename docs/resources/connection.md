@@ -598,10 +598,10 @@ resource "auth0_connection" "okta" {
     domain                   = "example.okta.com"
     domain_aliases           = ["example.com"]
     issuer                   = "https://example.okta.com"
-    jwks_uri                 = "https://example.okta.com/v1/oauth2/certs"
-    token_endpoint           = "https://example.okta.com/v1/oauth2/token"
-    userinfo_endpoint        = "https://example.okta.com/v1/oauth2/token/userinfo"
-    authorization_endpoint   = "https://example.okta.com/signin/authorize"
+    jwks_uri                 = "https://example.okta.com/oauth2/v1/keys"
+    token_endpoint           = "https://example.okta.com/oauth2/v1/token"
+    userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
+    authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
     scopes                   = ["openid", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]

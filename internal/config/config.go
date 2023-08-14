@@ -60,7 +60,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
-			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
+			management.WithRetries(12, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)

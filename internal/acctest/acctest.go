@@ -66,7 +66,7 @@ func configureTestProviderWithHTTPRecordings(httpRecorder *recorder.Recorder) sc
 			management.WithStaticToken("insecure"),
 			management.WithClient(httpRecorder.GetDefaultClient()),
 			management.WithDebug(debug),
-			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
+			management.WithRetries(12, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
 		}
 
 		if domain != RecordingsDomain {

@@ -111,19 +111,16 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"html": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type: schema.TypeString,
 							Description: "HTML format with supported Liquid syntax. " +
 								"Customized content of the error page.",
 						},
 						"show_log_link": {
 							Type:        schema.TypeBool,
-							Required:    true,
 							Description: "Indicates whether to show the link to logs as part of the default error page.",
 						},
 						"url": {
 							Type:        schema.TypeString,
-							Required:    true,
 							Description: "URL to redirect to when an error occurs rather than showing the default error page.",
 						},
 					},

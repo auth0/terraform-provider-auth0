@@ -4,13 +4,15 @@ BUG FIXES:
 
 - `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML([#786](https://github.com/auth0/terraform-provider-auth0/pull/786))
 
+
+
 ## 0.50.0
 
 FEATURES:
 
 - `auth0_pages`: Add new resource to manage Auth0 pages (`change_password`, `error`, `guardian_mfa`, `login`) ([#691](https://github.com/auth0/terraform-provider-auth0/pull/691))
 
-ENHANCEMENTS:
+ENHANCEMENTS: 
 
 - `resource/auth0_client`: Add `post_login_prompt` to available options for the `organization_require_behavior` attribute ([#680](https://github.com/auth0/terraform-provider-auth0/pull/680))
 - `resource/auth0_connection`: Relax `metadata` validation by not requiring key length to be between 0 and 10 characters ([#685](https://github.com/auth0/terraform-provider-auth0/pull/685))
@@ -27,6 +29,7 @@ BUG FIXES:
 NOTES:
 
 - :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the deprecations that were added in this release.
+
 
 ## 0.49.0
 
@@ -49,10 +52,11 @@ BUG FIXES:
 - `resource/auth0_role_permissions`: Update diffing algorithm to address a bug where the order of additions and removals was causing incorrect results ([#632](https://github.com/auth0/terraform-provider-auth0/pull/632))
 - `resource/auth0_trigger_action`: Fix delete logic ([#639](https://github.com/auth0/terraform-provider-auth0/pull/639))
 
-NOTES:
+NOTES: 
 
 - :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
-  to navigate the deprecations that were added in this release.
+to navigate the deprecations that were added in this release.
+
 
 ## 0.48.0
 
@@ -72,7 +76,8 @@ NOTES:
 
 - New guides on how to achieve 0 downtime client credentials were added in this release ([#592](https://github.com/auth0/terraform-provider-auth0/pull/592))
 - :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
-  to navigate the deprecations that were added in this release.
+to navigate the deprecations that were added in this release.
+
 
 ## 0.47.0
 
@@ -96,7 +101,8 @@ BUG FIXES:
 NOTES:
 
 - :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md)
-  to navigate the deprecations that were added in this release.
+to navigate the deprecations that were added in this release.
+
 
 ## 0.46.0
 
@@ -121,7 +127,8 @@ ENHANCEMENTS:
 NOTES:
 
 - :warning: The removal of the `options` attribute from the `auth0_resource_server` resource, while technically a breaking change,
-  should not cause any issues as the API wasn't accepting this parameter.
+should not cause any issues as the API wasn't accepting this parameter.
+
 
 ## 0.45.0
 
@@ -144,6 +151,7 @@ NOTES:
 
 - Updated docs for `auth0_role` resource ([#524](https://github.com/auth0/terraform-provider-auth0/pull/524))
 
+
 ## 0.44.1
 
 BUG FIXES:
@@ -159,6 +167,7 @@ NOTES:
 
 - Added docs on available log stream types ([#462](https://github.com/auth0/terraform-provider-auth0/pull/462))
 - Added docs on how to obtain the custom domain id for importing `auth0_custom_domain` resources ([#463](https://github.com/auth0/terraform-provider-auth0/pull/463))
+
 
 ## 0.44.0
 
@@ -185,6 +194,7 @@ NOTES:
 - `resource/auth0_connection`: Updated connection docs ([#471](https://github.com/auth0/terraform-provider-auth0/pull/471))
 - `resource/auth0_tenant`: Added deprecation notice to `flags.universal_login` ([#503](https://github.com/auth0/terraform-provider-auth0/pull/503))
 
+
 ## 0.43.0
 
 BUG FIXES:
@@ -194,6 +204,7 @@ BUG FIXES:
 - `resource/auth0_connection`: Set `authorization_endpoint`, `issuer`, `jws_uri`, `token_endpoint`, `user_info_endpoint` as `Computed` to prevent diff issues ([#443](https://github.com/auth0/terraform-provider-auth0/pull/443))
 - `resource/auth0_user`: Only send changed fields when updating a user ([#453](https://github.com/auth0/terraform-provider-auth0/pull/453))
 - `resource/auth0_*`: Relax url schema validation for `initiate_login_uri`, `apple_app_link`, `google_app_link`, `default_redirection_uri` to allow to be set to empty ([#453](https://github.com/auth0/terraform-provider-auth0/pull/453))
+
 
 FEATURES:
 
@@ -209,17 +220,19 @@ NOTES:
 - `resource/auth0_client`: Updated `client_secret_rotation_trigger` docs ([#439](https://github.com/auth0/terraform-provider-auth0/pull/439))
 - `resource/auth0_client`: Updated `cross_origin_auth` docs ([#456](https://github.com/auth0/terraform-provider-auth0/pull/456))
 
+
 ## 0.42.0
 
 BUG FIXES:
 
 - `resource/auth0_connection_client`, `resource/auth0_organization_connection`, `resource/auth0_organization_member`:
-  Fixed concurrency issue ([#425](https://github.com/auth0/terraform-provider-auth0/pull/425))
+Fixed concurrency issue ([#425](https://github.com/auth0/terraform-provider-auth0/pull/425))
 
 BREAKING CHANGES:
 
 - `resource/auth0_guardian`: Redesigned how mfa types get enabled ([#423](https://github.com/auth0/terraform-provider-auth0/pull/423))
   - It is now necessary to explicitly set the enabled attribute on all mfa types. Please check the [auth0_guardian](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/guardian) docs for more info.
+
 
 ## 0.41.0
 
@@ -227,6 +240,7 @@ BREAKING CHANGES:
 
 - `resource/auth0_connection`: Removed `enabled_clients` field ([#421](https://github.com/auth0/terraform-provider-auth0/pull/421))
   - It is necessary to migrate all `enabled_clients` on the `auth0_connection` resource to the [auth0_connection_client](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/connection_client) resource.
+
 
 ## 0.40.1
 
@@ -238,6 +252,7 @@ BUG FIXES:
 
 - `resource/auth0_guardian`: Added `provider` to `push` mfa to fix `sns` settings not getting propagated ([#415](https://github.com/auth0/terraform-provider-auth0/pull/415))
 - Prevent panic on null values when iterating over map elements ([#413](https://github.com/auth0/terraform-provider-auth0/pull/413))
+
 
 ## 0.40.0
 
@@ -257,6 +272,7 @@ ENHANCEMENTS:
 NOTES:
 
 - `resource/auth0_email`: Deprecated `api_user` field ([#392](https://github.com/auth0/terraform-provider-auth0/pull/392))
+
 
 ## 0.39.0
 
@@ -303,6 +319,7 @@ NOTES:
 
 - `resource/auth0_resource_server`: Changed `identifier` from `Optional` to `Required` ([#354](https://github.com/auth0/terraform-provider-auth0/pull/354))
 
+
 ## 0.37.1
 
 BUG FIXES:
@@ -312,6 +329,7 @@ BUG FIXES:
 NOTES:
 
 - `resource/auth0_client`: Improve description of `app_type` attribute ([#325](https://github.com/auth0/terraform-provider-auth0/pull/325))
+
 
 ## 0.37.0
 
@@ -333,6 +351,7 @@ NOTES:
 - Upgraded test recordings to go-vcr v3 ([#309](https://github.com/auth0/terraform-provider-auth0/pull/309))
 - Removed unnecessary `MapData` struct from resource data helpers ([#310](https://github.com/auth0/terraform-provider-auth0/pull/310))
 
+
 ## 0.36.0
 
 FEATURES:
@@ -345,6 +364,7 @@ NOTES:
 - `auth0_action`: Improve `supported_triggers.version` description ([#287](https://github.com/auth0/terraform-provider-auth0/pull/287))
 - `auth0_connection`: Improve `options.scopes` description ([#297](https://github.com/auth0/terraform-provider-auth0/pull/297))
 
+
 ## 0.35.0
 
 FEATURES:
@@ -355,6 +375,7 @@ NOTES:
 
 - Reorganized project layout ([#262](https://github.com/auth0/terraform-provider-auth0/pull/262))
 - Updated documentation and examples
+
 
 ## 0.34.0
 
@@ -373,6 +394,7 @@ BUG FIXES:
 - `resource/auth0_action`: Fix issue with not being able to update `dependencies` ([#247](https://github.com/auth0/terraform-provider-auth0/pull/247))
 - `resource/auth0_user`: Fix infinite plan on `user_metadata` ([#249](https://github.com/auth0/terraform-provider-auth0/pull/249), [#250](https://github.com/auth0/terraform-provider-auth0/pull/250))
 
+
 ## 0.33.0
 
 FEATURES:
@@ -385,6 +407,7 @@ FEATURES:
 - `resource/auth0_client`: Added `sso_integration` as valid app type ([#221](https://github.com/auth0/terraform-provider-auth0/pull/221))
 - `resource/auth0_email_template`: Added `include_email_in_redirect` field ([#229](https://github.com/auth0/terraform-provider-auth0/pull/229))
 - `resource/auth0_connection`: Added `upstream_params` field ([#223](https://github.com/auth0/terraform-provider-auth0/pull/223))
+  
 
 ## 0.32.0
 
@@ -408,7 +431,7 @@ FEATURES:
 
 - `resource/auth0_hook`: Add warnings for untracked hook secrets ([#189](https://github.com/auth0/terraform-provider-auth0/pull/189))
 - `resource/auth0_log_stream`: Add datadog_region validation ([#192](https://github.com/auth0/terraform-provider-auth0/pull/192))
-- `resource/auth0_connection`: Add computed to password\* fields in connection resource ([#191](https://github.com/auth0/terraform-provider-auth0/pull/191))
+- `resource/auth0_connection`: Add computed to password* fields in connection resource ([#191](https://github.com/auth0/terraform-provider-auth0/pull/191))
 - `resource/auth0_connection`: Adding icon_url to OAuth2 connection types ([#196](https://github.com/auth0/terraform-provider-auth0/pull/196))
 
 BUG FIXES:
@@ -419,6 +442,7 @@ BUG FIXES:
 - `resource/auth0_user`: Preserve user ID casing in state ([#197](https://github.com/auth0/terraform-provider-auth0/pull/197))
 - `resource/auth0_guardian`: Fix phone options issue#159 and refactor guardian resource implementation ([#195](https://github.com/auth0/terraform-provider-auth0/pull/195))
 
+
 NOTES:
 
 - Correct docs example typo binding_method to protocol_binding ([#179](https://github.com/auth0/terraform-provider-auth0/pull/179))
@@ -426,11 +450,13 @@ NOTES:
 - Adding documentation for passwordless email connection ([#179](https://github.com/auth0/terraform-provider-auth0/pull/179))
 - Adding GitHub connection scopes documentation ([#199](https://github.com/auth0/terraform-provider-auth0/pull/199))
 
+
 ## 0.30.3
 
 FEATURES:
 
 - `resource/auth0_connection`: Added support for connection metadata field ([#158](https://github.com/auth0/terraform-provider-auth0/pull/158))
+
 
 ## 0.30.2
 
@@ -443,11 +469,13 @@ NOTES:
 
 - `resource/auth0_custom_domain`: Removed deprecated verification_method from custom domain resource ([#143](https://github.com/auth0/terraform-provider-auth0/pull/143))
 
+
 ## 0.30.1
 
 BUG FIXES:
 
 - `resource/auth0_client`: Fix conversion issue flattenAddons func in client resource ([#140](https://github.com/auth0/terraform-provider-auth0/pull/140))
+
 
 ## 0.30.0
 
@@ -455,6 +483,7 @@ FEATURES:
 
 - `resource/auth0_custom_domain*`: Added support for creating external resources associated with self-managed certificates ([#118](https://github.com/auth0/terraform-provider-auth0/pull/118))
 - `resource/auth0_log_stream`: [DXCDT-104] Added filters to log_stream resource ([#133](https://github.com/auth0/terraform-provider-auth0/pull/133))
+
 
 BUG FIXES:
 
@@ -464,15 +493,16 @@ NOTES:
 
 - Upgraded to terraform-plugin-sdk@v2 ([#121](https://github.com/auth0/terraform-provider-auth0/pull/121), [#122](https://github.com/auth0/terraform-provider-auth0/pull/122), [#126](https://github.com/auth0/terraform-provider-auth0/pull/126))
 
+
 ## 0.29.0
 
 FEATURES:
 
-- `data-source/auth0_tenant`: Added a new data source for a subset of a tenant's info ([#95](https://github.com/auth0/terraform-provider-auth0/pull/95))
+* `data-source/auth0_tenant`: Added a new data source for a subset of a tenant's info ([#95](https://github.com/auth0/terraform-provider-auth0/pull/95))
 
 BUG FIXES:
 
-- `resource/*`: [DXCDT-80] Fixed surfaced errors on all resources after not ignoring them when setting resource data (
+* `resource/*`: [DXCDT-80] Fixed surfaced errors on all resources after not ignoring them when setting resource data (
   [#106](https://github.com/auth0/terraform-provider-auth0/pull/106),
   [#104](https://github.com/auth0/terraform-provider-auth0/pull/104),
   [#105](https://github.com/auth0/terraform-provider-auth0/pull/105),
@@ -485,48 +515,52 @@ BUG FIXES:
   [#110](https://github.com/auth0/terraform-provider-auth0/pull/110),
   [#114](https://github.com/auth0/terraform-provider-auth0/pull/114),
   [#109](https://github.com/auth0/terraform-provider-auth0/pull/109)
-  )
-- `resource/auth0_action`: Failed fast when action fails to build ([#107](https://github.com/auth0/terraform-provider-auth0/pull/107))
+)
+* `resource/auth0_action`: Failed fast when action fails to build ([#107](https://github.com/auth0/terraform-provider-auth0/pull/107))
+
 
 ## 0.28.1
 
 BUG FIXES:
 
-- `resource/auth0_attack_protection`: Fix attack protection resource for PSaaS Tenants ([#86](https://github.com/auth0/terraform-provider-auth0/pull/86))
+* `resource/auth0_attack_protection`: Fix attack protection resource for PSaaS Tenants ([#86](https://github.com/auth0/terraform-provider-auth0/pull/86))
+
 
 ## 0.28.0
 
 FEATURES:
 
-- `resource/auth0_attack_protection`: Added Attack Protection Management Resource ([#77](https://github.com/auth0/terraform-provider-auth0/pull/77))
+* `resource/auth0_attack_protection`: Added Attack Protection Management Resource ([#77](https://github.com/auth0/terraform-provider-auth0/pull/77))
 
 ENHANCEMENTS:
 
-- `resource/auth0_connection`: Added ShowAsButton option for enterprise connections ([#80](https://github.com/auth0/terraform-provider-auth0/pull/80))
+* `resource/auth0_connection`: Added ShowAsButton option for enterprise connections ([#80](https://github.com/auth0/terraform-provider-auth0/pull/80))
 
 BUG FIXES:
 
-- `resource/auth0_tenant`: Wiring `default_redirection_uri` parameter in 'auth0_tenant' into Auth0 API call ([#71](https://github.com/auth0/terraform-provider-auth0/pull/71))
-- `resource/auth0_client`: Mark signing_keys as sensitive ([#72](https://github.com/auth0/terraform-provider-auth0/pull/72))
+* `resource/auth0_tenant`: Wiring `default_redirection_uri` parameter in 'auth0_tenant' into Auth0 API call ([#71](https://github.com/auth0/terraform-provider-auth0/pull/71))
+* `resource/auth0_client`: Mark signing_keys as sensitive ([#72](https://github.com/auth0/terraform-provider-auth0/pull/72))
+
 
 ## 0.27.1
 
 ENHANCEMENTS:
 
-- Added Signing Keys to client resources ([#66](https://github.com/auth0/terraform-provider-auth0/pull/66))
-- Update documentation to include missing resources and show how to import each resource ([#67](https://github.com/auth0/terraform-provider-auth0/pull/67))
+* Added Signing Keys to client resources ([#66](https://github.com/auth0/terraform-provider-auth0/pull/66))
+* Update documentation to include missing resources and show how to import each resource ([#67](https://github.com/auth0/terraform-provider-auth0/pull/67))
+
 
 ## 0.27.0
 
 ENHANCEMENTS:
 
-- Added ability to authenticate with [management API tokens](https://auth0.com/docs/secure/tokens/access-tokens/management-api-access-tokens) ([#487](https://github.com/alexkappa/terraform-provider-auth0/pull/487))
-- Added client data source ([#511](https://github.com/alexkappa/terraform-provider-auth0/pull/511))
-- Added global client data source ([#512](https://github.com/alexkappa/terraform-provider-auth0/pull/512))
+* Added ability to authenticate with [management API tokens](https://auth0.com/docs/secure/tokens/access-tokens/management-api-access-tokens) ([#487](https://github.com/alexkappa/terraform-provider-auth0/pull/487))
+* Added client data source ([#511](https://github.com/alexkappa/terraform-provider-auth0/pull/511))
+* Added global client data source ([#512](https://github.com/alexkappa/terraform-provider-auth0/pull/512))
 
 NOTES:
 
-- Added reference to `initiate_login_uri` property in client documentation ([#513](https://github.com/alexkappa/terraform-provider-auth0/pull/513))
+* Added reference to  `initiate_login_uri` property in client documentation ([#513](https://github.com/alexkappa/terraform-provider-auth0/pull/513))
 
 ## Previous History
 

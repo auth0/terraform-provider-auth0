@@ -1,6 +1,6 @@
 module github.com/auth0/terraform-provider-auth0
 
-go 1.20
+go 1.21
 
 require (
 	github.com/auth0/go-auth0 v1.0.0

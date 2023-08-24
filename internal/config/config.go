@@ -2,9 +2,16 @@ package config
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"net/http"
+	"net/url"
+	"regexp"
+	"strconv"
+	"time"
 
+	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -60,7 +67,8 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
-			management.WithRetries(3, []int{http.StatusTooManyRequests, http.StatusInternalServerError}),
+			management.WithNoRetries(),
+			management.WithClient(customClientWithRetries()),
 		)
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -105,4 +113,89 @@ func authenticationOption(clientID, clientSecret, apiToken, audience string) man
 	}
 
 	return management.WithClientCredentials(ctx, clientID, clientSecret)
+}
+
+func customClientWithRetries() *http.Client {
+	client := &http.Client{
+		Transport: rateLimitTransport(
+			retryableErrorTransport(
+				http.DefaultTransport,
+			),
+		),
+	}
+
+	return client
+}
+
+func rateLimitTransport(tripper http.RoundTripper) http.RoundTripper {
+	return rehttp.NewTransport(tripper, rateLimitRetry, rateLimitDelay)
+}
+
+func rateLimitRetry(attempt rehttp.Attempt) bool {
+	if attempt.Response == nil {
+		return false
+	}
+
+	return attempt.Response.StatusCode == http.StatusTooManyRequests
+}
+
+func rateLimitDelay(attempt rehttp.Attempt) time.Duration {
+	resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
+
+	resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
+	if err != nil {
+		resetAtUnix = time.Now().Add(5 * time.Second).Unix()
+	}
+
+	return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
+}
+
+func retryableErrorTransport(tripper http.RoundTripper) http.RoundTripper {
+	return rehttp.NewTransport(
+		tripper,
+		rehttp.RetryAll(
+			rehttp.RetryMaxRetries(3),
+			rehttp.RetryAny(
+				rehttp.RetryStatuses(
+					http.StatusServiceUnavailable,
+					http.StatusInternalServerError,
+					http.StatusBadGateway,
+					http.StatusGatewayTimeout,
+				),
+				rehttp.RetryIsErr(retryableErrorRetryFunc),
+			),
+		),
+		rehttp.ExpJitterDelay(500*time.Millisecond, 10*time.Second),
+	)
+}
+
+func retryableErrorRetryFunc(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if v, ok := err.(*url.Error); ok {
+		// Don't retry if the error was due to too many redirects.
+		if regexp.MustCompile(`stopped after \d+ redirects\z`).MatchString(v.Error()) {
+			return false
+		}
+
+		// Don't retry if the error was due to an invalid protocol scheme.
+		if regexp.MustCompile(`unsupported protocol scheme`).MatchString(v.Error()) {
+			return false
+		}
+
+		// Don't retry if the certificate issuer is unknown.
+		if _, ok := v.Err.(*tls.CertificateVerificationError); ok {
+			return false
+		}
+
+		// Don't retry if the certificate issuer is unknown.
+		if _, ok := v.Err.(x509.UnknownAuthorityError); ok {
+			return false
+		}
+	}
+
+	// The error is likely recoverable so retry.
+	return true
 }

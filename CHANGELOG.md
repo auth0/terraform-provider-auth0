@@ -1,3 +1,15 @@
+## v1.0.0-beta.2
+
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+
+BUG FIXES:
+
+- `resource/auth0_client_grant`: Add validation to prevent empty string scope values ([#793](https://github.com/auth0/terraform-provider-auth0/pull/793))
+- `provider`: Fix issue with rate limit retry mechanism ([#788](https://github.com/auth0/terraform-provider-auth0/pull/788))
+
+
 ## v1.0.0-beta.1
 
 NOTES:

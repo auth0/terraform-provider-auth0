@@ -14,7 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
-const providerName = "Terraform-Provider-Auth0"
+const providerName = "Terraform-Provider-Auth0" // #nosec G101
 
 var version = "dev"
 

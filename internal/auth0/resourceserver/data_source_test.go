@@ -162,7 +162,10 @@ func TestAccDataSourceResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "signing_alg", "RS256"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_lifetime_for_web", "7200"),
-					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "scopes.#", "140"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_resource_server.auth0", "scopes.*", map[string]string{
+						"name":        "read:users",
+						"description": "Read Users",
+					}), // Checking just one to ensure that scopes are not empty, as they get expanded periodically.
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "verification_location", ""),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "enforce_policies", "false"),
 					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_dialect", ""),

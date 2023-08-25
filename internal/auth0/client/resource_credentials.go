@@ -197,16 +197,7 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 func readClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(
-		ctx,
-		data.Id(),
-		management.IncludeFields(
-			"client_id",
-			"client_secret",
-			"token_endpoint_auth_method",
-			"client_authentication_methods",
-		),
-	)
+	client, err := api.Client.Read(ctx, data.Id())
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

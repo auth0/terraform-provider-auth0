@@ -161,6 +161,10 @@ func retryableErrorTransport(tripper http.RoundTripper) http.RoundTripper {
 					http.StatusInternalServerError,
 					http.StatusBadGateway,
 					http.StatusGatewayTimeout,
+					// Cloudflare-specific server error that is generated
+					// because Cloudflare did not receive an HTTP response
+					// from the origin server after an HTTP Connection was made.
+					524,
 				),
 				rehttp.RetryIsErr(retryableErrorRetryFunc),
 			),

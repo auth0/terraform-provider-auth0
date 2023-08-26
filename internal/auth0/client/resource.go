@@ -78,10 +78,13 @@ func NewResource() *schema.Resource {
 				Description: "Indicates whether this client is a first-party client.",
 			},
 			"is_token_endpoint_ip_header_trusted": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Indicates whether the token endpoint IP header is trusted. This attribute can only be updated after the client gets created.",
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Indicates whether the token endpoint IP header is trusted. Requires the authentication " +
+					"method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when " +
+					"creating the resource, will default the authentication method to `client_secret_post`. To change" +
+					"the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.",
 			},
 			"oidc_conformant": {
 				Type:        schema.TypeBool,

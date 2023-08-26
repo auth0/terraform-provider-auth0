@@ -134,10 +134,11 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether the tenant allows dynamic client registration.",
 						},
 						"enable_custom_domain_in_emails": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Indicates whether the tenant allows custom domains in emails.",
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "Indicates whether the tenant allows custom domains in emails. " +
+								"Before enabling this flag, you must have a custom domain with status: `ready`.",
 						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,

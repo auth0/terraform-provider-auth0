@@ -12,7 +12,59 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandConnection(ctx context.Context, data *schema.ResourceData, api *management.Management) (*management.Connection, diag.Diagnostics) {
+var expandConnectionOptionsMap = map[string]expandConnectionOptionsFunc{
+	// Database Connection.
+	management.ConnectionStrategyAuth0: expandConnectionOptionsAuth0,
+
+	// Social Connections.
+	management.ConnectionStrategyGoogleOAuth2:        expandConnectionOptionsGoogleOAuth2,
+	management.ConnectionStrategyOAuth2:              expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyDropbox:             expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyBitBucket:           expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyPaypal:              expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyTwitter:             expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyAmazon:              expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyYahoo:               expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyBox:                 expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyWordpress:           expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyShopify:             expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyCustom:              expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyFacebook:            expandConnectionOptionsFacebook,
+	management.ConnectionStrategyApple:               expandConnectionOptionsApple,
+	management.ConnectionStrategyLinkedin:            expandConnectionOptionsLinkedin,
+	management.ConnectionStrategyGitHub:              expandConnectionOptionsGitHub,
+	management.ConnectionStrategyWindowsLive:         expandConnectionOptionsWindowsLive,
+	management.ConnectionStrategySalesforce:          expandConnectionOptionsSalesforce,
+	management.ConnectionStrategySalesforceCommunity: expandConnectionOptionsSalesforce,
+	management.ConnectionStrategySalesforceSandbox:   expandConnectionOptionsSalesforce,
+
+	// Passwordless Connections.
+	management.ConnectionStrategySMS:   expandConnectionOptionsSMS,
+	management.ConnectionStrategyEmail: expandConnectionOptionsEmail,
+
+	// Enterprise Connections.
+	management.ConnectionStrategyOIDC:         expandConnectionOptionsOIDC,
+	management.ConnectionStrategyGoogleApps:   expandConnectionOptionsGoogleApps,
+	management.ConnectionStrategyOkta:         expandConnectionOptionsOkta,
+	management.ConnectionStrategyAD:           expandConnectionOptionsAD,
+	management.ConnectionStrategyAzureAD:      expandConnectionOptionsAzureAD,
+	management.ConnectionStrategySAML:         expandConnectionOptionsSAML,
+	management.ConnectionStrategyADFS:         expandConnectionOptionsADFS,
+	management.ConnectionStrategyPingFederate: expandConnectionOptionsPingFederate,
+}
+
+type expandConnectionOptionsFunc func(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics)
+
+type scoper interface {
+	Scopes() []string
+	SetScopes(enable bool, scopes ...string)
+}
+
+func expandConnection(
+	ctx context.Context,
+	data *schema.ResourceData,
+	api *management.Management,
+) (*management.Connection, diag.Diagnostics) {
 	config := data.GetRawConfig()
 
 	connection := &management.Connection{
@@ -21,80 +73,66 @@ func expandConnection(ctx context.Context, data *schema.ResourceData, api *manag
 		Metadata:           value.MapOfStrings(config.GetAttr("metadata")),
 	}
 
+	strategy := data.Get("strategy").(string)
+
 	if data.IsNewResource() {
 		connection.Name = value.String(config.GetAttr("name"))
-		connection.Strategy = value.String(config.GetAttr("strategy"))
+		connection.Strategy = &strategy
 	}
 
 	if data.HasChange("realms") {
 		connection.Realms = value.Strings(config.GetAttr("realms"))
 	}
 
-	var diagnostics diag.Diagnostics
-	strategy := data.Get("strategy").(string)
-	showAsButton := value.Bool(config.GetAttr("show_as_button"))
+	if connectionIsEnterprise(strategy) {
+		connection.ShowAsButton = value.Bool(config.GetAttr("show_as_button"))
+	}
 
-	config.GetAttr("options").ForEachElement(func(_ cty.Value, options cty.Value) (stop bool) {
-		switch strategy {
-		case management.ConnectionStrategyAuth0:
-			connection.Options, diagnostics = expandConnectionOptionsAuth0(ctx, data, options, api)
-		case management.ConnectionStrategyGoogleOAuth2:
-			connection.Options, diagnostics = expandConnectionOptionsGoogleOAuth2(data, options)
-		case management.ConnectionStrategyGoogleApps:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsGoogleApps(data, options)
-		case management.ConnectionStrategyOAuth2,
-			management.ConnectionStrategyDropbox,
-			management.ConnectionStrategyBitBucket,
-			management.ConnectionStrategyPaypal,
-			management.ConnectionStrategyTwitter,
-			management.ConnectionStrategyAmazon,
-			management.ConnectionStrategyYahoo,
-			management.ConnectionStrategyBox,
-			management.ConnectionStrategyWordpress,
-			management.ConnectionStrategyShopify,
-			management.ConnectionStrategyCustom:
-			connection.Options, diagnostics = expandConnectionOptionsOAuth2(data, options)
-		case management.ConnectionStrategyFacebook:
-			connection.Options, diagnostics = expandConnectionOptionsFacebook(data, options)
-		case management.ConnectionStrategyApple:
-			connection.Options, diagnostics = expandConnectionOptionsApple(data, options)
-		case management.ConnectionStrategyLinkedin:
-			connection.Options, diagnostics = expandConnectionOptionsLinkedin(data, options)
-		case management.ConnectionStrategyGitHub:
-			connection.Options, diagnostics = expandConnectionOptionsGitHub(data, options)
-		case management.ConnectionStrategyWindowsLive:
-			connection.Options, diagnostics = expandConnectionOptionsWindowsLive(data, options)
-		case management.ConnectionStrategySalesforce,
-			management.ConnectionStrategySalesforceCommunity,
-			management.ConnectionStrategySalesforceSandbox:
-			connection.Options, diagnostics = expandConnectionOptionsSalesforce(data, options)
-		case management.ConnectionStrategySMS:
-			connection.Options, diagnostics = expandConnectionOptionsSMS(options)
-		case management.ConnectionStrategyOIDC:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsOIDC(data, options)
-		case management.ConnectionStrategyOkta:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsOkta(data, options)
-		case management.ConnectionStrategyAD:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAD(options)
-		case management.ConnectionStrategyAzureAD:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAzureAD(data, options)
-		case management.ConnectionStrategyEmail:
-			connection.Options, diagnostics = expandConnectionOptionsEmail(options)
-		case management.ConnectionStrategySAML:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsSAML(options)
-		case management.ConnectionStrategyADFS:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsADFS(options)
-		case management.ConnectionStrategyPingFederate:
-			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsPingFederate(options)
-		default:
+	var diagnostics diag.Diagnostics
+	connection.Options, diagnostics = expandConnectionOptions(data, strategy)
+
+	// Prevent erasing database configuration secrets.
+	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 {
+		apiConn, err := api.Connection.Read(ctx, data.Id())
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+
+		diagnostics = append(
+			diagnostics,
+			checkForUnmanagedConfigurationSecrets(
+				connection.Options.(*management.ConnectionOptions).GetConfiguration(),
+				apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
+			)...,
+		)
+	}
+
+	return connection, diagnostics
+}
+
+func connectionIsEnterprise(strategy string) bool {
+	switch strategy {
+	case management.ConnectionStrategyGoogleApps,
+		management.ConnectionStrategyOIDC,
+		management.ConnectionStrategyOkta,
+		management.ConnectionStrategyAD,
+		management.ConnectionStrategyAzureAD,
+		management.ConnectionStrategySAML,
+		management.ConnectionStrategyADFS,
+		management.ConnectionStrategyPingFederate:
+		return true
+	default:
+		return false
+	}
+}
+
+func expandConnectionOptions(data *schema.ResourceData, strategy string) (interface{}, diag.Diagnostics) {
+	var diagnostics diag.Diagnostics
+	var connectionOptions interface{}
+
+	data.GetRawConfig().GetAttr("options").ForEachElement(func(_ cty.Value, optionsConfig cty.Value) (stop bool) {
+		connectionOptionsFunc, ok := expandConnectionOptionsMap[strategy]
+		if !ok {
 			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
 				Summary:  "Unsupported Connection Strategy",
@@ -105,18 +143,19 @@ func expandConnection(ctx context.Context, data *schema.ResourceData, api *manag
 				),
 				AttributePath: cty.Path{cty.GetAttrStep{Name: "strategy"}},
 			})
+
+			return true
 		}
 
-		return stop
+		connectionOptions, diagnostics = connectionOptionsFunc(data, optionsConfig)
+
+		return true
 	})
 
-	return connection, diagnostics
+	return connectionOptions, diagnostics
 }
 
-func expandConnectionOptionsGitHub(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsGitHub, diag.Diagnostics) {
+func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGitHub{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -132,12 +171,7 @@ func expandConnectionOptionsGitHub(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAuth0(
-	ctx context.Context,
-	data *schema.ResourceData,
-	config cty.Value,
-	api *management.Management,
-) (*management.ConnectionOptions, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -161,11 +195,11 @@ func expandConnectionOptionsAuth0(
 				func(_ cty.Value, username cty.Value) (stop bool) {
 					usernameValidation := make(map[string]*int)
 
-					if min := value.Int(username.GetAttr("min")); min != nil {
-						usernameValidation["min"] = min
+					if usernameMinLength := value.Int(username.GetAttr("min")); usernameMinLength != nil {
+						usernameValidation["min"] = usernameMinLength
 					}
-					if max := value.Int(username.GetAttr("max")); max != nil {
-						usernameValidation["max"] = max
+					if usernameMaxLength := value.Int(username.GetAttr("max")); usernameMaxLength != nil {
+						usernameValidation["max"] = usernameMaxLength
 					}
 
 					if len(usernameValidation) > 0 {
@@ -268,33 +302,11 @@ func expandConnectionOptionsAuth0(
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
 
-	if !data.IsNewResource() {
-		apiConn, err := api.Connection.Read(ctx, data.Id())
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
-
-		diags := checkForUnmanagedConfigurationSecrets(
-			options.GetConfiguration(),
-			apiConn.Options.(*management.ConnectionOptions).GetConfiguration(),
-		)
-
-		if diags.HasError() {
-			return nil, diags
-		}
-	}
-
-	return options, nil
+	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsGoogleOAuth2(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsGoogleOAuth2, diag.Diagnostics) {
+func expandConnectionOptionsGoogleOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleOAuth2{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -311,10 +323,7 @@ func expandConnectionOptionsGoogleOAuth2(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsGoogleApps(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsGoogleApps, diag.Diagnostics) {
+func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsGoogleApps{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -339,10 +348,7 @@ func expandConnectionOptionsGoogleApps(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsOAuth2(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsOAuth2, diag.Diagnostics) {
+func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOAuth2{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -363,10 +369,7 @@ func expandConnectionOptionsOAuth2(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsFacebook(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsFacebook, diag.Diagnostics) {
+func expandConnectionOptionsFacebook(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsFacebook{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -382,10 +385,7 @@ func expandConnectionOptionsFacebook(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsApple(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsApple, diag.Diagnostics) {
+func expandConnectionOptionsApple(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsApple{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -403,10 +403,7 @@ func expandConnectionOptionsApple(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsLinkedin(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsLinkedin, diag.Diagnostics) {
+func expandConnectionOptionsLinkedin(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsLinkedin{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -423,10 +420,7 @@ func expandConnectionOptionsLinkedin(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsSalesforce(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsSalesforce, diag.Diagnostics) {
+func expandConnectionOptionsSalesforce(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSalesforce{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -443,10 +437,7 @@ func expandConnectionOptionsSalesforce(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsWindowsLive(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsWindowsLive, diag.Diagnostics) {
+func expandConnectionOptionsWindowsLive(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsWindowsLive{
 		ClientID:           value.String(config.GetAttr("client_id")),
 		ClientSecret:       value.String(config.GetAttr("client_secret")),
@@ -463,7 +454,7 @@ func expandConnectionOptionsWindowsLive(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsSMS(config cty.Value) (*management.ConnectionOptionsSMS, diag.Diagnostics) {
+func expandConnectionOptionsSMS(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSMS{
 		Name:                 value.String(config.GetAttr("name")),
 		From:                 value.String(config.GetAttr("from")),
@@ -506,7 +497,7 @@ func expandConnectionOptionsSMS(config cty.Value) (*management.ConnectionOptions
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsEmail(config cty.Value) (*management.ConnectionOptionsEmail, diag.Diagnostics) {
+func expandConnectionOptionsEmail(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsEmail{
 		Name:          value.String(config.GetAttr("name")),
 		DisableSignup: value.Bool(config.GetAttr("disable_signup")),
@@ -540,7 +531,7 @@ func expandConnectionOptionsEmail(config cty.Value) (*management.ConnectionOptio
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsAD, diag.Diagnostics) {
+func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAD{
 		DomainAliases:        value.Strings(config.GetAttr("domain_aliases")),
 		TenantDomain:         value.String(config.GetAttr("tenant_domain")),
@@ -564,10 +555,7 @@ func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsA
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAzureAD(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsAzureAD, diag.Diagnostics) {
+func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAzureAD{
 		ClientID:            value.String(config.GetAttr("client_id")),
 		ClientSecret:        value.String(config.GetAttr("client_secret")),
@@ -599,10 +587,7 @@ func expandConnectionOptionsAzureAD(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsOIDC(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsOIDC, diag.Diagnostics) {
+func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
 		ClientID:              value.String(config.GetAttr("client_id")),
 		ClientSecret:          value.String(config.GetAttr("client_secret")),
@@ -628,10 +613,7 @@ func expandConnectionOptionsOIDC(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsOkta(
-	data *schema.ResourceData,
-	config cty.Value,
-) (*management.ConnectionOptionsOkta, diag.Diagnostics) {
+func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOkta{
 		ClientID:              value.String(config.GetAttr("client_id")),
 		ClientSecret:          value.String(config.GetAttr("client_secret")),
@@ -655,7 +637,7 @@ func expandConnectionOptionsOkta(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOptionsSAML, diag.Diagnostics) {
+func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:              value.Bool(config.GetAttr("debug")),
 		SigningCert:        value.String(config.GetAttr("signing_cert")),
@@ -721,7 +703,7 @@ func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOption
 	return options, diagnostics
 }
 
-func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOptionsADFS, diag.Diagnostics) {
+func expandConnectionOptionsADFS(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsADFS{
 		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
 		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
@@ -745,9 +727,7 @@ func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOption
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsPingFederate(
-	config cty.Value,
-) (*management.ConnectionOptionsPingFederate, diag.Diagnostics) {
+func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsPingFederate{
 		SigningCert:         value.String(config.GetAttr("signing_cert")),
 		LogoURL:             value.String(config.GetAttr("icon_url")),
@@ -782,21 +762,14 @@ func expandConnectionOptionsPingFederate(
 	return options, diag.FromErr(err)
 }
 
-type scoper interface {
-	Scopes() []string
-	SetScopes(enable bool, scopes ...string)
-}
-
-func expandConnectionOptionsScopes(data *schema.ResourceData, s scoper) {
-	scopesList := data.Get("options.0.scopes").(*schema.Set).List()
-
+func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {
 	_, scopesToDisable := value.Difference(data, "options.0.scopes")
-
 	for _, scope := range scopesToDisable {
-		s.SetScopes(false, scope.(string))
+		options.SetScopes(false, scope.(string))
 	}
 
+	scopesList := data.Get("options.0.scopes").(*schema.Set).List()
 	for _, scope := range scopesList {
-		s.SetScopes(true, scope.(string))
+		options.SetScopes(true, scope.(string))
 	}
 }

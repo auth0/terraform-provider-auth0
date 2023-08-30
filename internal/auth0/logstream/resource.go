@@ -209,6 +209,7 @@ func NewResource() *schema.Resource {
 						"http_content_format": {
 							Type:     schema.TypeString,
 							Optional: true,
+							Computed: true,
 							Description: "The format of data sent over HTTP. Options are " +
 								"\"JSONLINES\", \"JSONARRAY\" or \"JSONOBJECT\"",
 							ValidateFunc: validation.StringInSlice([]string{

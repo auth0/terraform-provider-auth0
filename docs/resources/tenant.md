@@ -85,7 +85,7 @@ Optional:
 - `enable_adfs_waad_email_verification` (Boolean) If enabled, users will be presented with an email verification prompt during their first login when using Azure AD or ADFS connections.
 - `enable_apis_section` (Boolean) Indicates whether the APIs section is enabled for the tenant.
 - `enable_client_connections` (Boolean) Indicates whether all current connections should be enabled when a new client is created.
-- `enable_custom_domain_in_emails` (Boolean) Indicates whether the tenant allows custom domains in emails.
+- `enable_custom_domain_in_emails` (Boolean) Indicates whether the tenant allows custom domains in emails. Before enabling this flag, you must have a custom domain with status: `ready`.
 - `enable_dynamic_client_registration` (Boolean) Indicates whether the tenant allows dynamic client registration.
 - `enable_idtoken_api2` (Boolean) Whether ID tokens can be used to authorize some types of requests to API v2 (true) or not (false).
 - `enable_legacy_logs_search_v2` (Boolean) Indicates whether to use the older v2 legacy logs search.

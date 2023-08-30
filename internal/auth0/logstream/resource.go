@@ -92,11 +92,41 @@ func NewResource() *schema.Resource {
 							Description:  "The AWS Account ID.",
 						},
 						"aws_region": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"ap-east-1",
+								"ap-northeast-1",
+								"ap-northeast-2",
+								"ap-northeast-3",
+								"ap-south-1",
+								"ap-southeast-1",
+								"ap-southeast-2",
+								"ca-central-1",
+								"cn-north-1",
+								"cn-northwest-1",
+								"eu-central-1",
+								"eu-north-1",
+								"eu-west-1",
+								"eu-west-2",
+								"eu-west-3",
+								"me-south-1",
+								"sa-east-1",
+								"us-gov-east-1",
+								"us-gov-west-1",
+								"us-east-1",
+								"us-east-2",
+								"us-west-1",
+								"us-west-2",
+							}, false),
 							RequiredWith: []string{"sink.0.aws_account_id"},
-							Description:  "The AWS Region, e.g. \"us-east-2\").",
+							Description: "The region in which the EventBridge event source will be created. " +
+								"Possible values: `ap-east-1`, `ap-northeast-1`, `ap-northeast-2`, `ap-northeast-3`, " +
+								"`ap-south-1`, `ap-southeast-1`, `ap-southeast-2`, `ca-central-1`, `cn-north-1`, " +
+								"`cn-northwest-1`, `eu-central-1`, `eu-north-1`, `eu-west-1`, `eu-west-2`, `eu-west-3`, " +
+								"`me-south-1`, `sa-east-1`, `us-gov-east-1`, `us-gov-west-1`, `us-east-1`, `us-east-2`, " +
+								"`us-west-1`, `us-west-2`.",
 						},
 						"aws_partner_event_source": {
 							Type:     schema.TypeString,
@@ -122,11 +152,52 @@ func NewResource() *schema.Resource {
 								"Azure assets within one subscription.",
 						},
 						"azure_region": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"australiacentral",
+								"australiaeast",
+								"australiasoutheast",
+								"brazilsouth",
+								"canadacentral",
+								"canadaeast",
+								"centralindia",
+								"centralus",
+								"eastasia",
+								"eastus",
+								"eastus2",
+								"francecentral",
+								"germanywestcentral",
+								"japaneast",
+								"japanwest",
+								"koreacentral",
+								"koreasouth",
+								"northcentralus",
+								"northeurope",
+								"norwayeast",
+								"southafricanorth",
+								"southcentralus",
+								"southeastasia",
+								"southindia",
+								"switzerlandnorth",
+								"uaenorth",
+								"uksouth",
+								"ukwest",
+								"westcentralus",
+								"westeurope",
+								"westindia",
+								"westus",
+								"westus2",
+							}, false),
 							RequiredWith: []string{"sink.0.azure_subscription_id", "sink.0.azure_resource_group"},
-							Description:  "The Azure region code, e.g. \"ne\")",
+							Description: "The Azure region code. Possible values: `australiacentral`, `australiaeast`, " +
+								"`australiasoutheast`, `brazilsouth`, `canadacentral`, `canadaeast`, `centralindia`, " +
+								"`centralus`, `eastasia`, `eastus`, `eastus2`, `francecentral`, " +
+								"`germanywestcentral`, `japaneast`, `japanwest`, `koreacentral`, `koreasouth`, " +
+								"`northcentralus`, `northeurope`, `norwayeast`, `southafricanorth`, `southcentralus`, " +
+								"`southeastasia`, `southindia`, `switzerlandnorth`, `uaenorth`, `uksouth`, `ukwest`, " +
+								"`westcentralus`, `westeurope`, `westindia`, `westus`, `westus2`.",
 						},
 						"azure_partner_topic": {
 							Type:     schema.TypeString,
@@ -136,9 +207,9 @@ func NewResource() *schema.Resource {
 								"Generally should not be specified.",
 						},
 						"http_content_format": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							RequiredWith: []string{"sink.0.http_endpoint", "sink.0.http_authorization", "sink.0.http_content_type"},
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
 							Description: "The format of data sent over HTTP. Options are " +
 								"\"JSONLINES\", \"JSONARRAY\" or \"JSONOBJECT\"",
 							ValidateFunc: validation.StringInSlice([]string{
@@ -152,26 +223,26 @@ func NewResource() *schema.Resource {
 							Optional: true,
 							Description: "The \"Content-Type\" header to send over HTTP. " +
 								"Common value is \"application/json\".",
-							RequiredWith: []string{"sink.0.http_endpoint", "sink.0.http_authorization", "sink.0.http_content_format"},
 						},
 						"http_endpoint": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPS,
 							Description:  "The HTTP endpoint to send streaming logs.",
-							RequiredWith: []string{"sink.0.http_content_format", "sink.0.http_authorization", "sink.0.http_content_type"},
 						},
 						"http_authorization": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Sensitive:    true,
-							Description:  "Sent in the HTTP \"Authorization\" header with each request.",
-							RequiredWith: []string{"sink.0.http_content_format", "sink.0.http_endpoint", "sink.0.http_content_type"},
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							Description: "Sent in the HTTP \"Authorization\" header with each request.",
 						},
 						"http_custom_headers": {
 							Type: schema.TypeList,
 							Elem: &schema.Schema{
 								Type: schema.TypeMap,
-								Elem: &schema.Schema{Type: schema.TypeString},
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
 							},
 							Optional:    true,
 							Default:     nil,
@@ -185,7 +256,7 @@ func NewResource() *schema.Resource {
 								[]string{"us", "eu", "us3", "us5"},
 								false,
 							),
-							Description: "The Datadog region. Options are [\"us\", \"eu\", \"us3\", \"us5\"].",
+							Description: "The Datadog region. Possible values: `us`, `eu`, `us3`, `us5`.",
 						},
 						"datadog_api_key": {
 							Type:         schema.TypeString,

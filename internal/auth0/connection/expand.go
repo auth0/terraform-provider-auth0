@@ -781,6 +781,11 @@ func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {
 	}
 }
 
+// passThroughUnconfigurableConnectionOptions ensures that read-only connection options
+// set by external services do not get removed from the connection resource.
+//
+// This is necessary because the "/api/v2/connections/{id}" endpoint does not follow usual
+// PATCH behavior, the 'options' property is entirely replaced by the payload object.
 func passThroughUnconfigurableConnectionOptions(
 	ctx context.Context,
 	api *management.Management,
@@ -817,6 +822,10 @@ func passThroughUnconfigurableConnectionOptionsAD(
 		return err
 	}
 
+	if existingConnection.Options == nil {
+		return nil
+	}
+
 	existingOptions := existingConnection.Options.(*management.ConnectionOptionsAD)
 
 	expandedOptions := connection.Options.(*management.ConnectionOptionsAD)
@@ -840,6 +849,10 @@ func passThroughUnconfigurableConnectionOptionsAzureAD(
 	existingConnection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		return err
+	}
+
+	if existingConnection.Options == nil {
+		return nil
 	}
 
 	existingOptions := existingConnection.Options.(*management.ConnectionOptionsAzureAD)
@@ -867,6 +880,10 @@ func passThroughUnconfigurableConnectionOptionsADFS(
 		return err
 	}
 
+	if existingConnection.Options == nil {
+		return nil
+	}
+
 	existingOptions := existingConnection.Options.(*management.ConnectionOptionsADFS)
 
 	expandedOptions := connection.Options.(*management.ConnectionOptionsADFS)
@@ -889,6 +906,10 @@ func passThroughUnconfigurableConnectionOptionsSAML(
 	existingConnection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		return err
+	}
+
+	if existingConnection.Options == nil {
+		return nil
 	}
 
 	existingOptions := existingConnection.Options.(*management.ConnectionOptionsSAML)
@@ -917,6 +938,10 @@ func passThroughUnconfigurableConnectionOptionsPingFederate(
 	existingConnection, err := api.Connection.Read(ctx, connectionID)
 	if err != nil {
 		return err
+	}
+
+	if existingConnection.Options == nil {
+		return nil
 	}
 
 	existingOptions := existingConnection.Options.(*management.ConnectionOptionsPingFederate)

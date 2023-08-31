@@ -84,12 +84,19 @@ func expandConnection(
 		connection.Realms = value.Strings(config.GetAttr("realms"))
 	}
 
-	if connectionIsEnterprise(strategy) {
-		connection.ShowAsButton = value.Bool(config.GetAttr("show_as_button"))
-	}
-
 	var diagnostics diag.Diagnostics
 	connection.Options, diagnostics = expandConnectionOptions(data, strategy)
+
+	if connectionIsEnterprise(strategy) {
+		connection.ShowAsButton = value.Bool(config.GetAttr("show_as_button"))
+
+		if !data.IsNewResource() {
+			err := passThroughUnconfigurableConnectionOptions(ctx, api, data.Id(), strategy, connection)
+			if err != nil {
+				return nil, diag.FromErr(err)
+			}
+		}
+	}
 
 	// Prevent erasing database configuration secrets.
 	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 {
@@ -772,4 +779,174 @@ func expandConnectionOptionsScopes(data *schema.ResourceData, options scoper) {
 	for _, scope := range scopesList {
 		options.SetScopes(true, scope.(string))
 	}
+}
+
+func passThroughUnconfigurableConnectionOptions(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	strategy string,
+	connection *management.Connection,
+) error {
+	var err error
+
+	switch strategy {
+	case management.ConnectionStrategyAD:
+		err = passThroughUnconfigurableConnectionOptionsAD(ctx, api, connectionID, connection)
+	case management.ConnectionStrategyAzureAD:
+		err = passThroughUnconfigurableConnectionOptionsAzureAD(ctx, api, connectionID, connection)
+	case management.ConnectionStrategySAML:
+		err = passThroughUnconfigurableConnectionOptionsSAML(ctx, api, connectionID, connection)
+	case management.ConnectionStrategyADFS:
+		err = passThroughUnconfigurableConnectionOptionsADFS(ctx, api, connectionID, connection)
+	case management.ConnectionStrategyPingFederate:
+		err = passThroughUnconfigurableConnectionOptionsPingFederate(ctx, api, connectionID, connection)
+	}
+
+	return err
+}
+
+func passThroughUnconfigurableConnectionOptionsAD(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsAD)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsAD)
+	expandedOptions.Thumbprints = existingOptions.Thumbprints
+	expandedOptions.Certs = existingOptions.Certs
+	expandedOptions.AgentIP = existingOptions.AgentIP
+	expandedOptions.AgentVersion = existingOptions.AgentVersion
+	expandedOptions.AgentMode = existingOptions.AgentMode
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsAzureAD(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsAzureAD)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsAzureAD)
+	expandedOptions.Thumbprints = existingOptions.Thumbprints
+	expandedOptions.AppDomain = existingOptions.AppDomain
+	expandedOptions.CertRolloverNotification = existingOptions.CertRolloverNotification
+	expandedOptions.Granted = existingOptions.Granted
+	expandedOptions.TenantID = existingOptions.TenantID
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsADFS(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsADFS)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsADFS)
+	expandedOptions.Thumbprints = existingOptions.Thumbprints
+	expandedOptions.CertRolloverNotification = existingOptions.CertRolloverNotification
+	expandedOptions.EntityID = existingOptions.EntityID
+	expandedOptions.PreviousThumbprints = existingOptions.PreviousThumbprints
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsSAML(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsSAML)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsSAML)
+	expandedOptions.Thumbprints = existingOptions.Thumbprints
+	expandedOptions.BindingMethod = existingOptions.BindingMethod
+	expandedOptions.CertRolloverNotification = existingOptions.CertRolloverNotification
+	expandedOptions.AgentIP = existingOptions.AgentIP
+	expandedOptions.AgentVersion = existingOptions.AgentVersion
+	expandedOptions.AgentMode = existingOptions.AgentMode
+	expandedOptions.ExtGroups = existingOptions.ExtGroups
+	expandedOptions.ExtProfile = existingOptions.ExtProfile
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsPingFederate(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsPingFederate)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsPingFederate)
+	expandedOptions.APIEnableUsers = existingOptions.APIEnableUsers
+	expandedOptions.SignOutEndpoint = existingOptions.SignOutEndpoint
+	expandedOptions.Subject = existingOptions.Subject
+	expandedOptions.DisableSignout = existingOptions.DisableSignout
+	expandedOptions.UserIDAttribute = existingOptions.UserIDAttribute
+	expandedOptions.Debug = existingOptions.Debug
+	expandedOptions.ProtocolBinding = existingOptions.ProtocolBinding
+	expandedOptions.RequestTemplate = existingOptions.RequestTemplate
+	expandedOptions.Thumbprints = existingOptions.Thumbprints
+	expandedOptions.BindingMethod = existingOptions.BindingMethod
+	expandedOptions.Expires = existingOptions.Expires
+	expandedOptions.MetadataURL = existingOptions.MetadataURL
+	expandedOptions.FieldsMap = existingOptions.FieldsMap
+	expandedOptions.MetadataXML = existingOptions.MetadataXML
+	expandedOptions.EntityID = existingOptions.EntityID
+	expandedOptions.CertRolloverNotification = existingOptions.CertRolloverNotification
+	expandedOptions.SigningKey = existingOptions.SigningKey
+	expandedOptions.DecryptionKey = existingOptions.DecryptionKey
+	expandedOptions.AgentIP = existingOptions.AgentIP
+	expandedOptions.AgentVersion = existingOptions.AgentVersion
+	expandedOptions.AgentMode = existingOptions.AgentMode
+	expandedOptions.ExtGroups = existingOptions.ExtGroups
+	expandedOptions.ExtProfile = existingOptions.ExtProfile
+
+	connection.Options = expandedOptions
+
+	return nil
 }

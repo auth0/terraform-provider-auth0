@@ -77,6 +77,7 @@ func readClientForDataSource(ctx context.Context, data *schema.ResourceData, met
 		clients, err := api.Client.List(
 			ctx,
 			management.Page(page),
+			management.PerPage(100),
 		)
 		if err != nil {
 			return diag.FromErr(err)

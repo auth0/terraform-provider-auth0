@@ -3,6 +3,7 @@ package organization
 import (
 	"context"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -67,13 +68,31 @@ func readOrganizationMemberRoles(ctx context.Context, data *schema.ResourceData,
 	organizationID := data.Get("organization_id").(string)
 	userID := data.Get("user_id").(string)
 
-	memberRoles, err := api.Organization.MemberRoles(ctx, organizationID, userID)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var memberRoles []management.OrganizationMemberRole
+	var page int
+	for {
+		memberRoleList, err := api.Organization.MemberRoles(
+			ctx,
+			organizationID,
+			userID,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		memberRoles = append(memberRoles, memberRoleList.Roles...)
+
+		if !memberRoleList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	var rolesToSet []string
-	for _, role := range memberRoles.Roles {
+	for _, role := range memberRoles {
 		rolesToSet = append(rolesToSet, role.GetID())
 	}
 

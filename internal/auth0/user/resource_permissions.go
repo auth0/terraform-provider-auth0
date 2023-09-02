@@ -115,12 +115,24 @@ func upsertUserPermissions(ctx context.Context, data *schema.ResourceData, meta 
 func readUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	permissions, err := api.User.Permissions(ctx, data.Id())
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var permissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.User.Permissions(ctx, data.Id(), management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	return diag.FromErr(flattenUserPermissions(data, permissions.Permissions))
+	return diag.FromErr(flattenUserPermissions(data, permissions))
 }
 
 func deleteUserPermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

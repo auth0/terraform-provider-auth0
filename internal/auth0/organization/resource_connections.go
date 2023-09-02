@@ -65,9 +65,26 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Get("organization_id").(string)
 
-	alreadyEnabledConnections, err := api.Organization.Connections(ctx, organizationID)
-	if err != nil {
-		return diag.FromErr(err)
+	var alreadyEnabledConnections []*management.OrganizationConnection
+	var page int
+	for {
+		connectionList, err := api.Organization.Connections(
+			ctx,
+			organizationID,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		alreadyEnabledConnections = append(alreadyEnabledConnections, connectionList.OrganizationConnections...)
+
+		if !connectionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	data.SetId(organizationID)
@@ -76,14 +93,14 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	if diagnostics := guardAgainstErasingUnwantedConnections(
 		organizationID,
-		alreadyEnabledConnections.OrganizationConnections,
+		alreadyEnabledConnections,
 		connectionsToAdd,
 	); diagnostics.HasError() {
 		data.SetId("")
 		return diagnostics
 	}
 
-	if len(connectionsToAdd) > len(alreadyEnabledConnections.OrganizationConnections) {
+	if len(connectionsToAdd) > len(alreadyEnabledConnections) {
 		var result *multierror.Error
 
 		for _, connection := range connectionsToAdd {
@@ -102,12 +119,29 @@ func createOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 func readOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connections, err := api.Organization.Connections(ctx, data.Id())
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var connections []*management.OrganizationConnection
+	var page int
+	for {
+		connectionList, err := api.Organization.Connections(
+			ctx,
+			data.Id(),
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		connections = append(connections, connectionList.OrganizationConnections...)
+
+		if !connectionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	return diag.FromErr(flattenOrganizationConnections(data, connections.OrganizationConnections))
+	return diag.FromErr(flattenOrganizationConnections(data, connections))
 }
 
 func updateOrganizationConnections(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

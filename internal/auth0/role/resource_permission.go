@@ -83,12 +83,24 @@ func readRolePermission(ctx context.Context, data *schema.ResourceData, meta int
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	existingPermissions, err := api.Role.Permissions(ctx, roleID)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var existingPermissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, roleID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		existingPermissions = append(existingPermissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	for _, permission := range existingPermissions.Permissions {
+	for _, permission := range existingPermissions {
 		if permission.GetName() == permissionName && permission.GetResourceServerIdentifier() == resourceServerID {
 			return diag.FromErr(flattenRolePermission(data, permission))
 		}

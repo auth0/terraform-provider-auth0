@@ -122,14 +122,31 @@ func updateTriggerAction(ctx context.Context, data *schema.ResourceData, meta in
 	actionID := data.Get("action_id").(string)
 	displayName := data.Get("display_name").(string)
 
-	currentBindings, err := api.Action.Bindings(ctx, trigger)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var currentBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			trigger,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		currentBindings = append(currentBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	found := false
 	var updatedBindings []*management.ActionBinding
-	for _, binding := range currentBindings.Bindings {
+	for _, binding := range currentBindings {
 		if binding.Action.GetID() == actionID {
 			updatedBindings = append(updatedBindings, &management.ActionBinding{
 				Ref: &management.ActionBindingReference{
@@ -168,12 +185,29 @@ func readTriggerAction(ctx context.Context, data *schema.ResourceData, meta inte
 	trigger := data.Get("trigger").(string)
 	actionID := data.Get("action_id").(string)
 
-	triggerBindings, err := api.Action.Bindings(ctx, trigger)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var triggerBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			trigger,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		triggerBindings = append(triggerBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	for _, binding := range triggerBindings.Bindings {
+	for _, binding := range triggerBindings {
 		if binding.Action.GetID() == actionID {
 			return diag.FromErr(data.Set("display_name", binding.GetDisplayName()))
 		}

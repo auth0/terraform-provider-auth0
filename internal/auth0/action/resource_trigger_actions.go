@@ -90,12 +90,29 @@ func createTriggerBinding(ctx context.Context, data *schema.ResourceData, meta i
 func readTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	triggerBindings, err := api.Action.Bindings(ctx, data.Id())
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var triggerBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			data.Id(),
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		triggerBindings = append(triggerBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	return diag.FromErr(flattenTriggerBinding(data, triggerBindings.Bindings))
+	return diag.FromErr(flattenTriggerBinding(data, triggerBindings))
 }
 
 func updateTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

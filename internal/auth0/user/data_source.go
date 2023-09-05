@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -82,15 +83,39 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 
 	data.SetId(user.GetID())
 
-	roles, err := api.User.Roles(ctx, user.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var roles []*management.Role
+	var rolesPage int
+	for {
+		roleList, err := api.User.Roles(ctx, user.GetID(), management.Page(rolesPage), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		roles = append(roles, roleList.Roles...)
+
+		if !roleList.HasNext() {
+			break
+		}
+
+		rolesPage++
 	}
 
-	permissions, err := api.User.Permissions(ctx, user.GetID())
-	if err != nil {
-		return diag.FromErr(err)
+	var permissions []*management.Permission
+	var permissionsPage int
+	for {
+		permissionList, err := api.User.Permissions(ctx, user.GetID(), management.Page(permissionsPage), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		permissions = append(permissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		permissionsPage++
 	}
 
-	return diag.FromErr(flattenUserForDataSource(data, user, roles.Roles, permissions.Permissions))
+	return diag.FromErr(flattenUserForDataSource(data, user, roles, permissions))
 }

@@ -58,12 +58,24 @@ func upsertUserRoles(ctx context.Context, data *schema.ResourceData, meta interf
 func readUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	rolesList, err := api.User.Roles(ctx, data.Id())
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var roles []*management.Role
+	var page int
+	for {
+		roleList, err := api.User.Roles(ctx, data.Id(), management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		roles = append(roles, roleList.Roles...)
+
+		if !roleList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	return diag.FromErr(flattenUserRoles(data, rolesList.Roles))
+	return diag.FromErr(flattenUserRoles(data, roles))
 }
 
 func deleteUserRoles(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

@@ -1,3 +1,22 @@
+## v1.0.0-beta.3
+
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+
+ENHANCEMENTS:
+
+- `resource/auth0_client`: Improve DX for managing `is_token_endpoint_ip_header_trusted` ([#796](https://github.com/auth0/terraform-provider-auth0/pull/796))
+- `resource/auth0_log_stream`: Improve resource schema ([#798](https://github.com/auth0/terraform-provider-auth0/pull/798))
+
+BUG FIXES:
+
+- `resource/auth0_client_credentials`: Stop requiring `read:client_keys` permission when reading the resource ([#795](https://github.com/auth0/terraform-provider-auth0/pull/795))
+- `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML([#802](https://github.com/auth0/terraform-provider-auth0/pull/802))
+- `resource/*`: Fix pagination issues when fetching resources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
+- `data-source/*`: Fix pagination issues when fetching data sources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
+
+
 ## v1.0.0-beta.2
 
 NOTES:

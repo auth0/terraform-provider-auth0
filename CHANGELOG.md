@@ -1,3 +1,10 @@
+## 0.50.2
+
+ENHANCEMENTS:
+
+- `resource/auth0_action`: Add node18 GA (`node18-actions`) option to `runtime`([#803](https://github.com/auth0/terraform-provider-auth0/pull/803))
+
+
 ## 0.50.1
 
 BUG FIXES:

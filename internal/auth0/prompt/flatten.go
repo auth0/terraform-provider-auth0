@@ -26,6 +26,10 @@ func flattenPromptCustomText(data *schema.ResourceData, customText map[string]in
 		return err
 	}
 
+	if body == "null" {
+		return data.Set("body", nil)
+	}
+
 	return data.Set("body", body)
 }
 

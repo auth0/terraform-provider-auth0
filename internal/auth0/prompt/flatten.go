@@ -26,14 +26,14 @@ func flattenPromptCustomText(data *schema.ResourceData, customText map[string]in
 		return err
 	}
 
-	if body == "null" {
-		return data.Set("body", nil)
-	}
-
 	return data.Set("body", body)
 }
 
 func marshalCustomTextBody(b map[string]interface{}) (string, error) {
+	if b == nil {
+		return "{}", nil
+	}
+
 	bodyBytes, err := json.Marshal(b)
 	if err != nil {
 		return "", fmt.Errorf("failed to serialize the custom texts to JSON: %w", err)

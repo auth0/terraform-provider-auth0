@@ -74,3 +74,50 @@ func TestIsURLWithHTTPSorEmptyString(t *testing.T) {
 		})
 	}
 }
+
+func TestUniversalLoginTemplateContainsCorrectTags(t *testing.T) {
+	tests := []struct {
+		name          string
+		input         interface{}
+		key           string
+		expectedError string
+	}{
+		{
+			name:          "valid input",
+			input:         `Some content {%- auth0:head -%} More content {%- auth0:widget -%}`,
+			key:           "testKey",
+			expectedError: "",
+		},
+		{
+			name:          "missing auth0:head tag",
+			input:         `Some content More content {%- auth0:widget -%}`,
+			key:           "testKey",
+			expectedError: "expected \"testKey\" to contain a single auth0:head tag and at least one auth0:widget tag",
+		},
+		{
+			name:          "missing auth0:widget tag",
+			input:         `Some content {%- auth0:head -%} More content`,
+			key:           "testKey",
+			expectedError: "expected \"testKey\" to contain a single auth0:head tag and at least one auth0:widget tag",
+		},
+		{
+			name:          "incorrect input type",
+			input:         42,
+			key:           "testKey",
+			expectedError: "expected type of \"testKey\" to be string",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, errors := UniversalLoginTemplateContainsCorrectTags(test.input, test.key)
+
+			if test.expectedError != "" {
+				assert.EqualError(t, errors[0], test.expectedError)
+				return
+			}
+
+			assert.Len(t, errors, 0)
+		})
+	}
+}

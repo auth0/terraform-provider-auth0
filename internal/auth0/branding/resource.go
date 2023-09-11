@@ -8,10 +8,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
 var errNoCustomDomain = fmt.Errorf(
@@ -94,7 +94,7 @@ func NewResource() *schema.Resource {
 						"body": {
 							Type:         schema.TypeString,
 							Required:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
+							ValidateFunc: internalValidation.UniversalLoginTemplateContainsCorrectTags,
 							Description:  "The html template for the New Universal Login Experience.",
 						},
 					},

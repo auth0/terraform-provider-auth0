@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 // IsURLWithHTTPSorEmptyString is a validation func that checks
@@ -39,4 +40,21 @@ func IsURLWithHTTPSorEmptyString(rawURL interface{}, key string) ([]string, []er
 	}
 
 	return nil, nil
+}
+
+// UniversalLoginTemplateContainsCorrectTags is a validation func that checks
+// that the given universal login template body contains the correct tags.
+func UniversalLoginTemplateContainsCorrectTags(rawBody interface{}, key string) ([]string, []error) {
+	v, ok := rawBody.(string)
+	if !ok {
+		return nil, []error{fmt.Errorf("expected type of %q to be string", key)}
+	}
+
+	if strings.Contains(v, "{%- auth0:head -%}") && strings.Contains(v, "{%- auth0:widget -%}") {
+		return nil, nil
+	}
+
+	return nil, []error{
+		fmt.Errorf("expected %q to contain a single auth0:head tag and at least one auth0:widget tag", key),
+	}
 }

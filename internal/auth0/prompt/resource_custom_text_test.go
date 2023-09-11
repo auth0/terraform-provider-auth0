@@ -12,6 +12,14 @@ func TestAccPromptCustomText(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
+				Config: testAccPromptCustomTextEmptyBody,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "prompt", "login"),
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "language", "en"),
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "body", "{}"),
+				),
+			},
+			{
 				Config: testAccPromptCustomTextCreate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "prompt", "login"),
@@ -35,9 +43,25 @@ func TestAccPromptCustomText(t *testing.T) {
 					),
 				),
 			},
+			{
+				Config: testAccPromptCustomTextEmptyBody,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "prompt", "login"),
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "language", "en"),
+					resource.TestCheckResourceAttr("auth0_prompt_custom_text.prompt_custom_text", "body", "{}"),
+				),
+			},
 		},
 	})
 }
+
+const testAccPromptCustomTextEmptyBody = `
+resource "auth0_prompt_custom_text" "prompt_custom_text" {
+  prompt = "login"
+  language = "en"
+  body = "{}"
+}
+`
 
 const testAccPromptCustomTextCreate = `
 resource "auth0_prompt_custom_text" "prompt_custom_text" {

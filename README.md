@@ -20,6 +20,8 @@ Don’t hesitate and follow the link! [See you in our Community Forum](https://c
 
 </div>
 
+---
+
 The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
 [Terraform](https://www.terraform.io/) tool.
 

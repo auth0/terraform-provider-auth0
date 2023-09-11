@@ -155,7 +155,6 @@ func NewResource() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							RequiredWith: []string{"phone.0.provider"},
 							Description: "Message types to use, array of `sms` and/or `voice`. " +
 								"Adding both to the array should enable the user to choose.",
 						},

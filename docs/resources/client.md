@@ -18,7 +18,6 @@ resource "auth0_client" "my_client" {
   custom_login_page_on                = true
   is_first_party                      = true
   is_token_endpoint_ip_header_trusted = true
-  token_endpoint_auth_method          = "client_secret_post"
   oidc_conformant                     = false
   callbacks                           = ["https://example.com/callback"]
   allowed_origins                     = ["https://example.com"]

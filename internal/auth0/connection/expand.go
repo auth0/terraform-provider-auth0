@@ -28,6 +28,7 @@ var expandConnectionOptionsMap = map[string]expandConnectionOptionsFunc{
 	management.ConnectionStrategyBox:                 expandConnectionOptionsOAuth2,
 	management.ConnectionStrategyWordpress:           expandConnectionOptionsOAuth2,
 	management.ConnectionStrategyShopify:             expandConnectionOptionsOAuth2,
+	management.ConnectionStrategyLine:                expandConnectionOptionsOAuth2,
 	management.ConnectionStrategyCustom:              expandConnectionOptionsOAuth2,
 	management.ConnectionStrategyFacebook:            expandConnectionOptionsFacebook,
 	management.ConnectionStrategyApple:               expandConnectionOptionsApple,
@@ -974,4 +975,27 @@ func passThroughUnconfigurableConnectionOptionsPingFederate(
 	connection.Options = expandedOptions
 
 	return nil
+}
+
+// checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.
+func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[string]string) diag.Diagnostics {
+	var warnings diag.Diagnostics
+
+	for key := range configFromAPI {
+		if _, ok := configFromTF[key]; !ok {
+			warnings = append(warnings, diag.Diagnostic{
+				Severity: diag.Error,
+				Summary:  "Unmanaged Configuration Secret",
+				Detail: fmt.Sprintf("Detected a configuration secret not managed through terraform: %q. "+
+					"If you proceed, this configuration secret will get deleted. It is required to "+
+					"add this configuration secret to your custom database settings to "+
+					"prevent unintentionally destructive results.",
+					key,
+				),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.configuration"}},
+			})
+		}
+	}
+
+	return warnings
 }

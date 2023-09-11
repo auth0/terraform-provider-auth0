@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/auth0/go-auth0/management"
@@ -11,8 +12,54 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 )
 
+var errUnsupportedConnectionOptionsType = errors.New("unsupported connection options type")
+
+var flattenConnectionOptionsMap = map[string]flattenConnectionOptionsFunc{
+	// Database Connection.
+	management.ConnectionStrategyAuth0: flattenConnectionOptionsAuth0,
+
+	// Social Connections.
+	management.ConnectionStrategyGoogleOAuth2:        flattenConnectionOptionsGoogleOAuth2,
+	management.ConnectionStrategyOAuth2:              flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyDropbox:             flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyBitBucket:           flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyPaypal:              flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyTwitter:             flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyAmazon:              flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyYahoo:               flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyBox:                 flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyWordpress:           flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyShopify:             flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyLine:                flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyCustom:              flattenConnectionOptionsOAuth2,
+	management.ConnectionStrategyFacebook:            flattenConnectionOptionsFacebook,
+	management.ConnectionStrategyApple:               flattenConnectionOptionsApple,
+	management.ConnectionStrategyLinkedin:            flattenConnectionOptionsLinkedin,
+	management.ConnectionStrategyGitHub:              flattenConnectionOptionsGitHub,
+	management.ConnectionStrategyWindowsLive:         flattenConnectionOptionsWindowsLive,
+	management.ConnectionStrategySalesforce:          flattenConnectionOptionsSalesforce,
+	management.ConnectionStrategySalesforceCommunity: flattenConnectionOptionsSalesforce,
+	management.ConnectionStrategySalesforceSandbox:   flattenConnectionOptionsSalesforce,
+
+	// Passwordless Connections.
+	management.ConnectionStrategySMS:   flattenConnectionOptionsSMS,
+	management.ConnectionStrategyEmail: flattenConnectionOptionsEmail,
+
+	// Enterprise Connections.
+	management.ConnectionStrategyOIDC:         flattenConnectionOptionsOIDC,
+	management.ConnectionStrategyGoogleApps:   flattenConnectionOptionsGoogleApps,
+	management.ConnectionStrategyOkta:         flattenConnectionOptionsOkta,
+	management.ConnectionStrategyAD:           flattenConnectionOptionsAD,
+	management.ConnectionStrategyAzureAD:      flattenConnectionOptionsAzureAD,
+	management.ConnectionStrategySAML:         flattenConnectionOptionsSAML,
+	management.ConnectionStrategyADFS:         flattenConnectionOptionsADFS,
+	management.ConnectionStrategyPingFederate: flattenConnectionOptionsPingFederate,
+}
+
+type flattenConnectionOptionsFunc func(data *schema.ResourceData, options interface{}) (interface{}, diag.Diagnostics)
+
 func flattenConnection(data *schema.ResourceData, connection *management.Connection) diag.Diagnostics {
-	connectionOptions, diags := flattenConnectionOptions(data, connection.Options)
+	connectionOptions, diags := flattenConnectionOptions(data, connection)
 	if diags.HasError() {
 		return diags
 	}
@@ -27,13 +74,7 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("metadata", connection.GetMetadata()),
 	)
 
-	switch connection.GetStrategy() {
-	case management.ConnectionStrategyGoogleApps,
-		management.ConnectionStrategyOIDC,
-		management.ConnectionStrategyAD,
-		management.ConnectionStrategyAzureAD,
-		management.ConnectionStrategySAML,
-		management.ConnectionStrategyADFS:
+	if connectionIsEnterprise(connection.GetStrategy()) {
 		result = multierror.Append(result, data.Set("show_as_button", connection.GetShowAsButton()))
 	}
 
@@ -50,104 +91,105 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	return diags
 }
 
-func flattenConnectionOptions(data *schema.ResourceData, options interface{}) ([]interface{}, diag.Diagnostics) {
-	if options == nil {
+func flattenConnectionOptions(data *schema.ResourceData, connection *management.Connection) ([]interface{}, diag.Diagnostics) {
+	if connection == nil || connection.Options == nil {
 		return nil, nil
 	}
 
-	var m interface{}
-	var diags diag.Diagnostics
-	switch connectionOptions := options.(type) {
-	case *management.ConnectionOptions:
-		m, diags = flattenConnectionOptionsAuth0(data, connectionOptions)
-	case *management.ConnectionOptionsGoogleOAuth2:
-		m, diags = flattenConnectionOptionsGoogleOAuth2(connectionOptions)
-	case *management.ConnectionOptionsGoogleApps:
-		m, diags = flattenConnectionOptionsGoogleApps(connectionOptions)
-	case *management.ConnectionOptionsOAuth2:
-		m, diags = flattenConnectionOptionsOAuth2(connectionOptions)
-	case *management.ConnectionOptionsFacebook:
-		m, diags = flattenConnectionOptionsFacebook(connectionOptions)
-	case *management.ConnectionOptionsApple:
-		m, diags = flattenConnectionOptionsApple(connectionOptions)
-	case *management.ConnectionOptionsLinkedin:
-		m, diags = flattenConnectionOptionsLinkedin(connectionOptions)
-	case *management.ConnectionOptionsGitHub:
-		m, diags = flattenConnectionOptionsGitHub(connectionOptions)
-	case *management.ConnectionOptionsWindowsLive:
-		m, diags = flattenConnectionOptionsWindowsLive(connectionOptions)
-	case *management.ConnectionOptionsSalesforce:
-		m, diags = flattenConnectionOptionsSalesforce(connectionOptions)
-	case *management.ConnectionOptionsEmail:
-		m, diags = flattenConnectionOptionsEmail(connectionOptions)
-	case *management.ConnectionOptionsSMS:
-		m, diags = flattenConnectionOptionsSMS(connectionOptions)
-	case *management.ConnectionOptionsOIDC:
-		m, diags = flattenConnectionOptionsOIDC(connectionOptions)
-	case *management.ConnectionOptionsOkta:
-		m, diags = flattenConnectionOptionsOkta(connectionOptions)
-	case *management.ConnectionOptionsAD:
-		m, diags = flattenConnectionOptionsAD(connectionOptions)
-	case *management.ConnectionOptionsAzureAD:
-		m, diags = flattenConnectionOptionsAzureAD(connectionOptions)
-	case *management.ConnectionOptionsADFS:
-		m, diags = flattenConnectionOptionsADFS(connectionOptions)
-	case *management.ConnectionOptionsPingFederate:
-		m, diags = flattenConnectionOptionsPingFederate(connectionOptions)
-	case *management.ConnectionOptionsSAML:
-		m, diags = flattenConnectionOptionsSAML(data, connectionOptions)
+	connectionOptionsFunc, ok := flattenConnectionOptionsMap[connection.GetStrategy()]
+	if !ok {
+		return nil, diag.Diagnostics{
+			{
+				Severity: diag.Error,
+				Summary:  "Unsupported Connection Strategy",
+				Detail: fmt.Sprintf(
+					"Raise an issue at %s in order to have the following connection strategy supported: %q",
+					"https://github.com/auth0/terraform-provider-auth0/issues/new",
+					connection.GetStrategy(),
+				),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "strategy"}},
+			},
+		}
 	}
 
-	return []interface{}{m}, diags
+	connectionOptionsMap, diagnostics := connectionOptionsFunc(data, connection.Options)
+
+	return []interface{}{connectionOptionsMap}, diagnostics
 }
 
-func flattenConnectionOptionsGitHub(options *management.ConnectionOptionsGitHub) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
-		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"scopes":                   options.Scopes(),
+func flattenConnectionOptionsGitHub(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsGitHub)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
+	optionsMap := map[string]interface{}{
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"scopes":                   options.Scopes(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
 }
 
-func flattenConnectionOptionsWindowsLive(options *management.ConnectionOptionsWindowsLive) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+func flattenConnectionOptionsWindowsLive(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsWindowsLive)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"strategy_version":         options.GetStrategyVersion(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsAuth0(
+	data *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptions)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsAuth0(
-	data *schema.ResourceData,
-	options *management.ConnectionOptions,
-) (interface{}, diag.Diagnostics) {
 	dbSecretConfig, ok := data.GetOk("options.0.configuration")
 	if !ok {
 		dbSecretConfig = make(map[string]interface{})
 	}
 
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"password_policy":                      options.GetPasswordPolicy(),
 		"enable_script_context":                options.GetEnableScriptContext(),
 		"enabled_database_customization":       options.GetEnabledDatabaseCustomization(),
@@ -160,25 +202,31 @@ func flattenConnectionOptionsAuth0(
 		"configuration":                        dbSecretConfig, // Values do not get read back.
 		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
+		"upstream_params":                      upstreamParams,
 	}
 
 	if options.PasswordComplexityOptions != nil {
-		m["password_complexity_options"] = []interface{}{options.PasswordComplexityOptions}
+		optionsMap["password_complexity_options"] = []interface{}{options.PasswordComplexityOptions}
 	}
+
 	if options.PasswordDictionary != nil {
-		m["password_dictionary"] = []interface{}{options.PasswordDictionary}
+		optionsMap["password_dictionary"] = []interface{}{options.PasswordDictionary}
 	}
+
 	if options.PasswordNoPersonalInfo != nil {
-		m["password_no_personal_info"] = []interface{}{options.PasswordNoPersonalInfo}
+		optionsMap["password_no_personal_info"] = []interface{}{options.PasswordNoPersonalInfo}
 	}
+
 	if options.PasswordHistory != nil {
-		m["password_history"] = []interface{}{options.PasswordHistory}
+		optionsMap["password_history"] = []interface{}{options.PasswordHistory}
 	}
+
 	if options.MFA != nil {
-		m["mfa"] = []interface{}{options.MFA}
+		optionsMap["mfa"] = []interface{}{options.MFA}
 	}
+
 	if options.Validation != nil {
-		m["validation"] = []interface{}{
+		optionsMap["validation"] = []interface{}{
 			map[string]interface{}{
 				"username": []interface{}{
 					options.Validation["username"],
@@ -187,90 +235,86 @@ func flattenConnectionOptionsAuth0(
 		}
 	}
 
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsGoogleOAuth2(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsGoogleOAuth2)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-// checkForUnmanagedConfigurationSecrets is used to assess keys diff because values are sent back encrypted.
-func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[string]string) diag.Diagnostics {
-	var warnings diag.Diagnostics
-
-	for key := range configFromAPI {
-		if _, ok := configFromTF[key]; !ok {
-			warnings = append(warnings, diag.Diagnostic{
-				Severity: diag.Error,
-				Summary:  "Unmanaged Configuration Secret",
-				Detail: fmt.Sprintf("Detected a configuration secret not managed through terraform: %q. "+
-					"If you proceed, this configuration secret will get deleted. It is required to "+
-					"add this configuration secret to your custom database settings to "+
-					"prevent unintentionally destructive results.",
-					key,
-				),
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.configuration"}},
-			})
-		}
-	}
-
-	return warnings
-}
-
-func flattenConnectionOptionsGoogleOAuth2(
-	options *management.ConnectionOptionsGoogleOAuth2,
-) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"allowed_audiences":        options.GetAllowedAudiences(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
 	}
 
-	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-	m["upstream_params"] = upstreamParams
-
-	return m, nil
+	return optionsMap, nil
 }
 
 func flattenConnectionOptionsGoogleApps(
-	options *management.ConnectionOptionsGoogleApps,
+	_ *schema.ResourceData,
+	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
-		"client_id":            options.GetClientID(),
-		"client_secret":        options.GetClientSecret(),
-		"domain":               options.GetDomain(),
-		"tenant_domain":        options.GetTenantDomain(),
-		"api_enable_users":     options.GetEnableUsersAPI(),
-		"scopes":               options.Scopes(),
-		"non_persistent_attrs": options.GetNonPersistentAttrs(),
-		"domain_aliases":       options.GetDomainAliases(),
-		"icon_url":             options.GetLogoURL(),
-	}
-
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
-	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
+	options, ok := rawOptions.(*management.ConnectionOptionsGoogleApps)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
+	optionsMap := map[string]interface{}{
+		"client_id":                options.GetClientID(),
+		"client_secret":            options.GetClientSecret(),
+		"domain":                   options.GetDomain(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"api_enable_users":         options.GetEnableUsersAPI(),
+		"scopes":                   options.Scopes(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"icon_url":                 options.GetLogoURL(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"upstream_params":          upstreamParams,
+	}
+
+	if options.GetSetUserAttributes() == "" {
+		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
 }
 
-func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+func flattenConnectionOptionsOAuth2(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsOAuth2)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
@@ -281,37 +325,53 @@ func flattenConnectionOptionsOAuth2(options *management.ConnectionOptionsOAuth2)
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsFacebook(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsFacebook)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsFacebook(options *management.ConnectionOptionsFacebook) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsApple(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsApple)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"team_id":                  options.GetTeamID(),
@@ -319,57 +379,81 @@ func flattenConnectionOptionsApple(options *management.ConnectionOptionsApple) (
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsLinkedin(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsLinkedin)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsLinkedin(options *management.ConnectionOptionsLinkedin) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"strategy_version":         options.GetStrategyVersion(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsSalesforce(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsSalesforce)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsSalesforce(options *management.ConnectionOptionsSalesforce) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"community_base_url":       options.GetCommunityBaseURL(),
 		"scopes":                   options.Scopes(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsSMS(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsSMS)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"name":                   options.GetName(),
 		"from":                   options.GetFrom(),
 		"syntax":                 options.GetSyntax(),
@@ -382,10 +466,11 @@ func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (inte
 		"provider":               options.GetProvider(),
 		"gateway_url":            options.GetGatewayURL(),
 		"forward_request_info":   options.GetForwardRequestInfo(),
+		"upstream_params":        upstreamParams,
 	}
 
 	if options.OTP != nil {
-		m["totp"] = []interface{}{
+		optionsMap["totp"] = []interface{}{
 			map[string]interface{}{
 				"time_step": options.OTP.GetTimeStep(),
 				"length":    options.OTP.GetLength(),
@@ -394,7 +479,7 @@ func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (inte
 	}
 
 	if options.GatewayAuthentication != nil {
-		m["gateway_authentication"] = []interface{}{
+		optionsMap["gateway_authentication"] = []interface{}{
 			map[string]interface{}{
 				"method":                options.GatewayAuthentication.GetMethod(),
 				"subject":               options.GatewayAuthentication.GetSubject(),
@@ -405,17 +490,24 @@ func flattenConnectionOptionsSMS(options *management.ConnectionOptionsSMS) (inte
 		}
 	}
 
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsOIDC(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsOIDC)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"icon_url":                 options.GetLogoURL(),
@@ -431,19 +523,27 @@ func flattenConnectionOptionsOIDC(options *management.ConnectionOptionsOIDC) (in
 		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsOkta(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsOkta)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsOkta(options *management.ConnectionOptionsOkta) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
 		"domain":                   options.GetDomain(),
@@ -457,19 +557,27 @@ func flattenConnectionOptionsOkta(options *management.ConnectionOptionsOkta) (in
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"icon_url":                 options.GetLogoURL(),
+		"upstream_params":          upstreamParams,
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsEmail(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsEmail)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"name":                     options.GetName(),
 		"from":                     options.GetEmail().GetFrom(),
 		"syntax":                   options.GetEmail().GetSyntax(),
@@ -479,10 +587,11 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		"brute_force_protection":   options.GetBruteForceProtection(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"upstream_params":          upstreamParams,
 	}
 
 	if options.OTP != nil {
-		m["totp"] = []interface{}{
+		optionsMap["totp"] = []interface{}{
 			map[string]interface{}{
 				"time_step": options.OTP.GetTimeStep(),
 				"length":    options.OTP.GetLength(),
@@ -490,57 +599,73 @@ func flattenConnectionOptionsEmail(options *management.ConnectionOptionsEmail) (
 		}
 	}
 
-	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-	m["upstream_params"] = upstreamParams
-
 	if options.AuthParams != nil {
 		v, ok := options.AuthParams.(map[string]interface{})
 		if !ok {
-			return m, diag.Diagnostics{{
+			return optionsMap, diag.Diagnostics{{
 				Severity:      diag.Warning,
 				Summary:       "Unable to cast auth_params to map[string]string",
 				Detail:        fmt.Sprintf(`Authentication Parameters are required to be a map of strings, the existing value of %v is not compatible. It is recommended to express the existing value as a valid map[string]string. Subsequent terraform applys will clear this configuration to empty map.`, options.AuthParams),
 				AttributePath: cty.Path{cty.GetAttrStep{Name: "options.auth_params"}},
 			}}
 		}
-		m["auth_params"] = v
+
+		optionsMap["auth_params"] = v
 	}
 
-	return m, nil
+	return optionsMap, nil
 }
 
-func flattenConnectionOptionsAD(options *management.ConnectionOptionsAD) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
-		"tenant_domain":          options.GetTenantDomain(),
-		"domain_aliases":         options.GetDomainAliases(),
-		"icon_url":               options.GetLogoURL(),
-		"ips":                    options.GetIPs(),
-		"use_cert_auth":          options.GetCertAuth(),
-		"use_kerberos":           options.GetKerberos(),
-		"disable_cache":          options.GetDisableCache(),
-		"brute_force_protection": options.GetBruteForceProtection(),
-		"non_persistent_attrs":   options.GetNonPersistentAttrs(),
-	}
-
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
-	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
+func flattenConnectionOptionsAD(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsAD)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
+	optionsMap := map[string]interface{}{
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"icon_url":                 options.GetLogoURL(),
+		"ips":                      options.GetIPs(),
+		"use_cert_auth":            options.GetCertAuth(),
+		"use_kerberos":             options.GetKerberos(),
+		"disable_cache":            options.GetDisableCache(),
+		"brute_force_protection":   options.GetBruteForceProtection(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"upstream_params":          upstreamParams,
+	}
+
+	if options.GetSetUserAttributes() == "" {
+		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
 }
 
-func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureAD) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+func flattenConnectionOptionsAzureAD(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsAzureAD)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	optionsMap := map[string]interface{}{
 		"client_id":                              options.GetClientID(),
 		"client_secret":                          options.GetClientSecret(),
 		"app_id":                                 options.GetAppID(),
@@ -557,24 +682,32 @@ func flattenConnectionOptionsAzureAD(options *management.ConnectionOptionsAzureA
 		"scopes":                                 options.Scopes(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
+		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"upstream_params":                        upstreamParams,
 	}
 
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
 	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
+		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsADFS(
+	_ *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsADFS)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
+	optionsMap := map[string]interface{}{
 		"tenant_domain":                          options.GetTenantDomain(),
 		"domain_aliases":                         options.GetDomainAliases(),
 		"icon_url":                               options.GetLogoURL(),
@@ -584,54 +717,66 @@ func flattenConnectionOptionsADFS(options *management.ConnectionOptionsADFS) (in
 		"api_enable_users":                       options.GetEnableUsersAPI(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"upstream_params":                        upstreamParams,
 	}
 
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
 	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
+		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
+}
+
+func flattenConnectionOptionsSAML(
+	data *schema.ResourceData,
+	rawOptions interface{},
+) (interface{}, diag.Diagnostics) {
+	options, ok := rawOptions.(*management.ConnectionOptionsSAML)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
+	}
+
+	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
+	if err != nil {
+		return nil, diag.FromErr(err)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
-}
-
-func flattenConnectionOptionsSAML(
-	data *schema.ResourceData,
-	options *management.ConnectionOptionsSAML,
-) (interface{}, diag.Diagnostics) {
-	m := map[string]interface{}{
-		"signing_cert":         options.GetSigningCert(),
-		"protocol_binding":     options.GetProtocolBinding(),
-		"debug":                options.GetDebug(),
-		"tenant_domain":        options.GetTenantDomain(),
-		"domain_aliases":       options.GetDomainAliases(),
-		"sign_in_endpoint":     options.GetSignInEndpoint(),
-		"sign_out_endpoint":    options.GetSignOutEndpoint(),
-		"disable_sign_out":     options.GetDisableSignOut(),
-		"signature_algorithm":  options.GetSignatureAlgorithm(),
-		"digest_algorithm":     options.GetDigestAglorithm(),
-		"sign_saml_request":    options.GetSignSAMLRequest(),
-		"icon_url":             options.GetLogoURL(),
-		"request_template":     options.GetRequestTemplate(),
-		"user_id_attribute":    options.GetUserIDAttribute(),
-		"non_persistent_attrs": options.GetNonPersistentAttrs(),
-		"entity_id":            options.GetEntityID(),
-		"metadata_url":         options.GetMetadataURL(),
-		"metadata_xml":         data.Get("options.0.metadata_xml").(string), // Does not get read back.
+	optionsMap := map[string]interface{}{
+		"signing_cert":             options.GetSigningCert(),
+		"protocol_binding":         options.GetProtocolBinding(),
+		"debug":                    options.GetDebug(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"sign_in_endpoint":         options.GetSignInEndpoint(),
+		"sign_out_endpoint":        options.GetSignOutEndpoint(),
+		"disable_sign_out":         options.GetDisableSignOut(),
+		"signature_algorithm":      options.GetSignatureAlgorithm(),
+		"digest_algorithm":         options.GetDigestAglorithm(),
+		"sign_saml_request":        options.GetSignSAMLRequest(),
+		"icon_url":                 options.GetLogoURL(),
+		"request_template":         options.GetRequestTemplate(),
+		"user_id_attribute":        options.GetUserIDAttribute(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"entity_id":                options.GetEntityID(),
+		"metadata_url":             options.GetMetadataURL(),
+		"metadata_xml":             data.Get("options.0.metadata_xml").(string), // Does not get read back.
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"fields_map":               fieldsMap,
+		"upstream_params":          upstreamParams,
 	}
 
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
 	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
+		optionsMap["set_user_root_attributes"] = "on_each_login"
 	}
 
 	if options.IdpInitiated != nil {
-		m["idp_initiated"] = []interface{}{
+		optionsMap["idp_initiated"] = []interface{}{
 			map[string]interface{}{
 				"client_id":              options.IdpInitiated.GetClientID(),
 				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
@@ -641,7 +786,7 @@ func flattenConnectionOptionsSAML(
 	}
 
 	if options.SigningKey != nil {
-		m["signing_key"] = []interface{}{
+		optionsMap["signing_key"] = []interface{}{
 			map[string]interface{}{
 				"key":  options.GetSigningKey().GetKey(),
 				"cert": options.GetSigningKey().GetCert(),
@@ -650,7 +795,7 @@ func flattenConnectionOptionsSAML(
 	}
 
 	if options.DecryptionKey != nil {
-		m["decryption_key"] = []interface{}{
+		optionsMap["decryption_key"] = []interface{}{
 			map[string]interface{}{
 				"key":  options.GetDecryptionKey().GetKey(),
 				"cert": options.GetDecryptionKey().GetCert(),
@@ -658,62 +803,54 @@ func flattenConnectionOptionsSAML(
 		}
 	}
 
-	fieldsMap, err := structure.FlattenJsonToString(options.FieldsMap)
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-	m["fields_map"] = fieldsMap
-
-	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
-	if err != nil {
-		return nil, diag.FromErr(err)
-	}
-	m["upstream_params"] = upstreamParams
-
-	return m, nil
+	return optionsMap, nil
 }
 
 func flattenConnectionOptionsPingFederate(
-	options *management.ConnectionOptionsPingFederate,
+	_ *schema.ResourceData,
+	rawOptions interface{},
 ) (interface{}, diag.Diagnostics) {
-	signingCert := options.GetSigningCert()
-	if signingCert == "" {
-		signingCert = options.GetCert()
-	}
-
-	m := map[string]interface{}{
-		"signing_cert":           signingCert,
-		"tenant_domain":          options.GetTenantDomain(),
-		"domain_aliases":         options.GetDomainAliases(),
-		"sign_in_endpoint":       options.GetSignInEndpoint(),
-		"signature_algorithm":    options.GetSignatureAlgorithm(),
-		"digest_algorithm":       options.GetDigestAlgorithm(),
-		"sign_saml_request":      options.GetSignSAMLRequest(),
-		"ping_federate_base_url": options.GetPingFederateBaseURL(),
-		"icon_url":               options.GetLogoURL(),
-		"non_persistent_attrs":   options.GetNonPersistentAttrs(),
-	}
-
-	m["set_user_root_attributes"] = options.GetSetUserAttributes()
-	if options.GetSetUserAttributes() == "" {
-		m["set_user_root_attributes"] = "on_each_login"
-	}
-
-	m["idp_initiated"] = []interface{}{
-		map[string]interface{}{
-			"client_id":              options.GetIdpInitiated().GetClientID(),
-			"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
-			"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),
-		},
+	options, ok := rawOptions.(*management.ConnectionOptionsPingFederate)
+	if !ok {
+		return nil, diag.FromErr(errUnsupportedConnectionOptionsType)
 	}
 
 	upstreamParams, err := structure.FlattenJsonToString(options.UpstreamParams)
 	if err != nil {
 		return nil, diag.FromErr(err)
 	}
-	m["upstream_params"] = upstreamParams
 
-	return m, nil
+	optionsMap := map[string]interface{}{
+		"signing_cert":             options.GetSigningCert(),
+		"tenant_domain":            options.GetTenantDomain(),
+		"domain_aliases":           options.GetDomainAliases(),
+		"sign_in_endpoint":         options.GetSignInEndpoint(),
+		"signature_algorithm":      options.GetSignatureAlgorithm(),
+		"digest_algorithm":         options.GetDigestAlgorithm(),
+		"sign_saml_request":        options.GetSignSAMLRequest(),
+		"ping_federate_base_url":   options.GetPingFederateBaseURL(),
+		"icon_url":                 options.GetLogoURL(),
+		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
+		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"upstream_params":          upstreamParams,
+		"idp_initiated": []map[string]interface{}{
+			{
+				"client_id":              options.GetIdpInitiated().GetClientID(),
+				"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
+				"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),
+			},
+		},
+	}
+
+	if options.GetSigningCert() == "" {
+		optionsMap["signing_cert"] = options.GetCert()
+	}
+
+	if options.GetSetUserAttributes() == "" {
+		optionsMap["set_user_root_attributes"] = "on_each_login"
+	}
+
+	return optionsMap, nil
 }
 
 func flattenConnectionClient(data *schema.ResourceData, connection *management.Connection) error {

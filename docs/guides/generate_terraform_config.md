@@ -14,7 +14,6 @@ Fortunately, the [Auth0 CLI](https://auth0.github.io/auth0-cli/) simplifies this
 
 ## Pre-requisites:
 
-- **An Auth0 Tenant** -
 - **Auth0 CLI v1.1.0+** – Auth0's official CLI. This tool will be performing the heavy lifting. Specifically requires versions 1.1.0 and up. See: [Auth0 CLI installation instructions](https://auth0.github.io/auth0-cli/).
 
 ## 1. Create Dedicated M2M Application

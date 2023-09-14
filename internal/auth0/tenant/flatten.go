@@ -56,6 +56,7 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["dashboard_insights_view"] = flags.DashboardInsightsView
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
+	m["require_pushed_authorization_requests"] = flags.RequirePushedAuthorizationRequests
 
 	return []interface{}{m}
 }

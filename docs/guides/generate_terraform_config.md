@@ -77,7 +77,7 @@ Alternatively, you can choose not to apply the configuration immediately. Instea
 
 While the generated Terraform config appears complete, it cannot export sensitive values like secrets and keys.
 
-If configuring the same tenant as the one exported, immediate alterations may not be necessary. However, when applying this configuration to other tenants, you might need to supplement those values after the fact to ensure proper operation. Review the auth0_generated.tf file for properties commented with # sensitive. These are fields that may require replacements.
+If configuring the same tenant as the one exported, immediate alterations may not be necessary. However, when applying this configuration to other tenants, you might need to supplement those values after the fact to ensure proper operation. Review the `auth0_generated.tf` file for properties commented with `# sensitive`. These are fields that may require replacements.
 
 **Example:**
 In the below example, both `credentials.access_key_id` and `credentials.api_key` properties are marked as sensitive.

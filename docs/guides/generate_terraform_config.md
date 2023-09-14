@@ -6,7 +6,7 @@ description: |-
 
 # Auto-generating Terraform config files from Auth0 tenant
 
-~> This guide refers to Auth0 CLI functionality that is _experimental_ and may change in future versions
+~> This guide refers to Auth0 CLI functionality that is _experimental_ and may change in future versions.
 
 Adopting Terraform for a mature Auth0 tenant can be daunting. Developers often face the challenge of manually importing numerous resources, necessitating the retrieval of multiple IDs. At times, they resort to manual Terraform configuration to match the tenant's resources.
 

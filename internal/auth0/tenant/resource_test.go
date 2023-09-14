@@ -102,6 +102,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix                 = false
 		mfa_show_factor_list_on_enrollment     = false
+		require_pushed_authorization_requests  = false
 	}
 
 	session_cookie {
@@ -136,6 +137,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = true
 		disable_fields_map_fix                 = true
 		mfa_show_factor_list_on_enrollment     = true
+		require_pushed_authorization_requests  = true
 	}
 
 	session_cookie {

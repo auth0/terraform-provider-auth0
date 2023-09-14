@@ -32,7 +32,7 @@ export AUTH0_CLIENT_ID=***********
 export AUTH0_CLIENT_SECRET=***********
 ```
 
-**Note:** Environment variables are the simplest and most secure way to pass credentials to the provider. Refer to the [Related documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs#example-usage) for alternatives.
+**Note:** Environment variables are the simplest and most secure way to pass credentials to the provider. Refer to the [related documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs#example-usage) for alternatives.
 
 ## 3. Authenticate with Auth0 CLI
 

@@ -538,6 +538,10 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "disabled"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 				),
 			},
 			{
@@ -560,6 +564,36 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "auto"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOIDCConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "1234567"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "front_channel"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://www.paypalobjects.com"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.paypal.com/v1/oauth2/certs"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.discovery_url", "https://www.paypalobjects.com/.well-known/openid-configuration"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint", "https://api.paypal.com/v1/oauth2/token"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.userinfo_endpoint", "https://api.paypal.com/v1/oauth2/token/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.authorization_endpoint", "https://www.paypal.com/signin/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "0"),
 				),
 			},
 		},
@@ -579,26 +613,77 @@ resource "auth0_connection" "oidc" {
 			"example.com",
 			"api.example.com"
 		]
-		type                   = "back_channel"
-		issuer                 = "https://api.login.yahoo.com"
-		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
-		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
-		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
-		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
-		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
-		scopes                 = [ "openid", "email", "profile" ]
+		type                     = "back_channel"
+		issuer                   = "https://api.login.yahoo.com"
+		jwks_uri                 = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url            = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint           = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint        = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint   = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                   = [ "openid", "email", "profile" ]
 		set_user_root_attributes = "on_each_login"
-		non_persistent_attrs = ["gender","hair_color"]
-		upstream_params = jsonencode({
+		non_persistent_attrs     = ["gender","hair_color"]
+		upstream_params          = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
 			}
 		})
+
+		connection_settings {
+			pkce = "disabled"
+		}
+
+		attribute_map {
+			mapping_mode = "basic_profile"
+		}
 	}
 }
 `
 
 const testAccConnectionOIDCConfigUpdate = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-OIDC-{{.testName}}"
+	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
+	strategy = "oidc"
+	show_as_button = false
+	options {
+		client_id     = "1234567"
+		client_secret = "1234567"
+		domain_aliases = [
+			"example.com"
+		]
+		type                   = "front_channel"
+		issuer                 = "https://www.paypalobjects.com"
+		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
+		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
+		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
+		authorization_endpoint = "https://www.paypal.com/signin/authorize"
+		scopes                 = [ "openid", "email" ]
+		set_user_root_attributes = "on_first_login"
+
+		connection_settings {
+			pkce = "auto"
+		}
+
+		attribute_map {
+			mapping_mode   = "basic_profile"
+			userinfo_scope = "openid email profile groups"
+			attributes     = jsonencode({
+				"name": "$${context.tokenset.name}",
+				"email": "$${context.tokenset.email}",
+				"email_verified": "$${context.tokenset.email_verified}",
+				"nickname": "$${context.tokenset.nickname}",
+				"picture": "$${context.tokenset.picture}",
+				"given_name": "$${context.tokenset.given_name}",
+				"family_name": "$${context.tokenset.family_name}"
+		  	})
+		}
+	}
+}
+`
+
+const testAccConnectionOIDCConfigUpdateAgain = `
 resource "auth0_connection" "oidc" {
 	name     = "Acceptance-Test-OIDC-{{.testName}}"
 	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
@@ -651,6 +736,10 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "disabled"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 				),
 			},
 			{
@@ -675,6 +764,38 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "auto"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOktaConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_id", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v2/keys"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v2/token"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.userinfo_endpoint", "https://domain.okta.com/oauth2/v2/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.authorization_endpoint", "https://domain.okta.com/oauth2/v2/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "0"),
 				),
 			},
 		},
@@ -706,11 +827,61 @@ resource "auth0_connection" "okta" {
 				"alias": "login_hint"
 			}
 		})
+
+		connection_settings {
+			pkce = "disabled"
+		}
+
+		attribute_map {
+			mapping_mode = "basic_profile"
+		}
 	}
 }
 `
 
 const testAccConnectionOktaConfigUpdate = `
+resource "auth0_connection" "okta" {
+	name           = "Acceptance-Test-Okta-{{.testName}}"
+	display_name   = "Acceptance-Test-Okta-{{.testName}}"
+	strategy       = "okta"
+	show_as_button = false
+	options {
+		client_id                = "123456"
+		client_secret            = "123456"
+		domain                   = "domain.okta.com"
+		domain_aliases           = [ "example.com" ]
+		issuer                   = "https://domain.okta.com"
+		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
+		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
+		userinfo_endpoint        = "https://domain.okta.com/oauth2/v2/userinfo"
+		authorization_endpoint   = "https://domain.okta.com/oauth2/v2/authorize"
+		scopes                   = [ "openid", "profile"]
+		non_persistent_attrs     = [ "gender" ]
+		set_user_root_attributes = "on_first_login"
+		icon_url                 = "https://example.com/v2/logo.svg"
+
+		connection_settings {
+			pkce = "auto"
+		}
+
+		attribute_map {
+			mapping_mode   = "basic_profile"
+			userinfo_scope = "openid email profile groups"
+			attributes     = jsonencode({
+				"name": "$${context.tokenset.name}",
+				"email": "$${context.tokenset.email}",
+				"email_verified": "$${context.tokenset.email_verified}",
+				"nickname": "$${context.tokenset.nickname}",
+				"picture": "$${context.tokenset.picture}",
+				"given_name": "$${context.tokenset.given_name}",
+				"family_name": "$${context.tokenset.family_name}"
+		  	})
+		}
+	}
+}
+`
+
+const testAccConnectionOktaConfigUpdateAgain = `
 resource "auth0_connection" "okta" {
 	name           = "Acceptance-Test-Okta-{{.testName}}"
 	display_name   = "Acceptance-Test-Okta-{{.testName}}"

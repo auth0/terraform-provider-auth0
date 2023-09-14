@@ -613,9 +613,31 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
 	}
 
-	expandConnectionOptionsScopes(data, options)
+	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.ConnectionSettings = &management.ConnectionOptionsOIDCConnectionSettings{
+			PKCE: value.String(config.GetAttr("pkce")),
+		}
+
+		return true
+	})
 
 	var err error
+	config.GetAttr("attribute_map").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.AttributeMap = &management.ConnectionOptionsOIDCAttributeMap{
+			UserInfoScope: value.String(config.GetAttr("userinfo_scope")),
+			MappingMode:   value.String(config.GetAttr("mapping_mode")),
+		}
+
+		options.AttributeMap.Attributes, err = value.MapFromJSON(config.GetAttr("attributes"))
+
+		return true
+	})
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	expandConnectionOptionsScopes(data, options)
+
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)
@@ -637,9 +659,31 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		LogoURL:               value.String(config.GetAttr("icon_url")),
 	}
 
-	expandConnectionOptionsScopes(data, options)
+	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.ConnectionSettings = &management.ConnectionOptionsOIDCConnectionSettings{
+			PKCE: value.String(config.GetAttr("pkce")),
+		}
+
+		return true
+	})
 
 	var err error
+	config.GetAttr("attribute_map").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		options.AttributeMap = &management.ConnectionOptionsOIDCAttributeMap{
+			UserInfoScope: value.String(config.GetAttr("userinfo_scope")),
+			MappingMode:   value.String(config.GetAttr("mapping_mode")),
+		}
+
+		options.AttributeMap.Attributes, err = value.MapFromJSON(config.GetAttr("attributes"))
+
+		return true
+	})
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	expandConnectionOptionsScopes(data, options)
+
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
 	return options, diag.FromErr(err)

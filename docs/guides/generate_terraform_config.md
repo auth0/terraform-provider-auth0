@@ -6,7 +6,7 @@ description: |-
 
 # Auto-generating Terraform config files from Auth0 tenant
 
-~> This guide refers to Auth0 CLI functionality that is _experimental_ and may change in future versions
+~> This guide refers to Auth0 CLI functionality that is _experimental_ and may change in future versions.
 
 Adopting Terraform for a mature Auth0 tenant can be daunting. Developers often face the challenge of manually importing numerous resources, necessitating the retrieval of multiple IDs. At times, they resort to manual Terraform configuration to match the tenant's resources.
 
@@ -32,7 +32,7 @@ export AUTH0_CLIENT_ID=***********
 export AUTH0_CLIENT_SECRET=***********
 ```
 
-**Note:** Environment variables are the simplest and most secure way to pass credentials to the provider. Refer to the [Related documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs#example-usage) for alternatives.
+**Note:** Environment variables are the simplest and most secure way to pass credentials to the provider. Refer to the [related documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs#example-usage) for alternatives.
 
 ## 3. Authenticate with Auth0 CLI
 
@@ -71,13 +71,13 @@ Once you've executed the `auth0 tf generate` command and have created the `auth0
 
 It is at the developer's discretion to decide whether to immediately apply this generated configuration. Applying the configuration instructs Terraform to align your Auth0 tenant with the contents of these configuration files.
 
-Alternatively, you can choose not to apply the configuration immediately. Instead, retain the generated Terraform configuration files for reference or modification. These files offer a valuable snapshot of your Auth0 tenant's configuration at the time of generation.Using the generated configuration files in this manner grants you the flexibility to adjust them to your needs or apply them to different Auth0 tenants as necessary.
+Alternatively, you can choose not to apply the configuration immediately. Instead, retain the generated Terraform configuration files for reference or modification. These files offer a valuable snapshot of your Auth0 tenant's configuration at the time of generation. Using the generated configuration files in this manner grants you the flexibility to adjust them to your needs or apply them to different Auth0 tenants as necessary.
 
 ## Note About Sensitive Values
 
 While the generated Terraform config appears complete, it cannot export sensitive values like secrets and keys.
 
-If configuring the same tenant as the one exported, immediate alterations may not be necessary. However, when applying this configuration to other tenants, you might need to supplement those values after the fact to ensure proper operation. Review the auth0_generated.tf file for properties commented with # sensitive. These are fields that may require replacements.
+If configuring the same tenant as the one exported, immediate alterations may not be necessary. However, when applying this configuration to other tenants, you might need to supplement those values after the fact to ensure proper operation. Review the `auth0_generated.tf` file for properties commented with `# sensitive`. These are fields that may require replacements.
 
 **Example:**
 In the below example, both `credentials.access_key_id` and `credentials.api_key` properties are marked as sensitive.

@@ -544,14 +544,12 @@ resource "auth0_connection" "oidc" {
   show_as_button = false
 
   options {
-    client_id     = "1234567"
-    client_secret = "1234567"
-    domain_aliases = [
-      "example.com"
-    ]
+    client_id                = "1234567"
+    client_secret            = "1234567"
+    domain_aliases           = ["example.com"]
     tenant_domain            = ""
     icon_url                 = "https://example.com/assets/logo.png"
-    type                     = "front_channel"
+    type                     = "back_channel"
     issuer                   = "https://www.paypalobjects.com"
     jwks_uri                 = "https://api.paypal.com/v1/oauth2/certs"
     discovery_url            = "https://www.paypalobjects.com/.well-known/openid-configuration"
@@ -561,6 +559,24 @@ resource "auth0_connection" "oidc" {
     scopes                   = ["openid", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]
+
+    connection_settings {
+      pkce = "auto"
+    }
+
+    attribute_map {
+      mapping_mode   = "basic_profile"
+      userinfo_scope = "openid email profile groups"
+      attributes = jsonencode({
+        "name" : "$${context.tokenset.name}",
+        "email" : "$${context.tokenset.email}",
+        "email_verified" : "$${context.tokenset.email_verified}",
+        "nickname" : "$${context.tokenset.nickname}",
+        "picture" : "$${context.tokenset.picture}",
+        "given_name" : "$${context.tokenset.given_name}",
+        "family_name" : "$${context.tokenset.family_name}"
+      })
+    }
   }
 }
 ```
@@ -594,6 +610,24 @@ resource "auth0_connection" "okta" {
         "alias" : "login_hint"
       }
     })
+
+    connection_settings {
+      pkce = "auto"
+    }
+
+    attribute_map {
+      mapping_mode   = "basic_profile"
+      userinfo_scope = "openid email profile groups"
+      attributes = jsonencode({
+        "name" : "$${context.tokenset.name}",
+        "email" : "$${context.tokenset.email}",
+        "email_verified" : "$${context.tokenset.email_verified}",
+        "nickname" : "$${context.tokenset.nickname}",
+        "picture" : "$${context.tokenset.picture}",
+        "given_name" : "$${context.tokenset.given_name}",
+        "family_name" : "$${context.tokenset.family_name}"
+      })
+    }
   }
 }
 ```
@@ -628,6 +662,7 @@ Optional:
 - `allowed_audiences` (Set of String) List of allowed audiences.
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
+- `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
@@ -635,6 +670,7 @@ Optional:
 - `client_secret` (String, Sensitive) The strategy's client secret.
 - `community_base_url` (String) Salesforce community base URL.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
+- `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
@@ -711,6 +747,27 @@ Optional:
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
 - `waad_common_endpoint` (Boolean) Indicates whether to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
 - `waad_protocol` (String) Protocol to use.
+
+<a id="nestedblock--options--attribute_map"></a>
+### Nested Schema for `options.attribute_map`
+
+Required:
+
+- `mapping_mode` (String) Method used to map incoming claims. Possible values: `use_map`, `bind_all` or `basic_profile`.
+
+Optional:
+
+- `attributes` (String) This property is an object containing mapping information that allows Auth0 to interpret incoming claims from the IdP. Mapping information must be provided as key/value pairs.
+- `userinfo_scope` (String) This property defines the scopes that Auth0 sends to the IdP’s UserInfo endpoint when requested.
+
+
+<a id="nestedblock--options--connection_settings"></a>
+### Nested Schema for `options.connection_settings`
+
+Required:
+
+- `pkce` (String) PKCE configuration. Possible values: `auth0` (uses the strongest algorithm available), `s256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) or `disabled` (disables support for PKCE).
+
 
 <a id="nestedblock--options--decryption_key"></a>
 ### Nested Schema for `options.decryption_key`

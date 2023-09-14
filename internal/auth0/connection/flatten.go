@@ -526,6 +526,29 @@ func flattenConnectionOptionsOIDC(
 		"upstream_params":          upstreamParams,
 	}
 
+	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	if options.AttributeMap != nil {
+		optionsMap["attribute_map"] = []map[string]interface{}{
+			{
+				"mapping_mode":   options.GetAttributeMap().GetMappingMode(),
+				"userinfo_scope": options.GetAttributeMap().GetUserInfoScope(),
+				"attributes":     attributes,
+			},
+		}
+	}
+
+	if options.ConnectionSettings != nil {
+		optionsMap["connection_settings"] = []map[string]string{
+			{
+				"pkce": options.GetConnectionSettings().GetPKCE(),
+			},
+		}
+	}
+
 	return optionsMap, nil
 }
 
@@ -558,6 +581,29 @@ func flattenConnectionOptionsOkta(
 		"set_user_root_attributes": options.GetSetUserAttributes(),
 		"icon_url":                 options.GetLogoURL(),
 		"upstream_params":          upstreamParams,
+	}
+
+	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
+	if err != nil {
+		return nil, diag.FromErr(err)
+	}
+
+	if options.AttributeMap != nil {
+		optionsMap["attribute_map"] = []map[string]interface{}{
+			{
+				"mapping_mode":   options.GetAttributeMap().GetMappingMode(),
+				"userinfo_scope": options.GetAttributeMap().GetUserInfoScope(),
+				"attributes":     attributes,
+			},
+		}
+	}
+
+	if options.ConnectionSettings != nil {
+		optionsMap["connection_settings"] = []map[string]string{
+			{
+				"pkce": options.GetConnectionSettings().GetPKCE(),
+			},
+		}
 	}
 
 	return optionsMap, nil

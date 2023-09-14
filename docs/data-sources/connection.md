@@ -51,6 +51,7 @@ Read-Only:
 - `allowed_audiences` (Set of String)
 - `api_enable_users` (Boolean)
 - `app_id` (String)
+- `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))
 - `auth_params` (Map of String)
 - `authorization_endpoint` (String)
 - `brute_force_protection` (Boolean)
@@ -58,6 +59,7 @@ Read-Only:
 - `client_secret` (String)
 - `community_base_url` (String)
 - `configuration` (Map of String)
+- `connection_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--connection_settings))
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
 - `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))
@@ -134,6 +136,24 @@ Read-Only:
 - `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--validation))
 - `waad_common_endpoint` (Boolean)
 - `waad_protocol` (String)
+
+<a id="nestedobjatt--options--attribute_map"></a>
+### Nested Schema for `options.attribute_map`
+
+Read-Only:
+
+- `attributes` (String)
+- `mapping_mode` (String)
+- `userinfo_scope` (String)
+
+
+<a id="nestedobjatt--options--connection_settings"></a>
+### Nested Schema for `options.connection_settings`
+
+Read-Only:
+
+- `pkce` (String)
+
 
 <a id="nestedobjatt--options--decryption_key"></a>
 ### Nested Schema for `options.decryption_key`

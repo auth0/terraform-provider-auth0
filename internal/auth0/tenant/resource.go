@@ -242,6 +242,12 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
 						},
+						"require_pushed_authorization_requests": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant.",
+						},
 					},
 				},
 			},

@@ -85,7 +85,7 @@ In the below example, both `credentials.access_key_id` and `credentials.api_key`
 ```hcl
 # __generated__ by Terraform from "52745e4d-278c-4b6b-8cac-a27e457215d6"
 resource "auth0_email_provider" "email_provider" {
-  default_from_address = "mailing-daemon@travel0..com"
+  default_from_address = "mailing-daemon@travel0.com"
   enabled              = true
   name                 = "smtp"
   credentials {

@@ -851,6 +851,8 @@ func passThroughUnconfigurableConnectionOptions(
 		err = passThroughUnconfigurableConnectionOptionsADFS(ctx, api, connectionID, connection)
 	case management.ConnectionStrategyPingFederate:
 		err = passThroughUnconfigurableConnectionOptionsPingFederate(ctx, api, connectionID, connection)
+	case management.ConnectionStrategyGoogleApps:
+		err = passThroughUnconfigurableConnectionOptionsGoogleApps(ctx, api, connectionID, connection)
 	}
 
 	return err
@@ -1015,6 +1017,35 @@ func passThroughUnconfigurableConnectionOptionsPingFederate(
 	expandedOptions.AgentMode = existingOptions.AgentMode
 	expandedOptions.ExtGroups = existingOptions.ExtGroups
 	expandedOptions.ExtProfile = existingOptions.ExtProfile
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsGoogleApps(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	if existingConnection.Options == nil {
+		return nil
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsGoogleApps)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsGoogleApps)
+	expandedOptions.AdminAccessToken = existingOptions.AdminAccessToken
+	expandedOptions.AdminRefreshToken = existingOptions.AdminRefreshToken
+	expandedOptions.AdminAccessTokenExpiresIn = existingOptions.AdminAccessTokenExpiresIn
+	expandedOptions.HandleLoginFromSocial = existingOptions.HandleLoginFromSocial
+	expandedOptions.MapUserIDtoID = existingOptions.MapUserIDtoID
 
 	connection.Options = expandedOptions
 

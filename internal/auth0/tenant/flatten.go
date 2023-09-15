@@ -23,6 +23,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
+		data.Set("allow_organization_name_in_authentication_api", tenant.GetAllowOrgNameInAuthAPI()),
 	)
 
 	return result.ErrorOrNil()

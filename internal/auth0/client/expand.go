@@ -1,6 +1,8 @@
 package client
 
 import (
+	"slices"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -50,6 +52,10 @@ func expandClient(data *schema.ResourceData) *management.Client {
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
 		client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+	}
+
+	if data.IsNewResource() && slices.Contains(client.GetGrantTypes(), "urn:ietf:params:oauth:grant-type:device_code") {
+		client.TokenEndpointAuthMethod = auth0.String("none")
 	}
 
 	return client

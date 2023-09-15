@@ -2151,3 +2151,64 @@ func TestAccClientGetsCreatedWithIsTokenEndpointIPHeaderTrustedEnabled(t *testin
 		},
 	})
 }
+
+const testAccCreateClientWithDeviceCodeGrant = `
+resource "auth0_client" "my_client" {
+	name            = "Test Device Code Grant - {{.testName}}"
+	app_type        = "native"
+	grant_types     = ["urn:ietf:params:oauth:grant-type:device_code"]
+	oidc_conformant = true
+}
+`
+
+const testAccImportClientCredentialsForClientWithIsDeviceCodeGrantOnCreate = `
+resource "auth0_client" "my_client" {
+	name            = "Test Device Code Grant - {{.testName}}"
+	app_type        = "native"
+	grant_types     = ["urn:ietf:params:oauth:grant-type:device_code"]
+	oidc_conformant = true
+}
+
+resource "auth0_client_credentials" "my_client_credentials" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "none"
+}
+`
+
+func TestAccClientGetsCreatedWithDeviceCodeGrant(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithDeviceCodeGrant, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
+				),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccImportClientCredentialsForClientWithIsDeviceCodeGrantOnCreate, t.Name()),
+				ResourceName: "auth0_client_credentials.my_client_credentials",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_client", "id")
+					assert.NoError(t, err)
+					return clientID, nil
+				},
+				ImportStatePersist: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client_credentials", "client_id", "auth0_client.my_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_client_credentials", "authentication_method", "none"),
+				),
+			},
+		},
+	})
+}

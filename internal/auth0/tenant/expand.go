@@ -29,6 +29,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
 		Sessions:              expandTenantSessions(config.GetAttr("sessions")),
+		AllowOrgNameInAuthAPI: value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {

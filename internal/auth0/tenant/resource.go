@@ -296,6 +296,12 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"allow_organization_name_in_authentication_api": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether to accept an organization name instead of an ID on auth endpoints.",
+			},
 		},
 	}
 }

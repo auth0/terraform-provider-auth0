@@ -44,6 +44,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "false"),
 				),
 			},
 			{
@@ -60,6 +61,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "true"),
 				),
 			},
 			{
@@ -93,6 +95,8 @@ resource "auth0_tenant" "my_tenant" {
 	sandbox_version         = "16"
 	idle_session_lifetime   = 72
 	enabled_locales         = ["en", "de", "fr"]
+
+	allow_organization_name_in_authentication_api = false
 
 	flags {
 		disable_clickjack_protection_headers   = true
@@ -128,6 +132,8 @@ resource "auth0_tenant" "my_tenant" {
 	sandbox_version         = "16"
 	idle_session_lifetime   = 72
 	enabled_locales         = ["de", "fr"]
+
+	allow_organization_name_in_authentication_api = true
 
 	flags {
 		enable_public_signup_user_exists_error = true

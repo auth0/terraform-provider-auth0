@@ -71,7 +71,7 @@ Once you've executed the `auth0 tf generate` command and have created the `auth0
 
 It is at the developer's discretion to decide whether to immediately apply this generated configuration. Applying the configuration instructs Terraform to align your Auth0 tenant with the contents of these configuration files.
 
-Alternatively, you can choose not to apply the configuration immediately. Instead, retain the generated Terraform configuration files for reference or modification. These files offer a valuable snapshot of your Auth0 tenant's configuration at the time of generation.Using the generated configuration files in this manner grants you the flexibility to adjust them to your needs or apply them to different Auth0 tenants as necessary.
+Alternatively, you can choose not to apply the configuration immediately. Instead, retain the generated Terraform configuration files for reference or modification. These files offer a valuable snapshot of your Auth0 tenant's configuration at the time of generation. Using the generated configuration files in this manner grants you the flexibility to adjust them to your needs or apply them to different Auth0 tenants as necessary.
 
 ## Note About Sensitive Values
 

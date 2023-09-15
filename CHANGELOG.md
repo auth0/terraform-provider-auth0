@@ -1,3 +1,31 @@
+## v1.0.0-beta.4
+
+NOTES:
+
+- This release supports auto generated terraform configuration. [Check our guide for more info](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config).
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+
+FEATURES:
+
+- `resource/auth0_connection`: Add support for Line strategy ([#818](https://github.com/auth0/terraform-provider-auth0/pull/818))
+- `resource/auth0_connection`: Add `pkce` and `attribute_map` settings to OIDC and Okta Workforce connection options ([#815](https://github.com/auth0/terraform-provider-auth0/pull/815))
+- `resource/auth0_client`: Add support for pushed authorization requests setting ([#756](https://github.com/auth0/terraform-provider-auth0/pull/756))
+- `resource/auth0_tenant`: Add support for pushed authorization requests setting ([#756](https://github.com/auth0/terraform-provider-auth0/pull/756))
+- `resource/auth0_tenant`: Add support for `allow_organization_name_in_authentication_api` toggle ([#832](https://github.com/auth0/terraform-provider-auth0/pull/832))
+
+ENHANCEMENTS:
+
+- `resource/auth0_branding`: Improve validation for universal login template body ([#819](https://github.com/auth0/terraform-provider-auth0/pull/819))
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Prevent `"null"` string literal when importing resource ([#821](https://github.com/auth0/terraform-provider-auth0/pull/821))
+- `resource/auth0_guardian`: Remove minor `phone.message_types` validation  ([#820](https://github.com/auth0/terraform-provider-auth0/pull/820))
+- `resource/auth0_connection`: Allow sending `null` values for `from` and `messagingServiceSID` in SMS connection options ([#829](https://github.com/auth0/terraform-provider-auth0/pull/829))
+- `resource/auth0_connection`: Passing-through Google Workspace admin tokens when managing the connection ([#830](https://github.com/auth0/terraform-provider-auth0/pull/830))
+- `resource/auth0_tenant`: Allow creating native apps with device code grant  ([#833](https://github.com/auth0/terraform-provider-auth0/pull/833))
+
+
 ## v1.0.0-beta.3
 
 NOTES:
@@ -12,7 +40,7 @@ ENHANCEMENTS:
 BUG FIXES:
 
 - `resource/auth0_client_credentials`: Stop requiring `read:client_keys` permission when reading the resource ([#795](https://github.com/auth0/terraform-provider-auth0/pull/795))
-- `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML([#802](https://github.com/auth0/terraform-provider-auth0/pull/802))
+- `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML ([#802](https://github.com/auth0/terraform-provider-auth0/pull/802))
 - `resource/*`: Fix pagination issues when fetching resources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
 - `data-source/*`: Fix pagination issues when fetching data sources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
 

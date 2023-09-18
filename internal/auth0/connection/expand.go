@@ -91,7 +91,7 @@ func expandConnection(
 	if connectionIsEnterprise(strategy) {
 		connection.ShowAsButton = value.Bool(config.GetAttr("show_as_button"))
 
-		if !data.IsNewResource() {
+		if !data.IsNewResource() && connection.Options != nil {
 			err := passThroughUnconfigurableConnectionOptions(ctx, api, data.Id(), strategy, connection)
 			if err != nil {
 				return nil, diag.FromErr(err)

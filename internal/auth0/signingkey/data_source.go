@@ -25,7 +25,7 @@ func NewDataSource() *schema.Resource {
 						"kid": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "The key id of the signing key.",
+							Description: "The key ID of the signing key.",
 						},
 						"cert": {
 							Type:        schema.TypeString,
@@ -35,7 +35,7 @@ func NewDataSource() *schema.Resource {
 						"pkcs7": {
 							Type:        schema.TypeString,
 							Computed:    true,
-							Description: "The public certificate of the signing key in pkcs7 format.",
+							Description: "The public certificate of the signing key in PKCS7 format.",
 						},
 						"current": {
 							Type:        schema.TypeBool,

@@ -88,6 +88,7 @@ Read-Only:
 - `issuer` (String)
 - `jwks_uri` (String)
 - `key_id` (String)
+- `map_user_id_to_id` (Boolean)
 - `max_groups_to_retrieve` (String)
 - `messaging_service_sid` (String)
 - `metadata_url` (String)

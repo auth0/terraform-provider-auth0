@@ -1313,6 +1313,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.map_user_id_to_id", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
@@ -1334,6 +1335,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.map_user_id_to_id", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
@@ -1358,6 +1360,7 @@ resource "auth0_connection" "google_apps" {
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
 		set_user_root_attributes = "on_each_login"
+		map_user_id_to_id = true
 		scopes = [ "ext_profile", "ext_groups" ]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -1382,6 +1385,7 @@ resource "auth0_connection" "google_apps" {
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
 		set_user_root_attributes = "on_first_login"
+		map_user_id_to_id = true
 		scopes = [ "ext_profile", "ext_groups" ]
 		upstream_params = jsonencode({
 			"screen_name": {

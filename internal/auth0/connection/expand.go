@@ -343,6 +343,10 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 	}
 
+	if data.IsNewResource() {
+		options.MapUserIDtoID = value.Bool(config.GetAttr("map_user_id_to_id"))
+	}
+
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
 	if options.GetSetUserAttributes() == "on_each_login" {
 		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
@@ -1045,7 +1049,6 @@ func passThroughUnconfigurableConnectionOptionsGoogleApps(
 	expandedOptions.AdminRefreshToken = existingOptions.AdminRefreshToken
 	expandedOptions.AdminAccessTokenExpiresIn = existingOptions.AdminAccessTokenExpiresIn
 	expandedOptions.HandleLoginFromSocial = existingOptions.HandleLoginFromSocial
-	expandedOptions.MapUserIDtoID = existingOptions.MapUserIDtoID
 
 	connection.Options = expandedOptions
 

@@ -82,21 +82,21 @@ func expandConnection(d *schema.ResourceData, api *management.Management) (*mana
 			connection.Options, diagnostics = expandConnectionOptionsOkta(d, options)
 		case management.ConnectionStrategyAD:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAD(d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsAD(options)
 		case management.ConnectionStrategyAzureAD:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsAzureAD(d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsAzureAD(d, options)
 		case management.ConnectionStrategyEmail:
 			connection.Options, diagnostics = expandConnectionOptionsEmail(options)
 		case management.ConnectionStrategySAML:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsSAML(d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsSAML(options)
 		case management.ConnectionStrategyADFS:
 			connection.ShowAsButton = showAsButton
 			connection.Options, diagnostics = expandConnectionOptionsADFS(options)
 		case management.ConnectionStrategyPingFederate:
 			connection.ShowAsButton = showAsButton
-			connection.Options, diagnostics = expandConnectionOptionsPingFederate(d, options, api)
+			connection.Options, diagnostics = expandConnectionOptionsPingFederate(options)
 		default:
 			diagnostics = append(diagnostics, diag.Diagnostic{
 				Severity: diag.Error,
@@ -542,11 +542,7 @@ func expandConnectionOptionsEmail(config cty.Value) (*management.ConnectionOptio
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAD(
-	d *schema.ResourceData,
-	config cty.Value,
-	api *management.Management,
-) (*management.ConnectionOptionsAD, diag.Diagnostics) {
+func expandConnectionOptionsAD(config cty.Value) (*management.ConnectionOptionsAD, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAD{
 		DomainAliases:        value.Strings(config.GetAttr("domain_aliases")),
 		TenantDomain:         value.String(config.GetAttr("tenant_domain")),
@@ -557,21 +553,6 @@ func expandConnectionOptionsAD(
 		DisableCache:         value.Bool(config.GetAttr("disable_cache")),
 		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
 		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
-	}
-
-	if !d.IsNewResource() {
-		conn, err := api.Connection.Read(d.Id())
-		if err != nil {
-			return options, diag.FromErr(err)
-		}
-
-		existingOptions := conn.Options.(*management.ConnectionOptionsAD)
-
-		// Passing-through unconfigurable connection option values to prevent them from being erased on remote.
-		options.Certs = existingOptions.Certs
-		options.AgentIP = existingOptions.AgentIP
-		options.AgentVersion = existingOptions.AgentVersion
-		options.AgentMode = existingOptions.AgentMode
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -588,7 +569,6 @@ func expandConnectionOptionsAD(
 func expandConnectionOptionsAzureAD(
 	d *schema.ResourceData,
 	config cty.Value,
-	api *management.Management,
 ) (*management.ConnectionOptionsAzureAD, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAzureAD{
 		ClientID:            value.String(config.GetAttr("client_id")),
@@ -606,22 +586,6 @@ func expandConnectionOptionsAzureAD(
 		IdentityAPI:         value.String(config.GetAttr("identity_api")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
-	}
-
-	if !d.IsNewResource() {
-		conn, err := api.Connection.Read(d.Id())
-		if err != nil {
-			return options, diag.FromErr(err)
-		}
-
-		existingOptions := conn.Options.(*management.ConnectionOptionsAzureAD)
-
-		// Passing-through unconfigurable connection option values to prevent them from being erased on remote.
-		options.AppDomain = existingOptions.AppDomain
-		options.Thumbprints = existingOptions.Thumbprints
-		options.CertRolloverNotification = existingOptions.CertRolloverNotification
-		options.Granted = existingOptions.Granted
-		options.TenantID = existingOptions.TenantID
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -693,11 +657,7 @@ func expandConnectionOptionsOkta(
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsSAML(
-	d *schema.ResourceData,
-	config cty.Value,
-	api *management.Management,
-) (*management.ConnectionOptionsSAML, diag.Diagnostics) {
+func expandConnectionOptionsSAML(config cty.Value) (*management.ConnectionOptionsSAML, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
 		Debug:              value.Bool(config.GetAttr("debug")),
 		SigningCert:        value.String(config.GetAttr("signing_cert")),
@@ -717,24 +677,6 @@ func expandConnectionOptionsSAML(
 		EntityID:           value.String(config.GetAttr("entity_id")),
 		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
 		MetadataURL:        value.String(config.GetAttr("metadata_url")),
-	}
-
-	if !d.IsNewResource() {
-		conn, err := api.Connection.Read(d.Id())
-		if err != nil {
-			return options, diag.FromErr(err)
-		}
-
-		existingOptions := conn.Options.(*management.ConnectionOptionsSAML)
-
-		// Passing-through unconfigurable connection option values to prevent them from being erased on remote.
-		options.BindingMethod = existingOptions.BindingMethod
-		options.CertRolloverNotification = existingOptions.CertRolloverNotification
-		options.AgentIP = existingOptions.AgentIP
-		options.AgentVersion = existingOptions.AgentVersion
-		options.AgentMode = existingOptions.AgentMode
-		options.ExtGroups = existingOptions.ExtGroups
-		options.ExtProfile = existingOptions.ExtProfile
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -797,9 +739,7 @@ func expandConnectionOptionsADFS(config cty.Value) (*management.ConnectionOption
 }
 
 func expandConnectionOptionsPingFederate(
-	d *schema.ResourceData,
 	config cty.Value,
-	api *management.Management,
 ) (*management.ConnectionOptionsPingFederate, diag.Diagnostics) {
 	options := &management.ConnectionOptionsPingFederate{
 		SigningCert:         value.String(config.GetAttr("signing_cert")),
@@ -812,40 +752,6 @@ func expandConnectionOptionsPingFederate(
 		SignatureAlgorithm:  value.String(config.GetAttr("signature_algorithm")),
 		PingFederateBaseURL: value.String(config.GetAttr("ping_federate_base_url")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
-	}
-
-	if !d.IsNewResource() {
-		conn, err := api.Connection.Read(d.Id())
-		if err != nil {
-			return options, diag.FromErr(err)
-		}
-
-		existingOptions := conn.Options.(*management.ConnectionOptionsPingFederate)
-
-		// Passing-through unconfigurable connection option values to prevent them from being erased on remote.
-		options.APIEnableUsers = existingOptions.APIEnableUsers
-		options.SignOutEndpoint = existingOptions.SignOutEndpoint
-		options.Subject = existingOptions.Subject
-		options.DisableSignout = existingOptions.DisableSignout
-		options.UserIDAttribute = existingOptions.UserIDAttribute
-		options.Debug = existingOptions.Debug
-		options.ProtocolBinding = existingOptions.ProtocolBinding
-		options.RequestTemplate = existingOptions.RequestTemplate
-		options.BindingMethod = existingOptions.BindingMethod
-		options.Thumbprints = existingOptions.Thumbprints
-		options.Expires = existingOptions.Expires
-		options.MetadataURL = existingOptions.MetadataURL
-		options.FieldsMap = existingOptions.FieldsMap
-		options.MetadataXML = existingOptions.MetadataXML
-		options.EntityID = existingOptions.EntityID
-		options.CertRolloverNotification = existingOptions.CertRolloverNotification
-		options.SigningKey = existingOptions.SigningKey
-		options.DecryptionKey = existingOptions.DecryptionKey
-		options.AgentIP = existingOptions.AgentIP
-		options.AgentVersion = existingOptions.AgentVersion
-		options.AgentMode = existingOptions.AgentMode
-		options.ExtGroups = existingOptions.ExtGroups
-		options.ExtProfile = existingOptions.ExtProfile
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

@@ -795,6 +795,7 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
+				Computed:    true,
 				Description: "Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -812,6 +813,7 @@ var optionsSchema = &schema.Schema{
 			"attribute_map": {
 				Type:     schema.TypeList,
 				MaxItems: 1,
+				Computed: true,
 				Optional: true,
 				Description: "OpenID Connect and Okta Workforce connections can automatically map claims received " +
 					"from the identity provider (IdP). You can configure this mapping through a library template " +

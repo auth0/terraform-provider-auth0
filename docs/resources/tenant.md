@@ -25,41 +25,21 @@ resource "auth0_tenant" "my_tenant" {
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
 
-  change_password {
-    enabled = true
-    html    = "<html>Change Password</html>"
-  }
-
-  guardian_mfa_page {
-    enabled = true
-    html    = "<html>MFA</html>"
-  }
-
-  error_page {
-    html          = "<html>Error Page</html>"
-    show_log_link = true
-    url           = "https://example.com/errors"
-  }
-
-  session_cookie {
-    mode = "non-persistent"
-  }
-
-  universal_login {
-    colors {
-      primary         = "#0059d6"
-      page_background = "#000000"
-    }
-  }
-
   flags {
-    universal_login                        = true
     disable_clickjack_protection_headers   = true
     enable_public_signup_user_exists_error = true
     use_scope_descriptions_for_consent     = true
     no_disclose_enterprise_connections     = false
     disable_management_api_sms_obfuscation = false
     disable_fields_map_fix                 = false
+  }
+
+  session_cookie {
+    mode = "non-persistent"
+  }
+
+  sessions {
+    oidc_logout_prompt_enabled = false
   }
 }
 ```
@@ -69,47 +49,26 @@ resource "auth0_tenant" "my_tenant" {
 
 ### Optional
 
+- `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
-- `change_password` (Block List, Max: 1, Deprecated) Configuration settings for change password page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedblock--change_password))
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
-- `error_page` (Block List, Max: 1, Deprecated) Configuration settings for error pages. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedblock--error_page))
 - `flags` (Block List, Max: 1) Configuration settings for tenant flags. (see [below for nested schema](#nestedblock--flags))
 - `friendly_name` (String) Friendly name for the tenant.
-- `guardian_mfa_page` (Block List, Max: 1, Deprecated) Configuration settings for the Guardian MFA page. This attribute is deprecated in favor of the `auth0_pages` resource and it will be removed in a future major version. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-pages) for more info. (see [below for nested schema](#nestedblock--guardian_mfa_page))
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
+- `sessions` (Block List, Max: 1) Sessions related settings for the tenant. (see [below for nested schema](#nestedblock--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
-- `universal_login` (Block List, Max: 1, Deprecated) Configuration settings for Universal Login. These configuration settings have been deprecated. Migrate to managing these settings through the `auth0_branding` resource. Check the [MIGRATION_GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#tenant-universal-login) for more info. (see [below for nested schema](#nestedblock--universal_login))
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-
-<a id="nestedblock--change_password"></a>
-### Nested Schema for `change_password`
-
-Required:
-
-- `enabled` (Boolean) Indicates whether to use the custom change password page.
-- `html` (String) HTML format with supported Liquid syntax. Customized content of the change password page.
-
-
-<a id="nestedblock--error_page"></a>
-### Nested Schema for `error_page`
-
-Required:
-
-- `html` (String) HTML format with supported Liquid syntax. Customized content of the error page.
-- `show_log_link` (Boolean) Indicates whether to show the link to logs as part of the default error page.
-- `url` (String) URL to redirect to when an error occurs rather than showing the default error page.
-
 
 <a id="nestedblock--flags"></a>
 ### Nested Schema for `flags`
@@ -127,7 +86,7 @@ Optional:
 - `enable_adfs_waad_email_verification` (Boolean) If enabled, users will be presented with an email verification prompt during their first login when using Azure AD or ADFS connections.
 - `enable_apis_section` (Boolean) Indicates whether the APIs section is enabled for the tenant.
 - `enable_client_connections` (Boolean) Indicates whether all current connections should be enabled when a new client is created.
-- `enable_custom_domain_in_emails` (Boolean) Indicates whether the tenant allows custom domains in emails.
+- `enable_custom_domain_in_emails` (Boolean) Indicates whether the tenant allows custom domains in emails. Before enabling this flag, you must have a custom domain with status: `ready`.
 - `enable_dynamic_client_registration` (Boolean) Indicates whether the tenant allows dynamic client registration.
 - `enable_idtoken_api2` (Boolean) Whether ID tokens can be used to authorize some types of requests to API v2 (true) or not (false).
 - `enable_legacy_logs_search_v2` (Boolean) Indicates whether to use the older v2 legacy logs search.
@@ -136,18 +95,9 @@ Optional:
 - `enable_public_signup_user_exists_error` (Boolean) Indicates whether the public sign up process shows a `user_exists` error if the user already exists.
 - `mfa_show_factor_list_on_enrollment` (Boolean) Used to allow users to pick which factor to enroll with from the list of available MFA factors.
 - `no_disclose_enterprise_connections` (Boolean) Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
+- `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant.
 - `revoke_refresh_token_grant` (Boolean) Delete underlying grant when a refresh token is revoked via the Authentication API.
-- `universal_login` (Boolean, Deprecated) Indicates whether the New Universal Login Experience is enabled.
 - `use_scope_descriptions_for_consent` (Boolean) Indicates whether to use scope descriptions for consent.
-
-
-<a id="nestedblock--guardian_mfa_page"></a>
-### Nested Schema for `guardian_mfa_page`
-
-Required:
-
-- `enabled` (Boolean) Indicates whether to use the custom Guardian page.
-- `html` (String) HTML format with supported Liquid syntax. Customized content of the Guardian page.
 
 
 <a id="nestedblock--session_cookie"></a>
@@ -158,20 +108,12 @@ Optional:
 - `mode` (String) Behavior of tenant session cookie. Accepts either "persistent" or "non-persistent".
 
 
-<a id="nestedblock--universal_login"></a>
-### Nested Schema for `universal_login`
+<a id="nestedblock--sessions"></a>
+### Nested Schema for `sessions`
 
-Optional:
+Required:
 
-- `colors` (Block List, Max: 1) Configuration settings for Universal Login colors. (see [below for nested schema](#nestedblock--universal_login--colors))
-
-<a id="nestedblock--universal_login--colors"></a>
-### Nested Schema for `universal_login.colors`
-
-Optional:
-
-- `page_background` (String) Background color of login pages in hexadecimal.
-- `primary` (String) Primary button background color in hexadecimal.
+- `oidc_logout_prompt_enabled` (Boolean) When active, users will be presented with a consent prompt to confirm the logout request if the request is not trustworthy. Turn off the consent prompt to bypass user confirmation.
 
 ## Import
 
@@ -184,5 +126,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_tenant.my_tenant 82f4f21b-017a-319d-92e7-2291c1ca36c4
+terraform import auth0_tenant.my_tenant "82f4f21b-017a-319d-92e7-2291c1ca36c4"
 ```

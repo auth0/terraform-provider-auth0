@@ -3,15 +3,14 @@ package organization
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -46,17 +45,30 @@ func NewMembersResource() *schema.Resource {
 }
 
 func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
 	organizationID := data.Get("organization_id").(string)
 
-	api := meta.(*config.Config).GetAPI()
-	alreadyMembers, err := api.Organization.Members(organizationID)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var alreadyMembers []management.OrganizationMember
+	var page int
+	for {
+		memberList, err := api.Organization.Members(
+			ctx,
+			organizationID,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 
-		return diag.FromErr(err)
+		alreadyMembers = append(alreadyMembers, memberList.Members...)
+
+		if !memberList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	data.SetId(organizationID)
@@ -65,15 +77,15 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 	if diagnostics := guardAgainstErasingUnwantedMembers(
 		organizationID,
-		alreadyMembers.Members,
+		alreadyMembers,
 		membersToAdd,
 	); diagnostics.HasError() {
 		data.SetId("")
 		return diagnostics
 	}
 
-	if len(membersToAdd) > len(alreadyMembers.Members) {
-		if err := api.Organization.AddMembers(organizationID, membersToAdd); err != nil {
+	if len(membersToAdd) > len(alreadyMembers) {
+		if err := api.Organization.AddMembers(ctx, organizationID, membersToAdd); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -81,25 +93,32 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	return readOrganizationMembers(ctx, data, meta)
 }
 
-func readOrganizationMembers(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	members, err := api.Organization.Members(data.Id())
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var members []management.OrganizationMember
+	var page int
+	for {
+		memberList, err := api.Organization.Members(
+			ctx,
+			data.Id(),
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 
-		return diag.FromErr(err)
+		members = append(members, memberList.Members...)
+
+		if !memberList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	result := multierror.Append(
-		data.Set("organization_id", data.Id()),
-		data.Set("members", flattenOrganizationMembers(members.Members)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationMembers(data, members))
 }
 
 func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -115,12 +134,8 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(removeMembers) > 0 {
-		if err := api.Organization.DeleteMember(organizationID, removeMembers); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
+		err := api.Organization.DeleteMembers(ctx, organizationID, removeMembers)
+		if !internalError.IsStatusNotFound(err) {
 			return diag.FromErr(err)
 		}
 	}
@@ -131,12 +146,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	}
 
 	if len(addMembers) > 0 {
-		if err := api.Organization.AddMembers(organizationID, addMembers); err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
-
+		if err := api.Organization.AddMembers(ctx, organizationID, addMembers); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -144,7 +154,7 @@ func updateOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	return readOrganizationMembers(ctx, data, meta)
 }
 
-func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Id()
@@ -154,12 +164,8 @@ func deleteOrganizationMembers(_ context.Context, data *schema.ResourceData, met
 		return nil
 	}
 
-	if err := api.Organization.DeleteMember(organizationID, membersToRemove); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+	if err := api.Organization.DeleteMembers(ctx, organizationID, membersToRemove); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
@@ -193,17 +199,4 @@ func guardAgainstErasingUnwantedMembers(
 					"Run: 'terraform import auth0_organization_members.<given-name> %s'.", organizationID),
 		},
 	}
-}
-
-func flattenOrganizationMembers(members []management.OrganizationMember) []string {
-	if len(members) == 0 {
-		return nil
-	}
-
-	flattenedMembers := make([]string, 0)
-	for _, member := range members {
-		flattenedMembers = append(flattenedMembers, member.GetUserID())
-	}
-
-	return flattenedMembers
 }

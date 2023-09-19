@@ -1,20 +1,17 @@
 package prompt
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"net/http"
 	"strings"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -26,8 +23,8 @@ var (
 		"organizations", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}
 	availableLanguages = []string{
-		"ar", "bg", "bs", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "fr-CA", "fr-FR", "he", "hi", "hr",
-		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
+		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
+		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
 		"sl", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
 	}
 )
@@ -40,7 +37,7 @@ func NewCustomTextResource() *schema.Resource {
 		UpdateContext: updatePromptCustomText,
 		DeleteContext: deletePromptCustomText,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorColon, "prompt", "language"),
+			StateContext: internalSchema.ImportResourceGroupID("prompt", "language"),
 		},
 		Description: "With this resource, you can manage custom text on your Auth0 prompts. You can read more about " +
 			"custom texts [here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts).",
@@ -71,38 +68,32 @@ func NewCustomTextResource() *schema.Resource {
 	}
 }
 
-func createPromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(d.Get("prompt").(string) + ":" + d.Get("language").(string))
-	return updatePromptCustomText(ctx, d, m)
+func createPromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	prompt := data.Get("prompt").(string)
+	language := data.Get("language").(string)
+
+	internalSchema.SetResourceGroupID(data, prompt, language)
+
+	return updatePromptCustomText(ctx, data, meta)
 }
 
-func readPromptCustomText(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	customText, err := api.Prompt.CustomText(d.Get("prompt").(string), d.Get("language").(string))
+func readPromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	customText, err := api.Prompt.CustomText(ctx, data.Get("prompt").(string), data.Get("language").(string))
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	body, err := marshalCustomTextBody(customText)
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	return diag.FromErr(d.Set("body", body))
+	return diag.FromErr(flattenPromptCustomText(data, customText))
 }
 
-func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updatePromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	prompt := d.Get("prompt").(string)
-	language := d.Get("language").(string)
-	body := d.Get("body").(string)
+	prompt := data.Get("prompt").(string)
+	language := data.Get("language").(string)
+	body := data.Get("body").(string)
 
 	if body == "" {
 		return nil
@@ -113,37 +104,17 @@ func updatePromptCustomText(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	if err := api.Prompt.SetCustomText(prompt, language, payload); err != nil {
+	if err := api.Prompt.SetCustomText(ctx, prompt, language, payload); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readPromptCustomText(ctx, d, m)
+	return readPromptCustomText(ctx, data, meta)
 }
 
-func deletePromptCustomText(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	if err := d.Set("body", "{}"); err != nil {
+func deletePromptCustomText(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	if err := data.Set("body", "{}"); err != nil {
 		return diag.FromErr(err)
 	}
-	if err := updatePromptCustomText(ctx, d, m); err != nil {
-		return err
-	}
 
-	d.SetId("")
-
-	return nil
-}
-
-func marshalCustomTextBody(b map[string]interface{}) (string, error) {
-	bodyBytes, err := json.Marshal(b)
-	if err != nil {
-		return "", fmt.Errorf("failed to serialize the custom texts to JSON: %w", err)
-	}
-
-	var buffer bytes.Buffer
-	const jsonIndentation = "    "
-	if err := json.Indent(&buffer, bodyBytes, "", jsonIndentation); err != nil {
-		return "", fmt.Errorf("failed to format the custom texts JSON: %w", err)
-	}
-
-	return buffer.String(), nil
+	return updatePromptCustomText(ctx, data, meta)
 }

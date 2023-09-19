@@ -538,6 +538,10 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "disabled"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 				),
 			},
 			{
@@ -560,6 +564,36 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "auto"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOIDCConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_id", "1234567"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.client_secret", "1234567"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.type", "front_channel"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.issuer", "https://www.paypalobjects.com"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.jwks_uri", "https://api.paypal.com/v1/oauth2/certs"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.discovery_url", "https://www.paypalobjects.com/.well-known/openid-configuration"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.token_endpoint", "https://api.paypal.com/v1/oauth2/token"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.userinfo_endpoint", "https://api.paypal.com/v1/oauth2/token/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.authorization_endpoint", "https://www.paypal.com/signin/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "0"),
 				),
 			},
 		},
@@ -579,26 +613,77 @@ resource "auth0_connection" "oidc" {
 			"example.com",
 			"api.example.com"
 		]
-		type                   = "back_channel"
-		issuer                 = "https://api.login.yahoo.com"
-		jwks_uri               = "https://api.login.yahoo.com/openid/v1/certs"
-		discovery_url          = "https://api.login.yahoo.com/.well-known/openid-configuration"
-		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
-		userinfo_endpoint      = "https://api.login.yahoo.com/openid/v1/userinfo"
-		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
-		scopes                 = [ "openid", "email", "profile" ]
+		type                     = "back_channel"
+		issuer                   = "https://api.login.yahoo.com"
+		jwks_uri                 = "https://api.login.yahoo.com/openid/v1/certs"
+		discovery_url            = "https://api.login.yahoo.com/.well-known/openid-configuration"
+		token_endpoint           = "https://api.login.yahoo.com/oauth2/get_token"
+		userinfo_endpoint        = "https://api.login.yahoo.com/openid/v1/userinfo"
+		authorization_endpoint   = "https://api.login.yahoo.com/oauth2/request_auth"
+		scopes                   = [ "openid", "email", "profile" ]
 		set_user_root_attributes = "on_each_login"
-		non_persistent_attrs = ["gender","hair_color"]
-		upstream_params = jsonencode({
+		non_persistent_attrs     = ["gender","hair_color"]
+		upstream_params          = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
 			}
 		})
+
+		connection_settings {
+			pkce = "disabled"
+		}
+
+		attribute_map {
+			mapping_mode = "basic_profile"
+		}
 	}
 }
 `
 
 const testAccConnectionOIDCConfigUpdate = `
+resource "auth0_connection" "oidc" {
+	name     = "Acceptance-Test-OIDC-{{.testName}}"
+	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
+	strategy = "oidc"
+	show_as_button = false
+	options {
+		client_id     = "1234567"
+		client_secret = "1234567"
+		domain_aliases = [
+			"example.com"
+		]
+		type                   = "front_channel"
+		issuer                 = "https://www.paypalobjects.com"
+		jwks_uri               = "https://api.paypal.com/v1/oauth2/certs"
+		discovery_url          = "https://www.paypalobjects.com/.well-known/openid-configuration"
+		token_endpoint         = "https://api.paypal.com/v1/oauth2/token"
+		userinfo_endpoint      = "https://api.paypal.com/v1/oauth2/token/userinfo"
+		authorization_endpoint = "https://www.paypal.com/signin/authorize"
+		scopes                 = [ "openid", "email" ]
+		set_user_root_attributes = "on_first_login"
+
+		connection_settings {
+			pkce = "auto"
+		}
+
+		attribute_map {
+			mapping_mode   = "basic_profile"
+			userinfo_scope = "openid email profile groups"
+			attributes     = jsonencode({
+				"name": "$${context.tokenset.name}",
+				"email": "$${context.tokenset.email}",
+				"email_verified": "$${context.tokenset.email_verified}",
+				"nickname": "$${context.tokenset.nickname}",
+				"picture": "$${context.tokenset.picture}",
+				"given_name": "$${context.tokenset.given_name}",
+				"family_name": "$${context.tokenset.family_name}"
+		  	})
+		}
+	}
+}
+`
+
+const testAccConnectionOIDCConfigUpdateAgain = `
 resource "auth0_connection" "oidc" {
 	name     = "Acceptance-Test-OIDC-{{.testName}}"
 	display_name     = "Acceptance-Test-OIDC-{{.testName}}"
@@ -651,6 +736,10 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", `{"screen_name":{"alias":"login_hint"}}`),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "disabled"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
 				),
 			},
 			{
@@ -675,6 +764,38 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.0.pkce", "auto"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionOktaConfigUpdateAgain, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.okta", "name", fmt.Sprintf("Acceptance-Test-Okta-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "strategy", "okta"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "show_as_button", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_id", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.domain_aliases.#", "1"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.domain_aliases.*", "example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.issuer", "https://domain.okta.com"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.jwks_uri", "https://domain.okta.com/oauth2/v2/keys"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.token_endpoint", "https://domain.okta.com/oauth2/v2/token"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.userinfo_endpoint", "https://domain.okta.com/oauth2/v2/userinfo"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.authorization_endpoint", "https://domain.okta.com/oauth2/v2/authorize"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.scopes.#", "2"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "openid"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.scopes.*", "profile"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "0"),
 				),
 			},
 		},
@@ -706,11 +827,61 @@ resource "auth0_connection" "okta" {
 				"alias": "login_hint"
 			}
 		})
+
+		connection_settings {
+			pkce = "disabled"
+		}
+
+		attribute_map {
+			mapping_mode = "basic_profile"
+		}
 	}
 }
 `
 
 const testAccConnectionOktaConfigUpdate = `
+resource "auth0_connection" "okta" {
+	name           = "Acceptance-Test-Okta-{{.testName}}"
+	display_name   = "Acceptance-Test-Okta-{{.testName}}"
+	strategy       = "okta"
+	show_as_button = false
+	options {
+		client_id                = "123456"
+		client_secret            = "123456"
+		domain                   = "domain.okta.com"
+		domain_aliases           = [ "example.com" ]
+		issuer                   = "https://domain.okta.com"
+		jwks_uri                 = "https://domain.okta.com/oauth2/v2/keys"
+		token_endpoint           = "https://domain.okta.com/oauth2/v2/token"
+		userinfo_endpoint        = "https://domain.okta.com/oauth2/v2/userinfo"
+		authorization_endpoint   = "https://domain.okta.com/oauth2/v2/authorize"
+		scopes                   = [ "openid", "profile"]
+		non_persistent_attrs     = [ "gender" ]
+		set_user_root_attributes = "on_first_login"
+		icon_url                 = "https://example.com/v2/logo.svg"
+
+		connection_settings {
+			pkce = "auto"
+		}
+
+		attribute_map {
+			mapping_mode   = "basic_profile"
+			userinfo_scope = "openid email profile groups"
+			attributes     = jsonencode({
+				"name": "$${context.tokenset.name}",
+				"email": "$${context.tokenset.email}",
+				"email_verified": "$${context.tokenset.email_verified}",
+				"nickname": "$${context.tokenset.nickname}",
+				"picture": "$${context.tokenset.picture}",
+				"given_name": "$${context.tokenset.given_name}",
+				"family_name": "$${context.tokenset.family_name}"
+		  	})
+		}
+	}
+}
+`
+
+const testAccConnectionOktaConfigUpdateAgain = `
 resource "auth0_connection" "okta" {
 	name           = "Acceptance-Test-Okta-{{.testName}}"
 	display_name   = "Acceptance-Test-Okta-{{.testName}}"
@@ -1142,6 +1313,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.map_user_id_to_id", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
@@ -1163,6 +1335,7 @@ func TestAccConnectionGoogleApps(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.domain_aliases.*", "api.example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.api_enable_users", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.map_user_id_to_id", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.google_apps", "options.0.scopes.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_profile"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.google_apps", "options.0.scopes.*", "ext_groups"),
@@ -1187,6 +1360,7 @@ resource "auth0_connection" "google_apps" {
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
 		set_user_root_attributes = "on_each_login"
+		map_user_id_to_id = true
 		scopes = [ "ext_profile", "ext_groups" ]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -1211,6 +1385,7 @@ resource "auth0_connection" "google_apps" {
 		domain_aliases = [ "example.com", "api.example.com" ]
 		api_enable_users = true
 		set_user_root_attributes = "on_first_login"
+		map_user_id_to_id = true
 		scopes = [ "ext_profile", "ext_groups" ]
 		upstream_params = jsonencode({
 			"screen_name": {
@@ -1712,6 +1887,9 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.cert", "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.0.key", "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.key", "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_each_login"),
 				),
@@ -1733,6 +1911,9 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.signing_key.#", "0"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.set_user_root_attributes", "on_first_login"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.key", "-----BEGIN PRIVATE KEY-----\n...{your updated private key here}...\n-----END PRIVATE KEY-----"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.decryption_key.0.cert", "-----BEGIN CERTIFICATE-----\n...{your updated public key cert here}...\n-----END CERTIFICATE-----"),
 				),
 			},
 		},
@@ -1741,40 +1922,51 @@ func TestAccConnectionSAML(t *testing.T) {
 
 const testConnectionSAMLConfigCreate = `
 resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-SAML-{{.testName}}"
-	display_name = "Acceptance-Test-SAML-{{.testName}}"
-	strategy = "samlp"
+	name           = "Acceptance-Test-SAML-{{.testName}}"
+	display_name   = "Acceptance-Test-SAML-{{.testName}}"
+	strategy       = "samlp"
 	show_as_button = false
+
 	options {
 		signing_key {
 			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
        		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
 		}
-		disable_sign_out = false
-		user_id_attribute = "https://saml.provider/imi/ns/identity-200810"
-		tenant_domain = "example.com"
-		domain_aliases = ["example.com", "example.coz"]
-		protocol_binding = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-		request_template = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-		signature_algorithm = "rsa-sha256"
-		digest_algorithm = "sha256"
-		icon_url = "https://example.com/logo.svg"
+
+		decryption_key {
+			key  = "-----BEGIN PRIVATE KEY-----\n...{your private key here}...\n-----END PRIVATE KEY-----"
+			cert = "-----BEGIN CERTIFICATE-----\n...{your public key cert here}...\n-----END CERTIFICATE-----"
+		}
+
+		disable_sign_out         = false
+		user_id_attribute        = "https://saml.provider/imi/ns/identity-200810"
+		tenant_domain            = "example.com"
+		domain_aliases           = ["example.com", "example.coz"]
+		protocol_binding         = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+		request_template         = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+		signature_algorithm      = "rsa-sha256"
+		digest_algorithm         = "sha256"
+		icon_url                 = "https://example.com/logo.svg"
 		set_user_root_attributes = "on_each_login"
+
 		fields_map = jsonencode({
 			"name": ["name", "nameidentifier"]
 			"email": ["emailaddress", "nameidentifier"]
 			"family_name": "surname"
 		})
+
 		upstream_params = jsonencode({
 			"screen_name": {
 				"alias": "login_hint"
 			}
 		})
+
 		idp_initiated {
-			client_id = "client_id"
-			client_protocol = "samlp"
+			client_id              = "client_id"
+			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=30"
 		}
+
 		metadata_xml = <<EOF
 		<?xml version="1.0"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://example.com">
@@ -1818,30 +2010,38 @@ resource "auth0_connection" "my_connection" {
 
 const testConnectionSAMLConfigUpdate = `
 resource "auth0_connection" "my_connection" {
-	name = "Acceptance-Test-SAML-{{.testName}}"
-	display_name = "Acceptance-Test-SAML-{{.testName}}"
-	strategy = "samlp"
+	name           = "Acceptance-Test-SAML-{{.testName}}"
+	display_name   = "Acceptance-Test-SAML-{{.testName}}"
+	strategy       = "samlp"
 	show_as_button = true
+
 	options {
-		disable_sign_out = true
-		tenant_domain = "example.com"
-		domain_aliases = ["example.com", "example.coz"]
-		protocol_binding = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-		signature_algorithm = "rsa-sha256"
-		digest_algorithm = "sha256"
-		entity_id = "example"
+		disable_sign_out         = true
+		tenant_domain            = "example.com"
+		domain_aliases           = ["example.com", "example.coz"]
+		protocol_binding         = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+		signature_algorithm      = "rsa-sha256"
+		digest_algorithm         = "sha256"
+		entity_id                = "example"
 		set_user_root_attributes = "on_first_login"
+		metadata_url             = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
+
 		fields_map = jsonencode({
 			"name": ["name"]
 			"email": ["emailaddress", "nameidentifier"]
 			"family_name": "appelido"
 		})
+
 		idp_initiated {
-			client_id = "client_id"
-			client_protocol = "samlp"
+			client_id              = "client_id"
+			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=60"
 		}
-		metadata_url = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/132b28c30dfafbe018db0efe3ce2c98c452d4f9c/test/data/saml_metadata.xml"  # dictates 'sign_in_endpoint' and 'sign_in_endpoint'
+
+		decryption_key {
+			key  = "-----BEGIN PRIVATE KEY-----\n...{your updated private key here}...\n-----END PRIVATE KEY-----"
+			cert = "-----BEGIN CERTIFICATE-----\n...{your updated public key cert here}...\n-----END CERTIFICATE-----"
+		}
 	}
 }
 `

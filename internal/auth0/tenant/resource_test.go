@@ -37,19 +37,14 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.1", "de"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "enabled_locales.2", "fr"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.#", "1"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.universal_login", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.disable_clickjack_protection_headers", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.#", "1"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html>Error Page</html>"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.url", "https://mycompany.org/error"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.primary", "#0059d6"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "universal_login.0.colors.0.page_background", "#000000"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "false"),
 				),
 			},
 			{
@@ -65,6 +60,8 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "true"),
 				),
 			},
 			{
@@ -99,8 +96,9 @@ resource "auth0_tenant" "my_tenant" {
 	idle_session_lifetime   = 72
 	enabled_locales         = ["en", "de", "fr"]
 
+	allow_organization_name_in_authentication_api = false
+
 	flags {
-		universal_login                        = true
 		disable_clickjack_protection_headers   = true
 		enable_public_signup_user_exists_error = true
 		use_scope_descriptions_for_consent     = true
@@ -108,23 +106,15 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix                 = false
 		mfa_show_factor_list_on_enrollment     = false
-	}
-
-	error_page {
-		html          = "<html>Error Page</html>"
-		show_log_link = false
-		url           = "https://mycompany.org/error"
-	}
-
-	universal_login {
-		colors {
-			primary         = "#0059d6"
-			page_background = "#000000"
-		}
+		require_pushed_authorization_requests  = false
 	}
 
 	session_cookie {
 		mode = "non-persistent"
+	}
+
+	sessions {
+		oidc_logout_prompt_enabled = false
 	}
 }
 `
@@ -143,8 +133,9 @@ resource "auth0_tenant" "my_tenant" {
 	idle_session_lifetime   = 72
 	enabled_locales         = ["de", "fr"]
 
+	allow_organization_name_in_authentication_api = true
+
 	flags {
-		universal_login                        = true
 		enable_public_signup_user_exists_error = true
 		disable_clickjack_protection_headers   = false # <---- disable and test
 		use_scope_descriptions_for_consent     = false
@@ -152,33 +143,15 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = true
 		disable_fields_map_fix                 = true
 		mfa_show_factor_list_on_enrollment     = true
-	}
-
-	universal_login {
-		colors {
-			primary         = "#0059d6"
-			page_background = "#000000"
-		}
-	}
-
-	change_password {
-		enabled = true
-		html    = "<html>Change Password</html>"
-	}
-
-	guardian_mfa_page {
-		enabled = true
-		html    = "<html>MFA</html>"
-	}
-
-	error_page {
-		html          = "<html>Error Page</html>"
-		show_log_link = false
-		url           = "https://mycompany.org/error"
+		require_pushed_authorization_requests  = true
 	}
 
 	session_cookie {
 		mode = "persistent"
+	}
+
+	sessions {
+		oidc_logout_prompt_enabled = true
 	}
 }
 `

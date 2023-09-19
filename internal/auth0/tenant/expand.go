@@ -8,11 +8,11 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandTenant(d *schema.ResourceData) *management.Tenant {
-	config := d.GetRawConfig()
+func expandTenant(data *schema.ResourceData) *management.Tenant {
+	config := data.GetRawConfig()
 
-	sessionLifetime := d.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
-	idleSessionLifetime := d.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
+	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
 	tenant := &management.Tenant{
 		DefaultAudience:       value.String(config.GetAttr("default_audience")),
@@ -26,71 +26,17 @@ func expandTenant(d *schema.ResourceData) *management.Tenant {
 		SessionLifetime:       &sessionLifetime,
 		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
 		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
-		ChangePassword:        ExpandTenantChangePassword(config.GetAttr("change_password")),
-		GuardianMFAPage:       ExpandTenantGuardianMFAPage(config.GetAttr("guardian_mfa_page")),
-		ErrorPage:             ExpandTenantErrorPage(config.GetAttr("error_page")),
 		Flags:                 expandTenantFlags(config.GetAttr("flags")),
-		UniversalLogin:        expandTenantUniversalLogin(config.GetAttr("universal_login")),
 		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
+		Sessions:              expandTenantSessions(config.GetAttr("sessions")),
+		AllowOrgNameInAuthAPI: value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
 	}
 
-	if d.IsNewResource() || d.HasChange("idle_session_lifetime") {
+	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
 
 	return tenant
-}
-
-// ExpandTenantChangePassword expands the change password page config.
-func ExpandTenantChangePassword(config cty.Value) *management.TenantChangePassword {
-	var changePassword management.TenantChangePassword
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		changePassword.Enabled = value.Bool(d.GetAttr("enabled"))
-		changePassword.HTML = value.String(d.GetAttr("html"))
-		return stop
-	})
-
-	if changePassword == (management.TenantChangePassword{}) {
-		return nil
-	}
-
-	return &changePassword
-}
-
-// ExpandTenantGuardianMFAPage expands the guardian mfa page config.
-func ExpandTenantGuardianMFAPage(config cty.Value) *management.TenantGuardianMFAPage {
-	var mfa management.TenantGuardianMFAPage
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		mfa.Enabled = value.Bool(d.GetAttr("enabled"))
-		mfa.HTML = value.String(d.GetAttr("html"))
-		return stop
-	})
-
-	if mfa == (management.TenantGuardianMFAPage{}) {
-		return nil
-	}
-
-	return &mfa
-}
-
-// ExpandTenantErrorPage expands the error page config.
-func ExpandTenantErrorPage(config cty.Value) *management.TenantErrorPage {
-	var errorPage management.TenantErrorPage
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		errorPage.HTML = value.String(d.GetAttr("html"))
-		errorPage.ShowLogLink = value.Bool(d.GetAttr("show_log_link"))
-		errorPage.URL = value.String(d.GetAttr("url"))
-		return stop
-	})
-
-	if errorPage == (management.TenantErrorPage{}) {
-		return nil
-	}
-
-	return &errorPage
 }
 
 func expandTenantFlags(config cty.Value) *management.TenantFlags {
@@ -103,7 +49,6 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			EnablePipeline2:                    value.Bool(flags.GetAttr("enable_pipeline2")),
 			EnableDynamicClientRegistration:    value.Bool(flags.GetAttr("enable_dynamic_client_registration")),
 			EnableCustomDomainInEmails:         value.Bool(flags.GetAttr("enable_custom_domain_in_emails")),
-			UniversalLogin:                     value.Bool(flags.GetAttr("universal_login")),
 			EnableLegacyLogsSearchV2:           value.Bool(flags.GetAttr("enable_legacy_logs_search_v2")),
 			DisableClickjackProtectionHeaders:  value.Bool(flags.GetAttr("disable_clickjack_protection_headers")),
 			EnablePublicSignupUserExistsError:  value.Bool(flags.GetAttr("enable_public_signup_user_exists_error")),
@@ -121,35 +66,13 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
+			RequirePushedAuthorizationRequests: value.Bool(flags.GetAttr("require_pushed_authorization_requests")),
 		}
 
 		return stop
 	})
 
 	return tenantFlags
-}
-
-func expandTenantUniversalLogin(config cty.Value) *management.TenantUniversalLogin {
-	var universalLogin management.TenantUniversalLogin
-
-	config.ForEachElement(func(_ cty.Value, d cty.Value) (stop bool) {
-		colors := d.GetAttr("colors")
-
-		colors.ForEachElement(func(_ cty.Value, color cty.Value) (stop bool) {
-			universalLogin.Colors = &management.TenantUniversalLoginColors{
-				Primary:        value.String(color.GetAttr("primary")),
-				PageBackground: value.String(color.GetAttr("page_background")),
-			}
-			return stop
-		})
-		return stop
-	})
-
-	if universalLogin == (management.TenantUniversalLogin{}) {
-		return nil
-	}
-
-	return &universalLogin
 }
 
 func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie {
@@ -165,4 +88,19 @@ func expandTenantSessionCookie(config cty.Value) *management.TenantSessionCookie
 	}
 
 	return &sessionCookie
+}
+
+func expandTenantSessions(config cty.Value) *management.TenantSessions {
+	var sessions management.TenantSessions
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		sessions.OIDCLogoutPromptEnabled = value.Bool(cfg.GetAttr("oidc_logout_prompt_enabled"))
+		return stop
+	})
+
+	if sessions == (management.TenantSessions{}) {
+		return nil
+	}
+
+	return &sessions
 }

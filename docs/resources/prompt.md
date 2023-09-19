@@ -25,7 +25,7 @@ resource "auth0_prompt" "my_prompt" {
 
 - `identifier_first` (Boolean) Indicates whether the identifier first is used when using the new Universal Login experience.
 - `universal_login_experience` (String) Which login experience to use. Options include `classic` and `new`.
-- `webauthn_platform_first_factor` (Boolean) Determines if the login screen uses identifier and biometrics first.
+- `webauthn_platform_first_factor` (Boolean) Determines if the login screen uses identifier and biometrics first. Setting this property to `true`, requires MFA factors enabled for enrollment; use the `auth0_guardian` resource to set one up.
 
 ### Read-Only
 
@@ -42,5 +42,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_prompt.my_prompt 22f4f21b-017a-319d-92e7-2291c1ca36c4
+terraform import auth0_prompt.my_prompt "22f4f21b-017a-319d-92e7-2291c1ca36c4"
 ```

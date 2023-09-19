@@ -2,17 +2,14 @@ package rule
 
 import (
 	"context"
-	"net/http"
 	"regexp"
 
-	"github.com/auth0/go-auth0"
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 var ruleNameRegexp = regexp.MustCompile(`^[^\s-][\w -]+[^\s-]$`)
@@ -68,61 +65,47 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	rule := expandRule(d.GetRawConfig())
-	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Create(rule); err != nil {
+func createRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	rule := expandRule(data.GetRawConfig())
+
+	if err := api.Rule.Create(ctx, rule); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(auth0.StringValue(rule.ID))
+	data.SetId(rule.GetID())
 
-	return readRule(ctx, d, m)
+	return readRule(ctx, data, meta)
 }
 
-func readRule(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	rule, err := api.Rule.Read(d.Id())
+func readRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+	rule, err := api.Rule.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", rule.Name),
-		d.Set("script", rule.Script),
-		d.Set("order", rule.Order),
-		d.Set("enabled", rule.Enabled),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenRule(data, rule))
 }
 
-func updateRule(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	rule := expandRule(d.GetRawConfig())
-	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Update(d.Id(), rule); err != nil {
-		return diag.FromErr(err)
+func updateRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	rule := expandRule(data.GetRawConfig())
+
+	if err := api.Rule.Update(ctx, data.Id(), rule); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readRule(ctx, d, m)
+	return readRule(ctx, data, meta)
 }
 
-func deleteRule(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	if err := api.Rule.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+func deleteRule(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	if err := api.Rule.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

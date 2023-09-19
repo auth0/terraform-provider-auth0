@@ -1,6 +1,7 @@
 package sweep
 
 import (
+	"context"
 	"log"
 
 	"github.com/auth0/go-auth0/management"
@@ -13,6 +14,8 @@ func Users() {
 	resource.AddTestSweepers("auth0_user", &resource.Sweeper{
 		Name: "auth0_user",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
@@ -22,6 +25,7 @@ func Users() {
 			var result *multierror.Error
 			for {
 				userList, err := api.User.Search(
+					ctx,
 					management.Page(page),
 					management.Query(`email.domain:"acceptance.test.com"`))
 				if err != nil {
@@ -31,7 +35,7 @@ func Users() {
 				for _, user := range userList.Users {
 					result = multierror.Append(
 						result,
-						api.User.Delete(user.GetID()),
+						api.User.Delete(ctx, user.GetID()),
 					)
 					log.Printf("[DEBUG] ✗ %s", user.GetName())
 				}

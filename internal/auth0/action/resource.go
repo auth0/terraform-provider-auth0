@@ -3,16 +3,15 @@ package action
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_action resource.
@@ -91,8 +90,7 @@ func NewResource() *schema.Resource {
 					"node16",
 					"node18",
 				}, false),
-				Description: "The Node runtime. Defaults to `node12`. Possible values are: " +
-					"`node12`, `node16` or `node18`.",
+				Description: "The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
 			},
 			"secrets": {
 				Type:        schema.TypeList,
@@ -132,137 +130,102 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	action := expandAction(d.GetRawConfig())
-	if err := api.Action.Create(action); err != nil {
+	action := expandAction(data.GetRawConfig())
+
+	if err := api.Action.Create(ctx, action); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(action.GetID())
+	data.SetId(action.GetID())
 
-	if result := deployAction(ctx, d, m); result.HasError() {
-		return result
+	if err := deployAction(ctx, data, meta); err != nil {
+		return diag.FromErr(err)
 	}
 
-	return readAction(ctx, d, m)
+	return readAction(ctx, data, meta)
 }
 
-func readAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	action, err := api.Action.Read(d.Id())
+	action, err := api.Action.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", action.Name),
-		d.Set("supported_triggers", flattenActionTriggers(action.SupportedTriggers)),
-		d.Set("code", action.Code),
-		d.Set("dependencies", flattenActionDependencies(action.GetDependencies())),
-		d.Set("runtime", action.Runtime),
-	)
-
-	if action.DeployedVersion != nil {
-		result = multierror.Append(result, d.Set("version_id", action.DeployedVersion.GetID()))
-	}
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenAction(data, action))
 }
 
-func updateAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	diagnostics := preventErasingUnmanagedSecrets(d, api)
+	diagnostics := preventErasingUnmanagedSecrets(ctx, data, api)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
 
-	action := expandAction(d.GetRawConfig())
-	if err := api.Action.Update(d.Id(), action); err != nil {
+	action := expandAction(data.GetRawConfig())
+
+	if err := api.Action.Update(ctx, data.Id(), action); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	if err := deployAction(ctx, data, meta); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if result := deployAction(ctx, d, m); result.HasError() {
-		return result
-	}
-
-	return readAction(ctx, d, m)
+	return readAction(ctx, data, meta)
 }
 
-func deleteAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Action.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.Action.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	d.SetId("")
 	return nil
 }
 
-func deployAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	deployExists := d.Get("deploy").(bool)
+func deployAction(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
+	deployExists := data.Get("deploy").(bool)
 	if !deployExists {
 		return nil
 	}
 
-	api := m.(*config.Config).GetAPI()
+	api := meta.(*config.Config).GetAPI()
 
-	err := retry.RetryContext(ctx, d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
-		action, err := api.Action.Read(d.Id())
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
+		action, err := api.Action.Read(ctx, data.Id())
 		if err != nil {
 			return retry.NonRetryableError(err)
 		}
 
 		if action.GetStatus() == management.ActionStatusFailed {
 			return retry.NonRetryableError(
-				fmt.Errorf(
-					"action %q failed to build, check the Auth0 UI for errors",
-					action.GetName(),
-				),
+				fmt.Errorf("action %q failed to build, check the Auth0 UI for errors", action.GetName()),
 			)
 		}
 
 		if action.GetStatus() != management.ActionStatusBuilt {
 			return retry.RetryableError(
-				fmt.Errorf(
-					"expected action %q status %q to equal %q",
-					action.GetName(),
-					action.GetStatus(),
-					"built",
-				),
+				fmt.Errorf("expected action %q status %q to equal %q", action.GetName(), action.GetStatus(), "built"),
 			)
 		}
 
 		return nil
 	})
 	if err != nil {
-		return diag.FromErr(
-			fmt.Errorf(
-				"action %q never reached built state: %w",
-				d.Get("name").(string),
-				err,
-			),
-		)
+		return fmt.Errorf("action %q never reached built state: %w", data.Get("name").(string), err)
 	}
 
-	actionVersion, err := api.Action.Deploy(d.Id())
+	actionVersion, err := api.Action.Deploy(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return err
 	}
 
-	return diag.FromErr(d.Set("version_id", actionVersion.GetID()))
+	return data.Set("version_id", actionVersion.GetID())
 }

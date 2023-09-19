@@ -45,7 +45,7 @@ resource "auth0_trigger_action" "post_login_alert_action" {
 ### Required
 
 - `action_id` (String) The ID of the action to bind to the trigger.
-- `trigger` (String) The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `iga-approval`, `iga-certification`, `iga-fulfillment-assignment`, `iga-fulfillment-execution`,
+- `trigger` (String) The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `iga-approval`, `iga-certification`, `iga-fulfillment-assignment`, `iga-fulfillment-execution`.
 
 ### Optional
 
@@ -61,8 +61,9 @@ Import is supported using the following syntax:
 
 ```shell
 # This resource can be imported by specifying the
-# trigger and action ID separated by "::".
+# trigger and action ID separated by "::" (note the double colon)
+# <trigger>::<actionID>
 #
 # Example:
-terraform import auth0_trigger_action.post_login_action post-login::28b5c8fa-d371-5734-acf6-d0cf80ead918
+terraform import auth0_trigger_action.post_login_action "post-login::28b5c8fa-d371-5734-acf6-d0cf80ead918"
 ```

@@ -348,7 +348,7 @@ The `auth0_trigger_binding` resource has been renamed to `auth0_trigger_actions`
 `auth0_trigger_action` (1:1) resource.
 
 Before upgrading, run a `terraform state rm auth0_trigger_binding.<resource_name>`. Then upgrade to `v1.0.0-beta.x` and
-rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions` and re-import the resource using 
+rename the resource from `auth0_trigger_binding` to `auth0_trigger_actions` and re-import the resource using
 `terraform import auth0_trigger_actions.<resource_name> <trigger_id>`.
 
 <table>
@@ -828,11 +828,10 @@ resource "auth0_client_grant" "my_client_grant" {
 
 ### Actions Node 18 Runtime Beta
 
-The Node 18 Beta runtime option for actions has been removed.
+On `v0.x` the `node18` runtime value was setting the runtime to Node 18 Beta, on `v1` this will now opt you in to the
+GA version of Node 18. If you were using the `node18-actions` (GA) runtime on `v0.x`, simply rename that to `node18` on `v1`.
 
-Now, you will be opted in to the GA version of Node 18 actions runtime instead.
-
-Ensure that the versions of the trigger types you are using are allowed to use the `node18` runtime. You can retrieve 
+Ensure that the versions of the trigger types you are using are allowed to use the `node18` runtime. You can retrieve
 the triggers available within actions and their supported runtimes following this guide: [Retrieve triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers).
 
 [Back to Table of Contents](#migration-guide)
@@ -990,7 +989,7 @@ resource "auth0_branding" "my_branding" {
   colors {
     primary         = "#0059d6"
     page_background = "#000000"
-  } 
+  }
 }
 ```
 

@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewTriggerActionsResource will return a new auth0_trigger_actions resource.
@@ -38,12 +38,16 @@ func NewTriggerActionsResource() *schema.Resource {
 					"post-user-registration",
 					"post-change-password",
 					"send-phone-message",
+					"password-reset-post-challenge",
 					"iga-approval",
 					"iga-certification",
 					"iga-fulfillment-assignment",
 					"iga-fulfillment-execution",
 				}, false),
-				Description: "The ID of the trigger to bind with.",
+				Description: "The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, " +
+					"`pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, " +
+					"`password-reset-post-challenge`, `iga-approval` , `iga-certification` , `iga-fulfillment-assignment`, " +
+					"`iga-fulfillment-execution`.",
 			},
 			"actions": {
 				Type:     schema.TypeList,
@@ -68,49 +72,67 @@ func NewTriggerActionsResource() *schema.Resource {
 	}
 }
 
-func createTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	id := d.Get("trigger").(string)
-	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
+	id := data.Get("trigger").(string)
+	triggerBindings := expandTriggerBindings(data.GetRawConfig().GetAttr("actions"))
 
-	if err := api.Action.UpdateBindings(id, triggerBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, id, triggerBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(id)
+	data.SetId(id)
 
-	return readTriggerBinding(ctx, d, m)
+	return readTriggerBinding(ctx, data, meta)
 }
 
-func readTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	triggerBindings, err := api.Action.Bindings(d.Id())
-	if err != nil {
-		return diag.FromErr(err)
+	var triggerBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			data.Id(),
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		triggerBindings = append(triggerBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	result := multierror.Append(
-		d.Set("trigger", d.Id()),
-		d.Set("actions", flattenTriggerBindingActions(triggerBindings.Bindings)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenTriggerBinding(data, triggerBindings))
 }
 
-func updateTriggerBinding(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	triggerBindings := expandTriggerBindings(d.GetRawConfig().GetAttr("actions"))
-	if err := api.Action.UpdateBindings(d.Id(), triggerBindings); err != nil {
-		return diag.FromErr(err)
+	triggerBindings := expandTriggerBindings(data.GetRawConfig().GetAttr("actions"))
+
+	if err := api.Action.UpdateBindings(ctx, data.Id(), triggerBindings); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readTriggerBinding(ctx, d, m)
+	return readTriggerBinding(ctx, data, meta)
 }
 
-func deleteTriggerBinding(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	return diag.FromErr(api.Action.UpdateBindings(d.Id(), []*management.ActionBinding{}))
+func deleteTriggerBinding(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	if err := api.Action.UpdateBindings(ctx, data.Id(), []*management.ActionBinding{}); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return nil
 }

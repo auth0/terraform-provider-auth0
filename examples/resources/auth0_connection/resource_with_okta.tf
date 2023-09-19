@@ -24,5 +24,23 @@ resource "auth0_connection" "okta" {
         "alias" : "login_hint"
       }
     })
+
+    connection_settings {
+      pkce = "auto"
+    }
+
+    attribute_map {
+      mapping_mode   = "basic_profile"
+      userinfo_scope = "openid email profile groups"
+      attributes = jsonencode({
+        "name" : "$${context.tokenset.name}",
+        "email" : "$${context.tokenset.email}",
+        "email_verified" : "$${context.tokenset.email_verified}",
+        "nickname" : "$${context.tokenset.nickname}",
+        "picture" : "$${context.tokenset.picture}",
+        "given_name" : "$${context.tokenset.given_name}",
+        "family_name" : "$${context.tokenset.family_name}"
+      })
+    }
   }
 }

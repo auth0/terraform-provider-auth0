@@ -2,15 +2,14 @@ package client
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewGrantResource will return a new auth0_client_grant resource.
@@ -40,9 +39,12 @@ func NewGrantResource() *schema.Resource {
 				ForceNew:    true,
 				Description: "Audience or API Identifier for this grant.",
 			},
-			"scope": {
-				Type:        schema.TypeList,
-				Elem:        &schema.Schema{Type: schema.TypeString},
+			"scopes": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
 				Required:    true,
 				Description: "Permissions (scopes) included in this grant.",
 			},
@@ -50,101 +52,65 @@ func NewGrantResource() *schema.Resource {
 	}
 }
 
-func createClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	grantList, err := api.ClientGrant.List(
-		management.Parameter("audience", d.Get("audience").(string)),
-		management.Parameter("client_id", d.Get("client_id").(string)),
+		ctx,
+		management.Parameter("audience", data.Get("audience").(string)),
+		management.Parameter("client_id", data.Get("client_id").(string)),
 	)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
 	if len(grantList.ClientGrants) != 0 {
-		d.SetId(grantList.ClientGrants[0].GetID())
-		return readClientGrant(ctx, d, m)
+		data.SetId(grantList.ClientGrants[0].GetID())
+		return readClientGrant(ctx, data, meta)
 	}
 
-	clientGrant := expandClientGrant(d)
-	if err := api.ClientGrant.Create(clientGrant); err != nil {
+	clientGrant := expandClientGrant(data)
+
+	if err := api.ClientGrant.Create(ctx, clientGrant); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(clientGrant.GetID())
+	data.SetId(clientGrant.GetID())
 
-	return readClientGrant(ctx, d, m)
+	return readClientGrant(ctx, data, meta)
 }
 
-func readClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	clientGrant, err := api.ClientGrant.Read(d.Id())
+	clientGrant, err := api.ClientGrant.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("client_id", clientGrant.GetClientID()),
-		d.Set("audience", clientGrant.GetAudience()),
-		d.Set("scope", clientGrant.Scope),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenClientGrant(data, clientGrant))
 }
 
-func updateClientGrant(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	clientGrant := expandClientGrant(d)
-	if clientGrantHasChange(clientGrant) {
-		if err := api.ClientGrant.Update(d.Id(), clientGrant); err != nil {
-			return diag.FromErr(err)
+	if clientGrant := expandClientGrant(data); clientGrantHasChange(clientGrant) {
+		if err := api.ClientGrant.Update(ctx, data.Id(), clientGrant); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 	}
 
-	return readClientGrant(ctx, d, m)
+	return readClientGrant(ctx, data, meta)
 }
 
-func deleteClientGrant(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteClientGrant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.ClientGrant.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.ClientGrant.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	d.SetId("")
 	return nil
-}
-
-func expandClientGrant(d *schema.ResourceData) *management.ClientGrant {
-	config := d.GetRawConfig()
-
-	clientGrant := &management.ClientGrant{}
-
-	if d.IsNewResource() {
-		clientGrant.ClientID = value.String(config.GetAttr("client_id"))
-		clientGrant.Audience = value.String(config.GetAttr("audience"))
-	}
-
-	if d.IsNewResource() || d.HasChange("scope") {
-		scopeListFromConfig := d.Get("scope").([]interface{})
-		scopeList := make([]string, 0)
-		for _, scope := range scopeListFromConfig {
-			scopeList = append(scopeList, scope.(string))
-		}
-		clientGrant.Scope = scopeList
-	}
-
-	return clientGrant
 }
 
 func clientGrantHasChange(clientGrant *management.ClientGrant) bool {

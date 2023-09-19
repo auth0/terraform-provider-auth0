@@ -2,10 +2,8 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -70,19 +68,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return dataSourceSchema
 }
 
-func readOrganizationForDataSource(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	var foundOrganization *management.Organization
 	var err error
 
 	organizationID := data.Get("organization_id").(string)
 	if organizationID != "" {
-		foundOrganization, err = api.Organization.Read(organizationID)
+		foundOrganization, err = api.Organization.Read(ctx, organizationID)
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				data.SetId("")
-				return nil
-			}
 			return diag.FromErr(err)
 		}
 	} else {
@@ -91,7 +85,7 @@ func readOrganizationForDataSource(_ context.Context, data *schema.ResourceData,
 
 	outerLoop:
 		for {
-			organizations, err := api.Organization.List(management.Page(page), management.PerPage(100))
+			organizations, err := api.Organization.List(ctx, management.Page(page), management.PerPage(100))
 			if err != nil {
 				return diag.FromErr(err)
 			}
@@ -117,34 +111,25 @@ func readOrganizationForDataSource(_ context.Context, data *schema.ResourceData,
 
 	data.SetId(foundOrganization.GetID())
 
-	foundConnections, err := fetchAllOrganizationConnections(api, foundOrganization.GetID())
+	foundConnections, err := fetchAllOrganizationConnections(ctx, api, foundOrganization.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	foundMembers, err := fetchAllOrganizationMembers(api, foundOrganization.GetID())
+	foundMembers, err := fetchAllOrganizationMembers(ctx, api, foundOrganization.GetID())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		data.Set("name", foundOrganization.GetName()),
-		data.Set("display_name", foundOrganization.GetDisplayName()),
-		data.Set("branding", flattenOrganizationBranding(foundOrganization.GetBranding())),
-		data.Set("metadata", foundOrganization.GetMetadata()),
-		data.Set("connections", flattenOrganizationConnections(foundConnections)),
-		data.Set("members", foundMembers),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers))
 }
 
-func fetchAllOrganizationConnections(api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {
+func fetchAllOrganizationConnections(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {
 	var foundConnections []*management.OrganizationConnection
 	var page int
 
 	for {
-		connections, err := api.Organization.Connections(organizationID, management.Page(page), management.PerPage(100))
+		connections, err := api.Organization.Connections(ctx, organizationID, management.Page(page), management.PerPage(100))
 		if err != nil {
 			return nil, err
 		}
@@ -161,12 +146,12 @@ func fetchAllOrganizationConnections(api *management.Management, organizationID 
 	return foundConnections, nil
 }
 
-func fetchAllOrganizationMembers(api *management.Management, organizationID string) ([]string, error) {
+func fetchAllOrganizationMembers(ctx context.Context, api *management.Management, organizationID string) ([]string, error) {
 	foundMembers := make([]string, 0)
 	var page int
 
 	for {
-		members, err := api.Organization.Members(organizationID, management.Page(page), management.PerPage(100))
+		members, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
 		if err != nil {
 			return nil, err
 		}
@@ -183,20 +168,4 @@ func fetchAllOrganizationMembers(api *management.Management, organizationID stri
 	}
 
 	return foundMembers, nil
-}
-
-func flattenOrganizationConnections(connections []*management.OrganizationConnection) []interface{} {
-	if connections == nil {
-		return nil
-	}
-
-	result := make([]interface{}, len(connections))
-	for index, connection := range connections {
-		result[index] = map[string]interface{}{
-			"connection_id":              connection.GetConnectionID(),
-			"assign_membership_on_login": connection.GetAssignMembershipOnLogin(),
-		}
-	}
-
-	return result
 }

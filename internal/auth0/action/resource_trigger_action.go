@@ -2,7 +2,6 @@ package action
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -11,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -22,7 +22,7 @@ func NewTriggerActionResource() *schema.Resource {
 		UpdateContext: updateTriggerAction,
 		DeleteContext: deleteTriggerAction,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "trigger", "action_id"),
+			StateContext: internalSchema.ImportResourceGroupID("trigger", "action_id"),
 		},
 		Description: "With this resource, you can bind an action to a trigger. Once an action is created and deployed, it can be attached (i.e. bound) to a trigger so that it will be executed as part of a flow.\n\nOrdering of an action within a specific flow is not currently supported when using this resource; the action will get appended to the end of the flow. To precisely manage ordering, it is advised to either do so with the dashboard UI or with the `auth0_trigger_bindings` resource.",
 		Schema: map[string]*schema.Schema{
@@ -37,12 +37,13 @@ func NewTriggerActionResource() *schema.Resource {
 					"post-user-registration",
 					"post-change-password",
 					"send-phone-message",
+					"password-reset-post-challenge",
 					"iga-approval",
 					"iga-certification",
 					"iga-fulfillment-assignment",
 					"iga-fulfillment-execution",
 				}, false),
-				Description: "The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `iga-approval`, `iga-certification`, `iga-fulfillment-assignment`, `iga-fulfillment-execution`,",
+				Description: "The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `iga-approval`, `iga-certification`, `iga-fulfillment-assignment`, `iga-fulfillment-execution`.",
 			},
 			"action_id": {
 				Type:        schema.TypeString,
@@ -60,27 +61,23 @@ func NewTriggerActionResource() *schema.Resource {
 	}
 }
 
-func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createTriggerAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	trigger := d.Get("trigger").(string)
-	actionID := d.Get("action_id").(string)
-	displayName := d.Get("display_name").(string)
+	trigger := data.Get("trigger").(string)
+	actionID := data.Get("action_id").(string)
+	displayName := data.Get("display_name").(string)
 
-	currentBindings, err := api.Action.Bindings(trigger)
+	currentBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
 		return diag.FromErr(err)
 	}
 
 	var updatedBindings []*management.ActionBinding
 	for _, binding := range currentBindings.Bindings {
-		if binding.Action.ID == &actionID {
-			d.SetId(trigger + "::" + actionID)
-			return nil
+		if binding.Action.GetID() == actionID {
+			internalSchema.SetResourceGroupID(data, trigger, actionID)
+			return readTriggerAction(ctx, data, meta)
 		}
 
 		updatedBindings = append(updatedBindings, &management.ActionBinding{
@@ -93,15 +90,11 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	if displayName == "" {
-		action, err := api.Action.Read(actionID)
-
+		action, err := api.Action.Read(ctx, actionID)
 		if err != nil {
-			if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
 			return diag.FromErr(err)
 		}
+
 		displayName = action.GetName()
 	}
 
@@ -113,29 +106,47 @@ func createTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 		DisplayName: &displayName,
 	})
 
-	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
+	if err := api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(trigger + "::" + actionID)
-	return readTriggerAction(ctx, d, m)
+	internalSchema.SetResourceGroupID(data, trigger, actionID)
+
+	return readTriggerAction(ctx, data, meta)
 }
 
-func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateTriggerAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	trigger := d.Get("trigger").(string)
-	actionID := d.Get("action_id").(string)
-	displayName := d.Get("display_name").(string)
+	trigger := data.Get("trigger").(string)
+	actionID := data.Get("action_id").(string)
+	displayName := data.Get("display_name").(string)
 
-	currentBindings, err := api.Action.Bindings(trigger)
-	if err != nil {
-		return diag.FromErr(err)
+	var currentBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			trigger,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		currentBindings = append(currentBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	found := false
 	var updatedBindings []*management.ActionBinding
-	for _, binding := range currentBindings.Bindings {
+	for _, binding := range currentBindings {
 		if binding.Action.GetID() == actionID {
 			updatedBindings = append(updatedBindings, &management.ActionBinding{
 				Ref: &management.ActionBindingReference{
@@ -157,51 +168,64 @@ func updateTriggerAction(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 
 	if !found {
-		d.SetId("")
+		data.SetId("")
 		return nil
 	}
 
-	if err := api.Action.UpdateBindings(trigger, updatedBindings); err != nil {
-		return diag.FromErr(err)
+	if err := api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readTriggerAction(ctx, d, m)
+	return readTriggerAction(ctx, data, meta)
 }
 
-func readTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readTriggerAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	trigger := d.Get("trigger").(string)
-	actionID := d.Get("action_id").(string)
+	trigger := data.Get("trigger").(string)
+	actionID := data.Get("action_id").(string)
 
-	triggerBindings, err := api.Action.Bindings(trigger)
-	if err != nil {
-		return diag.FromErr(err)
+	var triggerBindings []*management.ActionBinding
+	var page int
+	for {
+		triggerBindingList, err := api.Action.Bindings(
+			ctx,
+			trigger,
+			management.Page(page),
+			management.PerPage(100),
+		)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		triggerBindings = append(triggerBindings, triggerBindingList.Bindings...)
+
+		if !triggerBindingList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	for _, binding := range triggerBindings.Bindings {
+	for _, binding := range triggerBindings {
 		if binding.Action.GetID() == actionID {
-			err = d.Set("display_name", binding.GetDisplayName())
-			if err != nil {
-				return diag.FromErr(err)
-			}
-			return nil
+			return diag.FromErr(data.Set("display_name", binding.GetDisplayName()))
 		}
 	}
 
-	d.SetId("")
+	data.SetId("")
 	return nil
 }
 
-func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteTriggerAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	trigger := d.Get("trigger").(string)
-	actionID := d.Get("action_id").(string)
+	trigger := data.Get("trigger").(string)
+	actionID := data.Get("action_id").(string)
 
-	triggerBindings, err := api.Action.Bindings(trigger)
+	triggerBindings, err := api.Action.Bindings(ctx, trigger)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	updatedBindings := make([]*management.ActionBinding, 0)
@@ -219,5 +243,9 @@ func deleteTriggerAction(_ context.Context, d *schema.ResourceData, m interface{
 		})
 	}
 
-	return diag.FromErr(api.Action.UpdateBindings(trigger, updatedBindings))
+	if err = api.Action.UpdateBindings(ctx, trigger, updatedBindings); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return nil
 }

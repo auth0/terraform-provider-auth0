@@ -2,16 +2,12 @@ package organization
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_organization resource.
@@ -74,107 +70,49 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization := expandOrganization(d)
-	if err := api.Organization.Create(organization); err != nil {
+	organization := expandOrganization(data)
+
+	if err := api.Organization.Create(ctx, organization); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(organization.GetID())
+	data.SetId(organization.GetID())
 
-	return readOrganization(ctx, d, m)
+	return readOrganization(ctx, data, meta)
 }
 
-func readOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization, err := api.Organization.Read(d.Id())
+	organization, err := api.Organization.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", organization.GetName()),
-		d.Set("display_name", organization.GetDisplayName()),
-		d.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
-		d.Set("metadata", organization.GetMetadata()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenOrganization(data, organization))
 }
 
-func updateOrganization(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	organization := expandOrganization(d)
-	if err := api.Organization.Update(d.Id(), organization); err != nil {
-		return diag.FromErr(err)
+	organization := expandOrganization(data)
+
+	if err := api.Organization.Update(ctx, data.Id(), organization); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readOrganization(ctx, d, m)
+	return readOrganization(ctx, data, meta)
 }
 
-func deleteOrganization(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteOrganization(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Organization.Delete(d.Id()); err != nil {
-		if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+	if err := api.Organization.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	d.SetId("")
 	return nil
-}
-
-func expandOrganization(d *schema.ResourceData) *management.Organization {
-	config := d.GetRawConfig()
-
-	organization := &management.Organization{
-		Name:        value.String(config.GetAttr("name")),
-		DisplayName: value.String(config.GetAttr("display_name")),
-		Branding:    expandOrganizationBranding(config.GetAttr("branding")),
-	}
-
-	if d.HasChange("metadata") {
-		organization.Metadata = value.MapOfStrings(config.GetAttr("metadata"))
-	}
-
-	return organization
-}
-
-func expandOrganizationBranding(brandingList cty.Value) *management.OrganizationBranding {
-	var organizationBranding *management.OrganizationBranding
-
-	brandingList.ForEachElement(func(_ cty.Value, branding cty.Value) (stop bool) {
-		organizationBranding = &management.OrganizationBranding{
-			LogoURL: value.String(branding.GetAttr("logo_url")),
-			Colors:  value.MapOfStrings(branding.GetAttr("colors")),
-		}
-
-		return stop
-	})
-
-	return organizationBranding
-}
-
-func flattenOrganizationBranding(organizationBranding *management.OrganizationBranding) []interface{} {
-	if organizationBranding == nil {
-		return nil
-	}
-
-	return []interface{}{
-		map[string]interface{}{
-			"logo_url": organizationBranding.GetLogoURL(),
-			"colors":   organizationBranding.GetColors(),
-		},
-	}
 }

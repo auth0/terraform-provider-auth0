@@ -21,7 +21,7 @@ func TestFlattenConnectionOptions(t *testing.T) {
 func TestFlattenConnectionOptionsEmail(t *testing.T) {
 	// Invalid Authentication Params.
 	invalidAuthParams := "some non-map value"
-	_, diags := flattenConnectionOptionsEmail(&management.ConnectionOptionsEmail{
+	_, diags := flattenConnectionOptionsEmail(nil, &management.ConnectionOptionsEmail{
 		AuthParams: invalidAuthParams,
 	})
 
@@ -42,7 +42,7 @@ func TestFlattenConnectionOptionsEmail(t *testing.T) {
 		"foo": "bar",
 		"bar": "baz",
 	}
-	_, diags = flattenConnectionOptionsEmail(&management.ConnectionOptionsEmail{
+	_, diags = flattenConnectionOptionsEmail(nil, &management.ConnectionOptionsEmail{
 		AuthParams: validAuthParams,
 	})
 

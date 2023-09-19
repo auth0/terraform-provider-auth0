@@ -9,7 +9,7 @@ import (
 )
 
 const testAccCreateSESEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "ses"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -22,7 +22,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccUpdateSESEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "ses"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -40,7 +40,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccCreateMandrillEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "mandrill"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -51,7 +51,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccUpdateMandrillEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "mandrill"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -67,7 +67,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccCreateSMTPEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "smtp"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -81,7 +81,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccUpdateSMTPEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "smtp"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -101,7 +101,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccCreateMailgunEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "mailgun"
 	enabled = true
 	default_from_address = "accounts@example.com"
@@ -114,7 +114,7 @@ resource "auth0_email" "my_email_provider" {
 `
 
 const testAccUpdateMailgunEmailProvider = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "mailgun"
 	enabled = false
 	default_from_address = ""
@@ -126,8 +126,56 @@ resource "auth0_email" "my_email_provider" {
 }
 `
 
+const testAccCreateAzureCSEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "azure_cs"
+	enabled = true
+	default_from_address = "accounts@example.com"
+	credentials {
+		azure_cs_connection_string = "azure_cs_connection_string"
+	}
+}
+`
+
+const testAccUpdateAzureCSEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "azure_cs"
+	enabled = false
+	default_from_address = ""
+	credentials {
+		azure_cs_connection_string = "azure_cs_updated_connection_string"
+	}
+}
+`
+
+const testAccCreateMS365EmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "ms365"
+	enabled = true
+	default_from_address = "accounts@example.com"
+	credentials {
+		ms365_tenant_id     = "ms365_tenant_id"
+		ms365_client_id     = "ms365_client_id"
+		ms365_client_secret = "ms365_client_secret"
+	}
+}
+`
+
+const testAccUpdateMS365EmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "ms365"
+	enabled = false
+	default_from_address = ""
+	credentials {
+		ms365_tenant_id     = "ms365_updated_tenant_id"
+		ms365_client_id     = "ms365_updated_client_id"
+		ms365_client_secret = "ms365_updated_client_secret"
+	}
+}
+`
+
 const testAccAlreadyConfiguredEmailProviderWillNotConflict = `
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
 	name = "mailgun"
 	enabled = false
 	default_from_address = ""
@@ -138,8 +186,8 @@ resource "auth0_email" "my_email_provider" {
 	}
 }
 
-resource "auth0_email" "no_conflict_email_provider" {
-	depends_on = [ auth0_email.my_email_provider ]
+resource "auth0_email_provider" "no_conflict_email_provider" {
+	depends_on = [ auth0_email_provider.my_email_provider ]
 
 	name = "mailgun"
 	enabled = false
@@ -158,116 +206,156 @@ func TestAccEmail(t *testing.T) {
 			{
 				Config: testAccCreateSESEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "ses"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.access_key_id", "AKIAXXXXXXXXXXXXXXXX"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.secret_access_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "us-east-1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ses"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.access_key_id", "AKIAXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.secret_access_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "us-east-1"),
 				),
 			},
 			{
 				Config: testAccUpdateSESEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "ses"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.access_key_id", "AKIAXXXXXXXXXXXXXXXX"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.secret_access_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "us-east-1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.message.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.message.0.configuration_set_name", "example"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ses"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.access_key_id", "AKIAXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.secret_access_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "us-east-1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.message.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.message.0.configuration_set_name", "example"),
 				),
 			},
 			{
 				Config: testAccCreateMandrillEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mandrill"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.api_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "mandrill"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.api_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 				),
 			},
 			{
 				Config: testAccUpdateMandrillEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mandrill"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.api_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.message.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.message.0.view_content_link", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "mandrill"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.api_key", "7e8c2148xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.message.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.message.0.view_content_link", "true"),
 				),
 			},
 			{
 				Config: testAccCreateSMTPEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "smtp"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_host", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_port", "984"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_user", "bob"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_pass", "secret"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "smtp"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_host", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_port", "984"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_user", "bob"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_pass", "secret"),
 				),
 			},
 			{
 				Config: testAccUpdateSMTPEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "smtp"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_host", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_port", "984"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_user", "bob"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.smtp_pass", "secret"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.headers.#", "1"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.headers.0.x_mc_view_content_link", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "settings.0.headers.0.x_ses_configuration_set", "example"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "smtp"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_host", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_port", "984"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_user", "bob"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.smtp_pass", "secret"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.headers.#", "1"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.headers.0.x_mc_view_content_link", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "settings.0.headers.0.x_ses_configuration_set", "example"),
 				),
 			},
 			{
 				Config: testAccCreateMailgunEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mailgun"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "true"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", "accounts@example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.domain", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "eu"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "mailgun"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "eu"),
 				),
 			},
 			{
 				Config: testAccUpdateMailgunEmailProvider,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mailgun"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "false"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", ""),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.domain", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "eu"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "mailgun"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "eu"),
+				),
+			},
+			{
+				Config: testAccCreateAzureCSEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "azure_cs"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.azure_cs_connection_string", "azure_cs_connection_string"),
+				),
+			},
+			{
+				Config: testAccUpdateAzureCSEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "azure_cs"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.azure_cs_connection_string", "azure_cs_updated_connection_string"),
+				),
+			},
+			{
+				Config: testAccCreateMS365EmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ms365"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_tenant_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_client_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_client_secret"),
+				),
+			},
+			{
+				Config: testAccUpdateMS365EmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "ms365"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_updated_tenant_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_updated_client_id"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_updated_client_secret"),
 				),
 			},
 			{
 				Config: testAccAlreadyConfiguredEmailProviderWillNotConflict,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "name", "mailgun"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "enabled", "false"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "default_from_address", ""),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.domain", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.my_email_provider", "credentials.0.region", "eu"),
-					resource.TestCheckResourceAttr("auth0_email.no_conflict_email_provider", "name", "mailgun"),
-					resource.TestCheckResourceAttr("auth0_email.no_conflict_email_provider", "enabled", "false"),
-					resource.TestCheckResourceAttr("auth0_email.no_conflict_email_provider", "default_from_address", ""),
-					resource.TestCheckResourceAttr("auth0_email.no_conflict_email_provider", "credentials.0.domain", "example.com"),
-					resource.TestCheckResourceAttr("auth0_email.no_conflict_email_provider", "credentials.0.region", "eu"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "mailgun"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.region", "eu"),
+					resource.TestCheckResourceAttr("auth0_email_provider.no_conflict_email_provider", "name", "mailgun"),
+					resource.TestCheckResourceAttr("auth0_email_provider.no_conflict_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.no_conflict_email_provider", "default_from_address", ""),
+					resource.TestCheckResourceAttr("auth0_email_provider.no_conflict_email_provider", "credentials.0.domain", "example.com"),
+					resource.TestCheckResourceAttr("auth0_email_provider.no_conflict_email_provider", "credentials.0.region", "eu"),
 				),
 			},
 		},

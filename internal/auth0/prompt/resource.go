@@ -3,16 +3,12 @@ package prompt
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewResource will return a new auth0_prompt resource.
@@ -29,78 +25,61 @@ func NewResource() *schema.Resource {
 			"including choosing the login experience version.",
 		Schema: map[string]*schema.Schema{
 			"universal_login_experience": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Computed: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"new", "classic",
-				}, false),
-				Description: "Which login experience to use. Options include `classic` and `new`.",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"new", "classic"}, false),
+				AtLeastOneOf: []string{"identifier_first", "webauthn_platform_first_factor"},
+				Description:  "Which login experience to use. Options include `classic` and `new`.",
 			},
 			"identifier_first": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:         schema.TypeBool,
+				Optional:     true,
+				Computed:     true,
+				AtLeastOneOf: []string{"universal_login_experience", "webauthn_platform_first_factor"},
 				Description: "Indicates whether the identifier first is used when " +
 					"using the new Universal Login experience.",
 			},
 			"webauthn_platform_first_factor": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Determines if the login screen uses identifier and biometrics first.",
+				Type:         schema.TypeBool,
+				Optional:     true,
+				Computed:     true,
+				AtLeastOneOf: []string{"universal_login_experience", "identifier_first"},
+				Description: "Determines if the login screen uses identifier and biometrics first. " +
+					"Setting this property to `true`, requires MFA factors enabled for enrollment; use the `auth0_guardian` resource to set one up.",
 			},
 		},
 	}
 }
 
-func createPrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
-	return updatePrompt(ctx, d, m)
+func createPrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	data.SetId(id.UniqueId())
+	return updatePrompt(ctx, data, meta)
 }
 
-func readPrompt(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readPrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	prompt, err := api.Prompt.Read()
+	prompt, err := api.Prompt.Read(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		d.Set("universal_login_experience", prompt.UniversalLoginExperience),
-		d.Set("identifier_first", prompt.GetIdentifierFirst()),
-		d.Set("webauthn_platform_first_factor", prompt.GetWebAuthnPlatformFirstFactor()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenPrompt(data, prompt))
 }
 
-func updatePrompt(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updatePrompt(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	prompt := expandPrompt(d.GetRawConfig())
-	if err := api.Prompt.Update(prompt); err != nil {
+	prompt := expandPrompt(data.GetRawConfig())
+
+	if err := api.Prompt.Update(ctx, prompt); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readPrompt(ctx, d, m)
+	return readPrompt(ctx, data, meta)
 }
 
-func deletePrompt(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
-	d.SetId("")
+func deletePrompt(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
-}
-
-func expandPrompt(d cty.Value) *management.Prompt {
-	prompt := management.Prompt{
-		IdentifierFirst:             value.Bool(d.GetAttr("identifier_first")),
-		WebAuthnPlatformFirstFactor: value.Bool(d.GetAttr("webauthn_platform_first_factor")),
-	}
-
-	ule := d.GetAttr("universal_login_experience")
-	if !ule.IsNull() {
-		prompt.UniversalLoginExperience = ule.AsString()
-	}
-
-	return &prompt
 }

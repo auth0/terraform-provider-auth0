@@ -3,15 +3,14 @@ package connection
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -59,24 +58,21 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	connectionID := data.Get("connection_id").(string)
 
 	connection, err := api.Connection.Read(
+		ctx,
 		connectionID,
 		management.IncludeFields("enabled_clients", "strategy", "name"),
 	)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
-	// This is never nil because the enabled clients is a required parameter.
-	enabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
+	connectionWithEnabledClients := &management.Connection{
+		EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients")),
+	}
 
 	if diagnostics := guardAgainstErasingUnwantedEnabledClients(
 		connection.GetID(),
-		*enabledClients,
+		connectionWithEnabledClients.GetEnabledClients(),
 		connection.GetEnabledClients(),
 	); diagnostics.HasError() {
 		data.SetId("")
@@ -85,78 +81,49 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 
 	data.SetId(connection.GetID())
 
-	if err := api.Connection.Update(
-		connectionID,
-		&management.Connection{EnabledClients: enabledClients},
-	); err != nil {
+	if err := api.Connection.Update(ctx, connection.GetID(), connectionWithEnabledClients); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return readConnectionClients(ctx, data, meta)
 }
 
-func readConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connection, err := api.Connection.Read(
-		data.Id(),
-		management.IncludeFields("enabled_clients", "strategy", "name"),
-	)
+	requestOption := management.IncludeFields("enabled_clients", "strategy", "name")
+	connection, err := api.Connection.Read(ctx, data.Id(), requestOption)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		data.Set("connection_id", connection.GetID()),
-		data.Set("name", connection.GetName()),
-		data.Set("strategy", connection.GetStrategy()),
-		data.Set("enabled_clients", connection.GetEnabledClients()),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenConnectionClients(data, connection))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Connection.Update(
-		data.Id(),
-		&management.Connection{EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))},
-	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
+	connectionWithEnabledClients := &management.Connection{
+		EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients")),
+	}
 
-		return diag.FromErr(err)
+	if err := api.Connection.Update(ctx, data.Id(), connectionWithEnabledClients); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return readConnectionClients(ctx, data, meta)
 }
 
-func deleteConnectionClients(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	enabledClients := make([]string, 0)
-
-	if err := api.Connection.Update(
-		data.Id(),
-		&management.Connection{EnabledClients: &enabledClients},
-	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+	connectionWithEnabledClients := &management.Connection{
+		EnabledClients: &[]string{},
 	}
 
-	data.SetId("")
+	if err := api.Connection.Update(ctx, data.Id(), connectionWithEnabledClients); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
 
 	return nil
 }

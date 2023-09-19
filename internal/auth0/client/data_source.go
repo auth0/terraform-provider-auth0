@@ -23,40 +23,61 @@ func NewDataSource() *schema.Resource {
 func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
-	delete(dataSourceSchema, "client_secret_rotation_trigger")
-
 	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "name", "client_id")
 
 	dataSourceSchema["name"].Description = "The name of the client. If not provided, `client_id` must be set."
 	dataSourceSchema["client_id"].Description = "The ID of the client. If not provided, `name` must be set."
 
-	dataSourceSchema["client_secret"].Deprecated = ""
-	dataSourceSchema["client_secret"].Description = "Secret for the client. Keep this private. To access this attribute you need to add the " +
-		"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
-		"empty string."
+	dataSourceSchema["client_secret"] = &schema.Schema{
+		Type:      schema.TypeString,
+		Computed:  true,
+		Sensitive: true,
+		Description: "Secret for the client. Keep this private. To access this attribute you need to add the " +
+			"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.",
+	}
+
+	dataSourceSchema["token_endpoint_auth_method"] = &schema.Schema{
+		Type:     schema.TypeString,
+		Computed: true,
+		Description: "The authentication method for the token endpoint. " +
+			"Results include `none` (public client without a client secret), " +
+			"`client_secret_post` (client uses HTTP POST parameters), " +
+			"`client_secret_basic` (client uses HTTP Basic). " +
+			"Managing a client's authentication method can be done via the " +
+			"`auth0_client_credentials` resource.",
+	}
 
 	return dataSourceSchema
 }
 
-func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	clientID := d.Get("client_id").(string)
+func readClientForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	clientID := data.Get("client_id").(string)
 	if clientID != "" {
-		d.SetId(clientID)
-		return readClient(ctx, d, m)
+		data.SetId(clientID)
+
+		client, err := api.Client.Read(ctx, data.Id())
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		err = flattenClientForDataSource(data, client)
+
+		return diag.FromErr(err)
 	}
 
-	name := d.Get("name").(string)
+	name := data.Get("name").(string)
 	if name == "" {
 		return diag.Errorf("One of 'client_id' or 'name' is required.")
 	}
 
-	api := m.(*config.Config).GetAPI()
-
 	var page int
 	for {
 		clients, err := api.Client.List(
-			management.IncludeFields("client_id", "name"),
+			ctx,
 			management.Page(page),
+			management.PerPage(100),
 		)
 		if err != nil {
 			return diag.FromErr(err)
@@ -64,8 +85,9 @@ func readClientForDataSource(ctx context.Context, d *schema.ResourceData, m inte
 
 		for _, client := range clients.Clients {
 			if client.GetName() == name {
-				d.SetId(client.GetClientID())
-				return readClient(ctx, d, m)
+				data.SetId(client.GetClientID())
+				err = flattenClientForDataSource(data, client)
+				return diag.FromErr(err)
 			}
 		}
 

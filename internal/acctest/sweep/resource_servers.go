@@ -1,10 +1,12 @@
 package sweep
 
 import (
+	"context"
 	"log"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -13,22 +15,40 @@ func ResourceServers() {
 	resource.AddTestSweepers("auth0_resource_server", &resource.Sweeper{
 		Name: "auth0_resource_server",
 		F: func(_ string) error {
+			ctx := context.Background()
+
 			api, err := auth0API()
 			if err != nil {
 				return err
 			}
 
-			fn := func(rs *management.ResourceServer) {
-				log.Printf("[DEBUG] ➝ %s", rs.GetName())
-				if strings.Contains(rs.GetName(), "Test") {
-					if err := api.ResourceServer.Delete(rs.GetID()); err != nil {
-						log.Printf("[DEBUG] Failed to delete resource server with ID: %s", rs.GetID())
-					}
-					log.Printf("[DEBUG] ✗ %s", rs.GetName())
+			var page int
+			var result *multierror.Error
+			for {
+				resourceServerList, err := api.ResourceServer.List(ctx, management.Page(page))
+				if err != nil {
+					return err
 				}
+
+				for _, server := range resourceServerList.ResourceServers {
+					log.Printf("[DEBUG] ➝ %s", server.GetName())
+
+					if strings.Contains(server.GetName(), "Test") {
+						result = multierror.Append(
+							result,
+							api.ResourceServer.Delete(ctx, server.GetID()),
+						)
+
+						log.Printf("[DEBUG] ✗ %s", server.GetName())
+					}
+				}
+				if !resourceServerList.HasNext() {
+					break
+				}
+				page++
 			}
 
-			return api.ResourceServer.Stream(fn, management.IncludeFields("id", "name"))
+			return result.ErrorOrNil()
 		},
 	})
 }

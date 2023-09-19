@@ -32,9 +32,10 @@ data "auth0_role" "some-role-by-id" {
 
 ### Read-Only
 
-- `description` (String) Description of the role.
+- `description` (String) The description of the role.
 - `id` (String) The ID of this resource.
-- `permissions` (Set of Object) Configuration settings for permissions (scopes) attached to the role. Managing permissions through the `permissions` attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_role_permission` or `auth0_role_permissions` resource to manage role permissions instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#role-permissions) for more info. (see [below for nested schema](#nestedatt--permissions))
+- `permissions` (Set of Object) Configuration settings for permissions (scopes) attached to the role. (see [below for nested schema](#nestedatt--permissions))
+- `users` (Set of String) List of user IDs assigned to this role. Retrieves a maximum of 1000 user IDs.
 
 <a id="nestedatt--permissions"></a>
 ### Nested Schema for `permissions`

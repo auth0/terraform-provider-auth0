@@ -21,6 +21,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
@@ -88,7 +89,6 @@ func New() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                     action.NewResource(),
-			"auth0_trigger_binding":            action.NewTriggerBindingResource(),
 			"auth0_trigger_actions":            action.NewTriggerActionsResource(),
 			"auth0_trigger_action":             action.NewTriggerActionResource(),
 			"auth0_attack_protection":          attackprotection.NewResource(),
@@ -97,13 +97,12 @@ func New() *schema.Provider {
 			"auth0_client":                     client.NewResource(),
 			"auth0_client_credentials":         client.NewCredentialsResource(),
 			"auth0_client_grant":               client.NewGrantResource(),
-			"auth0_global_client":              client.NewGlobalResource(),
 			"auth0_connection":                 connection.NewResource(),
 			"auth0_connection_client":          connection.NewClientResource(),
 			"auth0_connection_clients":         connection.NewClientsResource(),
 			"auth0_custom_domain":              customdomain.NewResource(),
 			"auth0_custom_domain_verification": customdomain.NewVerificationResource(),
-			"auth0_email":                      email.NewResource(),
+			"auth0_email_provider":             email.NewResource(),
 			"auth0_email_template":             email.NewTemplateResource(),
 			"auth0_guardian":                   guardian.NewResource(),
 			"auth0_hook":                       hook.NewResource(),
@@ -138,12 +137,13 @@ func New() *schema.Provider {
 			"auth0_branding":          branding.NewDataSource(),
 			"auth0_branding_theme":    branding.NewThemeDataSource(),
 			"auth0_client":            client.NewDataSource(),
-			"auth0_global_client":     client.NewGlobalDataSource(),
 			"auth0_connection":        connection.NewDataSource(),
 			"auth0_custom_domain":     customdomain.NewDataSource(),
 			"auth0_organization":      organization.NewDataSource(),
+			"auth0_pages":             page.NewDataSource(),
 			"auth0_resource_server":   resourceserver.NewDataSource(),
 			"auth0_role":              role.NewDataSource(),
+			"auth0_signing_keys":      signingkey.NewDataSource(),
 			"auth0_tenant":            tenant.NewDataSource(),
 			"auth0_user":              user.NewDataSource(),
 		},

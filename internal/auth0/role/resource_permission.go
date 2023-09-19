@@ -2,14 +2,13 @@ package role
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
@@ -50,7 +49,7 @@ func NewPermissionResource() *schema.Resource {
 		ReadContext:   readRolePermission,
 		DeleteContext: deleteRolePermission,
 		Importer: &schema.ResourceImporter{
-			StateContext: internalSchema.ImportResourceGroupID(internalSchema.SeparatorDoubleColon, "role_id", "resource_server_identifier", "permission"),
+			StateContext: internalSchema.ImportResourceGroupID("role_id", "resource_server_identifier", "permission"),
 		},
 		Description: "With this resource, you can manage role permissions (1-1).",
 	}
@@ -63,49 +62,47 @@ func createRolePermission(ctx context.Context, data *schema.ResourceData, meta i
 	resourceServerID := data.Get("resource_server_identifier").(string)
 	permissionName := data.Get("permission").(string)
 
-	if err := api.Role.AssociatePermissions(roleID, []*management.Permission{
+	if err := api.Role.AssociatePermissions(ctx, roleID, []*management.Permission{
 		{
 			ResourceServerIdentifier: &resourceServerID,
 			Name:                     &permissionName,
 		},
 	}); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
 		return diag.FromErr(err)
 	}
 
-	data.SetId(roleID + internalSchema.SeparatorDoubleColon + resourceServerID + internalSchema.SeparatorDoubleColon + permissionName)
+	internalSchema.SetResourceGroupID(data, roleID, resourceServerID, permissionName)
 
 	return readRolePermission(ctx, data, meta)
 }
 
-func readRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
 	permissionName := data.Get("permission").(string)
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
-	existingPermissions, err := api.Role.Permissions(roleID)
-	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
+	var existingPermissions []*management.Permission
+	var page int
+	for {
+		permissionList, err := api.Role.Permissions(ctx, roleID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 
-		return diag.FromErr(err)
+		existingPermissions = append(existingPermissions, permissionList.Permissions...)
+
+		if !permissionList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
-	for _, p := range existingPermissions.Permissions {
-		if p.GetName() == permissionName && p.GetResourceServerIdentifier() == resourceServerID {
-			result := multierror.Append(
-				data.Set("description", p.GetDescription()),
-				data.Set("resource_server_name", p.GetResourceServerName()),
-			)
-
-			return diag.FromErr(result.ErrorOrNil())
+	for _, permission := range existingPermissions {
+		if permission.GetName() == permissionName && permission.GetResourceServerIdentifier() == resourceServerID {
+			return diag.FromErr(flattenRolePermission(data, permission))
 		}
 	}
 
@@ -113,7 +110,7 @@ func readRolePermission(_ context.Context, data *schema.ResourceData, meta inter
 	return nil
 }
 
-func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteRolePermission(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
@@ -121,6 +118,7 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 	resourceServerID := data.Get("resource_server_identifier").(string)
 
 	if err := api.Role.RemovePermissions(
+		ctx,
 		roleID,
 		[]*management.Permission{
 			{
@@ -129,11 +127,7 @@ func deleteRolePermission(_ context.Context, data *schema.ResourceData, meta int
 			},
 		},
 	); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

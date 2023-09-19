@@ -1,13 +1,16 @@
 package action
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -19,6 +22,10 @@ func expandAction(config cty.Value) *management.Action {
 		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
 		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
 		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
+	}
+
+	if action.GetRuntime() == "node18" {
+		action.Runtime = auth0.String("node18-actions")
 	}
 
 	return action
@@ -96,19 +103,19 @@ func expandTriggerBindings(config cty.Value) []*management.ActionBinding {
 	return triggerBindings
 }
 
-func preventErasingUnmanagedSecrets(d *schema.ResourceData, api *management.Management) diag.Diagnostics {
-	if !d.HasChange("secrets") {
+func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceData, api *management.Management) diag.Diagnostics {
+	if !data.HasChange("secrets") {
 		return nil
 	}
 
-	preUpdateAction, err := api.Action.Read(d.Id())
+	preUpdateAction, err := api.Action.Read(ctx, data.Id())
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	// We need to also include the secrets that we're about to remove
 	// against the checks, not just the ones with which we are left.
-	oldSecrets, newSecrets := d.GetChange("secrets")
+	oldSecrets, newSecrets := data.GetChange("secrets")
 	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
 	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())

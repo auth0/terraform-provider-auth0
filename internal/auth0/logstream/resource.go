@@ -2,16 +2,15 @@ package logstream
 
 import (
 	"context"
-	"net/http"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 var validLogStreamTypes = []string{
@@ -65,7 +64,12 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeList,
 				Optional: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
-					" If omitted or empty, all events will be delivered.",
+					" If omitted or empty, all events will be delivered. " +
+					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +
+					"`auth.login.notification`, `auth.login.success`, `auth.logout.fail`, `auth.logout.success`, " +
+					"`auth.signup.fail`, `auth.signup.success`, `auth.silent_auth.fail`, `auth.silent_auth.success`, " +
+					"`auth.token_exchange.fail`, `auth.token_exchange.success`, `management.fail`, `management.success`, " +
+					"`system.notification`, `user.fail`, `user.notification`, `user.success`, `other`.",
 				Elem: &schema.Schema{
 					Type: schema.TypeMap,
 					Elem: &schema.Schema{
@@ -88,11 +92,41 @@ func NewResource() *schema.Resource {
 							Description:  "The AWS Account ID.",
 						},
 						"aws_region": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"ap-east-1",
+								"ap-northeast-1",
+								"ap-northeast-2",
+								"ap-northeast-3",
+								"ap-south-1",
+								"ap-southeast-1",
+								"ap-southeast-2",
+								"ca-central-1",
+								"cn-north-1",
+								"cn-northwest-1",
+								"eu-central-1",
+								"eu-north-1",
+								"eu-west-1",
+								"eu-west-2",
+								"eu-west-3",
+								"me-south-1",
+								"sa-east-1",
+								"us-gov-east-1",
+								"us-gov-west-1",
+								"us-east-1",
+								"us-east-2",
+								"us-west-1",
+								"us-west-2",
+							}, false),
 							RequiredWith: []string{"sink.0.aws_account_id"},
-							Description:  "The AWS Region, e.g. \"us-east-2\").",
+							Description: "The region in which the EventBridge event source will be created. " +
+								"Possible values: `ap-east-1`, `ap-northeast-1`, `ap-northeast-2`, `ap-northeast-3`, " +
+								"`ap-south-1`, `ap-southeast-1`, `ap-southeast-2`, `ca-central-1`, `cn-north-1`, " +
+								"`cn-northwest-1`, `eu-central-1`, `eu-north-1`, `eu-west-1`, `eu-west-2`, `eu-west-3`, " +
+								"`me-south-1`, `sa-east-1`, `us-gov-east-1`, `us-gov-west-1`, `us-east-1`, `us-east-2`, " +
+								"`us-west-1`, `us-west-2`.",
 						},
 						"aws_partner_event_source": {
 							Type:     schema.TypeString,
@@ -118,11 +152,52 @@ func NewResource() *schema.Resource {
 								"Azure assets within one subscription.",
 						},
 						"azure_region": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ForceNew:     true,
+							Type:     schema.TypeString,
+							Optional: true,
+							ForceNew: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"australiacentral",
+								"australiaeast",
+								"australiasoutheast",
+								"brazilsouth",
+								"canadacentral",
+								"canadaeast",
+								"centralindia",
+								"centralus",
+								"eastasia",
+								"eastus",
+								"eastus2",
+								"francecentral",
+								"germanywestcentral",
+								"japaneast",
+								"japanwest",
+								"koreacentral",
+								"koreasouth",
+								"northcentralus",
+								"northeurope",
+								"norwayeast",
+								"southafricanorth",
+								"southcentralus",
+								"southeastasia",
+								"southindia",
+								"switzerlandnorth",
+								"uaenorth",
+								"uksouth",
+								"ukwest",
+								"westcentralus",
+								"westeurope",
+								"westindia",
+								"westus",
+								"westus2",
+							}, false),
 							RequiredWith: []string{"sink.0.azure_subscription_id", "sink.0.azure_resource_group"},
-							Description:  "The Azure region code, e.g. \"ne\")",
+							Description: "The Azure region code. Possible values: `australiacentral`, `australiaeast`, " +
+								"`australiasoutheast`, `brazilsouth`, `canadacentral`, `canadaeast`, `centralindia`, " +
+								"`centralus`, `eastasia`, `eastus`, `eastus2`, `francecentral`, " +
+								"`germanywestcentral`, `japaneast`, `japanwest`, `koreacentral`, `koreasouth`, " +
+								"`northcentralus`, `northeurope`, `norwayeast`, `southafricanorth`, `southcentralus`, " +
+								"`southeastasia`, `southindia`, `switzerlandnorth`, `uaenorth`, `uksouth`, `ukwest`, " +
+								"`westcentralus`, `westeurope`, `westindia`, `westus`, `westus2`.",
 						},
 						"azure_partner_topic": {
 							Type:     schema.TypeString,
@@ -132,9 +207,9 @@ func NewResource() *schema.Resource {
 								"Generally should not be specified.",
 						},
 						"http_content_format": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							RequiredWith: []string{"sink.0.http_endpoint", "sink.0.http_authorization", "sink.0.http_content_type"},
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
 							Description: "The format of data sent over HTTP. Options are " +
 								"\"JSONLINES\", \"JSONARRAY\" or \"JSONOBJECT\"",
 							ValidateFunc: validation.StringInSlice([]string{
@@ -148,26 +223,26 @@ func NewResource() *schema.Resource {
 							Optional: true,
 							Description: "The \"Content-Type\" header to send over HTTP. " +
 								"Common value is \"application/json\".",
-							RequiredWith: []string{"sink.0.http_endpoint", "sink.0.http_authorization", "sink.0.http_content_format"},
 						},
 						"http_endpoint": {
 							Type:         schema.TypeString,
 							Optional:     true,
+							ValidateFunc: validation.IsURLWithHTTPS,
 							Description:  "The HTTP endpoint to send streaming logs.",
-							RequiredWith: []string{"sink.0.http_content_format", "sink.0.http_authorization", "sink.0.http_content_type"},
 						},
 						"http_authorization": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Sensitive:    true,
-							Description:  "Sent in the HTTP \"Authorization\" header with each request.",
-							RequiredWith: []string{"sink.0.http_content_format", "sink.0.http_endpoint", "sink.0.http_content_type"},
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
+							Description: "Sent in the HTTP \"Authorization\" header with each request.",
 						},
 						"http_custom_headers": {
 							Type: schema.TypeList,
 							Elem: &schema.Schema{
 								Type: schema.TypeMap,
-								Elem: &schema.Schema{Type: schema.TypeString},
+								Elem: &schema.Schema{
+									Type: schema.TypeString,
+								},
 							},
 							Optional:    true,
 							Default:     nil,
@@ -181,7 +256,7 @@ func NewResource() *schema.Resource {
 								[]string{"us", "eu", "us3", "us5"},
 								false,
 							),
-							Description: "The Datadog region. Options are [\"us\", \"eu\", \"us3\", \"us5\"].",
+							Description: "The Datadog region. Possible values: `us`, `eu`, `us3`, `us5`.",
 						},
 						"datadog_api_key": {
 							Type:         schema.TypeString,
@@ -262,73 +337,57 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream := expandLogStream(d)
-	if err := api.LogStream.Create(logStream); err != nil {
+	logStream := expandLogStream(data)
+
+	if err := api.LogStream.Create(ctx, logStream); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(logStream.GetID())
+	data.SetId(logStream.GetID())
 
 	// The Management API only allows updating a log stream's status.
 	// Therefore, if the status field was present in the configuration,
 	// we perform an additional operation to modify it.
-	status := d.Get("status").(string)
-	if status != "" && status != logStream.GetStatus() {
-		if err := api.LogStream.Update(logStream.GetID(), &management.LogStream{Status: &status}); err != nil {
-			return diag.FromErr(err)
-		}
+	if status := data.Get("status").(string); status != "" && status != logStream.GetStatus() {
+		logStreamWithStatus := &management.LogStream{Status: &status}
+		return diag.FromErr(api.LogStream.Update(ctx, logStream.GetID(), logStreamWithStatus))
 	}
 
-	return readLogStream(ctx, d, m)
+	return readLogStream(ctx, data, meta)
 }
 
-func readLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream, err := api.LogStream.Read(d.Id())
+	logStream, err := api.LogStream.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", logStream.GetName()),
-		d.Set("status", logStream.GetStatus()),
-		d.Set("type", logStream.GetType()),
-		d.Set("filters", logStream.Filters),
-		d.Set("sink", flattenLogStreamSink(d, logStream.Sink)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenLogStream(data, logStream))
 }
 
-func updateLogStream(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	logStream := expandLogStream(d)
-	if err := api.LogStream.Update(d.Id(), logStream); err != nil {
-		return diag.FromErr(err)
+	logStream := expandLogStream(data)
+
+	if err := api.LogStream.Update(ctx, data.Id(), logStream); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readLogStream(ctx, d, m)
+	return readLogStream(ctx, data, meta)
 }
 
-func deleteLogStream(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteLogStream(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.LogStream.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
+	if err := api.LogStream.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	d.SetId("")
 	return nil
 }

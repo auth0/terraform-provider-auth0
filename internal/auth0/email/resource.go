@@ -3,25 +3,24 @@ package email
 import (
 	"context"
 	"math"
-	"net/http"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_email resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: createEmail,
-		ReadContext:   readEmail,
-		UpdateContext: updateEmail,
-		DeleteContext: deleteEmail,
+		CreateContext: createEmailProvider,
+		ReadContext:   readEmailProvider,
+		UpdateContext: updateEmailProvider,
+		DeleteContext: deleteEmailProvider,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -34,11 +33,11 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice(
-					[]string{"mailgun", "mandrill", "sendgrid", "ses", "smtp", "sparkpost"},
+					[]string{"azure_cs", "mailgun", "mandrill", "ms365", "sendgrid", "ses", "smtp", "sparkpost"},
 					false,
 				),
 				Description: "Name of the email provider. " +
-					"Options include `mailgun`, `mandrill`, `sendgrid`, `ses`, `smtp`, and `sparkpost`.",
+					"Options include `azure_cs`, `mailgun`, `mandrill`, `ms365`, `sendgrid`, `ses`, `smtp` and `sparkpost`.",
 			},
 			"enabled": {
 				Type:        schema.TypeBool,
@@ -57,12 +56,6 @@ func NewResource() *schema.Resource {
 				Description: "Configuration settings for the credentials for the email provider.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"api_user": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Deprecated:  "This field is not accepted by the API any more so it will be removed soon.",
-							Description: "API User for your email service. This field is not accepted by the API any more so it will be removed in a future major version.",
-						},
 						"api_key": {
 							Type:         schema.TypeString,
 							Optional:     true,
@@ -120,6 +113,34 @@ func NewResource() *schema.Resource {
 							Sensitive:    true,
 							ValidateFunc: validation.StringIsNotEmpty,
 							Description:  "SMTP password. Used only for SMTP.",
+						},
+						"azure_cs_connection_string": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Azure Communication Services Connection String.",
+						},
+						"ms365_tenant_id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Tenant ID.",
+						},
+						"ms365_client_id": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Client ID.",
+						},
+						"ms365_client_secret": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Sensitive:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
+							Description:  "Microsoft 365 Client Secret.",
 						},
 					},
 				},
@@ -186,64 +207,58 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
+func createEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	api := m.(*config.Config).GetAPI()
-	if emailProviderIsConfigured(api) {
-		return updateEmail(ctx, d, m)
+	data.SetId(id.UniqueId())
+
+	if emailProviderIsConfigured(ctx, api) {
+		return updateEmailProvider(ctx, data, meta)
 	}
 
-	email := expandEmailProvider(d.GetRawConfig())
-	if err := api.EmailProvider.Create(email); err != nil {
+	email := expandEmailProvider(data.GetRawConfig())
+
+	if err := api.EmailProvider.Create(ctx, email); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readEmail(ctx, d, m)
+	return readEmailProvider(ctx, data, meta)
 }
 
-func readEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email, err := api.EmailProvider.Read()
+	email, err := api.EmailProvider.Read(ctx)
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			d.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	result := multierror.Append(
-		d.Set("name", email.GetName()),
-		d.Set("enabled", email.GetEnabled()),
-		d.Set("default_from_address", email.GetDefaultFromAddress()),
-		d.Set("credentials", flattenEmailProviderCredentials(d, email)),
-		d.Set("settings", flattenEmailProviderSettings(email)),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenEmailProvider(data, email))
 }
 
-func updateEmail(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailProvider(d.GetRawConfig())
-	if err := api.EmailProvider.Update(email); err != nil {
-		return diag.FromErr(err)
+	email := expandEmailProvider(data.GetRawConfig())
+
+	if err := api.EmailProvider.Update(ctx, email); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return readEmail(ctx, d, m)
+	return readEmailProvider(ctx, data, meta)
 }
 
-func deleteEmail(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	if err := api.EmailProvider.Delete(); err != nil {
-		return diag.FromErr(err)
+	if err := api.EmailProvider.Delete(ctx); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	d.SetId("")
 	return nil
+}
+
+func emailProviderIsConfigured(ctx context.Context, api *management.Management) bool {
+	_, err := api.EmailProvider.Read(ctx)
+	return !internalError.IsStatusNotFound(err)
 }

@@ -1,6 +1,6 @@
 resource "auth0_action" "my_action" {
   name    = format("Test Action %s", timestamp())
-  runtime = "node16"
+  runtime = "node18"
   deploy  = true
   code    = <<-EOT
   /**

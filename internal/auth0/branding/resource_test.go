@@ -142,7 +142,7 @@ func TestAccBranding(t *testing.T) {
 			},
 			{
 				Config:      testAccBrandingConfigThrowsAValidationErrorIfUniversalLoginBodyIsEmpty,
-				ExpectError: regexp.MustCompile("expected \"universal_login.0.body\" to not be an empty string"),
+				ExpectError: regexp.MustCompile("expected \"universal_login.0.body\" to contain a single auth0:head tag and at least one auth0:widget tag"),
 			},
 			{
 				Config: testAccBrandingConfigRemovesUniversalLoginTemplate,

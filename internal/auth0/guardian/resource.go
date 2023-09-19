@@ -155,7 +155,6 @@ func NewResource() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-							RequiredWith: []string{"phone.0.provider"},
 							Description: "Message types to use, array of `sms` and/or `voice`. " +
 								"Adding both to the array should enable the user to choose.",
 						},
@@ -411,22 +410,22 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	d.SetId(id.UniqueId())
-	return updateGuardian(ctx, d, m)
+func createGuardian(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	data.SetId(id.UniqueId())
+	return updateGuardian(ctx, data, meta)
 }
 
-func readGuardian(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func readGuardian(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	flattenedPolicy, err := flattenMultiFactorPolicy(api)
+	flattenedPolicy, err := flattenMultiFactorPolicy(ctx, api)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(d.Set("policy", flattenedPolicy))
+	result := multierror.Append(data.Set("policy", flattenedPolicy))
 
-	multiFactorList, err := api.Guardian.MultiFactor.List()
+	multiFactorList, err := api.Guardian.MultiFactor.List(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -434,91 +433,87 @@ func readGuardian(_ context.Context, d *schema.ResourceData, m interface{}) diag
 	for _, factor := range multiFactorList {
 		switch factor.GetName() {
 		case "email":
-			result = multierror.Append(result, d.Set("email", factor.GetEnabled()))
+			result = multierror.Append(result, data.Set("email", factor.GetEnabled()))
 		case "otp":
-			result = multierror.Append(result, d.Set("otp", factor.GetEnabled()))
+			result = multierror.Append(result, data.Set("otp", factor.GetEnabled()))
 		case "recovery-code":
-			result = multierror.Append(result, d.Set("recovery_code", factor.GetEnabled()))
+			result = multierror.Append(result, data.Set("recovery_code", factor.GetEnabled()))
 		case "sms":
-			phone, err := flattenPhone(factor.GetEnabled(), api)
+			phone, err := flattenPhone(ctx, factor.GetEnabled(), api)
 			if err != nil {
 				return diag.FromErr(err)
 			}
 
-			result = multierror.Append(result, d.Set("phone", phone))
+			result = multierror.Append(result, data.Set("phone", phone))
 		case "webauthn-roaming":
-			webAuthnRoaming, err := flattenWebAuthnRoaming(factor.GetEnabled(), api)
+			webAuthnRoaming, err := flattenWebAuthnRoaming(ctx, factor.GetEnabled(), api)
 			if err != nil {
 				return diag.FromErr(err)
 			}
 
-			result = multierror.Append(result, d.Set("webauthn_roaming", webAuthnRoaming))
+			result = multierror.Append(result, data.Set("webauthn_roaming", webAuthnRoaming))
 		case "webauthn-platform":
-			webAuthnPlatform, err := flattenWebAuthnPlatform(factor.GetEnabled(), api)
+			webAuthnPlatform, err := flattenWebAuthnPlatform(ctx, factor.GetEnabled(), api)
 			if err != nil {
 				return diag.FromErr(err)
 			}
 
-			result = multierror.Append(result, d.Set("webauthn_platform", webAuthnPlatform))
+			result = multierror.Append(result, data.Set("webauthn_platform", webAuthnPlatform))
 		case "duo":
-			duo, err := flattenDUO(factor.GetEnabled(), api)
+			duo, err := flattenDUO(ctx, factor.GetEnabled(), api)
 			if err != nil {
 				return diag.FromErr(err)
 			}
 
-			result = multierror.Append(result, d.Set("duo", duo))
+			result = multierror.Append(result, data.Set("duo", duo))
 		case "push-notification":
-			push, err := flattenPush(d, factor.GetEnabled(), api)
+			push, err := flattenPush(ctx, data, factor.GetEnabled(), api)
 			if err != nil {
 				return diag.FromErr(err)
 			}
 
-			result = multierror.Append(result, d.Set("push", push))
+			result = multierror.Append(result, data.Set("push", push))
 		}
 	}
 
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func updateGuardian(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func updateGuardian(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	result := multierror.Append(
-		updatePolicy(d, api),
-		updateEmailFactor(d, api),
-		updateOTPFactor(d, api),
-		updateRecoveryCodeFactor(d, api),
-		updatePhoneFactor(d, api),
-		updateWebAuthnRoaming(d, api),
-		updateWebAuthnPlatform(d, api),
-		updateDUO(d, api),
-		updatePush(d, api),
+		updatePolicy(ctx, data, api),
+		updateEmailFactor(ctx, data, api),
+		updateOTPFactor(ctx, data, api),
+		updateRecoveryCodeFactor(ctx, data, api),
+		updatePhoneFactor(ctx, data, api),
+		updateWebAuthnRoaming(ctx, data, api),
+		updateWebAuthnPlatform(ctx, data, api),
+		updateDUO(ctx, data, api),
+		updatePush(ctx, data, api),
 	)
 	if err := result.ErrorOrNil(); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readGuardian(ctx, d, m)
+	return readGuardian(ctx, data, meta)
 }
 
-func deleteGuardian(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func deleteGuardian(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
 	result := multierror.Append(
-		api.Guardian.MultiFactor.UpdatePolicy(&management.MultiFactorPolicies{}),
-		api.Guardian.MultiFactor.Phone.Enable(false),
-		api.Guardian.MultiFactor.Email.Enable(false),
-		api.Guardian.MultiFactor.OTP.Enable(false),
-		api.Guardian.MultiFactor.RecoveryCode.Enable(false),
-		api.Guardian.MultiFactor.WebAuthnRoaming.Enable(false),
-		api.Guardian.MultiFactor.WebAuthnPlatform.Enable(false),
-		api.Guardian.MultiFactor.DUO.Enable(false),
-		api.Guardian.MultiFactor.Push.Enable(false),
+		api.Guardian.MultiFactor.UpdatePolicy(ctx, &management.MultiFactorPolicies{}),
+		api.Guardian.MultiFactor.Phone.Enable(ctx, false),
+		api.Guardian.MultiFactor.Email.Enable(ctx, false),
+		api.Guardian.MultiFactor.OTP.Enable(ctx, false),
+		api.Guardian.MultiFactor.RecoveryCode.Enable(ctx, false),
+		api.Guardian.MultiFactor.WebAuthnRoaming.Enable(ctx, false),
+		api.Guardian.MultiFactor.WebAuthnPlatform.Enable(ctx, false),
+		api.Guardian.MultiFactor.DUO.Enable(ctx, false),
+		api.Guardian.MultiFactor.Push.Enable(ctx, false),
 	)
-	if err := result.ErrorOrNil(); err != nil {
-		return diag.FromErr(err)
-	}
 
-	d.SetId("")
-	return nil
+	return diag.FromErr(result.ErrorOrNil())
 }

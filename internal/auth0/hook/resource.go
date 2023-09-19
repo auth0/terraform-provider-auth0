@@ -2,15 +2,13 @@ package hook
 
 import (
 	"context"
-	"net/http"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -83,98 +81,83 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func createHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
+func createHook(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
 
-	hook := expandHook(d)
-	if err := api.Hook.Create(hook); err != nil {
+	hook := expandHook(data)
+
+	if err := api.Hook.Create(ctx, hook); err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(hook.GetID())
+	data.SetId(hook.GetID())
 
-	if err := upsertHookSecrets(ctx, d, m); err != nil {
+	if err := upsertHookSecrets(ctx, data, meta); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readHook(ctx, d, m)
+	return readHook(ctx, data, meta)
 }
 
-func readHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	hook, err := api.Hook.Read(d.Id())
+func readHook(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	hook, err := api.Hook.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	hookSecrets, err := api.Hook.Secrets(d.Id())
+	hookSecrets, err := api.Hook.Secrets(ctx, data.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	configSecrets := d.Get("secrets").(map[string]interface{})
+	configSecrets := data.Get("secrets").(map[string]interface{})
 
 	diagnostics := checkForUntrackedHookSecrets(hookSecrets, configSecrets)
 
-	result := multierror.Append(
-		d.Set("name", hook.Name),
-		d.Set("dependencies", hook.Dependencies),
-		d.Set("script", hook.Script),
-		d.Set("trigger_id", hook.TriggerID),
-		d.Set("enabled", hook.Enabled),
-	)
-
-	if err = result.ErrorOrNil(); err != nil {
+	if err := flattenHook(data, hook); err != nil {
 		diagnostics = append(diagnostics, diag.FromErr(err)...)
 	}
 
 	return diagnostics
 }
 
-func updateHook(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	hook := expandHook(d)
-	api := m.(*config.Config).GetAPI()
-	if err := api.Hook.Update(d.Id(), hook); err != nil {
+func updateHook(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	hook := expandHook(data)
+
+	if err := api.Hook.Update(ctx, data.Id(), hook); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	if err := upsertHookSecrets(ctx, data, meta); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := upsertHookSecrets(ctx, d, m); err != nil {
-		return diag.FromErr(err)
-	}
-
-	return readHook(ctx, d, m)
+	return readHook(ctx, data, meta)
 }
 
-func deleteHook(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	api := m.(*config.Config).GetAPI()
-	if err := api.Hook.Delete(d.Id()); err != nil {
-		if mErr, ok := err.(management.Error); ok {
-			if mErr.Status() == http.StatusNotFound {
-				d.SetId("")
-				return nil
-			}
-		}
-		return diag.FromErr(err)
+func deleteHook(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	if err := api.Hook.Delete(ctx, data.Id()); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
 }
 
-func upsertHookSecrets(_ context.Context, d *schema.ResourceData, m interface{}) error {
-	if d.IsNewResource() || d.HasChange("secrets") {
-		api := m.(*config.Config).GetAPI()
+func upsertHookSecrets(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
+	if data.IsNewResource() || data.HasChange("secrets") {
+		api := meta.(*config.Config).GetAPI()
 
-		hookSecrets := value.MapOfStrings(d.GetRawConfig().GetAttr("secrets"))
+		hookSecrets := value.MapOfStrings(data.GetRawConfig().GetAttr("secrets"))
 		if hookSecrets == nil {
 			return nil
 		}
 
-		return api.Hook.ReplaceSecrets(d.Id(), *hookSecrets)
+		return api.Hook.ReplaceSecrets(ctx, data.Id(), *hookSecrets)
 	}
 
 	return nil

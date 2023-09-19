@@ -1,12 +1,14 @@
 package guardian
 
 import (
+	"context"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func flattenMultiFactorPolicy(api *management.Management) (string, error) {
-	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy()
+func flattenMultiFactorPolicy(ctx context.Context, api *management.Management) (string, error) {
+	multiFactorPolicies, err := api.Guardian.MultiFactor.Policy(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -19,7 +21,7 @@ func flattenMultiFactorPolicy(api *management.Management) (string, error) {
 	return flattenedPolicy, nil
 }
 
-func flattenPhone(enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenPhone(ctx context.Context, enabled bool, api *management.Management) ([]interface{}, error) {
 	phoneData := make(map[string]interface{})
 	phoneData["enabled"] = enabled
 
@@ -27,13 +29,13 @@ func flattenPhone(enabled bool, api *management.Management) ([]interface{}, erro
 		return []interface{}{phoneData}, nil
 	}
 
-	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes()
+	phoneMessageTypes, err := api.Guardian.MultiFactor.Phone.MessageTypes(ctx)
 	if err != nil {
 		return nil, err
 	}
 	phoneData["message_types"] = phoneMessageTypes.GetMessageTypes()
 
-	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider()
+	phoneProvider, err := api.Guardian.MultiFactor.Phone.Provider(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -42,12 +44,12 @@ func flattenPhone(enabled bool, api *management.Management) ([]interface{}, erro
 	var phoneProviderOptions []interface{}
 	switch phoneProvider.GetProvider() {
 	case "twilio":
-		phoneProviderOptions, err = flattenTwilioOptions(api)
+		phoneProviderOptions, err = flattenTwilioOptions(ctx, api)
 		if err != nil {
 			return nil, err
 		}
 	case "auth0", "phone-message-hook":
-		phoneProviderOptions, err = flattenAuth0Options(api)
+		phoneProviderOptions, err = flattenAuth0Options(ctx, api)
 		if err != nil {
 			return nil, err
 		}
@@ -57,10 +59,10 @@ func flattenPhone(enabled bool, api *management.Management) ([]interface{}, erro
 	return []interface{}{phoneData}, nil
 }
 
-func flattenAuth0Options(api *management.Management) ([]interface{}, error) {
+func flattenAuth0Options(ctx context.Context, api *management.Management) ([]interface{}, error) {
 	m := make(map[string]interface{})
 
-	template, err := api.Guardian.MultiFactor.SMS.Template()
+	template, err := api.Guardian.MultiFactor.SMS.Template(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -71,10 +73,10 @@ func flattenAuth0Options(api *management.Management) ([]interface{}, error) {
 	return []interface{}{m}, nil
 }
 
-func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
+func flattenTwilioOptions(ctx context.Context, api *management.Management) ([]interface{}, error) {
 	m := make(map[string]interface{})
 
-	template, err := api.Guardian.MultiFactor.SMS.Template()
+	template, err := api.Guardian.MultiFactor.SMS.Template(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +84,7 @@ func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
 	m["enrollment_message"] = template.GetEnrollmentMessage()
 	m["verification_message"] = template.GetVerificationMessage()
 
-	twilio, err := api.Guardian.MultiFactor.SMS.Twilio()
+	twilio, err := api.Guardian.MultiFactor.SMS.Twilio(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +97,7 @@ func flattenTwilioOptions(api *management.Management) ([]interface{}, error) {
 	return []interface{}{m}, nil
 }
 
-func flattenWebAuthnRoaming(enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenWebAuthnRoaming(ctx context.Context, enabled bool, api *management.Management) ([]interface{}, error) {
 	webAuthnRoamingData := make(map[string]interface{})
 	webAuthnRoamingData["enabled"] = enabled
 
@@ -103,7 +105,7 @@ func flattenWebAuthnRoaming(enabled bool, api *management.Management) ([]interfa
 		return []interface{}{webAuthnRoamingData}, nil
 	}
 
-	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnRoaming.Read()
+	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnRoaming.Read(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +117,7 @@ func flattenWebAuthnRoaming(enabled bool, api *management.Management) ([]interfa
 	return []interface{}{webAuthnRoamingData}, nil
 }
 
-func flattenWebAuthnPlatform(enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenWebAuthnPlatform(ctx context.Context, enabled bool, api *management.Management) ([]interface{}, error) {
 	webAuthnPlatformData := make(map[string]interface{})
 	webAuthnPlatformData["enabled"] = enabled
 
@@ -123,7 +125,7 @@ func flattenWebAuthnPlatform(enabled bool, api *management.Management) ([]interf
 		return []interface{}{webAuthnPlatformData}, nil
 	}
 
-	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnPlatform.Read()
+	webAuthnSettings, err := api.Guardian.MultiFactor.WebAuthnPlatform.Read(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +136,7 @@ func flattenWebAuthnPlatform(enabled bool, api *management.Management) ([]interf
 	return []interface{}{webAuthnPlatformData}, nil
 }
 
-func flattenDUO(enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenDUO(ctx context.Context, enabled bool, api *management.Management) ([]interface{}, error) {
 	duoData := make(map[string]interface{})
 	duoData["enabled"] = enabled
 
@@ -142,7 +144,7 @@ func flattenDUO(enabled bool, api *management.Management) ([]interface{}, error)
 		return []interface{}{duoData}, nil
 	}
 
-	duoSettings, err := api.Guardian.MultiFactor.DUO.Read()
+	duoSettings, err := api.Guardian.MultiFactor.DUO.Read(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -154,7 +156,7 @@ func flattenDUO(enabled bool, api *management.Management) ([]interface{}, error)
 	return []interface{}{duoData}, nil
 }
 
-func flattenPush(d *schema.ResourceData, enabled bool, api *management.Management) ([]interface{}, error) {
+func flattenPush(ctx context.Context, data *schema.ResourceData, enabled bool, api *management.Management) ([]interface{}, error) {
 	pushData := make(map[string]interface{})
 	pushData["enabled"] = enabled
 
@@ -162,13 +164,13 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 		return []interface{}{pushData}, nil
 	}
 
-	pushProvider, err := api.Guardian.MultiFactor.Push.Provider()
+	pushProvider, err := api.Guardian.MultiFactor.Push.Provider(ctx)
 	if err != nil {
 		return nil, err
 	}
 	pushData["provider"] = pushProvider.GetProvider()
 
-	customApp, err := api.Guardian.MultiFactor.Push.CustomApp()
+	customApp, err := api.Guardian.MultiFactor.Push.CustomApp(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -181,7 +183,7 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 		},
 	}
 
-	directAPNS, err := api.Guardian.MultiFactor.Push.DirectAPNS()
+	directAPNS, err := api.Guardian.MultiFactor.Push.DirectAPNS(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +191,7 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 	pushData["direct_apns"] = []interface{}{
 		map[string]interface{}{
 			"sandbox":   directAPNS.GetSandbox(),
-			"p12":       d.Get("push.0.direct_apns.0.p12"), // Does not get read back.
+			"p12":       data.Get("push.0.direct_apns.0.p12"), // Does not get read back.
 			"bundle_id": directAPNS.GetBundleID(),
 			"enabled":   directAPNS.GetEnabled(),
 		},
@@ -197,12 +199,12 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 
 	pushData["direct_fcm"] = []interface{}{
 		map[string]interface{}{
-			"server_key": d.Get("push.0.direct_fcm.0.server_key"), // Does not get read back.
+			"server_key": data.Get("push.0.direct_fcm.0.server_key"), // Does not get read back.
 		},
 	}
 
 	if pushProvider.GetProvider() == "sns" {
-		amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS()
+		amazonSNS, err := api.Guardian.MultiFactor.Push.AmazonSNS(ctx)
 		if err != nil {
 			return nil, err
 		}
@@ -211,7 +213,7 @@ func flattenPush(d *schema.ResourceData, enabled bool, api *management.Managemen
 			map[string]interface{}{
 				"aws_access_key_id":                 amazonSNS.GetAccessKeyID(),
 				"aws_region":                        amazonSNS.GetRegion(),
-				"aws_secret_access_key":             d.Get("push.0.amazon_sns.0.aws_secret_access_key"), // Does not get read back.
+				"aws_secret_access_key":             data.Get("push.0.amazon_sns.0.aws_secret_access_key"), // Does not get read back.
 				"sns_apns_platform_application_arn": amazonSNS.GetAPNSPlatformApplicationARN(),
 				"sns_gcm_platform_application_arn":  amazonSNS.GetGCMPlatformApplicationARN(),
 			},

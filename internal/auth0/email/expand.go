@@ -1,8 +1,6 @@
 package email
 
 import (
-	"net/http"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 
@@ -29,6 +27,10 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 		expandEmailProviderMailgun(config, emailProvider)
 	case management.EmailProviderSMTP:
 		expandEmailProviderSMTP(config, emailProvider)
+	case management.EmailProviderAzureCS:
+		expandEmailProviderAzureCS(config, emailProvider)
+	case management.EmailProviderMS365:
+		expandEmailProviderMS365(config, emailProvider)
 	}
 
 	return emailProvider
@@ -133,6 +135,26 @@ func expandEmailProviderSMTP(config cty.Value, emailProvider *management.EmailPr
 	})
 }
 
+func expandEmailProviderAzureCS(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsAzureCS{
+			ConnectionString: value.String(credentials.GetAttr("azure_cs_connection_string")),
+		}
+		return stop
+	})
+}
+
+func expandEmailProviderMS365(config cty.Value, emailProvider *management.EmailProvider) {
+	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
+		emailProvider.Credentials = &management.EmailProviderCredentialsMS365{
+			TenantID:     value.String(credentials.GetAttr("ms365_tenant_id")),
+			ClientID:     value.String(credentials.GetAttr("ms365_client_id")),
+			ClientSecret: value.String(credentials.GetAttr("ms365_client_secret")),
+		}
+		return stop
+	})
+}
+
 func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	emailTemplate := &management.EmailTemplate{
 		Template:               value.String(config.GetAttr("template")),
@@ -147,13 +169,4 @@ func expandEmailTemplate(config cty.Value) *management.EmailTemplate {
 	}
 
 	return emailTemplate
-}
-
-func emailProviderIsConfigured(api *management.Management) bool {
-	_, err := api.EmailProvider.Read()
-	if err, ok := err.(management.Error); ok && err.Status() == http.StatusNotFound {
-		return false
-	}
-
-	return true
 }

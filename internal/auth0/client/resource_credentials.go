@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -164,12 +165,7 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	clientID := data.Get("client_id").(string)
 
 	// Check that client exists.
-	if _, err := api.Client.Read(clientID, management.IncludeFields("client_id")); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
+	if _, err := api.Client.Read(ctx, clientID, management.IncludeFields("client_id")); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -178,19 +174,19 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	authenticationMethod := data.Get("authentication_method").(string)
 	switch authenticationMethod {
 	case "private_key_jwt":
-		if diagnostics := createPrivateKeyJWTCredentials(api, data); diagnostics.HasError() {
+		if diagnostics := createPrivateKeyJWTCredentials(ctx, api, data); diagnostics.HasError() {
 			return diagnostics
 		}
 	case "client_secret_post", "client_secret_basic":
-		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
+		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := updateSecret(api, data); err != nil {
+		if err := updateSecret(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 	case "none":
-		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
+		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -198,28 +194,15 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	return readClientCredentials(ctx, data, meta)
 }
 
-func readClientCredentials(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(
-		data.Id(),
-		management.IncludeFields(
-			"client_id",
-			"client_secret",
-			"token_endpoint_auth_method",
-			"client_authentication_methods",
-		),
-	)
+	client, err := api.Client.Read(ctx, data.Id())
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	privateKeyJWT, err := flattenPrivateKeyJWT(api, data, client.GetClientAuthenticationMethods())
+	privateKeyJWT, err := flattenPrivateKeyJWT(ctx, api, data, client.GetClientAuthenticationMethods())
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -238,31 +221,26 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 
 	// Check that client exists.
-	if _, err := api.Client.Read(data.Id(), management.IncludeFields("client_id")); err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+	if _, err := api.Client.Read(ctx, data.Id(), management.IncludeFields("client_id")); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	switch authenticationMethod {
 	case "private_key_jwt":
-		if diagnostics := modifyPrivateKeyJWTCredentials(api, data); diagnostics.HasError() {
+		if diagnostics := modifyPrivateKeyJWTCredentials(ctx, api, data); diagnostics.HasError() {
 			return diagnostics
 		}
 	case "client_secret_post", "client_secret_basic":
-		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
+		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := updateSecret(api, data); err != nil {
+		if err := updateSecret(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 	case "none":
-		if err := updateTokenEndpointAuthMethod(api, data); err != nil {
+		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -270,17 +248,12 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	return readClientCredentials(ctx, data, meta)
 }
 
-func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	client, err := api.Client.Read(data.Id(), management.IncludeFields("client_id", "app_type"))
+	client, err := api.Client.Read(ctx, data.Id(), management.IncludeFields("client_id", "app_type"))
 	if err != nil {
-		if mErr, ok := err.(management.Error); ok && mErr.Status() == http.StatusNotFound {
-			data.SetId("")
-			return nil
-		}
-
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	tokenEndpointAuthMethod := ""
@@ -295,36 +268,34 @@ func deleteClientCredentials(_ context.Context, data *schema.ResourceData, meta 
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	if authenticationMethod == "private_key_jwt" {
-		credentials, err := api.Client.ListCredentials(client.GetClientID())
+		credentials, err := api.Client.ListCredentials(ctx, client.GetClientID())
 		if err != nil {
 			return diag.FromErr(err)
 		}
 
-		if err := detachCredentialsFromClient(api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
+		if err := detachCredentialsFromClient(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
 			return diag.FromErr(err)
 		}
 
 		for _, credential := range credentials {
-			if err := api.Client.DeleteCredential(client.GetClientID(), credential.GetID()); err != nil {
+			if err := api.Client.DeleteCredential(ctx, client.GetClientID(), credential.GetID()); err != nil {
 				return diag.FromErr(err)
 			}
 		}
 
-		data.SetId("")
 		return nil
 	}
 
-	if err := api.Client.Update(client.GetClientID(), &management.Client{
+	if err := api.Client.Update(ctx, client.GetClientID(), &management.Client{
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}); err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId("")
 	return nil
 }
 
-func createPrivateKeyJWTCredentials(api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+func createPrivateKeyJWTCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
 	credentials, diagnostics := expandPrivateKeyJWT(data.GetRawConfig())
 	if diagnostics.HasError() {
 		return diagnostics
@@ -334,7 +305,7 @@ func createPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 
 	credentialsToAttach := make([]management.Credential, 0)
 	for _, credential := range credentials {
-		if err := api.Client.CreateCredential(clientID, credential); err != nil {
+		if err := api.Client.CreateCredential(ctx, clientID, credential); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -343,12 +314,12 @@ func createPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 		})
 	}
 
-	err := attachCredentialsToClient(api, clientID, credentialsToAttach)
+	err := attachCredentialsToClient(ctx, api, clientID, credentialsToAttach)
 
 	return diag.FromErr(err)
 }
 
-func modifyPrivateKeyJWTCredentials(api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
 	credentials, diagnostics := expandPrivateKeyJWT(data.GetRawConfig())
 	if diagnostics.HasError() {
 		return diagnostics
@@ -373,7 +344,7 @@ func modifyPrivateKeyJWTCredentials(api *management.Management, data *schema.Res
 		credential.ExpiresAt = &expiresAt
 
 		// Limitation: Unable to update the credential to never expire. Needs to get deleted and recreated if needed.
-		if err := api.Client.UpdateCredential(clientID, credentialID, credential); err != nil {
+		if err := api.Client.UpdateCredential(ctx, clientID, credentialID, credential); err != nil {
 			return diag.FromErr(err)
 		}
 	}
@@ -387,7 +358,7 @@ type clientWithAuthMethod struct {
 	TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
 }
 
-func attachCredentialsToClient(api *management.Management, clientID string, credentials []management.Credential) error {
+func attachCredentialsToClient(ctx context.Context, api *management.Management, clientID string, credentials []management.Credential) error {
 	client := clientWithAuthMethod{
 		ID: clientID,
 		ClientAuthenticationMethods: &management.ClientAuthenticationMethods{
@@ -398,10 +369,10 @@ func attachCredentialsToClient(api *management.Management, clientID string, cred
 		TokenEndpointAuthMethod: nil,
 	}
 
-	return updateClientWithAuthMethod(api, client)
+	return updateClientWithAuthMethod(ctx, api, client)
 }
 
-func detachCredentialsFromClient(api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+func detachCredentialsFromClient(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
 	client := clientWithAuthMethod{
 		ID:                          clientID,
 		ClientAuthenticationMethods: nil,
@@ -409,11 +380,11 @@ func detachCredentialsFromClient(api *management.Management, clientID, tokenEndp
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}
 
-	return updateClientWithAuthMethod(api, client)
+	return updateClientWithAuthMethod(ctx, api, client)
 }
 
-func updateClientWithAuthMethod(api *management.Management, client clientWithAuthMethod) error {
-	request, err := api.NewRequest(http.MethodPatch, api.URI("clients", client.ID), &client)
+func updateClientWithAuthMethod(ctx context.Context, api *management.Management, client clientWithAuthMethod) error {
+	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", client.ID), &client)
 	if err != nil {
 		return err
 	}
@@ -438,7 +409,7 @@ func updateClientWithAuthMethod(api *management.Management, client clientWithAut
 	return nil
 }
 
-func updateTokenEndpointAuthMethod(api *management.Management, data *schema.ResourceData) error {
+func updateTokenEndpointAuthMethod(ctx context.Context, api *management.Management, data *schema.ResourceData) error {
 	if !data.HasChange("authentication_method") {
 		return nil
 	}
@@ -446,12 +417,12 @@ func updateTokenEndpointAuthMethod(api *management.Management, data *schema.Reso
 	clientID := data.Get("client_id").(string)
 	tokenEndpointAuthMethod := data.Get("authentication_method").(string)
 
-	return api.Client.Update(clientID, &management.Client{
+	return api.Client.Update(ctx, clientID, &management.Client{
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	})
 }
 
-func updateSecret(api *management.Management, data *schema.ResourceData) error {
+func updateSecret(ctx context.Context, api *management.Management, data *schema.ResourceData) error {
 	if !data.HasChange("client_secret") {
 		return nil
 	}
@@ -459,7 +430,7 @@ func updateSecret(api *management.Management, data *schema.ResourceData) error {
 	clientID := data.Get("client_id").(string)
 	clientSecret := data.Get("client_secret").(string)
 
-	return api.Client.Update(clientID, &management.Client{
+	return api.Client.Update(ctx, clientID, &management.Client{
 		ClientSecret: &clientSecret,
 	})
 }
@@ -527,6 +498,7 @@ func flattenAuthenticationMethod(client *management.Client) string {
 }
 
 func flattenPrivateKeyJWT(
+	ctx context.Context,
 	api *management.Management,
 	data *schema.ResourceData,
 	clientAuthMethods *management.ClientAuthenticationMethods,
@@ -539,7 +511,7 @@ func flattenPrivateKeyJWT(
 
 	stateCredentials := make([]interface{}, 0)
 	for index, credential := range clientAuthMethods.GetPrivateKeyJWT().GetCredentials() {
-		credential, err := api.Client.GetCredential(data.Id(), credential.GetID())
+		credential, err := api.Client.GetCredential(ctx, data.Id(), credential.GetID())
 		if err != nil {
 			return nil, err
 		}

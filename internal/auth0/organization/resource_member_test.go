@@ -126,7 +126,7 @@ func TestAccOrganizationMember(t *testing.T) {
 					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user_1", "id")
 					assert.NoError(t, err)
 
-					return orgID + ":" + userID, nil
+					return orgID + "::" + userID, nil
 				},
 				ImportStatePersist: true,
 			},
@@ -141,7 +141,7 @@ func TestAccOrganizationMember(t *testing.T) {
 					userID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_user.user_2", "id")
 					assert.NoError(t, err)
 
-					return orgID + ":" + userID, nil
+					return orgID + "::" + userID, nil
 				},
 				ImportStatePersist: true,
 			},

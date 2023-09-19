@@ -40,7 +40,7 @@ data "auth0_client" "some-client-by-id" {
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
-- `client_secret` (String) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+- `client_secret` (String, Sensitive) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
@@ -52,7 +52,7 @@ data "auth0_client" "some-client-by-id" {
 - `id` (String) The ID of this resource.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
 - `is_first_party` (Boolean) Indicates whether this client is a first-party client.
-- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. This attribute can only be updated after the client gets created.
+- `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwt_configuration` (List of Object) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedatt--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (List of Object) Additional configuration for native mobile apps. (see [below for nested schema](#nestedatt--mobile))
@@ -62,10 +62,11 @@ data "auth0_client" "some-client-by-id" {
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
+- `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client.
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
-- `token_endpoint_auth_method` (String) Defines the requested authentication method for the token endpoint. Options include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic). Managing the authentication method through this attribute is deprecated and it will be removed in a future major version. Migrate to the `auth0_client_credentials` resource to manage a client's authentication method instead. Check the [MIGRATION GUIDE](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md#client-authentication-method) on how to do that.
+- `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic). Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -73,34 +74,208 @@ data "auth0_client" "some-client-by-id" {
 
 Read-Only:
 
-- `aws` (Map of String)
-- `azure_blob` (Map of String)
-- `azure_sb` (Map of String)
-- `box` (Map of String)
-- `cloudbees` (Map of String)
-- `concur` (Map of String)
-- `dropbox` (Map of String)
-- `echosign` (Map of String)
-- `egnyte` (Map of String)
-- `firebase` (Map of String)
-- `layer` (Map of String)
-- `mscrm` (Map of String)
-- `newrelic` (Map of String)
-- `office365` (Map of String)
-- `rms` (Map of String)
-- `salesforce` (Map of String)
-- `salesforce_api` (Map of String)
-- `salesforce_sandbox_api` (Map of String)
+- `aws` (List of Object) (see [below for nested schema](#nestedobjatt--addons--aws))
+- `azure_blob` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_blob))
+- `azure_sb` (List of Object) (see [below for nested schema](#nestedobjatt--addons--azure_sb))
+- `box` (List of Object) (see [below for nested schema](#nestedobjatt--addons--box))
+- `cloudbees` (List of Object) (see [below for nested schema](#nestedobjatt--addons--cloudbees))
+- `concur` (List of Object) (see [below for nested schema](#nestedobjatt--addons--concur))
+- `dropbox` (List of Object) (see [below for nested schema](#nestedobjatt--addons--dropbox))
+- `echosign` (List of Object) (see [below for nested schema](#nestedobjatt--addons--echosign))
+- `egnyte` (List of Object) (see [below for nested schema](#nestedobjatt--addons--egnyte))
+- `firebase` (List of Object) (see [below for nested schema](#nestedobjatt--addons--firebase))
+- `layer` (List of Object) (see [below for nested schema](#nestedobjatt--addons--layer))
+- `mscrm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--mscrm))
+- `newrelic` (List of Object) (see [below for nested schema](#nestedobjatt--addons--newrelic))
+- `office365` (List of Object) (see [below for nested schema](#nestedobjatt--addons--office365))
+- `rms` (List of Object) (see [below for nested schema](#nestedobjatt--addons--rms))
+- `salesforce` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce))
+- `salesforce_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_api))
+- `salesforce_sandbox_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--salesforce_sandbox_api))
 - `samlp` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp))
-- `sap_api` (Map of String)
-- `sentry` (Map of String)
-- `sharepoint` (Map of String)
-- `slack` (Map of String)
-- `springcm` (Map of String)
-- `wams` (Map of String)
-- `wsfed` (Map of String)
-- `zendesk` (Map of String)
-- `zoom` (Map of String)
+- `sap_api` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sap_api))
+- `sentry` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sentry))
+- `sharepoint` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sharepoint))
+- `slack` (List of Object) (see [below for nested schema](#nestedobjatt--addons--slack))
+- `springcm` (List of Object) (see [below for nested schema](#nestedobjatt--addons--springcm))
+- `sso_integration` (List of Object) (see [below for nested schema](#nestedobjatt--addons--sso_integration))
+- `wams` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wams))
+- `wsfed` (List of Object) (see [below for nested schema](#nestedobjatt--addons--wsfed))
+- `zendesk` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zendesk))
+- `zoom` (List of Object) (see [below for nested schema](#nestedobjatt--addons--zoom))
+
+<a id="nestedobjatt--addons--aws"></a>
+### Nested Schema for `addons.aws`
+
+Read-Only:
+
+- `lifetime_in_seconds` (Number)
+- `principal` (String)
+- `role` (String)
+
+
+<a id="nestedobjatt--addons--azure_blob"></a>
+### Nested Schema for `addons.azure_blob`
+
+Read-Only:
+
+- `account_name` (String)
+- `blob_delete` (Boolean)
+- `blob_name` (String)
+- `blob_read` (Boolean)
+- `blob_write` (Boolean)
+- `container_delete` (Boolean)
+- `container_list` (Boolean)
+- `container_name` (String)
+- `container_read` (Boolean)
+- `container_write` (Boolean)
+- `expiration` (Number)
+- `signed_identifier` (String)
+- `storage_access_key` (String)
+
+
+<a id="nestedobjatt--addons--azure_sb"></a>
+### Nested Schema for `addons.azure_sb`
+
+Read-Only:
+
+- `entity_path` (String)
+- `expiration` (Number)
+- `namespace` (String)
+- `sas_key` (String)
+- `sas_key_name` (String)
+
+
+<a id="nestedobjatt--addons--box"></a>
+### Nested Schema for `addons.box`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--cloudbees"></a>
+### Nested Schema for `addons.cloudbees`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--concur"></a>
+### Nested Schema for `addons.concur`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--dropbox"></a>
+### Nested Schema for `addons.dropbox`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--echosign"></a>
+### Nested Schema for `addons.echosign`
+
+Read-Only:
+
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--egnyte"></a>
+### Nested Schema for `addons.egnyte`
+
+Read-Only:
+
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--firebase"></a>
+### Nested Schema for `addons.firebase`
+
+Read-Only:
+
+- `client_email` (String)
+- `lifetime_in_seconds` (Number)
+- `private_key` (String)
+- `private_key_id` (String)
+- `secret` (String)
+
+
+<a id="nestedobjatt--addons--layer"></a>
+### Nested Schema for `addons.layer`
+
+Read-Only:
+
+- `expiration` (Number)
+- `key_id` (String)
+- `principal` (String)
+- `private_key` (String)
+- `provider_id` (String)
+
+
+<a id="nestedobjatt--addons--mscrm"></a>
+### Nested Schema for `addons.mscrm`
+
+Read-Only:
+
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--newrelic"></a>
+### Nested Schema for `addons.newrelic`
+
+Read-Only:
+
+- `account` (String)
+
+
+<a id="nestedobjatt--addons--office365"></a>
+### Nested Schema for `addons.office365`
+
+Read-Only:
+
+- `connection` (String)
+- `domain` (String)
+
+
+<a id="nestedobjatt--addons--rms"></a>
+### Nested Schema for `addons.rms`
+
+Read-Only:
+
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--salesforce"></a>
+### Nested Schema for `addons.salesforce`
+
+Read-Only:
+
+- `entity_id` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_api"></a>
+### Nested Schema for `addons.salesforce_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
+
+
+<a id="nestedobjatt--addons--salesforce_sandbox_api"></a>
+### Nested Schema for `addons.salesforce_sandbox_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `community_name` (String)
+- `community_url_section` (String)
+- `principal` (String)
+
 
 <a id="nestedobjatt--addons--samlp"></a>
 ### Nested Schema for `addons.samlp`
@@ -116,7 +291,7 @@ Read-Only:
 - `include_attribute_name_format` (Boolean)
 - `issuer` (String)
 - `lifetime_in_seconds` (Number)
-- `logout` (Map of String)
+- `logout` (List of Object) (see [below for nested schema](#nestedobjatt--addons--samlp--logout))
 - `map_identities` (Boolean)
 - `map_unknown_claims_as_is` (Boolean)
 - `mappings` (Map of String)
@@ -128,6 +303,102 @@ Read-Only:
 - `signature_algorithm` (String)
 - `signing_cert` (String)
 - `typed_attributes` (Boolean)
+
+<a id="nestedobjatt--addons--samlp--logout"></a>
+### Nested Schema for `addons.samlp.logout`
+
+Read-Only:
+
+- `callback` (String)
+- `slo_enabled` (Boolean)
+
+
+
+<a id="nestedobjatt--addons--sap_api"></a>
+### Nested Schema for `addons.sap_api`
+
+Read-Only:
+
+- `client_id` (String)
+- `name_identifier_format` (String)
+- `scope` (String)
+- `service_password` (String)
+- `token_endpoint_url` (String)
+- `username_attribute` (String)
+
+
+<a id="nestedobjatt--addons--sentry"></a>
+### Nested Schema for `addons.sentry`
+
+Read-Only:
+
+- `base_url` (String)
+- `org_slug` (String)
+
+
+<a id="nestedobjatt--addons--sharepoint"></a>
+### Nested Schema for `addons.sharepoint`
+
+Read-Only:
+
+- `external_url` (List of String)
+- `url` (String)
+
+
+<a id="nestedobjatt--addons--slack"></a>
+### Nested Schema for `addons.slack`
+
+Read-Only:
+
+- `team` (String)
+
+
+<a id="nestedobjatt--addons--springcm"></a>
+### Nested Schema for `addons.springcm`
+
+Read-Only:
+
+- `acs_url` (String)
+
+
+<a id="nestedobjatt--addons--sso_integration"></a>
+### Nested Schema for `addons.sso_integration`
+
+Read-Only:
+
+- `name` (String)
+- `version` (String)
+
+
+<a id="nestedobjatt--addons--wams"></a>
+### Nested Schema for `addons.wams`
+
+Read-Only:
+
+- `master_key` (String)
+
+
+<a id="nestedobjatt--addons--wsfed"></a>
+### Nested Schema for `addons.wsfed`
+
+Read-Only:
+
+
+
+<a id="nestedobjatt--addons--zendesk"></a>
+### Nested Schema for `addons.zendesk`
+
+Read-Only:
+
+- `account_name` (String)
+
+
+<a id="nestedobjatt--addons--zoom"></a>
+### Nested Schema for `addons.zoom`
+
+Read-Only:
+
+- `account` (String)
 
 
 

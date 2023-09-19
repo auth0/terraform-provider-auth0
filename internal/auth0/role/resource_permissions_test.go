@@ -16,10 +16,6 @@ const testAccGivenAResourceServerWithTwoScopesAndARole = `
 resource "auth0_resource_server" "resource_server" {
 	name       = "Acceptance Test - {{.testName}}"
 	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-
-	lifecycle {
-		ignore_changes = [ scopes ]
-	}
 }
 
 resource "auth0_resource_server_scopes" "my_scopes" {
@@ -43,10 +39,6 @@ resource "auth0_role" "role" {
 
 	name        = "Acceptance Test - {{.testName}}"
 	description = "Acceptance Test Role - {{.testName}}"
-
-	lifecycle {
-		ignore_changes = [ permissions ]
-	}
 }
 `
 

@@ -1,3 +1,74 @@
+## v1.0.0
+
+NOTES:
+
+- :warning: Check our [migration guide](https://github.com/auth0/terraform-provider-auth0/blob/main/MIGRATION_GUIDE.md) to navigate the breaking changes that were added in this release.
+- This release supports auto generated terraform configuration. [Check our guide for more info](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config).
+
+FEATURES:
+
+- `resource/auth0_connection`: Add support for Line strategy ([#818](https://github.com/auth0/terraform-provider-auth0/pull/818))
+- `resource/auth0_connection`: Add `pkce` and `attribute_map` settings to OIDC and Okta Workforce connection options ([#815](https://github.com/auth0/terraform-provider-auth0/pull/815))
+- `resource/auth0_client`: Add support for pushed authorization requests setting ([#756](https://github.com/auth0/terraform-provider-auth0/pull/756))
+- `resource/auth0_tenant`: Add support for pushed authorization requests setting ([#756](https://github.com/auth0/terraform-provider-auth0/pull/756))
+- `resource/auth0_tenant`: Add support for `allow_organization_name_in_authentication_api` toggle ([#832](https://github.com/auth0/terraform-provider-auth0/pull/832))
+- `data-source/auth0_pages`: Add new data source to retrieve Auth0 pages ([#706](https://github.com/auth0/terraform-provider-auth0/pull/706))
+- `data-source/auth0_signing_keys`: Add new data source to retrieve signing keys for applications ([#839](https://github.com/auth0/terraform-provider-auth0/pull/839))
+
+ENHANCEMENTS:
+
+- `resource/auth0_branding`: Improve validation for universal login template body ([#819](https://github.com/auth0/terraform-provider-auth0/pull/819))
+- `resource/auth0_client`: Improve DX for managing `is_token_endpoint_ip_header_trusted` ([#796](https://github.com/auth0/terraform-provider-auth0/pull/796))
+- `resource/auth0_log_stream`: Improve resource schema ([#798](https://github.com/auth0/terraform-provider-auth0/pull/798))
+- `data-source/auth0_role`: Add ability to retrieve users assigned to a role ([#758](https://github.com/auth0/terraform-provider-auth0/pull/758))
+- `resource/auth0_email_provider`: Add support for `azure_cs` and `ms365` email providers ([#752](https://github.com/auth0/terraform-provider-auth0/pull/752))
+- `resource/auth0_connection`: Add support for `decryption_key` on SAML Connection Options ([#755](https://github.com/auth0/terraform-provider-auth0/pull/755))
+- `resource/auth0_tenant`: Add support for `OIDCLogoutPrompt` toggle ([#754](https://github.com/auth0/terraform-provider-auth0/pull/754))
+- `resource/auth0_action`: Add support for GA version of Node 18 within `runtime` field ([#709](https://github.com/auth0/terraform-provider-auth0/pull/709), [#722](https://github.com/auth0/terraform-provider-auth0/pull/722))
+- `resource/auth0_trigger_actions`: Add `password-reset-post-challenge` to available trigger bindings ([#726](https://github.com/auth0/terraform-provider-auth0/pull/726))
+- `resource/auth0_trigger_action`: Add `password-reset-post-challenge` to available trigger bindings ([#746](https://github.com/auth0/terraform-provider-auth0/pull/746))
+- `resource/auth0_*`: Improve how we check for 404 errors ([#727](https://github.com/auth0/terraform-provider-auth0/pull/727))
+- `resource/auth0_client`: Add validation to prevent empty `mobile` block ([#742](https://github.com/auth0/terraform-provider-auth0/pull/742))
+- `resource/auth0_prompt_custom_text`: Add support for six new languages ([#732](https://github.com/auth0/terraform-provider-auth0/pull/732))
+- `resource/auth0_connection`: Add support for `map_user_id_to_id` options field for Google Workspace connections ([#840](https://github.com/auth0/terraform-provider-auth0/pull/840))
+
+BUG FIXES:
+
+- `resource/auth0_prompt_custom_text`: Prevent `"null"` string literal when importing resource ([#821](https://github.com/auth0/terraform-provider-auth0/pull/821))
+- `resource/auth0_guardian`: Remove minor `phone.message_types` validation ([#820](https://github.com/auth0/terraform-provider-auth0/pull/820))
+- `resource/auth0_connection`: Allow sending `null` values for `from` and `messagingServiceSID` in SMS connection options ([#829](https://github.com/auth0/terraform-provider-auth0/pull/829))
+- `resource/auth0_connection`: Passing-through Google Workspace admin tokens when managing the connection ([#830](https://github.com/auth0/terraform-provider-auth0/pull/830))
+- `resource/auth0_tenant`: Allow creating native apps with device code grant ([#833](https://github.com/auth0/terraform-provider-auth0/pull/833))
+- `resource/auth0_client_credentials`: Stop requiring `read:client_keys` permission when reading the resource ([#795](https://github.com/auth0/terraform-provider-auth0/pull/795))
+- `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML ([#802](https://github.com/auth0/terraform-provider-auth0/pull/802))
+- `resource/*`: Fix pagination issues when fetching resources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
+- `data-source/*`: Fix pagination issues when fetching data sources ([#807](https://github.com/auth0/terraform-provider-auth0/pull/807))
+- `resource/auth0_client_grant`: Add validation to prevent empty string scope values ([#793](https://github.com/auth0/terraform-provider-auth0/pull/793))
+- `provider`: Fix issue with rate limit retry mechanism ([#788](https://github.com/auth0/terraform-provider-auth0/pull/788))
+- `resource/auth0_client`: Prevent sending empty payloads for client addons ([#759](https://github.com/auth0/terraform-provider-auth0/pull/759))
+- `resource/auth0_connection`: Correctly expand `shopify` connection strategy types ([#728](https://github.com/auth0/terraform-provider-auth0/pull/728))
+- `data-source/auth0_*`: Raise 404 errors when retrieving data sources ([#698](https://github.com/auth0/terraform-provider-auth0/pull/698))
+
+BREAKING CHANGES:
+
+- `resource/auth0_client`: Formally type the `addons` sub-properties ([#655](https://github.com/auth0/terraform-provider-auth0/pull/655), [#656](https://github.com/auth0/terraform-provider-auth0/pull/656), [#657](https://github.com/auth0/terraform-provider-auth0/pull/657), [#658](https://github.com/auth0/terraform-provider-auth0/pull/658), [#661](https://github.com/auth0/terraform-provider-auth0/pull/661), [#662](https://github.com/auth0/terraform-provider-auth0/pull/662), [#663](https://github.com/auth0/terraform-provider-auth0/pull/663), [#664](https://github.com/auth0/terraform-provider-auth0/pull/664), [#665](https://github.com/auth0/terraform-provider-auth0/pull/665), [#666](https://github.com/auth0/terraform-provider-auth0/pull/666), [#667](https://github.com/auth0/terraform-provider-auth0/pull/667), [#668](https://github.com/auth0/terraform-provider-auth0/pull/668), [#669](https://github.com/auth0/terraform-provider-auth0/pull/669), [#670](https://github.com/auth0/terraform-provider-auth0/pull/670), [#671](https://github.com/auth0/terraform-provider-auth0/pull/671), [#672](https://github.com/auth0/terraform-provider-auth0/pull/672), [#673](https://github.com/auth0/terraform-provider-auth0/pull/673), [#674](https://github.com/auth0/terraform-provider-auth0/pull/674), [#675](https://github.com/auth0/terraform-provider-auth0/pull/675), [#676](https://github.com/auth0/terraform-provider-auth0/pull/676), [#677](https://github.com/auth0/terraform-provider-auth0/pull/677), [#678](https://github.com/auth0/terraform-provider-auth0/pull/678), [#681](https://github.com/auth0/terraform-provider-auth0/pull/681), [#682](https://github.com/auth0/terraform-provider-auth0/pull/682))
+- `resource/auth0_user`: Remove `roles` and `permissions` fields ([#703](https://github.com/auth0/terraform-provider-auth0/pull/703))
+- `resource/auth0_resource_server`: Remove `scopes` field ([#703](https://github.com/auth0/terraform-provider-auth0/pull/703))
+- `resource/auth0_global_client`: Remove resource ([#704](https://github.com/auth0/terraform-provider-auth0/pull/704))
+- `data-source/auth0_global_client`: Remove data source ([#704](https://github.com/auth0/terraform-provider-auth0/pull/704))
+- `resource/auth0_tenant`: Remove `change_password`, `error_page` and `guardian_mfa_page` fields ([#711](https://github.com/auth0/terraform-provider-auth0/pull/711))
+- `resource/auth0_tenant`: Remove `universal_login` block ([#712](https://github.com/auth0/terraform-provider-auth0/pull/712))
+- `resource/auth0_client`: Remove `client_secret_rotation_trigger` field ([#711](https://github.com/auth0/terraform-provider-auth0/pull/711))
+- `resource/auth0_role`: Remove `permissions` field ([#714](https://github.com/auth0/terraform-provider-auth0/pull/714))
+- `resource/auth0_organization_member`: Remove `roles` field ([#715](https://github.com/auth0/terraform-provider-auth0/pull/715))
+- `resource/auth0_client_grant`: Rename `scope` field to `scopes` ([#717](https://github.com/auth0/terraform-provider-auth0/pull/717))
+- `resource/auth0_*`: Align resource import separators ([#718](https://github.com/auth0/terraform-provider-auth0/pull/718))
+- `resource/auth0_client`: Remove `client_secret` and `token_endpoint_auth_method` fields ([#725](https://github.com/auth0/terraform-provider-auth0/pull/725))
+- `resource/auth0_email`: Remove `api_user` field ([#730](https://github.com/auth0/terraform-provider-auth0/pull/730))
+- `resource/auth0_connection`: Remove `enabled_clients` field ([#730](https://github.com/auth0/terraform-provider-auth0/pull/730))
+- `resource/auth0_trigger_binding`: Remove resource ([#730](https://github.com/auth0/terraform-provider-auth0/pull/730))
+- `resource/auth0_email`: Rename resource to `auth0_email_provider` ([#731](https://github.com/auth0/terraform-provider-auth0/pull/731))
+  
 ## v1.0.0-beta.4
 
 NOTES:

@@ -90,10 +90,9 @@ func NewResource() *schema.Resource {
 					"node12",
 					"node16",
 					"node18",
-					"node18-actions",
 				}, false),
 				Description: "The Node runtime. Defaults to `node12`. Possible values are: " +
-					"`node12`, `node16`, `node18` (beta) or `node18-actions` (GA).",
+					"`node12`, `node16` or `node18`.",
 			},
 			"secrets": {
 				Type:        schema.TypeList,

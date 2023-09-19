@@ -828,8 +828,9 @@ resource "auth0_client_grant" "my_client_grant" {
 
 ### Actions Node 18 Runtime Beta
 
-On `v0.x` the `node18` runtime value was setting the runtime to Node 18 Beta, on `v1` this will now opt you in to the
-GA version of Node 18. If you were using the `node18-actions` (GA) runtime on `v0.x`, simply rename that to `node18` on `v1`.
+The Node 18 Beta runtime option for actions has been removed.
+
+Now, you will be opted in to the GA version of Node 18 actions runtime instead.
 
 Ensure that the versions of the trigger types you are using are allowed to use the `node18` runtime. You can retrieve 
 the triggers available within actions and their supported runtimes following this guide: [Retrieve triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers).

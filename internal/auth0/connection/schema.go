@@ -840,6 +840,14 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"map_user_id_to_id": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "By default Auth0 maps `user_id` to `email`. Enabling this setting changes the behavior " +
+					"to map `user_id` to 'id' instead. This can only be defined on a new Google Workspace connection " +
+					"and can not be changed once set.",
+			},
 		},
 	},
 }

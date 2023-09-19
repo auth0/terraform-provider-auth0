@@ -699,6 +699,7 @@ Optional:
 - `issuer` (String) Issuer URL, e.g. `https://auth.example.com`.
 - `jwks_uri` (String) JWKS URI.
 - `key_id` (String) Apple Key ID.
+- `map_user_id_to_id` (Boolean) By default Auth0 maps `user_id` to `email`. Enabling this setting changes the behavior to map `user_id` to 'id' instead. This can only be defined on a new Google Workspace connection and can not be changed once set.
 - `max_groups_to_retrieve` (String) Maximum number of groups to retrieve.
 - `messaging_service_sid` (String) SID for Copilot. Used when SMS Source is Copilot.
 - `metadata_url` (String) The URL of the SAML metadata document.

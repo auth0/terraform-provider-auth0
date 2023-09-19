@@ -290,6 +290,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain_aliases":           options.GetDomainAliases(),
 		"icon_url":                 options.GetLogoURL(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"map_user_id_to_id":        options.GetMapUserIDtoID(),
 		"upstream_params":          upstreamParams,
 	}
 

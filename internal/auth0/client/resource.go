@@ -215,8 +215,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Description: "Whether this client can be used to make cross-origin authentication requests (`true`) " +
-					"or it is not allowed to make such requests (`false`). Requires the `coa_toggle_enabled` " +
-					"feature flag to be enabled on the tenant by the support team.",
+					"or it is not allowed to make such requests (`false`).",
 			},
 			"cross_origin_loc": {
 				Type:     schema.TypeString,

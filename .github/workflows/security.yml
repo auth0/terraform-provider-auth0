@@ -3,10 +3,10 @@ name: Security
 on:
   pull_request: {}
   push:
-    branches: [ "main", "v1" ]
+    branches: ["main", "v1"]
 
   schedule:
-    - cron: '30 0 1,15 * *'
+    - cron: "30 0 1,15 * *"
 
 jobs:
   semgrep:
@@ -24,7 +24,7 @@ jobs:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_TOKEN }}
 
   govulncheck:
-    name : Vulnerabilities Scan
+    name: Vulnerabilities Scan
     runs-on: ubuntu-latest
     steps:
       - name: Scan for vulnerabilities in go code

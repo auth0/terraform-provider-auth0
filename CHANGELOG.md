@@ -120,6 +120,20 @@ BREAKING CHANGES:
 - `resource/auth0_email`: Rename resource to `auth0_email_provider` ([#731](https://github.com/auth0/terraform-provider-auth0/pull/731))
 
 
+## 0.50.2
+
+ENHANCEMENTS:
+
+- `resource/auth0_action`: Add node18 GA (`node18-actions`) option to `runtime`([#803](https://github.com/auth0/terraform-provider-auth0/pull/803))
+
+
+## 0.50.1
+
+BUG FIXES:
+
+- `resource/auth0_connection`: Passing-through critical connection options for following connection types: Ping Federate, AD, Azure AD, SAML([#786](https://github.com/auth0/terraform-provider-auth0/pull/786))
+
+
 ## 0.50.0
 
 FEATURES:

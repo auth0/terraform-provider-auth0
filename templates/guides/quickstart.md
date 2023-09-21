@@ -111,7 +111,5 @@ After apply finishes, you can verify that the application was created by going t
 
 ### Auto-generate Terraform config files from Auth0 Tenant
 
-If you need assistance with generating Terraform configuration files, you can refer to the 
-[Terraform Configuration Generation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config)
-for detailed instructions on creating clean and descriptive Terraform code.
-This guide will help you structure your Terraform code effectively.
+If you're adopting Terraform on an already configured Auth0 tenant, it is possible to auto-generate that tenant's Terraform configuration by following the
+[Terraform Configuration Generation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config).

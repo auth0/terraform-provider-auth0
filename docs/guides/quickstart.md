@@ -58,7 +58,7 @@ terraform {
   required_providers {
     auth0 = {
       source  = "auth0/auth0"
-      version = "1.0.0-beta.0" # Refer to docs for latest version
+      version = ">= 1.0.0" # Refer to docs for latest version
     }
   }
 }
@@ -107,3 +107,11 @@ terraform apply
 After apply finishes, you can verify that the application was created by going to the
 [Auth0 Dashboard Applications page](https://manage.auth0.com/#/applications). You should see a new application called
 "WebAppExample", as specified in the name argument passed to the resource.
+
+
+### Auto-generate Terraform config files from Auth0 Tenant
+
+If you need assistance with generating Terraform configuration files, you can refer to the 
+[Terraform Configuration Generation Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/generate_terraform_config)
+for detailed instructions on creating clean and descriptive Terraform code.
+This guide will help you structure your Terraform code effectively.

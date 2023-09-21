@@ -592,8 +592,8 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.oidc", "options.0.scopes.*", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.set_user_root_attributes", "on_first_login"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.upstream_params", ""),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "0"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"), // Gets set to a default if not provided.
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
 				),
 			},
 		},
@@ -794,8 +794,8 @@ func TestAccConnectionOkta(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.okta", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.icon_url", "https://example.com/v2/logo.svg"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "0"),
-					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "0"),
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.connection_settings.#", "1"), // Gets set to a default if not provided.
+					resource.TestCheckResourceAttr("auth0_connection.okta", "options.0.attribute_map.#", "1"),       // Gets set to a default if not provided.
 				),
 			},
 		},

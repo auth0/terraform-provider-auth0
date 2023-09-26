@@ -16,13 +16,13 @@ Fortunately, the [Auth0 CLI](https://auth0.github.io/auth0-cli/) simplifies this
 
 - **Auth0 CLI v1.1.0+** – Auth0's official CLI. This tool will be performing the heavy lifting. Specifically requires versions 1.1.0 and up. See: [Auth0 CLI installation instructions](https://auth0.github.io/auth0-cli/).
 
-## 1. Create Dedicated M2M Application
+## 1. Create Dedicated M2M Application for TF Provider
 
-Establish an authenticated link between the Auth0 Terraform provider and your Auth0 tenant by creating a dedicated machine-to-machine (M2M) application (client).
+Establish an authenticated link between the Auth0 Terraform provider and the Auth0 tenant you wish to generate config for. This can be done by creating a dedicated machine-to-machine (M2M) application (client).
 
 Follow the [Terraform Quickstart Guide](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/quickstart#create-a-machine-to-machine-application) for instructions. Note the **domain**, **client ID**, and **client secret** values, as they are required in the next step.
 
-## 2. Set Environment Variables
+## 2. Set Environment Variables for TF Provider
 
 In your terminal, set the following environment variables, replacing `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, and `AUTH0_CLIENT_SECRET` with the values noted in step 1:
 
@@ -36,7 +36,7 @@ export AUTH0_CLIENT_SECRET=***********
 
 ## 3. Authenticate with Auth0 CLI
 
-Like the Terraform Provider, the Auth0 CLI requires an authentication link with your Auth0 tenant. To begin the authentication step, run:
+Like the Terraform Provider, the Auth0 CLI requires an authentication link to the Auth0 tenant you wish to generate config for. To begin the authentication step, run:
 
 ```sh
 auth0 login
@@ -45,6 +45,8 @@ auth0 login
 Follow the interactive prompts to complete the authentication process.
 
 Authenticating as a user is the simplest and quickest way to authenticate with the CLI but authenticating as a machine is also a valid option. However, it is recommended to use a separate machine-to-machine client than the one created in step 1.
+
+~> It is required to authenticate the Auth0 CLI and TF provider to the same domain. The resulting auto-generated configuration is portable thereafter.
 
 ## 4. Run `tf generate` Command
 

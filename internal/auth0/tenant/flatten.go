@@ -16,7 +16,6 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("support_email", tenant.GetSupportEmail()),
 		data.Set("support_url", tenant.GetSupportURL()),
 		data.Set("allowed_logout_urls", tenant.GetAllowedLogoutURLs()),
-		data.Set("session_lifetime", tenant.GetSessionLifetime()),
 		data.Set("sandbox_version", tenant.GetSandboxVersion()),
 		data.Set("enabled_locales", tenant.GetEnabledLocales()),
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
@@ -26,10 +25,15 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
-		idleSessionLifetimeDefault := NewResource().Schema["idle_session_lifetime"].Default
 		result = multierror.Append(result, data.Set("idle_session_lifetime", idleSessionLifetimeDefault))
 	} else {
 		result = multierror.Append(result, data.Set("idle_session_lifetime", tenant.GetIdleSessionLifetime()))
+	}
+
+	if tenant.GetSessionLifetime() == 0 {
+		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
+	} else {
+		result = multierror.Append(result, data.Set("session_lifetime", tenant.GetSessionLifetime()))
 	}
 
 	return result.ErrorOrNil()

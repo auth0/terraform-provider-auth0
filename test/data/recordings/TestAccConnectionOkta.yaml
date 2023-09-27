@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
+                - Go-Auth0/1.1.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"icon_url":"https://example.com/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"basic_profile"},"schema_version":"openid-1.0.0","type":"back_channel"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["api.example.com","example.com"],"icon_url":"https://example.com/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v1/token","scope":"email openid profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"connection_settings":{"pkce":"disabled"},"attribute_map":{"mapping_mode":"basic_profile"},"schema_version":"openid-1.0.0","oidc_metadata":{"issuer":"https://domain.okta.com","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","token_endpoint":"https://domain.okta.com/oauth2/v1/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"code_challenge_methods_supported":["S256"],"introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","request_parameter_supported":true,"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","claims_parameter_supported":false,"request_uri_parameter_supported":true,"require_request_uri_registration":false},"type":"back_channel"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 123.539917ms
+        duration: 719.411792ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,8 +55,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.376875ms
+        duration: 134.9825ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -91,8 +91,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,13 +102,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 91.167625ms
+        duration: 111.216125ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -127,8 +127,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -138,13 +138,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"email openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","client_id":"123456","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["api.example.com","example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v1/token","upstream_params":{"screen_name":{"alias":"login_hint"}},"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","connection_settings":{"pkce":"disabled"},"non_persistent_attrs":["gender","hair_color"],"authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","set_user_root_attributes":"on_each_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.267167ms
+        duration: 111.61425ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -163,8 +163,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -174,13 +174,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 121.479167ms
+        duration: 760.282125ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -199,8 +199,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -210,13 +210,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 117.386125ms
+        duration: 122.743541ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -235,8 +235,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -246,13 +246,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.784042ms
+        duration: 199.516917ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -271,8 +271,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,34 +282,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.118125ms
+        duration: 142.409875ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 633
+        content_length: 5
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","show_as_button":false,"options":{"client_id":"123456","client_secret":"123456","domain":"domain.okta.com","domain_aliases":["example.com"],"icon_url":"https://example.com/v2/logo.svg","authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","token_endpoint":"https://domain.okta.com/oauth2/v2/token","scope":"openid profile","set_user_root_attributes":"on_first_login","non_persistent_attrs":["gender"]}}
+            null
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
-        method: PATCH
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -318,86 +318,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
+        body: '{"id":"con_YHHWRjHlsLrortw7","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","attribute_map":{"attributes":{"name":"${context.tokenset.name}","email":"${context.tokenset.email}","picture":"${context.tokenset.picture}","nickname":"${context.tokenset.nickname}","given_name":"${context.tokenset.given_name}","family_name":"${context.tokenset.family_name}","email_verified":"${context.tokenset.email_verified}"},"mapping_mode":"basic_profile","userinfo_scope":"openid email profile groups"},"client_secret":"123456","oidc_metadata":{"issuer":"https://domain.okta.com","jwks_uri":"https://domain.okta.com/oauth2/v1/keys","token_endpoint":"https://domain.okta.com/oauth2/v1/token","claims_supported":["iss","ver","sub","aud","iat","exp","jti","auth_time","amr","idp","nonce","name","nickname","preferred_username","given_name","middle_name","family_name","email","email_verified","profile","zoneinfo","locale","address","phone_number","picture","website","gender","birthdate","updated_at","at_hash","c_hash"],"scopes_supported":["openid","email","profile","address","phone","offline_access","groups"],"userinfo_endpoint":"https://domain.okta.com/oauth2/v1/userinfo","revocation_endpoint":"https://domain.okta.com/oauth2/v1/revoke","end_session_endpoint":"https://domain.okta.com/oauth2/v1/logout","grant_types_supported":["authorization_code","implicit","refresh_token","password","urn:ietf:params:oauth:grant-type:device_code"],"registration_endpoint":"https://domain.okta.com/oauth2/v1/clients","authorization_endpoint":"https://domain.okta.com/oauth2/v1/authorize","introspection_endpoint":"https://domain.okta.com/oauth2/v1/introspect","subject_types_supported":["public"],"response_modes_supported":["query","fragment","form_post","okta_post_message"],"response_types_supported":["code","id_token","code id_token","code token","id_token token","code id_token token"],"claims_parameter_supported":false,"request_parameter_supported":true,"device_authorization_endpoint":"https://domain.okta.com/oauth2/v1/device/authorize","request_uri_parameter_supported":true,"code_challenge_methods_supported":["S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"revocation_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"],"request_object_signing_alg_values_supported":["HS256","HS384","HS512","RS256","RS384","RS512","ES256","ES384","ES512"],"introspection_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","client_secret_jwt","private_key_jwt","none"]},"domain_aliases":["example.com"],"schema_version":"openid-1.0.0","token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","connection_settings":{"pkce":"auto"},"non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 123.096083ms
+        duration: 136.851083ms
     - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 100.074042ms
-    - id: 10
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"con_B8c2g9VS6Z2neIuy","options":{"type":"back_channel","scope":"openid profile","domain":"domain.okta.com","issuer":"https://domain.okta.com","icon_url":"https://example.com/v2/logo.svg","jwks_uri":"https://domain.okta.com/oauth2/v2/keys","client_id":"123456","client_secret":"123456","domain_aliases":["example.com"],"token_endpoint":"https://domain.okta.com/oauth2/v2/token","userinfo_endpoint":"https://domain.okta.com/oauth2/v2/userinfo","non_persistent_attrs":["gender"],"authorization_endpoint":"https://domain.okta.com/oauth2/v2/authorize","set_user_root_attributes":"on_first_login"},"strategy":"okta","name":"Acceptance-Test-Okta-TestAccConnectionOkta","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-Okta-TestAccConnectionOkta","enabled_clients":[],"realms":["Acceptance-Test-Okta-TestAccConnectionOkta"]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 100.937584ms
-    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -414,8 +342,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/latest
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_B8c2g9VS6Z2neIuy
+                - Go-Auth0/1.1.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YHHWRjHlsLrortw7
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -425,10 +353,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2023-09-08T16:26:55.170Z"}'
+        body: '{"deleted_at":"2023-09-19T17:38:02.774Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 104.65725ms
+        duration: 117.958875ms

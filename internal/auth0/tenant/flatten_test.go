@@ -21,8 +21,8 @@ func TestFlattenTenant(t *testing.T) {
 		err := flattenTenant(mockResourceData, &tenant)
 
 		assert.NoError(t, err)
-		assert.Equal(t, mockResourceData.Get("idle_session_lifetime"), idleSessionLifetimeDefault)
-		assert.Equal(t, mockResourceData.Get("session_lifetime"), sessionLifetimeDefault)
+		assert.Equal(t, mockResourceData.Get("idle_session_lifetime"), 72.00)
+		assert.Equal(t, mockResourceData.Get("session_lifetime"), 168.00)
 	})
 
 	t.Run("it does not set default values if remote tenant has values set", func(t *testing.T) {

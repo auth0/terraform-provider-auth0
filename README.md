@@ -1,13 +1,3 @@
-## Auth0 AMA: Auth0 Terraform Provider
-
-Hey there Auth0 users!
-
-This month, on **Thursday, September 28, 2023 in our Community Forum, we’re hosting an [Interactive Q&A Session for everyone about Auth0 Terraform Provider](https://community.auth0.com/t/ask-me-anything-with-auth0-terraform-provider/115670)**. From today you can ask your questions by following the link above and get them answered on the day of the event. Our subject matter experts will answer all things Auth0 Terraform Provider!
-
-Don’t hesitate and follow the link! [See you in our Community Forum](https://community.auth0.com/t/ask-me-anything-with-auth0-terraform-provider/115670)!
-
----
-
 <div align="center">
   <h1>Auth0 Terraform Provider</h1>
 
@@ -20,14 +10,14 @@ Don’t hesitate and follow the link! [See you in our Community Forum](https://c
 
 </div>
 
----
+-------------------------------------
 
 The Auth0 Terraform Provider is the official plugin for managing Auth0 tenant configuration through the
 [Terraform](https://www.terraform.io/) tool.
 
 📚 [Documentation](#documentation) • 🚀 [Getting Started](#getting-started) • 💬 [Feedback](#feedback)
 
----
+-------------------------------------
 
 ## Documentation
 

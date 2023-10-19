@@ -11,7 +11,7 @@ With Auth0, you can have standard welcome, password reset, and account verificat
 ## Example Usage
 
 ```terraform
-resource "auth0_email" "my_email_provider" {
+resource "auth0_email_provider" "my_email_provider" {
   name                 = "ses"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -24,7 +24,7 @@ resource "auth0_email" "my_email_provider" {
 }
 
 resource "auth0_email_template" "my_email_template" {
-  depends_on = [auth0_email.my_email_provider]
+  depends_on = [auth0_email_provider.my_email_provider]
 
   template                = "welcome_email"
   body                    = "<html><body><h1>Welcome!</h1></body></html>"

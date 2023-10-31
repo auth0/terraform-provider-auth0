@@ -100,7 +100,7 @@ func expandConnection(
 	}
 
 	// Prevent erasing database configuration secrets.
-	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 {
+	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)

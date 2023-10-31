@@ -307,6 +307,12 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Whether to accept an organization name instead of an ID on auth endpoints.",
 			},
+			"customize_mfa_in_postlogin_action": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
+			},
 		},
 	}
 }

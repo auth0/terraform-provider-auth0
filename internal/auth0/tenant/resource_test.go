@@ -45,6 +45,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "false"),
 				),
 			},
 			{
@@ -62,6 +63,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "true"),
 				),
 			},
 			{
@@ -97,6 +99,7 @@ resource "auth0_tenant" "my_tenant" {
 	enabled_locales         = ["en", "de", "fr"]
 
 	allow_organization_name_in_authentication_api = false
+	customize_mfa_in_postlogin_action = false
 
 	flags {
 		disable_clickjack_protection_headers   = true
@@ -134,6 +137,7 @@ resource "auth0_tenant" "my_tenant" {
 	enabled_locales         = ["de", "fr"]
 
 	allow_organization_name_in_authentication_api = true
+	customize_mfa_in_postlogin_action = true
 
 	flags {
 		enable_public_signup_user_exists_error = true

@@ -180,6 +180,7 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "ethnicity"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.disable_self_service_change_password", "false"),
 				),
 			},
 			{
@@ -199,6 +200,7 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "ethnicity"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.non_persistent_attrs.*", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.disable_self_service_change_password", "true"),
 				),
 			},
 		},
@@ -211,6 +213,7 @@ resource "auth0_connection" "ad" {
 	strategy = "ad"
 	show_as_button = true
 	options {
+		disable_self_service_change_password = false
 		brute_force_protection = true
 		tenant_domain = "example.com"
 		domain_aliases = [
@@ -235,6 +238,7 @@ resource "auth0_connection" "ad" {
 	strategy = "ad"
 	show_as_button = true
 	options {
+		disable_self_service_change_password = true
 		brute_force_protection = true
 		tenant_domain = "example.com"
 		domain_aliases = [

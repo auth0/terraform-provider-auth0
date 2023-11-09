@@ -2100,7 +2100,7 @@ func TestAccClientMetadataBehavior(t *testing.T) {
 }
 
 const testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue = `
-resource "auth0_client" "my_client" {
+resource "auth0_client" "my_client_ip_header" {
   name = "Test IP Header Trusted - {{.testName}}"
 
   is_token_endpoint_ip_header_trusted = true
@@ -2108,52 +2108,21 @@ resource "auth0_client" "my_client" {
 `
 
 const testAccImportClientCredentialsForClientWithIsTokenEndpointIPHeaderTrustedSetToTrueOnCreate = `
-resource "auth0_client" "my_client" {
+resource "auth0_client" "my_client_ip_header" {
   name = "Test IP Header Trusted - {{.testName}}"
 
   is_token_endpoint_ip_header_trusted = true
 }
 
-resource "auth0_client_credentials" "my_client_credentials" {
-  client_id = auth0_client.my_client.id
+resource "auth0_client_credentials" "my_client_ip_header_credentials" {
+  client_id = auth0_client.my_client_ip_header.id
 
   authentication_method = "client_secret_post"
 }
 `
 
-func TestAccClientGetsCreatedWithIsTokenEndpointIPHeaderTrustedEnabled(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
-				),
-			},
-			{
-				Config:       acctest.ParseTestName(testAccImportClientCredentialsForClientWithIsTokenEndpointIPHeaderTrustedSetToTrueOnCreate, t.Name()),
-				ResourceName: "auth0_client_credentials.my_client_credentials",
-				ImportState:  true,
-				ImportStateIdFunc: func(state *terraform.State) (string, error) {
-					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_client", "id")
-					assert.NoError(t, err)
-					return clientID, nil
-				},
-				ImportStatePersist: true,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "is_token_endpoint_ip_header_trusted", "true"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client_credentials", "client_id", "auth0_client.my_client", "id"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.my_client_credentials", "authentication_method", "client_secret_post"),
-				),
-			},
-		},
-	})
-}
-
-const testAccCreateClientWithDeviceCodeGrant = `
-resource "auth0_client" "my_client" {
+const testAccCreateNativeClientDefault = `
+resource "auth0_client" "my_native_client" {
 	name            = "Test Device Code Grant - {{.testName}}"
 	app_type        = "native"
 	grant_types     = ["urn:ietf:params:oauth:grant-type:device_code"]
@@ -2161,53 +2130,130 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccImportClientCredentialsForClientWithIsDeviceCodeGrantOnCreate = `
-resource "auth0_client" "my_client" {
+const testAccImportClientCredentialsForNativeClientDefault = `
+resource "auth0_client" "my_native_client" {
 	name            = "Test Device Code Grant - {{.testName}}"
 	app_type        = "native"
 	grant_types     = ["urn:ietf:params:oauth:grant-type:device_code"]
 	oidc_conformant = true
 }
 
-resource "auth0_client_credentials" "my_client_credentials" {
-  client_id = auth0_client.my_client.id
+resource "auth0_client_credentials" "my_native_client_credentials" {
+  client_id = auth0_client.my_native_client.id
 
   authentication_method = "none"
 }
 `
 
-func TestAccClientGetsCreatedWithDeviceCodeGrant(t *testing.T) {
+const testAccCreateRegularWebAppClientDefault = `
+resource "auth0_client" "my_rwa_client" {
+	name            = "Test Regular Web Defaults - {{.testName}}"
+	app_type        = "regular_web"
+}
+`
+
+const testAccImportClientCredentialsForRegularWebAppClientDefault = `
+resource "auth0_client" "my_rwa_client" {
+	name            = "Test Regular Web Defaults - {{.testName}}"
+	app_type        = "regular_web"
+}
+
+resource "auth0_client_credentials" "my_rwa_client_credentials" {
+  client_id = auth0_client.my_rwa_client.id
+
+  authentication_method = "client_secret_post"
+}
+`
+
+func TestAccClientCanSetDefaultAuthMethodOnCreate(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccCreateClientWithDeviceCodeGrant, t.Name()),
+				Config: acctest.ParseTestName(testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header", "is_token_endpoint_ip_header_trusted", "true"),
 				),
 			},
 			{
-				Config:       acctest.ParseTestName(testAccImportClientCredentialsForClientWithIsDeviceCodeGrantOnCreate, t.Name()),
-				ResourceName: "auth0_client_credentials.my_client_credentials",
+				Config:       acctest.ParseTestName(testAccImportClientCredentialsForClientWithIsTokenEndpointIPHeaderTrustedSetToTrueOnCreate, t.Name()),
+				ResourceName: "auth0_client_credentials.my_client_ip_header_credentials",
 				ImportState:  true,
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
-					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_client", "id")
+					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_client_ip_header", "id")
 					assert.NoError(t, err)
 					return clientID, nil
 				},
 				ImportStatePersist: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
-					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client_credentials", "client_id", "auth0_client.my_client", "id"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.my_client_credentials", "authentication_method", "none"),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header", "name", fmt.Sprintf("Test IP Header Trusted - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client_ip_header", "is_token_endpoint_ip_header_trusted", "true"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_client_ip_header_credentials", "client_id", "auth0_client.my_client_ip_header", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_client_ip_header_credentials", "authentication_method", "client_secret_post"),
 				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithIsTokenEndpointIPHeaderTrustedSetToTrue, t.Name()), // Needed to reset the testing framework after the import state.
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateNativeClientDefault, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "grant_types.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
+				),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccImportClientCredentialsForNativeClientDefault, t.Name()),
+				ResourceName: "auth0_client_credentials.my_native_client_credentials",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_native_client", "id")
+					assert.NoError(t, err)
+					return clientID, nil
+				},
+				ImportStatePersist: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "name", fmt.Sprintf("Test Device Code Grant - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "grant_types.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_native_client", "grant_types.0", "urn:ietf:params:oauth:grant-type:device_code"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_native_client_credentials", "client_id", "auth0_client.my_native_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_native_client_credentials", "authentication_method", "none"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateNativeClientDefault, t.Name()), // Needed to reset the testing framework after the import state.
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateRegularWebAppClientDefault, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_rwa_client", "name", fmt.Sprintf("Test Regular Web Defaults - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_rwa_client", "app_type", "regular_web"),
+				),
+			},
+			{
+				Config:       acctest.ParseTestName(testAccImportClientCredentialsForRegularWebAppClientDefault, t.Name()),
+				ResourceName: "auth0_client_credentials.my_rwa_client_credentials",
+				ImportState:  true,
+				ImportStateIdFunc: func(state *terraform.State) (string, error) {
+					clientID, err := acctest.ExtractResourceAttributeFromState(state, "auth0_client.my_rwa_client", "id")
+					assert.NoError(t, err)
+					return clientID, nil
+				},
+				ImportStatePersist: true,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_rwa_client", "name", fmt.Sprintf("Test Regular Web Defaults - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_rwa_client", "app_type", "regular_web"),
+					resource.TestCheckTypeSetElemAttrPair("auth0_client_credentials.my_rwa_client_credentials", "client_id", "auth0_client.my_rwa_client", "id"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.my_rwa_client_credentials", "authentication_method", "client_secret_post"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccCreateRegularWebAppClientDefault, t.Name()), // Needed to reset the testing framework after the import state.
 			},
 		},
 	})

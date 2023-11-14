@@ -1,3 +1,22 @@
+## v1.1.0
+
+FEATURES:
+
+- `resource/auth0_tenant`: Add support for `customize_mfa_in_postlogin_action` setting ([#871](https://github.com/auth0/terraform-provider-auth0/pull/871))
+
+ENHANCEMENTS:
+
+- `resource/auth0_client`: Set default `token_endpoint_auth_method` based on `app_type` on creation ([#878](https://github.com/auth0/terraform-provider-auth0/pull/878))
+
+BUG FIXES:
+
+- `resource/auth0_tenant`: Set default `idle_session_lifetime` and `session_lifetime` on import ([#849](https://github.com/auth0/terraform-provider-auth0/pull/849))
+- `resource/auth0_connection`: Prevent panic when checking for database config secrets ([#864](https://github.com/auth0/terraform-provider-auth0/pull/864))
+- `resource/auth0_branding`: Allow deleting the resource even on free tenants ([#875](https://github.com/auth0/terraform-provider-auth0/pull/875))
+- `data-source/auth0_organization`: Fix how we fetch organizations by name ([#877](https://github.com/auth0/terraform-provider-auth0/pull/877))
+- `resource/auth0_connection`: Add support for `disable_self_service_change_password` on AD connection options ([#874](https://github.com/auth0/terraform-provider-auth0/pull/874))
+
+
 ## v1.0.0
 
 NOTES:

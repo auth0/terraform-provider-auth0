@@ -309,11 +309,11 @@ func TestAccLogStreamDataDogRegionValidation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "uS"),
-				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \[us eu us3 us5\], got uS`),
+				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \["us" "eu" "us3" "us5"\], got uS`),
 			},
 			{
 				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "us9"),
-				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \[us eu us3 us5\], got us9`),
+				ExpectError: regexp.MustCompile(`expected sink.0.datadog_region to be one of \["us" "eu" "us3" "us5"\], got us9`),
 			},
 		},
 	})

@@ -81,7 +81,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 // userAgent computes the desired User-Agent header for the *management.Management client.
 func userAgent(terraformVersion *string) string {
 	sdkVersion := auth0.Version
-	terraformSDKVersion := meta.SDKVersionString()
+	terraformSDKVersion := meta.SDKVersionString() //nolint:staticcheck
 
 	userAgent := fmt.Sprintf(
 		"%s/%s (Go-Auth0-SDK/%s; Terraform-SDK/%s; Terraform/%s)",

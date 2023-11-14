@@ -545,15 +545,16 @@ func expandConnectionOptionsEmail(_ *schema.ResourceData, config cty.Value) (int
 
 func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAD{
-		DomainAliases:        value.Strings(config.GetAttr("domain_aliases")),
-		TenantDomain:         value.String(config.GetAttr("tenant_domain")),
-		LogoURL:              value.String(config.GetAttr("icon_url")),
-		IPs:                  value.Strings(config.GetAttr("ips")),
-		CertAuth:             value.Bool(config.GetAttr("use_cert_auth")),
-		Kerberos:             value.Bool(config.GetAttr("use_kerberos")),
-		DisableCache:         value.Bool(config.GetAttr("disable_cache")),
-		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
-		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
+		DomainAliases:                    value.Strings(config.GetAttr("domain_aliases")),
+		TenantDomain:                     value.String(config.GetAttr("tenant_domain")),
+		LogoURL:                          value.String(config.GetAttr("icon_url")),
+		IPs:                              value.Strings(config.GetAttr("ips")),
+		CertAuth:                         value.Bool(config.GetAttr("use_cert_auth")),
+		Kerberos:                         value.Bool(config.GetAttr("use_kerberos")),
+		DisableCache:                     value.Bool(config.GetAttr("disable_cache")),
+		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
+		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
+		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

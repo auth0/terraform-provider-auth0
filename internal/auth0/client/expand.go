@@ -875,12 +875,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {
-		scopeListFromConfig := data.Get("scopes").([]interface{})
-		scopeList := make([]string, 0)
-		for _, scope := range scopeListFromConfig {
-			scopeList = append(scopeList, scope.(string))
-		}
-		clientGrant.Scope = scopeList
+		clientGrant.Scope = value.Strings(cfg.GetAttr("scopes"))
 	}
 
 	return clientGrant

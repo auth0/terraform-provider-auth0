@@ -561,7 +561,7 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 	result := multierror.Append(
 		data.Set("client_id", clientGrant.GetClientID()),
 		data.Set("audience", clientGrant.GetAudience()),
-		data.Set("scopes", clientGrant.Scope),
+		data.Set("scopes", clientGrant.GetScope()),
 	)
 
 	return result.ErrorOrNil()

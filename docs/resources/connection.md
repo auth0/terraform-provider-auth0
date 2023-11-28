@@ -566,7 +566,7 @@ resource "auth0_connection" "oidc" {
     }
 
     attribute_map {
-      mapping_mode   = "basic_profile"
+      mapping_mode   = "use_map"
       userinfo_scope = "openid email profile groups"
       attributes = jsonencode({
         "name" : "$${context.tokenset.name}",
@@ -755,7 +755,7 @@ Optional:
 
 Required:
 
-- `mapping_mode` (String) Method used to map incoming claims. Possible values: `use_map`, `bind_all` or `basic_profile`.
+- `mapping_mode` (String) Method used to map incoming claims. Possible values: `use_map` (Okta or OIDC), `bind_all` (OIDC) or `basic_profile` (Okta).
 
 Optional:
 

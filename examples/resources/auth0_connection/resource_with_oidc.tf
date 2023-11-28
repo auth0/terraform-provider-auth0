@@ -28,7 +28,7 @@ resource "auth0_connection" "oidc" {
     }
 
     attribute_map {
-      mapping_mode   = "basic_profile"
+      mapping_mode   = "use_map"
       userinfo_scope = "openid email profile groups"
       attributes = jsonencode({
         "name" : "$${context.tokenset.name}",

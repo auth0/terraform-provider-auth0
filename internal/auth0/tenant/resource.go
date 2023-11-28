@@ -251,7 +251,7 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant.",
+							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.",
 						},
 					},
 				},

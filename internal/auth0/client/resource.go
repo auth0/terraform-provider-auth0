@@ -252,7 +252,7 @@ func NewResource() *schema.Resource {
 			"require_pushed_authorization_requests": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "Makes the use of Pushed Authorization Requests mandatory for this client.",
+				Description: "Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.",
 			},
 			"mobile": {
 				Type:        schema.TypeList,

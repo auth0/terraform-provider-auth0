@@ -824,7 +824,7 @@ var optionsSchema = &schema.Schema{
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringInSlice([]string{"use_map", "bind_all", "basic_profile"}, false),
-							Description:  "Method used to map incoming claims. Possible values: `use_map`, `bind_all` or `basic_profile`.",
+							Description:  "Method used to map incoming claims. Possible values: `use_map` (Okta or OIDC), `bind_all` (OIDC) or `basic_profile` (Okta).",
 						},
 						"userinfo_scope": {
 							Type:        schema.TypeString,

@@ -1,3 +1,9 @@
+## v1.1.1
+
+BUG FIXES:
+
+- `resource/auth0_client_grant`: Allowing `scopes` to be set as empty ([#888](https://github.com/auth0/terraform-provider-auth0/pull/888))
+
 ## v1.1.0
 
 FEATURES:

@@ -8,6 +8,8 @@ description: |-
 
 Actions are secure, tenant-specific, versioned functions written in Node.js that execute at certain points during the Auth0 runtime. Actions are used to customize and extend Auth0's capabilities with custom logic.
 
+~> Secrets and dependencies must be managed with Terraform, they cannot be managed out-of-band.
+
 ## Example Usage
 
 ```terraform
@@ -65,10 +67,10 @@ resource "auth0_action" "my_action" {
 
 ### Optional
 
-- `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedblock--dependencies))
+- `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. If your action contains dependencies, they must be managed through Terraform; dependencies cannot be managed out-of-band. (see [below for nested schema](#nestedblock--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
 - `runtime` (String) The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).
-- `secrets` (Block List) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. (see [below for nested schema](#nestedblock--secrets))
+- `secrets` (Block List) List of secrets that are included in an action or a version of an action. If your action contains secrets, they **must** be managed through Terraform; Secrets cannot be managed out-of-band. (see [below for nested schema](#nestedblock--secrets))
 
 ### Read-Only
 

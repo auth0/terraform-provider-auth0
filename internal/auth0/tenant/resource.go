@@ -12,6 +12,11 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
+const (
+	idleSessionLifetimeDefault = 72.00
+	sessionLifetimeDefault     = 168.00
+)
+
 // NewResource will return a new auth0_tenant resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -82,14 +87,14 @@ func NewResource() *schema.Resource {
 			"session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      168,
+				Default:      sessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session will stay valid.",
 			},
 			"idle_session_lifetime": {
 				Type:         schema.TypeFloat,
 				Optional:     true,
-				Default:      72,
+				Default:      idleSessionLifetimeDefault,
 				ValidateFunc: validation.FloatAtLeast(0.01),
 				Description:  "Number of hours during which a session can be inactive before the user must log in again.",
 			},
@@ -242,6 +247,12 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
 						},
+						"require_pushed_authorization_requests": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.",
+						},
 					},
 				},
 			},
@@ -289,6 +300,18 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"allow_organization_name_in_authentication_api": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether to accept an organization name instead of an ID on auth endpoints.",
+			},
+			"customize_mfa_in_postlogin_action": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
 			},
 		},
 	}

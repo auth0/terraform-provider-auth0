@@ -5,9 +5,10 @@ resource "auth0_connection" "ad" {
   show_as_button = true
 
   options {
-    brute_force_protection = true
-    tenant_domain          = "example.com"
-    icon_url               = "https://example.com/assets/logo.png"
+    disable_self_service_change_password = true
+    brute_force_protection               = true
+    tenant_domain                        = "example.com"
+    icon_url                             = "https://example.com/assets/logo.png"
     domain_aliases = [
       "example.com",
       "api.example.com"

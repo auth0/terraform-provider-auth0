@@ -95,7 +95,7 @@ func NewResource() *schema.Resource {
 			"secrets": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "List of secrets that are included in an action or a version of an action.",
+				Description: "List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

@@ -3,7 +3,7 @@ name: Main Workflow
 on:
   pull_request: {}
   push:
-    branches: [ "main", "v1" ]
+    branches: ["main", "v1"]
 
 jobs:
   checks:
@@ -45,7 +45,7 @@ jobs:
         run: make test-acc
 
       - name: Update codecov report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # pin@3.1.4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.out

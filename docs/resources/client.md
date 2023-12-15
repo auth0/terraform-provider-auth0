@@ -96,7 +96,7 @@ resource "auth0_client" "my_client" {
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
-- `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`). Requires the `coa_toggle_enabled` feature flag to be enabled on the tenant by the support team.
+- `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
 - `custom_login_page_on` (Boolean) Indicates whether a custom login page is to be used.
@@ -116,6 +116,7 @@ resource "auth0_client" "my_client" {
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
+- `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.

@@ -44,6 +44,8 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "false"),
 				),
 			},
 			{
@@ -60,6 +62,8 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "true"),
 				),
 			},
 			{
@@ -94,6 +98,9 @@ resource "auth0_tenant" "my_tenant" {
 	idle_session_lifetime   = 72
 	enabled_locales         = ["en", "de", "fr"]
 
+	allow_organization_name_in_authentication_api = false
+	customize_mfa_in_postlogin_action = false
+
 	flags {
 		disable_clickjack_protection_headers   = true
 		enable_public_signup_user_exists_error = true
@@ -102,6 +109,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix                 = false
 		mfa_show_factor_list_on_enrollment     = false
+		require_pushed_authorization_requests  = false
 	}
 
 	session_cookie {
@@ -128,6 +136,9 @@ resource "auth0_tenant" "my_tenant" {
 	idle_session_lifetime   = 72
 	enabled_locales         = ["de", "fr"]
 
+	allow_organization_name_in_authentication_api = true
+	customize_mfa_in_postlogin_action = true
+
 	flags {
 		enable_public_signup_user_exists_error = true
 		disable_clickjack_protection_headers   = false # <---- disable and test
@@ -136,6 +147,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = true
 		disable_fields_map_fix                 = true
 		mfa_show_factor_list_on_enrollment     = true
+		require_pushed_authorization_requests  = true
 	}
 
 	session_cookie {

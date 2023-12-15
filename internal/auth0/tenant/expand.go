@@ -15,20 +15,22 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
 	tenant := &management.Tenant{
-		DefaultAudience:       value.String(config.GetAttr("default_audience")),
-		DefaultDirectory:      value.String(config.GetAttr("default_directory")),
-		DefaultRedirectionURI: value.String(config.GetAttr("default_redirection_uri")),
-		FriendlyName:          value.String(config.GetAttr("friendly_name")),
-		PictureURL:            value.String(config.GetAttr("picture_url")),
-		SupportEmail:          value.String(config.GetAttr("support_email")),
-		SupportURL:            value.String(config.GetAttr("support_url")),
-		AllowedLogoutURLs:     value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:       &sessionLifetime,
-		SandboxVersion:        value.String(config.GetAttr("sandbox_version")),
-		EnabledLocales:        value.Strings(config.GetAttr("enabled_locales")),
-		Flags:                 expandTenantFlags(config.GetAttr("flags")),
-		SessionCookie:         expandTenantSessionCookie(config.GetAttr("session_cookie")),
-		Sessions:              expandTenantSessions(config.GetAttr("sessions")),
+		DefaultAudience:               value.String(config.GetAttr("default_audience")),
+		DefaultDirectory:              value.String(config.GetAttr("default_directory")),
+		DefaultRedirectionURI:         value.String(config.GetAttr("default_redirection_uri")),
+		FriendlyName:                  value.String(config.GetAttr("friendly_name")),
+		PictureURL:                    value.String(config.GetAttr("picture_url")),
+		SupportEmail:                  value.String(config.GetAttr("support_email")),
+		SupportURL:                    value.String(config.GetAttr("support_url")),
+		AllowedLogoutURLs:             value.Strings(config.GetAttr("allowed_logout_urls")),
+		SessionLifetime:               &sessionLifetime,
+		SandboxVersion:                value.String(config.GetAttr("sandbox_version")),
+		EnabledLocales:                value.Strings(config.GetAttr("enabled_locales")),
+		Flags:                         expandTenantFlags(config.GetAttr("flags")),
+		SessionCookie:                 expandTenantSessionCookie(config.GetAttr("session_cookie")),
+		Sessions:                      expandTenantSessions(config.GetAttr("sessions")),
+		AllowOrgNameInAuthAPI:         value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
+		CustomizeMFAInPostLoginAction: value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -65,6 +67,7 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
+			RequirePushedAuthorizationRequests: value.Bool(flags.GetAttr("require_pushed_authorization_requests")),
 		}
 
 		return stop

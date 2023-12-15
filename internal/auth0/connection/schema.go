@@ -795,6 +795,7 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
+				Computed:    true,
 				Description: "Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -812,6 +813,7 @@ var optionsSchema = &schema.Schema{
 			"attribute_map": {
 				Type:     schema.TypeList,
 				MaxItems: 1,
+				Computed: true,
 				Optional: true,
 				Description: "OpenID Connect and Okta Workforce connections can automatically map claims received " +
 					"from the identity provider (IdP). You can configure this mapping through a library template " +
@@ -822,7 +824,7 @@ var optionsSchema = &schema.Schema{
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringInSlice([]string{"use_map", "bind_all", "basic_profile"}, false),
-							Description:  "Method used to map incoming claims. Possible values: `use_map`, `bind_all` or `basic_profile`.",
+							Description:  "Method used to map incoming claims. Possible values: `use_map` (Okta or OIDC), `bind_all` (OIDC) or `basic_profile` (Okta).",
 						},
 						"userinfo_scope": {
 							Type:        schema.TypeString,
@@ -839,6 +841,14 @@ var optionsSchema = &schema.Schema{
 						},
 					},
 				},
+			},
+			"map_user_id_to_id": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "By default Auth0 maps `user_id` to `email`. Enabling this setting changes the behavior " +
+					"to map `user_id` to 'id' instead. This can only be defined on a new Google Workspace connection " +
+					"and can not be changed once set.",
 			},
 		},
 	},

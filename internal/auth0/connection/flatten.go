@@ -290,6 +290,7 @@ func flattenConnectionOptionsGoogleApps(
 		"domain_aliases":           options.GetDomainAliases(),
 		"icon_url":                 options.GetLogoURL(),
 		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"map_user_id_to_id":        options.GetMapUserIDtoID(),
 		"upstream_params":          upstreamParams,
 	}
 
@@ -677,17 +678,18 @@ func flattenConnectionOptionsAD(
 	}
 
 	optionsMap := map[string]interface{}{
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"icon_url":                 options.GetLogoURL(),
-		"ips":                      options.GetIPs(),
-		"use_cert_auth":            options.GetCertAuth(),
-		"use_kerberos":             options.GetKerberos(),
-		"disable_cache":            options.GetDisableCache(),
-		"brute_force_protection":   options.GetBruteForceProtection(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"upstream_params":          upstreamParams,
+		"tenant_domain":                        options.GetTenantDomain(),
+		"domain_aliases":                       options.GetDomainAliases(),
+		"icon_url":                             options.GetLogoURL(),
+		"ips":                                  options.GetIPs(),
+		"use_cert_auth":                        options.GetCertAuth(),
+		"use_kerberos":                         options.GetKerberos(),
+		"disable_cache":                        options.GetDisableCache(),
+		"brute_force_protection":               options.GetBruteForceProtection(),
+		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":             options.GetSetUserAttributes(),
+		"disable_self_service_change_password": options.GetDisableSelfServiceChangePassword(),
+		"upstream_params":                      upstreamParams,
 	}
 
 	if options.GetSetUserAttributes() == "" {

@@ -166,16 +166,10 @@ func updateBranding(ctx context.Context, data *schema.ResourceData, meta interfa
 func deleteBranding(ctx context.Context, _ *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := checkForCustomDomains(ctx, api); err != nil {
-		if err == errNoCustomDomain {
-			return nil
+	if err := checkForCustomDomains(ctx, api); err == nil {
+		if err := api.Branding.DeleteUniversalLogin(ctx); err != nil {
+			return diag.FromErr(err)
 		}
-
-		return diag.FromErr(err)
-	}
-
-	if err := api.Branding.DeleteUniversalLogin(ctx); err != nil {
-		return diag.FromErr(err)
 	}
 
 	return nil

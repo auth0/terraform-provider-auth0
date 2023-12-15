@@ -91,7 +91,7 @@ func expandConnection(
 	if connectionIsEnterprise(strategy) {
 		connection.ShowAsButton = value.Bool(config.GetAttr("show_as_button"))
 
-		if !data.IsNewResource() {
+		if !data.IsNewResource() && connection.Options != nil {
 			err := passThroughUnconfigurableConnectionOptions(ctx, api, data.Id(), strategy, connection)
 			if err != nil {
 				return nil, diag.FromErr(err)
@@ -100,7 +100,7 @@ func expandConnection(
 	}
 
 	// Prevent erasing database configuration secrets.
-	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 {
+	if !data.IsNewResource() && strategy == management.ConnectionStrategyAuth0 && connection.Options != nil {
 		apiConn, err := api.Connection.Read(ctx, data.Id())
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -343,6 +343,10 @@ func expandConnectionOptionsGoogleApps(data *schema.ResourceData, config cty.Val
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 	}
 
+	if data.IsNewResource() {
+		options.MapUserIDtoID = value.Bool(config.GetAttr("map_user_id_to_id"))
+	}
+
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
 	if options.GetSetUserAttributes() == "on_each_login" {
 		options.SetUserAttributes = nil // This needs to be omitted to have the toggle enabled in the UI.
@@ -541,15 +545,16 @@ func expandConnectionOptionsEmail(_ *schema.ResourceData, config cty.Value) (int
 
 func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsAD{
-		DomainAliases:        value.Strings(config.GetAttr("domain_aliases")),
-		TenantDomain:         value.String(config.GetAttr("tenant_domain")),
-		LogoURL:              value.String(config.GetAttr("icon_url")),
-		IPs:                  value.Strings(config.GetAttr("ips")),
-		CertAuth:             value.Bool(config.GetAttr("use_cert_auth")),
-		Kerberos:             value.Bool(config.GetAttr("use_kerberos")),
-		DisableCache:         value.Bool(config.GetAttr("disable_cache")),
-		NonPersistentAttrs:   value.Strings(config.GetAttr("non_persistent_attrs")),
-		BruteForceProtection: value.Bool(config.GetAttr("brute_force_protection")),
+		DomainAliases:                    value.Strings(config.GetAttr("domain_aliases")),
+		TenantDomain:                     value.String(config.GetAttr("tenant_domain")),
+		LogoURL:                          value.String(config.GetAttr("icon_url")),
+		IPs:                              value.Strings(config.GetAttr("ips")),
+		CertAuth:                         value.Bool(config.GetAttr("use_cert_auth")),
+		Kerberos:                         value.Bool(config.GetAttr("use_kerberos")),
+		DisableCache:                     value.Bool(config.GetAttr("disable_cache")),
+		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
+		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
+		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -851,6 +856,8 @@ func passThroughUnconfigurableConnectionOptions(
 		err = passThroughUnconfigurableConnectionOptionsADFS(ctx, api, connectionID, connection)
 	case management.ConnectionStrategyPingFederate:
 		err = passThroughUnconfigurableConnectionOptionsPingFederate(ctx, api, connectionID, connection)
+	case management.ConnectionStrategyGoogleApps:
+		err = passThroughUnconfigurableConnectionOptionsGoogleApps(ctx, api, connectionID, connection)
 	}
 
 	return err
@@ -1015,6 +1022,34 @@ func passThroughUnconfigurableConnectionOptionsPingFederate(
 	expandedOptions.AgentMode = existingOptions.AgentMode
 	expandedOptions.ExtGroups = existingOptions.ExtGroups
 	expandedOptions.ExtProfile = existingOptions.ExtProfile
+
+	connection.Options = expandedOptions
+
+	return nil
+}
+
+func passThroughUnconfigurableConnectionOptionsGoogleApps(
+	ctx context.Context,
+	api *management.Management,
+	connectionID string,
+	connection *management.Connection,
+) error {
+	existingConnection, err := api.Connection.Read(ctx, connectionID)
+	if err != nil {
+		return err
+	}
+
+	if existingConnection.Options == nil {
+		return nil
+	}
+
+	existingOptions := existingConnection.Options.(*management.ConnectionOptionsGoogleApps)
+
+	expandedOptions := connection.Options.(*management.ConnectionOptionsGoogleApps)
+	expandedOptions.AdminAccessToken = existingOptions.AdminAccessToken
+	expandedOptions.AdminRefreshToken = existingOptions.AdminRefreshToken
+	expandedOptions.AdminAccessTokenExpiresIn = existingOptions.AdminAccessTokenExpiresIn
+	expandedOptions.HandleLoginFromSocial = existingOptions.HandleLoginFromSocial
 
 	connection.Options = expandedOptions
 

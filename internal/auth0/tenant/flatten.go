@@ -23,7 +23,17 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
+		data.Set("allow_organization_name_in_authentication_api", tenant.GetAllowOrgNameInAuthAPI()),
+		data.Set("customize_mfa_in_postlogin_action", tenant.GetCustomizeMFAInPostLoginAction()),
 	)
+
+	if tenant.GetIdleSessionLifetime() == 0 {
+		result = multierror.Append(result, data.Set("idle_session_lifetime", idleSessionLifetimeDefault))
+	}
+
+	if tenant.GetSessionLifetime() == 0 {
+		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
+	}
 
 	return result.ErrorOrNil()
 }
@@ -56,6 +66,7 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["dashboard_insights_view"] = flags.DashboardInsightsView
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
+	m["require_pushed_authorization_requests"] = flags.RequirePushedAuthorizationRequests
 
 	return []interface{}{m}
 }

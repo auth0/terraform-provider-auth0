@@ -49,7 +49,9 @@ resource "auth0_tenant" "my_tenant" {
 
 ### Optional
 
+- `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
+- `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
@@ -94,6 +96,7 @@ Optional:
 - `enable_public_signup_user_exists_error` (Boolean) Indicates whether the public sign up process shows a `user_exists` error if the user already exists.
 - `mfa_show_factor_list_on_enrollment` (Boolean) Used to allow users to pick which factor to enroll with from the list of available MFA factors.
 - `no_disclose_enterprise_connections` (Boolean) Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
+- `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `revoke_refresh_token_grant` (Boolean) Delete underlying grant when a refresh token is revoked via the Authentication API.
 - `use_scope_descriptions_for_consent` (Boolean) Indicates whether to use scope descriptions for consent.
 

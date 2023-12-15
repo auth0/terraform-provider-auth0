@@ -70,43 +70,10 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	var foundOrganization *management.Organization
-	var err error
 
-	organizationID := data.Get("organization_id").(string)
-	if organizationID != "" {
-		foundOrganization, err = api.Organization.Read(ctx, organizationID)
-		if err != nil {
-			return diag.FromErr(err)
-		}
-	} else {
-		name := data.Get("name").(string)
-		page := 0
-
-	outerLoop:
-		for {
-			organizations, err := api.Organization.List(ctx, management.Page(page), management.PerPage(100))
-			if err != nil {
-				return diag.FromErr(err)
-			}
-
-			for _, organization := range organizations.Organizations {
-				if organization.GetName() == name {
-					foundOrganization = organization
-					break outerLoop
-				}
-			}
-
-			if !organizations.HasNext() {
-				break
-			}
-
-			page++
-		}
-
-		if foundOrganization == nil {
-			return diag.Errorf("No organization found with \"name\" = %q", name)
-		}
+	foundOrganization, err := findOrganizationByIDOrName(ctx, data, api)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	data.SetId(foundOrganization.GetID())
@@ -122,6 +89,20 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 	}
 
 	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers))
+}
+
+func findOrganizationByIDOrName(
+	ctx context.Context,
+	data *schema.ResourceData,
+	api *management.Management,
+) (*management.Organization, error) {
+	organizationID := data.Get("organization_id").(string)
+	if organizationID != "" {
+		return api.Organization.Read(ctx, organizationID)
+	}
+
+	organizationName := data.Get("name").(string)
+	return api.Organization.ReadByName(ctx, organizationName)
 }
 
 func fetchAllOrganizationConnections(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationConnection, error) {

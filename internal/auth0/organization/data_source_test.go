@@ -64,7 +64,7 @@ data "auth0_organization" "test" {
 }
 `
 
-const testAccDataSourceOrganizationNonexistentID = `
+const testAccDataSourceOrganizationNonExistentID = `
 data "auth0_organization" "test" {
 	organization_id = "org_XXXXXXXXXXXXXXXX"
 }
@@ -89,7 +89,7 @@ func TestAccDataSourceOrganization(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccDataSourceOrganizationNonexistentID, t.Name()),
+				Config: acctest.ParseTestName(testAccDataSourceOrganizationNonExistentID, t.Name()),
 				ExpectError: regexp.MustCompile(
 					"404 Not Found: No organization found by that id or name",
 				),

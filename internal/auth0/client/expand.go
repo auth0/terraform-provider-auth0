@@ -13,42 +13,52 @@ func expandClient(data *schema.ResourceData) *management.Client {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
-		Name:                           value.String(config.GetAttr("name")),
-		Description:                    value.String(config.GetAttr("description")),
-		AppType:                        value.String(config.GetAttr("app_type")),
-		LogoURI:                        value.String(config.GetAttr("logo_uri")),
-		IsFirstParty:                   value.Bool(config.GetAttr("is_first_party")),
-		OIDCConformant:                 value.Bool(config.GetAttr("oidc_conformant")),
-		ClientAliases:                  value.Strings(config.GetAttr("client_aliases")),
-		Callbacks:                      value.Strings(config.GetAttr("callbacks")),
-		AllowedLogoutURLs:              value.Strings(config.GetAttr("allowed_logout_urls")),
-		AllowedOrigins:                 value.Strings(config.GetAttr("allowed_origins")),
-		AllowedClients:                 value.Strings(config.GetAttr("allowed_clients")),
-		GrantTypes:                     value.Strings(config.GetAttr("grant_types")),
-		OrganizationUsage:              value.String(config.GetAttr("organization_usage")),
-		OrganizationRequireBehavior:    value.String(config.GetAttr("organization_require_behavior")),
-		WebOrigins:                     value.Strings(config.GetAttr("web_origins")),
-		SSO:                            value.Bool(config.GetAttr("sso")),
-		SSODisabled:                    value.Bool(config.GetAttr("sso_disabled")),
-		CrossOriginAuth:                value.Bool(config.GetAttr("cross_origin_auth")),
-		CrossOriginLocation:            value.String(config.GetAttr("cross_origin_loc")),
-		CustomLoginPageOn:              value.Bool(config.GetAttr("custom_login_page_on")),
-		CustomLoginPage:                value.String(config.GetAttr("custom_login_page")),
-		FormTemplate:                   value.String(config.GetAttr("form_template")),
-		InitiateLoginURI:               value.String(config.GetAttr("initiate_login_uri")),
-		EncryptionKey:                  value.MapOfStrings(config.GetAttr("encryption_key")),
-		IsTokenEndpointIPHeaderTrusted: value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
-		OIDCBackchannelLogout:          expandOIDCBackchannelLogout(data),
-		ClientMetadata:                 expandClientMetadata(data),
-		RefreshToken:                   expandClientRefreshToken(data),
-		JWTConfiguration:               expandClientJWTConfiguration(data),
-		Addons:                         expandClientAddons(data),
-		NativeSocialLogin:              expandClientNativeSocialLogin(data),
-		Mobile:                         expandClientMobile(data),
+		Name:                               value.String(config.GetAttr("name")),
+		Description:                        value.String(config.GetAttr("description")),
+		AppType:                            value.String(config.GetAttr("app_type")),
+		LogoURI:                            value.String(config.GetAttr("logo_uri")),
+		IsFirstParty:                       value.Bool(config.GetAttr("is_first_party")),
+		OIDCConformant:                     value.Bool(config.GetAttr("oidc_conformant")),
+		ClientAliases:                      value.Strings(config.GetAttr("client_aliases")),
+		Callbacks:                          value.Strings(config.GetAttr("callbacks")),
+		AllowedLogoutURLs:                  value.Strings(config.GetAttr("allowed_logout_urls")),
+		AllowedOrigins:                     value.Strings(config.GetAttr("allowed_origins")),
+		AllowedClients:                     value.Strings(config.GetAttr("allowed_clients")),
+		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
+		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
+		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
+		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
+		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
+		SSO:                                value.Bool(config.GetAttr("sso")),
+		SSODisabled:                        value.Bool(config.GetAttr("sso_disabled")),
+		CrossOriginAuth:                    value.Bool(config.GetAttr("cross_origin_auth")),
+		CrossOriginLocation:                value.String(config.GetAttr("cross_origin_loc")),
+		CustomLoginPageOn:                  value.Bool(config.GetAttr("custom_login_page_on")),
+		CustomLoginPage:                    value.String(config.GetAttr("custom_login_page")),
+		FormTemplate:                       value.String(config.GetAttr("form_template")),
+		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
+		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
+		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
+		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
+		ClientMetadata:                     expandClientMetadata(data),
+		RefreshToken:                       expandClientRefreshToken(data),
+		JWTConfiguration:                   expandClientJWTConfiguration(data),
+		Addons:                             expandClientAddons(data),
+		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
+		Mobile:                             expandClientMobile(data),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
 		client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+	}
+
+	if data.IsNewResource() {
+		switch client.GetAppType() {
+		case "native", "spa":
+			client.TokenEndpointAuthMethod = auth0.String("none")
+		case "regular_web", "non_interactive":
+			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
+		}
 	}
 
 	return client
@@ -865,12 +875,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {
-		scopeListFromConfig := data.Get("scopes").([]interface{})
-		scopeList := make([]string, 0)
-		for _, scope := range scopeListFromConfig {
-			scopeList = append(scopeList, scope.(string))
-		}
-		clientGrant.Scope = scopeList
+		clientGrant.Scope = value.Strings(cfg.GetAttr("scopes"))
 	}
 
 	return clientGrant

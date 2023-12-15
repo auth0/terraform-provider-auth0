@@ -281,9 +281,10 @@ resource "auth0_connection" "ad" {
   show_as_button = true
 
   options {
-    brute_force_protection = true
-    tenant_domain          = "example.com"
-    icon_url               = "https://example.com/assets/logo.png"
+    disable_self_service_change_password = true
+    brute_force_protection               = true
+    tenant_domain                        = "example.com"
+    icon_url                             = "https://example.com/assets/logo.png"
     domain_aliases = [
       "example.com",
       "api.example.com"
@@ -565,7 +566,7 @@ resource "auth0_connection" "oidc" {
     }
 
     attribute_map {
-      mapping_mode   = "basic_profile"
+      mapping_mode   = "use_map"
       userinfo_scope = "openid email profile groups"
       attributes = jsonencode({
         "name" : "$${context.tokenset.name}",
@@ -598,10 +599,10 @@ resource "auth0_connection" "okta" {
     domain                   = "example.okta.com"
     domain_aliases           = ["example.com"]
     issuer                   = "https://example.okta.com"
-    jwks_uri                 = "https://example.okta.com/v1/oauth2/certs"
-    token_endpoint           = "https://example.okta.com/v1/oauth2/token"
-    userinfo_endpoint        = "https://example.okta.com/v1/oauth2/token/userinfo"
-    authorization_endpoint   = "https://example.okta.com/signin/authorize"
+    jwks_uri                 = "https://example.okta.com/oauth2/v1/keys"
+    token_endpoint           = "https://example.okta.com/oauth2/v1/token"
+    userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
+    authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
     scopes                   = ["openid", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]
@@ -699,6 +700,7 @@ Optional:
 - `issuer` (String) Issuer URL, e.g. `https://auth.example.com`.
 - `jwks_uri` (String) JWKS URI.
 - `key_id` (String) Apple Key ID.
+- `map_user_id_to_id` (Boolean) By default Auth0 maps `user_id` to `email`. Enabling this setting changes the behavior to map `user_id` to 'id' instead. This can only be defined on a new Google Workspace connection and can not be changed once set.
 - `max_groups_to_retrieve` (String) Maximum number of groups to retrieve.
 - `messaging_service_sid` (String) SID for Copilot. Used when SMS Source is Copilot.
 - `metadata_url` (String) The URL of the SAML metadata document.
@@ -753,7 +755,7 @@ Optional:
 
 Required:
 
-- `mapping_mode` (String) Method used to map incoming claims. Possible values: `use_map`, `bind_all` or `basic_profile`.
+- `mapping_mode` (String) Method used to map incoming claims. Possible values: `use_map` (Okta or OIDC), `bind_all` (OIDC) or `basic_profile` (Okta).
 
 Optional:
 

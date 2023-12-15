@@ -2,6 +2,7 @@ package acctest
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"path"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
@@ -61,6 +63,7 @@ func removeSensitiveDataFromRecordings(t *testing.T, recorderTransport *recorder
 			domain := os.Getenv("AUTH0_DOMAIN")
 			require.NotEmpty(t, domain, "removeSensitiveDataFromRecordings(): AUTH0_DOMAIN is empty")
 
+			redactSensitiveDataInSigningKeys(t, i, domain)
 			redactSensitiveDataInClient(t, i, domain)
 			redactDomain(i, domain)
 
@@ -138,5 +141,41 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 		require.NoError(t, err)
 
 		i.Response.Body = string(clientBody)
+	}
+}
+
+func redactSensitiveDataInSigningKeys(t *testing.T, i *cassette.Interaction, domain string) {
+	read := i.Request.URL == "https://"+domain+"/api/v2/keys/signing" && i.Request.Method == http.MethodGet
+	if read {
+		currentSigningKey := &management.SigningKey{
+			KID:         auth0.String("111111111111111111111"),
+			Cert:        auth0.String("-----BEGIN CERTIFICATE-----\\r\\n[REDACTED]\\r\\n-----END CERTIFICATE-----"),
+			PKCS7:       auth0.String("-----BEGIN PKCS7-----\\r\\n[REDACTED]\\r\\n-----END PKCS7-----"),
+			Current:     auth0.Bool(true),
+			Next:        auth0.Bool(false),
+			Previous:    auth0.Bool(true),
+			Fingerprint: auth0.String("[REDACTED]"),
+			Thumbprint:  auth0.String("[REDACTED]"),
+			Revoked:     auth0.Bool(false),
+		}
+		previousSigningKey := &management.SigningKey{
+			KID:         auth0.String("222222222222222222222"),
+			Cert:        auth0.String("-----BEGIN CERTIFICATE-----\\r\\n[REDACTED]\\r\\n-----END CERTIFICATE-----"),
+			PKCS7:       auth0.String("-----BEGIN PKCS7-----\\r\\n[REDACTED]\\r\\n-----END PKCS7-----"),
+			Current:     auth0.Bool(false),
+			Next:        auth0.Bool(true),
+			Previous:    auth0.Bool(true),
+			Fingerprint: auth0.String("[REDACTED]"),
+			Thumbprint:  auth0.String("[REDACTED]"),
+			Revoked:     auth0.Bool(false),
+		}
+
+		currentSigningKeyBody, err := json.Marshal(currentSigningKey)
+		require.NoError(t, err)
+
+		previousSigningKeyBody, err := json.Marshal(previousSigningKey)
+		require.NoError(t, err)
+
+		i.Response.Body = fmt.Sprintf(`[%s,%s]`, currentSigningKeyBody, previousSigningKeyBody)
 	}
 }

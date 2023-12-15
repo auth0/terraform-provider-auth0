@@ -215,8 +215,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Description: "Whether this client can be used to make cross-origin authentication requests (`true`) " +
-					"or it is not allowed to make such requests (`false`). Requires the `coa_toggle_enabled` " +
-					"feature flag to be enabled on the tenant by the support team.",
+					"or it is not allowed to make such requests (`false`).",
 			},
 			"cross_origin_loc": {
 				Type:     schema.TypeString,
@@ -249,6 +248,11 @@ func NewResource() *schema.Resource {
 					"(max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are " +
 					"alphanumeric and may only include the following special characters: " +
 					"`:,-+=_*?\"/\\()<>@ [Tab] [Space]`.",
+			},
+			"require_pushed_authorization_requests": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.",
 			},
 			"mobile": {
 				Type:        schema.TypeList,

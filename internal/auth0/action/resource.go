@@ -133,7 +133,7 @@ func NewResource() *schema.Resource {
 func createAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	action := expandAction(data.GetRawConfig())
+	action := expandAction(data)
 
 	if err := api.Action.Create(ctx, action); err != nil {
 		return diag.FromErr(err)
@@ -167,7 +167,7 @@ func updateAction(ctx context.Context, data *schema.ResourceData, meta interface
 		return diagnostics
 	}
 
-	action := expandAction(data.GetRawConfig())
+	action := expandAction(data)
 
 	if err := api.Action.Update(ctx, data.Id(), action); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

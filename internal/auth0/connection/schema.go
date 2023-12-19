@@ -802,9 +802,9 @@ var optionsSchema = &schema.Schema{
 						"pkce": {
 							Type:         schema.TypeString,
 							Required:     true,
-							ValidateFunc: validation.StringInSlice([]string{"auto", "s256", "plain", "disabled"}, false),
+							ValidateFunc: validation.StringInSlice([]string{"auto", "S256", "plain", "disabled"}, false),
 							Description: "PKCE configuration. Possible values: `auto` (uses the strongest algorithm available), " +
-								"`s256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) " +
+								"`S256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) " +
 								"or `disabled` (disables support for PKCE).",
 						},
 					},

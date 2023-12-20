@@ -14,14 +14,22 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandAction(config cty.Value) *management.Action {
+func expandAction(data *schema.ResourceData) *management.Action {
+	config := data.GetRawConfig()
+
 	action := &management.Action{
 		Name:              value.String(config.GetAttr("name")),
 		Code:              value.String(config.GetAttr("code")),
 		Runtime:           value.String(config.GetAttr("runtime")),
 		SupportedTriggers: expandActionTriggers(config.GetAttr("supported_triggers")),
-		Dependencies:      expandActionDependencies(config.GetAttr("dependencies")),
-		Secrets:           expandActionSecrets(config.GetAttr("secrets")),
+	}
+
+	if data.HasChange("dependencies") {
+		action.Dependencies = expandActionDependencies(config.GetAttr("dependencies"))
+	}
+
+	if data.HasChange("secrets") {
+		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
 	if action.GetRuntime() == "node18" {
@@ -50,10 +58,6 @@ func expandActionTriggers(triggers cty.Value) []management.ActionTrigger {
 }
 
 func expandActionDependencies(dependencies cty.Value) *[]management.ActionDependency {
-	if dependencies.IsNull() {
-		return nil
-	}
-
 	actionDependencies := make([]management.ActionDependency, 0)
 
 	dependencies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
@@ -68,10 +72,6 @@ func expandActionDependencies(dependencies cty.Value) *[]management.ActionDepend
 }
 
 func expandActionSecrets(secrets cty.Value) *[]management.ActionSecret {
-	if secrets.IsNull() {
-		return nil
-	}
-
 	actionSecrets := make([]management.ActionSecret, 0)
 
 	secrets.ForEachElement(func(_ cty.Value, secret cty.Value) (stop bool) {

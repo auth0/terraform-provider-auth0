@@ -65,7 +65,7 @@ func NewResource() *schema.Resource {
 			"dependencies": {
 				Type:        schema.TypeSet,
 				Optional:    true,
-				Description: "List of third party npm modules, and their versions, that this action depends on. If your action contains dependencies, they must be managed through Terraform; dependencies cannot be managed out-of-band.",
+				Description: "List of third party npm modules, and their versions, that this action depends on.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -95,7 +95,7 @@ func NewResource() *schema.Resource {
 			"secrets": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Description: "List of secrets that are included in an action or a version of an action. If your action contains secrets, they **must** be managed through Terraform; Secrets cannot be managed out-of-band.",
+				Description: "List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {

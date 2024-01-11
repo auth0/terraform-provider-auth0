@@ -791,10 +791,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
 		}
 
-		if samlpAddon == (management.SAML2ClientAddon{}) {
-			return true
-		}
-
 		var logout management.SAML2ClientAddonLogout
 
 		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {

@@ -1011,7 +1011,18 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccUpdateClientWithSAMLP = `
+const testAccUpdateClientWithSAMLPEmpty = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - SSO Integration - {{.testName}}"
+	app_type = "sso_integration"
+
+	addons {
+		samlp {}
+	}
+}
+`
+
+const testAccUpdateClientWithSAMLPUpdated = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - SSO Integration - {{.testName}}"
 	app_type = "sso_integration"
@@ -1898,7 +1909,7 @@ func TestAccClientAddons(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLP, t.Name()),
+				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLPUpdated, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
@@ -1956,6 +1967,52 @@ func TestAccClientAddons(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.mappings.name", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.callback", "https://example.com/callback"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.logout.0.slo_enabled", "true"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSAMLPEmpty, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - SSO Integration - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "sso_integration"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.aws.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_blob.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.azure_sb.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.rms.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.mscrm.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.slack.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sentry.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.echosign.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.egnyte.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.firebase.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.newrelic.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.office365.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_api.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.salesforce_sandbox_api.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.layer.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sap_api.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sharepoint.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.springcm.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wams.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.zendesk.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.zoom.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.sso_integration.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.box.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.cloudbees.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.concur.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.dropbox.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.wsfed.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.digest_algorithm", "sha1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.name_identifier_format", "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.create_upn_claim", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.passthrough_claims_with_no_mapping", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_unknown_claims_as_is", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.map_identities", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.typed_attributes", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.sign_response", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.include_attribute_name_format", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "addons.0.samlp.0.signature_algorithm", "rsa-sha1"),
 				),
 			},
 			{

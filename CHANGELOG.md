@@ -1,3 +1,15 @@
+## v1.1.2
+
+ENHANCEMENTS:
+
+- `resource/auth0_action`: Prevent sending `secrets` and `dependencies` config if no changes triggered ([#903](https://github.com/auth0/terraform-provider-auth0/pull/903))
+
+BUG FIXES:
+
+- `resource/auth0_connection`: Fix PKCE values for OIDC connections ([#896](https://github.com/auth0/terraform-provider-auth0/pull/896))
+- `resource/auth0_connection`: Allow `samlp` block to be defined as empty and inherit default values ([#905](https://github.com/auth0/terraform-provider-auth0/pull/905))
+
+
 ## v1.1.1
 
 BUG FIXES:

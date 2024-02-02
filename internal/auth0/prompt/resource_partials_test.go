@@ -1,12 +1,28 @@
 package prompt_test
 
 import (
+	"context"
+	"github.com/auth0/go-auth0"
+	"github.com/auth0/go-auth0/management"
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
+	"time"
 )
 
-func TestPromptPartials(t *testing.T) {
+var (
+	domain       = os.Getenv("AUTH0_DOMAIN")
+	clientID     = os.Getenv("AUTH0_CLIENT_ID")
+	clientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
+	manager, _   = management.New(domain, management.WithClientCredentials(context.Background(), clientID, clientSecret))
+)
+
+func TestAccPromptPartials(t *testing.T) {
+	_ = givenACustomDomain(t)
+	_ = givenAUniversalLogin(t)
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -25,6 +41,57 @@ func TestPromptPartials(t *testing.T) {
 			},
 		},
 	})
+}
+
+func givenACustomDomain(t *testing.T) *management.CustomDomain {
+	t.Helper()
+
+	customDomain := &management.CustomDomain{
+		Domain:    auth0.Stringf("%d.auth.uat.auth0.com", time.Now().UTC().Unix()),
+		Type:      auth0.String("auth0_managed_certs"),
+		TLSPolicy: auth0.String("recommended"),
+	}
+
+	err := manager.CustomDomain.Create(context.Background(), customDomain)
+	assert.NoError(t, err)
+
+	t.Cleanup(func() {
+		cleanupCustomDomain(t, customDomain.GetID())
+	})
+
+	return customDomain
+}
+
+func givenAUniversalLogin(t *testing.T) *management.BrandingUniversalLogin {
+	t.Helper()
+
+	body := `<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>`
+	ul := &management.BrandingUniversalLogin{
+		Body: auth0.String(body),
+	}
+
+	err := manager.Branding.SetUniversalLogin(context.Background(), ul)
+	assert.NoError(t, err)
+
+	t.Cleanup(func() {
+		cleanupUniversalLogin(t)
+	})
+
+	return ul
+}
+
+func cleanupCustomDomain(t *testing.T, customDomainID string) {
+	t.Helper()
+
+	err := manager.CustomDomain.Delete(context.Background(), customDomainID)
+	assert.NoError(t, err)
+}
+
+func cleanupUniversalLogin(t *testing.T) {
+	t.Helper()
+
+	err := manager.Branding.DeleteUniversalLogin(context.Background())
+	assert.NoError(t, err)
 }
 
 const testAccPromptPartialsCreate = `

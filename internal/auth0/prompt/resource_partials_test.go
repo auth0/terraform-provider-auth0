@@ -58,6 +58,8 @@ const testAccGivenPrerequisites = testAccGivenACustomDomain + testGivenABranding
 
 const testAccPromptPartialsCreate = testAccGivenPrerequisites + `
 resource "auth0_prompt_partials" "prompt_partials" {
+  depends_on = [ auth0_branding.my_brand ]
+
   prompt = "login"
   form_content_start = "<div>Test Header</div>"
 }
@@ -65,6 +67,8 @@ resource "auth0_prompt_partials" "prompt_partials" {
 
 const testAccPromptPartialsUpdate = testAccGivenPrerequisites + `
 resource "auth0_prompt_partials" "prompt_partials" {
+  depends_on = [ auth0_branding.my_brand ]
+
   prompt = "login"
   form_content_start = "<div>Updated Test Header</div>"
 }

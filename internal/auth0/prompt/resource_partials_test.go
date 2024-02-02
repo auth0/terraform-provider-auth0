@@ -2,14 +2,15 @@ package prompt_test
 
 import (
 	"context"
+	"os"
+	"testing"
+	"time"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"testing"
-	"time"
 )
 
 var (

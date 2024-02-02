@@ -21,6 +21,7 @@ var availablePartialsPrompts = []string{
 	string(management.PartialsPromptSignupPassword),
 }
 
+// NewPartialsResource creates a new resource for partial prompts.
 func NewPartialsResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createPartialsPrompt,

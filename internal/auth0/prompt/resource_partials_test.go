@@ -24,6 +24,10 @@ func TestAccPromptPartials(t *testing.T) {
 	_ = givenACustomDomain(t)
 	_ = givenAUniversalLogin(t)
 
+	t.Cleanup(func() {
+		cleanupPartialsPrompt(t, management.PartialsPromptSegment("login"))
+	})
+
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -92,6 +96,13 @@ func cleanupUniversalLogin(t *testing.T) {
 	t.Helper()
 
 	err := manager.Branding.DeleteUniversalLogin(context.Background())
+	assert.NoError(t, err)
+}
+
+func cleanupPartialsPrompt(t *testing.T, prompt management.PartialsPromptSegment) {
+	t.Helper()
+
+	err := manager.Prompt.DeletePartials(context.Background(), &management.PartialsPrompt{Segment: prompt})
 	assert.NoError(t, err)
 }
 

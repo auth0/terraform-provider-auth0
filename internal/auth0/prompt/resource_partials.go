@@ -2,34 +2,37 @@ package prompt
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
-var availablePartialsPrompts = []string{
-	string(management.PartialsPromptLoginID),
-	string(management.PartialsPromptLogin),
-	string(management.PartialsPromptLoginPassword),
-	string(management.PartialsPromptSignup),
-	string(management.PartialsPromptSignupID),
-	string(management.PartialsPromptSignupPassword),
+var allowedPromptsWithPartials = []string{
+	string(management.PromptLoginID),
+	string(management.PromptLogin),
+	string(management.PromptLoginPassword),
+	string(management.PromptSignup),
+	string(management.PromptSignupID),
+	string(management.PromptSignupPassword),
 }
 
 // NewPartialsResource creates a new resource for partial prompts.
 func NewPartialsResource() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: createPartialsPrompt,
-		ReadContext:   readPartialsPrompt,
-		UpdateContext: updatePartialsPrompt,
-		DeleteContext: deletePartialsPrompt,
-		Description:   "With Auth0, you can use a custom sign in to maintain a consistent user experience. This resource allows you to create and manage a custom sign in within your Auth0 tenant.",
+		CreateContext: createPromptPartials,
+		ReadContext:   readPromptPartials,
+		UpdateContext: updatePromptPartials,
+		DeleteContext: deletePromptPartials,
+		Importer: &schema.ResourceImporter{
+			StateContext: schema.ImportStatePassthroughContext,
+		},
+		Description: "With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. " +
+			"You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).",
 		Schema: map[string]*schema.Schema{
 			"form_content_start": {
 				Type:        schema.TypeString,
@@ -63,89 +66,51 @@ func NewPartialsResource() *schema.Resource {
 			},
 			"prompt": {
 				Type:         schema.TypeString,
-				ValidateFunc: validation.StringInSlice(availablePartialsPrompts, false),
+				ValidateFunc: validation.StringInSlice(allowedPromptsWithPartials, false),
 				Description: "The prompt that you are adding partials for. " +
-					"Options are: `" + strings.Join(availablePartialsPrompts, "`, `") + "`.",
+					"Options are: `" + strings.Join(allowedPromptsWithPartials, "`, `") + "`.",
 				Required: true,
 			},
 		},
 	}
 }
-func createPartialsPrompt(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
-	return updatePartialsPrompt(ctx, data, meta)
+func createPromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
+	prompt := data.Get("prompt").(string)
+	data.SetId(prompt)
+	return updatePromptPartials(ctx, data, meta)
 }
 
-func readPartialsPrompt(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
+func readPromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	segment, ok := data.GetOk("prompt")
-	if !ok {
-		return diag.FromErr(fmt.Errorf("failed, missing prompt"))
-	}
-
-	prompt, err := api.Prompt.ReadPartials(ctx, management.PartialsPromptSegment(segment.(string)))
+	promptPartials, err := api.Prompt.ReadPartials(ctx, management.PromptType(data.Id()))
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	result := multierror.Append(
-		data.Set("form_content_start", prompt.FormContentStart),
-		data.Set("form_content_end", prompt.FormContentEnd),
-		data.Set("form_footer_start", prompt.FormFooterStart),
-		data.Set("form_footer_end", prompt.FormFooterEnd),
-		data.Set("secondary_actions_start", prompt.SecondaryActionsStart),
-		data.Set("secondary_actions_end", prompt.SecondaryActionsEnd),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenPromptPartials(data, promptPartials))
 }
 
-func updatePartialsPrompt(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
+func updatePromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	segment, ok := data.GetOk("prompt")
-	if !ok {
-		return diag.FromErr(fmt.Errorf("failed, missing prompt"))
-	}
+	promptPartials := expandPromptPartials(data)
 
-	prompt := &management.PartialsPrompt{
-		Segment:               management.PartialsPromptSegment(segment.(string)),
-		FormContentStart:      data.Get("form_content_start").(string),
-		FormContentEnd:        data.Get("form_content_end").(string),
-		FormFooterStart:       data.Get("form_footer_start").(string),
-		FormFooterEnd:         data.Get("form_footer_end").(string),
-		SecondaryActionsStart: data.Get("secondary_actions_start").(string),
-		SecondaryActionsEnd:   data.Get("secondary_actions_end").(string),
-	}
-
-	if err := api.Prompt.UpdatePartials(ctx, prompt); err != nil {
+	if err := api.Prompt.UpdatePartials(ctx, promptPartials); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readPartialsPrompt(ctx, data, meta)
+	return readPromptPartials(ctx, data, meta)
 }
 
-func deletePartialsPrompt(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
+func deletePromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	segment, ok := data.GetOk("prompt")
-	if !ok {
-		return diag.FromErr(fmt.Errorf("failed, missing prompt"))
-	}
+	prompt := data.Get("prompt").(string)
 
-	prompt := &management.PartialsPrompt{
-		Segment:               management.PartialsPromptSegment(segment.(string)),
-		FormContentStart:      data.Get("form_content_start").(string),
-		FormContentEnd:        data.Get("form_content_end").(string),
-		FormFooterStart:       data.Get("form_footer_start").(string),
-		FormFooterEnd:         data.Get("form_footer_end").(string),
-		SecondaryActionsStart: data.Get("secondary_actions_start").(string),
-		SecondaryActionsEnd:   data.Get("secondary_actions_end").(string),
-	}
-
-	if err := api.Prompt.DeletePartials(ctx, prompt); err != nil {
+	if err := api.Prompt.DeletePartials(ctx, management.PromptType(prompt)); err != nil {
 		return diag.FromErr(err)
 	}
 
-	return readPartialsPrompt(ctx, data, meta)
+	return nil
 }

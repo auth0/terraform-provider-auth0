@@ -20,6 +20,19 @@ func flattenPrompt(data *schema.ResourceData, prompt *management.Prompt) error {
 	return result.ErrorOrNil()
 }
 
+func flattenPromptPartials(data *schema.ResourceData, promptPartials *management.PromptPartials) error {
+	result := multierror.Append(
+		data.Set("form_content_start", promptPartials.FormContentStart),
+		data.Set("form_content_end", promptPartials.FormContentEnd),
+		data.Set("form_footer_start", promptPartials.FormFooterStart),
+		data.Set("form_footer_end", promptPartials.FormFooterEnd),
+		data.Set("secondary_actions_start", promptPartials.SecondaryActionsStart),
+		data.Set("secondary_actions_end", promptPartials.SecondaryActionsEnd),
+	)
+
+	return result.ErrorOrNil()
+}
+
 func flattenPromptCustomText(data *schema.ResourceData, customText map[string]interface{}) error {
 	body, err := marshalCustomTextBody(customText)
 	if err != nil {

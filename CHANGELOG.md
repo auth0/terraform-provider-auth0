@@ -1,3 +1,10 @@
+## v1.2.0
+
+FEATURES:
+
+- `resource/auth0_prompt_partials`: Add new resource to manage prompt partials ([#918](https://github.com/auth0/terraform-provider-auth0/pull/918))
+
+
 ## v1.1.2
 
 ENHANCEMENTS:

@@ -54,7 +54,7 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 // *management.Management client and *mutex.KeyValue is stored
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
-	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		domain := data.Get("domain").(string)
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)

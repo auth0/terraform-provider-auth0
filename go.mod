@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
 	github.com/hashicorp/terraform-plugin-testing v1.6.0
 	github.com/stretchr/testify v1.8.4
-	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
+	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
 
 require (

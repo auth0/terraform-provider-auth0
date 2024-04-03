@@ -96,7 +96,7 @@ Optional:
 - `mixpanel_service_account_username` (String) The Mixpanel Service Account username. Services Accounts can be created in the Project Settings page.
 - `segment_write_key` (String, Sensitive) The [Segment Write Key](https://segment.com/docs/connections/find-writekey/).
 - `splunk_domain` (String) The Splunk domain name.
-- `splunk_port` (String) The Splunk port.
+- `splunk_port` (Number) The Splunk port.
 - `splunk_secure` (Boolean) This toggle should be turned off when using self-signed certificates.
 - `splunk_token` (String, Sensitive) The Splunk access token.
 - `sumo_source_address` (String) Generated URL for your defined HTTP source in Sumo Logic for collecting streaming data from Auth0.

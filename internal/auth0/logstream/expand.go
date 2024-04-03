@@ -127,7 +127,7 @@ func expandLogStreamSinkSplunk(config cty.Value) *management.LogStreamSinkSplunk
 	return &management.LogStreamSinkSplunk{
 		Domain: value.String(config.GetAttr("splunk_domain")),
 		Token:  value.String(config.GetAttr("splunk_token")),
-		Port:   value.String(config.GetAttr("splunk_port")),
+		Port:   value.Int(config.GetAttr("splunk_port")),
 		Secure: value.Bool(config.GetAttr("splunk_secure")),
 	}
 }

@@ -279,7 +279,7 @@ func NewResource() *schema.Resource {
 							Description:  "The Splunk access token.",
 						},
 						"splunk_port": {
-							Type:         schema.TypeString,
+							Type:         schema.TypeInt,
 							Optional:     true,
 							RequiredWith: []string{"sink.0.splunk_domain", "sink.0.splunk_token", "sink.0.splunk_secure"},
 							Description:  "The Splunk port.",

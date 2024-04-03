@@ -405,7 +405,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_domain", "demo.splunk.com"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_token", "12a34ab5-c6d7-8901-23ef-456b7c89d0c1"),
-					// Resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_port", 8088),.
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_port", "8088"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_secure", "true"),
 				),
 			},
@@ -416,7 +416,7 @@ func TestAccLogStreamSplunk(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "splunk"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_domain", "prod.splunk.com"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_token", "12a34ab5-c6d7-8901-23ef-456b7c89d0d1"),
-					// Resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_port", "8088"),.
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_port", "8088"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.splunk_secure", "true"),
 				),
 			},

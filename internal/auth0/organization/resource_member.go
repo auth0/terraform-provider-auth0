@@ -57,20 +57,12 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
 
-	members, err := api.Organization.Members(ctx, organizationID)
+	_, err := api.Organization.MemberRoles(ctx, organizationID, userID)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
-
-	userID := data.Get("user_id").(string)
-	for _, member := range members.Members {
-		if member.GetUserID() == userID {
-			return nil
-		}
-	}
-
-	data.SetId("")
 	return nil
 }
 

@@ -1,6 +1,6 @@
 module github.com/auth0/terraform-provider-auth0
 
-go 1.21
+go 1.22.2
 
 require (
 	github.com/PuerkitoBio/rehttp v1.3.0

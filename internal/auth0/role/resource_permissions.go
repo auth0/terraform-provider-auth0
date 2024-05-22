@@ -53,8 +53,8 @@ func NewPermissionsResource() *schema.Resource {
 				},
 			},
 		},
-		CreateContext: upsertRolePermissions,
-		UpdateContext: upsertRolePermissions,
+		CreateContext: createRolePermissions,
+		UpdateContext: updateRolePermissions,
 		ReadContext:   readRolePermissions,
 		DeleteContext: deleteRolePermissions,
 		Importer: &schema.ResourceImporter{
@@ -64,7 +64,33 @@ func NewPermissionsResource() *schema.Resource {
 	}
 }
 
-func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func createRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	roleID := data.Get("role_id").(string)
+	toAdd := data.Get("permissions").([]interface{})
+
+	var addPermissions []*management.Permission
+	for _, permission := range toAdd {
+		p := permission.(map[string]interface{})
+		addPermissions = append(addPermissions, &management.Permission{
+			Name:                     auth0.String(p["name"].(string)),
+			ResourceServerIdentifier: auth0.String(p["resource_server_identifier"].(string)),
+		})
+	}
+
+	if len(addPermissions) > 0 {
+		if err := api.Role.AssociatePermissions(ctx, roleID, addPermissions); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	data.SetId(roleID)
+
+	return readRolePermissions(ctx, data, meta)
+}
+
+func updateRolePermissions(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	if !data.HasChange("permissions") {
 		return nil
 	}
@@ -106,8 +132,6 @@ func upsertRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 			return diag.FromErr(err)
 		}
 	}
-
-	data.SetId(roleID)
 
 	return readRolePermissions(ctx, data, meta)
 }

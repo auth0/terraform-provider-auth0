@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	"github.com/auth0/go-auth0/management"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -58,13 +59,25 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 
 	organizationID := data.Get("organization_id").(string)
 
-	members, err := api.Organization.Members(ctx, organizationID)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	var members []management.OrganizationMember
+	var page int
+	for {
+		memberList, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		members = append(members, memberList.Members...)
+
+		if !memberList.HasNext() {
+			break
+		}
+
+		page++
 	}
 
 	userID := data.Get("user_id").(string)
-	for _, member := range members.Members {
+	for _, member := range members {
 		if member.GetUserID() == userID {
 			return nil
 		}
@@ -73,7 +86,6 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	data.SetId("")
 	return nil
 }
-
 func deleteOrganizationMember(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 

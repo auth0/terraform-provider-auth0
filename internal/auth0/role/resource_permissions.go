@@ -68,7 +68,8 @@ func createRolePermissions(ctx context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 
 	roleID := data.Get("role_id").(string)
-	toAdd := data.Get("permissions").([]interface{})
+	permissionsSet := data.Get("permissions").(*schema.Set)
+	toAdd := permissionsSet.List()
 
 	var addPermissions []*management.Permission
 	for _, permission := range toAdd {

@@ -50,13 +50,13 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 	organizationID := data.Get("organization_id").(string)
 
 	var alreadyMembers []management.OrganizationMember
-	var page int
+	var from string
 	for {
 		memberList, err := api.Organization.Members(
 			ctx,
 			organizationID,
-			management.Page(page),
-			management.PerPage(100),
+			management.From(from),
+			management.Take(100),
 		)
 		if err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
@@ -68,7 +68,7 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 			break
 		}
 
-		page++
+		from = memberList.Next
 	}
 
 	data.SetId(organizationID)
@@ -97,13 +97,13 @@ func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 
 	var members []management.OrganizationMember
-	var page int
+	var from string
 	for {
 		memberList, err := api.Organization.Members(
 			ctx,
 			data.Id(),
-			management.Page(page),
-			management.PerPage(100),
+			management.From(from),
+			management.Take(100),
 		)
 		if err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
@@ -115,7 +115,7 @@ func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, met
 			break
 		}
 
-		page++
+		from = memberList.Next
 	}
 
 	return diag.FromErr(flattenOrganizationMembers(data, members))

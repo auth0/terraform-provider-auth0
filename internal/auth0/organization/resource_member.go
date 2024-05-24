@@ -61,9 +61,14 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	organizationID := data.Get("organization_id").(string)
 
 	var members []management.OrganizationMember
-	var page int
+	var from string
 	for {
-		memberList, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
+		memberList, err := api.Organization.Members(
+			ctx,
+			organizationID,
+			management.From(from),
+			management.Take(100),
+		)
 		if err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
@@ -74,7 +79,7 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 			break
 		}
 
-		page++
+		from = memberList.Next
 	}
 
 	userID := data.Get("user_id").(string)
@@ -87,6 +92,7 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	data.SetId("")
 	return nil
 }
+
 func deleteOrganizationMember(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 

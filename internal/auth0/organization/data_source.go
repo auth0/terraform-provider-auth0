@@ -132,7 +132,7 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 	var from string
 
 	for {
-		members, err := api.Organization.Members(ctx, organizationID, management.From(from), management.Take(100))
+		members, err := api.Organization.Members(ctx, organizationID, management.From(from), management.Take(100), management.IncludeFields("user_id"))
 		if err != nil {
 			return nil, err
 		}

@@ -3,8 +3,6 @@ package organization
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -59,32 +57,15 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
+	userID := data.Get("user_id").(string)
 
-	var members []management.OrganizationMember
-	var from string
-	for {
-		memberList, err := api.Organization.Members(
-			ctx,
-			organizationID,
-			management.From(from),
-			management.Take(100),
-		)
-		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		members = append(members, memberList.Members...)
-
-		if !memberList.HasNext() {
-			break
-		}
-
-		from = memberList.Next
+	members, err := fetchAllOrganizationMembers(ctx, api, organizationID)
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	userID := data.Get("user_id").(string)
-	for _, member := range members {
-		if member.GetUserID() == userID {
+	for _, memberID := range members {
+		if memberID == userID {
 			return nil
 		}
 	}

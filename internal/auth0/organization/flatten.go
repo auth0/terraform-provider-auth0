@@ -89,7 +89,7 @@ func flattenOrganizationMemberRole(data *schema.ResourceData, role management.Or
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationMembers(data *schema.ResourceData, members []management.OrganizationMember) error {
+func flattenOrganizationMembers(data *schema.ResourceData, members []string) error {
 	result := multierror.Append(
 		data.Set("organization_id", data.Id()),
 		data.Set("members", flattenOrganizationMembersSlice(members)),
@@ -98,15 +98,10 @@ func flattenOrganizationMembers(data *schema.ResourceData, members []management.
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationMembersSlice(members []management.OrganizationMember) []string {
+func flattenOrganizationMembersSlice(members []string) []string {
 	if len(members) == 0 {
 		return nil
 	}
 
-	flattenedMembers := make([]string, 0)
-	for _, member := range members {
-		flattenedMembers = append(flattenedMembers, member.GetUserID())
-	}
-
-	return flattenedMembers
+	return members
 }

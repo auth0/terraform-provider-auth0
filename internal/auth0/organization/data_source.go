@@ -129,10 +129,10 @@ func fetchAllOrganizationConnections(ctx context.Context, api *management.Manage
 
 func fetchAllOrganizationMembers(ctx context.Context, api *management.Management, organizationID string) ([]string, error) {
 	foundMembers := make([]string, 0)
-	var page int
+	var from string
 
 	for {
-		members, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
+		members, err := api.Organization.Members(ctx, organizationID, management.From(from), management.Take(100), management.IncludeFields("user_id"))
 		if err != nil {
 			return nil, err
 		}
@@ -145,7 +145,7 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 			break
 		}
 
-		page++
+		from = members.Next
 	}
 
 	return foundMembers, nil

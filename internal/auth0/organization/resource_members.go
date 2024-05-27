@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -49,26 +48,9 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 	organizationID := data.Get("organization_id").(string)
 
-	var alreadyMembers []management.OrganizationMember
-	var page int
-	for {
-		memberList, err := api.Organization.Members(
-			ctx,
-			organizationID,
-			management.Page(page),
-			management.PerPage(100),
-		)
-		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		alreadyMembers = append(alreadyMembers, memberList.Members...)
-
-		if !memberList.HasNext() {
-			break
-		}
-
-		page++
+	alreadyMembers, err := fetchAllOrganizationMembers(ctx, api, organizationID)
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	data.SetId(organizationID)
@@ -96,26 +78,9 @@ func createOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 func readOrganizationMembers(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	var members []management.OrganizationMember
-	var page int
-	for {
-		memberList, err := api.Organization.Members(
-			ctx,
-			data.Id(),
-			management.Page(page),
-			management.PerPage(100),
-		)
-		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		members = append(members, memberList.Members...)
-
-		if !memberList.HasNext() {
-			break
-		}
-
-		page++
+	members, err := fetchAllOrganizationMembers(ctx, api, data.Id())
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return diag.FromErr(flattenOrganizationMembers(data, members))
@@ -173,16 +138,11 @@ func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 func guardAgainstErasingUnwantedMembers(
 	organizationID string,
-	alreadyMembers []management.OrganizationMember,
+	alreadyMemberIDs []string,
 	memberIDsToAdd []string,
 ) diag.Diagnostics {
-	if len(alreadyMembers) == 0 {
+	if len(alreadyMemberIDs) == 0 {
 		return nil
-	}
-
-	alreadyMemberIDs := make([]string, 0)
-	for _, member := range alreadyMembers {
-		alreadyMemberIDs = append(alreadyMemberIDs, member.GetUserID())
 	}
 
 	if cmp.Equal(memberIDsToAdd, alreadyMemberIDs) {

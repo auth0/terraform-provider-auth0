@@ -127,25 +127,35 @@ func fetchAllOrganizationConnections(ctx context.Context, api *management.Manage
 	return foundConnections, nil
 }
 
-func fetchAllOrganizationMembers(ctx context.Context, api *management.Management, organizationID string) ([]string, error) {
-	foundMembers := make([]string, 0)
-	var page int
+func fetchAllOrganizationMembers(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]management.OrganizationMember, error) {
+	var foundMembers []management.OrganizationMember
+	var from string
+
+	options := []management.RequestOption{
+		management.Take(100),
+		management.IncludeFields("user_id"),
+	}
 
 	for {
-		members, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
+		if from != "" {
+			options = append(options, management.From(from))
+		}
+
+		membersList, err := api.Organization.Members(ctx, organizationID, options...)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, member := range members.Members {
-			foundMembers = append(foundMembers, member.GetUserID())
-		}
-
-		if !members.HasNext() {
+		foundMembers = append(foundMembers, membersList.Members...)
+		if !membersList.HasNext() {
 			break
 		}
 
-		page++
+		from = membersList.Next
 	}
 
 	return foundMembers, nil

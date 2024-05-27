@@ -3,6 +3,7 @@ package organization
 import (
 	"context"
 	"fmt"
+
 	"github.com/auth0/go-auth0/management"
 
 	"github.com/google/go-cmp/cmp"

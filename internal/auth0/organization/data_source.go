@@ -145,7 +145,8 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 		}
 
 		for _, member := range membersList.Members {
-			foundMembers = append(foundMembers, &member)
+			memberCopy := member
+			foundMembers = append(foundMembers, &memberCopy)
 		}
 
 		if !membersList.HasNext() {

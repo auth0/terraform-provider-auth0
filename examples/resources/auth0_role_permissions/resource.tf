@@ -1,28 +1,22 @@
 # Example:
 resource "auth0_resource_server" "resource_server" {
-  name                                            = "test"
-  identifier                                      = "test.example.com"
-  signing_alg                                     = "RS256"
-  token_lifetime                                  = 86400
-  token_lifetime_for_web                          = 7200
-  enforce_policies                                = true
-  skip_consent_for_verifiable_first_party_clients = true
-  allow_offline_access                            = false
-  token_dialect                                   = "access_token"
+  name       = "test"
+  identifier = "test.example.com"
 }
 resource "auth0_resource_server_scopes" "resource_server_scopes" {
   resource_server_identifier = auth0_resource_server.resource_server.identifier
 
   scopes {
-    name = "access:store_contrib"
+    name = "store:create"
   }
-
   scopes {
-    name = "access:store_read"
+    name = "store:read"
   }
-
   scopes {
-    name = "access:serve_read"
+    name = "store:update"
+  }
+  scopes {
+    name = "store:delete"
   }
 }
 
@@ -30,11 +24,14 @@ resource "auth0_role" "my_role" {
   name = "My Role"
 }
 
-resource "auth0_role_permissions" "all_role_permissions" {
+resource "auth0_role_permissions" "my_role_perms" {
   role_id = auth0_role.my_role.id
 
-  permissions {
-    name                       = tolist(auth0_resource_server_scopes.resource_server_scopes.scopes)[0].name
-    resource_server_identifier = auth0_resource_server.resource_server.identifier
+  dynamic "permissions" {
+    for_each = auth0_resource_server_scopes.resource_server_scopes.scopes
+    content {
+      name                       = permissions.value.name
+      resource_server_identifier = auth0_resource_server.resource_server.identifier
+    }
   }
 }

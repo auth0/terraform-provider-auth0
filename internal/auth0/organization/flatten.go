@@ -21,13 +21,22 @@ func flattenOrganizationForDataSource(
 	data *schema.ResourceData,
 	organization *management.Organization,
 	connections []*management.OrganizationConnection,
-	memberIDs []string,
+	members []*management.OrganizationMember,
 ) error {
 	result := multierror.Append(
 		flattenOrganization(data, organization),
 		data.Set("connections", flattenOrganizationEnabledConnections(connections)),
-		data.Set("members", memberIDs),
 	)
+
+	var memberIDs []string
+	for _, member := range members {
+		memberIDs = append(memberIDs, member.GetUserID())
+	}
+
+	err := data.Set("members", memberIDs)
+	if err != nil {
+		result = multierror.Append(result, err)
+	}
 
 	return result.ErrorOrNil()
 }
@@ -89,7 +98,7 @@ func flattenOrganizationMemberRole(data *schema.ResourceData, role management.Or
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationMembers(data *schema.ResourceData, members []string) error {
+func flattenOrganizationMembers(data *schema.ResourceData, members []*management.OrganizationMember) error {
 	result := multierror.Append(
 		data.Set("organization_id", data.Id()),
 		data.Set("members", flattenOrganizationMembersSlice(members)),
@@ -98,10 +107,14 @@ func flattenOrganizationMembers(data *schema.ResourceData, members []string) err
 	return result.ErrorOrNil()
 }
 
-func flattenOrganizationMembersSlice(members []string) []string {
+func flattenOrganizationMembersSlice(members []*management.OrganizationMember) []string {
 	if len(members) == 0 {
 		return nil
 	}
+	flattenedMembers := make([]string, 0)
+	for _, member := range members {
+		flattenedMembers = append(flattenedMembers, member.GetUserID())
+	}
 
-	return members
+	return flattenedMembers
 }

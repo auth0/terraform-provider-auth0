@@ -3,6 +3,7 @@ package organization
 import (
 	"context"
 	"fmt"
+	"github.com/auth0/go-auth0/management"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -138,11 +139,16 @@ func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 func guardAgainstErasingUnwantedMembers(
 	organizationID string,
-	alreadyMemberIDs []string,
+	alreadyMembers []*management.OrganizationMember,
 	memberIDsToAdd []string,
 ) diag.Diagnostics {
-	if len(alreadyMemberIDs) == 0 {
+	if len(alreadyMembers) == 0 {
 		return nil
+	}
+
+	alreadyMemberIDs := make([]string, 0)
+	for _, member := range alreadyMembers {
+		alreadyMemberIDs = append(alreadyMemberIDs, member.GetUserID())
 	}
 
 	if cmp.Equal(memberIDsToAdd, alreadyMemberIDs) {

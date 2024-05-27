@@ -64,8 +64,8 @@ func readOrganizationMember(ctx context.Context, data *schema.ResourceData, meta
 	}
 
 	userID := data.Get("user_id").(string)
-	for _, memberID := range members {
-		if memberID == userID {
+	for _, member := range members {
+		if member.UserID != nil && *member.UserID == userID {
 			return nil
 		}
 	}

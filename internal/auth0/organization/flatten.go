@@ -26,17 +26,8 @@ func flattenOrganizationForDataSource(
 	result := multierror.Append(
 		flattenOrganization(data, organization),
 		data.Set("connections", flattenOrganizationEnabledConnections(connections)),
+		data.Set("members", flattenOrganizationMembersSlice(members)),
 	)
-
-	var memberIDs []string
-	for _, member := range members {
-		memberIDs = append(memberIDs, member.GetUserID())
-	}
-
-	err := data.Set("members", memberIDs)
-	if err != nil {
-		result = multierror.Append(result, err)
-	}
 
 	return result.ErrorOrNil()
 }

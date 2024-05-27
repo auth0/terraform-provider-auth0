@@ -24,14 +24,13 @@ func Organizations() {
 
 			var result *multierror.Error
 			var from string
-			firstTime := true
-
+			options := []management.RequestOption{
+				management.Take(100),
+			}
 			for {
-				var options []management.RequestOption
-				if !firstTime {
+				if from != "" {
 					options = append(options, management.From(from))
 				}
-				options = append(options, management.Take(100))
 
 				organizationList, err := api.Organization.List(ctx, options...)
 				if err != nil {
@@ -56,7 +55,6 @@ func Organizations() {
 				}
 
 				from = organizationList.Next
-				firstTime = false
 			}
 
 			return result.ErrorOrNil()

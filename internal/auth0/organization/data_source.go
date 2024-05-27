@@ -150,10 +150,7 @@ func fetchAllOrganizationMembers(
 			return nil, err
 		}
 
-		for _, member := range membersList.Members {
-			foundMembers = append(foundMembers, member)
-		}
-
+		foundMembers = append(foundMembers, membersList.Members...)
 		if !membersList.HasNext() {
 			break
 		}

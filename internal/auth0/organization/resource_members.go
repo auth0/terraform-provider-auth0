@@ -140,7 +140,7 @@ func deleteOrganizationMembers(ctx context.Context, data *schema.ResourceData, m
 
 func guardAgainstErasingUnwantedMembers(
 	organizationID string,
-	alreadyMembers []*management.OrganizationMember,
+	alreadyMembers []management.OrganizationMember,
 	memberIDsToAdd []string,
 ) diag.Diagnostics {
 	if len(alreadyMembers) == 0 {

@@ -127,17 +127,23 @@ func fetchAllOrganizationConnections(ctx context.Context, api *management.Manage
 	return foundConnections, nil
 }
 
-func fetchAllOrganizationMembers(ctx context.Context, api *management.Management, organizationID string) ([]*management.OrganizationMember, error) {
-	var foundMembers []*management.OrganizationMember
+func fetchAllOrganizationMembers(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]management.OrganizationMember, error) {
+	var foundMembers []management.OrganizationMember
 	var from string
-	firstTime := true
+
+	options := []management.RequestOption{
+		management.Take(100),
+		management.IncludeFields("user_id"),
+	}
 
 	for {
-		var options []management.RequestOption
-		if !firstTime {
+		if from != "" {
 			options = append(options, management.From(from))
 		}
-		options = append(options, management.Take(100), management.IncludeFields("user_id"))
 
 		membersList, err := api.Organization.Members(ctx, organizationID, options...)
 		if err != nil {
@@ -145,8 +151,7 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 		}
 
 		for _, member := range membersList.Members {
-			memberCopy := member
-			foundMembers = append(foundMembers, &memberCopy)
+			foundMembers = append(foundMembers, member)
 		}
 
 		if !membersList.HasNext() {
@@ -154,7 +159,6 @@ func fetchAllOrganizationMembers(ctx context.Context, api *management.Management
 		}
 
 		from = membersList.Next
-		firstTime = false
 	}
 
 	return foundMembers, nil

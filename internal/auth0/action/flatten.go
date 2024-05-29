@@ -20,7 +20,11 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 	}
 
 	if action.GetDeployedVersion() != nil {
-		result = multierror.Append(result, data.Set("version_id", action.GetDeployedVersion().GetID()))
+		result = multierror.Append(result,
+			data.Set("version_id", action.GetDeployedVersion().GetID()),
+			data.Set("deploy", true))
+	} else {
+		result = multierror.Append(result, data.Set("deploy", false))
 	}
 
 	return result.ErrorOrNil()

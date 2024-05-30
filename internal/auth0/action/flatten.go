@@ -1,6 +1,7 @@
 package action
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -22,9 +23,9 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 	if action.GetDeployedVersion() != nil {
 		result = multierror.Append(result,
 			data.Set("version_id", action.GetDeployedVersion().GetID()),
-			data.Set("deploy", true))
+			data.Set("deploy", auth0.Bool(true)))
 	} else {
-		result = multierror.Append(result, data.Set("deploy", false))
+		result = multierror.Append(result, data.Set("deploy", auth0.Bool(false)))
 	}
 
 	return result.ErrorOrNil()

@@ -2,11 +2,7 @@
 
 ENHANCEMENTS:
 
-- `data-source/auth0_organization`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
-- `resource/auth0_organization`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
-- `resource/auth0_organization_members`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
-- `resource/auth0_organization_members`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
-- `sweeper/organizations`: : Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
+- Switched from `offset pagination` to `checkpoint pagination` when listing `organizations/members` to remove the 1000 result limit ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
 
 BUG FIXES:
 

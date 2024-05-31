@@ -2,7 +2,7 @@
 
 ENHANCEMENTS:
 
-- `resource/auth0_role_permission`: Update role permission and permissions documentation ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
+- `resource/auth0_role`: Update role permission and permissions documentation ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
 - `data-source/auth0_organization`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
 
 BUG FIXES:

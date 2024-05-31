@@ -2,7 +2,7 @@
 
 NOTES:
 
-- Update role [permission documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permission) and [permissions documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permissions) with examples ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
+- Added examples and Terraform import examples to **role** [permission documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permission) and [permissions documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permissions) ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
 
 ENHANCEMENTS:
 

@@ -1,3 +1,18 @@
+## v1.2.1
+
+ENHANCEMENTS:
+
+- Switched from `offset pagination` to `checkpoint pagination` when listing `organizations/members` to remove the 1000 result limit ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
+
+BUG FIXES:
+
+- `resource/auth0_organization_member`: Resolve an issue where organization members were searched among a limited paginated result ([#964](https://github.com/auth0/terraform-provider-auth0/pull/964))
+
+NOTES:
+
+- `resource/auth0_role_permission`: Improved documentation by adding resource config and import examples ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
+- `resource/auth0_role_permissions`: Improved documentation by adding resource config and import examples ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
+
 ## v1.2.0
 
 FEATURES:

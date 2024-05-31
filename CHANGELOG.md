@@ -1,13 +1,16 @@
 ## v1.2.1
 
+NOTES:
+
+- Update role [permission documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permission) and [permissions documentation](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/role_permissions) with examples ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
+
 ENHANCEMENTS:
 
-- `resource/auth0_role`: Update role permission and permissions documentation ([#963](https://github.com/auth0/terraform-provider-auth0/pull/963))
-- `data-source/auth0_organization`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
+- `auth0_organization`: Refactor organization-related pagination method from `'Offset pagination'` to `'Checkpoint pagination'` ([#965](https://github.com/auth0/terraform-provider-auth0/pull/965))
 
 BUG FIXES:
 
-- `resource/auth0_organization_member`: Fix pagination for `auth0_organization_member` import/Create limit ([#964](https://github.com/auth0/terraform-provider-auth0/pull/964))
+- `resource/auth0_organization_member`: Resolve an issue where organization members were searched among a limited paginated result ([#964](https://github.com/auth0/terraform-provider-auth0/pull/964))
 
 ## v1.2.0
 

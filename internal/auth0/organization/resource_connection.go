@@ -10,6 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewConnectionResource will return a new auth0_organization_connection resource.
@@ -38,9 +39,24 @@ func NewConnectionResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
-				Description: "When true, all users that log in with this connection will be automatically granted " +
-					"membership in the organization. When false, users must be granted membership in the organization" +
-					" before logging in with this connection.",
+				Description: "When `true`, all users that log in with this connection will be automatically granted " +
+					"membership in the organization. When `false`, users must be granted membership in the organization " +
+					"before logging in with this connection.",
+			},
+			"is_signup_enabled": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+				Description: "Determines whether organization sign-up should be enabled for this " +
+					"organization connection. Only applicable for database connections. " +
+					"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
+			},
+			"show_as_button": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  true,
+				Description: "Determines whether a connection should be displayed on this organization’s " +
+					"login prompt. Only applicable for enterprise connections.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -60,13 +76,18 @@ func createOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
+
+	// We need to keep these null if they don't appear in the schema.
+	isSignupEnabled := value.Bool(data.GetRawConfig().GetAttr("is_signup_enabled"))
+	showAsButton := value.Bool(data.GetRawConfig().GetAttr("show_as_button"))
 
 	organizationConnection := &management.OrganizationConnection{
 		ConnectionID:            &connectionID,
 		AssignMembershipOnLogin: &assignMembershipOnLogin,
+		IsSignupEnabled:         isSignupEnabled,
+		ShowAsButton:            showAsButton,
 	}
 
 	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
@@ -96,12 +117,17 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
 	connectionID := data.Get("connection_id").(string)
 	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
 
+	// We need to keep these null if they don't appear in the schema.
+	isSignupEnabled := value.Bool(data.GetRawConfig().GetAttr("is_signup_enabled"))
+	showAsButton := value.Bool(data.GetRawConfig().GetAttr("show_as_button"))
+
 	organizationConnection := &management.OrganizationConnection{
 		AssignMembershipOnLogin: &assignMembershipOnLogin,
+		IsSignupEnabled:         isSignupEnabled,
+		ShowAsButton:            showAsButton,
 	}
 
 	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {

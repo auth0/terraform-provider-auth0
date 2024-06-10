@@ -52,6 +52,19 @@ func dataSourceSchema() map[string]*schema.Schema {
 						"automatically granted membership in the organization. When `false`, users must be " +
 						"granted membership in the organization before logging in with this connection.",
 				},
+				"is_signup_enabled": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: "Determines whether organization sign-up should be enabled for this " +
+						"organization connection. Only applicable for database connections. " +
+						"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
+				},
+				"show_as_button": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: "Determines whether a connection should be displayed on this organization’s " +
+						"login prompt. Only applicable for enterprise connections.",
+				},
 			},
 		},
 	}

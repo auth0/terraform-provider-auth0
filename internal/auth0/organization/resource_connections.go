@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
 	"github.com/hashicorp/go-multierror"
@@ -39,9 +38,24 @@ func NewConnectionsResource() *schema.Resource {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Default:  false,
-							Description: "When true, all users that log in with this connection will be " +
-								"automatically granted membership in the organization. When false, users must be " +
+							Description: "When `true`, all users that log in with this connection will be " +
+								"automatically granted membership in the organization. When `false`, users must be " +
 								"granted membership in the organization before logging in with this connection.",
+						},
+						"is_signup_enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+							Description: "Determines whether organization sign-up should be enabled for this " +
+								"organization connection. Only applicable for database connections. " +
+								"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
+						},
+						"show_as_button": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  true,
+							Description: "Determines whether a connection should be displayed on this organization’s " +
+								"login prompt. Only applicable for enterprise connections.",
 						},
 					},
 				},
@@ -149,6 +163,12 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
+	connections := expandOrganizationConnections(data.GetRawConfig().GetAttr("enabled_connections"))
+	connectionMap := make(map[string]*management.OrganizationConnection)
+	for _, connection := range connections {
+		connectionMap[connection.GetConnectionID()] = connection
+	}
+
 	toAdd, toRemove := value.Difference(data, "enabled_connections")
 	var result *multierror.Error
 
@@ -166,12 +186,9 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	for _, addConnection := range toAdd {
 		connection := addConnection.(map[string]interface{})
-		connectionToAdd := &management.OrganizationConnection{
-			ConnectionID:            auth0.String(connection["connection_id"].(string)),
-			AssignMembershipOnLogin: auth0.Bool(connection["assign_membership_on_login"].(bool)),
-		}
+		connectionID := connection["connection_id"].(string)
 
-		err := api.Organization.AddConnection(ctx, organizationID, connectionToAdd)
+		err := api.Organization.AddConnection(ctx, organizationID, connectionMap[connectionID])
 		result = multierror.Append(result, err)
 	}
 

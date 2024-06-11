@@ -50,6 +50,7 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			EnablePipeline2:                    value.Bool(flags.GetAttr("enable_pipeline2")),
 			EnableDynamicClientRegistration:    value.Bool(flags.GetAttr("enable_dynamic_client_registration")),
 			EnableCustomDomainInEmails:         value.Bool(flags.GetAttr("enable_custom_domain_in_emails")),
+			EnableSSO:                          value.Bool(flags.GetAttr("enable_sso")),
 			EnableLegacyLogsSearchV2:           value.Bool(flags.GetAttr("enable_legacy_logs_search_v2")),
 			DisableClickjackProtectionHeaders:  value.Bool(flags.GetAttr("disable_clickjack_protection_headers")),
 			EnablePublicSignupUserExistsError:  value.Bool(flags.GetAttr("enable_public_signup_user_exists_error")),

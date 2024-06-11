@@ -145,6 +145,13 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether the tenant allows custom domains in emails. " +
 								"Before enabling this flag, you must have a custom domain with status: `ready`.",
 						},
+						"enable_sso": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "If enabled, users will not be prompted to confirm log in before SSO " +
+								"redirection.",
+						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,
 							Optional:    true,

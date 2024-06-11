@@ -41,6 +41,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
@@ -58,6 +59,7 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
@@ -110,6 +112,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_fields_map_fix                 = false
 		mfa_show_factor_list_on_enrollment     = false
 		require_pushed_authorization_requests  = false
+		enable_sso                             = false
 	}
 
 	session_cookie {
@@ -148,6 +151,7 @@ resource "auth0_tenant" "my_tenant" {
 		disable_fields_map_fix                 = true
 		mfa_show_factor_list_on_enrollment     = true
 		require_pushed_authorization_requests  = true
+		enable_sso                             = true
 	}
 
 	session_cookie {

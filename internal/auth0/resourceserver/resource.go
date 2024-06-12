@@ -111,10 +111,10 @@ func NewResource() *schema.Resource {
 					"rfc9068_profile_authz",
 				}, true),
 				Description: "Dialect of access tokens that should be issued for this resource server. " +
-					"Options include `access_token`, `access_token_authz`, `rfc9068_profile`, and `rfc9068_profile_authz`. " +
-					"`access_token` is a JWT containing standard Auth0 claims; `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. " +
-					"`access_token_authz` and `rfc9068_profile_authz` additionally include RBAC permissions claims. " +
-					"Only available if RBAC (`enforce_policies`) is enabled for this API." +
+					"Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. " +
+					"`access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. " +
+					"`access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. " +
+					"RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. " +
 					"For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).",
 			},
 		},

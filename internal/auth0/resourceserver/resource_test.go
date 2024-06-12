@@ -105,7 +105,7 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 `
 
-func TestAccResourceServer1(t *testing.T) {
+func TestAccResourceServer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

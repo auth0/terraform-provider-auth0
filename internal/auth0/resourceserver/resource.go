@@ -54,9 +54,9 @@ func NewResource() *schema.Resource {
 						es = append(es, fmt.Errorf("expected type of %s to be string", k))
 						return
 					}
-					min := 16
-					if len(v) < min {
-						es = append(es, fmt.Errorf("expected length of %s to be at least %d, %q is %d", k, min, v, len(v)))
+					minLength := 16
+					if len(v) < minLength {
+						es = append(es, fmt.Errorf("expected length of %s to be at least %d, %q is %d", k, minLength, v, len(v)))
 					}
 					return
 				},
@@ -103,6 +103,7 @@ func NewResource() *schema.Resource {
 			"token_dialect": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"access_token",
 					"access_token_authz",

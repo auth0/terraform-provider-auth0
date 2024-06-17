@@ -27,37 +27,10 @@ resource "auth0_connection" "my_enterprise_connection" {
 	options {
 		client_id                = "1234567"
 		client_secret            = "1234567"
-		#domain                   = "example.okta.com"
-		domain_aliases           = ["example.com"]
 		issuer                   = "https://example.okta.com"
 		jwks_uri                 = "https://example.okta.com/oauth2/v1/keys"
 		token_endpoint           = "https://example.okta.com/oauth2/v1/token"
-		userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
 		authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
-		scopes                   = ["openid", "email"]
-		set_user_root_attributes = "on_first_login"
-		non_persistent_attrs     = ["ethnicity", "gender"]
-		upstream_params = jsonencode({
-			"screen_name" : {
-				"alias" : "login_hint"
-			}
-		})
-		connection_settings {
-			pkce = "auto"
-		}
-		attribute_map {
-			mapping_mode   = "basic_profile"
-			userinfo_scope = "openid email profile groups"
-			attributes = jsonencode({
-			"name" : "$${context.tokenset.name}",
-			"email" : "$${context.tokenset.email}",
-			"email_verified" : "$${context.tokenset.email_verified}",
-			"nickname" : "$${context.tokenset.nickname}",
-			"picture" : "$${context.tokenset.picture}",
-			"given_name" : "$${context.tokenset.given_name}",
-			"family_name" : "$${context.tokenset.family_name}"
-			})
-		}
 	}
 }
 
@@ -100,7 +73,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -122,7 +95,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -146,7 +119,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -165,7 +138,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -184,7 +157,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -204,7 +177,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -224,7 +197,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -243,7 +216,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -251,7 +224,7 @@ data "auth0_organization" "org_data" {
 `
 
 const testAccOrganizationConnectionsDelete = testAccGivenTwoConnectionsAndAnOrganization + `
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization.my_org ]
 
 	organization_id = auth0_organization.my_org.id
@@ -294,7 +267,7 @@ resource "auth0_organization_connections" "one_to_many" {
 	}
 }
 
-data "auth0_organization" "org_data" {
+data "auth0_organization" "my_org" {
 	depends_on = [ auth0_organization_connections.one_to_many ]
 
 	organization_id = auth0_organization.my_org.id
@@ -316,7 +289,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "0"),
 				),
 			},
 			{
@@ -325,7 +298,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
 				),
 			},
@@ -335,7 +308,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "2"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "2"),
 				),
 			},
@@ -345,12 +318,20 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "2"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.assign_membership_on_login", "true"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.1.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.1.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.1.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.1.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "2"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.1.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.1.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.1.show_as_button", "true"),
 				),
 			},
 			{
@@ -359,10 +340,14 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "true"),
 				),
 			},
 			{
@@ -371,7 +356,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "0"),
 				),
 			},
 			{
@@ -380,9 +365,13 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.show_as_button", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "true"),
 				),
 			},
@@ -392,9 +381,13 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.show_as_button", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "false"),
 				),
 			},
@@ -404,7 +397,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "0"),
 				),
 			},
 			{
@@ -413,10 +406,14 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.is_signup_enabled", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "true"),
 				),
 			},
 			{
@@ -425,10 +422,14 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.assign_membership_on_login", "true"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.0.show_as_button", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "1"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.assign_membership_on_login", "true"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.is_signup_enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.0.show_as_button", "true"),
 				),
 			},
 			{
@@ -437,7 +438,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "0"),
 				),
 			},
 			{
@@ -460,7 +461,7 @@ func TestAccOrganizationConnections(t *testing.T) {
 					},
 				},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_organization.org_data", "connections.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_organization.my_org", "connections.#", "2"),
 					resource.TestCheckResourceAttr("auth0_organization_connections.one_to_many", "enabled_connections.#", "2"),
 				),
 			},

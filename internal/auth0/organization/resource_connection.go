@@ -3,14 +3,12 @@ package organization
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 // NewConnectionResource will return a new auth0_organization_connection resource.
@@ -104,18 +102,11 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-	connectionID := data.Get("connection_id").(string)
-	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
+	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
+	connectionID := organizationConnection.GetConnectionID()
 
-	// We need to keep these null if they don't appear in the schema.
-	isSignupEnabled := value.Bool(data.GetRawConfig().GetAttr("is_signup_enabled"))
-	showAsButton := value.Bool(data.GetRawConfig().GetAttr("show_as_button"))
-
-	organizationConnection := &management.OrganizationConnection{
-		AssignMembershipOnLogin: &assignMembershipOnLogin,
-		IsSignupEnabled:         isSignupEnabled,
-		ShowAsButton:            showAsButton,
-	}
+	// UpdateConnection doesn't like this to be set.
+	organizationConnection.ConnectionID = nil
 
 	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

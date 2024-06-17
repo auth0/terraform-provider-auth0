@@ -163,6 +163,7 @@ func updateOrganizationConnections(ctx context.Context, data *schema.ResourceDat
 
 	organizationID := data.Id()
 
+	// We are using the data from expandOrganizations and not value.Difference to preserver the nilness of the data.
 	connections := expandOrganizationConnections(data.GetRawConfig().GetAttr("enabled_connections"))
 	connectionMap := make(map[string]*management.OrganizationConnection)
 	for _, connection := range connections {

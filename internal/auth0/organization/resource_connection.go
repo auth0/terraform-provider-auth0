@@ -74,27 +74,14 @@ func NewConnectionResource() *schema.Resource {
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
 	organizationID := data.Get("organization_id").(string)
-	connectionID := data.Get("connection_id").(string)
-	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
-
-	// We need to keep these null if they don't appear in the schema.
-	isSignupEnabled := value.Bool(data.GetRawConfig().GetAttr("is_signup_enabled"))
-	showAsButton := value.Bool(data.GetRawConfig().GetAttr("show_as_button"))
-
-	organizationConnection := &management.OrganizationConnection{
-		ConnectionID:            &connectionID,
-		AssignMembershipOnLogin: &assignMembershipOnLogin,
-		IsSignupEnabled:         isSignupEnabled,
-		ShowAsButton:            showAsButton,
-	}
+	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
 
 	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
 		return diag.FromErr(err)
 	}
 
-	internalSchema.SetResourceGroupID(data, organizationID, connectionID)
+	internalSchema.SetResourceGroupID(data, organizationID, organizationConnection.GetConnectionID())
 
 	return readOrganizationConnection(ctx, data, meta)
 }

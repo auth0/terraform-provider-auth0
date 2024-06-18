@@ -930,6 +930,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", ""),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.#", "0"),
 				),
 			},
 			{
@@ -947,6 +948,11 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.icon_url", "https://cdn.paypal.com/assets/logo.png"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.upstream_params", ""),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.#", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.header", "foo"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "foo"),
 				),
 			},
 		},
@@ -974,6 +980,7 @@ resource "auth0_connection" "oauth2" {
 				"alias": "login_hint"
 			}
 		})
+		custom_headers = []
 	}
 }
 `
@@ -995,6 +1002,16 @@ resource "auth0_connection" "oauth2" {
 			fetchUserProfile= "function( { return callback(null) }"
 		}
 		pkce_enabled = false
+		custom_headers = [
+			{
+				header = "foo"
+				value  = "bar"
+			},
+	{
+				header = "bar"
+				value  = "foo"
+			}
+		]
 	}
 }
 `

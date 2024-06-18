@@ -49,6 +49,7 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
+	m["enable_sso"] = flags.EnableSSO
 	m["enable_legacy_logs_search_v2"] = flags.EnableLegacyLogsSearchV2
 	m["disable_clickjack_protection_headers"] = flags.DisableClickjackProtectionHeaders
 	m["enable_public_signup_user_exists_error"] = flags.EnablePublicSignupUserExistsError

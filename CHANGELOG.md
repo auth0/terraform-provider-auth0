@@ -5,6 +5,8 @@ FEATURES:
 - `resource/auth0_connection`: Add support for `is_signup_enabled` to support configuring sign-ups with Organization Membership ([#974](https://github.com/auth0/terraform-provider-auth0/pull/974))
 - `resource/auth0_connection`: Add support for `show_as_button` to allow the button to be disabled in Organization Enterprise connections ([#974](https://github.com/auth0/terraform-provider-auth0/pull/974))
 - `resource/auth0_resource_server`: Add Support for `rfc9068_profile` and `rfc9068_profile_authz` Token Dialects in Resource Server Configuration
+- `data-source/auth0_organization`: Add `is_signup_enabled` to `connections` to indicate if sign-ups with Organization Membership are enabled ([#974](https://github.com/auth0/terraform-provider-auth0/pull/974))
+- `data-source/auth0_organization`: Add `show_as_button` to `connections` to indicatate if button is disabled in Organization Enterprise connections ([#974](https://github.com/auth0/terraform-provider-auth0/pull/974))
  ([#973](https://github.com/auth0/terraform-provider-auth0/pull/973))
 
 ## v1.2.1

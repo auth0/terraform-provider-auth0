@@ -132,6 +132,38 @@ func TestSetExistingAttributesAsOptional(t *testing.T) {
 	}
 }
 
+func TestSetExistingAttributesAsRequired(t *testing.T) {
+	var newMockResourceSchema = map[string]*schema.Schema{
+		"string_prop": {
+			Type:        schema.TypeString,
+			Description: "Some string property.",
+			Optional:    true,
+		},
+		"map_prop": {
+			Type:        schema.TypeMap,
+			Optional:    true,
+			Description: "Some map property.",
+		},
+		"bool_prop": {
+			Type:        schema.TypeBool,
+			Computed:    true,
+			Description: "Some bool property.",
+		},
+	}
+
+	expectedRequiredAttributes := []string{"string_prop", "map_prop", "bool_prop"}
+	SetExistingAttributesAsRequired(newMockResourceSchema, expectedRequiredAttributes[1:]...)
+
+	// It should not panic if we set a non-existent attribute as required.
+	SetExistingAttributesAsRequired(newMockResourceSchema, "non_existent", expectedRequiredAttributes[0])
+
+	for _, attribute := range expectedRequiredAttributes {
+		assert.True(t, newMockResourceSchema[attribute].Required)
+		assert.False(t, newMockResourceSchema[attribute].Computed)
+		assert.False(t, newMockResourceSchema[attribute].Optional)
+	}
+}
+
 func TestClone(t *testing.T) {
 	var m1 = map[int]int{1: 2, 2: 4, 4: 8, 8: 16}
 

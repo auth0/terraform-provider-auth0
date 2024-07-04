@@ -920,3 +920,28 @@ func flattenConnectionClients(data *schema.ResourceData, connection *management.
 
 	return result.ErrorOrNil()
 }
+
+func flattenSCIMMappings(mappings []management.SCIMConfigurationMapping) *[]map[string]string {
+	flattenedMappings := make([]map[string]string, 0, len(mappings))
+	for _, mapping := range mappings {
+		flattenedMappings = append(flattenedMappings, map[string]string{
+			"auth0": mapping.GetAuth0(),
+			"scim":  mapping.GetSCIM(),
+		})
+	}
+
+	return &flattenedMappings
+}
+
+func flattenSCIMConfiguration(data *schema.ResourceData, scimConfiguration *management.SCIMConfiguration) diag.Diagnostics {
+	result := multierror.Append(
+		data.Set("connection_id", scimConfiguration.GetConnectionID()),
+		data.Set("connection_name", scimConfiguration.GetConnectionName()),
+		data.Set("user_id_attribute", scimConfiguration.GetUserIDAttribute()),
+		data.Set("mapping", flattenSCIMMappings(scimConfiguration.GetMapping())),
+		data.Set("strategy", scimConfiguration.GetStrategy()),
+		data.Set("tenant_name", scimConfiguration.GetTenantName()),
+	)
+
+	return diag.FromErr(result.ErrorOrNil())
+}

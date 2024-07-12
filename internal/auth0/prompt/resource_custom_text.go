@@ -17,9 +17,9 @@ import (
 
 var (
 	availablePrompts = []string{
-		"capcha", "common", "consent", "custom-form", "customized-consent", "device-flow", "email-otp-challenge",
-		"email-verification", "invitation", "login", "login-id", "login-password", "login-passwordless",
-		"login-email-verification", "logout", "mfa", "mfa-email", "mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code",
+		"captcha", "common", "consent", "custom-form", "customized-consent", "device-flow", "email-otp-challenge",
+		"email-verification", "invitation", "login", "login-email-verification", "login-id", "login-password",
+		"login-passwordless", "logout", "mfa", "mfa-email", "mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code",
 		"mfa-sms", "mfa-voice", "mfa-webauthn", "organizations", "passkeys", "phone-identifier-challenge",
 		"phone-identifier-enrollment", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}

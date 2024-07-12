@@ -17,10 +17,11 @@ import (
 
 var (
 	availablePrompts = []string{
-		"common", "consent", "device-flow", "email-otp-challenge", "email-verification", "invitation", "login",
-		"login-id", "login-password", "login-passwordless", "login-email-verification", "logout", "mfa", "mfa-email",
-		"mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code", "mfa-sms", "mfa-voice", "mfa-webauthn",
-		"organizations", "reset-password", "signup", "signup-id", "signup-password", "status",
+		"capcha", "common", "consent", "custom-form", "customized-consent", "device-flow", "email-otp-challenge",
+		"email-verification", "invitation", "login", "login-id", "login-password", "login-passwordless",
+		"login-email-verification", "logout", "mfa", "mfa-email", "mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code",
+		"mfa-sms", "mfa-voice", "mfa-webauthn", "organizations", "passkeys", "phone-identifier-challenge",
+		"phone-identifier-enrollment", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}
 	availableLanguages = []string{
 		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",

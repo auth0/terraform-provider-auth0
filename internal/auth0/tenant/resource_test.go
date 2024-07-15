@@ -41,7 +41,6 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "false"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "non-persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "sessions.0.oidc_logout_prompt_enabled", "false"),
@@ -59,7 +58,6 @@ func TestAccTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_public_signup_user_exists_error", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.use_scope_descriptions_for_consent", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.mfa_show_factor_list_on_enrollment", "true"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allowed_logout_urls.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_cookie.0.mode", "persistent"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_redirection_uri", ""),
@@ -84,6 +82,54 @@ func TestAccTenant(t *testing.T) {
 		},
 	})
 }
+
+// TestAccTenant_EnableSSO tests the enable_sso flag. This test is added separately because it can only be tested on existing tenants.
+// For new tenants, this flag is always set to true.
+func TestAccTenant_EnableSSO(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccEmptyTenant,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
+				),
+			},
+			{
+				Config: testAccTenantEnableSSOConfigCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "false"),
+				),
+			},
+			{
+				Config: testAccTenantEnableSSOConfigUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "true"),
+				),
+			},
+		},
+	})
+}
+
+const testAccTenantEnableSSOConfigCreate = `
+resource "auth0_tenant" "my_tenant" {
+	flags {
+		enable_sso = false
+	}
+}
+`
+
+const testAccTenantEnableSSOConfigUpdate = `
+resource "auth0_tenant" "my_tenant" {
+	flags {
+		enable_sso = true
+	}
+}
+`
 
 const testAccTenantConfigCreate = `
 resource "auth0_tenant" "my_tenant" {
@@ -111,8 +157,6 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = false
 		disable_fields_map_fix                 = false
 		mfa_show_factor_list_on_enrollment     = false
-		require_pushed_authorization_requests  = false
-		enable_sso                             = false
 	}
 
 	session_cookie {
@@ -150,8 +194,6 @@ resource "auth0_tenant" "my_tenant" {
 		disable_management_api_sms_obfuscation = true
 		disable_fields_map_fix                 = true
 		mfa_show_factor_list_on_enrollment     = true
-		require_pushed_authorization_requests  = true
-		enable_sso                             = true
 	}
 
 	session_cookie {

@@ -149,8 +149,8 @@ func NewResource() *schema.Resource {
 							Type:     schema.TypeBool,
 							Optional: true,
 							Computed: true,
-							Description: "If enabled, users will not be prompted to confirm log in before SSO " +
-								"redirection.",
+							Description: "Flag indicating whether users will not be prompted to confirm log in before SSO redirection. " +
+								"This flag applies to existing tenants only; new tenants have it enforced as true.",
 						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,
@@ -253,12 +253,6 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
-						},
-						"require_pushed_authorization_requests": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.",
 						},
 					},
 				},

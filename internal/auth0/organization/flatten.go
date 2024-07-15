@@ -48,6 +48,8 @@ func flattenOrganizationBranding(organizationBranding *management.OrganizationBr
 func flattenOrganizationConnection(data *schema.ResourceData, orgConn *management.OrganizationConnection) error {
 	result := multierror.Append(
 		data.Set("assign_membership_on_login", orgConn.GetAssignMembershipOnLogin()),
+		data.Set("is_signup_enabled", orgConn.GetIsSignupEnabled()),
+		data.Set("show_as_button", orgConn.GetShowAsButton()),
 		data.Set("name", orgConn.GetConnection().GetName()),
 		data.Set("strategy", orgConn.GetConnection().GetStrategy()),
 	)
@@ -74,6 +76,8 @@ func flattenOrganizationEnabledConnections(connections []*management.Organizatio
 		result[index] = map[string]interface{}{
 			"connection_id":              connection.GetConnectionID(),
 			"assign_membership_on_login": connection.GetAssignMembershipOnLogin(),
+			"is_signup_enabled":          connection.GetIsSignupEnabled(),
+			"show_as_button":             connection.GetShowAsButton(),
 		}
 	}
 

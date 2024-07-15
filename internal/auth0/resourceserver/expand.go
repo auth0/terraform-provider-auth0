@@ -32,7 +32,6 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
 	}
-
 	return resourceServer
 }
 

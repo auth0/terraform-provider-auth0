@@ -145,6 +145,13 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether the tenant allows custom domains in emails. " +
 								"Before enabling this flag, you must have a custom domain with status: `ready`.",
 						},
+						"enable_sso": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "Flag indicating whether users will not be prompted to confirm log in before SSO redirection. " +
+								"This flag applies to existing tenants only; new tenants have it enforced as true.",
+						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
@@ -246,12 +253,6 @@ func NewResource() *schema.Resource {
 							Optional:    true,
 							Computed:    true,
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
-						},
-						"require_pushed_authorization_requests": {
-							Type:        schema.TypeBool,
-							Optional:    true,
-							Computed:    true,
-							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.",
 						},
 					},
 				},

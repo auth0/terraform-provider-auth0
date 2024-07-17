@@ -259,7 +259,7 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "DEPRECATED: This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
+							Description: "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
 						},
 					},
 				},

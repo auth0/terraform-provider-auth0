@@ -97,6 +97,7 @@ Optional:
 - `enable_sso` (Boolean) Flag indicating whether users will not be prompted to confirm log in before SSO redirection. This flag applies to existing tenants only; new tenants have it enforced as true.
 - `mfa_show_factor_list_on_enrollment` (Boolean) Used to allow users to pick which factor to enroll with from the list of available MFA factors.
 - `no_disclose_enterprise_connections` (Boolean) Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file.
+- `require_pushed_authorization_requests` (Boolean, Deprecated) This Flag is not supported by the Auth0 Management API and will be removed in the next major release.
 - `revoke_refresh_token_grant` (Boolean) Delete underlying grant when a refresh token is revoked via the Authentication API.
 - `use_scope_descriptions_for_consent` (Boolean) Indicates whether to use scope descriptions for consent.
 

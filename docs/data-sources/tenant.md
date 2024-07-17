@@ -66,6 +66,7 @@ Read-Only:
 - `enable_sso` (Boolean)
 - `mfa_show_factor_list_on_enrollment` (Boolean)
 - `no_disclose_enterprise_connections` (Boolean)
+- `require_pushed_authorization_requests` (Boolean)
 - `revoke_refresh_token_grant` (Boolean)
 - `use_scope_descriptions_for_consent` (Boolean)
 

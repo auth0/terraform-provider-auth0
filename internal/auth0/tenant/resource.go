@@ -254,6 +254,13 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
 						},
+						"require_pushed_authorization_requests": {
+							Deprecated:  "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
+						},
 					},
 				},
 			},

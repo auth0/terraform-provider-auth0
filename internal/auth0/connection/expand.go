@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -1077,4 +1078,35 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 	}
 
 	return warnings
+}
+
+func expandSCIMConfigurationMapping(data *schema.ResourceData) *[]management.SCIMConfigurationMapping {
+	srcMapping := data.Get("mapping").(*schema.Set)
+	mapping := make([]management.SCIMConfigurationMapping, 0, srcMapping.Len())
+	for _, item := range srcMapping.List() {
+		srcMap := item.(map[string]interface{})
+		mapping = append(mapping, management.SCIMConfigurationMapping{
+			Auth0: auth0.String(srcMap["auth0"].(string)),
+			SCIM:  auth0.String(srcMap["scim"].(string)),
+		})
+	}
+
+	return &mapping
+}
+
+func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfiguration {
+	cfg := data.GetRawConfig()
+	scimConfiguration := &management.SCIMConfiguration{}
+	if !cfg.GetAttr("user_id_attribute").IsNull() {
+		scimConfiguration.UserIDAttribute = auth0.String(data.Get("user_id_attribute").(string))
+	}
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		scimConfiguration.Mapping = expandSCIMConfigurationMapping(data)
+	}
+
+	if scimConfiguration.Mapping != nil || scimConfiguration.UserIDAttribute != nil {
+		return scimConfiguration
+	}
+
+	return nil
 }

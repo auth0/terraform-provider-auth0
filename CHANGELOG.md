@@ -1,3 +1,15 @@
+## v1.4.0
+
+FEATURES:
+
+- `resource/auth0_connection_scim_configuration`: Add a resource for managing SCIM(System for Cross-domain Identity Management) configuration. ([#980](https://github.com/auth0/terraform-provider-auth0/pull/980))
+- `resource/auth0_prompt_custom_text`: Add new prompt values (`captcha`, `custom-form`, `customized-consent`, `passkeys`, `phone-identifier-challenge`, `phone-identifier-enrollment`) to the `auth0_prompt_custom_text` resource. ([#985](https://github.com/auth0/terraform-provider-auth0/pull/985))
+- `data-source/auth0_connection_scim_configuration`: Add a data source for managing SCIM(System for Cross-domain Identity Management) configuration. ([#980](https://github.com/auth0/terraform-provider-auth0/pull/980))
+
+NOTES:
+
+- `resource/auth0_tenant`: Deprecated the `require-pushed-authorization-requests` attribute. ([#986](https://github.com/auth0/terraform-provider-auth0/pull/986))
+
 ## v1.3.0
 
 FEATURES:

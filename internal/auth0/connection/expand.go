@@ -3,7 +3,6 @@ package connection
 import (
 	"context"
 	"fmt"
-
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -180,7 +179,132 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAttributes(data *schema.ResourceData) *management.ConnectionOptionsAttributes {
+	//if !data.HasChange("attributes") {
+	//	return nil
+	//}
+
+	var coa *management.ConnectionOptionsAttributes
+	data.GetRawConfig().GetAttr("attributes").ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			coa = &management.ConnectionOptionsAttributes{
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
+				Username:    expandConnectionOptionsUsernameAttribute(attributes),
+				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
+			}
+			return stop
+		})
+	return coa
+}
+
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
+	var coea *management.ConnectionOptionsEmailAttribute
+	config.GetAttr("email").ForEachElement(
+		func(_ cty.Value, email cty.Value) (stop bool) {
+			coea = &management.ConnectionOptionsEmailAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(email),
+				ProfileRequired: value.Bool(email.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(email),
+			}
+			return stop
+		})
+	return coea
+}
+
+func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.ConnectionOptionsUsernameAttribute {
+	var coua *management.ConnectionOptionsUsernameAttribute
+	config.GetAttr("username").ForEachElement(
+		func(_ cty.Value, username cty.Value) (stop bool) {
+			coua = &management.ConnectionOptionsUsernameAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(username),
+				ProfileRequired: value.Bool(username.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(username),
+				Validation:      expandConnectionOptionsAttributeValidation(username),
+			}
+			return stop
+		})
+	return coua
+}
+
+func expandConnectionOptionsPhoneNumberAttribute(config cty.Value) *management.ConnectionOptionsPhoneNumberAttribute {
+	var copa *management.ConnectionOptionsPhoneNumberAttribute
+	config.GetAttr("phone_number").ForEachElement(
+		func(_ cty.Value, phoneNumber cty.Value) (stop bool) {
+			copa = &management.ConnectionOptionsPhoneNumberAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(phoneNumber),
+				ProfileRequired: value.Bool(phoneNumber.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(phoneNumber),
+			}
+			return stop
+		})
+	return copa
+}
+
+func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.ConnectionOptionsAttributeIdentifier {
+	var coai *management.ConnectionOptionsAttributeIdentifier
+	config.GetAttr("identifier").ForEachElement(
+		func(_ cty.Value, identifier cty.Value) (stop bool) {
+			coai = &management.ConnectionOptionsAttributeIdentifier{
+				Active: value.Bool(identifier.GetAttr("active")),
+			}
+			return stop
+		})
+	return coai
+}
+
+func expandConnectionOptionsAttributeSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status:       value.String(signup.GetAttr("status")),
+				Verification: expandConnectionOptionsAttributeVerification(signup),
+			}
+			return stop
+		})
+	return coas
+}
+
+func expandConnectionOptionsAttributeVerification(config cty.Value) *management.ConnectionOptionsAttributeVerification {
+	var coav *management.ConnectionOptionsAttributeVerification
+	config.GetAttr("verification").ForEachElement(
+		func(_ cty.Value, verification cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeVerification{
+				Active: value.Bool(verification.GetAttr("active")),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeValidation(config cty.Value) *management.ConnectionOptionsAttributeValidation {
+	var coav *management.ConnectionOptionsAttributeValidation
+	config.GetAttr("validation").ForEachElement(
+		func(_ cty.Value, validation cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeValidation{
+				MinLength:    value.Int(validation.GetAttr("min_length")),
+				MaxLength:    value.Int(validation.GetAttr("max_length")),
+				AllowedTypes: expandConnectionOptionsAttributeAllowedTypes(validation.GetAttr("allowed_types")),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.ConnectionOptionsAttributeAllowedTypes {
+	var coaat *management.ConnectionOptionsAttributeAllowedTypes
+	config.GetAttr("allowed_types").ForEachElement(
+		func(_ cty.Value, allowedTypes cty.Value) (stop bool) {
+			coaat = &management.ConnectionOptionsAttributeAllowedTypes{
+				Email:       value.Bool(allowedTypes.GetAttr("email")),
+				PhoneNumber: value.Bool(allowedTypes.GetAttr("phone_number")),
+			}
+			return stop
+		})
+	return coaat
+}
+
+func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
@@ -194,6 +318,8 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
+		Precedence:                       value.Strings(config.GetAttr("precedence")),
+		Attributes:                       expandConnectionOptionsAttributes(data),
 	}
 
 	config.GetAttr("validation").ForEachElement(

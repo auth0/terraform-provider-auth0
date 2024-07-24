@@ -3,7 +3,6 @@ package connection
 import (
 	"errors"
 	"fmt"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -170,6 +169,102 @@ func flattenConnectionOptionsWindowsLive(
 	return optionsMap, nil
 }
 
+func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) (interface{}, diag.Diagnostics) {
+	if connAttributes == nil {
+		return nil, nil
+	}
+
+	return map[string]interface{}{
+		"email":        flattenEmailAttribute(connAttributes.Email),
+		"username":     flattenUsernameAttribute(connAttributes.Username),
+		"phone_number": flattenPhoneNumberAttribute(connAttributes.PhoneNumber),
+	}, nil
+
+}
+
+func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) (interface{}, diag.Diagnostics) {
+	if emailAttribute == nil {
+		return nil, nil
+	}
+
+	return map[string]interface{}{
+		"identifier":       flattenIdentifier(emailAttribute.Identifier),
+		"profile_required": emailAttribute.ProfileRequired,
+		"signup":           flattenSignUp(emailAttribute.Signup),
+	}, nil
+
+}
+
+func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) (interface{}, diag.Diagnostics) {
+	if usernameAttribute == nil {
+		return nil, nil
+	}
+
+	return map[string]interface{}{
+		"identifier":       flattenIdentifier(usernameAttribute.Identifier),
+		"profile_required": usernameAttribute.ProfileRequired,
+		"signup":           flattenSignUp(usernameAttribute.Signup),
+		"validation":       flattenValidation(usernameAttribute.Validation),
+	}, nil
+
+}
+
+func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) (interface{}, diag.Diagnostics) {
+	if phoneNumberAttribute == nil {
+		return nil, nil
+	}
+
+	return map[string]interface{}{
+		"identifier":       flattenIdentifier(phoneNumberAttribute.Identifier),
+		"profile_required": phoneNumberAttribute.ProfileRequired,
+		"signup":           flattenSignUp(phoneNumberAttribute.Signup),
+	}, nil
+
+}
+
+func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) (interface{}, diag.Diagnostics) {
+	if identifier == nil {
+		return nil, nil
+	}
+	return map[string]interface{}{
+		"active": identifier.Active,
+	}, nil
+}
+
+func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) (interface{}, diag.Diagnostics) {
+	if signup == nil {
+		return nil, nil
+	}
+	return map[string]interface{}{
+		"status":       signup.Status,
+		"verification": flattenVerification(signup.Verification),
+	}, nil
+}
+
+func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) (interface{}, diag.Diagnostics) {
+	if validation == nil {
+		return nil, nil
+	}
+	return map[string]interface{}{
+		"min_length": validation.MinLength,
+		"max_length": validation.MaxLength,
+		"allowed_types": map[string]interface{}{
+			"email":        validation.AllowedTypes.Email,
+			"phone_number": validation.AllowedTypes.PhoneNumber,
+		},
+	}, nil
+}
+
+func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) (interface{}, diag.Diagnostics) {
+	if verification == nil {
+		return nil, nil
+	}
+
+	return map[string]interface{}{
+		"active": verification.Active,
+	}, nil
+}
+
 func flattenConnectionOptionsAuth0(
 	data *schema.ResourceData,
 	rawOptions interface{},
@@ -203,6 +298,8 @@ func flattenConnectionOptionsAuth0(
 		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"upstream_params":                      upstreamParams,
+		"precedence":                           options.GetPrecedence(),
+		"attributes":                           flattenAttributes(options.Attributes),
 	}
 
 	if options.PasswordComplexityOptions != nil {

@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -180,9 +181,9 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 }
 
 func expandConnectionOptionsAttributes(data *schema.ResourceData) *management.ConnectionOptionsAttributes {
-	//if !data.HasChange("attributes") {
+	//If !data.HasChange("attributes") {
 	//	return nil
-	//}
+	//}.
 
 	var coa *management.ConnectionOptionsAttributes
 	data.GetRawConfig().GetAttr("attributes").ForEachElement(

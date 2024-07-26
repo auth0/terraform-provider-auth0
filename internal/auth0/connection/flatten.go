@@ -3,6 +3,7 @@ package connection
 import (
 	"errors"
 	"fmt"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -179,7 +180,6 @@ func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) i
 		"username":     flattenUsernameAttribute(connAttributes.Username),
 		"phone_number": flattenPhoneNumberAttribute(connAttributes.PhoneNumber),
 	}
-
 }
 
 func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) interface{} {
@@ -192,7 +192,6 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 		"profile_required": emailAttribute.ProfileRequired,
 		"signup":           flattenSignUp(emailAttribute.Signup),
 	}
-
 }
 
 func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) interface{} {
@@ -206,7 +205,6 @@ func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUse
 		"signup":           flattenSignUp(usernameAttribute.Signup),
 		"validation":       flattenValidation(usernameAttribute.Validation),
 	}
-
 }
 
 func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) interface{} {
@@ -219,7 +217,6 @@ func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOpti
 		"profile_required": phoneNumberAttribute.ProfileRequired,
 		"signup":           flattenSignUp(phoneNumberAttribute.Signup),
 	}
-
 }
 
 func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) interface{} {

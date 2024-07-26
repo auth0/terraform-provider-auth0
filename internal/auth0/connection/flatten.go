@@ -169,35 +169,35 @@ func flattenConnectionOptionsWindowsLive(
 	return optionsMap, nil
 }
 
-func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) (interface{}, diag.Diagnostics) {
+func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) interface{} {
 	if connAttributes == nil {
-		return nil, nil
+		return nil
 	}
 
 	return map[string]interface{}{
 		"email":        flattenEmailAttribute(connAttributes.Email),
 		"username":     flattenUsernameAttribute(connAttributes.Username),
 		"phone_number": flattenPhoneNumberAttribute(connAttributes.PhoneNumber),
-	}, nil
+	}
 
 }
 
-func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) (interface{}, diag.Diagnostics) {
+func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) interface{} {
 	if emailAttribute == nil {
-		return nil, nil
+		return nil
 	}
 
 	return map[string]interface{}{
 		"identifier":       flattenIdentifier(emailAttribute.Identifier),
 		"profile_required": emailAttribute.ProfileRequired,
 		"signup":           flattenSignUp(emailAttribute.Signup),
-	}, nil
+	}
 
 }
 
-func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) (interface{}, diag.Diagnostics) {
+func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) interface{} {
 	if usernameAttribute == nil {
-		return nil, nil
+		return nil
 	}
 
 	return map[string]interface{}{
@@ -205,45 +205,45 @@ func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUse
 		"profile_required": usernameAttribute.ProfileRequired,
 		"signup":           flattenSignUp(usernameAttribute.Signup),
 		"validation":       flattenValidation(usernameAttribute.Validation),
-	}, nil
+	}
 
 }
 
-func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) (interface{}, diag.Diagnostics) {
+func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) interface{} {
 	if phoneNumberAttribute == nil {
-		return nil, nil
+		return nil
 	}
 
 	return map[string]interface{}{
 		"identifier":       flattenIdentifier(phoneNumberAttribute.Identifier),
 		"profile_required": phoneNumberAttribute.ProfileRequired,
 		"signup":           flattenSignUp(phoneNumberAttribute.Signup),
-	}, nil
+	}
 
 }
 
-func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) (interface{}, diag.Diagnostics) {
+func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) interface{} {
 	if identifier == nil {
-		return nil, nil
+		return nil
 	}
 	return map[string]interface{}{
 		"active": identifier.Active,
-	}, nil
+	}
 }
 
-func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) (interface{}, diag.Diagnostics) {
+func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) interface{} {
 	if signup == nil {
-		return nil, nil
+		return nil
 	}
 	return map[string]interface{}{
 		"status":       signup.Status,
 		"verification": flattenVerification(signup.Verification),
-	}, nil
+	}
 }
 
-func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) (interface{}, diag.Diagnostics) {
+func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) interface{} {
 	if validation == nil {
-		return nil, nil
+		return nil
 	}
 	return map[string]interface{}{
 		"min_length": validation.MinLength,
@@ -252,17 +252,17 @@ func flattenValidation(validation *management.ConnectionOptionsAttributeValidati
 			"email":        validation.AllowedTypes.Email,
 			"phone_number": validation.AllowedTypes.PhoneNumber,
 		},
-	}, nil
+	}
 }
 
-func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) (interface{}, diag.Diagnostics) {
+func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) interface{} {
 	if verification == nil {
-		return nil, nil
+		return nil
 	}
 
 	return map[string]interface{}{
 		"active": verification.Active,
-	}, nil
+	}
 }
 
 func flattenConnectionOptionsAuth0(

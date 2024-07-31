@@ -543,6 +543,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("client_metadata", client.GetClientMetadata()),
 		data.Set("oidc_backchannel_logout_urls", client.GetOIDCBackchannelLogout().GetBackChannelLogoutURLs()),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
+		data.Set("compliance_level", client.GetComplianceLevel()),
 	)
 	return result.ErrorOrNil()
 }

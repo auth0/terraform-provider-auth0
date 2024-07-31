@@ -106,6 +106,19 @@ func TestFloat64(t *testing.T) {
 	})
 }
 
+// Time evaluates the typed value of the value
+// and coerces to a pointer of a string, which
+// is then converted to a `time.Time` according
+// to ISO 3339 (ISO 8601 is largely the same in
+// common use cases, see https://ijmacd.github.io/rfc3339-iso8601/
+// for differences).
+func TestTime(t *testing.T) {
+	t.Run("it returns nil when given a null value", func(t *testing.T) {
+		actual := Time(cty.NullVal(cty.String))
+		assert.Nil(t, actual)
+	})
+}
+
 func TestStrings(t *testing.T) {
 	t.Run("it returns nil when given a null value", func(t *testing.T) {
 		actual := Strings(cty.NilVal)

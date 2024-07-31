@@ -1,6 +1,8 @@
 package tenant
 
 import (
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -8,36 +10,71 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandTenant(data *schema.ResourceData) *management.Tenant {
+func expandTenant(data *schema.ResourceData) (interface{}, error) {
 	config := data.GetRawConfig()
 
 	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
-	tenant := &management.Tenant{
-		DefaultAudience:               value.String(config.GetAttr("default_audience")),
-		DefaultDirectory:              value.String(config.GetAttr("default_directory")),
-		DefaultRedirectionURI:         value.String(config.GetAttr("default_redirection_uri")),
-		FriendlyName:                  value.String(config.GetAttr("friendly_name")),
-		PictureURL:                    value.String(config.GetAttr("picture_url")),
-		SupportEmail:                  value.String(config.GetAttr("support_email")),
-		SupportURL:                    value.String(config.GetAttr("support_url")),
-		AllowedLogoutURLs:             value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:               &sessionLifetime,
-		SandboxVersion:                value.String(config.GetAttr("sandbox_version")),
-		EnabledLocales:                value.Strings(config.GetAttr("enabled_locales")),
-		Flags:                         expandTenantFlags(config.GetAttr("flags")),
-		SessionCookie:                 expandTenantSessionCookie(config.GetAttr("session_cookie")),
-		Sessions:                      expandTenantSessions(config.GetAttr("sessions")),
-		AllowOrgNameInAuthAPI:         value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
-		CustomizeMFAInPostLoginAction: value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
+	tenant := management.Tenant{
+		DefaultAudience:                      value.String(config.GetAttr("default_audience")),
+		DefaultDirectory:                     value.String(config.GetAttr("default_directory")),
+		DefaultRedirectionURI:                value.String(config.GetAttr("default_redirection_uri")),
+		FriendlyName:                         value.String(config.GetAttr("friendly_name")),
+		PictureURL:                           value.String(config.GetAttr("picture_url")),
+		SupportEmail:                         value.String(config.GetAttr("support_email")),
+		SupportURL:                           value.String(config.GetAttr("support_url")),
+		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
+		SessionLifetime:                      &sessionLifetime,
+		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
+		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
+		Flags:                                expandTenantFlags(config.GetAttr("flags")),
+		SessionCookie:                        expandTenantSessionCookie(config.GetAttr("session_cookie")),
+		Sessions:                             expandTenantSessions(config.GetAttr("sessions")),
+		AllowOrgNameInAuthAPI:                value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
+		CustomizeMFAInPostLoginAction:        value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
+		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
+	mtls := config.GetAttr("mtls")
 
-	return tenant
+	disableACRValuesSupported := config.GetAttr("disable_acr_values_supported")
+	if tenantJSON, err := json.Marshal(tenant); err != nil {
+		return nil, err
+	} else if !disableACRValuesSupported.IsNull() && disableACRValuesSupported.True() {
+		if isMTLSConfigurationDisabled(mtls) {
+			nilableTenant := tenantNilACRValuesSupportedMTLS{}
+			if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
+				return nil, err
+			}
+			nilableTenant.ACRValuesSupported = nil
+			nilableTenant.MTLS = nil
+
+			return nilableTenant, nil
+		}
+		nilableTenant := tenantNilACRValuesSupported{}
+		if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
+			return nil, err
+		}
+		nilableTenant.ACRValuesSupported = nil
+		nilableTenant.MTLS = expandMTLSConfiguration(mtls)
+		return nilableTenant, nil
+	} else if isMTLSConfigurationDisabled(mtls) {
+		nilableTenant := tenantNilMTLS{}
+		if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
+			return nil, err
+		}
+		nilableTenant.ACRValuesSupported = value.Strings(config.GetAttr("acr_values_supported"))
+		nilableTenant.MTLS = nil
+		return nilableTenant, nil
+	}
+	tenant.ACRValuesSupported = value.Strings(config.GetAttr("acr_values_supported"))
+	tenant.MTLS = expandMTLSConfiguration(mtls)
+
+	return tenant, nil
 }
 
 func expandTenantFlags(config cty.Value) *management.TenantFlags {
@@ -68,6 +105,7 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
+			RemoveAlgFromJWKS:                  value.Bool(flags.GetAttr("remove_alg_from_jwks")),
 		}
 
 		return stop
@@ -104,4 +142,28 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	}
 
 	return &sessions
+}
+
+func isMTLSConfigurationDisabled(config cty.Value) bool {
+	return !config.IsNull() && config.LengthInt() > 0 && config.AsValueSlice()[0].GetAttr("disable").True()
+}
+
+func expandMTLSConfiguration(config cty.Value) *management.TenantMTLSConfiguration {
+	var mtls management.TenantMTLSConfiguration
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disabled := cfg.GetAttr("disable")
+		if !disabled.IsNull() && disabled.True() {
+			// Force it to exit the ForEachElement and return nil.
+			stop = true
+		} else {
+			mtls.EnableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
+		}
+		return stop
+	}) {
+		return nil
+	}
+	if mtls == (management.TenantMTLSConfiguration{}) {
+		return nil
+	}
+	return &mtls
 }

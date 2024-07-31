@@ -2,6 +2,7 @@ resource "auth0_client" "my_client" {
   name                                = "Application - Acceptance Test"
   description                         = "Test Applications Long Description"
   app_type                            = "non_interactive"
+  compliance_level                    = "none"
   custom_login_page_on                = true
   is_first_party                      = true
   is_token_endpoint_ip_header_trusted = true

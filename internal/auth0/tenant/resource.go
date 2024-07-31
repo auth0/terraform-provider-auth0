@@ -2,7 +2,9 @@ package tenant
 
 import (
 	"context"
+	"net/http"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -16,6 +18,22 @@ const (
 	idleSessionLifetimeDefault = 72.00
 	sessionLifetimeDefault     = 168.00
 )
+
+type tenantNilACRValuesSupported struct {
+	management.Tenant
+	ACRValuesSupported *[]string `json:"acr_values_supported"`
+}
+
+type tenantNilMTLS struct {
+	management.Tenant
+	MTLS *management.TenantMTLSConfiguration `json:"mtls"`
+}
+
+type tenantNilACRValuesSupportedMTLS struct {
+	management.Tenant
+	ACRValuesSupported *[]string                           `json:"acr_values_supported"`
+	MTLS               *management.TenantMTLSConfiguration `json:"mtls"`
+}
 
 // NewResource will return a new auth0_tenant resource.
 func NewResource() *schema.Resource {
@@ -261,6 +279,12 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
 						},
+						"remove_alg_from_jwks": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Remove `alg` from jwks(JSON Web Key Sets).",
+						},
 					},
 				},
 			},
@@ -321,6 +345,52 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
 			},
+			"acr_values_supported": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				Computed:      true,
+				ConflictsWith: []string{"disable_acr_values_supported"},
+				Description:   "List of supported ACR values.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"disable_acr_values_supported": {
+				Type:          schema.TypeBool,
+				Optional:      true,
+				ConflictsWith: []string{"acr_values_supported"},
+				Computed:      true,
+				Description:   "Disable list of supported ACR values.",
+			},
+			"pushed_authorization_requests_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Enable pushed authorization requests.",
+			},
+			"mtls": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for mTLS.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enable_endpoint_aliases": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							ConflictsWith: []string{"mtls.disable"},
+							Description:   "Enable mTLS endpoint aliases.",
+						},
+						"disable": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							ConflictsWith: []string{"mtls.enable_endpoint_aliases"},
+							Description:   "Disable mTLS settings.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -344,9 +414,9 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	tenant := expandTenant(data)
-
-	if err := api.Tenant.Update(ctx, tenant); err != nil {
+	if tenant, err := expandTenant(data); err != nil {
+		return diag.FromErr(err)
+	} else if err = api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), tenant); err != nil {
 		return diag.FromErr(err)
 	}
 

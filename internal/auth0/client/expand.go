@@ -46,6 +46,7 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		Addons:                             expandClientAddons(data),
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
+		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {

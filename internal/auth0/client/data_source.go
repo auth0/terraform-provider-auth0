@@ -47,6 +47,116 @@ func dataSourceSchema() map[string]*schema.Schema {
 			"`auth0_client_credentials` resource.",
 	}
 
+	dataSourceSchema["signed_request_object"] = &schema.Schema{
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Configuration for JWT-secured Authorization Requests(JAR).",
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"required": {
+					Type:        schema.TypeBool,
+					Computed:    true,
+					Description: "Require JWT-secured authorization requests.",
+				},
+				"credentials": {
+					Type:        schema.TypeList,
+					Computed:    true,
+					Description: "Credentials that will be enabled on the client for JWT-secured authorization requests.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"id": {
+								Type:        schema.TypeString,
+								Computed:    true,
+								Description: "The ID of the client credential.",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	dataSourceSchema["client_authentication_methods"] = &schema.Schema{
+		Type:        schema.TypeSet,
+		Computed:    true,
+		Description: "Defines client authentication methods.",
+		Elem: &schema.Resource{
+			Schema: map[string]*schema.Schema{
+				"private_key_jwt": {
+					Type:        schema.TypeSet,
+					Computed:    true,
+					Description: "If this is defined, the client is enabled to use the Private Key JWT authentication method.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"credentials": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "Credentials that will be enabled on the client for Private Key JWT authentication.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"id": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The ID of the client credential.",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				"tls_client_auth": {
+					Type:        schema.TypeSet,
+					Computed:    true,
+					Description: "If this is defined, the client is enabled to use the CA-based mTLS authentication method.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"credentials": {
+								Type:        schema.TypeList,
+								Computed:    true,
+								Description: "Credentials that will be enabled on the client for CA-based mTLS authentication.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"id": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The ID of the client credential.",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				"self_signed_tls_client_auth": {
+					Type:     schema.TypeSet,
+					Computed: true,
+					Description: "If this is defined, the client is enabled to use the mTLS authentication " +
+						"method utilizing a self-signed certificate.",
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"credentials": {
+								Type:     schema.TypeList,
+								Computed: true,
+								Description: "Credentials that will be enabled on the client for mTLS " +
+									"authentication utilizing self-signed certificates.",
+								Elem: &schema.Resource{
+									Schema: map[string]*schema.Schema{
+										"id": {
+											Type:        schema.TypeString,
+											Computed:    true,
+											Description: "The ID of the client credential.",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
 	return dataSourceSchema
 }
 

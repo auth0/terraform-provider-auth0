@@ -182,83 +182,110 @@ func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) i
 	}
 }
 
-func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) interface{} {
+func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) []map[string]interface{} {
 	if emailAttribute == nil {
 		return nil
 	}
 
-	return map[string]interface{}{
-		"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
-		"profile_required": emailAttribute.GetProfileRequired(),
-		"signup":           flattenSignUp(emailAttribute.GetSignup()),
-	}
-}
-
-func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) interface{} {
-	if usernameAttribute == nil {
-		return nil
-	}
-
-	return map[string]interface{}{
-		"identifier":       flattenIdentifier(usernameAttribute.GetIdentifier()),
-		"profile_required": usernameAttribute.GetProfileRequired(),
-		"signup":           flattenSignUp(usernameAttribute.GetSignup()),
-		"validation":       flattenValidation(usernameAttribute.GetValidation()),
-	}
-}
-
-func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) interface{} {
-	if phoneNumberAttribute == nil {
-		return nil
-	}
-
-	return map[string]interface{}{
-		"identifier":       flattenIdentifier(phoneNumberAttribute.GetIdentifier()),
-		"profile_required": phoneNumberAttribute.GetProfileRequired(),
-		"signup":           flattenSignUp(phoneNumberAttribute.GetSignup()),
-	}
-}
-
-func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) interface{} {
-	if identifier == nil {
-		return nil
-	}
-	return map[string]interface{}{
-		"active": identifier.Active,
-	}
-}
-
-func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) interface{} {
-	if signup == nil {
-		return nil
-	}
-	return map[string]interface{}{
-		"status":       signup.Status,
-		"verification": flattenVerification(signup.Verification),
-	}
-}
-
-func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) interface{} {
-	if validation == nil {
-		return nil
-	}
-	return map[string]interface{}{
-		"min_length": validation.MinLength,
-		"max_length": validation.MaxLength,
-		"allowed_types": map[string]interface{}{
-			"email":        validation.AllowedTypes.Email,
-			"phone_number": validation.AllowedTypes.PhoneNumber,
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
+			"profile_required": emailAttribute.GetProfileRequired(),
+			"signup":           flattenSignUp(emailAttribute.GetSignup()),
 		},
 	}
 }
 
-func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) interface{} {
+func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) []map[string]interface{} {
+	if usernameAttribute == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(usernameAttribute.GetIdentifier()),
+			"profile_required": usernameAttribute.GetProfileRequired(),
+			"signup":           flattenUsernameSignUp(usernameAttribute.GetSignup()),
+			"validation":       flattenValidation(usernameAttribute.GetValidation()),
+		},
+	}
+}
+
+func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) []map[string]interface{} {
+	if phoneNumberAttribute == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(phoneNumberAttribute.GetIdentifier()),
+			"profile_required": phoneNumberAttribute.GetProfileRequired(),
+			"signup":           flattenSignUp(phoneNumberAttribute.GetSignup()),
+		},
+	}
+}
+
+func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
+	if identifier == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"active": identifier.GetActive(),
+		},
+	}
+}
+
+func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) []map[string]interface{} {
+	if signup == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"status":       signup.GetStatus(),
+			"verification": flattenVerification(signup.GetVerification()),
+		},
+	}
+}
+
+func flattenUsernameSignUp(signup *management.ConnectionOptionsAttributeSignup) []map[string]interface{} {
+	if signup == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"status": signup.GetStatus(),
+		},
+	}
+}
+
+func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) []map[string]interface{} {
+	if validation == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"min_length": validation.GetMinLength(),
+			"max_length": validation.GetMaxLength(),
+			"allowed_types": []map[string]interface{}{
+				{
+					"email":        validation.GetAllowedTypes().GetEmail(),
+					"phone_number": validation.GetAllowedTypes().GetEmail(),
+				},
+			},
+		},
+	}
+}
+
+func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) []map[string]interface{} {
 	if verification == nil {
 		return nil
 	}
 
-	return map[string]interface{}{
-		"active": verification.Active,
+	return []map[string]interface{}{
+		{
+			"active": verification.GetActive(),
+		},
 	}
 }
 

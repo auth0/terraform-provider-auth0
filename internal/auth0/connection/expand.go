@@ -216,7 +216,7 @@ func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.Conn
 			coua = &management.ConnectionOptionsUsernameAttribute{
 				Identifier:      expandConnectionOptionsAttributeIdentifier(username),
 				ProfileRequired: value.Bool(username.GetAttr("profile_required")),
-				Signup:          expandConnectionOptionsAttributeSignup(username),
+				Signup:          expandConnectionOptionsAttributeUsernameSignup(username),
 				Validation:      expandConnectionOptionsAttributeValidation(username),
 			}
 			return stop
@@ -248,6 +248,19 @@ func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.Co
 			return stop
 		})
 	return coai
+}
+
+func expandConnectionOptionsAttributeUsernameSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	log.Printf("config signup : %v ", config.GetAttr("signup"))
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status: value.String(signup.GetAttr("status")),
+			}
+			return stop
+		})
+	return coas
 }
 
 func expandConnectionOptionsAttributeSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {

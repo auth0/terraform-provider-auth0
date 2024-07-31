@@ -188,9 +188,9 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 	}
 
 	return map[string]interface{}{
-		"identifier":       flattenIdentifier(emailAttribute.Identifier),
-		"profile_required": emailAttribute.ProfileRequired,
-		"signup":           flattenSignUp(emailAttribute.Signup),
+		"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
+		"profile_required": emailAttribute.GetProfileRequired(),
+		"signup":           flattenSignUp(emailAttribute.GetSignup()),
 	}
 }
 
@@ -200,10 +200,10 @@ func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUse
 	}
 
 	return map[string]interface{}{
-		"identifier":       flattenIdentifier(usernameAttribute.Identifier),
-		"profile_required": usernameAttribute.ProfileRequired,
-		"signup":           flattenSignUp(usernameAttribute.Signup),
-		"validation":       flattenValidation(usernameAttribute.Validation),
+		"identifier":       flattenIdentifier(usernameAttribute.GetIdentifier()),
+		"profile_required": usernameAttribute.GetProfileRequired(),
+		"signup":           flattenSignUp(usernameAttribute.GetSignup()),
+		"validation":       flattenValidation(usernameAttribute.GetValidation()),
 	}
 }
 
@@ -213,9 +213,9 @@ func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOpti
 	}
 
 	return map[string]interface{}{
-		"identifier":       flattenIdentifier(phoneNumberAttribute.Identifier),
-		"profile_required": phoneNumberAttribute.ProfileRequired,
-		"signup":           flattenSignUp(phoneNumberAttribute.Signup),
+		"identifier":       flattenIdentifier(phoneNumberAttribute.GetIdentifier()),
+		"profile_required": phoneNumberAttribute.GetProfileRequired(),
+		"signup":           flattenSignUp(phoneNumberAttribute.GetSignup()),
 	}
 }
 
@@ -296,7 +296,10 @@ func flattenConnectionOptionsAuth0(
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"upstream_params":                      upstreamParams,
 		"precedence":                           options.GetPrecedence(),
-		"attributes":                           flattenAttributes(options.Attributes),
+	}
+
+	if options.Attributes != nil {
+		optionsMap["attributes"] = []interface{}{flattenAttributes(options.GetAttributes())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

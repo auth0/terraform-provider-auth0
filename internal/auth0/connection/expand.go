@@ -3,12 +3,12 @@ package connection
 import (
 	"context"
 	"fmt"
-
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"log"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -180,13 +180,10 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
-func expandConnectionOptionsAttributes(data *schema.ResourceData) *management.ConnectionOptionsAttributes {
-	if !data.HasChange("attributes") {
-		return nil
-	}
-
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
+	log.Printf("config: %v", config)
 	var coa *management.ConnectionOptionsAttributes
-	data.GetRawConfig().GetAttr("attributes").ForEachElement(
+	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			coa = &management.ConnectionOptionsAttributes{
 				Email:       expandConnectionOptionsEmailAttribute(attributes),
@@ -320,7 +317,7 @@ func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
-		Attributes:                       expandConnectionOptionsAttributes(data),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 	}
 
 	config.GetAttr("validation").ForEachElement(

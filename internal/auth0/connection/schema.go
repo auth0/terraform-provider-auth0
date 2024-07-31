@@ -515,7 +515,6 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies whether or not request info should be forwarded to sms gateway.",
 			},
-
 			"set_user_root_attributes": {
 				Type:         schema.TypeString,
 				Optional:     true,

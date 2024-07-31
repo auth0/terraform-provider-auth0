@@ -181,9 +181,9 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 }
 
 func expandConnectionOptionsAttributes(data *schema.ResourceData) *management.ConnectionOptionsAttributes {
-	//If !data.HasChange("attributes") {
-	//	return nil
-	//}.
+	if !data.HasChange("attributes") {
+		return nil
+	}
 
 	var coa *management.ConnectionOptionsAttributes
 	data.GetRawConfig().GetAttr("attributes").ForEachElement(

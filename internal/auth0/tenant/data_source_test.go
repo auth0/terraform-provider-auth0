@@ -12,18 +12,19 @@ import (
 
 const testAccDataTenantConfig = `
 resource "auth0_tenant" "my_tenant" {
-	default_directory       = ""
-	default_audience        = ""
-	default_redirection_uri = "https://example.com/login"
-	friendly_name           = "My Test Tenant"
-	picture_url             = "https://mycompany.org/logo.png"
-	support_email           = "support@mycompany.org"
-	support_url             = "https://mycompany.org/support"
-	allowed_logout_urls     = [ "https://mycompany.org/logoutCallback" ]
-	session_lifetime        = 720
-	sandbox_version         = "16"
-	idle_session_lifetime   = 72
-	enabled_locales         = ["en", "de", "fr"]
+	default_directory            = ""
+	default_audience             = ""
+	default_redirection_uri      = "https://example.com/login"
+	friendly_name                = "My Test Tenant"
+	picture_url                  = "https://mycompany.org/logo.png"
+	support_email                = "support@mycompany.org"
+	support_url                  = "https://mycompany.org/support"
+	allowed_logout_urls          = [ "https://mycompany.org/logoutCallback" ]
+	session_lifetime             = 720
+	sandbox_version              = "16"
+	idle_session_lifetime        = 72
+	enabled_locales              = ["en", "de", "fr"]
+	disable_acr_values_supported = true
 
 	flags {
 		disable_clickjack_protection_headers   = true
@@ -36,6 +37,49 @@ resource "auth0_tenant" "my_tenant" {
 
 	session_cookie {
 		mode = "non-persistent"
+	}
+
+	mtls {
+		enable_endpoint_aliases = true
+	}
+}
+
+data "auth0_tenant" "current" {
+	depends_on = [ auth0_tenant.my_tenant ]
+}
+`
+
+const testAccDataTenantConfigUpdate = `
+resource "auth0_tenant" "my_tenant" {
+	default_directory            = ""
+	default_audience             = ""
+	default_redirection_uri      = "https://example.com/login"
+	friendly_name                = "My Test Tenant"
+	picture_url                  = "https://mycompany.org/logo.png"
+	support_email                = "support@mycompany.org"
+	support_url                  = "https://mycompany.org/support"
+	allowed_logout_urls          = [ "https://mycompany.org/logoutCallback" ]
+	session_lifetime             = 720
+	sandbox_version              = "16"
+	idle_session_lifetime        = 72
+	enabled_locales              = ["en", "de", "fr"]
+	acr_values_supported         = ["foo", "bar"]
+
+	flags {
+		disable_clickjack_protection_headers   = true
+		enable_public_signup_user_exists_error = true
+		use_scope_descriptions_for_consent     = true
+		no_disclose_enterprise_connections     = false
+		disable_management_api_sms_obfuscation = false
+		disable_fields_map_fix                 = false
+	}
+
+	session_cookie {
+		mode = "non-persistent"
+	}
+
+	mtls {
+		disable = true
 	}
 }
 
@@ -70,6 +114,22 @@ func TestAccDataSourceTenant(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "flags.0.use_scope_descriptions_for_consent", "true"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "default_redirection_uri", "https://example.com/login"),
 					resource.TestCheckResourceAttr("data.auth0_tenant.current", "session_cookie.0.mode", "non-persistent"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "disable_acr_values_supported", "true"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "acr_values_supported.#", "0"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "mtls.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "mtls.0.enable_endpoint_aliases", "true"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "mtls.0.disable", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataTenantConfigUpdate, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "disable_acr_values_supported", "false"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "acr_values_supported.#", "2"),
+					resource.TestCheckTypeSetElemAttr("data.auth0_tenant.current", "acr_values_supported.*", "foo"),
+					resource.TestCheckTypeSetElemAttr("data.auth0_tenant.current", "acr_values_supported.*", "bar"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "mtls.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_tenant.current", "mtls.0.disable", "true"),
 				),
 			},
 		},

@@ -14,30 +14,33 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 	idleSessionLifetime := data.Get("idle_session_lifetime").(float64) // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
 
-	tenant := &management.Tenant{
-		DefaultAudience:               value.String(config.GetAttr("default_audience")),
-		DefaultDirectory:              value.String(config.GetAttr("default_directory")),
-		DefaultRedirectionURI:         value.String(config.GetAttr("default_redirection_uri")),
-		FriendlyName:                  value.String(config.GetAttr("friendly_name")),
-		PictureURL:                    value.String(config.GetAttr("picture_url")),
-		SupportEmail:                  value.String(config.GetAttr("support_email")),
-		SupportURL:                    value.String(config.GetAttr("support_url")),
-		AllowedLogoutURLs:             value.Strings(config.GetAttr("allowed_logout_urls")),
-		SessionLifetime:               &sessionLifetime,
-		SandboxVersion:                value.String(config.GetAttr("sandbox_version")),
-		EnabledLocales:                value.Strings(config.GetAttr("enabled_locales")),
-		Flags:                         expandTenantFlags(config.GetAttr("flags")),
-		SessionCookie:                 expandTenantSessionCookie(config.GetAttr("session_cookie")),
-		Sessions:                      expandTenantSessions(config.GetAttr("sessions")),
-		AllowOrgNameInAuthAPI:         value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
-		CustomizeMFAInPostLoginAction: value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
+	tenant := management.Tenant{
+		DefaultAudience:                      value.String(config.GetAttr("default_audience")),
+		DefaultDirectory:                     value.String(config.GetAttr("default_directory")),
+		DefaultRedirectionURI:                value.String(config.GetAttr("default_redirection_uri")),
+		FriendlyName:                         value.String(config.GetAttr("friendly_name")),
+		PictureURL:                           value.String(config.GetAttr("picture_url")),
+		SupportEmail:                         value.String(config.GetAttr("support_email")),
+		SupportURL:                           value.String(config.GetAttr("support_url")),
+		AllowedLogoutURLs:                    value.Strings(config.GetAttr("allowed_logout_urls")),
+		SessionLifetime:                      &sessionLifetime,
+		SandboxVersion:                       value.String(config.GetAttr("sandbox_version")),
+		EnabledLocales:                       value.Strings(config.GetAttr("enabled_locales")),
+		Flags:                                expandTenantFlags(config.GetAttr("flags")),
+		SessionCookie:                        expandTenantSessionCookie(config.GetAttr("session_cookie")),
+		Sessions:                             expandTenantSessions(config.GetAttr("sessions")),
+		AllowOrgNameInAuthAPI:                value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
+		CustomizeMFAInPostLoginAction:        value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
+		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
+		ACRValuesSupported:                   expandACRValuesSupported(data),
+		MTLS:                                 expandMTLSConfiguration(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
 
-	return tenant
+	return &tenant
 }
 
 func expandTenantFlags(config cty.Value) *management.TenantFlags {
@@ -68,6 +71,7 @@ func expandTenantFlags(config cty.Value) *management.TenantFlags {
 			DashboardInsightsView:              value.Bool(flags.GetAttr("dashboard_insights_view")),
 			DisableFieldsMapFix:                value.Bool(flags.GetAttr("disable_fields_map_fix")),
 			MFAShowFactorListOnEnrollment:      value.Bool(flags.GetAttr("mfa_show_factor_list_on_enrollment")),
+			RemoveAlgFromJWKS:                  value.Bool(flags.GetAttr("remove_alg_from_jwks")),
 		}
 
 		return stop
@@ -104,4 +108,66 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	}
 
 	return &sessions
+}
+
+func isACRValuesSupportedNull(data *schema.ResourceData) bool {
+	if !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
+		return false
+	}
+	disable := data.GetRawConfig().GetAttr("disable_acr_values_supported")
+	return !disable.IsNull() && disable.True()
+}
+
+func expandACRValuesSupported(data *schema.ResourceData) *[]string {
+	if !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
+		return nil
+	} else if isACRValuesSupportedNull(data) {
+		return nil
+	}
+
+	return value.Strings(data.GetRawConfig().GetAttr("acr_values_supported"))
+}
+
+func isMTLSConfigurationNull(data *schema.ResourceData) bool {
+	if !data.HasChange("mtls") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("mtls")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
+}
+
+func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSConfiguration {
+	if !data.HasChange("mtls") {
+		return nil
+	} else if isMTLSConfigurationNull(data) {
+		return nil
+	}
+	var mtls management.TenantMTLSConfiguration
+
+	config := data.GetRawConfig().GetAttr("mtls")
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		mtls.EnableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
+		return stop
+	})
+
+	if mtls == (management.TenantMTLSConfiguration{}) {
+		return nil
+	}
+
+	return &mtls
 }

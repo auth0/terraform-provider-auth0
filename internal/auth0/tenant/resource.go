@@ -2,6 +2,8 @@ package tenant
 
 import (
 	"context"
+	"net/http"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
@@ -261,6 +263,12 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
 						},
+						"remove_alg_from_jwks": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Remove `alg` from jwks(JSON Web Key Sets).",
+						},
 					},
 				},
 			},
@@ -321,6 +329,52 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
 			},
+			"acr_values_supported": {
+				Type:          schema.TypeSet,
+				Optional:      true,
+				Computed:      true,
+				ConflictsWith: []string{"disable_acr_values_supported"},
+				Description:   "List of supported ACR values.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"disable_acr_values_supported": {
+				Type:          schema.TypeBool,
+				Optional:      true,
+				ConflictsWith: []string{"acr_values_supported"},
+				Computed:      true,
+				Description:   "Disable list of supported ACR values.",
+			},
+			"pushed_authorization_requests_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Enable pushed authorization requests.",
+			},
+			"mtls": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for mTLS.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enable_endpoint_aliases": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							ConflictsWith: []string{"mtls.disable"},
+							Description:   "Enable mTLS endpoint aliases.",
+						},
+						"disable": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							ConflictsWith: []string{"mtls.enable_endpoint_aliases"},
+							Description:   "Disable mTLS settings.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -345,10 +399,29 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 	api := meta.(*config.Config).GetAPI()
 
 	tenant := expandTenant(data)
-
 	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
+	// These call should NOT be needed, but the tests fail sometimes if it they not there.
+	time.Sleep(200 * time.Millisecond)
+
+	if isACRValuesSupportedNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"acr_values_supported": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	time.Sleep(200 * time.Millisecond)
+
+	if isMTLSConfigurationNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"mtls": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	time.Sleep(200 * time.Millisecond)
 
 	return readTenant(ctx, data, meta)
 }

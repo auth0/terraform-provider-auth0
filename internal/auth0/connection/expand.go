@@ -3,12 +3,13 @@ package connection
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"log"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -315,7 +316,7 @@ func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.
 	return coaat
 }
 
-func expandConnectionOptionsAuth0(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
+func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),

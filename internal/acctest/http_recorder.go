@@ -12,9 +12,11 @@ import (
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/terraform-provider-auth0/internal/go-vcr.v3/cassette"
+	"github.com/auth0/terraform-provider-auth0/internal/go-vcr.v3/recorder"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/dnaeon/go-vcr.v3/cassette"
-	"gopkg.in/dnaeon/go-vcr.v3/recorder"
+	//"gopkg.in/dnaeon/go-vcr.v3/cassette"
+	//"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
 
 const (

@@ -988,39 +988,39 @@ var optionsSchema = &schema.Schema{
 									"validation": {
 										Type:        schema.TypeList,
 										Optional:    true,
-										Computed:    false,
+										Computed:    true,
 										Description: "Defines validation settings for User Name attribute",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 												"min_length": {
 													Type:        schema.TypeInt,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines Min Length for User Name attribute",
 												},
 												"max_length": {
 													Type:        schema.TypeInt,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines Max Length for User Name attribute",
 												},
 												"allowed_types": {
 													Type:        schema.TypeList,
 													Optional:    true,
-													Computed:    false,
+													Computed:    true,
 													Description: "Defines allowed types for for UserName attribute",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 															"email": {
 																Type:        schema.TypeBool,
 																Optional:    true,
-																Computed:    false,
+																Computed:    true,
 																Description: "One of the allowed types for UserName signup attribute",
 															},
 															"phone_number": {
 																Type:        schema.TypeBool,
 																Optional:    true,
-																Computed:    false,
+																Computed:    true,
 																Description: "One of the allowed types for UserName signup attribute",
 															},
 														},

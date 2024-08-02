@@ -167,8 +167,8 @@ resource "auth0_connection" "my_connection" {
 	strategy = "auth0"
 	options {
 		precedence = ["username","email","phone_number"]
-		{{.validation}}
 		{{.requires_username}}
+		{{.validation}}
 		{{.attributes}}
 		brute_force_protection = true
 	}
@@ -181,19 +181,19 @@ func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
 		"requires_username": `requires_username = false`,
 		"validation":        ``,
 		"attributes": `attributes {
-							phone_number {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "required"
-									verification {
-										active = false
-									}
-								}
-							}
-						}`}
+			phone_number {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -230,19 +230,19 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 		"requires_username": `requires_username = false`,
 		"validation":        ``,
 		"attributes": `attributes {
-							email {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "required"
-									verification {
-										active = false
-									}
-								}
-							}
-						}`}
+			email {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -279,16 +279,16 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 		"requires_username": `requires_username = false`,
 		"validation":        ``,
 		"attributes": `attributes {
-							username {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "required"
-								}
-							}
-						}`}
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -324,16 +324,16 @@ func TestAccConnectionOptionsAttrUserNameNegative(t *testing.T) {
 		"testName":          t.Name(),
 		"validation":        ``,
 		"attributes": `attributes {
-							username {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "required"
-								}
-							}
-						}`}
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -350,40 +350,40 @@ func TestAccConnectionOptionsAttrNoActiveNegative(t *testing.T) {
 		"requires_username": `requires_username = false`,
 		"validation":        ``,
 		"attributes": `attributes {
-							phone_number {
-								identifier {
-									active = false
-								}
-								profile_required = true
-								signup {
-									status = "required"
-									verification {
-										active = false
-									}
-								}
-							}
-							email {
-								identifier {
-									active = false
-								}
-								profile_required = true
-								signup {
-									status = "required"
-									verification {
-										active = false
-									}
-								}
-							}
-							username {
-								identifier {
-									active = false
-								}
-								profile_required = true
-								signup {
-									status = "required"
-								}
-							}
-						}`}
+			phone_number {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			email {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			username {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -399,34 +399,34 @@ func TestAccConnectionOptionsAttrSetValidationNegative(t *testing.T) {
 		"testName":          t.Name(),
 		"requires_username": `requires_username = false`,
 		"validation": `validation {
-							username {
-								min = 1
-								max =  5
-							}
-						}`,
+			username {
+				min = 1
+				max =  5
+			}
+		}`,
 		"attributes": `attributes {
-							email {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "required"
-									verification {
-										active = false
-									}
-								}
-							}
-							username {
-								identifier {
-									active = false
-								}
-								profile_required = true
-								signup {
-									status = "required"
-								}
-							}
-						}`}
+			email {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			username {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -443,19 +443,19 @@ func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
 		"requires_username": `requires_username = false`,
 		"validation":        ``,
 		"attributes": `attributes {
-							phone_number {
-								identifier {
-									active = true
-								}
-								profile_required = true
-								signup {
-									status = "inactive"
-									verification {
-										active = false
-									}
-								}
-							}
-						}`}
+			phone_number {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "inactive"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

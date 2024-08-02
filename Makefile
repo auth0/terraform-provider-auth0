@@ -127,6 +127,7 @@ test-acc: ## Run acceptance tests with http recordings. To run a specific test, 
 		-v \
 		-run "$(FILTER)" \
 		-timeout 120m \
+		--parallel 1 \
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
 		${GO_PACKAGES}
 

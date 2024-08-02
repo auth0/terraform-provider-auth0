@@ -160,6 +160,312 @@ resource "auth0_connection" "my_connection" {
 }
 `
 
+const testAccConnectionOptionAttributesTemplate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-Connection-{{.testName}}"
+	is_domain_connection = true
+	strategy = "auth0"
+	options {
+		precedence = ["username","email","phone_number"]
+		{{.validation}}
+		{{.requires_username}}
+		{{.attributes}}
+		brute_force_protection = true
+	}
+}
+`
+
+func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+							phone_number {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "required"
+									verification {
+										active = false
+									}
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.verification.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrEmail(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+							email {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "required"
+									verification {
+										active = false
+									}
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrUserName(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+							username {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "required"
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.signup.0.status", "required"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrUserNameNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"requires_username": `requires_username = true`,
+		"testName":          t.Name(),
+		"validation":        ``,
+		"attributes": `attributes {
+							username {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "required"
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: Cannot set both options.attributes and options.requires_username"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrNoActiveNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+							phone_number {
+								identifier {
+									active = false
+								}
+								profile_required = true
+								signup {
+									status = "required"
+									verification {
+										active = false
+									}
+								}
+							}
+							email {
+								identifier {
+									active = false
+								}
+								profile_required = true
+								signup {
+									status = "required"
+									verification {
+										active = false
+									}
+								}
+							}
+							username {
+								identifier {
+									active = false
+								}
+								profile_required = true
+								signup {
+									status = "required"
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: attributes must contain one active identifier"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrSetValidationNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation": `validation {
+							username {
+								min = 1
+								max =  5
+							}
+						}`,
+		"attributes": `attributes {
+							email {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "required"
+									verification {
+										active = false
+									}
+								}
+							}
+							username {
+								identifier {
+									active = false
+								}
+								profile_required = true
+								signup {
+									status = "required"
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: Cannot set both options.attributes and options.validation"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+							phone_number {
+								identifier {
+									active = true
+								}
+								profile_required = true
+								signup {
+									status = "inactive"
+									verification {
+										active = false
+									}
+								}
+							}
+						}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("attribute phone_number must also be required on signup"),
+			},
+		},
+	})
+}
+
 func TestAccConnectionAD(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

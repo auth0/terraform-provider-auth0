@@ -138,6 +138,7 @@ test-acc-record: ## Run acceptance tests and record http interactions. To run a 
 		-v \
 		-run "$(FILTER)" \
 		-timeout 120m \
+		--parallel 1 \
 		${GO_PACKAGES}
 
 test-acc-e2e: ## Run acceptance tests without http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc-e2e FILTER="TestAccResourceServer`

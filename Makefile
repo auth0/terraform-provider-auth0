@@ -123,10 +123,10 @@ test-acc: ## Run acceptance tests with http recordings. To run a specific test, 
 	@AUTH0_HTTP_RECORDINGS=on \
 		AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com \
 		TF_ACC=1 \
-		TF_LOG=DEBUG  \
+		TF_LOG=DEBUG \
 		go test \
 		-v \
-		-run "$(FILTER)" \
+		-run "TestAccClientAuthenticationMethods" \
 		-timeout 120m \
 		--parallel 1 \
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \

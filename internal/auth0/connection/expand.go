@@ -182,7 +182,6 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 }
 
 func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
-	log.Printf("config: %v", config)
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
@@ -296,7 +295,7 @@ func expandConnectionOptionsAttributeValidation(config cty.Value) *management.Co
 			coav = &management.ConnectionOptionsAttributeValidation{
 				MinLength:    value.Int(validation.GetAttr("min_length")),
 				MaxLength:    value.Int(validation.GetAttr("max_length")),
-				AllowedTypes: expandConnectionOptionsAttributeAllowedTypes(validation.GetAttr("allowed_types")),
+				AllowedTypes: expandConnectionOptionsAttributeAllowedTypes(validation),
 			}
 			return stop
 		})

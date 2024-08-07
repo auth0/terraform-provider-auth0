@@ -287,6 +287,14 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 				signup {
 					status = "required"
 				}
+				validation {
+					min_length = 1
+					max_length = 3
+					allowed_types {
+						email = true
+						phone_number = false
+					}
+				}
 			}
 		}`}
 	acctest.Test(t, resource.TestCase{
@@ -301,6 +309,10 @@ func TestAccConnectionOptionsAttrUserName(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.profile_required", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.min_length", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.max_length", "3"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.email", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.phone_number", "false"),
 				),
 			},
 			{

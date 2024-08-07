@@ -270,7 +270,7 @@ func flattenValidation(validation *management.ConnectionOptionsAttributeValidati
 			"allowed_types": []map[string]interface{}{
 				{
 					"email":        validation.GetAllowedTypes().GetEmail(),
-					"phone_number": validation.GetAllowedTypes().GetEmail(),
+					"phone_number": validation.GetAllowedTypes().GetPhoneNumber(),
 				},
 			},
 		},

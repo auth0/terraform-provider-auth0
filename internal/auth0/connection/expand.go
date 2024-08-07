@@ -3,7 +3,6 @@ package connection
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -251,7 +250,6 @@ func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.Co
 }
 
 func expandConnectionOptionsAttributeUsernameSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
-	log.Printf("config signup : %v ", config.GetAttr("signup"))
 	var coas *management.ConnectionOptionsAttributeSignup
 	config.GetAttr("signup").ForEachElement(
 		func(_ cty.Value, signup cty.Value) (stop bool) {

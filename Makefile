@@ -126,6 +126,7 @@ test-acc: ## Run acceptance tests with http recordings. To run a specific test, 
 		go test \
 		-v \
 		-run "$(FILTER)" \
+		-parallel 1 \
 		-timeout 120m \
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
 		${GO_PACKAGES}
@@ -137,6 +138,7 @@ test-acc-record: ## Run acceptance tests and record http interactions. To run a 
 		go test \
 		-v \
 		-run "$(FILTER)" \
+		-parallel 1 \
 		-timeout 120m \
 		${GO_PACKAGES}
 

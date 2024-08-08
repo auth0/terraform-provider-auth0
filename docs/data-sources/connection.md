@@ -52,6 +52,7 @@ Read-Only:
 - `api_enable_users` (Boolean)
 - `app_id` (String)
 - `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))
+- `attributes` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes))
 - `auth_params` (Map of String)
 - `authorization_endpoint` (String)
 - `brute_force_protection` (Boolean)
@@ -103,6 +104,7 @@ Read-Only:
 - `password_policy` (String)
 - `ping_federate_base_url` (String)
 - `pkce_enabled` (Boolean)
+- `precedence` (List of String)
 - `protocol_binding` (String)
 - `provider` (String)
 - `request_template` (String)
@@ -146,6 +148,132 @@ Read-Only:
 - `attributes` (String)
 - `mapping_mode` (String)
 - `userinfo_scope` (String)
+
+
+<a id="nestedobjatt--options--attributes"></a>
+### Nested Schema for `options.attributes`
+
+Read-Only:
+
+- `email` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email))
+- `phone_number` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number))
+- `username` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username))
+
+<a id="nestedobjatt--options--attributes--email"></a>
+### Nested Schema for `options.attributes.email`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup))
+
+<a id="nestedobjatt--options--attributes--email--identifier"></a>
+### Nested Schema for `options.attributes.email.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--email--signup"></a>
+### Nested Schema for `options.attributes.email.signup`
+
+Read-Only:
+
+- `status` (String)
+- `verification` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup--verification))
+
+<a id="nestedobjatt--options--attributes--email--signup--verification"></a>
+### Nested Schema for `options.attributes.email.signup.verification`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+
+
+<a id="nestedobjatt--options--attributes--phone_number"></a>
+### Nested Schema for `options.attributes.phone_number`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--signup))
+
+<a id="nestedobjatt--options--attributes--phone_number--identifier"></a>
+### Nested Schema for `options.attributes.phone_number.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--phone_number--signup"></a>
+### Nested Schema for `options.attributes.phone_number.signup`
+
+Read-Only:
+
+- `status` (String)
+- `verification` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--signup--verification))
+
+<a id="nestedobjatt--options--attributes--phone_number--signup--verification"></a>
+### Nested Schema for `options.attributes.phone_number.signup.verification`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+
+
+<a id="nestedobjatt--options--attributes--username"></a>
+### Nested Schema for `options.attributes.username`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--signup))
+- `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--validation))
+
+<a id="nestedobjatt--options--attributes--username--identifier"></a>
+### Nested Schema for `options.attributes.username.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--username--signup"></a>
+### Nested Schema for `options.attributes.username.signup`
+
+Read-Only:
+
+- `status` (String)
+
+
+<a id="nestedobjatt--options--attributes--username--validation"></a>
+### Nested Schema for `options.attributes.username.validation`
+
+Read-Only:
+
+- `allowed_types` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--validation--allowed_types))
+- `max_length` (Number)
+- `min_length` (Number)
+
+<a id="nestedobjatt--options--attributes--username--validation--allowed_types"></a>
+### Nested Schema for `options.attributes.username.validation.allowed_types`
+
+Read-Only:
+
+- `email` (Boolean)
+- `phone_number` (Boolean)
+
+
+
 
 
 <a id="nestedobjatt--options--connection_settings"></a>

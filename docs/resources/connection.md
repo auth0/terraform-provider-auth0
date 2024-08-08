@@ -664,6 +664,7 @@ Optional:
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
+- `attributes` (Block List) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order (see [below for nested schema](#nestedblock--options--attributes))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
@@ -715,6 +716,7 @@ Optional:
 - `password_policy` (String) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
 - `ping_federate_base_url` (String) Ping Federate Server URL.
 - `pkce_enabled` (Boolean) Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.
+- `precedence` (List of String) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `request_template` (String) Template that formats the SAML request.
@@ -761,6 +763,132 @@ Optional:
 
 - `attributes` (String) This property is an object containing mapping information that allows Auth0 to interpret incoming claims from the IdP. Mapping information must be provided as key/value pairs.
 - `userinfo_scope` (String) This property defines the scopes that Auth0 sends to the IdP’s UserInfo endpoint when requested.
+
+
+<a id="nestedblock--options--attributes"></a>
+### Nested Schema for `options.attributes`
+
+Optional:
+
+- `email` (Block List) Connection Options for Email Attribute (see [below for nested schema](#nestedblock--options--attributes--email))
+- `phone_number` (Block List) Connection Options for Phone Number Attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number))
+- `username` (Block List) Connection Options for User Name Attribute (see [below for nested schema](#nestedblock--options--attributes--username))
+
+<a id="nestedblock--options--attributes--email"></a>
+### Nested Schema for `options.attributes.email`
+
+Optional:
+
+- `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
+
+<a id="nestedblock--options--attributes--email--identifier"></a>
+### Nested Schema for `options.attributes.email.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether email attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--email--signup"></a>
+### Nested Schema for `options.attributes.email.signup`
+
+Optional:
+
+- `status` (String) Defines signup status for Email Attribute
+- `verification` (Block List) Defines settings for Verification under Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup--verification))
+
+<a id="nestedblock--options--attributes--email--signup--verification"></a>
+### Nested Schema for `options.attributes.email.signup.verification`
+
+Optional:
+
+- `active` (Boolean) Defines verification settings for signup attribute
+
+
+
+
+<a id="nestedblock--options--attributes--phone_number"></a>
+### Nested Schema for `options.attributes.phone_number`
+
+Optional:
+
+- `identifier` (Block List) Connection Options Phone Number Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--phone_number--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for Phone Number attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number--signup))
+
+<a id="nestedblock--options--attributes--phone_number--identifier"></a>
+### Nested Schema for `options.attributes.phone_number.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether Phone Number attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--phone_number--signup"></a>
+### Nested Schema for `options.attributes.phone_number.signup`
+
+Optional:
+
+- `status` (String) Defines status of signup for Phone Number attribute
+- `verification` (Block List) Defines verification settings for Phone Number attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number--signup--verification))
+
+<a id="nestedblock--options--attributes--phone_number--signup--verification"></a>
+### Nested Schema for `options.attributes.phone_number.signup.verification`
+
+Optional:
+
+- `active` (Boolean) Defines verification settings for Phone Number attribute
+
+
+
+
+<a id="nestedblock--options--attributes--username"></a>
+### Nested Schema for `options.attributes.username`
+
+Optional:
+
+- `identifier` (Block List) Connection options for User Name Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--username--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for User Name attribute (see [below for nested schema](#nestedblock--options--attributes--username--signup))
+- `validation` (Block List) Defines validation settings for User Name attribute (see [below for nested schema](#nestedblock--options--attributes--username--validation))
+
+<a id="nestedblock--options--attributes--username--identifier"></a>
+### Nested Schema for `options.attributes.username.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether UserName attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--username--signup"></a>
+### Nested Schema for `options.attributes.username.signup`
+
+Optional:
+
+- `status` (String) Defines whether User Name attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--username--validation"></a>
+### Nested Schema for `options.attributes.username.validation`
+
+Optional:
+
+- `allowed_types` (Block List) Defines allowed types for for UserName attribute (see [below for nested schema](#nestedblock--options--attributes--username--validation--allowed_types))
+- `max_length` (Number) Defines Max Length for User Name attribute
+- `min_length` (Number) Defines Min Length for User Name attribute
+
+<a id="nestedblock--options--attributes--username--validation--allowed_types"></a>
+### Nested Schema for `options.attributes.username.validation.allowed_types`
+
+Optional:
+
+- `email` (Boolean) One of the allowed types for UserName signup attribute
+- `phone_number` (Boolean) One of the allowed types for UserName signup attribute
+
+
+
 
 
 <a id="nestedblock--options--connection_settings"></a>

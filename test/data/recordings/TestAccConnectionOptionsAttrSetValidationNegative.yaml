@@ -1,0 +1,39 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 535
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrSetValidationNegative","strategy":"auth0","is_domain_connection":true,"options":{"validation":{"username":{"max":5,"min":1}},"brute_force_protection":true,"requires_username":false,"precedence":["username","email","phone_number"],"attributes":{"email":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required","verification":{"active":false}}},"username":{"identifier":{"active":false},"profile_required":true,"signup":{"status":"required"}}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.8.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 137
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Cannot set both options.attributes and options.validation","errorCode":"invalid_body"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 108.277625ms

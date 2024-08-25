@@ -32,19 +32,12 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readSelfServiceProfileForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
 	id := data.Get("id").(string)
-	if id != "" {
-		data.SetId(id)
-
-		ssp, err := api.SelfServiceProfile.Read(ctx, data.Id())
-		if err != nil {
-			return diag.FromErr(err)
-		}
-
-		err = flattenSelfServiceProfile(data, ssp)
-
+	data.SetId(id)
+	ssp, err := api.SelfServiceProfile.Read(ctx, data.Id())
+	if err != nil {
 		return diag.FromErr(err)
 	}
-	return diag.Errorf("No Self Service Profile found with \"id\" = %q", id)
+	err = flattenSelfServiceProfile(data, ssp)
+	return diag.FromErr(err)
 }

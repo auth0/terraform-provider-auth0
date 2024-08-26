@@ -45,6 +45,7 @@ data "auth0_client" "some-client-by-id" {
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
 - `custom_login_page_on` (Boolean) Indicates whether a custom login page is to be used.
+- `default_organization` (List of Object) Configure and associate an organization with the Client (see [below for nested schema](#nestedatt--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `form_template` (String) HTML form template to be used for WS-Federation.
@@ -400,6 +401,15 @@ Read-Only:
 
 - `account` (String)
 
+
+
+<a id="nestedatt--default_organization"></a>
+### Nested Schema for `default_organization`
+
+Read-Only:
+
+- `flows` (List of String)
+- `organization_id` (String)
 
 
 <a id="nestedatt--jwt_configuration"></a>

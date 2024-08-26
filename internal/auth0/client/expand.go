@@ -46,6 +46,7 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		Addons:                             expandClientAddons(data),
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
+		DefaultOrganization:                expandDefaultOrganization(data),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -62,6 +63,23 @@ func expandClient(data *schema.ResourceData) *management.Client {
 	}
 
 	return client
+}
+
+func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {
+	defaultOrganizationConfig := data.GetRawConfig().GetAttr("default_organization")
+	if defaultOrganizationConfig.IsNull() {
+		return nil
+	}
+
+	var defaultOrg management.ClientDefaultOrganization
+
+	defaultOrganizationConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		defaultOrg.Flows = value.Strings(config.GetAttr("flows"))
+		defaultOrg.OrganizationID = value.String(config.GetAttr("organization_id"))
+		return stop
+	})
+
+	return &defaultOrg
 }
 
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {

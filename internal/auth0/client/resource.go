@@ -1271,6 +1271,27 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_organization": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configure and associate an organization with the Client",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"flows": {
+							Type:        schema.TypeList,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Required:    true,
+							Description: "Definition of the flow that needs to be configured. Eg. client_credentials",
+						},
+						"organization_id": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The unique identifier of the organization",
+						},
+					},
+				},
+			},
 		},
 	}
 }

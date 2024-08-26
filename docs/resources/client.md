@@ -100,6 +100,7 @@ resource "auth0_client" "my_client" {
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
 - `custom_login_page_on` (Boolean) Indicates whether a custom login page is to be used.
+- `default_organization` (Block List, Max: 1) Configure and associate an organization with the Client (see [below for nested schema](#nestedblock--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `form_template` (String) HTML form template to be used for WS-Federation.
@@ -446,6 +447,15 @@ Optional:
 
 - `account` (String) Zoom account name. Usually the first segment of your Zoom URL, for example `https://acme-org.zoom.us` would be `acme-org`.
 
+
+
+<a id="nestedblock--default_organization"></a>
+### Nested Schema for `default_organization`
+
+Required:
+
+- `flows` (List of String) Definition of the flow that needs to be configured. Eg. client_credentials
+- `organization_id` (String) The unique identifier of the organization
 
 
 <a id="nestedblock--jwt_configuration"></a>

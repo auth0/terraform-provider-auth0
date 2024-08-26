@@ -2346,7 +2346,7 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.0", "client_credentials"),
-					resource.TestCheckResourceAttrSet("auth0_client.my_client", "organization_id.0.organization_id"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "default_organization.0.organization_id"),
 				),
 			},
 		},

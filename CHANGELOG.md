@@ -1,3 +1,12 @@
+## v1.5.0
+
+FEATURES:
+
+- `resource/auth0_connection`: Add new fields ```attributes``` and ```precedence``` to ConnectionOptions & ```phone_number``` to SignupRequest. ([#991](https://github.com/auth0/terraform-provider-auth0/pull/991))
+- `resource/auth0_self_service_profile`: Add new resource for managing self-service profiles. ([#1008](https://github.com/auth0/terraform-provider-auth0/pull/1008))
+- `data-source/auth0_self_service_profile`: Add a data source for managing self-service profiles. ([#1008](https://github.com/auth0/terraform-provider-auth0/pull/1008))
+
+
 ## v1.4.0
 
 FEATURES:

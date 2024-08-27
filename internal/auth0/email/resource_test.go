@@ -174,6 +174,24 @@ resource "auth0_email_provider" "my_email_provider" {
 }
 `
 
+const testAccCreateCustomEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "custom"
+	enabled = true
+	credentials {
+	}
+}
+`
+
+const testAccUpdateCustomEmailProvider = `
+resource "auth0_email_provider" "my_email_provider" {
+	name = "custom"
+	enabled = false
+	credentials {
+	}
+}
+`
+
 const testAccAlreadyConfiguredEmailProviderWillNotConflict = `
 resource "auth0_email_provider" "my_email_provider" {
 	name = "mailgun"
@@ -341,6 +359,20 @@ func TestAccEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_tenant_id", "ms365_updated_tenant_id"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_id", "ms365_updated_client_id"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "credentials.0.ms365_client_secret", "ms365_updated_client_secret"),
+				),
+			},
+			{
+				Config: testAccCreateCustomEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "custom"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+				),
+			},
+			{
+				Config: testAccUpdateCustomEmailProvider,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "custom"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
 				),
 			},
 			{

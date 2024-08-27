@@ -2,7 +2,6 @@ package email
 
 import (
 	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -67,6 +66,8 @@ func flattenEmailProviderCredentials(data *schema.ResourceData, emailProvider *m
 			"ms365_client_id":     data.Get("credentials.0.ms365_client_id").(string),
 			"ms365_client_secret": data.Get("credentials.0.ms365_client_secret").(string),
 		}
+	case *management.EmailProviderCredentialsCustom:
+		credentials = map[string]interface{}{}
 	}
 
 	return []interface{}{credentials}

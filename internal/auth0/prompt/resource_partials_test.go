@@ -1,6 +1,7 @@
 package prompt_test
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -49,6 +50,36 @@ resource "auth0_prompt_partials" "prompt_partials" {
   secondary_actions_end   = "<div>Updated Secondary Actions End</div>"
 }
 `
+const testAccPromptPartialsWithScreenName = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+
+resource "auth0_prompt_partials" "prompt_partials_with_screen_name" {
+  depends_on = [ auth0_branding.my_brand ]
+
+	prompt = "login-passwordless"
+	screen_name = "login-passwordless-email-code"
+	form_content_start = "<div>Form Content Start</div>"
+}
+`
+const testAccPromptPartialsWithScreenNameUpdate = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+
+resource "auth0_prompt_partials" "prompt_partials_with_screen_name" {
+  depends_on = [ auth0_branding.my_brand ]
+
+	prompt = "login-passwordless"
+	screen_name = "login-passwordless-sms-otp"
+	form_content_start = "<div>Form Content Start</div>"
+}
+`
+
+const testAccPromptPartialsWithInvalidScreenName = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+resource "auth0_prompt_partials" "prompt_partials_with_screen_name" {
+  depends_on = [ auth0_branding.my_brand ]
+
+	prompt = "login-passwordless"
+	screen_name = "invalid-screen-name"
+	form_content_start = "<div>Form Content Start</div>"
+}
+`
 
 func TestAccPromptPartials(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -58,11 +89,6 @@ func TestAccPromptPartials(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "prompt", "login"),
 					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "form_content_start", "<div>Form Content Start</div>"),
-					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "form_content_end", ""),
-					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "form_footer_start", ""),
-					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "form_footer_end", ""),
-					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "secondary_actions_start", ""),
-					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "secondary_actions_end", ""),
 				),
 			},
 			{
@@ -76,6 +102,26 @@ func TestAccPromptPartials(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "secondary_actions_start", "<div>Updated Secondary Actions Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials", "secondary_actions_end", "<div>Updated Secondary Actions End</div>"),
 				),
+			},
+			{
+				Config: testAccPromptPartialsWithScreenName,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "prompt", "login-passwordless"),
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "screen_name", "login-passwordless-email-code"),
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "form_content_start", "<div>Form Content Start</div>"),
+				),
+			},
+			{
+				Config: testAccPromptPartialsWithScreenNameUpdate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "prompt", "login-passwordless"),
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "screen_name", "login-passwordless-sms-otp"),
+					resource.TestCheckResourceAttr("auth0_prompt_partials.prompt_partials_with_screen_name", "form_content_start", "<div>Form Content Start</div>"),
+				),
+			},
+			{
+				Config:      testAccPromptPartialsWithInvalidScreenName,
+				ExpectError: regexp.MustCompile(`Invalid screen 'invalid-screen-name' in prompt 'login-passwordless'`),
 			},
 		},
 	})

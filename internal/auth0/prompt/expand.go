@@ -22,14 +22,34 @@ func expandPrompt(data cty.Value) *management.Prompt {
 	return &prompt
 }
 
-func expandPromptPartials(data *schema.ResourceData) *management.PromptPartials {
-	return &management.PromptPartials{
-		Prompt:                management.PromptType(data.Get("prompt").(string)),
-		FormContentStart:      data.Get("form_content_start").(string),
-		FormContentEnd:        data.Get("form_content_end").(string),
-		FormFooterStart:       data.Get("form_footer_start").(string),
-		FormFooterEnd:         data.Get("form_footer_end").(string),
-		SecondaryActionsStart: data.Get("secondary_actions_start").(string),
-		SecondaryActionsEnd:   data.Get("secondary_actions_end").(string),
+func expandPromptPartials(data *schema.ResourceData) *management.PromptScreenPartials {
+	screenName := management.ScreenName(data.Get("screen_name").(string))
+	if screenName == "" {
+		screenName = management.ScreenName(data.Get("prompt").(string))
+	}
+
+	insertionPoints := make(map[management.InsertionPoint]string)
+
+	if content := data.Get("form_content_start").(string); content != "" {
+		insertionPoints[management.InsertionPointFormContentStart] = content
+	}
+	if content := data.Get("form_content_end").(string); content != "" {
+		insertionPoints[management.InsertionPointFormContentEnd] = content
+	}
+	if content := data.Get("form_footer_start").(string); content != "" {
+		insertionPoints[management.InsertionPointFormFooterStart] = content
+	}
+	if content := data.Get("form_footer_end").(string); content != "" {
+		insertionPoints[management.InsertionPointFormFooterEnd] = content
+	}
+	if content := data.Get("secondary_actions_start").(string); content != "" {
+		insertionPoints[management.InsertionPointSecondaryActionsStart] = content
+	}
+	if content := data.Get("secondary_actions_end").(string); content != "" {
+		insertionPoints[management.InsertionPointSecondaryActionsEnd] = content
+	}
+
+	return &management.PromptScreenPartials{
+		screenName: insertionPoints,
 	}
 }

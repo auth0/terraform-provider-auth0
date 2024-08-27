@@ -2,6 +2,8 @@ module github.com/auth0/terraform-provider-auth0
 
 go 1.22
 
+replace github.com/auth0/go-auth0 v1.9.0 => github.com/auth0/go-auth0 v1.9.1-0.20240826130047-25c37ff195e4
+
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
 	github.com/auth0/go-auth0 v1.9.0

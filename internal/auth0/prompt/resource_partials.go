@@ -19,6 +19,7 @@ var allowedPromptsWithPartials = []string{
 	string(management.PromptSignup),
 	string(management.PromptSignupID),
 	string(management.PromptSignupPassword),
+	string(management.PromptLoginPasswordLess),
 }
 
 // NewPartialsResource creates a new resource for partial prompts.
@@ -64,6 +65,11 @@ func NewPartialsResource() *schema.Resource {
 				Optional:    true,
 				Description: "Actions that go at the end of secondary actions.",
 			},
+			"screen_name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The name of the screen associated with the partials.",
+			},
 			"prompt": {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.StringInSlice(allowedPromptsWithPartials, false),
@@ -83,7 +89,7 @@ func createPromptPartials(ctx context.Context, data *schema.ResourceData, meta a
 func readPromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	promptPartials, err := api.Prompt.ReadPartials(ctx, management.PromptType(data.Id()))
+	promptPartials, err := api.Prompt.GetPartials(ctx, management.PromptType(data.Id()))
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -93,10 +99,28 @@ func readPromptPartials(ctx context.Context, data *schema.ResourceData, meta any
 
 func updatePromptPartials(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	prompt := management.PromptType(data.Get("prompt").(string))
 
-	promptPartials := expandPromptPartials(data)
+	existingPromptScreenPartials, err := api.Prompt.GetPartials(ctx, prompt)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	if existingPromptScreenPartials == nil {
+		existingPromptScreenPartials = &management.PromptScreenPartials{}
+	}
 
-	if err := api.Prompt.UpdatePartials(ctx, promptPartials); err != nil {
+	newPromptScreenPartials := expandPromptPartials(data)
+	for screenName, insertionPoints := range *newPromptScreenPartials {
+		if existingInsertionPoints, exists := (*existingPromptScreenPartials)[screenName]; exists {
+			for insertionPoint, content := range insertionPoints {
+				existingInsertionPoints[insertionPoint] = content
+			}
+		} else {
+			(*existingPromptScreenPartials)[screenName] = insertionPoints
+		}
+	}
+
+	if err := api.Prompt.SetPartials(ctx, management.PromptType(data.Get("prompt").(string)), existingPromptScreenPartials); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -108,7 +132,7 @@ func deletePromptPartials(ctx context.Context, data *schema.ResourceData, meta a
 
 	prompt := data.Get("prompt").(string)
 
-	if err := api.Prompt.DeletePartials(ctx, management.PromptType(prompt)); err != nil {
+	if err := api.Prompt.SetPartials(ctx, management.PromptType(prompt), &management.PromptScreenPartials{}); err != nil {
 		return diag.FromErr(err)
 	}
 

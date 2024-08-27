@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 846
+        content_length: 867
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-Connection-TestAccConnection","strategy":"auth0","is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false}}
+            {"name":"Acceptance-Test-Connection-TestAccConnection","strategy":"auth0","is_domain_connection":true,"metadata":{"key1":"foo","key2":"bar"},"options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"passwordPolicy":"fair","password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"configuration":{"foo":"bar"},"strategy_version":2,"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
+                - Go-Auth0/1.10.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,33 +30,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"fair","validation":{"username":{"max":40,"min":10}},"password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false,"configuration":{"foo":"2.0$fe4b6c362b1011a21e0abd2ff582b562$3f5b978005ebd74ae949d727e67ba3cc$3b8a7fa370ea85a8ac36e92d2eb21b8ca96714dcb2417f6a62690339a09b3ebc"},"strategy_version":2},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"fair","validation":{"username":{"max":40,"min":10}},"password_history":{"enable":true,"size":5},"password_no_personal_info":{"enable":true},"password_dictionary":{"dictionary":["1234","admin","password"],"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"brute_force_protection":true,"import_mode":false,"disable_signup":false,"requires_username":true,"customScripts":{"get_user":"myFunction"},"strategy_version":2,"non_persistent_attrs":["gender","hair_color"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"disable_self_service_change_password":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EUitlTEVneFZlWmlXL1MzU1NFbkp4SVFhRUhBY1NOb0FCcHd1aytmRW9sT3ZRSUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDkzODA3OCRiMDFiOWNhODI0OWNiNGU4NjVkOTJjNGIkMjZlNmRhM2I1YTFhZDIxNzQzMmRhZTFmMWNmNTRjNmI="},"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true}},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 179.745375ms
+        duration: 196.697917ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,33 +65,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fe4b6c362b1011a21e0abd2ff582b562$3f5b978005ebd74ae949d727e67ba3cc$3b8a7fa370ea85a8ac36e92d2eb21b8ca96714dcb2417f6a62690339a09b3ebc"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EUitlTEVneFZlWmlXL1MzU1NFbkp4SVFhRUhBY1NOb0FCcHd1aytmRW9sT3ZRSUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDkzODA3OCRiMDFiOWNhODI0OWNiNGU4NjVkOTJjNGIkMjZlNmRhM2I1YTFhZDIxNzQzMmRhZTFmMWNmNTRjNmI="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 174.67525ms
+        duration: 144.738667ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,33 +100,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fe4b6c362b1011a21e0abd2ff582b562$3f5b978005ebd74ae949d727e67ba3cc$3b8a7fa370ea85a8ac36e92d2eb21b8ca96714dcb2417f6a62690339a09b3ebc"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EUitlTEVneFZlWmlXL1MzU1NFbkp4SVFhRUhBY1NOb0FCcHd1aytmRW9sT3ZRSUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDkzODA3OCRiMDFiOWNhODI0OWNiNGU4NjVkOTJjNGIkMjZlNmRhM2I1YTFhZDIxNzQzMmRhZTFmMWNmNTRjNmI="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 203.55225ms
+        duration: 144.499625ms
     - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -138,33 +135,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fe4b6c362b1011a21e0abd2ff582b562$3f5b978005ebd74ae949d727e67ba3cc$3b8a7fa370ea85a8ac36e92d2eb21b8ca96714dcb2417f6a62690339a09b3ebc"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EUitlTEVneFZlWmlXL1MzU1NFbkp4SVFhRUhBY1NOb0FCcHd1aytmRW9sT3ZRSUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDkzODA3OCRiMDFiOWNhODI0OWNiNGU4NjVkOTJjNGIkMjZlNmRhM2I1YTFhZDIxNzQzMmRhZTFmMWNmNTRjNmI="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 279.879708ms
+        duration: 142.853625ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -174,13 +170,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"2.0$fe4b6c362b1011a21e0abd2ff582b562$3f5b978005ebd74ae949d727e67ba3cc$3b8a7fa370ea85a8ac36e92d2eb21b8ca96714dcb2417f6a62690339a09b3ebc"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":true},"validation":{"username":{"max":40,"min":10}},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EUitlTEVneFZlWmlXL1MzU1NFbkp4SVFhRUhBY1NOb0FCcHd1aytmRW9sT3ZRSUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDkzODA3OCRiMDFiOWNhODI0OWNiNGU4NjVkOTJjNGIkMjZlNmRhM2I1YTFhZDIxNzQzMmRhZTFmMWNmNTRjNmI="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"upstream_params":{"screen_name":{"alias":"login_hint"}},"password_history":{"size":5,"enable":true},"strategy_version":2,"requires_username":true,"password_dictionary":{"enable":true,"dictionary":["1234","admin","password"]},"non_persistent_attrs":["gender","hair_color"],"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true,"password_no_personal_info":{"enable":true},"password_complexity_options":{"min_length":6},"enabledDatabaseCustomization":false,"disable_self_service_change_password":false},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 134.633084ms
+        duration: 161.016292ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -199,8 +195,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -210,33 +206,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$36d9c7cd70c86020f261b3d4281e938e$9293156bc470086234dcdd559893f616$5699ba9622269296277092f8bc60d4652b6103e2da8bd4cb7d310213bcb5bb30"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EKy96WEVnd0hsSTFHazdwVy9jdWduVU1hRUhodEVhKzdTR3dqdU9RaXNrK3V2VkFhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI3N2YzMiRmZThiZmEwZDUwOWI2MmM0MzY1OGIzYTUkMjc2MDgxOWE0MDc3ZTM4ZDIyOGYzYjM4ODY4OTM5MjY="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 272.759625ms
+        duration: 402.314584ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -246,33 +241,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$36d9c7cd70c86020f261b3d4281e938e$9293156bc470086234dcdd559893f616$5699ba9622269296277092f8bc60d4652b6103e2da8bd4cb7d310213bcb5bb30"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EKy96WEVnd0hsSTFHazdwVy9jdWduVU1hRUhodEVhKzdTR3dqdU9RaXNrK3V2VkFhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI3N2YzMiRmZThiZmEwZDUwOWI2MmM0MzY1OGIzYTUkMjc2MDgxOWE0MDc3ZTM4ZDIyOGYzYjM4ODY4OTM5MjY="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 103.177916ms
+        duration: 150.11375ms
     - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,13 +276,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dFvRUNNkrPXlSiDw","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"2.0$36d9c7cd70c86020f261b3d4281e938e$9293156bc470086234dcdd559893f616$5699ba9622269296277092f8bc60d4652b6103e2da8bd4cb7d310213bcb5bb30"},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
+        body: '{"id":"con_IPeCaCzy6ARWKhUd","options":{"mfa":{"active":true,"return_enroll_settings":false},"import_mode":false,"configuration":{"foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EKy96WEVnd0hsSTFHazdwVy9jdWduVU1hRUhodEVhKzdTR3dqdU9RaXNrK3V2VkFhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI3N2YzMiRmZThiZmEwZDUwOWI2MmM0MzY1OGIzYTUkMjc2MDgxOWE0MDc3ZTM4ZDIyOGYzYjM4ODY4OTM5MjY="},"customScripts":{"get_user":"myFunction"},"disable_signup":false,"passwordPolicy":"fair","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_history":{"size":5,"enable":true},"requires_username":true,"non_persistent_attrs":[],"enable_script_context":true,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":false,"set_user_root_attributes":"on_first_login","password_no_personal_info":{"enable":true},"enabledDatabaseCustomization":true,"disable_self_service_change_password":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnection","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnection"],"metadata":{"key1":"foo","key2":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 305.603042ms
+        duration: 137.584417ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -306,8 +300,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0-SDK/0.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dFvRUNNkrPXlSiDw
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_IPeCaCzy6ARWKhUd
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -317,10 +311,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2023-03-16T09:23:13.215Z"}'
+        body: '{"deleted_at":"2024-09-12T21:27:48.639Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 183.888375ms
+        duration: 147.271166ms

@@ -7,6 +7,8 @@
 package value
 
 import (
+	"time"
+
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -54,6 +56,21 @@ func Float64(rawValue cty.Value) *float64 {
 	}
 
 	value, _ := rawValue.AsBigFloat().Float64()
+	return &value
+}
+
+// Time evaluates the typed value of the value
+// and coerces to a pointer of a string, which
+// is then converted to a `time.Time` according
+// to ISO 3339 (ISO 8601 is largely the same in
+// common use cases, see https://ijmacd.github.io/rfc3339-iso8601/
+// for differences).
+func Time(rawValue cty.Value) *time.Time {
+	if rawValue.IsNull() {
+		return nil
+	}
+
+	value, _ := time.Parse(time.RFC3339, rawValue.AsString())
 	return &value
 }
 

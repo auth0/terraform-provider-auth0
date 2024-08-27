@@ -37,4 +37,57 @@ func TestFlattenTenant(t *testing.T) {
 		assert.Equal(t, mockResourceData.Get("idle_session_lifetime"), 73.5)
 		assert.Equal(t, mockResourceData.Get("session_lifetime"), 169.5)
 	})
+
+	t.Run("it sets acr_values_supported if remote tenant has valid value set", func(t *testing.T) {
+		tenant := management.Tenant{
+			ACRValuesSupported: &[]string{"foo"},
+		}
+
+		assert.NoError(t, mockResourceData.Set("disable_acr_values_supported", true))
+		assert.True(t, mockResourceData.Get("disable_acr_values_supported").(bool))
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.False(t, mockResourceData.Get("disable_acr_values_supported").(bool))
+		assert.Equal(t, mockResourceData.Get("acr_values_supported").(*schema.Set).Len(), 1)
+		assert.Equal(t, mockResourceData.Get("acr_values_supported").(*schema.Set).List()[0].(string), "foo")
+	})
+
+	t.Run("it sets disable_acr_values_supported if remote tenant has null value set", func(t *testing.T) {
+		tenant := management.Tenant{
+			ACRValuesSupported: nil,
+		}
+
+		assert.NoError(t, mockResourceData.Set("acr_values_supported", &[]string{"foo"}))
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.True(t, mockResourceData.Get("disable_acr_values_supported").(bool))
+		assert.Equal(t, mockResourceData.Get("acr_values_supported").(*schema.Set).Len(), 0)
+	})
+
+	t.Run("it sets enable_endpoint_aliases if remote tenant has valid value set", func(t *testing.T) {
+		tenant := management.Tenant{
+			MTLS: &management.TenantMTLSConfiguration{
+				EnableEndpointAliases: auth0.Bool(true),
+			},
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, len(mockResourceData.Get("mtls").([]interface{})), 1)
+		assert.True(t, mockResourceData.Get("mtls").([]interface{})[0].(map[string]interface{})["enable_endpoint_aliases"].(bool))
+	})
+
+	t.Run("it disables mtls if remote tenant has no value set", func(t *testing.T) {
+		tenant := management.Tenant{
+			MTLS: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.True(t, mockResourceData.Get("mtls").([]interface{})[0].(map[string]interface{})["disable"].(bool))
+	})
 }

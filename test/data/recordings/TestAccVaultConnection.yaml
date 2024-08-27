@@ -1,0 +1,285 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 45
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"app_id":"HTTP","name":"test-v-connection"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 240
+        uncompressed: false
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:24.834Z","refreshed_at":null,"fingerprint":"6879858e37a98f15e5bd92ff4d480967"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 237.560459ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:24.834Z","fingerprint":"6879858e37a98f15e5bd92ff4d480967"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 219.13075ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:24.834Z","fingerprint":"6879858e37a98f15e5bd92ff4d480967"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.342541ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:24.834Z","fingerprint":"6879858e37a98f15e5bd92ff4d480967"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 237.953583ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 37
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"updated-test-v-connection"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"updated-test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:27.081Z","refreshed_at":null,"fingerprint":"57e0eb8c3e94a79cbc3ce6ba8f046286"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 222.2495ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"updated-test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:27.081Z","fingerprint":"57e0eb8c3e94a79cbc3ce6ba8f046286"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 219.678875ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ac_driHxZHbTWt3zCyXRqsDFo","app_id":"HTTP","name":"updated-test-v-connection","ready":false,"created_at":"2024-09-30T10:30:24.834Z","updated_at":"2024-09-30T10:30:27.081Z","fingerprint":"57e0eb8c3e94a79cbc3ce6ba8f046286"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 222.635167ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/flows/vault/connections/ac_driHxZHbTWt3zCyXRqsDFo
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 220.597875ms

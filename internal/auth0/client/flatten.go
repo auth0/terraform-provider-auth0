@@ -1,6 +1,9 @@
 package client
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -506,6 +509,19 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 	}
 }
 
+func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {
+	do := make(map[string]interface{})
+
+	if defaultOrganization == nil {
+		do["disable"] = true
+	} else {
+		do["flows"] = defaultOrganization.GetFlows()
+		do["organization_id"] = defaultOrganization.GetOrganizationID()
+	}
+
+	return []interface{}{do}
+}
+
 func flattenClient(data *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
@@ -543,17 +559,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("client_metadata", client.GetClientMetadata()),
 		data.Set("oidc_backchannel_logout_urls", client.GetOIDCBackchannelLogout().GetBackChannelLogoutURLs()),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
+		data.Set("default_organization", flattenDefaultOrganization(client.GetDefaultOrganization())),
+		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
+		data.Set("compliance_level", client.GetComplianceLevel()),
 	)
-	return result.ErrorOrNil()
-}
-
-func flattenClientForDataSource(data *schema.ResourceData, client *management.Client) error {
-	result := multierror.Append(
-		flattenClient(data, client),
-		data.Set("client_secret", client.GetClientSecret()),
-		data.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
-	)
-
 	return result.ErrorOrNil()
 }
 
@@ -562,7 +571,233 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("client_id", clientGrant.GetClientID()),
 		data.Set("audience", clientGrant.GetAudience()),
 		data.Set("scopes", clientGrant.GetScope()),
+		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
+		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
 	)
 
 	return result.ErrorOrNil()
+}
+
+func flattenClientForDataSource(ctx context.Context, api *management.Management, data *schema.ResourceData, client *management.Client) error {
+	result := multierror.Append(
+		flattenClient(data, client),
+		data.Set("client_secret", client.GetClientSecret()),
+		data.Set("token_endpoint_auth_method", client.GetTokenEndpointAuthMethod()),
+	)
+
+	sro, err := flattenSignedRequestObject(ctx, api, data, false, client.GetSignedRequestObject())
+	result = multierror.Append(result, err, data.Set("signed_request_object", sro))
+
+	authMethods, err := flattenClientAuthenticationMethods(ctx, api, data, false, client.GetClientAuthenticationMethods())
+	result = multierror.Append(result, err, data.Set("client_authentication_methods", authMethods))
+
+	return result.ErrorOrNil()
+}
+
+func flattenClientCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, client *management.Client) error {
+	signedRequestObject, err := flattenSignedRequestObject(ctx, api, data, true, client.GetSignedRequestObject())
+	result := multierror.Append(
+		err,
+		data.Set("client_id", client.GetClientID()),
+		data.Set("client_secret", client.GetClientSecret()),
+		data.Set("signed_request_object", signedRequestObject),
+	)
+
+	authenticationMethods, err := flattenClientAuthenticationMethods(ctx, api, data, true, client.GetClientAuthenticationMethods())
+	result = multierror.Append(result, err)
+	if len(authenticationMethods) > 0 {
+		for key, method := range authenticationMethods[0] {
+			if method != nil {
+				result = multierror.Append(result, data.Set("authentication_method", key))
+			}
+			result = multierror.Append(result, data.Set(key, method))
+		}
+	} else {
+		result = multierror.Append(
+			result,
+			data.Set("private_key_jwt", nil),
+			data.Set("tls_client_auth", nil),
+			data.Set("self_signed_tls_client_auth", nil),
+		)
+
+		if client.GetTokenEndpointAuthMethod() == "" {
+			switch client.GetAppType() {
+			case "native", "spa":
+				result = multierror.Append(result, data.Set("authentication_method", "none"))
+			case "regular_web", "non_interactive":
+				result = multierror.Append(result, data.Set("authentication_method", "client_secret_post"))
+			default:
+				result = multierror.Append(result, data.Set("authentication_method", "client_secret_basic"))
+			}
+		} else {
+			result = multierror.Append(result, data.Set("authentication_method", client.GetTokenEndpointAuthMethod()))
+		}
+	}
+
+	return result.ErrorOrNil()
+}
+
+func flattenClientAuthenticationMethods(
+	ctx context.Context,
+	api *management.Management,
+	data *schema.ResourceData,
+	isResource bool,
+	authMethods *management.ClientAuthenticationMethods,
+) ([]map[string]interface{}, error) {
+	if authMethods == nil {
+		return nil, nil
+	}
+
+	resultMap := map[string]interface{}{
+		"private_key_jwt":             nil,
+		"tls_client_auth":             nil,
+		"self_signed_tls_client_auth": nil,
+	}
+
+	if authMethods.GetPrivateKeyJWT() != nil {
+		if credentials, err := flattenCredentials(
+			ctx, api, data, isResource, "private_key_jwt",
+			authMethods.GetPrivateKeyJWT().GetCredentials(),
+		); err != nil {
+			return nil, err
+		} else if credentials != nil {
+			resultMap["private_key_jwt"] = []interface{}{
+				map[string]interface{}{
+					"credentials": credentials,
+				},
+			}
+		}
+	}
+
+	if authMethods.GetTLSClientAuth() != nil {
+		if credentials, err := flattenCredentials(
+			ctx, api, data, isResource, "tls_client_auth",
+			authMethods.GetTLSClientAuth().GetCredentials(),
+		); err != nil {
+			return nil, err
+		} else if credentials != nil {
+			resultMap["tls_client_auth"] = []interface{}{
+				map[string]interface{}{
+					"credentials": credentials,
+				},
+			}
+		}
+	}
+
+	if authMethods.GetSelfSignedTLSClientAuth() != nil {
+		if credentials, err := flattenCredentials(
+			ctx, api, data, isResource, "self_signed_tls_client_auth",
+			authMethods.GetSelfSignedTLSClientAuth().GetCredentials(),
+		); err != nil {
+			return nil, err
+		} else if credentials != nil {
+			resultMap["self_signed_tls_client_auth"] = []interface{}{
+				map[string]interface{}{
+					"credentials": credentials,
+				},
+			}
+		}
+	}
+
+	if len(resultMap) == 0 {
+		return nil, nil
+	}
+
+	return []map[string]interface{}{resultMap}, nil
+}
+
+func flattenSignedRequestObject(
+	ctx context.Context,
+	api *management.Management,
+	data *schema.ResourceData,
+	isResource bool,
+	sro *management.ClientSignedRequestObject,
+) ([]interface{}, error) {
+	if sro == nil {
+		return nil, nil
+	}
+
+	if credentials, err := flattenCredentials(
+		ctx, api, data, isResource, "signed_request_object",
+		sro.GetCredentials(),
+	); err != nil {
+		return nil, err
+	} else if credentials != nil {
+		return []interface{}{
+			map[string]interface{}{
+				"required":    sro.GetRequired(),
+				"credentials": credentials,
+			},
+		}, nil
+	}
+	return nil, nil
+}
+
+func flattenCredentials(
+	ctx context.Context,
+	api *management.Management,
+	data *schema.ResourceData,
+	isResource bool,
+	attribute string,
+	credentials []management.Credential,
+) ([]interface{}, error) {
+	if credentials == nil {
+		return nil, nil
+	}
+
+	const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
+
+	stateCredentials := make([]interface{}, 0)
+	for index, cred := range credentials {
+		credential, err := api.Client.GetCredential(ctx, data.Id(), cred.GetID())
+		if err != nil {
+			return nil, err
+		}
+
+		stateCredential := map[string]interface{}{
+			"id":              credential.GetID(),
+			"name":            credential.GetName(),
+			"credential_type": credential.GetCredentialType(),
+			"created_at":      credential.GetCreatedAt().Format(timeRFC3339WithMilliseconds),
+			"updated_at":      credential.GetUpdatedAt().Format(timeRFC3339WithMilliseconds),
+		}
+		if credential.ExpiresAt != nil {
+			stateCredential["expires_at"] = credential.GetExpiresAt().Format(timeRFC3339WithMilliseconds)
+		}
+		switch credential.GetCredentialType() {
+		case "public_key":
+			stateCredential["algorithm"] = credential.GetAlgorithm()
+			stateCredential["key_id"] = credential.GetKeyID()
+
+			if isResource {
+				// These ones don't get read back, so we have to get them from the state.
+				stateCredential["pem"] = data.Get(
+					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
+				)
+				stateCredential["parse_expiry_from_cert"] = data.Get(
+					fmt.Sprintf("%s.0.credentials.%d.parse_expiry_from_cert", attribute, index),
+				)
+			}
+		case "cert_subject_dn":
+			stateCredential["subject_dn"] = credential.GetSubjectDN()
+
+			if isResource {
+				// This one doesn't get read back, so we have to get it from the state.
+				stateCredential["pem"] = data.Get(
+					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
+				)
+			}
+		case "x509_cert":
+			if isResource {
+				// This one doesn't get read back, so we have to get it from the state.
+				stateCredential["pem"] = data.Get(
+					fmt.Sprintf("%s.0.credentials.%d.pem", attribute, index),
+				)
+			}
+		}
+
+		stateCredentials = append(stateCredentials, stateCredential)
+	}
+
+	return stateCredentials, nil
 }

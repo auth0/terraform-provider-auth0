@@ -33,6 +33,7 @@ data "auth0_organization" "some-organization-by-id" {
 ### Read-Only
 
 - `branding` (List of Object) Defines how to style the login pages. (see [below for nested schema](#nestedatt--branding))
+- `client_grants` (Set of String) Client Grant ID(s) that are associated to the organization.
 - `connections` (Set of Object) (see [below for nested schema](#nestedatt--connections))
 - `display_name` (String) Friendly name of this organization.
 - `id` (String) The ID of this resource.

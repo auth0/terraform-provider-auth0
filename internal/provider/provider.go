@@ -1,7 +1,15 @@
 package provider
 
 import (
+	"context"
+	"fmt"
 	"os"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 
 	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
 
@@ -14,6 +22,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkeymanager"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
@@ -107,10 +116,15 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":    customdomain.NewVerificationResource(),
 			"auth0_email_provider":                email.NewResource(),
 			"auth0_email_template":                email.NewTemplateResource(),
+			"auth0_encryption_key_manager":        encryptionkeymanager.NewEncryptionKeyManagerResource(),
+			"auth0_flow":                          flow.NewResource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionResource(),
+			"auth0_form":                          form.NewResource(),
 			"auth0_guardian":                      guardian.NewResource(),
 			"auth0_hook":                          hook.NewResource(),
 			"auth0_log_stream":                    logstream.NewResource(),
 			"auth0_organization":                  organization.NewResource(),
+			"auth0_organization_client_grant":     organization.NewOrganizationClientGrantResource(),
 			"auth0_organization_connection":       organization.NewConnectionResource(),
 			"auth0_organization_connections":      organization.NewConnectionsResource(),
 			"auth0_organization_member":           organization.NewMemberResource(),
@@ -121,6 +135,8 @@ func New() *schema.Provider {
 			"auth0_prompt":                        prompt.NewResource(),
 			"auth0_prompt_custom_text":            prompt.NewCustomTextResource(),
 			"auth0_prompt_partials":               prompt.NewPartialsResource(),
+			"auth0_prompt_screen_partial":         prompt.NewScreenPartialResource(),
+			"auth0_prompt_screen_partials":        prompt.NewScreenPartialsResource(),
 			"auth0_resource_server":               resourceserver.NewResource(),
 			"auth0_resource_server_scope":         resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":        resourceserver.NewScopesResource(),
@@ -129,13 +145,13 @@ func New() *schema.Provider {
 			"auth0_role_permissions":              role.NewPermissionsResource(),
 			"auth0_rule":                          rule.NewResource(),
 			"auth0_rule_config":                   rule.NewConfigResource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 			"auth0_tenant":                        tenant.NewResource(),
 			"auth0_user":                          user.NewResource(),
 			"auth0_user_permission":               user.NewPermissionResource(),
 			"auth0_user_permissions":              user.NewPermissionsResource(),
 			"auth0_user_role":                     user.NewRoleResource(),
 			"auth0_user_roles":                    user.NewRolesResource(),
-			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
@@ -145,18 +161,44 @@ func New() *schema.Provider {
 			"auth0_connection":                    connection.NewDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
+			"auth0_flow":                          flow.NewDataSource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
+			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
+			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_resource_server":               resourceserver.NewDataSource(),
 			"auth0_role":                          role.NewDataSource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_signing_keys":                  signingkey.NewDataSource(),
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
-			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 		},
 	}
 
-	provider.ConfigureContextFunc = config.ConfigureProvider(&provider.TerraformVersion)
+	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		var diags diag.Diagnostics
+
+		// Check required environment variables.
+		requiredEnvVars := []string{"AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET"}
+		for _, varName := range requiredEnvVars {
+			value, exists := os.LookupEnv(varName)
+			if !exists || value == "" {
+				diags = append(diags, diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  fmt.Sprintf("Missing environment variable: %s", varName),
+					Detail:   fmt.Sprintf("The environment variable %s must be set and cannot be empty.", varName),
+				})
+			}
+		}
+
+		if len(diags) > 0 {
+			return nil, diags
+		}
+
+		// Call the original configuration function if no errors.
+		return config.ConfigureProvider(&provider.TerraformVersion)(ctx, d)
+	}
 
 	return provider
 }

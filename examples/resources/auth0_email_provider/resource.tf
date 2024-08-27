@@ -38,7 +38,7 @@ resource "auth0_email_provider" "sendgrid_email_provider" {
 
 
 # This is an example on how to set up the email provider with Azure CS.
-resource "auth0_email_provider" "smtp_email_provider" {
+resource "auth0_email_provider" "azure_cs_email_provider" {
   name                 = "azure_cs"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -50,7 +50,7 @@ resource "auth0_email_provider" "smtp_email_provider" {
 
 
 # This is an example on how to set up the email provider with MS365.
-resource "auth0_email_provider" "smtp_email_provider" {
+resource "auth0_email_provider" "ms365_email_provider" {
   name                 = "ms365"
   enabled              = true
   default_from_address = "accounts@example.com"
@@ -60,4 +60,14 @@ resource "auth0_email_provider" "smtp_email_provider" {
     ms365_client_id     = "ms365_client_id"
     ms365_client_secret = "ms365_client_secret"
   }
+}
+
+
+# This is an example on how to set up the email provider with a custom action.
+# Make sure a corresponding action exists with custom-email-provider as supported triggers
+resource "auth0_email_provider" "custom_email_provider" {
+  name                 = "custom"
+  enabled              = true
+  default_from_address = "accounts@example.com"
+  credentials {}
 }

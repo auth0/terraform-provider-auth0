@@ -1,3 +1,74 @@
+## v1.7.1
+
+BUG FIXES:
+
+- `data-source/auth0_organization`: Implemented enhanced error handling to gracefully manage "Forbidden" errors when retrieving the list of client grants via the `auth0_organization` data source. This addresses cases where the feature is not enabled for the user, preventing the error from disrupting the process ([#1049](https://github.com/auth0/terraform-provider-auth0/pull/1049/))
+- `resource/auth0_connection`: Updated documentation to clarify that `user_id_attribute` can be either `oid` or `sub` for Azure AD connections ([#1047](https://github.com/auth0/terraform-provider-auth0/pull/1047/))
+- `resource/auth0_form`: Updated docs to use `auth0_form` in examples  ([#1046](https://github.com/auth0/terraform-provider-auth0/pull/1046/))
+
+ENHANCEMENTS:
+- `data-source/auth0_roles`: Updated from `Offset Pagination` to `Checkpoint Pagination` to retrieve more than 1,000 role users ([#1048](https://github.com/auth0/terraform-provider-auth0/pull/1048/))
+
+
+## v1.7.0
+
+FEATURES:
+
+- `resource/auth0_encryption_key_manager`: Add new resource for re-keying of tenant master key ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
+- `resource/auth0_encryption_key_manager`: Add support for `customer_provided_root_key` for BYOK ([#1041](https://github.com/auth0/terraform-provider-auth0/pull/1041/))
+- `resource/auth0_organization_client_grant`: Add new resource for managing association of client-grant and organization ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
+- `resource/auth0_form`: Add new resource for managing Forms ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `resource/auth0_flow`: Add new resource for managing Flows ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `resource/auth0_flow_vault_connection`: Add new resource for managing Flow Vault Connection ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_form`: Add a data-source for retrieving Form ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_flow`: Add a data-source for retrieving Flow ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_flow_vault_connection`: Add a data-source for retrieving Flow Vault Connection. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+
+ENHANCEMENTS:
+
+- `resource/auth0_connection`: Add support for `strategy_version` to be configurable ([#1024](https://github.com/auth0/terraform-provider-auth0/pull/1024/))  
+- `resource/auth0_connection`: Add support for `user_id_attribute` in options attribute for AzureAD connections ([#1028](https://github.com/auth0/terraform-provider-auth0/pull/1028/))
+- `data-source/auth0_organization`: Add support to fetch list of associated client grants ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
+- `resource/auth0_tenant`: Add support for `acr_values_supported`, `pushed_authorization_requests_supported` and `remove_alg_from_jwks` configuration ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
+- `resource/auth0_client_credentials`: Add support for setting `signed_request_object`, `tls_client_auth` and `self_signed_tls_client_auth` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
+- `resource/auth0_client`: Add support for setting `compliance_level` and `require_proof_of_possession` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
+- `resource/auth0_resource_server`: Add support for setting `consent_policy`, `authorization_details`, `token_encryption` and `proof_of_possession` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
+- `data-source/auth0_client`: Add support to retrieve `signed_request_object`, `tls_client_auth`, `compliance_level` and `require_proof_of_possession` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
+
+BUG FIXES:
+
+- `resource/auth0_prompt_screen_partial`: Ensure removal of insertion points  ([#1043](https://github.com/auth0/terraform-provider-auth0/pull/1043/))
+
+
+## v1.6.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Fixed an issue where the `default_organization` plan failed due to `ConflictsWith` and `RequiredWith` clauses in the schema ([#1021](https://github.com/auth0/terraform-provider-auth0/pull/1021))
+
+
+## v1.6.0
+
+FEATURES:
+
+- `resource/auth0_prompt_screen_partial`: Add new resource to manage customized sign up and login experience. (1:1) ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+- `resource/auth0_prompt_screen_partials`: Add new resource to manage customized sign up and login experience. (1:many) ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+- `data_source/auth0_prompt_screen_partials`: Add new data source to retrieve prompt screen partials. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+
+ENHANCEMENTS:
+
+- `resource/auth0_client`: Add Organizations for Client Credentials. ([#1009](https://github.com/auth0/terraform-provider-auth0/pull/1009))
+- `resource/auth0_prompt_custom_text`: Add support for fetching the language list from a CDN for prompt custom text. ([#1006](https://github.com/auth0/terraform-provider-auth0/pull/1016))
+
+BUG FIXES:
+
+- `resource/auth0_connection`: Remove MinItems validation for precedence. ([#1017](https://github.com/auth0/terraform-provider-auth0/pull/1017))
+
+NOTES:
+
+- `resource/auth0_prompt_partials`: Deprecated in favor of `resource/auth0_prompt_screen_partial` and `resource/auth0_prompt_screen_partials`. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+
+
 ## v1.5.0
 
 FEATURES:

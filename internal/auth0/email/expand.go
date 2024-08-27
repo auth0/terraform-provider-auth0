@@ -31,6 +31,8 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 		expandEmailProviderAzureCS(config, emailProvider)
 	case management.EmailProviderMS365:
 		expandEmailProviderMS365(config, emailProvider)
+	case management.EmailProviderCustom:
+		emailProvider.Credentials = &management.EmailProviderCredentialsCustom{}
 	}
 
 	return emailProvider

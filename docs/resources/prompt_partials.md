@@ -14,6 +14,7 @@ With this resource, you can manage a customized sign up and login experience by 
 resource "auth0_prompt_partials" "my_login_prompt_partials" {
   prompt = "login"
 
+  screen_name             = "login"
   form_content_start      = "<div>Updated Form Content Start</div>"
   form_content_end        = "<div>Updated Form Content End</div>"
   form_footer_start       = "<div>Updated Footer Start</div>"
@@ -28,7 +29,7 @@ resource "auth0_prompt_partials" "my_login_prompt_partials" {
 
 ### Required
 
-- `prompt` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`.
+- `prompt` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
 
 ### Optional
 
@@ -36,6 +37,7 @@ resource "auth0_prompt_partials" "my_login_prompt_partials" {
 - `form_content_start` (String) Content that goes at the start of the form.
 - `form_footer_end` (String) Footer content for the end of the footer.
 - `form_footer_start` (String) Footer content for the start of the footer.
+- `screen_name` (String) The name of the screen associated with the partials.
 - `secondary_actions_end` (String) Actions that go at the end of secondary actions.
 - `secondary_actions_start` (String) Actions that go at the start of secondary actions.
 

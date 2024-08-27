@@ -1,6 +1,7 @@
 resource "auth0_prompt_partials" "my_login_prompt_partials" {
   prompt = "login"
 
+  screen_name             = "login"
   form_content_start      = "<div>Updated Form Content Start</div>"
   form_content_end        = "<div>Updated Form Content End</div>"
   form_footer_start       = "<div>Updated Footer Start</div>"

@@ -408,6 +408,7 @@ Read-Only:
 
 Read-Only:
 
+- `disable` (Boolean)
 - `flows` (List of String)
 - `organization_id` (String)
 

@@ -2322,20 +2322,68 @@ resource "auth0_organization" "my_org" {
 	display_name = "temp-org"
 }
 
-data "auth0_organization" "my_org-by-name" {
+data "auth0_organization" "my_org" {
 	depends_on = [ resource.auth0_organization.my_org ]
 	name = "temp-org"
 }
 
 resource "auth0_client" "my_client" {
-	depends_on = [ data.auth0_organization.my_org-by-name ]
+	depends_on = [ data.auth0_organization.my_org ]
     name = "Acceptance Test - DefaultOrganization - {{.testName}}"
     default_organization {
         flows = ["client_credentials"]
-        organization_id = data.auth0_organization.my_org-by-name.id
+        organization_id = data.auth0_organization.my_org.id
     }
 }
 `
+
+const testAccUpdateClientWithDefaultOrganization = `
+resource "auth0_organization" "my_new_org" {
+	name         = "temp-new-org"
+	display_name = "temp-new-org"
+}
+
+data "auth0_organization" "my_new_org" {
+	depends_on = [ resource.auth0_organization.my_new_org ]
+	name = "temp-new-org"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [ data.auth0_organization.my_new_org ]
+    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+    default_organization {
+        flows = ["client_credentials"]
+        organization_id = data.auth0_organization.my_new_org.id
+    }
+}
+`
+
+const testAccUpdateClientRemoveDefaultOrganization = `
+resource "auth0_client" "my_client" {
+    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+    default_organization {
+		disable = true
+    }
+}
+`
+
+// Const testAccUpdateClientDefaultOrganizationFlowsOnly = `
+//resource "auth0_client" "my_client" {
+//    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+//    default_organization {
+//		flows = ["client_credentials"]
+//    }
+//}
+//`
+//
+//const testAccUpdateClientDefaultOrganizationOrgIdOnly = `
+//resource "auth0_client" "my_client" {
+//    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+//    default_organization {
+//        organization_id = "org_z5YvxlXPO0NspoIa"
+//    }
+//}
+//`.
 
 func TestAccClientWithDefaultOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -2349,6 +2397,33 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "default_organization.0.organization_id"),
 				),
 			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithDefaultOrganization, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.0", "client_credentials"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "default_organization.0.organization_id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveDefaultOrganization, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.disable", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.organization_id", ""),
+				),
+			},
+			//{
+			//	Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
+			//	ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			// },
+			//{
+			//	Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIdOnly, t.Name()),
+			//	ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			// },.
 		},
 	})
 }

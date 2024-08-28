@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -1279,15 +1281,25 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"flows": {
-							Type:        schema.TypeList,
-							Elem:        &schema.Schema{Type: schema.TypeString},
-							Required:    true,
-							Description: "Definition of the flow that needs to be configured. Eg. client_credentials",
+							Type:          schema.TypeList,
+							Optional:      true,
+							Elem:          &schema.Schema{Type: schema.TypeString},
+							RequiredWith:  []string{"default_organization.0.organization_id"},
+							ConflictsWith: []string{"default_organization.0.disable"},
+							Description:   "Definition of the flow that needs to be configured. Eg. client_credentials",
 						},
 						"organization_id": {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "The unique identifier of the organization",
+							Type:          schema.TypeString,
+							Optional:      true,
+							RequiredWith:  []string{"default_organization.0.flows"},
+							ConflictsWith: []string{"default_organization.0.disable"},
+							Description:   "The unique identifier of the organization",
+						},
+						"disable": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							ConflictsWith: []string{"default_organization.0.organization_id", "default_organization.0.flows"},
+							Description:   "If set, the `default_organization` will be removed.",
 						},
 					},
 				},
@@ -1298,14 +1310,28 @@ func NewResource() *schema.Resource {
 
 func createClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	client, err := expandClient(data)
 
-	client := expandClient(data)
-
-	if err := api.Client.Create(ctx, client); err != nil {
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = api.Request(ctx, http.MethodPost, api.URI("clients"), client)
+	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	data.SetId(client.GetClientID())
+	baseClient := management.Client{}
+	clientJSON, err := json.Marshal(client)
+
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err = json.Unmarshal(clientJSON, &baseClient); err != nil {
+		return diag.FromErr(err)
+	}
+
+	data.SetId(baseClient.GetClientID())
 
 	return readClient(ctx, data, meta)
 }
@@ -1325,8 +1351,24 @@ func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if client := expandClient(data); clientHasChange(client) {
-		if client.GetAddons() != nil {
+	client, err := expandClient(data)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	baseClient := management.Client{}
+	clientJSON, err := json.Marshal(client)
+
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err = json.Unmarshal(clientJSON, &baseClient); err != nil {
+		return diag.FromErr(err)
+	}
+
+	if clientHasChange(&baseClient) {
+		if baseClient.GetAddons() != nil {
 			// In case we are switching addons, we need to be able to clear out the previous config.
 			resetAddons := &management.Client{
 				Addons: &management.ClientAddons{},
@@ -1336,8 +1378,9 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 			}
 		}
 
-		if err := api.Client.Update(ctx, data.Id(), client); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+		err = api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), client)
+		if err != nil {
+			return diag.FromErr(err)
 		}
 	}
 

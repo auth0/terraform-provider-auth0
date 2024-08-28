@@ -452,8 +452,9 @@ Optional:
 <a id="nestedblock--default_organization"></a>
 ### Nested Schema for `default_organization`
 
-Required:
+Optional:
 
+- `disable` (Boolean) If set, the `default_organization` will be removed.
 - `flows` (List of String) Definition of the flow that needs to be configured. Eg. client_credentials
 - `organization_id` (String) The unique identifier of the organization
 

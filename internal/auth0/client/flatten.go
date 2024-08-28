@@ -507,15 +507,16 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 }
 
 func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {
+	do := make(map[string]interface{})
+
 	if defaultOrganization == nil {
-		return nil
+		do["disable"] = true
+	} else {
+		do["flows"] = defaultOrganization.GetFlows()
+		do["organization_id"] = defaultOrganization.GetOrganizationID()
 	}
-	return []interface{}{
-		map[string]interface{}{
-			"flows":           defaultOrganization.GetFlows(),
-			"organization_id": defaultOrganization.GetOrganizationID(),
-		},
-	}
+
+	return []interface{}{do}
 }
 
 func flattenClient(data *schema.ResourceData, client *management.Client) error {

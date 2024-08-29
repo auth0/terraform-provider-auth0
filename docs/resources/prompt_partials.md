@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_prompt_partials"
 description: |-
-  With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this here https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts.
+  Deprecated: This resource is deprecated and will be removed in the next major version. Please use the auth0_prompt_screen_partials resource instead. With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this here https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts.
 ---
 
 # Resource: auth0_prompt_partials
 
-With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).
+Deprecated: This resource is deprecated and will be removed in the next major version. Please use the `auth0_prompt_screen_partials` resource instead. With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).
 
 ## Example Usage
 
@@ -28,16 +28,16 @@ resource "auth0_prompt_partials" "my_login_prompt_partials" {
 
 ### Required
 
-- `prompt` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`.
+- `prompt` (String, Deprecated) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
 
 ### Optional
 
-- `form_content_end` (String) Content that goes at the end of the form.
-- `form_content_start` (String) Content that goes at the start of the form.
-- `form_footer_end` (String) Footer content for the end of the footer.
-- `form_footer_start` (String) Footer content for the start of the footer.
-- `secondary_actions_end` (String) Actions that go at the end of secondary actions.
-- `secondary_actions_start` (String) Actions that go at the start of secondary actions.
+- `form_content_end` (String, Deprecated) Content that goes at the end of the form.
+- `form_content_start` (String, Deprecated) Content that goes at the start of the form.
+- `form_footer_end` (String, Deprecated) Footer content for the end of the footer.
+- `form_footer_start` (String, Deprecated) Footer content for the start of the footer.
+- `secondary_actions_end` (String, Deprecated) Actions that go at the end of secondary actions.
+- `secondary_actions_start` (String, Deprecated) Actions that go at the start of secondary actions.
 
 ### Read-Only
 

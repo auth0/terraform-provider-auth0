@@ -20,6 +20,7 @@ func flattenPrompt(data *schema.ResourceData, prompt *management.Prompt) error {
 	return result.ErrorOrNil()
 }
 
+// Deprecated: flattenPromptPartials is deprecated and will be removed in the next major version.
 func flattenPromptPartials(data *schema.ResourceData, promptPartials *management.PromptPartials) error {
 	result := multierror.Append(
 		data.Set("form_content_start", promptPartials.FormContentStart),
@@ -31,6 +32,61 @@ func flattenPromptPartials(data *schema.ResourceData, promptPartials *management
 	)
 
 	return result.ErrorOrNil()
+}
+
+func flattenPromptScreenPartials(data *schema.ResourceData, screenPartials *management.PromptScreenPartials) error {
+	result := multierror.Append(
+		data.Set("prompt_type", data.Id()),
+		data.Set("screen_partials", flattenPromptScreenPartialsList(screenPartials)),
+	)
+	return result.ErrorOrNil()
+}
+
+func flattenPromptScreenPartialsList(screenPartials *management.PromptScreenPartials) []map[string]interface{} {
+	if screenPartials == nil {
+		return nil
+	}
+
+	var screenPartialsList []map[string]interface{}
+
+	for screenName, insertionPoints := range *screenPartials {
+		flattenedInsertionPoints := flattenInsertionPoints(insertionPoints)
+
+		screenPartialsList = append(screenPartialsList, map[string]interface{}{
+			"screen_name":      string(screenName),
+			"insertion_points": flattenedInsertionPoints, // This should now be a []map[string]interface{}.
+		})
+	}
+	return screenPartialsList
+}
+
+func flattenInsertionPoints(insertionPoints map[management.InsertionPoint]string) []map[string]interface{} {
+	if insertionPoints == nil {
+		return nil
+	}
+
+	flattened := make(map[string]interface{})
+
+	if v, exists := insertionPoints[management.InsertionPointFormContentStart]; exists {
+		flattened["form_content_start"] = v
+	}
+	if v, exists := insertionPoints[management.InsertionPointFormContentEnd]; exists {
+		flattened["form_content_end"] = v
+	}
+	if v, exists := insertionPoints[management.InsertionPointFormFooterStart]; exists {
+		flattened["form_footer_start"] = v
+	}
+	if v, exists := insertionPoints[management.InsertionPointFormFooterEnd]; exists {
+		flattened["form_footer_end"] = v
+	}
+	if v, exists := insertionPoints[management.InsertionPointSecondaryActionsStart]; exists {
+		flattened["secondary_actions_start"] = v
+	}
+	if v, exists := insertionPoints[management.InsertionPointSecondaryActionsEnd]; exists {
+		flattened["secondary_actions_end"] = v
+	}
+
+	return []map[string]interface{}{flattened}
 }
 
 func flattenPromptCustomText(data *schema.ResourceData, customText map[string]interface{}) error {

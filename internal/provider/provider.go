@@ -121,6 +121,7 @@ func New() *schema.Provider {
 			"auth0_prompt":                        prompt.NewResource(),
 			"auth0_prompt_custom_text":            prompt.NewCustomTextResource(),
 			"auth0_prompt_partials":               prompt.NewPartialsResource(),
+			"auth0_prompt_screen_partials":        prompt.NewScreenPartialsResource(),
 			"auth0_resource_server":               resourceserver.NewResource(),
 			"auth0_resource_server_scope":         resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":        resourceserver.NewScopesResource(),
@@ -153,6 +154,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
+			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 		},
 	}
 

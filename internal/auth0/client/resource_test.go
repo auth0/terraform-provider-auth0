@@ -2367,27 +2367,35 @@ resource "auth0_client" "my_client" {
 }
 `
 
-// Const testAccUpdateClientDefaultOrganizationFlowsOnly = `
-//resource "auth0_client" "my_client" {
-//    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
-//    default_organization {
-//		flows = ["client_credentials"]
-//    }
-//}
-//`
-//
-//const testAccUpdateClientDefaultOrganizationOrgIdOnly = `
-//resource "auth0_client" "my_client" {
-//    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
-//    default_organization {
-//        organization_id = "org_z5YvxlXPO0NspoIa"
-//    }
-//}
-//`.
+const testAccUpdateClientDefaultOrganizationFlowsOnly = `
+resource "auth0_client" "my_client" {
+   name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+   default_organization {
+		flows = ["client_credentials"]
+   }
+}
+`
+
+const testAccUpdateClientDefaultOrganizationOrgIdOnly = `
+resource "auth0_client" "my_client" {
+   name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+   default_organization {
+       organization_id = "org_z5YvxlXPO0NspoIa"
+   }
+}
+`
 
 func TestAccClientWithDefaultOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
+				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIdOnly, t.Name()),
+				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			},
 			{
 				Config: acctest.ParseTestName(testAccCreateClientWithDefaultOrganization, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -2416,14 +2424,6 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.organization_id", ""),
 				),
 			},
-			//{
-			//	Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
-			//	ExpectError: regexp.MustCompile("Error: Missing required argument"),
-			// },
-			//{
-			//	Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIdOnly, t.Name()),
-			//	ExpectError: regexp.MustCompile("Error: Missing required argument"),
-			// },.
 		},
 	})
 }

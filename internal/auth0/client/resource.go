@@ -1278,6 +1278,7 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				MaxItems:    1,
 				Description: "Configure and associate an organization with the Client",
+				Computed:    true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"flows": {

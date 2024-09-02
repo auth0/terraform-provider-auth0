@@ -2376,7 +2376,7 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccUpdateClientDefaultOrganizationOrgIdOnly = `
+const testAccUpdateClientDefaultOrganizationOrgIDOnly = `
 resource "auth0_client" "my_client" {
    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
    default_organization {
@@ -2393,7 +2393,7 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 				ExpectError: regexp.MustCompile("Error: Missing required argument"),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIdOnly, t.Name()),
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIDOnly, t.Name()),
 				ExpectError: regexp.MustCompile("Error: Missing required argument"),
 			},
 			{

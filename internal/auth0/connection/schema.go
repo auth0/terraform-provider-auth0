@@ -859,6 +859,7 @@ var optionsSchema = &schema.Schema{
 						"username",
 					}, true),
 				},
+				MaxItems: 3,
 				Optional: true,
 				Computed: false,
 				Description: "Order of attributes for precedence in identification." +

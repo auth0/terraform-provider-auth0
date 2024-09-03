@@ -830,11 +830,12 @@ resource "auth0_client_credentials" "test" {
 `
 
 func TestAccAllowUpdatingTheClientSecret(t *testing.T) {
-	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
-		// Only run with recorded HTTP requests, because
-		// the http recorder redacts the client secret.
-		t.Skip()
-	}
+	// When run with recorded HTTP requests, the http recorder
+	// redacts the client secret. If this test needs to be updated,
+	// a few of the redacted client secrets in the recording should
+	// be replaced with the one in the test instead of [REDACTED].
+	// This currently occurs in interactions 5, 6, 7, and 10, but
+	// the numbers may change with as the code changes.
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -1310,6 +1311,11 @@ EOF
 func TestAccClientCredentialsImport(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// The test runs only with recordings as it requires an initial setup.
+		// If this test requires updating, the objects defined in the above configurations
+		// should be manually added to your tenant, and the appropriate ids should be copied
+		// into the test code as ImportStateId. These will be cleaned up by the test,
+		// so you should copy the ids immediately before running `make test-acc-record`.
+		// When running the recording, you may need to disable the call to `t.Skip()`.
 		t.Skip()
 	}
 
@@ -1322,14 +1328,14 @@ func TestAccClientCredentialsImport(t *testing.T) {
 				Config:             testAccImportClientWithSecretPost,
 				ResourceName:       "auth0_client.my_test_client_secret",
 				ImportState:        true,
-				ImportStateId:      "Bjnm4jQ66Kb5Ug33eSBDxHsW6teU7SE1",
+				ImportStateId:      "OPKABsgfP91ueA4oMF3NIyEzShuiB7KC",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             testAccImportClientWithSecretPost,
 				ResourceName:       "auth0_client_credentials.test_simple_client",
 				ImportState:        true,
-				ImportStateId:      "Bjnm4jQ66Kb5Ug33eSBDxHsW6teU7SE1",
+				ImportStateId:      "OPKABsgfP91ueA4oMF3NIyEzShuiB7KC",
 				ImportStatePersist: true,
 			},
 			{
@@ -1349,14 +1355,14 @@ func TestAccClientCredentialsImport(t *testing.T) {
 				Config:             testAccImportClientWithPrivateKeyJWT,
 				ResourceName:       "auth0_client.my_test_client_jwt_ca",
 				ImportState:        true,
-				ImportStateId:      "zm5DPtaaSqenbpEX36nNLbmUQ2rW81Mu",
+				ImportStateId:      "l2RlA0V5Bdf1tzoY98sui8uB787YmUCX",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             fmt.Sprintf(testAccImportClientWithPrivateKeyJWT, credsCert),
 				ResourceName:       "auth0_client_credentials.test_jwt_ca_client",
 				ImportState:        true,
-				ImportStateId:      "zm5DPtaaSqenbpEX36nNLbmUQ2rW81Mu",
+				ImportStateId:      "l2RlA0V5Bdf1tzoY98sui8uB787YmUCX",
 				ImportStatePersist: true,
 			},
 			{

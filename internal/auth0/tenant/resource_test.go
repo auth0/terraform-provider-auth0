@@ -9,7 +9,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-func TestAccTenantFoo(t *testing.T) {
+func TestAccTenant_Main(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -243,6 +243,7 @@ func TestAccTenantDefaults(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// Only run with recorded HTTP requests because  normal E2E tests will naturally configure the tenant
 		// and this test will only pass when the tenant has not been configured yet (aka "fresh" tenants).
+		// In this test, just re-recording it should work, although you may need to comment out the `t.Skip()`.
 		t.Skip()
 	}
 

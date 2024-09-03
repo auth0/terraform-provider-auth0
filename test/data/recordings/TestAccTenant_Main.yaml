@@ -1,0 +1,532 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 52
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"session_lifetime":168,"idle_session_lifetime":72}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true},"is_custom_template_set":true,"identifier_first":false,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 166.84675ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 132.806208ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 140.616542ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 143.922917ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1047
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"default_audience":"","default_directory":"","flags":{"disable_clickjack_protection_headers":true,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":["https://mycompany.org/logoutCallback"],"session_lifetime":720,"sandbox_version":"16","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"session_cookie":{"mode":"non-persistent"},"sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"mtls":{"enable_endpoint_aliases":true},"pushed_authorization_requests_supported":true,"acr_values_supported":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true},"is_custom_template_set":true,"identifier_first":false,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"non-persistent"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 178.739458ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 129.025667ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 145.13925ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://mycompany.org/logoutCallback"],"default_audience":"","default_directory":"","default_redirection_uri":"https://example.com/login","enabled_locales":["en","de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":false,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":true,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":false,"mfa_show_factor_list_on_enrollment":false,"remove_alg_from_jwks":true,"disable_clickjack_protection_headers":true},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":false},"allow_organization_name_in_authentication_api":false,"customize_mfa_in_postlogin_action":false,"pushed_authorization_requests_supported":true,"mtls":{"enable_endpoint_aliases":true},"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 159.469417ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 932
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"default_directory":"","flags":{"disable_clickjack_protection_headers":false,"enable_public_signup_user_exists_error":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"disable_management_api_sms_obfuscation":true,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false},"friendly_name":"My Test Tenant","picture_url":"https://mycompany.org/logo.png","support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","allowed_logout_urls":[],"session_lifetime":720,"sandbox_version":"16","default_redirection_uri":"","enabled_locales":["de","fr"],"session_cookie":{"mode":"persistent"},"sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"acr_values_supported":["bar","foo"],"pushed_authorization_requests_supported":false,"mtls":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true},"is_custom_template_set":true,"identifier_first":false,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"persistent"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 165.916083ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 132.125917ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 135.954875ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":720,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 139.892625ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 25
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"session_lifetime":168}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true},"is_custom_template_set":true,"identifier_first":false,"webauthn_platform_first_factor":false},"session_cookie":{"mode":"persistent"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 163.127708ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 132.82075ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.9.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":[],"acr_values_supported":["bar","foo"],"default_audience":"","default_directory":"","enabled_locales":["de","fr"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"disable_management_api_sms_obfuscation":true,"enable_public_signup_user_exists_error":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"use_scope_descriptions_for_consent":false,"no_disclose_enterprise_connections":false,"revoke_refresh_token_grant":false,"disable_fields_map_fix":true,"mfa_show_factor_list_on_enrollment":true,"remove_alg_from_jwks":false,"disable_clickjack_protection_headers":false},"friendly_name":"My Test Tenant","guardian_mfa_page":{"enabled":true,"html":"<!DOCTYPE html>\n<html>\n<head>\n  <title>2nd Factor Authentication</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <style type=\"text/css\">\n\n    html, body { padding: 0; margin: 0; }\n\n    .table {\n      display: table;\n      position: absolute;\n      height: 100%;\n      width: 100%;\n      background-color: {{ pageBackgroundColor | default: ''#2b2b33'' }};\n    }\n\n    .cell {\n      display: table-cell;\n      vertical-align: middle;\n    }\n\n    .content {\n      padding: 25px 0px 25px 0px;\n      margin-left: auto;\n      margin-right: auto;\n      width: 280px; /* login widget width */\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"table\">\n    <div class=\"cell\">\n      <div class=\"content\">\n        <!-- WIDGET -->\n        <div class=\"js-mfa-container mfa-container\" id=\"container\"></div>\n      </div>\n    </div>\n  </div>\n\n  <script src=\"//cdn.auth0.com/js/mfa-widget/mfa-widget-1.8.min.js\"></script>\n\n  <script>\n    (function() {\n      return new Auth0MFAWidget({\n        container: \"container\",\n\n        theme: {\n          icon: \"{{ iconUrl | default: ''//cdn.auth0.com/styleguide/1.0.0/img/badge.png'' }}\",\n          primaryColor: \"{{ primaryColor | default: ''#ea5323'' }}\"\n        },\n\n        requesterErrors: [\n          {% for error in errors %}\n            { message: \"{{ error.message }}\", errorCode: \"{{ error.code }}\" }\n          {% endfor %}\n        ],\n\n        mfaServerUrl: \"{{ mfaServerUrl }}\",\n        {% if ticket %}\n        ticket: \"{{ ticket }}\",\n        {% else %}\n        requestToken: \"{{ requestToken }}\",\n        {% endif %}\n        postActionURL: \"{{ postActionURL }}\",\n\n        userData: {\n          userId: \"{{ userData.userId }}\",\n          email: \"{{ userData.email }}\",\n          friendlyUserId: \"{{ userData.friendlyUserId }}\",\n          tenant: \"{{ userData.tenant }}\",\n          {% if userData.tenantFriendlyName %}\n          tenantFriendlyName: \"{{ userData.tenantFriendlyName }}\"\n          {% endif %}\n        },\n        globalTrackingId: \"{{ globalTrackingId }}\",\n        {% if allowRememberBrowser %}allowRememberBrowser: {{ allowRememberBrowser }}, {% endif %}\n        {% if stateCheckingMechanism %}stateCheckingMechanism: \"{{ stateCheckingMechanism }}\", {% endif %}\n      });\n    })();\n  </script>\n</body>\n</html>\n"},"idle_session_lifetime":72,"picture_url":"https://mycompany.org/logo.png","sandbox_version":"16","session_lifetime":168,"support_email":"support@mycompany.org","support_url":"https://mycompany.org/support","sessions":{"oidc_logout_prompt_enabled":true},"allow_organization_name_in_authentication_api":true,"customize_mfa_in_postlogin_action":true,"pushed_authorization_requests_supported":false,"universal_login":{"passwordless":{"allow_magiclink_verify_without_session":true}},"session_cookie":{"mode":"persistent"},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 131.499167ms

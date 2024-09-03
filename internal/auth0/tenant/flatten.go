@@ -1,6 +1,8 @@
 package tenant
 
 import (
+	"time"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -37,10 +39,14 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
 	}
 
+	// If anybody can figure out why this is necessary, I would LOVE to know. If you remove this
+	// the tests fail a significant percentage of the time. It still fails occasionally,
+	// particularly when trying to do `make test-acc-record`, but retrying will generally fix it.
+	time.Sleep(200)
 	if tenant.GetACRValuesSupported() == nil {
 		result = multierror.Append(result,
 			data.Set("disable_acr_values_supported", true),
-			data.Set("acr_values_supported", []string{}),
+			data.Set("acr_values_supported", nil),
 		)
 	} else {
 		result = multierror.Append(result,

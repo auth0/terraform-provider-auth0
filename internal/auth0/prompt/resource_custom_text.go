@@ -21,7 +21,6 @@ import (
 const languagesURL = "https://cdn.auth0.com/ulp/react-components/development/languages/available-languages.json"
 
 func fetchLanguages() []string {
-
 	fallbackAvailableLanguages := []string{
 		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
 		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
@@ -29,7 +28,7 @@ func fetchLanguages() []string {
 	}
 
 	client := http.Client{
-		Timeout: 10 * time.Second, // Set a timeout for the HTTP request
+		Timeout: 10 * time.Second, // Set a timeout for the HTTP request.
 	}
 
 	resp, err := client.Get(languagesURL)

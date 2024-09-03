@@ -861,8 +861,6 @@ var optionsSchema = &schema.Schema{
 				},
 				Optional: true,
 				Computed: false,
-				MaxItems: 3,
-				MinItems: 3,
 				Description: "Order of attributes for precedence in identification." +
 					"Valid values: email, phone_number, username. " +
 					"If Precedence is set, it must contain all values (email, phone_number, username) in specific order",

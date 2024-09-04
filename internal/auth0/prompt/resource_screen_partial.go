@@ -41,7 +41,7 @@ func NewScreenPartialResource() *schema.Resource {
 			},
 			"insertion_points": {
 				Type:        schema.TypeList,
-				Required:    true,
+				Optional:    true,
 				MaxItems:    1,
 				Description: "The insertion points for the partials.",
 				Elem: &schema.Resource{

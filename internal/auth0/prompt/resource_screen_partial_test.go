@@ -8,7 +8,15 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccPromptScreenPartialCreate = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+const testAccPromptScreenPartialWithoutScreenPartial = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+resource "auth0_prompt_screen_partial" "signup" {
+	depends_on = [ auth0_branding.my_brand ]
+	prompt_type = "signup"
+	screen_name = "signup"
+}
+`
+
+const testAccPromptScreenPartialCreate = testAccPromptScreenPartialWithoutScreenPartial + `
 resource "auth0_prompt_screen_partial" "login_passwordless_email_code" {
   	depends_on = [ auth0_branding.my_brand ]
   	prompt_type = "login-passwordless"
@@ -59,6 +67,14 @@ data "auth0_prompt_screen_partials" "login_passwordless" {
 func TestAccPromptScreenPartial(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config: testAccPromptScreenPartialWithoutScreenPartial,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.signup", "prompt_type", "signup"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.signup", "screen_name", "signup"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.signup", "insertion_points.#", "0"),
+				),
+			},
 			{
 				Config: testAccPromptScreenPartialCreate,
 				Check: resource.ComposeTestCheckFunc(

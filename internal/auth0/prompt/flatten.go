@@ -45,10 +45,16 @@ func flattenPromptScreenPartials(data *schema.ResourceData, screenPartials *mana
 
 func flattenPromptScreenPartial(data *schema.ResourceData, partial *management.PromptScreenPartials) error {
 	promptName, screenName := strings.Split(data.Id(), ":")[0], strings.Split(data.Id(), ":")[1]
+	var insertionPoints interface{}
+	if partial == nil || (*partial)[management.ScreenName(screenName)] == nil {
+		insertionPoints = nil
+	} else {
+		insertionPoints = flattenInsertionPoints((*partial)[management.ScreenName(screenName)])
+	}
 	result := multierror.Append(
 		data.Set("prompt_type", promptName),
 		data.Set("screen_name", screenName),
-		data.Set("insertion_points", flattenInsertionPoints((*partial)[management.ScreenName(screenName)])),
+		data.Set("insertion_points", insertionPoints),
 	)
 	return result.ErrorOrNil()
 }

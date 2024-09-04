@@ -24,8 +24,14 @@ resource "auth0_branding" "my_brand" {
 	}
 }
 `
+const testAccPromptScreenPartialWithoutScreenPartials = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+resource "auth0_prompt_screen_partials" "login" {
+	depends_on = [ auth0_branding.my_brand ]
+	prompt_type = "login"
+}
+`
 
-const testAccPromptScreenPartialsCreate = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+const testAccPromptScreenPartialsCreate = testAccPromptScreenPartialWithoutScreenPartials + `
 resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
   depends_on = [ auth0_branding.my_brand ]
   prompt_type = "login-passwordless"
@@ -62,10 +68,11 @@ resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
 }
 `
 
-const testAccPromptScreenPartialsDelete = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+const testAccPromptScreenPartialsDelete = testAccGivenACustomDomain + testGivenABrandingTemplate
+
+const testAccPromptScreenPartialsDataAfterDelete = testAccPromptScreenPartialsDelete + `
 data "auth0_prompt_screen_partials" "prompt_screen_partials" {
-  depends_on = [ auth0_branding.my_brand ]
-  prompt_type = "login-passwordless"
+	  prompt_type = "login-passwordless"
 }
 `
 
@@ -73,13 +80,24 @@ func TestAccPromptScreenPartials(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
+				Config: testAccPromptScreenPartialWithoutScreenPartials,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.login", "prompt_type", "login"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.login", "screen_partials.#", "0"),
+				),
+			},
+			{
 				Config: testAccPromptScreenPartialsCreate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "prompt_type", "login-passwordless"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.screen_name", "login-passwordless-email-code"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.*", map[string]string{
+						"screen_name": "login-passwordless-email-code",
+					}),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.insertion_points.0.form_content_end", "<div>Form Content End</div>"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.screen_name", "login-passwordless-sms-otp"),
+					resource.TestCheckTypeSetElemNestedAttrs("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.*", map[string]string{
+						"screen_name": "login-passwordless-sms-otp",
+					}),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.insertion_points.0.form_content_end", "<div>Form Content End</div>"),
 				),
@@ -96,6 +114,13 @@ func TestAccPromptScreenPartials(t *testing.T) {
 			},
 			{
 				Config: testAccPromptScreenPartialsDelete,
+			},
+			{
+				Config: testAccPromptScreenPartialsDataAfterDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_prompt_screen_partials.prompt_screen_partials", "prompt_type", "login-passwordless"),
+					resource.TestCheckResourceAttr("data.auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.#", "0"),
+				),
 			},
 		},
 	})

@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"context"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -38,6 +39,8 @@ func NewScreenPartialsResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(allowedPromptsWithPartials, false),
+				Description: "The prompt that you are adding partials for. " +
+					"Options are: `" + strings.Join(allowedPromptsWithPartials, "`, `") + "`.",
 			},
 			"screen_partials": {
 				Type:     schema.TypeList,

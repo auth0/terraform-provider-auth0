@@ -34,6 +34,19 @@ func expandPromptPartials(data *schema.ResourceData) *management.PromptPartials 
 		SecondaryActionsEnd:   data.Get("secondary_actions_end").(string),
 	}
 }
+func expandPromptScreenPartial(data *schema.ResourceData) *management.PromptScreenPartials {
+	partialRaw := data.GetRawConfig()
+	if partialRaw.IsNull() {
+		return nil
+	}
+
+	screenPartial := make(management.PromptScreenPartials)
+
+	insertionPoints := expandInsertionPoints(partialRaw.GetAttr("insertion_points").AsValueSlice())
+	screenPartial[management.ScreenName(partialRaw.GetAttr("screen_name").AsString())] = insertionPoints
+
+	return &screenPartial
+}
 
 func expandPromptScreenPartials(data *schema.ResourceData) *management.PromptScreenPartials {
 	partialsRaw := data.GetRawConfig().GetAttr("screen_partials")

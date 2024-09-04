@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
@@ -38,6 +39,16 @@ func flattenPromptScreenPartials(data *schema.ResourceData, screenPartials *mana
 	result := multierror.Append(
 		data.Set("prompt_type", data.Id()),
 		data.Set("screen_partials", flattenPromptScreenPartialsList(screenPartials)),
+	)
+	return result.ErrorOrNil()
+}
+
+func flattenPromptScreenPartial(data *schema.ResourceData, partial *management.PromptScreenPartials) error {
+	promptName, screenName := strings.Split(data.Id(), ":")[0], strings.Split(data.Id(), ":")[1]
+	result := multierror.Append(
+		data.Set("prompt_type", promptName),
+		data.Set("screen_name", screenName),
+		data.Set("insertion_points", flattenInsertionPoints((*partial)[management.ScreenName(screenName)])),
 	)
 	return result.ErrorOrNil()
 }

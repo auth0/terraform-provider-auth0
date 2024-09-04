@@ -23,10 +23,9 @@ func NewPartialsResource() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		DeprecationMessage: "This resource is deprecated and will be removed in the next major version. " +
-			"Please use the `auth0_prompt_screen_partials` resource instead.",
-		Description: "Deprecated: This resource is deprecated and will be removed in the next major version. " +
-			"Please use the `auth0_prompt_screen_partials` resource instead. " +
-			"With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. " +
+			"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+			"for managing a single prompt screen, depending on your use case.",
+		Description: "With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. " +
 			"You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).",
 		Schema: map[string]*schema.Schema{
 			"form_content_start": {
@@ -34,42 +33,48 @@ func NewPartialsResource() *schema.Resource {
 				Optional:    true,
 				Description: "Content that goes at the start of the form.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"form_content_end": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Content that goes at the end of the form.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"form_footer_start": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Footer content for the start of the footer.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"form_footer_end": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Footer content for the end of the footer.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"secondary_actions_start": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Actions that go at the start of secondary actions.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"secondary_actions_end": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Actions that go at the end of secondary actions.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 			"prompt": {
 				Type:         schema.TypeString,
@@ -78,7 +83,8 @@ func NewPartialsResource() *schema.Resource {
 					"Options are: `" + strings.Join(allowedPromptsWithPartials, "`, `") + "`.",
 				Required: true,
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
-					"Please use the `auth0_prompt_screen_partials` resource instead.",
+					"Please use `auth0_prompt_screen_partials` for managing multiple prompt screens or `auth0_prompt_screen_partial` " +
+					"for managing a single prompt screen, depending on your use case.",
 			},
 		},
 	}

@@ -1,12 +1,15 @@
 ---
 page_title: "Resource: auth0_prompt_partials"
 description: |-
-  Deprecated: This resource is deprecated and will be removed in the next major version. Please use the auth0_prompt_screen_partials resource instead. With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this here https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts.
+    With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this here https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts.
 ---
 
 # Resource: auth0_prompt_partials
 
-Deprecated: This resource is deprecated and will be removed in the next major version. Please use the `auth0_prompt_screen_partials` resource instead. With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).
+With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).
+
+!> **Deprecated:** `auth0_prompt_partials` has been deprecated. Please use `auth0_prompt_screen_partials` for managing multiple
+prompt screens or `auth0_prompt_screen_partial` for managing a single prompt screen.
 
 ## Example Usage
 

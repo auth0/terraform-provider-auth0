@@ -121,6 +121,7 @@ func New() *schema.Provider {
 			"auth0_prompt":                        prompt.NewResource(),
 			"auth0_prompt_custom_text":            prompt.NewCustomTextResource(),
 			"auth0_prompt_partials":               prompt.NewPartialsResource(),
+			"auth0_prompt_screen_partial":         prompt.NewScreenPartialResource(),
 			"auth0_prompt_screen_partials":        prompt.NewScreenPartialsResource(),
 			"auth0_resource_server":               resourceserver.NewResource(),
 			"auth0_resource_server_scope":         resourceserver.NewScopeResource(),

@@ -8,6 +8,11 @@ description: |-
 
 With this resource, you can manage a customized sign up and login experience by adding custom content, form elements and css/javascript. You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/customize-signup-and-login-prompts).
 
+!> This resource manages the entire set of prompt screens enabled for a prompt. In contrast, the `auth0_prompt_screen_partial`
+resource appends a specific prompt screen to the list of prompt screens displayed to the user during the authentication flow.
+ To avoid potential issues, it is recommended not to use this resource in conjunction with the `auth0_prompt_screen_partial`
+ resource when managing prompt screens for the same prompt.
+
 ## Example Usage
 
 ```terraform
@@ -37,7 +42,7 @@ resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
 
 ### Required
 
-- `prompt_type` (String)
+- `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
 
 ### Optional
 
@@ -75,5 +80,5 @@ Import is supported using the following syntax:
 # This resource can be imported using the prompt name.
 #
 # Example:
-terraform import auth0_prompt_screen_partials.prompt_screen_partials "login"
+terraform import auth0_prompt_screen_partials.prompt_screen_partials "login-passwordless"
 ```

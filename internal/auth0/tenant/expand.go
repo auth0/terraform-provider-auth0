@@ -1,8 +1,6 @@
 package tenant
 
 import (
-	"encoding/json"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -10,7 +8,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandTenant(data *schema.ResourceData) (interface{}, error) {
+func expandTenant(data *schema.ResourceData) *management.Tenant {
 	config := data.GetRawConfig()
 
 	sessionLifetime := data.Get("session_lifetime").(float64)          // Handling separately to preserve default values not honored by `d.GetRawConfig()`.
@@ -34,47 +32,15 @@ func expandTenant(data *schema.ResourceData) (interface{}, error) {
 		AllowOrgNameInAuthAPI:                value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
 		CustomizeMFAInPostLoginAction:        value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
 		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
+		ACRValuesSupported:                   value.Strings(config.GetAttr("acr_values_supported")),
+		MTLS:                                 expandMTLSConfiguration(config.GetAttr("mtls")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
 		tenant.IdleSessionLifetime = &idleSessionLifetime
 	}
-	mtls := config.GetAttr("mtls")
 
-	disableACRValuesSupported := config.GetAttr("disable_acr_values_supported")
-	if tenantJSON, err := json.Marshal(tenant); err != nil {
-		return nil, err
-	} else if !disableACRValuesSupported.IsNull() && disableACRValuesSupported.True() {
-		if isMTLSConfigurationDisabled(mtls) {
-			nilableTenant := tenantNilACRValuesSupportedMTLS{}
-			if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
-				return nil, err
-			}
-			nilableTenant.ACRValuesSupported = nil
-			nilableTenant.MTLS = nil
-
-			return nilableTenant, nil
-		}
-		nilableTenant := tenantNilACRValuesSupported{}
-		if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
-			return nil, err
-		}
-		nilableTenant.ACRValuesSupported = nil
-		nilableTenant.MTLS = expandMTLSConfiguration(mtls)
-		return nilableTenant, nil
-	} else if isMTLSConfigurationDisabled(mtls) {
-		nilableTenant := tenantNilMTLS{}
-		if err = json.Unmarshal(tenantJSON, &nilableTenant); err != nil {
-			return nil, err
-		}
-		nilableTenant.ACRValuesSupported = value.Strings(config.GetAttr("acr_values_supported"))
-		nilableTenant.MTLS = nil
-		return nilableTenant, nil
-	}
-	tenant.ACRValuesSupported = value.Strings(config.GetAttr("acr_values_supported"))
-	tenant.MTLS = expandMTLSConfiguration(mtls)
-
-	return tenant, nil
+	return &tenant
 }
 
 func expandTenantFlags(config cty.Value) *management.TenantFlags {
@@ -144,26 +110,50 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	return &sessions
 }
 
-func isMTLSConfigurationDisabled(config cty.Value) bool {
-	return !config.IsNull() && config.LengthInt() > 0 && config.AsValueSlice()[0].GetAttr("disable").True()
+func isACRValuesSupportedNull(config cty.Value) bool {
+	disable := config.GetAttr("disable_acr_values_supported")
+	return !disable.IsNull() && disable.True()
+}
+
+func isMTLSConfigurationNull(config cty.Value) bool {
+	empty := true
+
+	mtlsConfig := config.GetAttr("mtls")
+	if mtlsConfig.IsNull() || mtlsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
 }
 
 func expandMTLSConfiguration(config cty.Value) *management.TenantMTLSConfiguration {
 	var mtls management.TenantMTLSConfiguration
+
 	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		disabled := cfg.GetAttr("disable")
-		if !disabled.IsNull() && disabled.True() {
-			// Force it to exit the ForEachElement and return nil.
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
 			stop = true
 		} else {
 			mtls.EnableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
 		}
 		return stop
 	}) {
+		// We forced an early return because it was disabled.
 		return nil
 	}
+
 	if mtls == (management.TenantMTLSConfiguration{}) {
 		return nil
 	}
+
 	return &mtls
 }

@@ -1285,6 +1285,11 @@ func NewResource() *schema.Resource {
 				Description: "Defines the compliance level for this client, which may restrict it's capabilities. " +
 					"Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.",
 			},
+			"require_proof_of_possession": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Makes the use of Proof-of-Possession mandatory for this client.",
+			},
 		},
 	}
 }

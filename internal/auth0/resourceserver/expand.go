@@ -31,6 +31,8 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
+		resourceServer.AuthorizationDetails = expandAuthorizationDetails(cfg.GetAttr("authorization_details"))
+		resourceServer.ConsentPolicy = expandConsentPolicy(cfg.GetAttr("consent_policy"))
 	}
 	return resourceServer
 }
@@ -48,6 +50,70 @@ func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerSc
 	})
 
 	return &resourceServerScopes
+}
+
+func isConsentPolicyNull(config cty.Value) bool {
+	consentPolicy := value.String(config.GetAttr("consent_policy"))
+	return consentPolicy != nil && *consentPolicy == "null"
+}
+
+func expandConsentPolicy(config cty.Value) *string {
+	consentPolicy := value.String(config)
+	if consentPolicy == nil || *consentPolicy == "null" {
+		return nil
+	}
+
+	return nil
+}
+
+func isAuthorizationDetailsNull(config cty.Value) bool {
+	empty := true
+
+	detailsConfig := config.GetAttr("authorization_details")
+	if detailsConfig.IsNull() || detailsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
+}
+
+func expandAuthorizationDetails(config cty.Value) *[]management.ResourceServerAuthorizationDetails {
+	if config.IsNull() {
+		return nil
+	}
+
+	authorizationDetails := make([]management.ResourceServerAuthorizationDetails, 0, config.LengthInt())
+	if config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			// Force it to exit the ForEachElement and return nil.
+			stop = true
+		} else {
+			authorizationDetails = append(authorizationDetails, management.ResourceServerAuthorizationDetails{
+				Type: value.String(cfg.GetAttr("type")),
+			})
+		}
+
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return nil
+	}
+
+	if len(authorizationDetails) == 0 {
+		return nil
+	}
+
+	return &authorizationDetails
 }
 
 func resourceServerIsAuth0ManagementAPI(state cty.Value) bool {

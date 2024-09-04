@@ -19,22 +19,6 @@ const (
 	sessionLifetimeDefault     = 168.00
 )
 
-type tenantNilACRValuesSupported struct {
-	management.Tenant
-	ACRValuesSupported *[]string `json:"acr_values_supported"`
-}
-
-type tenantNilMTLS struct {
-	management.Tenant
-	MTLS *management.TenantMTLSConfiguration `json:"mtls"`
-}
-
-type tenantNilACRValuesSupportedMTLS struct {
-	management.Tenant
-	ACRValuesSupported *[]string                           `json:"acr_values_supported"`
-	MTLS               *management.TenantMTLSConfiguration `json:"mtls"`
-}
-
 // NewResource will return a new auth0_tenant resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -414,10 +398,32 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if tenant, err := expandTenant(data); err != nil {
+	tenant := expandTenant(data)
+	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
-	} else if err = api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), tenant); err != nil {
-		return diag.FromErr(err)
+	}
+
+	config := data.GetRawConfig()
+	if isACRValuesSupportedNull(config) {
+		type nilableTenant struct {
+			ACRValuesSupported *[]string `json:"acr_values_supported"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), nilableTenant{
+			ACRValuesSupported: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	if isMTLSConfigurationNull(config) {
+		type nilableTenant struct {
+			MTLS *management.TenantMTLSConfiguration `json:"mtls"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), nilableTenant{
+			MTLS: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readTenant(ctx, data, meta)

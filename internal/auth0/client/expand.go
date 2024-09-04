@@ -46,6 +46,7 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		Addons:                             expandClientAddons(data),
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
+		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
 

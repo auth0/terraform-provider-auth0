@@ -11,6 +11,8 @@ resource "auth0_client" "my_client" {
   allowed_origins                     = ["https://example.com"]
   allowed_logout_urls                 = ["https://example.com"]
   web_origins                         = ["https://example.com"]
+  require_proof_of_possession         = false
+
   grant_types = [
     "authorization_code",
     "http://auth0.com/oauth/grant-type/password-realm",

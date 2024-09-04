@@ -3,11 +3,13 @@ package resourceserver
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
@@ -117,6 +119,37 @@ func NewResource() *schema.Resource {
 					"RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. " +
 					"For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).",
 			},
+			"consent_policy": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"transactional-authorization-with-mfa",
+					"null",
+				}, true),
+				Description: "Consent policy for this resource server. " +
+					"Options include `transactional-authorization-with-mfa`, or `null` to disable.",
+			},
+			"authorization_details": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Description: "Authorization details for this resource server.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Type of authorization details.",
+						},
+						"disable": {
+							Type:          schema.TypeBool,
+							Optional:      true,
+							Description:   "Disable authorization details.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -131,6 +164,29 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 	}
 
 	data.SetId(resourceServer.GetID())
+
+	config := data.GetRawConfig()
+	if isConsentPolicyNull(config) {
+		type nilableResourceServer struct {
+			ConsentPolicy *string `json:"consent_policy"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nilableResourceServer{
+			ConsentPolicy: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	if isAuthorizationDetailsNull(config) {
+		type nilableResourceServer struct {
+			AuthorizationDetails *[]management.ResourceServerAuthorizationDetails `json:"authorization_details"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nilableResourceServer{
+			AuthorizationDetails: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	return readResourceServer(ctx, data, meta)
 }
@@ -157,6 +213,29 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 
 	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	config := data.GetRawConfig()
+	if isConsentPolicyNull(config) {
+		type nilableResourceServer struct {
+			ConsentPolicy *string `json:"consent_policy"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nilableResourceServer{
+			ConsentPolicy: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	if isAuthorizationDetailsNull(config) {
+		type nilableResourceServer struct {
+			AuthorizationDetails *[]management.ResourceServerAuthorizationDetails `json:"authorization_details"`
+		}
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), nilableResourceServer{
+			AuthorizationDetails: nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readResourceServer(ctx, data, meta)

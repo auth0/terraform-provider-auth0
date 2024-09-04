@@ -1,11 +1,9 @@
 package prompt_test
 
 import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"testing"
 )
 
 const testAccPromptScreenPartialCreate = testAccGivenACustomDomain + testGivenABrandingTemplate + `
@@ -16,6 +14,8 @@ resource "auth0_prompt_screen_partial" "login_passwordless_email_code" {
 	insertion_points {
 		form_content_start = "<div>Form Content Start</div>"
 		form_content_end = "<div>Form Content End</div>"
+		form_footer_start = "<div>Form Footer Start</div>"
+		form_footer_end = "<div>Form Footer End</div>"
 	}
 }
 `
@@ -27,6 +27,20 @@ resource "auth0_prompt_screen_partial" "login_passwordless_sms_otp" {
 		insertion_points {
 			form_content_start = "<div>Form Content Start</div>"
 			form_content_end = "<div>Form Content End</div>"
+		}
+}
+
+resource "auth0_prompt_screen_partial" "login" {
+	  	depends_on = [ auth0_branding.my_brand ]
+	  	prompt_type = "login"
+		screen_name = "login"
+		insertion_points {
+			form_content_start = "<div>Form Content Start</div>"
+			form_content_end = "<div>Form Content End</div>"
+			form_footer_start = "<div>Form Footer Start</div>"
+			form_footer_end = "<div>Form Footer End</div>"
+			secondary_actions_start = "<div>Secondary Actions Start</div>"
+			secondary_actions_end = "<div>Secondary Actions End</div>"
 		}
 }
 `
@@ -50,6 +64,8 @@ func TestAccPromptScreenPartial(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_email_code", "screen_name", "login-passwordless-email-code"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_email_code", "insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_email_code", "insertion_points.0.form_content_end", "<div>Form Content End</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_email_code", "insertion_points.0.form_footer_start", "<div>Form Footer Start</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_email_code", "insertion_points.0.form_footer_end", "<div>Form Footer End</div>"),
 				),
 			},
 			{
@@ -63,6 +79,14 @@ func TestAccPromptScreenPartial(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_sms_otp", "screen_name", "login-passwordless-sms-otp"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_sms_otp", "insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login_passwordless_sms_otp", "insertion_points.0.form_content_end", "<div>Form Content End</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "prompt_type", "login"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "screen_name", "login"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.form_content_end", "<div>Form Content End</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.form_footer_start", "<div>Form Footer Start</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.form_footer_end", "<div>Form Footer End</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.secondary_actions_start", "<div>Secondary Actions Start</div>"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partial.login", "insertion_points.0.secondary_actions_end", "<div>Secondary Actions End</div>"),
 				),
 			},
 			{

@@ -31,12 +31,9 @@ resource "auth0_prompt_screen_partial" "login" {
 
 ### Required
 
+- `insertion_points` (Block List, Min: 1, Max: 1) The insertion points for the partials. (see [below for nested schema](#nestedblock--insertion_points))
 - `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
 - `screen_name` (String) The name of the screen associated with the partials
-
-### Optional
-
-- `insertion_points` (Block List, Max: 1) The insertion points for the partials. (see [below for nested schema](#nestedblock--insertion_points))
 
 ### Read-Only
 

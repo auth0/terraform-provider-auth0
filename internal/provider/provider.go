@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/action"
@@ -133,6 +135,7 @@ func New() *schema.Provider {
 			"auth0_user_permissions":              user.NewPermissionsResource(),
 			"auth0_user_role":                     user.NewRoleResource(),
 			"auth0_user_roles":                    user.NewRolesResource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
@@ -149,6 +152,7 @@ func New() *schema.Provider {
 			"auth0_signing_keys":                  signingkey.NewDataSource(),
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 		},
 	}
 

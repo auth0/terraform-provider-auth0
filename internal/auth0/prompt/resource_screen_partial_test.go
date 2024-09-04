@@ -1,8 +1,9 @@
 package prompt_test
 
 import (
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )

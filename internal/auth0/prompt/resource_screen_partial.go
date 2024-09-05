@@ -14,7 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
-// NewScreenPartialResource creates a new resource for prompt screen partial.
+// NewScreenPartialResource will return a new auth0_prompt_screen_partial (1:1) resource.
 func NewScreenPartialResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createPromptScreenPartial,

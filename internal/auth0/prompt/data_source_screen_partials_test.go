@@ -35,7 +35,7 @@ resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
 }
 
 data "auth0_prompt_screen_partials" "prompt_screen_partials" {
-  	  depends_on = [ auth0_branding.my_brand ]
+  	  depends_on = [ auth0_prompt_screen_partials.prompt_screen_partials ]
 	  prompt_type = auth0_prompt_screen_partials.prompt_screen_partials.prompt_type
 }
 `

@@ -22,7 +22,7 @@ var allowedPromptsWithPartials = []string{
 	string(management.PromptLoginPasswordLess),
 }
 
-// NewScreenPartialsResource creates a new resource for managing prompt screen partials.
+// NewScreenPartialsResource will return a new auth0_prompt_screen_partials (1:many) resource.
 func NewScreenPartialsResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createPromptScreenPartials,

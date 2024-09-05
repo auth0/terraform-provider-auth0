@@ -3,7 +3,10 @@ package prompt
 import (
 	"context"
 	"encoding/json"
+	"io"
+	"net/http"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -15,6 +18,44 @@ import (
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
+const languagesURL = "https://cdn.auth0.com/ulp/react-components/development/languages/available-languages.json"
+
+func fetchLanguages() []string {
+	fallbackAvailableLanguages := []string{
+		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
+		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
+		"sl", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
+	}
+
+	client := http.Client{
+		Timeout: 10 * time.Second, // Set a timeout for the HTTP request.
+	}
+
+	resp, err := client.Get(languagesURL)
+	if err != nil {
+		return fallbackAvailableLanguages
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+	}(resp.Body)
+
+	if resp.StatusCode != http.StatusOK {
+		return fallbackAvailableLanguages
+	}
+
+	var retrievedLanguages []string
+	decoder := json.NewDecoder(resp.Body)
+	if err := decoder.Decode(&retrievedLanguages); err != nil {
+		return fallbackAvailableLanguages
+	}
+
+	if len(retrievedLanguages) == 0 {
+		return fallbackAvailableLanguages
+	}
+
+	return retrievedLanguages
+}
+
 var (
 	availablePrompts = []string{
 		"captcha", "common", "consent", "custom-form", "customized-consent", "device-flow", "email-otp-challenge",
@@ -23,11 +64,8 @@ var (
 		"mfa-sms", "mfa-voice", "mfa-webauthn", "organizations", "passkeys", "phone-identifier-challenge",
 		"phone-identifier-enrollment", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}
-	availableLanguages = []string{
-		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
-		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
-		"sl", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
-	}
+
+	availableLanguages = fetchLanguages()
 )
 
 // NewCustomTextResource will return a new auth0_prompt_custom_text resource.

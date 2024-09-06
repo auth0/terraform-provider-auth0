@@ -13,7 +13,7 @@ BUG FIXES:
 - `resource/auth0_connection`: Remove MinItems validation for precedence. ([#1017](https://github.com/auth0/terraform-provider-auth0/pull/1017))
 
 NOTES:
-- `resource/auth0_prompt_partials`: Deprecated the resource. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+- `resource/auth0_prompt_partials`: Deprecated in favor of `resource/auth0_prompt_screen_partial` and `resource/auth0_prompt_screen_partials`. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
 
 
 ## v1.5.0

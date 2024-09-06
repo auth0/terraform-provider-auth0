@@ -26,7 +26,7 @@ data "auth0_prompt_screen_partials" "prompt_screen_partials" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
-- `screen_partials` (Block Set) The screen partials associated with the prompt type. (see [below for nested schema](#nestedblock--screen_partials))
+- `screen_partials` (Block List) The screen partials associated with the prompt type. (see [below for nested schema](#nestedblock--screen_partials))
 
 <a id="nestedblock--screen_partials"></a>
 ### Nested Schema for `screen_partials`

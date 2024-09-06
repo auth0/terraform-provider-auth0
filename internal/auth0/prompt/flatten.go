@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
@@ -44,7 +45,9 @@ func flattenPromptScreenPartials(data *schema.ResourceData, screenPartials *mana
 }
 
 func flattenPromptScreenPartial(data *schema.ResourceData, partial *management.PromptScreenPartials) error {
-	promptName, screenName := strings.Split(data.Id(), ":")[0], strings.Split(data.Id(), ":")[1]
+	idComponents := strings.Split(data.Id(), ":")
+	promptName, screenName := idComponents[0], idComponents[1]
+
 	var insertionPoints interface{}
 	if partial == nil || (*partial)[management.ScreenName(screenName)] == nil {
 		insertionPoints = nil
@@ -64,14 +67,22 @@ func flattenPromptScreenPartialsList(screenPartials *management.PromptScreenPart
 		return nil
 	}
 
+	screenNames := make([]string, 0, len(*screenPartials))
+	for screenName := range *screenPartials {
+		screenNames = append(screenNames, string(screenName))
+	}
+
+	sort.Strings(screenNames)
+
 	var screenPartialsList []map[string]interface{}
 
-	for screenName, insertionPoints := range *screenPartials {
+	for _, screenName := range screenNames {
+		insertionPoints := (*screenPartials)[management.ScreenName(screenName)]
 		flattenedInsertionPoints := flattenInsertionPoints(insertionPoints)
 
 		screenPartialsList = append(screenPartialsList, map[string]interface{}{
-			"screen_name":      string(screenName),
-			"insertion_points": flattenedInsertionPoints, // This should now be a []map[string]interface{}.
+			"screen_name":      screenName,
+			"insertion_points": flattenedInsertionPoints,
 		})
 	}
 	return screenPartialsList

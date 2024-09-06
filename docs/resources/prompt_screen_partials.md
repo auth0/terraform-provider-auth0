@@ -46,7 +46,7 @@ resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
 
 ### Optional
 
-- `screen_partials` (Block Set) (see [below for nested schema](#nestedblock--screen_partials))
+- `screen_partials` (Block List) (see [below for nested schema](#nestedblock--screen_partials))
 
 ### Read-Only
 

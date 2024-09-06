@@ -130,8 +130,8 @@ func updatePromptScreenPartial(ctx context.Context, data *schema.ResourceData, m
 
 func deletePromptScreenPartial(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	promptName, screenName := strings.Split(data.Id(), ":")[0], strings.Split(data.Id(), ":")[1]
+	idComponents := strings.Split(data.Id(), ":")
+	promptName, screenName := idComponents[0], idComponents[1]
 
 	prompt := management.PromptType(promptName)
 

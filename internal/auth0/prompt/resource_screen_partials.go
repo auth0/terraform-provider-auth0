@@ -43,7 +43,7 @@ func NewScreenPartialsResource() *schema.Resource {
 					"Options are: `" + strings.Join(allowedPromptsWithPartials, "`, `") + "`.",
 			},
 			"screen_partials": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

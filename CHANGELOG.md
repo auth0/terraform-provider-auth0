@@ -3,7 +3,7 @@
 FEATURES:
 - `resource/auth0_prompt_screen_partial`: Add new resource to manage customized sign up and login experience. (1:1) ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
 - `resource/auth0_prompt_screen_partials`: Add new resource to manage customized sign up and login experience. (1:many) ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
-- `data_source/auth0_prompt_screen_partials`: Add new data source to retrieve screen partials. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
+- `data_source/auth0_prompt_screen_partials`: Add new data source to retrieve prompt screen partials. ([#1013](https://github.com/auth0/terraform-provider-auth0/pull/1013))
 
 - ENHANCEMENTS:
 - `resource/auth0_client`: Add Organizations for Client Credentials. ([#1009](https://github.com/auth0/terraform-provider-auth0/pull/1009))

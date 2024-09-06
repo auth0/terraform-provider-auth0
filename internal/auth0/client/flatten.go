@@ -506,6 +506,19 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 	}
 }
 
+func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrganization) []interface{} {
+	do := make(map[string]interface{})
+
+	if defaultOrganization == nil {
+		do["disable"] = true
+	} else {
+		do["flows"] = defaultOrganization.GetFlows()
+		do["organization_id"] = defaultOrganization.GetOrganizationID()
+	}
+
+	return []interface{}{do}
+}
+
 func flattenClient(data *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
@@ -543,6 +556,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("client_metadata", client.GetClientMetadata()),
 		data.Set("oidc_backchannel_logout_urls", client.GetOIDCBackchannelLogout().GetBackChannelLogoutURLs()),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
+		data.Set("default_organization", flattenDefaultOrganization(client.GetDefaultOrganization())),
 	)
 	return result.ErrorOrNil()
 }

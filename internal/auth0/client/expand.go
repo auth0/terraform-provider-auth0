@@ -1,6 +1,8 @@
 package client
 
 import (
+	"encoding/json"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -9,7 +11,12 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandClient(data *schema.ResourceData) *management.Client {
+type nilableClient struct {
+	management.Client
+	DefaultOrganization *management.ClientDefaultOrganization `json:"default_organization"`
+}
+
+func expandClient(data *schema.ResourceData) (interface{}, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
@@ -61,7 +68,46 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		}
 	}
 
-	return client
+	defaultOrg := config.GetAttr("default_organization")
+
+	if !defaultOrg.IsNull() && defaultOrg.LengthInt() > 0 {
+		if defaultOrg.AsValueSlice()[0].GetAttr("disable").True() {
+			clientJSON, err := json.Marshal(client)
+			if err != nil {
+				return nil, err
+			}
+
+			nilableClient := nilableClient{}
+			if err := json.Unmarshal(clientJSON, &nilableClient); err != nil {
+				return nil, err
+			}
+			nilableClient.DefaultOrganization = nil
+			return nilableClient, nil
+		}
+		client.DefaultOrganization = expandDefaultOrganization(data)
+	}
+
+	return client, nil
+}
+
+func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {
+	var defaultOrg management.ClientDefaultOrganization
+
+	defaultOrganizationConfig := data.GetRawConfig().GetAttr("default_organization")
+	if defaultOrganizationConfig.IsNull() {
+		return nil
+	}
+
+	defaultOrganizationConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		defaultOrg.Flows = value.Strings(config.GetAttr("flows"))
+		defaultOrg.OrganizationID = value.String(config.GetAttr("organization_id"))
+		return stop
+	})
+	if defaultOrg == (management.ClientDefaultOrganization{}) {
+		return nil
+	}
+
+	return &defaultOrg
 }
 
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {

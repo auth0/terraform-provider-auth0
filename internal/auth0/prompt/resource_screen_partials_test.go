@@ -35,22 +35,28 @@ const testAccPromptScreenPartialsCreate = testAccPromptScreenPartialWithoutScree
 resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
   depends_on = [ auth0_branding.my_brand ]
   prompt_type = "login-passwordless"
-  screen_partials {
-	screen_name = "login-passwordless-email-code"
-	insertion_points {
-		form_content_start = "<div>Form Content Start</div>"
-		form_content_end = "<div>Form Content End</div>"
-	}
-  }
 
-  screen_partials {
-	screen_name = "login-passwordless-sms-otp"
-	insertion_points {
-		form_content_start = "<div>Form Content Start</div>"
-		form_content_end = "<div>Form Content End</div>"
-	}
+  dynamic "screen_partials" {
+    for_each = [
+      {
+        screen_name = "login-passwordless-email-code"
+        form_content_start = "<div>Form Content Start</div>"
+        form_content_end = "<div>Form Content End</div>"
+      },
+      {
+        screen_name = "login-passwordless-sms-otp"
+        form_content_start = "<div>Form Content Start</div>"
+        form_content_end = "<div>Form Content End</div>"
+      }
+    ]
+    content {
+      screen_name = screen_partials.value.screen_name
+      insertion_points {
+        form_content_start = screen_partials.value.form_content_start
+        form_content_end = screen_partials.value.form_content_end
+      }
+    }
   }
-
 }
 `
 
@@ -90,14 +96,10 @@ func TestAccPromptScreenPartials(t *testing.T) {
 				Config: testAccPromptScreenPartialsCreate,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "prompt_type", "login-passwordless"),
-					resource.TestCheckTypeSetElemNestedAttrs("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.*", map[string]string{
-						"screen_name": "login-passwordless-email-code",
-					}),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.screen_name", "login-passwordless-email-code"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.0.insertion_points.0.form_content_end", "<div>Form Content End</div>"),
-					resource.TestCheckTypeSetElemNestedAttrs("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.*", map[string]string{
-						"screen_name": "login-passwordless-sms-otp",
-					}),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.screen_name", "login-passwordless-sms-otp"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.insertion_points.0.form_content_start", "<div>Form Content Start</div>"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_partials.prompt_screen_partials", "screen_partials.1.insertion_points.0.form_content_end", "<div>Form Content End</div>"),
 				),

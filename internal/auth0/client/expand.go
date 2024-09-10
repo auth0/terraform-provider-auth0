@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -9,7 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandClient(data *schema.ResourceData) *management.Client {
+func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
@@ -62,7 +63,21 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		}
 	}
 
-	return client
+	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
+
+	for _, item := range defaultConfig.AsValueSlice() {
+		disable := item.GetAttr("disable")
+		organizationID := item.GetAttr("organization_id")
+		flows := item.GetAttr("flows")
+
+		if !disable.IsNull() && disable.True() {
+			if (!flows.IsNull() && flows.LengthInt() > 0) || (!organizationID.IsNull() && organizationID.AsString() != "") {
+				return nil, fmt.Errorf("cannot set both disable and either flows/organization_id")
+			}
+		}
+	}
+
+	return client, nil
 }
 
 func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {

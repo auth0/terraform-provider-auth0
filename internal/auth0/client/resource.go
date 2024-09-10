@@ -1277,29 +1277,27 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
+				Computed:    true,
 				Description: "Configure and associate an organization with the Client",
-				//Computed:    true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"flows": {
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem:     &schema.Schema{Type: schema.TypeString},
-							//RequiredWith:  []string{"default_organization.0.organization_id"},
-							//ConflictsWith: []string{"default_organization.0.disable"},
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							Elem:        &schema.Schema{Type: schema.TypeString},
 							Description: "Definition of the flow that needs to be configured. Eg. client_credentials",
 						},
 						"organization_id": {
-							Type:     schema.TypeString,
-							Optional: true,
-							//RequiredWith:  []string{"default_organization.0.flows"},
-							//ConflictsWith: []string{"default_organization.0.disable"},
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
 							Description: "The unique identifier of the organization",
 						},
 						"disable": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							//ConflictsWith: []string{"default_organization.0.organization_id", "default_organization.0.flows"},
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
 							Description: "If set, the `default_organization` will be removed.",
 						},
 					},
@@ -1311,7 +1309,11 @@ func NewResource() *schema.Resource {
 
 func createClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-	client := expandClient(data)
+	client, err := expandClient(data)
+
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
@@ -1336,7 +1338,12 @@ func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if client := expandClient(data); clientHasChange(client) {
+	client, err := expandClient(data)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if clientHasChange(client) {
 		if client.GetAddons() != nil {
 			resetAddons := &management.Client{
 				Addons: &management.ClientAddons{},

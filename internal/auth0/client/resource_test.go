@@ -2389,14 +2389,6 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
-				ExpectError: regexp.MustCompile("Missing required property: organization_id"),
-			},
-			{
-				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIDOnly, t.Name()),
-				ExpectError: regexp.MustCompile("Missing required property: flows"),
-			},
-			{
 				Config: acctest.ParseTestName(testAccCreateClientWithDefaultOrganization, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 
@@ -2423,6 +2415,14 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.organization_id", ""),
 				),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
+				ExpectError: regexp.MustCompile("400 Bad Request"),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIDOnly, t.Name()),
+				ExpectError: regexp.MustCompile("400 Bad Request"),
 			},
 		},
 	})

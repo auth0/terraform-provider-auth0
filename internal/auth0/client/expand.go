@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -108,7 +109,6 @@ func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefa
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {
-
 	if !data.HasChange("default_organization") {
 		return false
 	}
@@ -120,9 +120,7 @@ func isDefaultOrgNull(data *schema.ResourceData) bool {
 		flows := cfg.GetAttr("flows")
 		organizationID := cfg.GetAttr("organization_id")
 
-		if !disable.IsNull() && disable.True() {
-			stop = true
-		} else if flows.IsNull() && organizationID.IsNull() {
+		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
 			stop = true
 		} else {
 			empty = false

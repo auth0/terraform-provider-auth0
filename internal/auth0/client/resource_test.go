@@ -2390,11 +2390,11 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
-				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+				ExpectError: regexp.MustCompile("Missing required property: organization_id"),
 			},
 			{
 				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIDOnly, t.Name()),
-				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+				ExpectError: regexp.MustCompile("Missing required property: flows"),
 			},
 			{
 				Config: acctest.ParseTestName(testAccCreateClientWithDefaultOrganization, t.Name()),

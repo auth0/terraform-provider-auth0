@@ -55,7 +55,7 @@ func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerSc
 }
 
 func isConsentPolicyNull(data *schema.ResourceData) bool {
-	if !data.HasChange("consent_policy") {
+	if !data.IsNewResource() && !data.HasChange("consent_policy") {
 		return false
 	}
 	consentPolicy := value.String(data.GetRawConfig().GetAttr("consent_policy"))
@@ -63,7 +63,7 @@ func isConsentPolicyNull(data *schema.ResourceData) bool {
 }
 
 func expandConsentPolicy(data *schema.ResourceData) *string {
-	if !data.HasChange("consent_policy") {
+	if !data.IsNewResource() && !data.HasChange("consent_policy") {
 		return nil
 	} else if isConsentPolicyNull(data) {
 		return nil
@@ -73,7 +73,7 @@ func expandConsentPolicy(data *schema.ResourceData) *string {
 }
 
 func isAuthorizationDetailsNull(data *schema.ResourceData) bool {
-	if !data.HasChange("authorization_details") {
+	if !data.IsNewResource() && !data.HasChange("authorization_details") {
 		return false
 	}
 	empty := true
@@ -96,7 +96,7 @@ func isAuthorizationDetailsNull(data *schema.ResourceData) bool {
 }
 
 func expandAuthorizationDetails(data *schema.ResourceData) *[]management.ResourceServerAuthorizationDetails {
-	if !data.HasChange("authorization_details") {
+	if !data.IsNewResource() && !data.HasChange("authorization_details") {
 		return nil
 	} else if isAuthorizationDetailsNull(data) {
 		return nil
@@ -121,7 +121,7 @@ func expandAuthorizationDetails(data *schema.ResourceData) *[]management.Resourc
 }
 
 func isTokenEncryptionNull(data *schema.ResourceData) bool {
-	if !data.HasChange("token_encryption") {
+	if !data.IsNewResource() && !data.HasChange("token_encryption") {
 		return false
 	}
 	empty := true
@@ -144,7 +144,7 @@ func isTokenEncryptionNull(data *schema.ResourceData) bool {
 }
 
 func expandTokenEncryption(data *schema.ResourceData) *management.ResourceServerTokenEncryption {
-	if !data.HasChange("token_encryption") {
+	if !data.IsNewResource() && !data.HasChange("token_encryption") {
 		return nil
 	} else if isTokenEncryptionNull(data) {
 		return nil
@@ -189,7 +189,7 @@ func expandTokenEncryptionKey(config cty.Value) *management.ResourceServerTokenE
 }
 
 func isProofOfPossessionNull(data *schema.ResourceData) bool {
-	if !data.HasChange("proof_of_possession") {
+	if !data.IsNewResource() && !data.HasChange("proof_of_possession") {
 		return false
 	}
 	empty := true
@@ -212,7 +212,7 @@ func isProofOfPossessionNull(data *schema.ResourceData) bool {
 }
 
 func expandProofOfPossession(data *schema.ResourceData) *management.ResourceServerProofOfPossession {
-	if !data.HasChange("proof_of_possession") {
+	if !data.IsNewResource() && !data.HasChange("proof_of_possession") {
 		return nil
 	} else if isProofOfPossessionNull(data) {
 		return nil

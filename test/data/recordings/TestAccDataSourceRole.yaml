@@ -35,7 +35,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 171.833042ms
+        duration: 230.279875ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: 306
         uncompressed: false
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 186.969334ms
+        duration: 189.065792ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -91,7 +91,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -101,103 +101,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 157.007416ms
+        duration: 176.161ms
     - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 148.068292ms
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 148.470083ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 119
+        content_length: 26
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}
+            {"token_encryption":null}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -207,13 +137,84 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 220.073625ms
+        duration: 195.215ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 29
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"proof_of_possession":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 196.571875ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 162.37425ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -242,14 +243,85 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 144.834417ms
+        duration: 159.229292ms
     - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 119
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 195.444209ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 193.0345ms
+    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -278,84 +350,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.200292ms
-    - id: 8
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 157.035083ms
-    - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 233
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"permissions":[{"resource_server_identifier":"https://testaccdatasourcerole.matrix.com/","permission_name":"stop:bullets"},{"resource_server_identifier":"https://testaccdatasourcerole.matrix.com/","permission_name":"bring:peace"}]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 2
-        uncompressed: false
-        body: '{}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 154.585667ms
+        duration: 203.651083ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -374,7 +375,78 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 173.610625ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 233
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://testaccdatasourcerole.matrix.com/","permission_name":"stop:bullets"},{"resource_server_identifier":"https://testaccdatasourcerole.matrix.com/","permission_name":"bring:peace"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 346.642959ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -390,8 +462,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 150.378583ms
-    - id: 11
+        duration: 174.757417ms
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -420,84 +492,13 @@ interactions:
         trailer: {}
         content_length: 597
         uncompressed: false
-        body: '{"created_at":"2024-09-06T19:56:22.375Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e665f8bad52ec38940e","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:22.375Z","user_id":"auth0|66db5e665f8bad52ec38940e","username":"testaccdatasourcerole1"}'
+        body: '{"created_at":"2024-09-10T19:42:13.975Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a1158ec876ea516ff4a2","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:13.976Z","user_id":"auth0|66e0a1158ec876ea516ff4a2","username":"testaccdatasourcerole1"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 380.258ms
-    - id: 12
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:22.375Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e665f8bad52ec38940e","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:22.375Z","user_id":"auth0|66db5e665f8bad52ec38940e","username":"testaccdatasourcerole1"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 149.798209ms
-    - id: 13
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 35
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"roles":["rol_hRIBOEUgDpJ7K8si"]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 182.782167ms
+        duration: 388.294333ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -516,7 +517,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2
         method: GET
       response:
         proto: HTTP/2.0
@@ -526,14 +527,85 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        body: '{"created_at":"2024-09-10T19:42:13.975Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a1158ec876ea516ff4a2","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:13.976Z","user_id":"auth0|66e0a1158ec876ea516ff4a2","username":"testaccdatasourcerole1"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 144.999708ms
+        duration: 206.027167ms
     - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 35
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"roles":["rol_LmR90bBh3V7DLCPP"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 189.687209ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles?include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 178.395291ms
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -562,84 +634,13 @@ interactions:
         trailer: {}
         content_length: 597
         uncompressed: false
-        body: '{"created_at":"2024-09-06T19:56:23.193Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e67114d462f666a8598","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:23.193Z","user_id":"auth0|66db5e67114d462f666a8598","username":"testaccdatasourcerole2"}'
+        body: '{"created_at":"2024-09-10T19:42:21.206Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a11d6064cbd20c35e0b9","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:21.206Z","user_id":"auth0|66e0a11d6064cbd20c35e0b9","username":"testaccdatasourcerole2"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 306.298042ms
-    - id: 16
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:23.193Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e67114d462f666a8598","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:23.193Z","user_id":"auth0|66db5e67114d462f666a8598","username":"testaccdatasourcerole2"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 150.61875ms
-    - id: 17
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 35
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"roles":["rol_hRIBOEUgDpJ7K8si"]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 197.827708ms
+        duration: 418.775959ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -658,7 +659,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9
         method: GET
       response:
         proto: HTTP/2.0
@@ -668,48 +669,49 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        body: '{"created_at":"2024-09-10T19:42:21.206Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a11d6064cbd20c35e0b9","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:21.206Z","user_id":"auth0|66e0a11d6064cbd20c35e0b9","username":"testaccdatasourcerole2"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 158.364167ms
+        duration: 165.862209ms
     - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 35
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"roles":["rol_LmR90bBh3V7DLCPP"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+One+-+Acceptance+Test+-+testaccdatasourcerole&page=0&per_page=100
-        method: GET
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles
+        method: POST
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
+        content_length: 0
+        uncompressed: false
+        body: ""
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 152.665542ms
+        status: 204 No Content
+        code: 204
+        duration: 218.188667ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -728,7 +730,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -738,13 +740,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.700583ms
+        duration: 204.987709ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -763,7 +765,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+One+-+Acceptance+Test+-+testaccdatasourcerole&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -773,13 +775,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 171.419667ms
+        duration: 211.980709ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -798,7 +800,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+One+-+Acceptance+Test+-+testaccdatasourcerole&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -808,13 +810,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 159.504791ms
+        duration: 195.679875ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -833,7 +835,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -843,329 +845,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 169.313542ms
+        duration: 203.123542ms
     - id: 24
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 153.359958ms
-    - id: 25
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 146.432167ms
-    - id: 26
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 156.686875ms
-    - id: 27
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 143.1035ms
-    - id: 28
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 159.030875ms
-    - id: 29
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:22.375Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e665f8bad52ec38940e","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:22.375Z","user_id":"auth0|66db5e665f8bad52ec38940e","username":"testaccdatasourcerole1"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 141.556417ms
-    - id: 30
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles?include_totals=true&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 138.793459ms
-    - id: 31
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:23.193Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e67114d462f666a8598","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:23.193Z","user_id":"auth0|66db5e67114d462f666a8598","username":"testaccdatasourcerole2"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 144.956167ms
-    - id: 32
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles?include_totals=true&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 164.587625ms
-    - id: 33
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1193,13 +880,328 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 151.793583ms
+        duration: 195.921542ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 370.00825ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 211.396542ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 147.612334ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 156.040083ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 153.941167ms
+    - id: 30
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 205.988042ms
+    - id: 31
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2024-09-10T19:42:13.975Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a1158ec876ea516ff4a2","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:13.976Z","user_id":"auth0|66e0a1158ec876ea516ff4a2","username":"testaccdatasourcerole1"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 173.271333ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles?include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 193.695667ms
+    - id: 33
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2024-09-10T19:42:21.206Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a11d6064cbd20c35e0b9","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:21.206Z","user_id":"auth0|66e0a11d6064cbd20c35e0b9","username":"testaccdatasourcerole2"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 172.949417ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1218,7 +1220,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -1228,13 +1230,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 174.334291ms
+        duration: 205.711458ms
     - id: 35
       request:
         proto: HTTP/1.1
@@ -1253,7 +1255,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles?include_totals=true&name_filter=The+One+-+Acceptance+Test+-+testaccdatasourcerole&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1263,13 +1265,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":100,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 159.477ms
+        duration: 159.798042ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1288,7 +1290,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1298,13 +1300,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 141.025917ms
+        duration: 196.054917ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1323,7 +1325,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1333,13 +1335,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 151.039667ms
+        duration: 208.908667ms
     - id: 38
       request:
         proto: HTTP/1.1
@@ -1358,7 +1360,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
         method: GET
       response:
         proto: HTTP/2.0
@@ -1368,434 +1370,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.062958ms
+        duration: 161.509917ms
     - id: 39
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 156.702792ms
-    - id: 40
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:22.375Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e665f8bad52ec38940e","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:22.375Z","user_id":"auth0|66db5e665f8bad52ec38940e","username":"testaccdatasourcerole1"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 134.6075ms
-    - id: 41
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles?include_totals=true&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 164.543417ms
-    - id: 42
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:23.193Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e67114d462f666a8598","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:23.193Z","user_id":"auth0|66db5e67114d462f666a8598","username":"testaccdatasourcerole2"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 138.926333ms
-    - id: 43
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles?include_totals=true&per_page=50
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 145.8205ms
-    - id: 44
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 135.846333ms
-    - id: 45
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 141.03525ms
-    - id: 46
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 148.473208ms
-    - id: 47
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 146.513292ms
-    - id: 48
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 149.75675ms
-    - id: 49
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 161.696792ms
-    - id: 50
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 141.894459ms
-    - id: 51
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1823,13 +1405,433 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 162.872375ms
+        duration: 167.625958ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 164.32225ms
+    - id: 41
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 211.146833ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2024-09-10T19:42:13.975Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a1158ec876ea516ff4a2","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:13.976Z","user_id":"auth0|66e0a1158ec876ea516ff4a2","username":"testaccdatasourcerole1"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 174.513875ms
+    - id: 43
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles?include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 163.23025ms
+    - id: 44
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2024-09-10T19:42:21.206Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a11d6064cbd20c35e0b9","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:21.206Z","user_id":"auth0|66e0a11d6064cbd20c35e0b9","username":"testaccdatasourcerole2"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 173.37875ms
+    - id: 45
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles?include_totals=true&per_page=50
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 205.98325ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 154.81025ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 201.929583ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 178.817375ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 192.951792ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 172.216833ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 175.089416ms
     - id: 52
       request:
         proto: HTTP/1.1
@@ -1848,7 +1850,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
         method: GET
       response:
         proto: HTTP/2.0
@@ -1858,13 +1860,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.098375ms
+        duration: 201.057291ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1883,7 +1885,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Ftestaccdatasourcerole.matrix.com%2F
         method: GET
       response:
         proto: HTTP/2.0
@@ -1893,13 +1895,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"bring:peace","description":"Bring peace"},{"value":"stop:bullets","description":"Stop bullets"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 142.283167ms
+        duration: 157.152833ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1918,7 +1920,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
         method: GET
       response:
         proto: HTTP/2.0
@@ -1928,13 +1930,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:22.375Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e665f8bad52ec38940e","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:22.375Z","user_id":"auth0|66db5e665f8bad52ec38940e","username":"testaccdatasourcerole1"}'
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 157.373917ms
+        duration: 169.801125ms
     - id: 55
       request:
         proto: HTTP/1.1
@@ -1953,7 +1955,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
         proto: HTTP/2.0
@@ -1963,13 +1965,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 154.249083ms
+        duration: 157.481125ms
     - id: 56
       request:
         proto: HTTP/1.1
@@ -1988,7 +1990,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2
         method: GET
       response:
         proto: HTTP/2.0
@@ -1998,13 +2000,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2024-09-06T19:56:23.193Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66db5e67114d462f666a8598","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-06T19:56:23.193Z","user_id":"auth0|66db5e67114d462f666a8598","username":"testaccdatasourcerole2"}'
+        body: '{"created_at":"2024-09-10T19:42:13.975Z","email":"testaccdatasourcerole1@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a1158ec876ea516ff4a2","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole1@acceptance.test.com","nickname":"testaccdatasourcerole1","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:13.976Z","user_id":"auth0|66e0a1158ec876ea516ff4a2","username":"testaccdatasourcerole1"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 142.455459ms
+        duration: 169.823042ms
     - id: 57
       request:
         proto: HTTP/1.1
@@ -2023,7 +2025,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles?include_totals=true&per_page=50
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2033,13 +2035,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.210625ms
+        duration: 193.441625ms
     - id: 58
       request:
         proto: HTTP/1.1
@@ -2058,7 +2060,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9
         method: GET
       response:
         proto: HTTP/2.0
@@ -2068,13 +2070,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_hRIBOEUgDpJ7K8si","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
+        body: '{"created_at":"2024-09-10T19:42:21.206Z","email":"testaccdatasourcerole2@acceptance.test.com","email_verified":false,"identities":[{"connection":"Username-Password-Authentication","user_id":"66e0a11d6064cbd20c35e0b9","provider":"auth0","isSocial":false}],"name":"testaccdatasourcerole2@acceptance.test.com","nickname":"testaccdatasourcerole2","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","updated_at":"2024-09-10T19:42:21.206Z","user_id":"auth0|66e0a11d6064cbd20c35e0b9","username":"testaccdatasourcerole2"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.658583ms
+        duration: 195.589542ms
     - id: 59
       request:
         proto: HTTP/1.1
@@ -2093,7 +2095,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles?include_totals=true&per_page=50
         method: GET
       response:
         proto: HTTP/2.0
@@ -2103,13 +2105,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}],"start":0,"limit":50,"total":1}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.609916ms
+        duration: 169.111583ms
     - id: 60
       request:
         proto: HTTP/1.1
@@ -2128,7 +2130,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/users?include_totals=true&page=0&per_page=100
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
         method: GET
       response:
         proto: HTTP/2.0
@@ -2138,49 +2140,48 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"users":[{"user_id":"auth0|66db5e665f8bad52ec38940e","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66db5e67114d462f666a8598","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
+        body: '{"id":"rol_LmR90bBh3V7DLCPP","name":"The One - Acceptance Test - testaccdatasourcerole","description":"The One - Acceptance Test"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 152.158791ms
+        duration: 164.149917ms
     - id: 61
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 35
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"roles":["rol_hRIBOEUgDpJ7K8si"]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598/roles
-        method: DELETE
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions?include_totals=true&page=0&per_page=100
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"bring:peace","description":"Bring peace","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"},{"permission_name":"stop:bullets","description":"Stop bullets","resource_server_name":"Role - Acceptance Test - testaccdatasourcerole","resource_server_identifier":"https://testaccdatasourcerole.matrix.com/"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 150.842792ms
+        status: 200 OK
+        code: 200
+        duration: 210.308667ms
     - id: 62
       request:
         proto: HTTP/1.1
@@ -2199,23 +2200,23 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e67114d462f666a8598
-        method: DELETE
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/users?include_totals=true&page=0&per_page=100
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"users":[{"user_id":"auth0|66e0a1158ec876ea516ff4a2","email":"testaccdatasourcerole1@acceptance.test.com","picture":"https://s.gravatar.com/avatar/09a7904a4325b6787e81151627d9c6c1?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole1@acceptance.test.com"},{"user_id":"auth0|66e0a11d6064cbd20c35e0b9","email":"testaccdatasourcerole2@acceptance.test.com","picture":"https://s.gravatar.com/avatar/24f52deaee80609c2220433ef62e2e2f?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png","name":"testaccdatasourcerole2@acceptance.test.com"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 290.492916ms
+        status: 200 OK
+        code: 200
+        duration: 198.7705ms
     - id: 63
       request:
         proto: HTTP/1.1
@@ -2228,14 +2229,14 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"roles":["rol_hRIBOEUgDpJ7K8si"]}
+            {"roles":["rol_LmR90bBh3V7DLCPP"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e/roles
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9/roles
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2251,7 +2252,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 169.747416ms
+        duration: 160.282083ms
     - id: 64
       request:
         proto: HTTP/1.1
@@ -2270,7 +2271,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66db5e665f8bad52ec38940e
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a11d6064cbd20c35e0b9
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2286,8 +2287,79 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 248.153167ms
+        duration: 218.552584ms
     - id: 65
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 35
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"roles":["rol_LmR90bBh3V7DLCPP"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2/roles
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 172.996ms
+    - id: 66
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C66e0a1158ec876ea516ff4a2
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 253.401166ms
+    - id: 67
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2306,7 +2378,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si/permissions
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP/permissions
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2322,8 +2394,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 149.617125ms
-    - id: 66
+        duration: 163.28475ms
+    - id: 68
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2342,7 +2414,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_hRIBOEUgDpJ7K8si
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_LmR90bBh3V7DLCPP
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2358,8 +2430,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 157.760417ms
-    - id: 67
+        duration: 182.136916ms
+    - id: 69
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2388,14 +2460,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66db5e643a8d38a9b06ee4d4","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"66e0a11320b2fc32cb4cfd23","name":"Role - Acceptance Test - testaccdatasourcerole","identifier":"https://testaccdatasourcerole.matrix.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 205.271958ms
-    - id: 68
+        duration: 222.31425ms
+    - id: 70
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -2413,7 +2485,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66db5e643a8d38a9b06ee4d4
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e0a11320b2fc32cb4cfd23
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2429,4 +2501,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 211.562208ms
+        duration: 207.330208ms

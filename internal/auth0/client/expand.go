@@ -82,7 +82,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 }
 
 func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {
-	if !data.HasChange("default_organization") {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
 		return nil
 	}
 	var defaultOrg management.ClientDefaultOrganization
@@ -109,7 +109,7 @@ func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefa
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {
-	if !data.HasChange("default_organization") {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
 		return false
 	}
 	empty := true

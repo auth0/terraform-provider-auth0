@@ -1,3 +1,10 @@
+## v1.6.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Resolve an issue where default_organization plan failed due to ConflictsWith/RequiredWith clauses in schema ([#1021](https://github.com/auth0/terraform-provider-auth0/pull/1021))
+
+
 ## v1.6.0
 
 FEATURES:

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"encoding/json"
+	"fmt"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -11,12 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-type nilableClient struct {
-	management.Client
-	DefaultOrganization *management.ClientDefaultOrganization `json:"default_organization"`
-}
-
-func expandClient(data *schema.ResourceData) (interface{}, error) {
+func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
@@ -53,6 +48,7 @@ func expandClient(data *schema.ResourceData) (interface{}, error) {
 		Addons:                             expandClientAddons(data),
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
+		DefaultOrganization:                expandDefaultOrganization(data),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -68,46 +64,73 @@ func expandClient(data *schema.ResourceData) (interface{}, error) {
 		}
 	}
 
-	defaultOrg := config.GetAttr("default_organization")
+	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
 
-	if !defaultOrg.IsNull() && defaultOrg.LengthInt() > 0 {
-		if defaultOrg.AsValueSlice()[0].GetAttr("disable").True() {
-			clientJSON, err := json.Marshal(client)
-			if err != nil {
-				return nil, err
-			}
+	for _, item := range defaultConfig.AsValueSlice() {
+		disable := item.GetAttr("disable")
+		organizationID := item.GetAttr("organization_id")
+		flows := item.GetAttr("flows")
 
-			nilableClient := nilableClient{}
-			if err := json.Unmarshal(clientJSON, &nilableClient); err != nil {
-				return nil, err
+		if !disable.IsNull() && disable.True() {
+			if (!flows.IsNull() && flows.LengthInt() > 0) || (!organizationID.IsNull() && organizationID.AsString() != "") {
+				return nil, fmt.Errorf("cannot set both disable and either flows/organization_id")
 			}
-			nilableClient.DefaultOrganization = nil
-			return nilableClient, nil
 		}
-		client.DefaultOrganization = expandDefaultOrganization(data)
 	}
 
 	return client, nil
 }
 
 func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {
-	var defaultOrg management.ClientDefaultOrganization
-
-	defaultOrganizationConfig := data.GetRawConfig().GetAttr("default_organization")
-	if defaultOrganizationConfig.IsNull() {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
 		return nil
 	}
+	var defaultOrg management.ClientDefaultOrganization
 
-	defaultOrganizationConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		defaultOrg.Flows = value.Strings(config.GetAttr("flows"))
-		defaultOrg.OrganizationID = value.String(config.GetAttr("organization_id"))
+	config := data.GetRawConfig().GetAttr("default_organization")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			defaultOrg.Flows = value.Strings(cfg.GetAttr("flows"))
+			defaultOrg.OrganizationID = value.String(cfg.GetAttr("organization_id"))
+		}
 		return stop
-	})
+	}) {
+		// We forced an early return because it was disabled.
+		return nil
+	}
 	if defaultOrg == (management.ClientDefaultOrganization{}) {
 		return nil
 	}
 
 	return &defaultOrg
+}
+
+func isDefaultOrgNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
+		return false
+	}
+	empty := true
+	config := data.GetRawConfig()
+	defaultOrgConfig := config.GetAttr("default_organization")
+	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		flows := cfg.GetAttr("flows")
+		organizationID := cfg.GetAttr("organization_id")
+
+		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+	return empty
 }
 
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {

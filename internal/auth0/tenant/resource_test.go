@@ -2,6 +2,7 @@ package tenant_test
 
 import (
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -54,6 +55,14 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.enable_endpoint_aliases", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.disable", "false"),
 				),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccTenantConfigInvalidACRValuesSupported, t.Name()),
+				ExpectError: regexp.MustCompile(`only one of disable_acr_values_supported and acr_values_supported should be set`),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccTenantConfigInvalidMTLS, t.Name()),
+				ExpectError: regexp.MustCompile(`only one of disable and enable_endpoint_aliases should be set in the mtls block`),
 			},
 			{
 				Config: testAccTenantConfigUpdate,
@@ -193,6 +202,94 @@ resource "auth0_tenant" "my_tenant" {
 
 	mtls {
 		enable_endpoint_aliases = true
+	}
+}
+`
+
+const testAccTenantConfigInvalidACRValuesSupported = `
+resource "auth0_tenant" "my_tenant" {
+	default_directory                             = ""
+	default_audience                              = ""
+	friendly_name                                 = "My Test Tenant"
+	picture_url                                   = "https://mycompany.org/logo.png"
+	support_email                                 = "support@mycompany.org"
+	support_url                                   = "https://mycompany.org/support"
+	default_redirection_uri                       = "https://example.com/login"
+	allowed_logout_urls                           = [ "https://mycompany.org/logoutCallback" ]
+	session_lifetime                              = 720
+	sandbox_version                               = "16"
+	idle_session_lifetime                         = 72
+	enabled_locales                               = ["en", "de", "fr"]
+	disable_acr_values_supported                  = true
+	acr_values_supported                          = ["foo", "bar"]
+
+	allow_organization_name_in_authentication_api = false
+	customize_mfa_in_postlogin_action             = false
+	pushed_authorization_requests_supported       = true
+
+	flags {
+		disable_clickjack_protection_headers   = true
+		enable_public_signup_user_exists_error = true
+		use_scope_descriptions_for_consent     = true
+		remove_alg_from_jwks                   = true
+		no_disclose_enterprise_connections     = false
+		disable_management_api_sms_obfuscation = false
+		disable_fields_map_fix                 = false
+		mfa_show_factor_list_on_enrollment     = false
+	}
+
+	session_cookie {
+		mode = "non-persistent"
+	}
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+	}
+}
+`
+
+const testAccTenantConfigInvalidMTLS = `
+resource "auth0_tenant" "my_tenant" {
+	default_directory                             = ""
+	default_audience                              = ""
+	friendly_name                                 = "My Test Tenant"
+	picture_url                                   = "https://mycompany.org/logo.png"
+	support_email                                 = "support@mycompany.org"
+	support_url                                   = "https://mycompany.org/support"
+	default_redirection_uri                       = "https://example.com/login"
+	allowed_logout_urls                           = [ "https://mycompany.org/logoutCallback" ]
+	session_lifetime                              = 720
+	sandbox_version                               = "16"
+	idle_session_lifetime                         = 72
+	enabled_locales                               = ["en", "de", "fr"]
+	disable_acr_values_supported                  = true
+
+	allow_organization_name_in_authentication_api = false
+	customize_mfa_in_postlogin_action             = false
+	pushed_authorization_requests_supported       = true
+
+	flags {
+		disable_clickjack_protection_headers   = true
+		enable_public_signup_user_exists_error = true
+		use_scope_descriptions_for_consent     = true
+		remove_alg_from_jwks                   = true
+		no_disclose_enterprise_connections     = false
+		disable_management_api_sms_obfuscation = false
+		disable_fields_map_fix                 = false
+		mfa_show_factor_list_on_enrollment     = false
+	}
+
+	session_cookie {
+		mode = "non-persistent"
+	}
+
+	sessions {
+		oidc_logout_prompt_enabled = false
+	}
+
+	mtls {
+		enable_endpoint_aliases = true
+		disable                 = true
 	}
 }
 `

@@ -1,8 +1,11 @@
 package tenant
 
 import (
+	"fmt"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
@@ -110,8 +113,41 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	return &sessions
 }
 
+func validateTenant(data *schema.ResourceData) error {
+	var result *multierror.Error
+	disableACRValues := data.GetRawConfig().GetAttr("disable_acr_values_supported")
+	if !disableACRValues.IsNull() && disableACRValues.True() {
+		acrValues := data.GetRawConfig().GetAttr("acr_values_supported")
+		if !acrValues.IsNull() && acrValues.LengthInt() > 0 {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable_acr_values_supported and acr_values_supported should be set"),
+			)
+		}
+	}
+
+	mtlsConfig := data.GetRawConfig().GetAttr("mtls")
+	if !mtlsConfig.IsNull() {
+		var disable, enableEndpointAliases *bool
+
+		mtlsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			disable = value.Bool(cfg.GetAttr("disable"))
+			enableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
+			return stop
+		})
+		if disable != nil && *disable && enableEndpointAliases != nil {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and enable_endpoint_aliases should be set in the mtls block"),
+			)
+		}
+	}
+
+	return result.ErrorOrNil()
+}
+
 func isACRValuesSupportedNull(data *schema.ResourceData) bool {
-	if !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
+	if !data.IsNewResource() && !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
 		return false
 	}
 	disable := data.GetRawConfig().GetAttr("disable_acr_values_supported")
@@ -119,7 +155,7 @@ func isACRValuesSupportedNull(data *schema.ResourceData) bool {
 }
 
 func expandACRValuesSupported(data *schema.ResourceData) *[]string {
-	if !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
+	if !data.IsNewResource() && !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
 		return nil
 	} else if isACRValuesSupportedNull(data) {
 		return nil
@@ -129,7 +165,7 @@ func expandACRValuesSupported(data *schema.ResourceData) *[]string {
 }
 
 func isMTLSConfigurationNull(data *schema.ResourceData) bool {
-	if !data.HasChange("mtls") {
+	if !data.IsNewResource() && !data.HasChange("mtls") {
 		return false
 	}
 	empty := true
@@ -152,7 +188,7 @@ func isMTLSConfigurationNull(data *schema.ResourceData) bool {
 }
 
 func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSConfiguration {
-	if !data.HasChange("mtls") {
+	if !data.IsNewResource() && !data.HasChange("mtls") {
 		return nil
 	} else if isMTLSConfigurationNull(data) {
 		return nil

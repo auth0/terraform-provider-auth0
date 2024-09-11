@@ -330,21 +330,19 @@ func NewResource() *schema.Resource {
 				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
 			},
 			"acr_values_supported": {
-				Type:          schema.TypeSet,
-				Optional:      true,
-				Computed:      true,
-				ConflictsWith: []string{"disable_acr_values_supported"},
-				Description:   "List of supported ACR values.",
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Computed:    true,
+				Description: "List of supported ACR values.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 			"disable_acr_values_supported": {
-				Type:          schema.TypeBool,
-				Optional:      true,
-				ConflictsWith: []string{"acr_values_supported"},
-				Computed:      true,
-				Description:   "Disable list of supported ACR values.",
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Disable list of supported ACR values.",
 			},
 			"pushed_authorization_requests_supported": {
 				Type:        schema.TypeBool,
@@ -361,16 +359,14 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_endpoint_aliases": {
-							Type:          schema.TypeBool,
-							Optional:      true,
-							ConflictsWith: []string{"mtls.disable"},
-							Description:   "Enable mTLS endpoint aliases.",
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Enable mTLS endpoint aliases.",
 						},
 						"disable": {
-							Type:          schema.TypeBool,
-							Optional:      true,
-							ConflictsWith: []string{"mtls.enable_endpoint_aliases"},
-							Description:   "Disable mTLS settings.",
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Disable mTLS settings.",
 						},
 					},
 				},
@@ -398,12 +394,16 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
+	if err := validateTenant(data); err != nil {
+		return diag.FromErr(err)
+	}
+
 	tenant := expandTenant(data)
 	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
 	// These call should NOT be needed, but the tests fail sometimes if it they not there.
-	time.Sleep(200 * time.Millisecond)
+	time.Sleep(800 * time.Millisecond)
 
 	if isACRValuesSupportedNull(data) {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
@@ -421,7 +421,7 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 			return diag.FromErr(err)
 		}
 	}
-	time.Sleep(200 * time.Millisecond)
+	time.Sleep(800 * time.Millisecond)
 
 	return readTenant(ctx, data, meta)
 }

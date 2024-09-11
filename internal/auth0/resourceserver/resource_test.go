@@ -3,6 +3,7 @@ package resourceserver_test
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -70,6 +71,74 @@ EOF
 	proof_of_possession {
 		mechanism = "mtls"
 		required = true
+	}
+
+}
+`
+
+const testAccResourceServerInvalidAuthorizationDetails = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = false # <--- set to false
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = false
+	consent_policy                                  = "transactional-authorization-with-mfa"
+	authorization_details {
+		disable = true
+		type    = "payment"
+	}
+	authorization_details {
+		type = "not-payment"
+	}
+
+}
+`
+
+const testAccResourceServerInvalidTokenEncryption = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = false # <--- set to false
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = false
+	consent_policy                                  = "transactional-authorization-with-mfa"
+	token_encryption {
+		disable = true
+		format  = "compact-nested-jwe"
+		encryption_key {
+			name      = "encryptkey"
+			algorithm = "RSA-OAEP-256"
+			pem       = <<EOF
+%s
+EOF
+		}
+	}
+
+}
+`
+
+const testAccResourceServerInvalidProofOfPossession = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = false # <--- set to false
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = false
+	consent_policy                                  = "transactional-authorization-with-mfa"
+	proof_of_possession {
+		mechanism = "mtls"
+		required = true
+		disable  = true
 	}
 
 }
@@ -189,6 +258,18 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", ""),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "false"),
 				),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccResourceServerInvalidAuthorizationDetails, t.Name()),
+				ExpectError: regexp.MustCompile(`only one of disable and type should be set in the authorization_details block`),
+			},
+			{
+				Config:      fmt.Sprintf(acctest.ParseTestName(testAccResourceServerInvalidTokenEncryption, t.Name()), credsCert1),
+				ExpectError: regexp.MustCompile(`only one of disable and format or encryption_key should be set in the token_encryption blocks`),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccResourceServerInvalidProofOfPossession, t.Name()),
+				ExpectError: regexp.MustCompile(`only one of disable and mechanism or required should be set in the proof_of_possession block`),
 			},
 			{
 				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerConfigUpdate, t.Name()), credsCert1),

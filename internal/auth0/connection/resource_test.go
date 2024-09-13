@@ -592,6 +592,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.strategy_version", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.user_id_attribute", "userName"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
@@ -615,6 +616,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.identity_api", "azure-active-directory-v1.0"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.user_id_attribute", "email"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
@@ -652,6 +654,7 @@ resource "auth0_connection" "azure_ad" {
 		use_wsfed            = false
 		waad_protocol        = "openid-connect"
 		waad_common_endpoint = false
+		user_id_attribute    = "userName"
 		api_enable_users     = true
 		scopes               = [
 			"basic_profile",
@@ -687,6 +690,7 @@ resource "auth0_connection" "azure_ad" {
 		use_wsfed            = false
 		waad_protocol        = "openid-connect"
 		waad_common_endpoint = false
+		user_id_attribute    = "email"
 		api_enable_users     = true
 		scopes               = [
 			"basic_profile",

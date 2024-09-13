@@ -315,13 +315,14 @@ resource "auth0_connection" "azure_ad" {
   strategy       = "waad"
   show_as_button = true
   options {
-    identity_api     = "azure-active-directory-v1.0"
-    client_id        = "123456"
-    client_secret    = "123456"
-    strategy_version = 2
-    app_id           = "app-id-123"
-    tenant_domain    = "example.onmicrosoft.com"
-    domain           = "example.onmicrosoft.com"
+    identity_api      = "azure-active-directory-v1.0"
+    client_id         = "123456"
+    client_secret     = "123456"
+    strategy_version  = 2
+    user_id_attribute = "userName"
+    app_id            = "app-id-123"
+    tenant_domain     = "example.onmicrosoft.com"
+    domain            = "example.onmicrosoft.com"
     domain_aliases = [
       "example.com",
       "api.example.com"
@@ -751,7 +752,7 @@ Optional:
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
-- `user_id_attribute` (String) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
+- `user_id_attribute` (String) Attribute in the token that will be mapped to the user_id property in Auth0.
 - `userinfo_endpoint` (String) User info endpoint.
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
 - `waad_common_endpoint` (Boolean) Indicates whether to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.

@@ -3,13 +3,14 @@ resource "auth0_connection" "azure_ad" {
   strategy       = "waad"
   show_as_button = true
   options {
-    identity_api     = "azure-active-directory-v1.0"
-    client_id        = "123456"
-    client_secret    = "123456"
-    strategy_version = 2
-    app_id           = "app-id-123"
-    tenant_domain    = "example.onmicrosoft.com"
-    domain           = "example.onmicrosoft.com"
+    identity_api      = "azure-active-directory-v1.0"
+    client_id         = "123456"
+    client_secret     = "123456"
+    strategy_version  = 2
+    user_id_attribute = "userName"
+    app_id            = "app-id-123"
+    tenant_domain     = "example.onmicrosoft.com"
+    domain            = "example.onmicrosoft.com"
     domain_aliases = [
       "example.com",
       "api.example.com"

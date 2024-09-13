@@ -725,6 +725,7 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
 		StrategyVersion:     value.Int(config.GetAttr("strategy_version")),
+		UserIDAttribute:     value.String(config.GetAttr("user_id_attribute")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

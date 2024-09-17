@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -24,6 +26,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readResourceServer,
 		UpdateContext: updateResourceServer,
 		DeleteContext: deleteResourceServer,
+		CustomizeDiff: validateResourceServer,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -256,10 +259,6 @@ func NewResource() *schema.Resource {
 func createResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := validateResourceServer(data); err != nil {
-		return diag.FromErr(err)
-	}
-
 	resourceServer := expandResourceServer(data)
 
 	if err := api.ResourceServer.Create(ctx, resourceServer); err != nil {
@@ -278,10 +277,6 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := validateResourceServer(data); err != nil {
-		return diag.FromErr(err)
-	}
-
 	resourceServer := expandResourceServer(data)
 
 	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
@@ -293,6 +288,84 @@ func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 	}
 
 	return readResourceServer(ctx, data, meta)
+}
+
+func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	var result *multierror.Error
+
+	authorizationDetailsConfig := diff.GetRawConfig().GetAttr("authorization_details")
+	if !authorizationDetailsConfig.IsNull() {
+		disable := false
+		found := false
+
+		authorizationDetailsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("type").IsNull() {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and type should be set in the authorization_details block"),
+			)
+		}
+	}
+
+	tokenEncryptionConfig := diff.GetRawConfig().GetAttr("token_encryption")
+	if !tokenEncryptionConfig.IsNull() {
+		disable := false
+		found := false
+
+		tokenEncryptionConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("format").IsNull() {
+				found = true
+			}
+			if !cfg.GetAttr("encryption_key").IsNull() && cfg.GetAttr("encryption_key").LengthInt() > 0 {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and format or encryption_key should be set in the token_encryption blocks"),
+			)
+		}
+	}
+
+	proofOfPossessionConfig := diff.GetRawConfig().GetAttr("proof_of_possession")
+	if !proofOfPossessionConfig.IsNull() {
+		disable := false
+		found := false
+
+		proofOfPossessionConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("mechanism").IsNull() {
+				found = true
+			}
+			if !cfg.GetAttr("required").IsNull() {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and mechanism or required should be set in the proof_of_possession block"),
+			)
+		}
+	}
+
+	return result.ErrorOrNil()
 }
 
 func fixNullableAttributes(ctx context.Context, data *schema.ResourceData, api *management.Management) error {

@@ -2,9 +2,12 @@ package tenant
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -12,6 +15,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 const (
@@ -26,6 +30,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readTenant,
 		UpdateContext: updateTenant,
 		DeleteContext: deleteTenant,
+		CustomizeDiff: validateTenant,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -391,12 +396,41 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 	return diag.FromErr(flattenTenant(data, tenant))
 }
 
+func validateTenant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	var result *multierror.Error
+	disableACRValues := diff.GetRawConfig().GetAttr("disable_acr_values_supported")
+	if !disableACRValues.IsNull() && disableACRValues.True() {
+		acrValues := diff.GetRawConfig().GetAttr("acr_values_supported")
+		if !acrValues.IsNull() && acrValues.LengthInt() > 0 {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable_acr_values_supported and acr_values_supported should be set"),
+			)
+		}
+	}
+
+	mtlsConfig := diff.GetRawConfig().GetAttr("mtls")
+	if !mtlsConfig.IsNull() {
+		var disable, enableEndpointAliases *bool
+
+		mtlsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			disable = value.Bool(cfg.GetAttr("disable"))
+			enableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
+			return stop
+		})
+		if disable != nil && *disable && enableEndpointAliases != nil {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and enable_endpoint_aliases should be set in the mtls block"),
+			)
+		}
+	}
+
+	return result.ErrorOrNil()
+}
+
 func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	if err := validateTenant(data); err != nil {
-		return diag.FromErr(err)
-	}
 
 	tenant := expandTenant(data)
 	if err := api.Tenant.Update(ctx, tenant); err != nil {

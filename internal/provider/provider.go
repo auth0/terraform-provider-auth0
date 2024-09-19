@@ -14,6 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkey"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
@@ -107,6 +108,7 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":    customdomain.NewVerificationResource(),
 			"auth0_email_provider":                email.NewResource(),
 			"auth0_email_template":                email.NewTemplateResource(),
+			"auth0_encryption_key":                encryptionkey.NewEncryptionKeyResource(),
 			"auth0_guardian":                      guardian.NewResource(),
 			"auth0_hook":                          hook.NewResource(),
 			"auth0_log_stream":                    logstream.NewResource(),
@@ -131,13 +133,13 @@ func New() *schema.Provider {
 			"auth0_role_permissions":              role.NewPermissionsResource(),
 			"auth0_rule":                          rule.NewResource(),
 			"auth0_rule_config":                   rule.NewConfigResource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 			"auth0_tenant":                        tenant.NewResource(),
 			"auth0_user":                          user.NewResource(),
 			"auth0_user_permission":               user.NewPermissionResource(),
 			"auth0_user_permissions":              user.NewPermissionsResource(),
 			"auth0_user_role":                     user.NewRoleResource(),
 			"auth0_user_roles":                    user.NewRolesResource(),
-			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
@@ -149,13 +151,13 @@ func New() *schema.Provider {
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
+			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_resource_server":               resourceserver.NewDataSource(),
 			"auth0_role":                          role.NewDataSource(),
+			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_signing_keys":                  signingkey.NewDataSource(),
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
-			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
-			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 		},
 	}
 

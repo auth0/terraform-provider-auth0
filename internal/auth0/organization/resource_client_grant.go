@@ -56,13 +56,7 @@ func readOrganizationClientGrant(ctx context.Context, data *schema.ResourceData,
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
-
-	// ClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, organizationID).
-
 	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
-	// If err != nil {
-	//	return nil, err
-	//}.
 
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

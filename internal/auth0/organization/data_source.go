@@ -198,9 +198,5 @@ func fetchAllOrganizationClientGrants(
 		return nil, err
 	}
 
-	if clientGrantList == nil {
-		return nil, nil
-	}
-
 	return clientGrantList.ClientGrants, nil
 }

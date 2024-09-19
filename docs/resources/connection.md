@@ -31,6 +31,7 @@ resource "auth0_connection" "my_connection" {
   options {
     password_policy                = "excellent"
     brute_force_protection         = true
+    strategy_version               = 2
     enabled_database_customization = true
     import_mode                    = false
     requires_username              = true
@@ -253,6 +254,7 @@ resource "auth0_connection" "oauth2" {
   options {
     client_id              = "<client-id>"
     client_secret          = "<client-secret>"
+    strategy_version       = 2
     scopes                 = ["basic_profile", "profile", "email"]
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
@@ -284,6 +286,7 @@ resource "auth0_connection" "ad" {
     disable_self_service_change_password = true
     brute_force_protection               = true
     tenant_domain                        = "example.com"
+    strategy_version                     = 2
     icon_url                             = "https://example.com/assets/logo.png"
     domain_aliases = [
       "example.com",
@@ -312,12 +315,13 @@ resource "auth0_connection" "azure_ad" {
   strategy       = "waad"
   show_as_button = true
   options {
-    identity_api  = "azure-active-directory-v1.0"
-    client_id     = "123456"
-    client_secret = "123456"
-    app_id        = "app-id-123"
-    tenant_domain = "example.onmicrosoft.com"
-    domain        = "example.onmicrosoft.com"
+    identity_api     = "azure-active-directory-v1.0"
+    client_id        = "123456"
+    client_secret    = "123456"
+    strategy_version = 2
+    app_id           = "app-id-123"
+    tenant_domain    = "example.onmicrosoft.com"
+    domain           = "example.onmicrosoft.com"
     domain_aliases = [
       "example.com",
       "api.example.com"
@@ -468,6 +472,7 @@ resource "auth0_connection" "samlp" {
     sign_in_endpoint    = "https://saml.provider/sign_in"
     sign_out_endpoint   = "https://saml.provider/sign_out"
     disable_sign_out    = true
+    strategy_version    = 2
     tenant_domain       = "example.com"
     domain_aliases      = ["example.com", "alias.example.com"]
     protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"

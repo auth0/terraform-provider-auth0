@@ -138,6 +138,7 @@ func New() *schema.Provider {
 			"auth0_user_role":                     user.NewRoleResource(),
 			"auth0_user_roles":                    user.NewRolesResource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
+			"auth0_organization_client_grant":     organization.NewOrganizationClientGrantResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),

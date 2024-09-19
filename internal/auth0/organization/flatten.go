@@ -22,11 +22,13 @@ func flattenOrganizationForDataSource(
 	organization *management.Organization,
 	connections []*management.OrganizationConnection,
 	members []management.OrganizationMember,
+	clientGrants []*management.ClientGrant,
 ) error {
 	result := multierror.Append(
 		flattenOrganization(data, organization),
 		data.Set("connections", flattenOrganizationEnabledConnections(connections)),
 		data.Set("members", flattenOrganizationMembersSlice(members)),
+		data.Set("client_grants", flattenOrganizationClientGrantsSlice(clientGrants)),
 	)
 
 	return result.ErrorOrNil()
@@ -112,4 +114,15 @@ func flattenOrganizationMembersSlice(members []management.OrganizationMember) []
 	}
 
 	return flattenedMembers
+}
+
+func flattenOrganizationClientGrantsSlice(clientGrants []*management.ClientGrant) []string {
+	if len(clientGrants) == 0 {
+		return nil
+	}
+	flattenedClientGrants := make([]string, 0)
+	for _, grant := range clientGrants {
+		flattenedClientGrants = append(flattenedClientGrants, grant.GetID())
+	}
+	return flattenedClientGrants
 }

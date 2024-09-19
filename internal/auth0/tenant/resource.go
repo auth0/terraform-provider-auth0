@@ -418,7 +418,7 @@ func validateTenant(_ context.Context, diff *schema.ResourceDiff, _ interface{})
 			enableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
 			return stop
 		})
-		if disable != nil && *disable && enableEndpointAliases != nil {
+		if disable != nil && *disable && enableEndpointAliases != nil && *enableEndpointAliases {
 			result = multierror.Append(
 				result,
 				fmt.Errorf("only one of disable and enable_endpoint_aliases should be set in the mtls block"),

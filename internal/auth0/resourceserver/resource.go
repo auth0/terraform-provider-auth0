@@ -352,7 +352,7 @@ func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ inte
 			if !cfg.GetAttr("mechanism").IsNull() {
 				found = true
 			}
-			if !cfg.GetAttr("required").IsNull() {
+			if !cfg.GetAttr("required").IsNull() && cfg.GetAttr("required").True() {
 				found = true
 			}
 			return stop

@@ -945,5 +945,13 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.Scope = value.Strings(cfg.GetAttr("scopes"))
 	}
 
+	if data.IsNewResource() || data.HasChange("allow_any_organization") {
+		clientGrant.AllowAnyOrganization = value.Bool(cfg.GetAttr("allow_any_organization"))
+	}
+
+	if data.IsNewResource() || data.HasChange("organization_usage") {
+		clientGrant.OrganizationUsage = value.String(cfg.GetAttr("organization_usage"))
+	}
+
 	return clientGrant
 }

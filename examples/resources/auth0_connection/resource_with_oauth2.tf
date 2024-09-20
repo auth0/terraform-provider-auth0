@@ -7,6 +7,7 @@ resource "auth0_connection" "oauth2" {
   options {
     client_id              = "<client-id>"
     client_secret          = "<client-secret>"
+    strategy_version       = 2
     scopes                 = ["basic_profile", "profile", "email"]
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"

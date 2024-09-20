@@ -1,290 +1,285 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 336
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","strategy":"linkedin","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["r_emailaddress","r_liteprofile","r_basicprofile"]},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 212
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"is_domain_connection":false,"options":{"client_id":"client_id_update","client_secret":"client_secret_update","strategy_version":2,"email":false,"profile":true,"basic_profile":true,"non_persistent_attrs":null}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_DUbnzTUJXSQilo5b","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_DUbnzTUJXSQilo5b
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 308
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","strategy":"linkedin","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 480
+        uncompressed: false
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"email":true,"profile":true,"basic_profile":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["r_emailaddress","r_liteprofile","r_basicprofile"]},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 162.230334ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 153.76425ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 137.802458ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":true,"scope":["r_emailaddress","r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id","basic_profile":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 134.189541ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 184
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"is_domain_connection":false,"options":{"client_id":"client_id_update","client_secret":"client_secret_update","strategy_version":2,"email":false,"profile":true,"basic_profile":true}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 157.643542ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 144.162417ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_OBZprCgrid0WdxL4","options":{"email":false,"scope":["r_liteprofile","r_basicprofile"],"profile":true,"client_id":"client_id_update","basic_profile":true,"client_secret":"client_secret_update","strategy_version":2},"strategy":"linkedin","name":"Acceptance-Test-Linkedin-TestAccConnectionLinkedin","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Linkedin-TestAccConnectionLinkedin"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 141.643375ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_OBZprCgrid0WdxL4
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2024-09-12T21:26:45.027Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 157.493458ms

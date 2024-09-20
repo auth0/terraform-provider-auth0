@@ -323,6 +323,7 @@ func flattenConnectionOptionsAuth0(
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"upstream_params":                      upstreamParams,
 		"precedence":                           options.GetPrecedence(),
+		"strategy_version":                     options.GetStrategyVersion(),
 	}
 
 	if options.Attributes != nil {
@@ -450,6 +451,7 @@ func flattenConnectionOptionsOAuth2(
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
+		"strategy_version":         options.GetStrategyVersion(),
 		"upstream_params":          upstreamParams,
 	}
 
@@ -813,6 +815,7 @@ func flattenConnectionOptionsAD(
 		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"disable_self_service_change_password": options.GetDisableSelfServiceChangePassword(),
+		"strategy_version":                     options.GetStrategyVersion(),
 		"upstream_params":                      upstreamParams,
 	}
 
@@ -855,6 +858,7 @@ func flattenConnectionOptionsAzureAD(
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"strategy_version":                       options.GetStrategyVersion(),
 		"upstream_params":                        upstreamParams,
 	}
 
@@ -890,6 +894,7 @@ func flattenConnectionOptionsADFS(
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"strategy_version":                       options.GetStrategyVersion(),
 		"upstream_params":                        upstreamParams,
 	}
 
@@ -939,6 +944,7 @@ func flattenConnectionOptionsSAML(
 		"metadata_url":             options.GetMetadataURL(),
 		"metadata_xml":             data.Get("options.0.metadata_xml").(string), // Does not get read back.
 		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"strategy_version":         options.GetStrategyVersion(),
 		"fields_map":               fieldsMap,
 		"upstream_params":          upstreamParams,
 	}

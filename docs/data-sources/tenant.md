@@ -19,12 +19,14 @@ data "auth0_tenant" "my_tenant" {}
 
 ### Read-Only
 
+- `acr_values_supported` (Set of String) List of supported ACR values.
 - `allow_organization_name_in_authentication_api` (Boolean) Whether to accept an organization name instead of an ID on auth endpoints.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `customize_mfa_in_postlogin_action` (Boolean) Whether to enable flexible factors for MFA in the PostLogin action.
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
+- `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `domain` (String) Your Auth0 domain name.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
 - `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
@@ -32,7 +34,9 @@ data "auth0_tenant" "my_tenant" {}
 - `id` (String) The ID of this resource.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.
+- `mtls` (List of Object) Configuration for mTLS. (see [below for nested schema](#nestedatt--mtls))
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
+- `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
 - `session_cookie` (List of Object) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedatt--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
@@ -66,9 +70,19 @@ Read-Only:
 - `enable_sso` (Boolean)
 - `mfa_show_factor_list_on_enrollment` (Boolean)
 - `no_disclose_enterprise_connections` (Boolean)
+- `remove_alg_from_jwks` (Boolean)
 - `require_pushed_authorization_requests` (Boolean)
 - `revoke_refresh_token_grant` (Boolean)
 - `use_scope_descriptions_for_consent` (Boolean)
+
+
+<a id="nestedatt--mtls"></a>
+### Nested Schema for `mtls`
+
+Read-Only:
+
+- `disable` (Boolean)
+- `enable_endpoint_aliases` (Boolean)
 
 
 <a id="nestedatt--session_cookie"></a>

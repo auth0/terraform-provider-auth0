@@ -859,6 +859,7 @@ func flattenConnectionOptionsAzureAD(
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"set_user_root_attributes":               options.GetSetUserAttributes(),
 		"strategy_version":                       options.GetStrategyVersion(),
+		"user_id_attribute":                      options.GetUserIDAttribute(),
 		"upstream_params":                        upstreamParams,
 	}
 

@@ -689,7 +689,7 @@ var optionsSchema = &schema.Schema{
 			"user_id_attribute": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Attribute in the SAML token that will be mapped to the user_id property in Auth0.",
+				Description: "Attribute in the token that will be mapped to the user_id property in Auth0.",
 			},
 			"idp_initiated": {
 				Type:     schema.TypeList,

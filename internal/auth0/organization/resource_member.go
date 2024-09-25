@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -49,6 +50,7 @@ func createOrganizationMember(ctx context.Context, data *schema.ResourceData, me
 	}
 
 	internalSchema.SetResourceGroupID(data, organizationID, userID)
+	time.Sleep(500 * time.Millisecond)
 
 	return readOrganizationMember(ctx, data, meta)
 }

@@ -15,13 +15,14 @@ resource "auth0_organization" "my_organization" {
 }
 
 resource "auth0_resource_server" "new_resource_server" {
+    depends_on = [ auth0_organization.my_organization ]
     name       = "Example API"
     identifier = "https://api.travel00123.com/"
 }
 
 
 resource "auth0_client" "my_test_client"{
-    depends_on = [ auth0_organization.my_organization, auth0_client.my_test_client ]
+    depends_on = [ auth0_organization.my_organization, auth0_resource_server.new_resource_server ]
     name = "test_client"
     organization_usage = "allow"
     default_organization {
@@ -53,7 +54,7 @@ data "auth0_organization" "retrieve_org_data" {
 
 `
 
-func TestOrganizationClientGrant(t *testing.T) {
+func TestAccOrganizationClientGrant(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{

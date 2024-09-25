@@ -10,9 +10,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
+	"github.com/auth0/terraform-provider-auth0/internal/go-vcr.v3/recorder"
 	"github.com/auth0/terraform-provider-auth0/internal/provider"
 )
 

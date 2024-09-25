@@ -11,11 +11,12 @@ Resource to allow the rekeying of your tenant master key.
 ## Example Usage
 
 ```terraform
-resource "auth0_encryption_key" "my_encryption_keys_dont_rekey" {
+resource "auth0_encryption_key" "my_encryption_key_initial" {
+  key_rotation_id = "da9f2f3b-1c7e-4245-8982-9a25da8407c4"
 }
 
-resource "auth0_encryption_key" "my_encryption_keys_rekey" {
-  rekey = true
+resource "auth0_encryption_key" "my_encryption_key_rekey" {
+  key_rotation_id = "68feba2c-7768-40f3-9d71-4b91e0233abf"
 }
 ```
 
@@ -24,7 +25,7 @@ resource "auth0_encryption_key" "my_encryption_keys_rekey" {
 
 ### Optional
 
-- `rekey` (Boolean) If set to `true`, the encryption keys will be rotated.
+- `key_rotation_id` (String) If set to to a new value, the encryption keys will be rotated.
 
 ### Read-Only
 
@@ -54,5 +55,5 @@ Import is supported using the following syntax:
 # We recommend [Version 4 UUID](https://www.uuidgenerator.net/version4)
 #
 # Example:
-terraform import auth0_encryption_key.my_keys "6f0519ad-ea35-44a3-9b0e-ac9c631612c2"
+terraform import auth0_encryption_key.my_key "6f0519ad-ea35-44a3-9b0e-ac9c631612c2"
 ```

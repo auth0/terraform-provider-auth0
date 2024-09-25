@@ -13,16 +13,16 @@ import (
 // NewEncryptionKeyResource will return a new auth0_encryption_keys resource.
 func NewEncryptionKeyResource() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: createEncryptionKeys,
-		UpdateContext: updateEncryptionKeys,
-		ReadContext:   readEncryptionKeys,
-		DeleteContext: deleteEncryptionKeys,
+		CreateContext: createEncryptionKey,
+		UpdateContext: updateEncryptionKey,
+		ReadContext:   readEncryptionKey,
+		DeleteContext: deleteEncryptionKey,
 		Description:   "Resource to allow the rekeying of your tenant master key.",
 		Schema: map[string]*schema.Schema{
-			"rekey": {
-				Type:        schema.TypeBool,
+			"key_rotation_id": {
+				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "If set to `true`, the encryption keys will be rotated.",
+				Description: "If set to to a new value, the encryption keys will be rotated.",
 			},
 			"encryption_keys": {
 				Type:        schema.TypeList,
@@ -70,28 +70,28 @@ func NewEncryptionKeyResource() *schema.Resource {
 	}
 }
 
-func createEncryptionKeys(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func createEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 
-	return updateEncryptionKeys(ctx, data, meta)
+	return updateEncryptionKey(ctx, data, meta)
 }
 
-func updateEncryptionKeys(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func updateEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if data.IsNewResource() || data.HasChange("rekey") {
-		rekey := data.GetRawConfig().GetAttr("rekey")
-		if !rekey.IsNull() && rekey.True() {
+	if data.IsNewResource() || data.HasChange("key_rotation_id") {
+		keyRotationID := data.GetRawConfig().GetAttr("key_rotation_id")
+		if !keyRotationID.IsNull() && len(keyRotationID.AsString()) > 0 {
 			if err := api.EncryptionKey.Rekey(ctx); err != nil {
 				return diag.FromErr(err)
 			}
 		}
 	}
 
-	return readEncryptionKeys(ctx, data, meta)
+	return readEncryptionKey(ctx, data, meta)
 }
 
-func readEncryptionKeys(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	encryptionKeys, err := api.EncryptionKey.List(ctx)
@@ -104,6 +104,6 @@ func readEncryptionKeys(ctx context.Context, data *schema.ResourceData, meta int
 	return diag.FromErr(data.Set("encryption_keys", flattenEncryptionKeys(encryptionKeys.Keys)))
 }
 
-func deleteEncryptionKeys(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
+func deleteEncryptionKey(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
 }

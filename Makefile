@@ -123,7 +123,6 @@ test-acc: ## Run acceptance tests with http recordings. To run a specific test, 
 	@terraform version; \
 		AUTH0_HTTP_RECORDINGS=on \
 		AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com \
-		TF_LOG=DEBUG \
 		TF_ACC=1 \
 		go test \
 		-v \

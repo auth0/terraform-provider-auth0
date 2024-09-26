@@ -258,7 +258,6 @@ func NewResource() *schema.Resource {
 }
 
 func createResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	fmt.Printf("DEBUG: CRAIG: createResourceServer\n")
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServer := expandResourceServer(data)
@@ -278,7 +277,6 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 }
 
 func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	fmt.Printf("DEBUG: CRAIG: updateResourceServer\n")
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServer := expandResourceServer(data)
@@ -410,7 +408,6 @@ func fixNullableAttributes(ctx context.Context, data *schema.ResourceData, api *
 }
 
 func readResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	fmt.Printf("DEBUG: CRAIG: readResourceServer\n")
 	api := meta.(*config.Config).GetAPI()
 
 	resourceServer, err := api.ResourceServer.Read(ctx, data.Id())
@@ -426,7 +423,6 @@ func readResourceServer(ctx context.Context, data *schema.ResourceData, meta int
 }
 
 func deleteResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	fmt.Printf("DEBUG: CRAIG: deleteResourceServer\n")
 	if resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		return nil
 	}

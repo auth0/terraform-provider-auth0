@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
 	"os"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
@@ -141,6 +142,7 @@ func New() *schema.Provider {
 			"auth0_user_roles":                    user.NewRolesResource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 			"auth0_form":                          form.NewResource(),
+			"auth0_flow":                          flow.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
@@ -160,6 +162,7 @@ func New() *schema.Provider {
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_form":                          form.NewDataSource(),
+			"auth0_flow":                          flow.NewDataSource(),
 		},
 	}
 

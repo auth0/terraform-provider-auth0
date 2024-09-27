@@ -14,7 +14,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkey"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkeymanager"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
@@ -108,7 +108,7 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":    customdomain.NewVerificationResource(),
 			"auth0_email_provider":                email.NewResource(),
 			"auth0_email_template":                email.NewTemplateResource(),
-			"auth0_encryption_key":                encryptionkey.NewEncryptionKeyResource(),
+			"auth0_encryption_key_manager":        encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_guardian":                      guardian.NewResource(),
 			"auth0_hook":                          hook.NewResource(),
 			"auth0_log_stream":                    logstream.NewResource(),

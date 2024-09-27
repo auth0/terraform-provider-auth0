@@ -1,4 +1,4 @@
-package encryptionkey_test
+package encryptionkeymanager_test
 
 import (
 	"fmt"
@@ -14,28 +14,28 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccEncryptionKeyCreate = `
-resource "auth0_encryption_key" "my_key" { }
+const testAccEncryptionKeyManagerCreate = `
+resource "auth0_encryption_key_manager" "my_key_manager" { }
 `
 
-const testAccEncryptionKeyFirstRotation = `
-resource "auth0_encryption_key" "my_key" {
+const testAccEncryptionKeyManagerFirstRotation = `
+resource "auth0_encryption_key_manager" "my_key_manager" {
 	key_rotation_id = "initial_value"
 }
 `
 
-const testAccEncryptionKeySecondRotation = `
-resource "auth0_encryption_key" "my_key" {
+const testAccEncryptionKeyManagerSecondRotation = `
+resource "auth0_encryption_key_manager" "my_key_manager" {
 	key_rotation_id = "changed_value"
 }
 `
 
-const testAccEncryptionKeyUnsetRotation = `
-resource "auth0_encryption_key" "my_key" {
+const testAccEncryptionKeyManagerUnsetRotation = `
+resource "auth0_encryption_key_manager" "my_key_manager" {
 }
 `
 
-func TestAccEncryptionKey(t *testing.T) {
+func TestAccEncryptionKeyManager(t *testing.T) {
 	initialKey := make(map[string]string)
 	firstRotationKey := make(map[string]string)
 	secondRotationKey := make(map[string]string)
@@ -44,10 +44,10 @@ func TestAccEncryptionKey(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: testAccEncryptionKeyCreate,
+				Config: testAccEncryptionKeyManagerCreate,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr("auth0_encryption_key.my_key", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
-					extractActiveKey("auth0_encryption_key.my_key", "encryption_keys", "tenant-master-key", &initialKey),
+					resource.TestMatchResourceAttr("auth0_encryption_key_manager.my_key_manager", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
+					extractActiveKey("auth0_encryption_key_manager.my_key_manager", "encryption_keys", "tenant-master-key", &initialKey),
 					func(_ *terraform.State) error {
 						keyID, ok := initialKey["key_id"]
 						assert.True(t, ok && len(keyID) > 0, "key_id should exist")
@@ -65,10 +65,10 @@ func TestAccEncryptionKey(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccEncryptionKeyFirstRotation,
+				Config: testAccEncryptionKeyManagerFirstRotation,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr("auth0_encryption_key.my_key", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
-					extractActiveKey("auth0_encryption_key.my_key", "encryption_keys", "tenant-master-key", &firstRotationKey),
+					resource.TestMatchResourceAttr("auth0_encryption_key_manager.my_key_manager", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
+					extractActiveKey("auth0_encryption_key_manager.my_key_manager", "encryption_keys", "tenant-master-key", &firstRotationKey),
 					func(_ *terraform.State) error {
 						keyID, ok := firstRotationKey["key_id"]
 						assert.True(t, ok && len(keyID) > 0, "key_id should exist")
@@ -87,10 +87,10 @@ func TestAccEncryptionKey(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccEncryptionKeySecondRotation,
+				Config: testAccEncryptionKeyManagerSecondRotation,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr("auth0_encryption_key.my_key", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
-					extractActiveKey("auth0_encryption_key.my_key", "encryption_keys", "tenant-master-key", &secondRotationKey),
+					resource.TestMatchResourceAttr("auth0_encryption_key_manager.my_key_manager", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
+					extractActiveKey("auth0_encryption_key_manager.my_key_manager", "encryption_keys", "tenant-master-key", &secondRotationKey),
 					func(_ *terraform.State) error {
 						keyID, ok := secondRotationKey["key_id"]
 						assert.True(t, ok && len(keyID) > 0, "key_id should exist")
@@ -109,10 +109,10 @@ func TestAccEncryptionKey(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccEncryptionKeyUnsetRotation,
+				Config: testAccEncryptionKeyManagerUnsetRotation,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr("auth0_encryption_key.my_key", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
-					extractActiveKey("auth0_encryption_key.my_key", "encryption_keys", "tenant-master-key", &unsetRotationKey),
+					resource.TestMatchResourceAttr("auth0_encryption_key_manager.my_key_manager", "encryption_keys.#", regexp.MustCompile("^[1-9][0-9]*")),
+					extractActiveKey("auth0_encryption_key_manager.my_key_manager", "encryption_keys", "tenant-master-key", &unsetRotationKey),
 					func(_ *terraform.State) error {
 						keyID, ok := unsetRotationKey["key_id"]
 						assert.True(t, ok && len(keyID) > 0, "key_id should exist")

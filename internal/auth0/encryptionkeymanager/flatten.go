@@ -1,4 +1,4 @@
-package encryptionkey
+package encryptionkeymanager
 
 import (
 	"github.com/auth0/go-auth0/management"

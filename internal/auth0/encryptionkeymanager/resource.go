@@ -1,4 +1,4 @@
-package encryptionkey
+package encryptionkeymanager
 
 import (
 	"context"
@@ -10,19 +10,19 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
-// NewEncryptionKeyResource will return a new auth0_encryption_keys resource.
-func NewEncryptionKeyResource() *schema.Resource {
+// NewEncryptionKeyManagerResource will return a new auth0_encryption_key_manager resource.
+func NewEncryptionKeyManagerResource() *schema.Resource {
 	return &schema.Resource{
-		CreateContext: createEncryptionKey,
-		UpdateContext: updateEncryptionKey,
-		ReadContext:   readEncryptionKey,
-		DeleteContext: deleteEncryptionKey,
+		CreateContext: createEncryptionKeyManager,
+		UpdateContext: updateEncryptionKeyManager,
+		ReadContext:   readEncryptionKeyManager,
+		DeleteContext: deleteEncryptionKeyManager,
 		Description:   "Resource to allow the rekeying of your tenant master key.",
 		Schema: map[string]*schema.Schema{
 			"key_rotation_id": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "If set to to a new value, the encryption keys will be rotated.",
+				Description: "If this value is changed, the encryption keys will be rotated. A UUID is recommended for the `key_rotation_id`.",
 			},
 			"encryption_keys": {
 				Type:        schema.TypeList,
@@ -70,16 +70,16 @@ func NewEncryptionKeyResource() *schema.Resource {
 	}
 }
 
-func createEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func createEncryptionKeyManager(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	data.SetId(id.UniqueId())
 
-	return updateEncryptionKey(ctx, data, meta)
+	return updateEncryptionKeyManager(ctx, data, meta)
 }
 
-func updateEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func updateEncryptionKeyManager(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if data.IsNewResource() || data.HasChange("key_rotation_id") {
+	if !data.IsNewResource() && data.HasChange("key_rotation_id") {
 		keyRotationID := data.GetRawConfig().GetAttr("key_rotation_id")
 		if !keyRotationID.IsNull() && len(keyRotationID.AsString()) > 0 {
 			if err := api.EncryptionKey.Rekey(ctx); err != nil {
@@ -88,10 +88,10 @@ func updateEncryptionKey(ctx context.Context, data *schema.ResourceData, meta in
 		}
 	}
 
-	return readEncryptionKey(ctx, data, meta)
+	return readEncryptionKeyManager(ctx, data, meta)
 }
 
-func readEncryptionKey(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readEncryptionKeyManager(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	encryptionKeys, err := api.EncryptionKey.List(ctx)
@@ -104,6 +104,6 @@ func readEncryptionKey(ctx context.Context, data *schema.ResourceData, meta inte
 	return diag.FromErr(data.Set("encryption_keys", flattenEncryptionKeys(encryptionKeys.Keys)))
 }
 
-func deleteEncryptionKey(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
+func deleteEncryptionKeyManager(_ context.Context, _ *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	return nil
 }

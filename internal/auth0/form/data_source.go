@@ -12,7 +12,7 @@ import (
 // NewDataSource will return a new auth0_form data source.
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: readSelfServiceProfileForDataSource,
+		ReadContext: readFormDataSource,
 		Description: "Data source to retrieve a specific Auth0 Form by `id`",
 		Schema:      dataSourceSchema(),
 	}
@@ -29,7 +29,7 @@ func dataSourceSchema() map[string]*schema.Schema {
 	return dataSourceSchema
 }
 
-func readSelfServiceProfileForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func readFormDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 	id := data.Get("id").(string)
 	data.SetId(id)

@@ -164,6 +164,9 @@ func updateForm(ctx context.Context, data *schema.ResourceData, meta interface{}
 		}
 	}
 
+	// TODO:
+	// _ = data.Set("ending", nil)
+
 	return readForm(ctx, data, meta)
 }
 

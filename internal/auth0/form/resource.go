@@ -2,14 +2,16 @@ package form
 
 import (
 	"context"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	"net/http"
+	"time"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-	"net/http"
-	"time"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewResource will return a new auth0_form resource.
@@ -165,7 +167,7 @@ func updateForm(ctx context.Context, data *schema.ResourceData, meta interface{}
 	}
 
 	// TODO:
-	// _ = data.Set("ending", nil)
+	// _ = data.Set("ending", nil).
 
 	return readForm(ctx, data, meta)
 }

@@ -2,6 +2,7 @@ package form
 
 import (
 	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -9,7 +10,6 @@ import (
 )
 
 func flattenForm(data *schema.ResourceData, form *management.Form) error {
-
 	formStyle, err := structure.FlattenJsonToString(form.GetStyle())
 	if err != nil {
 		return err
@@ -95,7 +95,6 @@ func flattenFormStart(formStart *map[string]interface{}) string {
 	}
 
 	return string(formBytes)
-
 }
 
 func flattenFormNodes(formNodes []interface{}) string {

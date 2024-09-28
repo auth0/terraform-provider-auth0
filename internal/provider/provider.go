@@ -1,8 +1,9 @@
 package provider
 
 import (
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
 	"os"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 

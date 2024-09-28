@@ -2,11 +2,13 @@ package form
 
 import (
 	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func expandForm(data *schema.ResourceData) (*management.Form, error) {
@@ -134,7 +136,6 @@ func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 }
 
 func expandStringInterfaceMap(data *schema.ResourceData, key string) (map[string]interface{}, error) {
-
 	oldMetadata, newMetadata := data.GetChange(key)
 	if oldMetadata == "" {
 		return value.MapFromJSON(data.GetRawConfig().GetAttr(key))
@@ -184,8 +185,5 @@ func isNodeEmpty(data *schema.ResourceData) bool {
 		return false
 	}
 	nodes := expandInterfaceArray(data, "nodes")
-	if len(nodes) > 0 {
-		return false
-	}
-	return true
+	return len(nodes) == 0
 }

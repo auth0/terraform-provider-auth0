@@ -1,11 +1,30 @@
 package flow
 
 import (
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func flattenFlow(data *schema.ResourceData, form *management.Flow) error {
+	result := multierror.Append(
+		data.Set("name", form.GetName()),
+		data.Set("actions", flattenFlowAction(form.Actions)),
+	)
+	return result.ErrorOrNil()
+}
 
-	return nil
+func flattenFlowAction(formNodes []interface{}) string {
+	if formNodes == nil {
+		return ""
+	}
+
+	nodeBytes, err := json.Marshal(formNodes)
+	if err != nil {
+		return ""
+	}
+
+	return string(nodeBytes)
 }

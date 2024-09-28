@@ -65,6 +65,9 @@ func NewResource() *schema.Resource {
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 				Description:      "Submission configuration of the form.",
+				DefaultFunc: func() (interface{}, error) {
+					return `{"resume_flow":true}`, nil
+				},
 			},
 			"languages": formLanguageSchema,
 			"messages":  formMessagesSchema,

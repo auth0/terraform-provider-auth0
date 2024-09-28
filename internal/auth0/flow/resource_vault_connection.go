@@ -2,10 +2,13 @@ package flow
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	"log"
 )
 
 // NewVaultConnectionResource will return a new auth0_flow_vault_connection resource.
@@ -27,8 +30,31 @@ func NewVaultConnectionResource() *schema.Resource {
 			},
 			"app_id": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "App identifier of the vault connection.",
+				ValidateFunc: validation.StringInSlice([]string{
+					"ACTIVECAMPAIGN",
+					"AIRTABLE",
+					"AUTH0",
+					"BIGQUERY",
+					"CLEARBIT",
+					"DOCUSIGN",
+					"GOOGLE_SHEETS",
+					"HTTP",
+					"HUBSPOT",
+					"JWT",
+					"MAILCHIMP",
+					"MAILJET",
+					"PIPEDRIVE",
+					"SALESFORCE",
+					"SENDGRID",
+					"SLACK",
+					"STRIPE",
+					"TELEGRAM",
+					"TWILIO",
+					"WHATSAPP",
+					"ZAPIER",
+				}, false),
 			},
 			"environment": {
 				Type:        schema.TypeString,
@@ -99,6 +125,9 @@ func updateVaultConnection(ctx context.Context, data *schema.ResourceData, meta 
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
+	d, _ := json.Marshal(vaultConnection)
+	log.Println("vaultConnection", string(d))
 
 	if err := api.Flow.Vault.UpdateConnection(ctx, data.Id(), vaultConnection); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

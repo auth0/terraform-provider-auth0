@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
-	github.com/auth0/go-auth0 v1.10.0
+	github.com/auth0/go-auth0 v1.11.0
 	github.com/google/go-cmp v0.6.0
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1
@@ -90,5 +90,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/auth0/go-auth0 => github.com/auth0/go-auth0 v1.10.1-0.20240923150456-1771d460b92c

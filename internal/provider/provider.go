@@ -143,6 +143,7 @@ func New() *schema.Provider {
 			"auth0_self_service_profile":          selfserviceprofile.NewResource(),
 			"auth0_form":                          form.NewResource(),
 			"auth0_flow":                          flow.NewResource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
@@ -163,6 +164,7 @@ func New() *schema.Provider {
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_flow":                          flow.NewDataSource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 		},
 	}
 

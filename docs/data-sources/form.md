@@ -19,14 +19,14 @@ Data source to retrieve a specific Auth0 Form by `id`
 
 ### Read-Only
 
-- `ending` (String) Submission configuration of the form.
+- `ending` (String) Submission configuration of the form. (JSON encoded)
 - `languages` (List of Object) Language specific configuration for the form. (see [below for nested schema](#nestedatt--languages))
 - `messages` (List of Object) Message specific configuration for the form. (see [below for nested schema](#nestedatt--messages))
 - `name` (String) Name of the form.
-- `nodes` (String) Nodes of the form.
-- `start` (String) Input setup of the form.
-- `style` (String) Style specific configuration for the form.
-- `translations` (String) Translations of the form.
+- `nodes` (String) Nodes of the form. (JSON encoded)
+- `start` (String) Input setup of the form. (JSON encoded)
+- `style` (String) Style specific configuration for the form. (JSON encoded)
+- `translations` (String) Translations of the form. (JSON encoded)
 
 <a id="nestedatt--languages"></a>
 ### Nested Schema for `languages`

@@ -36,35 +36,35 @@ func NewResource() *schema.Resource {
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Translations of the form.",
+				Description:      "Translations of the form. (JSON encoded)",
 			},
 			"style": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Style specific configuration for the form.",
+				Description:      "Style specific configuration for the form. (JSON encoded)",
 			},
 			"start": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Input setup of the form.",
+				Description:      "Input setup of the form. (JSON encoded)",
 			},
 			"nodes": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Nodes of the form.",
+				Description:      "Nodes of the form. (JSON encoded)",
 			},
 			"ending": {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
-				Description:      "Submission configuration of the form.",
+				Description:      "Submission configuration of the form. (JSON encoded)",
 				DefaultFunc: func() (interface{}, error) {
 					return `{"resume_flow":true}`, nil
 				},
@@ -91,7 +91,7 @@ var formLanguageSchema = &schema.Schema{
 				Required:    true,
 				Description: "Primary language for the form.",
 				DefaultFunc: func() (interface{}, error) {
-					return `primary: en`, nil
+					return "en", nil
 				},
 			},
 		},
@@ -107,14 +107,14 @@ var formMessagesSchema = &schema.Schema{
 			"errors": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Description:      "Error message for the form.",
+				Description:      "Error message for the form. (JSON encoded)",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
 			"custom": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Description:      "Custom message for the form.",
+				Description:      "Custom message for the form. (JSON encoded)",
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 			},
@@ -171,9 +171,6 @@ func updateForm(ctx context.Context, data *schema.ResourceData, meta interface{}
 			return diag.FromErr(err)
 		}
 	}
-
-	// TODO:
-	// _ = data.Set("ending", nil).
 
 	return readForm(ctx, data, meta)
 }

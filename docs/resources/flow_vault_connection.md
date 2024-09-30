@@ -24,7 +24,7 @@ With this resource, you can create and manage flow vault connections for a tenan
 - `environment` (String) Environment of the vault connection.
 - `fingerprint` (String) Fingerprint of the vault connection.
 - `ready` (Boolean) Indicates if the vault connection is configured.
-- `setup` (Map of String, Sensitive) Configuration of the vault connection.
+- `setup` (Map of String, Sensitive) Configuration of the vault connection. (Mapping information must be provided as key/value pairs)
 
 ### Read-Only
 

@@ -19,13 +19,13 @@ With this resource, you can create and manage Forms for a tenant.
 
 ### Optional
 
-- `ending` (String) Submission configuration of the form.
+- `ending` (String) Submission configuration of the form. (JSON encoded)
 - `languages` (Block List) Language specific configuration for the form. (see [below for nested schema](#nestedblock--languages))
 - `messages` (Block List) Message specific configuration for the form. (see [below for nested schema](#nestedblock--messages))
-- `nodes` (String) Nodes of the form.
-- `start` (String) Input setup of the form.
-- `style` (String) Style specific configuration for the form.
-- `translations` (String) Translations of the form.
+- `nodes` (String) Nodes of the form. (JSON encoded)
+- `start` (String) Input setup of the form. (JSON encoded)
+- `style` (String) Style specific configuration for the form. (JSON encoded)
+- `translations` (String) Translations of the form. (JSON encoded)
 
 ### Read-Only
 
@@ -34,13 +34,10 @@ With this resource, you can create and manage Forms for a tenant.
 <a id="nestedblock--languages"></a>
 ### Nested Schema for `languages`
 
-Required:
-
-- `primary` (String) Primary language for the form.
-
 Optional:
 
 - `default` (String) Default language for the form.
+- `primary` (String) Primary language for the form.
 
 
 <a id="nestedblock--messages"></a>
@@ -48,7 +45,7 @@ Optional:
 
 Optional:
 
-- `custom` (String) Custom message for the form.
-- `errors` (String) Error message for the form.
+- `custom` (String) Custom message for the form. (JSON encoded)
+- `errors` (String) Error message for the form. (JSON encoded)
 
 

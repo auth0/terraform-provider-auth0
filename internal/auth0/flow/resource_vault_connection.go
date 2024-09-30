@@ -66,7 +66,7 @@ func NewVaultConnectionResource() *schema.Resource {
 			"setup": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: "Configuration of the vault connection.",
+				Description: "Configuration of the vault connection. (Mapping information must be provided as key/value pairs)",
 				Sensitive:   true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,

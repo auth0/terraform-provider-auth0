@@ -19,7 +19,12 @@ Data source to retrieve a specific Auth0 Flow Vault Connection by `id`
 
 ### Read-Only
 
-- `actions` (String) Actions of the flow.
-- `name` (String) Name of the flow.
+- `account_name` (String) Custom account name of the vault connection.
+- `app_id` (String) App identifier of the vault connection.
+- `environment` (String) Environment of the vault connection.
+- `fingerprint` (String) Fingerprint of the vault connection.
+- `name` (String) Name of the vault connection.
+- `ready` (Boolean) Indicates if the vault connection is configured.
+- `setup` (Map of String) Configuration of the vault connection. (Mapping information must be provided as key/value pairs)
 
 

@@ -65,7 +65,7 @@ func expandStringInterfaceMap(data *schema.ResourceData, key string) (map[string
 		return m, nil
 	}
 
-	return nil, fmt.Errorf("expected map[string]interface{} for %s, got %T", key, raw)
+	return nil, fmt.Errorf("expected map for %s, got %T", key, raw)
 }
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {

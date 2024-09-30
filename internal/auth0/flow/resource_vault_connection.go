@@ -3,12 +3,14 @@ package flow
 import (
 	"context"
 	"encoding/json"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
+	"log"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
-	"log"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 // NewVaultConnectionResource will return a new auth0_flow_vault_connection resource.

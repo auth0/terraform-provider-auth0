@@ -2,6 +2,7 @@ package flow
 
 import (
 	"context"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -19,7 +20,7 @@ func NewVaultConnectionDataSource() *schema.Resource {
 }
 
 func getVaultConnectionDataSourceSchema() map[string]*schema.Schema {
-	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewVaultConnectionResource().Schema)
 	dataSourceSchema["id"] = &schema.Schema{
 		Type:        schema.TypeString,
 		Required:    true,
@@ -33,11 +34,11 @@ func readVaultConnectionForDataSource(ctx context.Context, data *schema.Resource
 	api := meta.(*config.Config).GetAPI()
 	id := data.Get("id").(string)
 	data.SetId(id)
-	flow, err := api.Flow.Read(ctx, id)
+	vaultConnection, err := api.Flow.Vault.GetConnection(ctx, id)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	err = flattenFlow(data, flow)
+	err = flattenVaultConnection(data, vaultConnection)
 	return diag.FromErr(err)
 }

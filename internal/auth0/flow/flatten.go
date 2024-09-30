@@ -30,15 +30,14 @@ func flattenFlowAction(formNodes []interface{}) string {
 }
 
 func flattenVaultConnection(data *schema.ResourceData, vaultConnection *management.FlowVaultConnection) error {
-
 	result := multierror.Append(
-		data.Set("name", vaultConnection.Name),
-		data.Set("app_id", vaultConnection.AppID),
-		data.Set("environment", vaultConnection.Environment),
-		data.Set("setup", vaultConnection.Setup),
-		data.Set("account_name", vaultConnection.AccountName),
-		data.Set("ready", vaultConnection.Ready),
-		data.Set("fingerprint", vaultConnection.Fingerprint),
+		data.Set("name", vaultConnection.GetName()),
+		data.Set("app_id", vaultConnection.GetAppID()),
+		data.Set("environment", vaultConnection.GetEnvironment()),
+		data.Set("setup", vaultConnection.GetSetup()),
+		data.Set("account_name", vaultConnection.GetAccountName()),
+		data.Set("ready", vaultConnection.GetReady()),
+		data.Set("fingerprint", vaultConnection.GetFingerprint()),
 	)
 
 	return result.ErrorOrNil()

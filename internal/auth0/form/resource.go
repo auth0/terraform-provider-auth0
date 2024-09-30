@@ -90,6 +90,9 @@ var formLanguageSchema = &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Primary language for the form.",
+				DefaultFunc: func() (interface{}, error) {
+					return `primary: en`, nil
+				},
 			},
 		},
 	},

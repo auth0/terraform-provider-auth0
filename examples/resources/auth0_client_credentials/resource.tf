@@ -49,6 +49,59 @@ EOF
   }
 }
 
+# Configuring tls_client_auth as an authentication method with a PEM certificate.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "tls_client_auth"
+
+  tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "cert_subject_dn"
+      pem             = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
+-----END CERTIFICATE-----
+EOF
+    }
+  }
+}
+
+# Configuring tls_client_auth as an authentication method with a subject_dn.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "tls_client_auth"
+
+  tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "cert_subject_dn"
+      subject_dn      = "C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience"
+    }
+  }
+}
+
+# Configuring self_signed_tls_client_auth as an authentication method.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "self_signed_tls_client_auth"
+
+  self_signed_tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "x509_cert"
+      pem             = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
+-----END CERTIFICATE-----
+EOF
+    }
+  }
+}
+
 # Configuring the client_secret.
 resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id

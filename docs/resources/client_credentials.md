@@ -65,6 +65,59 @@ EOF
   }
 }
 
+# Configuring tls_client_auth as an authentication method with a PEM certificate.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "tls_client_auth"
+
+  tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "cert_subject_dn"
+      pem             = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
+-----END CERTIFICATE-----
+EOF
+    }
+  }
+}
+
+# Configuring tls_client_auth as an authentication method with a subject_dn.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "tls_client_auth"
+
+  tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "cert_subject_dn"
+      subject_dn      = "C=es\nST=Madrid\nL=Madrid\nO=Okta\nOU=DX-CDT\nCN=Developer Experience"
+    }
+  }
+}
+
+# Configuring self_signed_tls_client_auth as an authentication method.
+resource "auth0_client_credentials" "test" {
+  client_id = auth0_client.my_client.id
+
+  authentication_method = "self_signed_tls_client_auth"
+
+  self_signed_tls_client_auth {
+    credentials {
+      name            = "Testing Credentials 1"
+      credential_type = "x509_cert"
+      pem             = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
+-----END CERTIFICATE-----
+EOF
+    }
+  }
+}
+
 # Configuring the client_secret.
 resource "auth0_client_credentials" "test" {
   client_id = auth0_client.my_client.id
@@ -79,13 +132,16 @@ resource "auth0_client_credentials" "test" {
 
 ### Required
 
-- `authentication_method` (String) Configure the method to use when making requests to any endpoint that requires this client to authenticate. Options include `none` (public client without a client secret), `client_secret_post` (confidential client using HTTP POST parameters), `client_secret_basic` (confidential client using HTTP Basic), `private_key_jwt` (confidential client using a Private Key JWT).
 - `client_id` (String) The ID of the client for which to configure the authentication method.
 
 ### Optional
 
+- `authentication_method` (String) Configure the method to use when making requests to any endpoint that requires this client to authenticate. Options include `none` (public client without a client secret), `client_secret_post` (confidential client using HTTP POST parameters), `client_secret_basic` (confidential client using HTTP Basic), `private_key_jwt` (confidential client using a Private Key JWT), `tls_client_auth` (confidential client using CA-based mTLS authentication), `self_signed_tls_client_auth` (confidential client using mTLS authentication utilizing a self-signed certificate).
 - `client_secret` (String, Sensitive) Secret for the client when using `client_secret_post` or `client_secret_basic` authentication method. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string. The attribute will also be an empty string in case `private_key_jwt` is selected as an authentication method.
 - `private_key_jwt` (Block List, Max: 1) Defines `private_key_jwt` client authentication method. (see [below for nested schema](#nestedblock--private_key_jwt))
+- `self_signed_tls_client_auth` (Block List, Max: 1) Defines `tls_client_auth` client authentication method. (see [below for nested schema](#nestedblock--self_signed_tls_client_auth))
+- `signed_request_object` (Block List, Max: 1) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedblock--signed_request_object))
+- `tls_client_auth` (Block List, Max: 1) Defines `tls_client_auth` client authentication method. (see [below for nested schema](#nestedblock--tls_client_auth))
 
 ### Read-Only
 
@@ -118,6 +174,98 @@ Read-Only:
 - `created_at` (String) The ISO 8601 formatted date the credential was created.
 - `id` (String) The ID of the client credential.
 - `key_id` (String) The key identifier of the credential, generated on creation.
+- `updated_at` (String) The ISO 8601 formatted date the credential was updated.
+
+
+
+<a id="nestedblock--self_signed_tls_client_auth"></a>
+### Nested Schema for `self_signed_tls_client_auth`
+
+Required:
+
+- `credentials` (Block List, Min: 1) Credentials that will be enabled on the client for mTLS authentication utilizing self-signed certificates. (see [below for nested schema](#nestedblock--self_signed_tls_client_auth--credentials))
+
+<a id="nestedblock--self_signed_tls_client_auth--credentials"></a>
+### Nested Schema for `self_signed_tls_client_auth.credentials`
+
+Required:
+
+- `pem` (String) PEM-formatted X509 certificate. Must be JSON escaped.
+
+Optional:
+
+- `credential_type` (String) Credential type. Supported types: `x509_cert`.
+- `name` (String) Friendly name for a credential.
+
+Read-Only:
+
+- `created_at` (String) The ISO 8601 formatted date the credential was created.
+- `expires_at` (String) The ISO 8601 formatted date representing the expiration of the credential.
+- `id` (String) The ID of the client credential.
+- `thumbprint_sha256` (String) The X509 certificate's SHA256 thumbprint.
+- `updated_at` (String) The ISO 8601 formatted date the credential was updated.
+
+
+
+<a id="nestedblock--signed_request_object"></a>
+### Nested Schema for `signed_request_object`
+
+Required:
+
+- `credentials` (Block List, Min: 1) Client credentials for use with JWT-secured authorization requests. (see [below for nested schema](#nestedblock--signed_request_object--credentials))
+
+Optional:
+
+- `required` (Boolean) Require JWT-secured authorization requests.
+
+<a id="nestedblock--signed_request_object--credentials"></a>
+### Nested Schema for `signed_request_object.credentials`
+
+Required:
+
+- `credential_type` (String) Credential type. Supported types: `public_key`.
+- `pem` (String) PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped.
+
+Optional:
+
+- `algorithm` (String) Algorithm which will be used with the credential. Can be one of `RS256`, `RS384`, `PS256`. If not specified, `RS256` will be used.
+- `expires_at` (String) The ISO 8601 formatted date representing the expiration of the credential. It is not possible to set this to never expire after it has been set. Recreate the certificate if needed.
+- `name` (String) Friendly name for a credential.
+- `parse_expiry_from_cert` (Boolean) Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM. If also the `expires_at` is set the credential expiry will be set to the explicit `expires_at` value.
+
+Read-Only:
+
+- `created_at` (String) The ISO 8601 formatted date the credential was created.
+- `id` (String) The ID of the client credential.
+- `key_id` (String) The key identifier of the credential, generated on creation.
+- `updated_at` (String) The ISO 8601 formatted date the credential was updated.
+
+
+
+<a id="nestedblock--tls_client_auth"></a>
+### Nested Schema for `tls_client_auth`
+
+Required:
+
+- `credentials` (Block List, Min: 1) Credentials that will be enabled on the client for CA-based mTLS authentication. (see [below for nested schema](#nestedblock--tls_client_auth--credentials))
+
+<a id="nestedblock--tls_client_auth--credentials"></a>
+### Nested Schema for `tls_client_auth.credentials`
+
+Required:
+
+- `credential_type` (String) Credential type. Supported types: `cert_subject_dn`.
+
+Optional:
+
+- `name` (String) Friendly name for a credential.
+- `pem` (String) PEM-formatted X509 certificate. Must be JSON escaped. Mutually exlusive with `subject_dn` property.
+- `subject_dn` (String) Subject Distinguished Name. Mutually exlusive with `pem` property.
+
+Read-Only:
+
+- `created_at` (String) The ISO 8601 formatted date the credential was created.
+- `id` (String) The ID of the client credential.
 - `updated_at` (String) The ISO 8601 formatted date the credential was updated.
 
 ## Import

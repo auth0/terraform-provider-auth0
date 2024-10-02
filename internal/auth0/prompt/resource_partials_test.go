@@ -8,23 +8,6 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccGivenACustomDomain = `
-resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "auth.terraform-provider-auth0.com"
-	type   = "auth0_managed_certs"
-}
-`
-
-const testGivenABrandingTemplate = `
-resource "auth0_branding" "my_brand" {
-	depends_on = [ auth0_custom_domain.my_custom_domain ]
-
-	universal_login {
-		body = "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"
-	}
-}
-`
-
 const testAccPromptPartialsCreate = testAccGivenACustomDomain + testGivenABrandingTemplate + `
 resource "auth0_prompt_partials" "prompt_partials" {
   depends_on = [ auth0_branding.my_brand ]

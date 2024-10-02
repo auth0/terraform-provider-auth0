@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 620
+        content_length: 672
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","strategy":"waad","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+            {"name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","strategy":"waad","show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}},"user_id_attribute":"userName"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.10.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,33 +30,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}},"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"]},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}},"user_id_attribute":"userName","thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","waad_common_endpoint":false,"userid_attribute":"oid"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 569.489125ms
+        duration: 435.464042ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -66,33 +65,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"strategy_version":2,"userid_attribute":"oid","useCommonEndpoint":false,"user_id_attribute":"userName","waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 115.615167ms
+        duration: 158.795292ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,33 +100,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"strategy_version":2,"userid_attribute":"oid","useCommonEndpoint":false,"user_id_attribute":"userName","waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 97.54875ms
+        duration: 155.665125ms
     - id: 3
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -138,33 +135,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"strategy_version":2,"userid_attribute":"oid","useCommonEndpoint":false,"user_id_attribute":"userName","waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 92.558875ms
+        duration: 212.03275ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -174,33 +170,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"strategy_version":2,"userid_attribute":"oid","useCommonEndpoint":false,"user_id_attribute":"userName","waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.5015ms
+        duration: 158.75525ms
     - id: 5
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 752
+        content_length: 841
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}},"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"]}}
+            {"show_as_button":true,"options":{"client_id":"123456","client_secret":"123456","tenant_domain":"example.onmicrosoft.com","domain":"example.onmicrosoft.com","domain_aliases":["api.example.com","example.com"],"identity_api":"azure-active-directory-v1.0","waad_protocol":"openid-connect","use_wsfed":false,"useCommonEndpoint":false,"api_enable_users":true,"basic_profile":true,"ext_profile":true,"ext_groups":true,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified","upstream_params":{"screen_name":{"alias":"login_hint"}},"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"user_id_attribute":"email"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -210,33 +206,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"userid_attribute":null,"useCommonEndpoint":false,"user_id_attribute":"email","waad_common_endpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 439.426625ms
+        duration: 425.207125ms
     - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -246,33 +241,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"userid_attribute":null,"useCommonEndpoint":false,"user_id_attribute":"email","waad_common_endpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 158.296125ms
+        duration: 150.204833ms
     - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,13 +276,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_dAweBN15jCPJXn6m","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["f8a23743d9cd47b6d1a1fc66799a17a9b1d919ec","9472c8bb89a82aaccf72893095f0913c7ca39798"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"useCommonEndpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/tV6FByCP","is_domain_connection":false,"show_as_button":true,"enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
+        body: '{"id":"con_vC97x6M6uJ5I5k0D","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.eu.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["1fd9e3e40392b30329860d52171ee3695fa507dc","8a48f046b8d93d1e7c6bfc10c54ce9cc6b94378b","31cee5dc8cfdde0eeec2035e1269b0fd66063e4a","824f47a0658299810b52ad51110d0290783e46c6"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"userid_attribute":null,"useCommonEndpoint":false,"user_id_attribute":"email","waad_common_endpoint":false,"set_user_root_attributes":"on_first_login","should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","provisioning_ticket_url":"https://terraform-provider-auth0-dev.eu.auth0.com/terraform-provider-auth0-dev/p/waad/rJNVoCqy","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-TestAccConnectionAzureAD","enabled_clients":[],"realms":["Acceptance-Test-Azure-AD-TestAccConnectionAzureAD"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 112.425583ms
+        duration: 148.59025ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -306,8 +300,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dAweBN15jCPJXn6m
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_vC97x6M6uJ5I5k0D
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -317,10 +311,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2023-08-31T08:59:42.378Z"}'
+        body: '{"deleted_at":"2024-09-19T17:48:55.628Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 112.65575ms
+        duration: 163.399875ms

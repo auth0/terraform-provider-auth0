@@ -1,147 +1,180 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 111
-      uncompressed: false
-      body: '{"change_password":{},"enabled_locales":["en"],"error_page":{},"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"guardian_mfa_page":{},"idle_session_lifetime":72,"sandbox_version":"12","session_lifetime":168,"universal_login":{},"sandbox_versions_available":["12"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"change_password":{},"guardian_mfa_page":{},"error_page":{},"universal_login":{},"session_lifetime":168,"idle_session_lifetime":72}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 111
-      uncompressed: false
-      body: '{"change_password":{},"enabled_locales":["en"],"error_page":{},"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"guardian_mfa_page":{},"idle_session_lifetime":72,"sandbox_version":"12","session_lifetime":168,"universal_login":{}}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 111
-      uncompressed: false
-      body: '{"change_password":{},"enabled_locales":["en"],"error_page":{},"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"guardian_mfa_page":{},"idle_session_lifetime":72,"sandbox_version":"12","session_lifetime":168,"universal_login":{},"sandbox_versions_available":["12"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 111
-      uncompressed: false
-      body: '{"change_password":{},"enabled_locales":["en"],"error_page":{},"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"disable_clickjack_protection_headers":false},"guardian_mfa_page":{},"idle_session_lifetime":72,"sandbox_version":"12","session_lifetime":168,"universal_login":{},"sandbox_versions_available":["12"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"sandbox_version":"18","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 208.427583ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 52
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"session_lifetime":168,"idle_session_lifetime":72}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"sandbox_version":"18","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 315.47325ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 14
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"mtls":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"cannot_change_enforce_client_authentication_on_passwordless_start":true,"disable_impersonation":true,"enable_sso":true,"enforce_client_authentication_on_passwordless_start":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"sandbox_version":"18","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 172.834625ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"sandbox_version":"18","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 164.269375ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":false,"disable_clickjack_protection_headers":false},"idle_session_lifetime":72,"sandbox_version":"18","session_lifetime":168,"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"sandbox_versions_available":["18","16","12"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 165.573792ms

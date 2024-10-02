@@ -48,7 +48,7 @@ resource "auth0_prompt_custom_text" "example" {
 ### Required
 
 - `body` (String) JSON containing the custom texts. You can check the options for each prompt [here](https://auth0.com/docs/customize/universal-login-pages/customize-login-text-prompts#prompt-values).
-- `language` (String) Language of the custom text. Options include: `ar`, `bg`, `bs`, `ca-ES`, `cs`, `cy`, `da`, `de`, `el`, `en`, `es`, `et`, `eu-ES`, `fi`, `fr`, `fr-CA`, `fr-FR`, `gl-ES`, `he`, `hi`, `hr`, `hu`, `id`, `is`, `it`, `ja`, `ko`, `lt`, `lv`, `nb`, `nl`, `nn`, `no`, `pl`, `pt`, `pt-BR`, `pt-PT`, `ro`, `ru`, `sk`, `sl`, `sr`, `sv`, `th`, `tr`, `uk`, `vi`, `zh-CN`, `zh-TW`.
+- `language` (String) Language of the custom text. Options include: `ar`, `ar-EG`, `ar-SA`, `az`, `bg`, `bs`, `ca-ES`, `cs`, `cy`, `da`, `de`, `el`, `en`, `es`, `es-AR`, `es-MX`, `et`, `eu-ES`, `fa`, `fi`, `fr`, `fr-CA`, `fr-FR`, `gl-ES`, `he`, `hi`, `hr`, `hu`, `hy`, `id`, `is`, `it`, `ja`, `ko`, `lt`, `lv`, `ms`, `nb`, `nl`, `nn`, `no`, `pl`, `pt`, `pt-BR`, `pt-PT`, `ro`, `ru`, `sk`, `sl`, `sq`, `sr`, `sv`, `th`, `tl`, `tr`, `uk`, `ur`, `vi`, `zh-CN`, `zh-HK`, `zh-TW`.
 - `prompt` (String) The term `prompt` is used to refer to a specific step in the login flow. Options include: `captcha`, `common`, `consent`, `custom-form`, `customized-consent`, `device-flow`, `email-otp-challenge`, `email-verification`, `invitation`, `login`, `login-email-verification`, `login-id`, `login-password`, `login-passwordless`, `logout`, `mfa`, `mfa-email`, `mfa-otp`, `mfa-phone`, `mfa-push`, `mfa-recovery-code`, `mfa-sms`, `mfa-voice`, `mfa-webauthn`, `organizations`, `passkeys`, `phone-identifier-challenge`, `phone-identifier-enrollment`, `reset-password`, `signup`, `signup-id`, `signup-password`, `status`.
 
 ### Read-Only

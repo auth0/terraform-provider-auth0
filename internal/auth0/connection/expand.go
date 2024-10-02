@@ -329,6 +329,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -507,6 +508,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	expandConnectionOptionsScopes(data, options)
@@ -691,6 +693,7 @@ func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interf
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
 		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
 		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -721,6 +724,8 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 		IdentityAPI:         value.String(config.GetAttr("identity_api")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
+		StrategyVersion:     value.Int(config.GetAttr("strategy_version")),
+		UserIDAttribute:     value.String(config.GetAttr("user_id_attribute")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -850,6 +855,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		EntityID:           value.String(config.GetAttr("entity_id")),
 		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
 		MetadataURL:        value.String(config.GetAttr("metadata_url")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -907,6 +913,7 @@ func expandConnectionOptionsADFS(_ *schema.ResourceData, config cty.Value) (inte
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
 		TrustEmailVerified: value.String(config.GetAttr("should_trust_email_verified_connection")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))

@@ -1,290 +1,285 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 328
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","strategy":"windowslive","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"graph_user":true,"signin":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"graph_user":true,"signin":true,"non_persistent_attrs":null,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["https://graph.microsoft.com/User.Read"]},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 195
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"is_domain_connection":false,"options":{"client_id":"client_id_update","client_secret":"client_secret_update","strategy_version":2,"graph_user":false,"signin":true,"non_persistent_attrs":null}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_0V3JboomO8cG73H0","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2,"non_persistent_attrs":null},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_0V3JboomO8cG73H0
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"deleted_at":"2022-08-30T09:00:09.243Z"}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 202 Accepted
-      code: 202
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 300
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","strategy":"windowslive","is_domain_connection":false,"options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"graph_user":true,"signin":true,"upstream_params":{"screen_name":{"alias":"login_hint"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 468
+        uncompressed: false
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"client_id":"client_id","client_secret":"client_secret","strategy_version":2,"graph_user":true,"signin":true,"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["https://graph.microsoft.com/User.Read"]},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 159.266667ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 139.409583ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 152.591667ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":["https://graph.microsoft.com/User.Read"],"signin":true,"client_id":"client_id","graph_user":true,"client_secret":"client_secret","upstream_params":{"screen_name":{"alias":"login_hint"}},"strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 143.799292ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 167
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"is_domain_connection":false,"options":{"client_id":"client_id_update","client_secret":"client_secret_update","strategy_version":2,"graph_user":false,"signin":true}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 164.294917ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 147.829166ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XLYlaG3JSVerDmya","options":{"scope":[],"signin":true,"client_id":"client_id_update","graph_user":false,"client_secret":"client_secret_update","strategy_version":2},"strategy":"windowslive","name":"Acceptance-Test-Windowslive-TestAccConnectionWindowslive","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Windowslive-TestAccConnectionWindowslive"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 175.602209ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XLYlaG3JSVerDmya
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2024-09-12T21:26:38.963Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 140.238ms

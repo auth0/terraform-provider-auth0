@@ -6,4 +6,27 @@ resource "auth0_resource_server" "my_resource_server" {
   allow_offline_access                            = true
   token_lifetime                                  = 8600
   skip_consent_for_verifiable_first_party_clients = true
+  consent_policy                                  = "transactional-authorization-with-mfa"
+  token_encryption {
+    format = "compact-nested-jwe"
+    encryption_key {
+      name      = "keyname"
+      algorithm = "RSA-OAEP-256"
+      pem       = <<EOF
+-----BEGIN CERTIFICATE-----
+MIIFWDCCA0ACCQDXqpBo3R...G9w0BAQsFADBuMQswCQYDVQQGEwJl
+-----END CERTIFICATE-----
+EOF
+    }
+  }
+  authorization_details {
+    type = "payment"
+  }
+  authorization_details {
+    type = "non-payment"
+  }
+  proof_of_possession {
+    mechanism = "mtls"
+    required  = true
+  }
 }

@@ -189,9 +189,15 @@ func NewResource() *schema.Resource {
 							Description: "Permissions (scopes) included in JWTs.",
 						},
 						"alg": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Algorithm used to sign JWTs.",
+							Type:     schema.TypeString,
+							Optional: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"HS256",
+								"RS256",
+								"PS256",
+							}, false),
+							Description: "Algorithm used to sign JWTs. " +
+								"Can be one of `HS256`, `RS256`, `PS256`.",
 						},
 					},
 				},
@@ -1302,6 +1308,19 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"compliance_level": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice([]string{"none", "fapi1_adv_pkj_par", "fapi1_adv_mtls_par"}, false),
+				Default:      nil,
+				Description: "Defines the compliance level for this client, which may restrict it's capabilities. " +
+					"Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.",
+			},
+			"require_proof_of_possession": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Makes the use of Proof-of-Possession mandatory for this client.",
 			},
 		},
 	}

@@ -15,6 +15,7 @@ var resourceSchema = map[string]*schema.Schema{
 	"display_name": {
 		Type:        schema.TypeString,
 		Optional:    true,
+		Computed:    true,
 		Description: "Name used in login screen.",
 	},
 	"is_domain_connection": {
@@ -688,7 +689,7 @@ var optionsSchema = &schema.Schema{
 			"user_id_attribute": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Attribute in the SAML token that will be mapped to the user_id property in Auth0.",
+				Description: "Attribute in the token that will be mapped to the user_id property in Auth0.",
 			},
 			"idp_initiated": {
 				Type:     schema.TypeList,

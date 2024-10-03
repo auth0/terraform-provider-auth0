@@ -15,6 +15,7 @@ resource "auth0_client" "my_client" {
   name                                = "Application - Acceptance Test"
   description                         = "Test Applications Long Description"
   app_type                            = "non_interactive"
+  compliance_level                    = "none"
   custom_login_page_on                = true
   is_first_party                      = true
   is_token_endpoint_ip_header_trusted = true
@@ -23,6 +24,8 @@ resource "auth0_client" "my_client" {
   allowed_origins                     = ["https://example.com"]
   allowed_logout_urls                 = ["https://example.com"]
   web_origins                         = ["https://example.com"]
+  require_proof_of_possession         = false
+
   grant_types = [
     "authorization_code",
     "http://auth0.com/oauth/grant-type/password-realm",
@@ -96,6 +99,7 @@ resource "auth0_client" "my_client" {
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
+- `compliance_level` (String) Defines the compliance level for this client, which may restrict it's capabilities. Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
@@ -117,6 +121,7 @@ resource "auth0_client" "my_client" {
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
+- `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
@@ -464,7 +469,7 @@ Optional:
 
 Optional:
 
-- `alg` (String) Algorithm used to sign JWTs.
+- `alg` (String) Algorithm used to sign JWTs. Can be one of `HS256`, `RS256`, `PS256`.
 - `lifetime_in_seconds` (Number) Number of seconds during which the JWT will be valid.
 - `scopes` (Map of String) Permissions (scopes) included in JWTs.
 - `secret_encoded` (Boolean) Indicates whether the client secret is Base64-encoded.

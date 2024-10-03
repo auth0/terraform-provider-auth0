@@ -3,10 +3,15 @@ package resourceserver
 import (
 	"context"
 	"fmt"
+	"net/http"
 
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/go-auth0/management"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
@@ -21,6 +26,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readResourceServer,
 		UpdateContext: updateResourceServer,
 		DeleteContext: deleteResourceServer,
+		CustomizeDiff: validateResourceServer,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -39,10 +45,15 @@ func NewResource() *schema.Resource {
 					"for authorization calls. Cannot be changed once set.",
 			},
 			"signing_alg": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Algorithm used to sign JWTs. Options include `HS256` and `RS256`.",
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"HS256",
+					"RS256",
+					"PS256",
+				}, true),
+				Description: "Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.",
 			},
 			"signing_secret": {
 				Type:     schema.TypeString,
@@ -117,6 +128,130 @@ func NewResource() *schema.Resource {
 					"RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. " +
 					"For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).",
 			},
+			"consent_policy": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"transactional-authorization-with-mfa",
+					"null",
+				}, true),
+				Description: "Consent policy for this resource server. " +
+					"Options include `transactional-authorization-with-mfa`, or `null` to disable.",
+			},
+			"authorization_details": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Description: "Authorization details for this resource server.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"type": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Type of authorization details.",
+						},
+						"disable": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Disable authorization details.",
+						},
+					},
+				},
+			},
+			"token_encryption": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for JSON Web Encryption(JWE) of tokens for this resource server.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"format": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"compact-nested-jwe",
+							}, true),
+							RequiredWith: []string{"token_encryption.0.encryption_key"},
+							Description: "Format of the token encryption. " +
+								"Only `compact-nested-jwe` is supported.",
+						},
+						"encryption_key": {
+							Type:         schema.TypeList,
+							Optional:     true,
+							Computed:     true,
+							MaxItems:     1,
+							RequiredWith: []string{"token_encryption.0.format"},
+							Description:  "Authorization details for this resource server.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Name of the encryption key.",
+									},
+									"algorithm": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "Algorithm used to encrypt the token.",
+									},
+									"kid": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Key ID.",
+									},
+									"pem": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "PEM-formatted public key. Must be JSON escaped.",
+									},
+								},
+							},
+						},
+						"disable": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Disable token encryption.",
+						},
+					},
+				},
+			},
+			"proof_of_possession": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration settings for proof-of-possession for this resource server.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"mechanism": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"mtls",
+							}, true),
+							Description: "Mechanism used for proof-of-possession. " +
+								"Only `mtls` is supported.",
+						},
+						"required": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether proof-of-possession is required with this resource server.",
+						},
+						"disable": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Disable proof-of-possession.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -132,7 +267,141 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 
 	data.SetId(resourceServer.GetID())
 
+	if err := fixNullableAttributes(ctx, data, api); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return readResourceServer(ctx, data, meta)
+}
+
+func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	api := meta.(*config.Config).GetAPI()
+
+	resourceServer := expandResourceServer(data)
+
+	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	if err := fixNullableAttributes(ctx, data, api); err != nil {
+		return diag.FromErr(err)
+	}
+
+	return readResourceServer(ctx, data, meta)
+}
+
+func validateResourceServer(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	var result *multierror.Error
+
+	authorizationDetailsConfig := diff.GetRawConfig().GetAttr("authorization_details")
+	if !authorizationDetailsConfig.IsNull() {
+		disable := false
+		found := false
+
+		authorizationDetailsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("type").IsNull() {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and type should be set in the authorization_details block"),
+			)
+		}
+	}
+
+	tokenEncryptionConfig := diff.GetRawConfig().GetAttr("token_encryption")
+	if !tokenEncryptionConfig.IsNull() {
+		disable := false
+		found := false
+
+		tokenEncryptionConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("format").IsNull() {
+				found = true
+			}
+			if !cfg.GetAttr("encryption_key").IsNull() && cfg.GetAttr("encryption_key").LengthInt() > 0 {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and format or encryption_key should be set in the token_encryption blocks"),
+			)
+		}
+	}
+
+	proofOfPossessionConfig := diff.GetRawConfig().GetAttr("proof_of_possession")
+	if !proofOfPossessionConfig.IsNull() {
+		disable := false
+		found := false
+
+		proofOfPossessionConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			if !cfg.GetAttr("disable").IsNull() && cfg.GetAttr("disable").True() {
+				disable = true
+			}
+			if !cfg.GetAttr("mechanism").IsNull() {
+				found = true
+			}
+			if !cfg.GetAttr("required").IsNull() && cfg.GetAttr("required").True() {
+				found = true
+			}
+			return stop
+		})
+		if disable && found {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and mechanism or required should be set in the proof_of_possession block"),
+			)
+		}
+	}
+
+	return result.ErrorOrNil()
+}
+
+func fixNullableAttributes(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
+	if isConsentPolicyNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
+			"consent_policy": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	if isAuthorizationDetailsNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
+			"authorization_details": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	if isTokenEncryptionNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
+			"token_encryption": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	if isProofOfPossessionNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("resource-servers", data.Id()), map[string]interface{}{
+			"proof_of_possession": nil,
+		}); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func readResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -148,18 +417,6 @@ func readResourceServer(ctx context.Context, data *schema.ResourceData, meta int
 	data.SetId(resourceServer.GetID())
 
 	return diag.FromErr(flattenResourceServer(data, resourceServer))
-}
-
-func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	api := meta.(*config.Config).GetAPI()
-
-	resourceServer := expandResourceServer(data)
-
-	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
-
-	return readResourceServer(ctx, data, meta)
 }
 
 func deleteResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

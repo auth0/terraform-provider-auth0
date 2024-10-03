@@ -1,290 +1,285 @@
 ---
 version: 2
 interactions:
-  - id: 0
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 266
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","strategy":"twitter","options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"set_user_root_attributes":"on_each_login","non_persistent_attrs":null}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
-      method: POST
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: false
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"set_user_root_attributes":"on_each_login","non_persistent_attrs":null},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 201 Created
-      code: 201
-      duration: 1ms
-  - id: 1
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"tokenURL":null,"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 2
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"tokenURL":null,"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 3
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"tokenURL":null,"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 4
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 261
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        {"is_domain_connection":false,"options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"scope":"basic_profile","set_user_root_attributes":"on_each_login","non_persistent_attrs":null,"pkce_enabled":false}}
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: PATCH
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"scope":"basic_profile","tokenURL":null,"client_id":"someClientID","pkce_enabled":false,"client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 5
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"scope":"basic_profile","tokenURL":null,"client_id":"someClientID","pkce_enabled":false,"client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 6
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 5
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: |
-        null
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: GET
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: -1
-      uncompressed: true
-      body: '{"id":"con_ybYrfHIpKNl3wJwN","options":{"scope":"basic_profile","tokenURL":null,"client_id":"someClientID","pkce_enabled":false,"client_secret":"someClientSecret","authorizationURL":null,"non_persistent_attrs":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 200 OK
-      code: 200
-      duration: 1ms
-  - id: 7
-    request:
-      proto: HTTP/1.1
-      proto_major: 1
-      proto_minor: 1
-      content_length: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      host: terraform-provider-auth0-dev.eu.auth0.com
-      remote_addr: ""
-      request_uri: ""
-      body: ""
-      form: { }
-      headers:
-        Content-Type:
-          - application/json
-        User-Agent:
-          - Go-Auth0-SDK/0.10.0
-      url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_ybYrfHIpKNl3wJwN
-      method: DELETE
-    response:
-      proto: HTTP/2.0
-      proto_major: 2
-      proto_minor: 0
-      transfer_encoding: [ ]
-      trailer: { }
-      content_length: 0
-      uncompressed: false
-      body: ""
-      headers:
-        Content-Type:
-          - application/json; charset=utf-8
-      status: 204 No Content
-      code: 204
-      duration: 1ms
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 238
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","strategy":"twitter","options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"set_user_root_attributes":"on_each_login"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 377
+        uncompressed: false
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 181.085458ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"client_id":"someClientID","client_secret":"someClientSecret","set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 168.388333ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"client_id":"someClientID","client_secret":"someClientSecret","set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 135.6995ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"client_id":"someClientID","client_secret":"someClientSecret","set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 149.072375ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 185
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"options":{"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"tokenURL":null,"set_user_root_attributes":"on_each_login","scope":["basic_profile"]}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"scope":["basic_profile"],"tokenURL":null,"client_id":"someClientID","client_secret":"someClientSecret","authorizationURL":null,"set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 172.520375ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"scope":["basic_profile"],"client_id":"someClientID","client_secret":"someClientSecret","set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 168.744791ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_VjztzwMHd045xVt8","options":{"scope":["basic_profile"],"client_id":"someClientID","client_secret":"someClientSecret","set_user_root_attributes":"on_each_login"},"strategy":"twitter","name":"Acceptance-Test-Twitter-TestAccConnectionTwitter","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-Twitter-TestAccConnectionTwitter"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 150.202875ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.10.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_VjztzwMHd045xVt8
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2024-09-12T21:26:27.668Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 154.267208ms

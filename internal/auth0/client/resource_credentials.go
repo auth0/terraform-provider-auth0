@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
-	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -32,25 +30,35 @@ func NewCredentialsResource() *schema.Resource {
 			},
 			"authentication_method": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"none",
 					"client_secret_post",
 					"client_secret_basic",
 					"private_key_jwt",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
 				}, false),
 				Description: "Configure the method to use when making requests to " +
 					"any endpoint that requires this client to authenticate. " +
 					"Options include `none` (public client without a client secret), " +
 					"`client_secret_post` (confidential client using HTTP POST parameters), " +
 					"`client_secret_basic` (confidential client using HTTP Basic), " +
-					"`private_key_jwt` (confidential client using a Private Key JWT).",
+					"`private_key_jwt` (confidential client using a Private Key JWT), " +
+					"`tls_client_auth` (confidential client using CA-based mTLS authentication), " +
+					"`self_signed_tls_client_auth` (confidential client using mTLS authentication utilizing a self-signed certificate).",
 			},
 			"client_secret": {
 				Type:      schema.TypeString,
 				Optional:  true,
 				Computed:  true,
 				Sensitive: true,
+				ConflictsWith: []string{
+					"private_key_jwt",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				},
 				Description: "Secret for the client when using `client_secret_post` or `client_secret_basic` " +
 					"authentication method. Keep this private. To access this attribute you need to add the " +
 					"`read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an " +
@@ -58,9 +66,14 @@ func NewCredentialsResource() *schema.Resource {
 					"as an authentication method.",
 			},
 			"private_key_jwt": {
-				Type:        schema.TypeList,
-				MaxItems:    1,
-				Optional:    true,
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				ConflictsWith: []string{
+					"client_secret",
+					"tls_client_auth",
+					"self_signed_tls_client_auth",
+				},
 				Description: "Defines `private_key_jwt` client authentication method.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -70,6 +83,236 @@ func NewCredentialsResource() *schema.Resource {
 							Required: true,
 							Description: "Client credentials available for use when Private Key JWT is in use as " +
 								"the client authentication method. A maximum of 2 client credentials can be set.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										ForceNew:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"key_id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The key identifier of the credential, generated on creation.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"public_key"}, false),
+										Description:  "Credential type. Supported types: `public_key`.",
+									},
+									"pem": {
+										Type:     schema.TypeString,
+										Required: true,
+										ForceNew: true,
+										Description: "PEM-formatted public key (SPKI and PKCS1) or X509 certificate. " +
+											"Must be JSON escaped.",
+									},
+									"algorithm": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"RS256", "RS384", "PS256"}, false),
+										Default:      "RS256",
+										Description: "Algorithm which will be used with the credential. " +
+											"Can be one of `RS256`, `RS384`, `PS256`. If not specified, " +
+											"`RS256` will be used.",
+									},
+									"parse_expiry_from_cert": {
+										Type:     schema.TypeBool,
+										Optional: true,
+										ForceNew: true,
+										Description: "Parse expiry from x509 certificate. " +
+											"If true, attempts to parse the expiry date from the provided PEM. " +
+											"If also the `expires_at` is set the credential expiry will be set to " +
+											"the explicit `expires_at` value.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+									"expires_at": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										Computed:     true,
+										ValidateFunc: validation.IsRFC3339Time,
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential. It is not possible to set this to " +
+											"never expire after it has been set. Recreate the certificate if needed.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"tls_client_auth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				ConflictsWith: []string{
+					"client_secret",
+					"private_key_jwt",
+					"self_signed_tls_client_auth",
+				},
+				Description: "Defines `tls_client_auth` client authentication method.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:        schema.TypeList,
+							Required:    true,
+							Description: "Credentials that will be enabled on the client for CA-based mTLS authentication.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"cert_subject_dn"}, false),
+										Description:  "Credential type. Supported types: `cert_subject_dn`.",
+									},
+									"subject_dn": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										Computed:     true,
+										ValidateFunc: validation.StringLenBetween(1, 256),
+										Description:  "Subject Distinguished Name. Mutually exlusive with `pem` property.",
+									},
+									"pem": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringLenBetween(1, 4096),
+										Description: "PEM-formatted X509 certificate. Must be JSON escaped. " +
+											"Mutually exlusive with `subject_dn` property.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"self_signed_tls_client_auth": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				ConflictsWith: []string{
+					"client_secret",
+					"private_key_jwt",
+					"tls_client_auth",
+				},
+				Description: "Defines `tls_client_auth` client authentication method.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"credentials": {
+							Type:     schema.TypeList,
+							Required: true,
+							Description: "Credentials that will be enabled on the client for mTLS " +
+								"authentication utilizing self-signed certificates.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ID of the client credential.",
+									},
+									"name": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Friendly name for a credential.",
+									},
+									"credential_type": {
+										Type:         schema.TypeString,
+										Optional:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringInSlice([]string{"x509_cert"}, false),
+										Description:  "Credential type. Supported types: `x509_cert`.",
+									},
+									"pem": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ForceNew:     true,
+										ValidateFunc: validation.StringLenBetween(1, 4096),
+										Description:  "PEM-formatted X509 certificate. Must be JSON escaped. ",
+									},
+									"thumbprint_sha256": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The X509 certificate's SHA256 thumbprint.",
+									},
+									"created_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was created.",
+									},
+									"updated_at": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The ISO 8601 formatted date the credential was updated.",
+									},
+									"expires_at": {
+										Type:     schema.TypeString,
+										Computed: true,
+										Description: "The ISO 8601 formatted date representing " +
+											"the expiration of the credential.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"signed_request_object": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Configuration for JWT-secured Authorization Requests(JAR).",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"required": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Require JWT-secured authorization requests.",
+						},
+						"credentials": {
+							Type:        schema.TypeList,
+							Required:    true,
+							Description: "Client credentials for use with JWT-secured authorization requests.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"id": {
@@ -172,22 +415,30 @@ func createClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	data.SetId(clientID)
 
 	authenticationMethod := data.Get("authentication_method").(string)
-	switch authenticationMethod {
-	case "private_key_jwt":
-		if diagnostics := createPrivateKeyJWTCredentials(ctx, api, data); diagnostics.HasError() {
-			return diagnostics
-		}
-	case "client_secret_post", "client_secret_basic":
-		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
-			return diag.FromErr(err)
-		}
+	if len(authenticationMethod) > 0 {
+		switch authenticationMethod {
+		case "private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth":
+			if diagnostics := createAuthenticationMethodCredentials(ctx, api, data, authenticationMethod); diagnostics.HasError() {
+				return diagnostics
+			}
+		case "client_secret_post", "client_secret_basic":
+			if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
+				return diag.FromErr(err)
+			}
 
-		if err := updateSecret(ctx, api, data); err != nil {
-			return diag.FromErr(err)
+			if err := updateSecret(ctx, api, data); err != nil {
+				return diag.FromErr(err)
+			}
+		case "none":
+			if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
+				return diag.FromErr(err)
+			}
 		}
-	case "none":
-		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
-			return diag.FromErr(err)
+	}
+	if data.GetRawConfig().GetAttr("signed_request_object").LengthInt() > 0 {
+		diagnostics := createSignedRequestObject(ctx, api, data)
+		if diagnostics.HasError() {
+			return diagnostics
 		}
 	}
 
@@ -202,19 +453,7 @@ func readClientCredentials(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	privateKeyJWT, err := flattenPrivateKeyJWT(ctx, api, data, client.GetClientAuthenticationMethods())
-	if err != nil {
-		return diag.FromErr(err)
-	}
-
-	result := multierror.Append(
-		data.Set("client_id", client.GetClientID()),
-		data.Set("authentication_method", flattenAuthenticationMethod(client)),
-		data.Set("client_secret", client.GetClientSecret()),
-		data.Set("private_key_jwt", privateKeyJWT),
-	)
-
-	return diag.FromErr(result.ErrorOrNil())
+	return diag.FromErr(flattenClientCredentials(ctx, api, data, client))
 }
 
 func updateClientCredentials(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -227,8 +466,8 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 
 	authenticationMethod := data.Get("authentication_method").(string)
 	switch authenticationMethod {
-	case "private_key_jwt":
-		if diagnostics := modifyPrivateKeyJWTCredentials(ctx, api, data); diagnostics.HasError() {
+	case "private_key_jwt", "tls_client_auth", "self_signed_tls_client_auth":
+		if diagnostics := modifyAuthenticationMethodCredentials(ctx, api, data, authenticationMethod); diagnostics.HasError() {
 			return diagnostics
 		}
 	case "client_secret_post", "client_secret_basic":
@@ -242,6 +481,12 @@ func updateClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	case "none":
 		if err := updateTokenEndpointAuthMethod(ctx, api, data); err != nil {
 			return diag.FromErr(err)
+		}
+	}
+	if data.GetRawConfig().GetAttr("signed_request_object").LengthInt() > 0 {
+		diagnostics := modifySignedRequestObject(ctx, api, data)
+		if diagnostics.HasError() {
+			return diagnostics
 		}
 	}
 
@@ -266,14 +511,13 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 		tokenEndpointAuthMethod = "client_secret_basic"
 	}
 
-	authenticationMethod := data.Get("authentication_method").(string)
-	if authenticationMethod == "private_key_jwt" {
-		credentials, err := api.Client.ListCredentials(ctx, client.GetClientID())
-		if err != nil {
-			return diag.FromErr(err)
-		}
+	credentials, err := api.Client.ListCredentials(ctx, client.GetClientID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
-		if err := detachCredentialsFromClient(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
+	if len(credentials) > 0 {
+		if err := detachClientCredentials(ctx, api, client.GetClientID(), tokenEndpointAuthMethod); err != nil {
 			return diag.FromErr(err)
 		}
 
@@ -295,8 +539,8 @@ func deleteClientCredentials(ctx context.Context, data *schema.ResourceData, met
 	return nil
 }
 
-func createPrivateKeyJWTCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
-	credentials, diagnostics := expandPrivateKeyJWT(data.GetRawConfig())
+func createAuthenticationMethodCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
+	credentials, diagnostics := expandAuthenticationMethodCredentials(data.GetRawConfig(), authenticationMethod)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
@@ -314,13 +558,13 @@ func createPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 		})
 	}
 
-	err := attachCredentialsToClient(ctx, api, clientID, credentialsToAttach)
+	err := attachAuthenticationMethodCredentials(ctx, api, clientID, authenticationMethod, credentialsToAttach)
 
 	return diag.FromErr(err)
 }
 
-func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
-	credentials, diagnostics := expandPrivateKeyJWT(data.GetRawConfig())
+func modifyAuthenticationMethodCredentials(ctx context.Context, api *management.Management, data *schema.ResourceData, authenticationMethod string) diag.Diagnostics {
+	credentials, diagnostics := expandAuthenticationMethodCredentials(data.GetRawConfig(), authenticationMethod)
 	if diagnostics.HasError() {
 		return diagnostics
 	}
@@ -328,18 +572,18 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	clientID := data.Get("client_id").(string)
 
 	for index, credential := range credentials {
-		const configAddress = "private_key_jwt.0.credentials"
-		if !data.HasChange(fmt.Sprintf("%s.%s", configAddress, strconv.Itoa(index))) {
+		configAddress := fmt.Sprintf("%s.0.credentials.%d", authenticationMethod, index)
+		if !data.HasChange(configAddress) {
 			continue
 		}
 
-		credentialID := data.Get(fmt.Sprintf("%s.%s.id", configAddress, strconv.Itoa(index))).(string)
-		stateExpiresAt := data.Get(fmt.Sprintf("%s.%s.expires_at", configAddress, strconv.Itoa(index))).(string)
+		credentialID := data.Get(fmt.Sprintf("%s.id", configAddress)).(string)
+		stateExpiresAt := data.Get(fmt.Sprintf("%s.expires_at", configAddress)).(string)
 		if stateExpiresAt == "" {
 			continue
 		}
 
-		// We can ignore the error as we have the validation.IsRFC3339Time on this attribute.
+		// The error can be ignored, the schema validates the type.
 		expiresAt, _ := time.Parse(time.RFC3339, stateExpiresAt)
 		credential.ExpiresAt = &expiresAt
 
@@ -352,39 +596,151 @@ func modifyPrivateKeyJWTCredentials(ctx context.Context, api *management.Managem
 	return nil
 }
 
+func createSignedRequestObject(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+	signedRequestObject, diagnostics := expandSignedRequestObject(data.GetRawConfig())
+	if diagnostics.HasError() {
+		return diagnostics
+	}
+
+	clientID := data.Get("client_id").(string)
+
+	if signedRequestObject.GetCredentials() != nil {
+		credentialsToAttach := make([]management.Credential, 0)
+		for _, credential := range signedRequestObject.GetCredentials() {
+			if err := api.Client.CreateCredential(ctx, clientID, &credential); err != nil {
+				return diag.FromErr(err)
+			}
+
+			credentialsToAttach = append(credentialsToAttach, management.Credential{
+				ID: credential.ID,
+			})
+		}
+
+		return diag.FromErr(attachSignedRequestObjectCredentials(ctx, api, clientID, signedRequestObject.Required, credentialsToAttach))
+	}
+
+	return nil
+}
+
+func modifySignedRequestObject(ctx context.Context, api *management.Management, data *schema.ResourceData) diag.Diagnostics {
+	signedRequestObject, diagnostics := expandSignedRequestObject(data.GetRawConfig())
+	if diagnostics.HasError() {
+		return diagnostics
+	}
+
+	clientID := data.Get("client_id").(string)
+
+	if signedRequestObject.GetCredentials() != nil {
+		for index, credential := range signedRequestObject.GetCredentials() {
+			configAddress := fmt.Sprintf("signed_request_object.0.credentials.%d", index)
+			if !data.HasChange(configAddress) {
+				continue
+			}
+
+			credentialID := data.Get(fmt.Sprintf("%s.id", configAddress)).(string)
+			stateExpiresAt := data.Get(fmt.Sprintf("%s.expires_at", configAddress)).(string)
+			if stateExpiresAt == "" {
+				continue
+			}
+
+			// The error can be ignored, the schema validates the type.
+			expiresAt, _ := time.Parse(time.RFC3339, stateExpiresAt)
+			credential.ExpiresAt = &expiresAt
+
+			// Limitation: Unable to update the credential to never expire. Needs to get deleted and recreated if needed.
+			if err := api.Client.UpdateCredential(ctx, clientID, credentialID, &credential); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+	}
+
+	if data.HasChange("signed_request_object.0.required") {
+		return diag.FromErr(attachSignedRequestObjectNoCredentials(ctx, api, clientID, signedRequestObject.Required))
+	}
+
+	return nil
+}
+
 type clientWithAuthMethod struct {
 	ID                          string                                  `json:"-"`
 	ClientAuthenticationMethods *management.ClientAuthenticationMethods `json:"client_authentication_methods"`
 	TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
 }
 
-func attachCredentialsToClient(ctx context.Context, api *management.Management, clientID string, credentials []management.Credential) error {
-	client := clientWithAuthMethod{
-		ID: clientID,
-		ClientAuthenticationMethods: &management.ClientAuthenticationMethods{
-			PrivateKeyJWT: &management.PrivateKeyJWT{
-				Credentials: &credentials,
-			},
-		},
-		TokenEndpointAuthMethod: nil,
-	}
-
-	return updateClientWithAuthMethod(ctx, api, client)
+type clientWithSignedRequestObject struct {
+	ID                  string                                `json:"-"`
+	SignedRequestObject *management.ClientSignedRequestObject `json:"signed_request_object"`
 }
 
-func detachCredentialsFromClient(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+type clientWithAuthMethodAndSignedRequestObject struct {
+	ID                          string                                  `json:"-"`
+	ClientAuthenticationMethods *management.ClientAuthenticationMethods `json:"client_authentication_methods"`
+	TokenEndpointAuthMethod     *string                                 `json:"token_endpoint_auth_method"`
+	SignedRequestObject         *management.ClientSignedRequestObject   `json:"signed_request_object"`
+}
+
+func attachAuthenticationMethodCredentials(ctx context.Context, api *management.Management, clientID string, authenticationMethod string, credentials []management.Credential) error {
 	client := clientWithAuthMethod{
 		ID:                          clientID,
+		ClientAuthenticationMethods: &management.ClientAuthenticationMethods{},
+		TokenEndpointAuthMethod:     nil,
+	}
+
+	switch authenticationMethod {
+	case "private_key_jwt":
+		client.ClientAuthenticationMethods.PrivateKeyJWT = &management.PrivateKeyJWT{
+			Credentials: &credentials,
+		}
+	case "tls_client_auth":
+		client.ClientAuthenticationMethods.TLSClientAuth = &management.TLSClientAuth{
+			Credentials: &credentials,
+		}
+	case "self_signed_tls_client_auth":
+		client.ClientAuthenticationMethods.SelfSignedTLSClientAuth = &management.SelfSignedTLSClientAuth{
+			Credentials: &credentials,
+		}
+	}
+
+	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+func attachSignedRequestObjectCredentials(ctx context.Context, api *management.Management, clientID string, required *bool, credentials []management.Credential) error {
+	client := clientWithSignedRequestObject{
+		ID: clientID,
+		SignedRequestObject: &management.ClientSignedRequestObject{
+			Required:    required,
+			Credentials: &credentials,
+		},
+	}
+
+	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+func attachSignedRequestObjectNoCredentials(ctx context.Context, api *management.Management, clientID string, required *bool) error {
+	client := clientWithSignedRequestObject{
+		ID: clientID,
+		SignedRequestObject: &management.ClientSignedRequestObject{
+			Required: required,
+		},
+	}
+
+	return updateClientInternal(ctx, api, client.ID, client)
+}
+
+func detachClientCredentials(ctx context.Context, api *management.Management, clientID, tokenEndpointAuthMethod string) error {
+	client := clientWithAuthMethodAndSignedRequestObject{
+		ID:                          clientID,
+		SignedRequestObject:         nil,
 		ClientAuthenticationMethods: nil,
 		// API doesn't accept nil on both of these, so we temporarily set this to a default.
 		TokenEndpointAuthMethod: &tokenEndpointAuthMethod,
 	}
 
-	return updateClientWithAuthMethod(ctx, api, client)
+	return updateClientInternal(ctx, api, client.ID, client)
 }
 
-func updateClientWithAuthMethod(ctx context.Context, api *management.Management, client clientWithAuthMethod) error {
-	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", client.ID), &client)
+func updateClientInternal(ctx context.Context, api *management.Management, clientID string, client interface{}) error {
+	request, err := api.NewRequest(ctx, http.MethodPatch, api.URI("clients", clientID), client)
 	if err != nil {
 		return err
 	}
@@ -435,12 +791,12 @@ func updateSecret(ctx context.Context, api *management.Management, data *schema.
 	})
 }
 
-func expandPrivateKeyJWT(rawConfig cty.Value) ([]*management.Credential, diag.Diagnostics) {
+func expandAuthenticationMethodCredentials(rawConfig cty.Value, authenticationMethod string) ([]*management.Credential, diag.Diagnostics) {
 	credentials := make([]*management.Credential, 0)
 
-	rawConfig.GetAttr("private_key_jwt").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+	rawConfig.GetAttr(authenticationMethod).ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-			credentials = append(credentials, expandClientCredentials(config))
+			credentials = append(credentials, expandClientCredential(config))
 			return stop
 		})
 		return stop
@@ -451,92 +807,83 @@ func expandPrivateKeyJWT(rawConfig cty.Value) ([]*management.Credential, diag.Di
 			diag.Diagnostic{
 				Severity:      diag.Error,
 				Summary:       "Client Credentials Missing",
-				Detail:        "You must define client credentials when setting the authentication method as Private Key JWT.",
-				AttributePath: cty.Path{cty.GetAttrStep{Name: "private_key_jwt.credentials"}},
+				Detail:        fmt.Sprintf("You must define client credentials when setting the authentication method as %q.", authenticationMethod),
+				AttributePath: cty.Path{cty.GetAttrStep{Name: fmt.Sprintf("%s.credentials", authenticationMethod)}},
 			},
+		}
+	} else if authenticationMethod == "tls_client_auth" {
+		for _, credential := range credentials {
+			if (credential.PEM != nil && credential.SubjectDN != nil) || (credential.PEM == nil && credential.SubjectDN == nil) {
+				return nil, diag.Diagnostics{
+					diag.Diagnostic{
+						Severity:      diag.Error,
+						Summary:       "Client Credentials Invalid",
+						Detail:        fmt.Sprintf("Exactly one of pem and subject_dn must be set when setting the authentication method as %q.", authenticationMethod),
+						AttributePath: cty.Path{cty.GetAttrStep{Name: fmt.Sprintf("%s.credentials", authenticationMethod)}},
+					},
+				}
+			}
 		}
 	}
 
 	return credentials, nil
 }
 
-func expandClientCredentials(rawConfig cty.Value) *management.Credential {
-	clientCredential := management.Credential{
-		Name:                value.String(rawConfig.GetAttr("name")),
-		CredentialType:      value.String(rawConfig.GetAttr("credential_type")),
-		PEM:                 value.String(rawConfig.GetAttr("pem")),
-		Algorithm:           value.String(rawConfig.GetAttr("algorithm")),
-		ParseExpiryFromCert: value.Bool(rawConfig.GetAttr("parse_expiry_from_cert")),
-	}
-
-	if expiresAt := value.String(rawConfig.GetAttr("expires_at")); expiresAt != nil {
-		// We can ignore the error as we have the validation.IsRFC3339Time on this attribute.
-		expiresAt, _ := time.Parse(time.RFC3339, *expiresAt)
-		clientCredential.ExpiresAt = &expiresAt
-	}
-
-	return &clientCredential
-}
-
-func flattenAuthenticationMethod(client *management.Client) string {
-	if client.GetTokenEndpointAuthMethod() == "" && client.GetClientAuthenticationMethods() == nil {
-		switch client.GetAppType() {
-		case "native", "spa":
-			return "none"
-		case "regular_web", "non_interactive":
-			return "client_secret_post"
-		default:
-			return "client_secret_basic"
-		}
-	}
-
-	if client.GetTokenEndpointAuthMethod() != "" {
-		return client.GetTokenEndpointAuthMethod()
-	}
-
-	return "private_key_jwt"
-}
-
-func flattenPrivateKeyJWT(
-	ctx context.Context,
-	api *management.Management,
-	data *schema.ResourceData,
-	clientAuthMethods *management.ClientAuthenticationMethods,
-) ([]interface{}, error) {
-	if clientAuthMethods == nil {
+func expandSignedRequestObject(rawConfig cty.Value) (*management.ClientSignedRequestObject, diag.Diagnostics) {
+	signedRequestObjectConfig := rawConfig.GetAttr("signed_request_object")
+	if signedRequestObjectConfig.IsNull() {
 		return nil, nil
 	}
 
-	const timeRFC3339WithMilliseconds = "2006-01-02T15:04:05.000Z07:00"
+	var signedRequestObject management.ClientSignedRequestObject
 
-	stateCredentials := make([]interface{}, 0)
-	for index, credential := range clientAuthMethods.GetPrivateKeyJWT().GetCredentials() {
-		credential, err := api.Client.GetCredential(ctx, data.Id(), credential.GetID())
-		if err != nil {
-			return nil, err
-		}
-
-		stateCredentials = append(stateCredentials, map[string]interface{}{
-			"id":              credential.GetID(),
-			"name":            credential.GetName(),
-			"key_id":          credential.GetKeyID(),
-			"credential_type": credential.GetCredentialType(),
-			"pem": data.Get(
-				fmt.Sprintf("private_key_jwt.0.credentials.%s.pem", strconv.Itoa(index)),
-			), // Doesn't get read back.
-			"algorithm": credential.GetAlgorithm(),
-			"parse_expiry_from_cert": data.Get(
-				fmt.Sprintf("private_key_jwt.0.credentials.%s.parse_expiry_from_cert", strconv.Itoa(index)),
-			), // Doesn't get read back.
-			"created_at": credential.GetCreatedAt().Format(timeRFC3339WithMilliseconds),
-			"updated_at": credential.GetUpdatedAt().Format(timeRFC3339WithMilliseconds),
-			"expires_at": credential.GetExpiresAt().Format(timeRFC3339WithMilliseconds),
+	signedRequestObjectConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		credentials := make([]management.Credential, 0)
+		config.GetAttr("credentials").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+			credentials = append(credentials, *expandClientCredential(config))
+			return stop
 		})
+		signedRequestObject.Credentials = &credentials
+		signedRequestObject.Required = value.Bool(config.GetAttr("required"))
+		return stop
+	})
+
+	if signedRequestObject == (management.ClientSignedRequestObject{}) {
+		return nil, nil
 	}
 
-	return []interface{}{
-		map[string]interface{}{
-			"credentials": stateCredentials,
-		},
-	}, nil
+	if len(*signedRequestObject.Credentials) == 0 {
+		return nil, diag.Diagnostics{
+			diag.Diagnostic{
+				Severity:      diag.Error,
+				Summary:       "Client Credentials Missing",
+				Detail:        "You must define client credentials when using JWT-secured Authorization Requests.",
+				AttributePath: cty.Path{cty.GetAttrStep{Name: "signed_request_object.credentials"}},
+			},
+		}
+	}
+
+	return &signedRequestObject, nil
+}
+
+func expandClientCredential(rawConfig cty.Value) *management.Credential {
+	clientCredential := management.Credential{
+		Name:           value.String(rawConfig.GetAttr("name")),
+		CredentialType: value.String(rawConfig.GetAttr("credential_type")),
+	}
+
+	switch *clientCredential.CredentialType {
+	case "public_key":
+		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
+		clientCredential.Algorithm = value.String(rawConfig.GetAttr("algorithm"))
+		clientCredential.ParseExpiryFromCert = value.Bool(rawConfig.GetAttr("parse_expiry_from_cert"))
+		clientCredential.ExpiresAt = value.Time(rawConfig.GetAttr("expires_at"))
+	case "cert_subject_dn":
+		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
+		clientCredential.SubjectDN = value.String(rawConfig.GetAttr("subject_dn"))
+	case "x509_cert":
+		clientCredential.PEM = value.String(rawConfig.GetAttr("pem"))
+	}
+
+	return &clientCredential
 }

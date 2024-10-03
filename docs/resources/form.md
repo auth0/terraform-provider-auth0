@@ -14,6 +14,14 @@ With this resource, you can create and manage Forms for a tenant.
 # Example:
 resource "auth0_form" "my_form" {
   name = "My KYC Form"
+
+  start = jsonencode({
+    coordinates = {
+      x = 0
+      y = 0
+    }
+    next_node = "step_ggeX"
+  })
   nodes = jsonencode([{
     alias = "New step"
     config = {
@@ -24,7 +32,7 @@ resource "auth0_form" "my_form" {
           min_length = 1
           multiline  = false
         }
-        id        = "text_wi1M"
+        id        = "full_name"
         label     = "Your Name"
         required  = true
         sensitive = false
@@ -47,22 +55,20 @@ resource "auth0_form" "my_form" {
     type = "STEP"
   }])
   ending = jsonencode({
+    after_submit = {
+      flow_id = "<my_flow_id>" # Altenative ways: (flow_id = auth0_flow.my_flow.id) or using terraform variables
+    }
     coordinates = {
       x = 1250
       y = 0
     }
     resume_flow = true
   })
-  start = jsonencode({
-    coordinates = {
-      x = 0
-      y = 0
-    }
-    next_node = "step_ggeX"
-  })
+
   style = jsonencode({
     css = "h1 {\n  color: white;\n  text-align: center;\n}"
   })
+
   translations = jsonencode({
     es = {
       components = {
@@ -72,7 +78,6 @@ resource "auth0_form" "my_form" {
           }
         }
       }
-      ending = null
       messages = {
         custom = {}
         errors = {
@@ -81,6 +86,7 @@ resource "auth0_form" "my_form" {
       }
     }
   })
+
   languages {
     default = "en"
     primary = "en"

@@ -20,10 +20,17 @@ resource "auth0_flow" "my_flow" {
 const testFlowCreate = `
 resource "auth0_flow" "my_flow" {
     name = "test-flow-{{.testName}}"
+
 }
 `
 
 const testFlowUpdate = `
+resource "auth0_flow" "my_flow" {
+    name = "updated-test-flow-{{.testName}}"
+}
+`
+
+const testFlowDelete = `
 resource "auth0_flow" "my_flow" {
     name = "updated-test-flow-{{.testName}}"
 }
@@ -49,6 +56,14 @@ func TestAccFlow(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_flow.my_flow", "name", fmt.Sprintf("updated-test-flow-%s", t.Name())),
 					resource.TestCheckResourceAttrSet("auth0_flow.my_flow", "id"),
 				),
+			},
+			{
+				Config: acctest.ParseTestName(testFlowDelete, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_flow.my_flow", "name", fmt.Sprintf("updated-test-flow-%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_flow.my_flow", "id"),
+				),
+				Destroy: true,
 			},
 		},
 	})

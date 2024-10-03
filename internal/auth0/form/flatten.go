@@ -38,7 +38,7 @@ func flattenForm(data *schema.ResourceData, form *management.Form) error {
 	if form.Start != nil {
 		result = multierror.Append(result, data.Set("start", flattenFormStart(form.Start)))
 	}
-	if form.Nodes != nil && len(form.Nodes) > 0 {
+	if len(form.Nodes) > 0 {
 		result = multierror.Append(result, data.Set("nodes", flattenFormNodes(form.Nodes)))
 	}
 	if form.Ending != nil {

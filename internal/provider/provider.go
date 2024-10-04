@@ -113,6 +113,7 @@ func New() *schema.Provider {
 			"auth0_hook":                          hook.NewResource(),
 			"auth0_log_stream":                    logstream.NewResource(),
 			"auth0_organization":                  organization.NewResource(),
+			"auth0_organization_client_grant":     organization.NewOrganizationClientGrantResource(),
 			"auth0_organization_connection":       organization.NewConnectionResource(),
 			"auth0_organization_connections":      organization.NewConnectionsResource(),
 			"auth0_organization_member":           organization.NewMemberResource(),

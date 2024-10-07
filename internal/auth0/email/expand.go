@@ -32,7 +32,7 @@ func expandEmailProvider(config cty.Value) *management.EmailProvider {
 	case management.EmailProviderMS365:
 		expandEmailProviderMS365(config, emailProvider)
 	case management.EmailProviderCustom:
-		expandEmailProviderCustom(config, emailProvider)
+		emailProvider.Credentials = &management.EmailProviderCredentialsCustom{}
 	}
 
 	return emailProvider
@@ -153,13 +153,6 @@ func expandEmailProviderMS365(config cty.Value, emailProvider *management.EmailP
 			ClientID:     value.String(credentials.GetAttr("ms365_client_id")),
 			ClientSecret: value.String(credentials.GetAttr("ms365_client_secret")),
 		}
-		return stop
-	})
-}
-
-func expandEmailProviderCustom(config cty.Value, emailProvider *management.EmailProvider) {
-	config.GetAttr("credentials").ForEachElement(func(_ cty.Value, credentials cty.Value) (stop bool) {
-		emailProvider.Credentials = &management.EmailProviderCredentialsMS365{}
 		return stop
 	})
 }

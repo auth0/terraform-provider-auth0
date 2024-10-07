@@ -76,41 +76,12 @@ resource "auth0_email_provider" "ms365_email_provider" {
 }
 
 
-# This is an example on how to set up the email provider with a Custom Action.
+# This is an example on how to set up the email provider with a custom action.
 resource "auth0_email_provider" "custom_email_provider" {
   name                 = "custom"
   enabled              = true
-
-  credentials {
-  }
-}
-
-resource "auth0_action" "my_action" {
-  name    = "Custom Email Provider"
-  runtime = "node18"
-  deploy  = true
-  code    = <<-EOT
-  /**
-  * Handler to be executed while sending an email notification
-  * @param {Event} event - Details about the user and the context in which they are logging in.
-  * @param {CustomEmailProviderAPI} api - Methods and utilities to help change the behavior of sending a email notification.
-  */
-  exports.onExecuteCustomEmailProvider = async (event, api) => {
-    // Code goes here
-    return;
-  };
-  EOT
-
-  supported_triggers {
-    id      = "custom-email-provider"
-    version = "v1"
-  }
-
-  dependencies {
-  }
-
-  secrets {
-  }
+  default_from_address = "accounts@example.com"
+  credentials {}
 }
 ```
 

@@ -175,11 +175,23 @@ resource "auth0_email_provider" "my_email_provider" {
 `
 
 const testAccCreateCustomEmailProvider = `
+resource "auth0_action" "my_action" {
+  name    = format("Test Action %s", timestamp())
+  runtime = "node18"
+  deploy  = true
+  code    = "exports.onExecuteCustomEmailProvider = async (event, api) => {};"
+  supported_triggers {
+	id      = "custom-email-provider"
+	version = "v1"
+  }
+}
+
 resource "auth0_email_provider" "my_email_provider" {
+	depends_on = [resource.auth0_action.my_action]
 	name = "custom"
 	enabled = true
-	credentials {
-	}
+	credentials {}
+    default_from_address = "accounts@example.com"
 }
 `
 
@@ -187,8 +199,8 @@ const testAccUpdateCustomEmailProvider = `
 resource "auth0_email_provider" "my_email_provider" {
 	name = "custom"
 	enabled = false
-	credentials {
-	}
+	default_from_address = "accounts_updated@example.com"
+	credentials {}
 }
 `
 
@@ -366,6 +378,7 @@ func TestAccEmail(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "custom"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts@example.com"),
 				),
 			},
 			{
@@ -373,6 +386,7 @@ func TestAccEmail(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "name", "custom"),
 					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_email_provider.my_email_provider", "default_from_address", "accounts_updated@example.com"),
 				),
 			},
 			{

@@ -78,6 +78,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Description: "User ID(s) that are members of the organization.",
 	}
 
+	dataSourceSchema["client_grants"] = &schema.Schema{
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "Client Grant ID(s) that are associated to the organization.",
+	}
+
 	return dataSourceSchema
 }
 
@@ -101,7 +110,12 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers))
+	foundClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))
 }
 
 func findOrganizationByIDOrName(
@@ -172,4 +186,17 @@ func fetchAllOrganizationMembers(
 	}
 
 	return foundMembers, nil
+}
+
+func fetchAllOrganizationClientGrants(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]*management.ClientGrant, error) {
+	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
+	if err != nil {
+		return nil, err
+	}
+
+	return clientGrantList.ClientGrants, nil
 }

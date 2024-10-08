@@ -114,6 +114,11 @@ func updatePromptScreenPartial(ctx context.Context, data *schema.ResourceData, m
 	promptPartial := expandPromptScreenPartial(data)
 	for screenName, insertionPoints := range *promptPartial {
 		if existingInsertionPoints, exists := (*existingPromptScreenPartial)[screenName]; exists {
+			for insertionPoint := range existingInsertionPoints {
+				if _, found := insertionPoints[insertionPoint]; !found {
+					delete(existingInsertionPoints, insertionPoint)
+				}
+			}
 			for insertionPoint, content := range insertionPoints {
 				existingInsertionPoints[insertionPoint] = content
 			}

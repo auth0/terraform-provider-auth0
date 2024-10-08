@@ -3,6 +3,10 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
+
 	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -109,10 +113,14 @@ func New() *schema.Provider {
 			"auth0_email_provider":                email.NewResource(),
 			"auth0_email_template":                email.NewTemplateResource(),
 			"auth0_encryption_key_manager":        encryptionkeymanager.NewEncryptionKeyManagerResource(),
+			"auth0_flow":                          flow.NewResource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionResource(),
+			"auth0_form":                          form.NewResource(),
 			"auth0_guardian":                      guardian.NewResource(),
 			"auth0_hook":                          hook.NewResource(),
 			"auth0_log_stream":                    logstream.NewResource(),
 			"auth0_organization":                  organization.NewResource(),
+			"auth0_organization_client_grant":     organization.NewOrganizationClientGrantResource(),
 			"auth0_organization_connection":       organization.NewConnectionResource(),
 			"auth0_organization_connections":      organization.NewConnectionsResource(),
 			"auth0_organization_member":           organization.NewMemberResource(),
@@ -149,6 +157,9 @@ func New() *schema.Provider {
 			"auth0_connection":                    connection.NewDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
+			"auth0_flow":                          flow.NewDataSource(),
+			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
+			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),

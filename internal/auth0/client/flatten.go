@@ -571,6 +571,8 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("client_id", clientGrant.GetClientID()),
 		data.Set("audience", clientGrant.GetAudience()),
 		data.Set("scopes", clientGrant.GetScope()),
+		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
+		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
 	)
 
 	return result.ErrorOrNil()

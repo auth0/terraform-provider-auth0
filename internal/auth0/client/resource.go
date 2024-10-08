@@ -119,6 +119,28 @@ func NewResource() *schema.Resource {
 				Optional:    true,
 				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
 			},
+			"oidc_backchannel_logout_initiators_mode": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"all", "custom",
+				}, false),
+				Description: "Which initiators should receive a logout token. Possible values are `all` indicating all " +
+					"initiators or `custom` meaning only those selected via oidc_backchannel_logout_initiators",
+			},
+			"oidc_backchannel_logout_initiators": {
+				Type: schema.TypeSet,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"rp-logout", "idp-logout", "password-changed", "session-expired", "session-revoked",
+						"account-deleted", "email-identifier-changed", "mfa-phone-unenrolled", "account-deactivated",
+					}, false),
+				},
+				Optional: true,
+				Description: "Which specific initiators should receive a logout token. Possible values are " +
+					"rp-logout, idp-logout, password-changed, session-expired, session-revoked, account-deleted, email-identifier-changed, mfa-phone-unenrolled, account-deactivated",
+			},
 			"grant_types": {
 				Type:        schema.TypeList,
 				Elem:        &schema.Schema{Type: schema.TypeString},

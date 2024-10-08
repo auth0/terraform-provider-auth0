@@ -1,3 +1,27 @@
+## v1.7.0
+
+FEATURES:
+
+- `resource/auth0_encryption_key_manager`: Add new resource for re-keying of tenant master key ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
+- `resource/auth0_organization_client_grant`: Add new resource for managing association of client-grant and organization ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
+- `resource/auth0_form`: Add new resource for managing Forms. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `resource/auth0_flow`: Add new resource for managing Flows. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `resource/auth0_flow_vault_connection`: Add new resource for managing Flow Vault Connection. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_form`: Add a data-source for retrieving Form. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_flow`: Add a data-source for retrieving Flow. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+- `data-source/auth0_flow_vault_connection`: Add a data-source for retrieving Flow Vault Connection. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
+
+ENHANCEMENTS:
+
+- `resource/auth0_connection`: Add support for `strategy_version` to be configurable ([#1024](https://github.com/auth0/terraform-provider-auth0/pull/1024/))  
+- `resource/auth0_connection`: Add support for `user_id_attribute` in options attribute for AzureAD connections ([#1028](https://github.com/auth0/terraform-provider-auth0/pull/1028/))
+- `data-source/auth0_organization`: Add support to fetch list of associated client grants ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
+
+BUG FIXES:
+
+- `resource/auth0_prompt_screen_partial`: Ensure removal of insertion points  ([#1043](https://github.com/auth0/terraform-provider-auth0/pull/1043/))
+
+
 ## v1.6.1
 
 BUG FIXES:

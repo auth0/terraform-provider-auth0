@@ -7,7 +7,7 @@ resource "auth0_connection" "azure_ad" {
     client_id         = "123456"
     client_secret     = "123456"
     strategy_version  = 2
-    user_id_attribute = "userName"
+    user_id_attribute = "oid"
     app_id            = "app-id-123"
     tenant_domain     = "example.onmicrosoft.com"
     domain            = "example.onmicrosoft.com"

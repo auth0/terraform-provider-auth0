@@ -3,7 +3,7 @@
 FEATURES:
 
 - `resource/auth0_encryption_key_manager`: Add new resource for re-keying of tenant master key ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
-- `resource/auth0_organization_client_grant`: Add new resource for managing association of client-grant and organization ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
+- `resource/auth0_organization_client_grant`: Add new resource for managing association of client-grant and organization ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
 - `resource/auth0_form`: Add new resource for managing Forms. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
 - `resource/auth0_flow`: Add new resource for managing Flows. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
 - `resource/auth0_flow_vault_connection`: Add new resource for managing Flow Vault Connection. ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))

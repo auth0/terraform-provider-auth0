@@ -3,6 +3,7 @@
 FEATURES:
 
 - `resource/auth0_encryption_key_manager`: Add new resource for re-keying of tenant master key ([#1031](https://github.com/auth0/terraform-provider-auth0/pull/1031/))
+- `resource/auth0_encryption_key_manager`: Add support for `customer_provided_root_key` for BYOK ([#1041](https://github.com/auth0/terraform-provider-auth0/pull/1041/))
 - `resource/auth0_organization_client_grant`: Add new resource for managing association of client-grant and organization ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
 - `resource/auth0_form`: Add new resource for managing Forms ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
 - `resource/auth0_flow`: Add new resource for managing Flows ([#1039](https://github.com/auth0/terraform-provider-auth0/pull/1039/))
@@ -16,7 +17,6 @@ ENHANCEMENTS:
 - `resource/auth0_connection`: Add support for `strategy_version` to be configurable ([#1024](https://github.com/auth0/terraform-provider-auth0/pull/1024/))  
 - `resource/auth0_connection`: Add support for `user_id_attribute` in options attribute for AzureAD connections ([#1028](https://github.com/auth0/terraform-provider-auth0/pull/1028/))
 - `data-source/auth0_organization`: Add support to fetch list of associated client grants ([#1027](https://github.com/auth0/terraform-provider-auth0/pull/1027/))
-- `resource/auth0_encryption_key_manager`: Add support for `customer_provided_root_key` for BYOK ([#1041](https://github.com/auth0/terraform-provider-auth0/pull/1041/))
 - `resource/auth0_tenant`: Add support for `acr_values_supported`, `pushed_authorization_requests_supported` and `remove_alg_from_jwks` configuration ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
 - `resource/auth0_client_credentials`: Add support for setting `signed_request_object`, `tls_client_auth` and `self_signed_tls_client_auth` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))
 - `resource/auth0_client`: Add support for setting `compliance_level` and `require_proof_of_possession` ([#1015](https://github.com/auth0/terraform-provider-auth0/pull/1015/))

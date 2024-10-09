@@ -474,6 +474,8 @@ resource "auth0_client" "my_client" {
 	grant_types = [ "authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token" ]
 	allowed_logout_urls = [ "https://example.com" ]
 	oidc_backchannel_logout_urls = [ "https://example.com/oidc-logout" ]
+	oidc_backchannel_logout_initiators = [ "rp-logout", "idp-logout", "account-deleted" ]
+	oidc_backchannel_logout_initiators_mode = "custom"
 	web_origins = [ "https://example.com" ]
 	client_metadata = {
 		foo = "zoo"
@@ -567,6 +569,8 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
 					resource.TestCheckNoResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_initiators_mode", ""),
+					resource.TestCheckNoResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_initiators"),
 				),
 			},
 			{
@@ -631,6 +635,8 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_initiators.#", "3"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_initiators_mode", "custom"),
 				),
 			},
 			{
@@ -683,6 +689,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_initiators_mode", ""),
 				),
 			},
 		},

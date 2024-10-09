@@ -116,6 +116,8 @@ resource "auth0_client" "my_client" {
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
 - `mobile` (Block List, Max: 1) Additional configuration for native mobile apps. (see [below for nested schema](#nestedblock--mobile))
 - `native_social_login` (Block List, Max: 1) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedblock--native_social_login))
+- `oidc_backchannel_logout_initiators` (Set of String) Which specific initiators should receive a logout token. Possible values are rp-logout, idp-logout, password-changed, session-expired, session-revoked, account-deleted, email-identifier-changed, mfa-phone-unenrolled, account-deactivated
+- `oidc_backchannel_logout_initiators_mode` (String) Which initiators should receive a logout token. Possible values are `all` indicating all initiators or `custom` meaning only those selected via oidc_backchannel_logout_initiators
 - `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.

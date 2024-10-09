@@ -41,7 +41,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		InitiateLoginURI:                   value.String(config.GetAttr("initiate_login_uri")),
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
-		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
+		OIDCLogout:                         expandOIDCLogout(data),
 		ClientMetadata:                     expandClientMetadata(data),
 		RefreshToken:                       expandClientRefreshToken(data),
 		JWTConfiguration:                   expandClientJWTConfiguration(data),
@@ -135,17 +135,32 @@ func isDefaultOrgNull(data *schema.ResourceData) bool {
 	return empty
 }
 
-func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
+func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 	raw := data.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
-
 	logoutUrls := value.Strings(raw)
-
 	if logoutUrls == nil {
 		return nil
 	}
 
-	return &management.OIDCBackchannelLogout{
+	rawMode := data.GetRawConfig().GetAttr("oidc_backchannel_logout_initiators_mode")
+	mode := value.String(rawMode)
+	if mode == nil {
+		mode = new(string)
+		*mode = "custom"
+	}
+
+	rawInitiators := data.GetRawConfig().GetAttr("oidc_backchannel_logout_initiators")
+	initiators := value.Strings(rawInitiators)
+	if initiators == nil && *mode != "all" {
+		initiators = &[]string{"idp-logout", "rp-logout"}
+	}
+
+	return &management.OIDCLogout{
 		BackChannelLogoutURLs: logoutUrls,
+		BackChannelLogoutInitiators: &management.BackChannelLogoutInitiators{
+			Mode:               mode,
+			SelectedInitiators: initiators,
+		},
 	}
 }
 

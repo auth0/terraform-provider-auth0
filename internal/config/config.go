@@ -14,10 +14,12 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	frameworkDiag "github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
@@ -78,6 +80,28 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	}
 }
 
+// ConfigureFrameworkProvider will configure the provider.Provider so that
+// *management.Management client and *mutex.KeyValue is stored
+// and passed into the subsequent resources Configure method as the ConfigureRequest.ProviderData.
+func ConfigureFrameworkProvider(
+	terraformVersion, domain, clientID, clientSecret, apiToken, audience string,
+	debug bool,
+) (interface{}, frameworkDiag.Diagnostics) {
+	apiClient, err := management.New(domain,
+		authenticationOption(clientID, clientSecret, apiToken, audience),
+		management.WithDebug(debug),
+		management.WithUserAgent(userAgentFramework(terraformVersion)),
+		management.WithAuth0ClientEnvEntry(providerName, version),
+		management.WithNoRetries(),
+		management.WithClient(customClientWithRetries()),
+	)
+	if err != nil {
+		return nil, internalError.DiagnosticsFromError(err)
+	}
+
+	return New(apiClient), nil
+}
+
 // userAgent computes the desired User-Agent header for the *management.Management client.
 func userAgent(terraformVersion *string) string {
 	sdkVersion := auth0.Version
@@ -90,6 +114,22 @@ func userAgent(terraformVersion *string) string {
 		sdkVersion,
 		terraformSDKVersion,
 		*terraformVersion,
+	)
+
+	return userAgent
+}
+
+// userAgentFramework computes the desired User-Agent header for the
+// *management.Management client using the Terraform Framework.
+func userAgentFramework(terraformVersion string) string {
+	sdkVersion := auth0.Version
+
+	userAgent := fmt.Sprintf(
+		"%s/%s (Go-Auth0-SDK/%s; Terraform/%s)",
+		providerName,
+		version,
+		sdkVersion,
+		terraformVersion,
 	)
 
 	return userAgent

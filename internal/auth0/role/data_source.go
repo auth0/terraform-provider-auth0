@@ -189,20 +189,28 @@ func getAllRoleUsers(
 	roleID string,
 ) ([]*management.User, error) {
 	var users []*management.User
-	var page int
+	var from string
+
+	options := []management.RequestOption{
+		management.Take(100),
+	}
+
 	for {
-		userList, err := api.Role.Users(ctx, roleID, management.Page(page), management.PerPage(100))
+		if from != "" {
+			options = append(options, management.From(from))
+		}
+
+		userList, err := api.Role.Users(ctx, roleID, options...)
 		if err != nil {
 			return nil, err
 		}
 
 		users = append(users, userList.Users...)
-
 		if !userList.HasNext() {
 			break
 		}
 
-		page++
+		from = userList.Next
 	}
 
 	return users, nil

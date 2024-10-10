@@ -21,7 +21,7 @@ resource "auth0_client" "my_client" {
 
 func TestAccClientInitiateLoginUriValidation(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccClientValidationOnInitiateLoginURIWithHTTP, t.Name()),
@@ -44,7 +44,7 @@ resource "auth0_client" "my_client" {
 
 func TestAccClientMobileValidationError(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccClientValidationOnMobile, t.Name()),

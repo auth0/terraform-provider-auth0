@@ -55,64 +55,58 @@ EOF
 ### Optional
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
-- `authorization_details` (Block List) Authorization details for this resource server. (see [below for nested schema](#nestedblock--authorization_details))
+- `authorization_details` (Attributes List) Authorization details for this resource server. (see [below for nested schema](#nestedatt--authorization_details))
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `name` (String) Friendly name for the resource server. Cannot include `<` or `>` characters.
-- `proof_of_possession` (Block List, Max: 1) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedblock--proof_of_possession))
+- `proof_of_possession` (Attributes) Configuration settings for proof-of-possession for this resource server. (see [below for nested schema](#nestedatt--proof_of_possession))
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
 - `skip_consent_for_verifiable_first_party_clients` (Boolean) Indicates whether to skip user consent for applications flagged as first party.
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. `access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).
-- `token_encryption` (Block List, Max: 1) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedblock--token_encryption))
+- `token_encryption` (Attributes) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedatt--token_encryption))
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
 - `token_lifetime_for_web` (Number) Number of seconds during which access tokens issued for this resource server via implicit or hybrid flows remain valid. Cannot be greater than the `token_lifetime` value.
 - `verification_location` (String) URL from which to retrieve JWKs for this resource server. Used for verifying the JWT sent to Auth0 for token introspection.
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
+- `resource_server_id` (String) A generated string identifying the resource server.
 
-<a id="nestedblock--authorization_details"></a>
+<a id="nestedatt--authorization_details"></a>
 ### Nested Schema for `authorization_details`
 
-Optional:
+Required:
 
-- `disable` (Boolean) Disable authorization details.
 - `type` (String) Type of authorization details.
 
 
-<a id="nestedblock--proof_of_possession"></a>
+<a id="nestedatt--proof_of_possession"></a>
 ### Nested Schema for `proof_of_possession`
 
 Optional:
 
-- `disable` (Boolean) Disable proof-of-possession.
 - `mechanism` (String) Mechanism used for proof-of-possession. Only `mtls` is supported.
 - `required` (Boolean) Indicates whether proof-of-possession is required with this resource server.
 
 
-<a id="nestedblock--token_encryption"></a>
+<a id="nestedatt--token_encryption"></a>
 ### Nested Schema for `token_encryption`
 
 Optional:
 
-- `disable` (Boolean) Disable token encryption.
-- `encryption_key` (Block List, Max: 1) Authorization details for this resource server. (see [below for nested schema](#nestedblock--token_encryption--encryption_key))
+- `encryption_key` (Attributes) Authorization details for this resource server. (see [below for nested schema](#nestedatt--token_encryption--encryption_key))
 - `format` (String) Format of the token encryption. Only `compact-nested-jwe` is supported.
 
-<a id="nestedblock--token_encryption--encryption_key"></a>
+<a id="nestedatt--token_encryption--encryption_key"></a>
 ### Nested Schema for `token_encryption.encryption_key`
-
-Required:
-
-- `algorithm` (String) Algorithm used to encrypt the token.
-- `pem` (String) PEM-formatted public key. Must be JSON escaped.
 
 Optional:
 
+- `algorithm` (String) Algorithm used to encrypt the token.
 - `kid` (String) Key ID.
 - `name` (String) Name of the encryption key.
+- `pem` (String) PEM-formatted public key. Must be JSON escaped.
 
 ## Import
 

@@ -29,14 +29,11 @@ resource "auth0_resource_server" "my_resource_server" {
 	skip_consent_for_verifiable_first_party_clients = true
 	enforce_policies                                = false
 	consent_policy                                  = "null"
-	authorization_details {
-		disable = true
+	authorization_details = [
+	]
+	token_encryption = {
 	}
-	token_encryption {
-		disable = true
-	}
-	proof_of_possession {
-		disable = true
+	proof_of_possession = {
 	}
 }
 `
@@ -52,15 +49,16 @@ resource "auth0_resource_server" "my_resource_server" {
 	skip_consent_for_verifiable_first_party_clients = true
 	enforce_policies                                = false
 	consent_policy                                  = "transactional-authorization-with-mfa"
-	authorization_details {
-		type = "payment"
-	}
-	authorization_details {
-		type = "not-payment"
-	}
-	token_encryption {
+	authorization_details = [
+		{
+			type = "payment"
+		}, {
+			type = "not-payment"
+		}
+	]
+	token_encryption = {
 		format = "compact-nested-jwe"
-		encryption_key {
+		encryption_key = {
 			name      = "encryptkey"
 			algorithm = "RSA-OAEP-256"
 			pem       = <<EOF
@@ -68,33 +66,10 @@ resource "auth0_resource_server" "my_resource_server" {
 EOF
 		}
 	}
-	proof_of_possession {
+	proof_of_possession = {
 		mechanism = "mtls"
 		required = true
 	}
-
-}
-`
-
-const testAccResourceServerInvalidAuthorizationDetails = `
-resource "auth0_resource_server" "my_resource_server" {
-	name                                            = "Acceptance Test - {{.testName}}"
-	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
-	signing_alg                                     = "RS256"
-	allow_offline_access                            = false # <--- set to false
-	token_lifetime                                  = 7200
-	token_lifetime_for_web                          = 3600
-	skip_consent_for_verifiable_first_party_clients = true
-	enforce_policies                                = false
-	consent_policy                                  = "transactional-authorization-with-mfa"
-	authorization_details {
-		disable = true
-		type    = "payment"
-	}
-	authorization_details {
-		type = "not-payment"
-	}
-
 }
 `
 
@@ -109,10 +84,8 @@ resource "auth0_resource_server" "my_resource_server" {
 	skip_consent_for_verifiable_first_party_clients = true
 	enforce_policies                                = false
 	consent_policy                                  = "transactional-authorization-with-mfa"
-	token_encryption {
-		disable = true
-		format  = "compact-nested-jwe"
-		encryption_key {
+	token_encryption = {
+		encryption_key = {
 			name      = "encryptkey"
 			algorithm = "RSA-OAEP-256"
 			pem       = <<EOF
@@ -120,7 +93,6 @@ resource "auth0_resource_server" "my_resource_server" {
 EOF
 		}
 	}
-
 }
 `
 
@@ -135,12 +107,9 @@ resource "auth0_resource_server" "my_resource_server" {
 	skip_consent_for_verifiable_first_party_clients = true
 	enforce_policies                                = false
 	consent_policy                                  = "transactional-authorization-with-mfa"
-	proof_of_possession {
+	proof_of_possession = {
 		mechanism = "mtls"
-		required = true
-		disable  = true
 	}
-
 }
 `
 
@@ -220,8 +189,8 @@ resource "auth0_resource_server" "my_resource_server" {
 }
 `
 
-func TestAccResourceServer(t *testing.T) {
-	credsCert1, err := os.ReadFile("./../../../test/data/creds-cert-1.pem")
+func TestAccFrameworkResourceServer(t *testing.T) {
+	credsCert1, err := os.ReadFile("../../../../test/data/creds-cert-1.pem")
 	require.NoError(t, err)
 
 	acctest.Test(t, resource.TestCase{
@@ -230,7 +199,7 @@ func TestAccResourceServer(t *testing.T) {
 				Config: acctest.ParseTestName(testAccResourceServerConfigEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", ""),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "name"),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "signing_alg"),
 					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_lifetime_for_web"),
 				),
@@ -247,29 +216,20 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "consent_policy", "null"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.disable", "true"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.disable", "true"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.format", ""),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.#", "0"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "true"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", ""),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.#", "0"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.format"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.encryption_key"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.mechanism"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.required"),
 				),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccResourceServerInvalidAuthorizationDetails, t.Name()),
-				ExpectError: regexp.MustCompile(`only one of disable and type should be set in the authorization_details block`),
-			},
-			{
 				Config:      fmt.Sprintf(acctest.ParseTestName(testAccResourceServerInvalidTokenEncryption, t.Name()), credsCert1),
-				ExpectError: regexp.MustCompile(`only one of disable and format or encryption_key should be set in the token_encryption blocks`),
+				ExpectError: regexp.MustCompile(`Invalid Attribute Combination`),
 			},
 			{
 				Config:      acctest.ParseTestName(testAccResourceServerInvalidProofOfPossession, t.Name()),
-				ExpectError: regexp.MustCompile(`only one of disable and mechanism or required should be set in the proof_of_possession block`),
+				ExpectError: regexp.MustCompile(`Invalid Attribute Combination`),
 			},
 			{
 				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerConfigUpdate, t.Name()), credsCert1),
@@ -284,21 +244,14 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "consent_policy", "transactional-authorization-with-mfa"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.#", "2"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.disable", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.type", "payment"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.disable", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.type", "not-payment"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.format", "compact-nested-jwe"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.name", "encryptkey"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.algorithm", "RSA-OAEP-256"),
-					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.pem"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "mtls"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.format", "compact-nested-jwe"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.encryption_key.name", "encryptkey"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.encryption_key.algorithm", "RSA-OAEP-256"),
+					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_encryption.encryption_key.pem"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.mechanism", "mtls"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.required", "true"),
 				),
 			},
 			{
@@ -312,23 +265,10 @@ func TestAccResourceServer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
 					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "consent_policy", "transactional-authorization-with-mfa"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.#", "2"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.type", "payment"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.type", "not-payment"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.format", "compact-nested-jwe"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.name", "encryptkey"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.algorithm", "RSA-OAEP-256"),
-					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.pem"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.#", "1"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "mtls"),
-					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "consent_policy"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "authorization_details"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "token_encryption"),
+					resource.TestCheckNoResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession"),
 				),
 			},
 			{
@@ -414,7 +354,7 @@ resource "auth0_resource_server" "auth0" {
 }
 `
 
-func TestAccResourceServerAuth0APIManagementImport(t *testing.T) {
+func TestAccFrameworkResourceServerAuth0APIManagementImport(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		t.Skip()
 	}

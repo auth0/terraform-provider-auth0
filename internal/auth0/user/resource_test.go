@@ -13,7 +13,7 @@ import (
 
 func TestAccUserMissingRequiredParams(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      "resource auth0_user user {}",

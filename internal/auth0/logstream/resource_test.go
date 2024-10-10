@@ -305,7 +305,7 @@ resource "auth0_log_stream" "my_log_stream" {
 
 func TestAccLogStreamDataDogRegionValidation(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(logStreamDatadogInvalidConfig, "uS"),

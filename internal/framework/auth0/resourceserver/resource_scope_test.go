@@ -35,7 +35,7 @@ resource "auth0_resource_server_scope" "read_posts" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scope.read_posts_copy ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -52,7 +52,7 @@ resource "auth0_resource_server_scope" "read_posts" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scope.read_posts ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -69,7 +69,7 @@ resource "auth0_resource_server_scope" "read_posts" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scope.read_posts ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -94,7 +94,7 @@ resource "auth0_resource_server_scope" "write_posts" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scope.write_posts ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -136,11 +136,11 @@ resource "auth0_resource_server_scope" "write_posts" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scope.write_posts ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
-func TestAccResourceServerScope(t *testing.T) {
+func TestAccFrameworkResourceServerScope(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 	resourceServerIdentifier := fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", testName)
 
@@ -187,7 +187,7 @@ func TestAccResourceServerScope(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "description", "Can read posts from API"),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.read_posts", "resource_server_identifier", resourceServerIdentifier),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "scope", "write:posts"),
-					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "description", ""),
+					resource.TestCheckNoResourceAttr("auth0_resource_server_scope.write_posts", "description"),
 					resource.TestCheckResourceAttr("auth0_resource_server_scope.write_posts", "resource_server_identifier", resourceServerIdentifier),
 				),
 			},

@@ -2,6 +2,7 @@ package config_test
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"github.com/auth0/go-auth0"
@@ -16,6 +17,9 @@ import (
 )
 
 func TestConfigureProvider(t *testing.T) {
+	_ = os.Unsetenv("AUTH0_DOMAIN")
+	_ = os.Unsetenv("AUTH0_CLIENT_ID")
+	_ = os.Unsetenv("AUTH0_CLIENT_SECRET")
 	var testCases = []struct {
 		name                 string
 		givenTerraformConfig map[string]interface{}

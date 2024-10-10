@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 145
+        content_length: 163
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes"}
+            {"name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes"}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
+                - Go-Auth0/1.14.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -28,36 +28,35 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 336
+        content_length: 354
         uncompressed: false
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 160.374917ms
+        duration: 157.121542ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 31
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"authorization_details":null}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -66,34 +65,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 145.928125ms
+        duration: 135.479042ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 26
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"token_encryption":null}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -102,120 +100,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 179.603542ms
+        duration: 114.133958ms
     - id: 3
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 29
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"proof_of_possession":null}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 145.866042ms
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 126.724375ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 150.064708ms
-    - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -233,8 +125,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -244,13 +136,118 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 150.967916ms
+        duration: 127.617875ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 120.134166ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 235.1675ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 115.944875ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -268,8 +265,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -279,13 +276,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.59075ms
+        duration: 128.863541ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -303,8 +300,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -314,13 +311,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.745375ms
+        duration: 114.808416ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -338,8 +335,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -349,33 +346,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.84575ms
+        duration: 133.442417ms
     - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 14
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -384,13 +382,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 188.175125ms
+        duration: 151.207791ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -408,8 +406,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -419,13 +417,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 168.864916ms
+        duration: 125.13725ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -443,8 +441,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -454,34 +452,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"read:posts","description":"Can read posts"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 153.977125ms
+        duration: 124.535709ms
     - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 14
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"scopes":[]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -490,13 +487,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.126083ms
+        duration: 125.331833ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -514,8 +511,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -525,13 +522,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 126.19975ms
+        duration: 113.572709ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -549,8 +546,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -560,33 +557,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.893041ms
+        duration: 117.69025ms
     - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 92
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -595,13 +593,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 129.577208ms
+        duration: 120.698833ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -619,8 +617,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -630,13 +628,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 132.014667ms
+        duration: 122.733917ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -654,8 +652,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -665,34 +663,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 150.894792ms
+        duration: 121.993042ms
     - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 92
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -701,13 +698,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.627542ms
+        duration: 108.342541ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -725,8 +722,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -736,13 +733,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 126.01ms
+        duration: 121.32475ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -760,8 +757,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -771,13 +768,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 168.534291ms
+        duration: 115.892209ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -795,8 +792,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -806,13 +803,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 150.810125ms
+        duration: 118.872792ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -830,8 +827,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -841,13 +838,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 209.981375ms
+        duration: 114.454958ms
     - id: 24
       request:
         proto: HTTP/1.1
@@ -865,8 +862,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -876,33 +873,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 128.859459ms
+        duration: 150.761334ms
     - id: 25
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 167
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -911,13 +909,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 222.644917ms
+        duration: 127.581125ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -935,8 +933,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -946,13 +944,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.743ms
+        duration: 113.674083ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -970,8 +968,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -981,34 +979,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 159.610584ms
+        duration: 119.765917ms
     - id: 28
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 167
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1017,13 +1014,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.202334ms
+        duration: 115.845ms
     - id: 29
       request:
         proto: HTTP/1.1
@@ -1041,8 +1038,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1052,13 +1049,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.132375ms
+        duration: 111.635209ms
     - id: 30
       request:
         proto: HTTP/1.1
@@ -1076,8 +1073,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1087,13 +1084,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 144.342875ms
+        duration: 111.316459ms
     - id: 31
       request:
         proto: HTTP/1.1
@@ -1111,8 +1108,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1122,13 +1119,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.15575ms
+        duration: 118.132833ms
     - id: 32
       request:
         proto: HTTP/1.1
@@ -1146,8 +1143,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1157,13 +1154,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 130.49475ms
+        duration: 116.420833ms
     - id: 33
       request:
         proto: HTTP/1.1
@@ -1181,8 +1178,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1192,13 +1189,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.812333ms
+        duration: 120.206625ms
     - id: 34
       request:
         proto: HTTP/1.1
@@ -1216,8 +1213,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1227,33 +1224,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 171.251042ms
+        duration: 122.896542ms
     - id: 35
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 14
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1262,13 +1260,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 147.467459ms
+        duration: 193.164875ms
     - id: 36
       request:
         proto: HTTP/1.1
@@ -1286,8 +1284,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1297,13 +1295,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 164.731208ms
+        duration: 111.709584ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1321,8 +1319,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1332,34 +1330,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 152.064416ms
+        duration: 114.01625ms
     - id: 38
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 14
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"scopes":[]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1368,13 +1365,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 226.017584ms
+        duration: 131.695959ms
     - id: 39
       request:
         proto: HTTP/1.1
@@ -1392,8 +1389,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1403,13 +1400,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 153.853625ms
+        duration: 120.362041ms
     - id: 40
       request:
         proto: HTTP/1.1
@@ -1427,8 +1424,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1438,13 +1435,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 145.959708ms
+        duration: 110.635833ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1462,8 +1459,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1473,13 +1470,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 129.472959ms
+        duration: 111.445ms
     - id: 42
       request:
         proto: HTTP/1.1
@@ -1497,8 +1494,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1508,13 +1505,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 147.784125ms
+        duration: 142.262542ms
     - id: 43
       request:
         proto: HTTP/1.1
@@ -1532,8 +1529,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1543,13 +1540,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 163.183917ms
+        duration: 113.500666ms
     - id: 44
       request:
         proto: HTTP/1.1
@@ -1567,8 +1564,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1578,119 +1575,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 298.637834ms
+        duration: 134.053583ms
     - id: 45
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 147.268208ms
-    - id: 46
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 135.745209ms
-    - id: 47
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 136.157917ms
-    - id: 48
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1708,8 +1600,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1719,14 +1611,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 166.251292ms
-    - id: 49
+        duration: 126.226125ms
+    - id: 46
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1743,8 +1635,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1754,14 +1646,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.855833ms
-    - id: 50
+        duration: 220.291334ms
+    - id: 47
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1778,8 +1670,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1789,14 +1681,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 145.256917ms
-    - id: 51
+        duration: 146.961625ms
+    - id: 48
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -1814,8 +1706,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -1825,13 +1717,118 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.8095ms
+        duration: 127.671542ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 123.03225ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 115.124209ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 134.456791ms
     - id: 52
       request:
         proto: HTTP/1.1
@@ -1849,8 +1846,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1860,13 +1857,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.007916ms
+        duration: 139.180042ms
     - id: 53
       request:
         proto: HTTP/1.1
@@ -1884,8 +1881,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -1895,13 +1892,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 136.462166ms
+        duration: 135.627292ms
     - id: 54
       request:
         proto: HTTP/1.1
@@ -1919,8 +1916,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1930,13 +1927,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 129.84175ms
+        duration: 123.410708ms
     - id: 55
       request:
         proto: HTTP/1.1
@@ -1954,8 +1951,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -1965,13 +1962,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 138.743459ms
+        duration: 238.635791ms
     - id: 56
       request:
         proto: HTTP/1.1
@@ -1989,8 +1986,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2000,13 +1997,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 162.964958ms
+        duration: 118.746ms
     - id: 57
       request:
         proto: HTTP/1.1
@@ -2024,8 +2021,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2035,13 +2032,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 135.685333ms
+        duration: 127.878542ms
     - id: 58
       request:
         proto: HTTP/1.1
@@ -2059,8 +2056,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2070,13 +2067,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.581416ms
+        duration: 112.239959ms
     - id: 59
       request:
         proto: HTTP/1.1
@@ -2094,8 +2091,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -2105,13 +2102,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 165.748792ms
+        duration: 120.120292ms
     - id: 60
       request:
         proto: HTTP/1.1
@@ -2129,8 +2126,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -2140,13 +2137,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.321166ms
+        duration: 110.679417ms
     - id: 61
       request:
         proto: HTTP/1.1
@@ -2164,8 +2161,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -2175,13 +2172,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 192.11425ms
+        duration: 112.51075ms
     - id: 62
       request:
         proto: HTTP/1.1
@@ -2199,8 +2196,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2210,13 +2207,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.42675ms
+        duration: 115.414666ms
     - id: 63
       request:
         proto: HTTP/1.1
@@ -2234,8 +2231,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2245,13 +2242,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 165.650708ms
+        duration: 118.684916ms
     - id: 64
       request:
         proto: HTTP/1.1
@@ -2269,8 +2266,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2280,13 +2277,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 148.874583ms
+        duration: 160.762292ms
     - id: 65
       request:
         proto: HTTP/1.1
@@ -2304,8 +2301,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: GET
       response:
         proto: HTTP/2.0
@@ -2315,33 +2312,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 189.367292ms
+        duration: 125.139542ms
     - id: 66
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 14
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2350,13 +2348,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 164.595958ms
+        duration: 134.550541ms
     - id: 67
       request:
         proto: HTTP/1.1
@@ -2374,8 +2372,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
         method: GET
       response:
         proto: HTTP/2.0
@@ -2385,33 +2383,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.518208ms
+        duration: 115.626917ms
     - id: 68
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 14
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2420,34 +2419,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:appointments","description":"Ability to create appointments"},{"value":"read:appointments","description":"Ability to read appointments"}]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.887583ms
+        duration: 117.72775ms
     - id: 69
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 14
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"scopes":[]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
-        method: PATCH
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2456,33 +2454,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 161.463583ms
+        duration: 124.793541ms
     - id: 70
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 14
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"scopes":[]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccframeworkresourceserverscopes
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -2491,54 +2490,18 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"679050f144b3a54b7d47320e","name":"Acceptance Test - testaccframeworkresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccframeworkresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 155.50075ms
+        duration: 126.4625ms
     - id: 71
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 14
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"scopes":[]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 164.41475ms
-    - id: 72
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
         content_length: 0
         transfer_encoding: []
         trailer: {}
@@ -2551,79 +2514,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 139.196583ms
-    - id: 73
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 14
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"scopes":[]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccresourceserverscopes
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"66e1df75d5fa0521310a884d","name":"Acceptance Test - testaccresourceserverscopes","identifier":"https://uat.api.terraform-provider-auth0.com/testaccresourceserverscopes","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 152.089125ms
-    - id: 74
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66e1df75d5fa0521310a884d
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679050f144b3a54b7d47320e
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -2639,4 +2531,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 180.0465ms
+        duration: 165.366459ms

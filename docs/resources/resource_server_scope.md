@@ -50,10 +50,6 @@ resource "auth0_resource_server_scope" "write_posts" {
 
 - `description` (String) Description of the scope (permission).
 
-### Read-Only
-
-- `id` (String) The ID of this resource.
-
 ## Import
 
 Import is supported using the following syntax:

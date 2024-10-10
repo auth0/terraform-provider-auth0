@@ -80,7 +80,7 @@ resource "auth0_encryption_key_manager" "my_key_manager" {
 }
 `
 
-func TestAccEncryptionKeyManagerRotation(t *testing.T) {
+func TestAccFrameworkEncryptionKeyManagerRotation(t *testing.T) {
 	initialKey := make(map[string]string)
 	firstRotationKey := make(map[string]string)
 	secondRotationKey := make(map[string]string)
@@ -179,7 +179,7 @@ func TestAccEncryptionKeyManagerRotation(t *testing.T) {
 	})
 }
 
-func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
+func TestAccFrameworkEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 	initialRootKey := make(map[string]string)
 	initialWrappingKey := make(map[string]string)
 	secondRootKey := make(map[string]string)
@@ -195,7 +195,7 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 					_ = os.Setenv("TF_VAR_WRAPPED_KEY", "bad-key-value")
 				},
 				Config:      testAccEncryptionKeyManagerAddWrappedKey,
-				ExpectError: regexp.MustCompile(`Error: The wrapped_key attribute should not be specified`),
+				ExpectError: regexp.MustCompile(`The wrapped_key attribute should not be specified`),
 			},
 			{
 				Config: testAccEncryptionKeyManagerCreateRootKey,
@@ -203,7 +203,6 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.#", "1"),
 					extractRootKey("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key", &initialRootKey),
 					extractWrappingKey("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key", &initialWrappingKey),
 					func(_ *terraform.State) error {
@@ -227,7 +226,7 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 			{
 				Config: testAccEncryptionKeyManagerRemoveRootKey,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.#", "0"),
+					resource.TestCheckNoResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key"),
 				),
 			},
 			{
@@ -236,7 +235,6 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.#", "1"),
 					extractRootKey("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key", &secondRootKey),
 					extractWrappingKey("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key", &secondWrappingKey),
 					func(_ *terraform.State) error {
@@ -280,9 +278,8 @@ func TestAccEncryptionKeyManagerCustomerProvidedRootKey(t *testing.T) {
 			{
 				RefreshState: true,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.#", "1"),
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.0.public_wrapping_key", ""),
-					resource.TestCheckResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.0.wrapping_algorithm", ""),
+					resource.TestCheckNoResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.public_wrapping_key"),
+					resource.TestCheckNoResourceAttr("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key.wrapping_algorithm"),
 					extractRootKey("auth0_encryption_key_manager.my_key_manager", "customer_provided_root_key", &thirdRootKey),
 					func(_ *terraform.State) error {
 						keyID, ok := thirdRootKey["key_id"]
@@ -319,14 +316,14 @@ func extractKey(resource, attribute, keyType, keyState string, keyMapPtr *map[st
 			return err
 		}
 		for i := range count {
-			stateValue, ok := tfResource.Primary.Attributes[keyName(attribute, i, "state")]
+			stateValue, ok := tfResource.Primary.Attributes[indexedKeyName(attribute, i, "state")]
 			if !ok {
 				return fmt.Errorf("extractKey: failed to find state for attribute with name: %q", attribute)
 			}
 			if stateValue != keyState {
 				continue
 			}
-			typeValue, ok := tfResource.Primary.Attributes[keyName(attribute, i, "type")]
+			typeValue, ok := tfResource.Primary.Attributes[indexedKeyName(attribute, i, "type")]
 			if !ok {
 				return fmt.Errorf("extractKey: failed to find type for attribute with name: %q", attribute)
 			}
@@ -334,8 +331,8 @@ func extractKey(resource, attribute, keyType, keyState string, keyMapPtr *map[st
 				continue
 			}
 			for key, value := range tfResource.Primary.Attributes {
-				if strings.HasPrefix(key, keyName(attribute, i, "")) {
-					foundKey, _ := strings.CutPrefix(key, keyName(attribute, i, ""))
+				if strings.HasPrefix(key, indexedKeyName(attribute, i, "")) {
+					foundKey, _ := strings.CutPrefix(key, indexedKeyName(attribute, i, ""))
 					(*keyMapPtr)[foundKey] = value
 				}
 			}
@@ -353,14 +350,19 @@ func extractRootKey(resource, attribute string, keyMapPtr *map[string]string) re
 		if !ok {
 			return fmt.Errorf("extractRootKey: failed to find resource with name: %q", resource)
 		}
+		found := false
 		for key, value := range tfResource.Primary.Attributes {
-			if strings.HasPrefix(key, keyName(attribute, 0, "")) {
-				foundKey, _ := strings.CutPrefix(key, keyName(attribute, 0, ""))
+			if strings.HasPrefix(key, keyName(attribute, "")) {
+				found = true
+				foundKey, _ := strings.CutPrefix(key, keyName(attribute, ""))
 				switch foundKey {
 				case "key_id", "parent_key_id", "type", "state", "created_at", "updated_at":
 					(*keyMapPtr)[foundKey] = value
 				}
 			}
+		}
+		if !found {
+			return fmt.Errorf("extractRootKey: failed to find resource: %q attribute: %q", resource, attribute)
 		}
 		return nil
 	}
@@ -374,21 +376,30 @@ func extractWrappingKey(resource, attribute string, keyMapPtr *map[string]string
 		if !ok {
 			return fmt.Errorf("extractWrappingKey: failed to find resource with name: %q", resource)
 		}
+		found := false
 		for key, value := range tfResource.Primary.Attributes {
-			if strings.HasPrefix(key, keyName(attribute, 0, "")) {
-				foundKey, _ := strings.CutPrefix(key, keyName(attribute, 0, ""))
+			if strings.HasPrefix(key, keyName(attribute, "")) {
+				found = true
+				foundKey, _ := strings.CutPrefix(key, keyName(attribute, ""))
 				switch foundKey {
 				case "public_wrapping_key", "wrapping_algorithm":
 					(*keyMapPtr)[foundKey] = value
 				}
 			}
 		}
+		if !found {
+			return fmt.Errorf("extractWrappingKey: failed to find resource: %q attribute: %q", resource, attribute)
+		}
 		return nil
 	}
 }
 
-func keyName(attribute string, index int, key string) string {
+func indexedKeyName(attribute string, index int, key string) string {
 	return fmt.Sprintf("%s.%d.%s", attribute, index, key)
+}
+
+func keyName(attribute string, key string) string {
+	return fmt.Sprintf("%s.%s", attribute, key)
 }
 
 // Utility methods and constants for wrapping keys.

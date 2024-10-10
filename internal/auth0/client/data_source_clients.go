@@ -40,7 +40,7 @@ func NewClientsDataSource() *schema.Resource {
 				Description: "Filter clients by first party status.",
 			},
 			"clients": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Computed:    true,
 				Description: "List of clients matching the filter criteria.",
 				Elem: &schema.Resource{

@@ -2,6 +2,7 @@ package organization_test
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 	"testing"
@@ -113,6 +114,38 @@ func TestAccDataSourceOrganization(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_organization.test", "connections.0.connection_id"),
 					resource.TestCheckResourceAttr("data.auth0_organization.test", "members.#", "1"),
 				),
+			},
+			{
+				PreConfig: func() {
+					_ = os.Setenv("AUTH0_DOMAIN", "duedares.us.auth0.com")
+					_ = os.Setenv("AUTH0_CLIENT_ID", "DCglqGHelY62aZieE2d7TrvZ2Wwwmjfy")
+					_ = os.Setenv("AUTH0_CLIENT_SECRET", "bOTTvO1lq2_0VDvXidBN58A3tPIrHRSKw5xkAGmPbZy3i8DMjveVYkx5mxQosYNX")
+				},
+				Config: `data "auth0_organization" "test" {
+					organization_id = "org_P2TMimgtov7fsPI6"
+				}`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_organization.test", "grant_ids.#", "0")),
+			},
+		},
+	})
+}
+
+func TestAccDataSourceOrganizationInsufficientScope(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		PreventPostDestroyRefresh: true,
+		Steps: []resource.TestStep{
+			{
+				PreConfig: func() {
+					_ = os.Setenv("AUTH0_DOMAIN", "duedares.us.auth0.com")
+					_ = os.Setenv("AUTH0_CLIENT_ID", "DCglqGHelY62aZieE2d7TrvZ2Wwwmjfy")
+					_ = os.Setenv("AUTH0_CLIENT_SECRET", "bOTTvO1lq2_0VDvXidBN58A3tPIrHRSKw5xkAGmPbZy3i8DMjveVYkx5mxQosYNX")
+				},
+				Config: `data "auth0_organization" "test" {
+					organization_id = "org_P0nITxTkwnKQvD22"
+				}`,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_organization.test", "grant_ids.#", "0")),
 			},
 		},
 	})

@@ -136,12 +136,13 @@ func TestAccDataSourceOrganizationInsufficientScope(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				PreConfig: func() {
-					// Add your env variables here
-					_ = os.Setenv("AUTH0_DOMAIN", "some-domain-name")
-					_ = os.Setenv("AUTH0_CLIENT_ID", "some-client-id")
-					_ = os.Setenv("AUTH0_CLIENT_SECRET", "some-client-secret")
-				},
+				// Uncomment the below code to test functionality against a non enabled tenants and record it.
+				//PreConfig: func() {
+				//	// Add your env variables here.
+				//	_ = os.Setenv("AUTH0_DOMAIN", "some-domain-name")
+				//	_ = os.Setenv("AUTH0_CLIENT_ID", "some-client-id")
+				//	_ = os.Setenv("AUTH0_CLIENT_SECRET", "some-client-secret")
+				//},
 				Config: `data "auth0_organization" "test" {
 					organization_id = "org_P0nITxTkwnKQvD22"
 				}`,

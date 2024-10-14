@@ -2,7 +2,7 @@
 
 BUG FIXES:
 
-- `data-source/auth0_organization`: Add support to gracefully error handle for clients which doesn't support organization client grant association ([#1049](https://github.com/auth0/terraform-provider-auth0/pull/1049/))
+- `data-source/auth0_organization`: Add support to gracefully handle error (Forbidden) for clients which doesn't support organization - client grants association ([#1049](https://github.com/auth0/terraform-provider-auth0/pull/1049/))
 - `resource/auth0_connection`: Updated docs to highlight that user_id_attribute is one of oid/sub for Azure AD Connection ([#1047](https://github.com/auth0/terraform-provider-auth0/pull/1047/)) 
 
 

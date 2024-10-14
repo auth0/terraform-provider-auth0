@@ -7,7 +7,7 @@ BUG FIXES:
 - `resource/auth0_form`: Updated docs to use `auth0_form` in examples  ([#1046](https://github.com/auth0/terraform-provider-auth0/pull/1046/))
 
 ENHANCEMENTS:
-- `data-source/auth0_roles`: Updated from `Offset Pagination` to `Checkpoint Pagination` to retrieve greater than 1000 role users ([#1048](https://github.com/auth0/terraform-provider-auth0/pull/1048/))
+- `data-source/auth0_roles`: Updated from `Offset Pagination` to `Checkpoint Pagination` to retrieve more than 1,000 role users ([#1048](https://github.com/auth0/terraform-provider-auth0/pull/1048/))
 
 
 ## v1.7.0

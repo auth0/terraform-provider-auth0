@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -195,6 +196,9 @@ func fetchAllOrganizationClientGrants(
 ) ([]*management.ClientGrant, error) {
 	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
 	if err != nil {
+		if strings.Contains(err.Error(), "Insufficient scope") {
+			return []*management.ClientGrant{}, nil
+		}
 		return nil, err
 	}
 

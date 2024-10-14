@@ -137,9 +137,10 @@ func TestAccDataSourceOrganizationInsufficientScope(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				PreConfig: func() {
-					_ = os.Setenv("AUTH0_DOMAIN", "duedares.us.auth0.com")
-					_ = os.Setenv("AUTH0_CLIENT_ID", "DCglqGHelY62aZieE2d7TrvZ2Wwwmjfy")
-					_ = os.Setenv("AUTH0_CLIENT_SECRET", "bOTTvO1lq2_0VDvXidBN58A3tPIrHRSKw5xkAGmPbZy3i8DMjveVYkx5mxQosYNX")
+					// Add your env variables here
+					_ = os.Setenv("AUTH0_DOMAIN", "some-domain-name")
+					_ = os.Setenv("AUTH0_CLIENT_ID", "some-client-id")
+					_ = os.Setenv("AUTH0_CLIENT_SECRET", "some-client-secret")
 				},
 				Config: `data "auth0_organization" "test" {
 					organization_id = "org_P0nITxTkwnKQvD22"

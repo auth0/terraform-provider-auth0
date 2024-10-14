@@ -2,9 +2,12 @@
 
 BUG FIXES:
 
-- `data-source/auth0_organization`: Implemented enhanced error handling to gracefully manage "Forbidden" errors when retrieving the list of client grants via the `auth0_organization` data source. This addresses cases where the feature is not enabled for the user, preventing the error from disrupting the process ([#1049](https://github.com/auth0/terraform-provider-auth0/pull/1049/)). 
+- `data-source/auth0_organization`: Add support to gracefully handle error (Forbidden) for clients which doesn't support organization - client grants association ([#1049](https://github.com/auth0/terraform-provider-auth0/pull/1049/))
 - `resource/auth0_connection`: Update docs to highlight that user_id_attribute is one of oid/sub for Azure AD Connection ([#1047](https://github.com/auth0/terraform-provider-auth0/pull/1047/))
 - `resource/auth0_form`: Update docs to use `auth0_form` in examples  ([#1046](https://github.com/auth0/terraform-provider-auth0/pull/1046/))
+
+ENHANCEMENTS:
+- `data-source/auth0_roles`: Updated from `Offset Pagination` to `Checkpoint Pagination` to retrieve greater than 1000 role users ([#1048](https://github.com/auth0/terraform-provider-auth0/pull/1048/))
 
 
 ## v1.7.0

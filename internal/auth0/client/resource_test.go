@@ -2427,3 +2427,72 @@ func TestAccClientWithDefaultOrganization(t *testing.T) {
 		},
 	})
 }
+
+const testAccCreateClientWithOIDCLogout = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+
+	oidc_logout {
+    	backchannel_logout_urls = ["https://auth0.test/all/logout"]
+		backchannel_logout_initiators_mode = "all"
+    }
+}
+`
+
+const testAccUpdateClientWithOIDCLogout = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+
+	oidc_logout {
+		backchannel_logout_urls = ["https://auth0.test/custom/logout"]
+		backchannel_logout_initiators_mode = "custom"
+		backchannel_logout_selected_initiators = ["rp-logout", "idp-logout", "password-changed", "session-expired"]
+	}
+}
+`
+
+const testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+}
+`
+
+func TestAccClientOIDCLogout(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithOIDCLogout, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators_mode", "all"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_selected_initiators.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithOIDCLogout, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators_mode", "custom"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_selected_initiators.#", "4"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "0"),
+				),
+			},
+		},
+	})
+}

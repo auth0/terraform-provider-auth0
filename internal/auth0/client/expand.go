@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -42,6 +41,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
+		OIDCLogout:                         expandOIDCLogout(data),
 		ClientMetadata:                     expandClientMetadata(data),
 		RefreshToken:                       expandClientRefreshToken(data),
 		JWTConfiguration:                   expandClientJWTConfiguration(data),
@@ -147,6 +147,27 @@ func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBack
 	return &management.OIDCBackchannelLogout{
 		BackChannelLogoutURLs: logoutUrls,
 	}
+}
+
+func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
+	oidcLogoutConfig := data.GetRawConfig().GetAttr("oidc_logout")
+	if oidcLogoutConfig.IsNull() {
+		return nil
+	}
+
+	var oidcLogout management.OIDCLogout
+
+	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
+		oidcLogout.BackChannelLogoutInitiators = &management.BackChannelLogoutInitiators{
+			Mode:               value.String(config.GetAttr("backchannel_logout_initiators_mode")),
+			SelectedInitiators: value.Strings(config.GetAttr("backchannel_logout_selected_initiators")),
+		}
+
+		return stop
+	})
+
+	return &oidcLogout
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {

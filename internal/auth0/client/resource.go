@@ -118,28 +118,7 @@ func NewResource() *schema.Resource {
 				},
 				Optional:    true,
 				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
-			},
-			"oidc_backchannel_logout_initiators_mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"all", "custom",
-				}, false),
-				Description: "Which initiators should receive a logout token. Possible values are `all` indicating all " +
-					"initiators or `custom` meaning only those selected via oidc_backchannel_logout_initiators",
-			},
-			"oidc_backchannel_logout_initiators": {
-				Type: schema.TypeSet,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-					ValidateFunc: validation.StringInSlice([]string{
-						"rp-logout", "idp-logout", "password-changed", "session-expired", "session-revoked",
-						"account-deleted", "email-identifier-changed", "mfa-phone-unenrolled", "account-deactivated",
-					}, false),
-				},
-				Optional: true,
-				Description: "Which specific initiators should receive a logout token. Possible values are " +
-					"rp-logout, idp-logout, password-changed, session-expired, session-revoked, account-deleted, email-identifier-changed, mfa-phone-unenrolled, account-deactivated",
+				Deprecated:  "Configure oidc_logout block instead to gain access to all properties.",
 			},
 			"grant_types": {
 				Type:        schema.TypeList,
@@ -1346,6 +1325,38 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "Makes the use of Proof-of-Possession mandatory for this client.",
+			},
+			"oidc_logout": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configure OIDC logout for the Client",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"backchannel_logout_urls": {
+							Type: schema.TypeSet,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Required:    true,
+							Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
+						},
+						"backchannel_logout_initiators_mode": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"all", "custom"}, false),
+							Description:  "Determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the backchannel_logout_selected_initiators set, `all` enables all current and future initiators.",
+						},
+						"backchannel_logout_selected_initiators": {
+							Type: schema.TypeSet,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Optional:    true,
+							Description: "Contains the list of initiators to be enabled for the given client.",
+						},
+					},
+				},
 			},
 		},
 	}

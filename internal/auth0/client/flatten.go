@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"fmt"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -60,6 +59,34 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 			"infinite_idle_token_lifetime": refreshToken.GetInfiniteIdleTokenLifetime(),
 			"idle_token_lifetime":          refreshToken.GetIdleTokenLifetime(),
 		},
+	}
+}
+
+func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
+	if logout != nil {
+		return nil
+	} else {
+		return backchannelLogout.GetBackChannelLogoutURLs()
+	}
+}
+
+func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
+	if oidcLogout == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"backchannel_logout_urls":            oidcLogout.GetBackChannelLogoutURLs(),
+		"backchannel_logout_initiators_mode": oidcLogout.GetBackChannelLogoutInitiators().GetMode(),
+	}
+
+	selectedInitiators := oidcLogout.GetBackChannelLogoutInitiators().GetSelectedInitiators()
+	if len(selectedInitiators) > 0 {
+		flattened["backchannel_logout_selected_initiators"] = selectedInitiators
+	}
+
+	return []interface{}{
+		flattened,
 	}
 }
 
@@ -557,9 +584,8 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		data.Set("signing_keys", client.SigningKeys),
 		data.Set("client_metadata", client.GetClientMetadata()),
-		data.Set("oidc_backchannel_logout_urls", client.GetOIDCLogout().GetBackChannelLogoutURLs()),
-		data.Set("oidc_backchannel_logout_initiators_mode", client.GetOIDCLogout().GetBackChannelLogoutInitiators().GetMode()),
-		data.Set("oidc_backchannel_logout_initiators", client.GetOIDCLogout().GetBackChannelLogoutInitiators().GetSelectedInitiators()),
+		data.Set("oidc_backchannel_logout_urls", flattenOIDCBackchannelURLs(client.GetOIDCBackchannelLogout(), client.GetOIDCLogout())),
+		data.Set("oidc_logout", flattenOIDCLogout(client.GetOIDCLogout())),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
 		data.Set("default_organization", flattenDefaultOrganization(client.GetDefaultOrganization())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),

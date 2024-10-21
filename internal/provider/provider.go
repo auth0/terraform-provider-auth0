@@ -1,6 +1,9 @@
 package provider
 
 import (
+	"context"
+	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"os"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
@@ -172,7 +175,29 @@ func New() *schema.Provider {
 		},
 	}
 
-	provider.ConfigureContextFunc = config.ConfigureProvider(&provider.TerraformVersion)
+	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		var diags diag.Diagnostics
+
+		// Check required environment variables
+		requiredEnvVars := []string{"AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET"}
+		for _, varName := range requiredEnvVars {
+			value, exists := os.LookupEnv(varName)
+			if !exists || value == "" {
+				diags = append(diags, diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  fmt.Sprintf("Missing environment variable: %s", varName),
+					Detail:   fmt.Sprintf("The environment variable %s must be set and cannot be empty.", varName),
+				})
+			}
+		}
+
+		if len(diags) > 0 {
+			return nil, diags
+		}
+
+		// Call the original configuration function if no errors
+		return config.ConfigureProvider(&provider.TerraformVersion)(ctx, d)
+	}
 
 	return provider
 }

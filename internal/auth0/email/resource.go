@@ -33,11 +33,11 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: validation.StringInSlice(
-					[]string{"azure_cs", "mailgun", "mandrill", "ms365", "sendgrid", "ses", "smtp", "sparkpost"},
+					[]string{"azure_cs", "custom", "mailgun", "mandrill", "ms365", "sendgrid", "ses", "smtp", "sparkpost"},
 					false,
 				),
 				Description: "Name of the email provider. " +
-					"Options include `azure_cs`, `mailgun`, `mandrill`, `ms365`, `sendgrid`, `ses`, `smtp` and `sparkpost`.",
+					"Options include `azure_cs`, `custom`, `mailgun`, `mandrill`, `ms365`, `sendgrid`, `ses`, `smtp` and `sparkpost`.",
 			},
 			"enabled": {
 				Type:        schema.TypeBool,

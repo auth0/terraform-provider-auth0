@@ -3,8 +3,9 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"os"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
 
@@ -178,7 +179,7 @@ func New() *schema.Provider {
 	provider.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		var diags diag.Diagnostics
 
-		// Check required environment variables
+		// Check required environment variables.
 		requiredEnvVars := []string{"AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET"}
 		for _, varName := range requiredEnvVars {
 			value, exists := os.LookupEnv(varName)
@@ -195,7 +196,7 @@ func New() *schema.Provider {
 			return nil, diags
 		}
 
-		// Call the original configuration function if no errors
+		// Call the original configuration function if no errors.
 		return config.ConfigureProvider(&provider.TerraformVersion)(ctx, d)
 	}
 

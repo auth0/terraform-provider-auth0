@@ -113,7 +113,7 @@ data "auth0_role" "test" {
 
 func TestAccDataSourceRoleRequiredArguments(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_role" "test" { }`,

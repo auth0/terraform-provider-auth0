@@ -5,7 +5,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 )
 
-func DiagnosticsFromError(err error) diag.Diagnostics {
+// Diagnostics converts an error to a framework Diagnostics
+// If the error code is a 404 it triggers a resource deletion.
+func Diagnostics(err error) diag.Diagnostics {
 	result := diag.Diagnostics{}
 	if err == nil {
 		return result

@@ -62,6 +62,17 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
 
+		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
+			return nil, diag.Diagnostics{
+				{
+					Severity: diag.Error,
+					Summary:  fmt.Sprintf("Missing environment variables"),
+					Detail: fmt.Sprintf("Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. " +
+						"Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs"),
+				},
+			}
+		}
+
 		apiClient, err := management.New(domain,
 			authenticationOption(clientID, clientSecret, apiToken, audience),
 			management.WithDebug(debug),

@@ -66,7 +66,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.Diagnostics{
 				{
 					Severity: diag.Error,
-					Summary:  fmt.Sprintf("Missing environment variables"),
+					Summary:  "Missing environment variables",
 					Detail: fmt.Sprintf("Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. " +
 						"Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs"),
 				},

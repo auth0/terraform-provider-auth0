@@ -25,7 +25,7 @@ func TestConfigureProvider(t *testing.T) {
 			name: "it can configure a provider with client credentials",
 			givenTerraformConfig: map[string]interface{}{
 				"domain":        "example.auth0.com",
-				"clientID":      "1234567",
+				"client_id":     "1234567",
 				"client_secret": "secret",
 			},
 			expectedDiagnostics: nil,
@@ -34,7 +34,7 @@ func TestConfigureProvider(t *testing.T) {
 			name: "it can configure a provider with client credentials and audience",
 			givenTerraformConfig: map[string]interface{}{
 				"domain":        "example.auth0.com",
-				"clientID":      "1234567",
+				"client_id":     "1234567",
 				"client_secret": "secret",
 				"audience":      "myaudience",
 			},

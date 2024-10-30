@@ -56,7 +56,8 @@ func TestConfigureProvider(t *testing.T) {
 			expectedDiagnostics: diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,
-					Summary:  "parse \"https://example.com:path\": invalid port \":path\" after host",
+					Summary:  "Missing environment variables",
+					Detail:   "Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs",
 				},
 			},
 		},

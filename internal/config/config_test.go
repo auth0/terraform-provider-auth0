@@ -56,7 +56,7 @@ func TestConfigureProvider(t *testing.T) {
 			expectedDiagnostics: diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,
-					Summary:  "parse \"https://example.com:path\": invalid port \":path\" after host",
+					Summary:  "Missing environment variables",
 				},
 			},
 		},

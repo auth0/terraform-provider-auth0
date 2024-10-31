@@ -75,28 +75,20 @@ func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 		return result
 	}
 
-	if oldMetadata == "" {
-		if newMetadataStr, ok := newMetadata.(string); ok {
-			var newMetadataArr []interface{}
-			if err := json.Unmarshal([]byte(newMetadataStr), &newMetadataArr); err != nil {
-				return nil
-			}
-			return newMetadataArr
-		}
-		return result
-	}
-
 	if newMetadata == "" {
 		return result
 	}
 
-	b, err := json.Marshal(newMetadata)
-	if err != nil {
-		return nil
+	if newMetadataStr, ok := newMetadata.(string); ok {
+		var newMetadataArr []interface{}
+		if err := json.Unmarshal([]byte(newMetadataStr), &newMetadataArr); err != nil {
+			return nil
+		}
+		return newMetadataArr
 	}
 
-	if err := json.Unmarshal(b, &result); err != nil {
-		return nil
+	if newMetadataArr, ok := newMetadata.([]interface{}); ok {
+		return newMetadataArr
 	}
 
 	return result

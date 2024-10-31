@@ -1,3 +1,18 @@
+## v1.7.2
+
+BUG FIXES:
+
+- `resource/auth0_flow`: Fixed an issue with updating flows  ([#1058](https://github.com/auth0/terraform-provider-auth0/pull/1058/))
+- `resource/auth0_form`: Fixed an issue with updating forms  ([#1058](https://github.com/auth0/terraform-provider-auth0/pull/1058/))
+
+ENHANCEMENTS:
+- `provider`: Added explicit check for handling missing env variables ([#1065](https://github.com/auth0/terraform-provider-auth0/pull/1065/))
+- `resource/auth0_email_provider`: Added support for Custom Email Provider ([#1064](https://github.com/auth0/terraform-provider-auth0/pull/1064/))
+
+NOTES:
+- `resource/auth0_trigger_action`: Remove IGA-* triggers ([#1063](https://github.com/auth0/terraform-provider-auth0/pull/1063/))
+
+
 ## v1.7.1
 
 BUG FIXES:

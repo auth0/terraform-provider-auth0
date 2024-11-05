@@ -70,7 +70,7 @@ data "auth0_resource_server" "auth0" {
 
 func TestAccDataSourceResourceServerRequiredArguments(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_resource_server" "test" { }`,

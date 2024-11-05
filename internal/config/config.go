@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"regexp"
 	"strconv"
 	"time"
@@ -14,10 +15,13 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 
+	frameworkError "github.com/auth0/terraform-provider-auth0/internal/framework/error"
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
@@ -25,8 +29,8 @@ const providerName = "Terraform-Provider-Auth0" // #nosec G101
 
 var version = "dev"
 
-// Config is the type used for the
-// *schema.Provider meta parameter.
+// Config is the type used for the *schema.Provider meta parameter
+// and the framework ResourceData and DatasourceData parameters.
 type Config struct {
 	api   *management.Management
 	mutex *mutex.KeyValue
@@ -48,6 +52,11 @@ func (c *Config) GetAPI() *management.Management {
 // GetMutex fetches an instance of the *mutex.KeyValue.
 func (c *Config) GetMutex() *mutex.KeyValue {
 	return c.mutex
+}
+
+// GetProviderVersion fetches the build version of the provider.
+func GetProviderVersion() string {
+	return version
 }
 
 // ConfigureProvider will configure the *schema.Provider so that
@@ -73,7 +82,8 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			}
 		}
 
-		apiClient, err := management.New(domain,
+		apiClient, err := management.New(
+			domain,
 			authenticationOption(clientID, clientSecret, apiToken, audience),
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
@@ -89,6 +99,71 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	}
 }
 
+// FrameworkProviderModel is the data model for our framework provider.
+type FrameworkProviderModel struct {
+	Domain       types.String `tfsdk:"domain"`
+	Audience     types.String `tfsdk:"audience"`
+	ClientID     types.String `tfsdk:"client_id"`
+	ClientSecret types.String `tfsdk:"client_secret"`
+	APIToken     types.String `tfsdk:"api_token"`
+	Debug        types.Bool   `tfsdk:"debug"`
+}
+
+// ConfigureFrameworkProvider will configure the provider.Provider so that
+// *management.Management client and *mutex.KeyValue is stored
+// and passed into the subsequent resources Configure method as the ConfigureRequest.ProviderData.
+func ConfigureFrameworkProvider() func(context.Context, provider.ConfigureRequest, *provider.ConfigureResponse) {
+	return func(ctx context.Context, request provider.ConfigureRequest, response *provider.ConfigureResponse) {
+		domain := os.Getenv("AUTH0_DOMAIN")
+		clientID := os.Getenv("AUTH0_CLIENT_ID")
+		clientSecret := os.Getenv("AUTH0_CLIENT_SECRET")
+		apiToken := os.Getenv("AUTH0_API_TOKEN")
+		audience := os.Getenv("AUTH0_AUDIENCE")
+		debugStr := os.Getenv("AUTH0_DEBUG")
+		debug := (debugStr == "1" || debugStr == "true" || debugStr == "TRUE" || debugStr == "on" || debugStr == "ON")
+
+		var data FrameworkProviderModel
+		response.Diagnostics.Append(request.Config.Get(ctx, &data)...)
+
+		if data.Domain.ValueString() != "" {
+			domain = data.Domain.ValueString()
+		}
+		if data.ClientID.ValueString() != "" {
+			clientID = data.ClientID.ValueString()
+		}
+		if data.ClientSecret.ValueString() != "" {
+			clientSecret = data.ClientSecret.ValueString()
+		}
+		if data.APIToken.ValueString() != "" {
+			apiToken = data.APIToken.ValueString()
+		}
+		if data.Audience.ValueString() != "" {
+			audience = data.Audience.ValueString()
+		}
+		if !data.Debug.IsNull() && !data.Debug.IsUnknown() {
+			debug = data.Debug.ValueBool()
+		}
+		apiClient, err := management.New(
+			domain,
+			authenticationOption(clientID, clientSecret, apiToken, audience),
+			management.WithDebug(debug),
+			management.WithUserAgent(userAgentFramework(&request.TerraformVersion)),
+			management.WithAuth0ClientEnvEntry(providerName, version),
+			management.WithNoRetries(),
+			management.WithClient(customClientWithRetries()),
+		)
+		if err != nil {
+			response.Diagnostics.Append(frameworkError.Diagnostics(err)...)
+		}
+
+		if !response.Diagnostics.HasError() {
+			config := New(apiClient)
+			response.ResourceData = config
+			response.DataSourceData = config
+		}
+	}
+}
+
 // userAgent computes the desired User-Agent header for the *management.Management client.
 func userAgent(terraformVersion *string) string {
 	sdkVersion := auth0.Version
@@ -100,6 +175,22 @@ func userAgent(terraformVersion *string) string {
 		version,
 		sdkVersion,
 		terraformSDKVersion,
+		*terraformVersion,
+	)
+
+	return userAgent
+}
+
+// userAgentFramework computes the desired User-Agent header for the
+// *management.Management client using the Terraform Framework.
+func userAgentFramework(terraformVersion *string) string {
+	sdkVersion := auth0.Version
+
+	userAgent := fmt.Sprintf(
+		"%s/%s (Go-Auth0-SDK/%s; Terraform/%s)",
+		providerName,
+		version,
+		sdkVersion,
 		*terraformVersion,
 	)
 

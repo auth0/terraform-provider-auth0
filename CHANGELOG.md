@@ -1,3 +1,8 @@
+## v1.7.3
+
+NOTES:
+This is a placeholder change to bump the version, as we are trying to resolve issues publishing to the Terraform Registry.
+
 ## v1.7.2
 
 BUG FIXES:

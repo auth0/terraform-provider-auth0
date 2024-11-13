@@ -104,8 +104,8 @@ func NewResource() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
-						"oidc", "samlp", "waad", "google-apps", "adfs",
-						"okta", "keycloak-samlp", "pingfederate"},
+						"oidc", "samlp", "waad", "google-apps",
+						"adfs", "okta", "keycloak-samlp", "pingfederate"},
 						false),
 				},
 				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow.",

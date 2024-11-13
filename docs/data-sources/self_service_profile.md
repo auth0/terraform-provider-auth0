@@ -26,8 +26,11 @@ data "auth0_self_service_profile" "auth0_self_service_profile" {
 
 ### Read-Only
 
+- `allowed_strategies` (Set of String) List of IdP strategies that will be shown to users during the Self-Service SSO flow.
 - `branding` (List of Object) Field can be used to customize the look and feel of the wizard. (see [below for nested schema](#nestedatt--branding))
 - `created_at` (String) The ISO 8601 formatted date the profile was created.
+- `description` (String) The description of the self-service Profile
+- `name` (String) The name of the self-service Profile
 - `updated_at` (String) The ISO 8601 formatted date the profile was updated.
 - `user_attributes` (List of Object) This array stores the mapping information that will be shown to the user during the SS-SSO flow. The user will be prompted to map the attributes on their identity provider to ensure the specified attributes get passed to Auth0. (see [below for nested schema](#nestedatt--user_attributes))
 

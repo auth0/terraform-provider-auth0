@@ -59,7 +59,7 @@ func flattenBrandingColors(brandingColors *management.BrandingColors) []interfac
 	}
 }
 
-func flattenPromptCustomText(data *schema.ResourceData, customText map[string]interface{}) error {
+func flattenSSOCustomText(data *schema.ResourceData, customText map[string]interface{}) error {
 	body, err := marshalCustomTextBody(customText)
 	if err != nil {
 		return err

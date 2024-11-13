@@ -31,7 +31,7 @@ func NewResource() *schema.Resource {
 			},
 			"description": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
 				ValidateFunc: validation.StringLenBetween(1, 140),
 				Description:  "The description of the self-service Profile",
 			},

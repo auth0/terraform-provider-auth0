@@ -31,13 +31,13 @@ resource "auth0_self_service_profile" "my_self_service_profile" {
 
 ### Required
 
-- `description` (String) The description of the self-service Profile
 - `name` (String) The name of the self-service Profile
 
 ### Optional
 
 - `allowed_strategies` (Set of String) List of IdP strategies that will be shown to users during the Self-Service SSO flow.
 - `branding` (Block List, Max: 1) Field can be used to customize the look and feel of the wizard. (see [below for nested schema](#nestedblock--branding))
+- `description` (String) The description of the self-service Profile
 - `user_attributes` (Block List, Max: 20) This array stores the mapping information that will be shown to the user during the SS-SSO flow. The user will be prompted to map the attributes on their identity provider to ensure the specified attributes get passed to Auth0. (see [below for nested schema](#nestedblock--user_attributes))
 
 ### Read-Only

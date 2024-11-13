@@ -74,7 +74,7 @@ func readCustomTextForSSOProfile(ctx context.Context, data *schema.ResourceData,
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenPromptCustomText(data, customText))
+	return diag.FromErr(flattenSSOCustomText(data, customText))
 }
 
 func updateCustomTextForSSOProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

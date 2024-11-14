@@ -20,8 +20,8 @@ func NewRoleResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				DiffSuppressFunc: func(_, old, new string, _ *schema.ResourceData) bool {
-					return old == "auth0|"+new
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return o == "auth0|"+n
 				},
 				Description: "ID of the user.",
 			},

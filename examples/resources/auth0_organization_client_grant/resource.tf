@@ -1,15 +1,17 @@
+# Create an Organization
 resource "auth0_organization" "my_organization" {
   name         = "test-org-acceptance-testing"
   display_name = "Test Org Acceptance Testing"
 }
 
+# Create a Resource Server
 resource "auth0_resource_server" "new_resource_server" {
-  depends_on = [auth0_organization.my_organization]
   name       = "Example API"
   identifier = "https://api.travel00123.com/"
 }
 
 
+# Create a Client by referencing the newly created organisation or by reference an existing one.
 resource "auth0_client" "my_test_client" {
   depends_on         = [auth0_organization.my_organization, auth0_resource_server.new_resource_server]
   name               = "test_client"
@@ -20,6 +22,7 @@ resource "auth0_client" "my_test_client" {
   }
 }
 
+# Create a client grant which is associated with the client and resource server.
 resource "auth0_client_grant" "my_client_grant" {
   depends_on             = [auth0_resource_server.new_resource_server, auth0_client.my_test_client]
   client_id              = auth0_client.my_test_client.id
@@ -30,6 +33,7 @@ resource "auth0_client_grant" "my_client_grant" {
 }
 
 
+# Create the organization and client grant association
 resource "auth0_organization_client_grant" "associate_org_client_grant" {
   depends_on      = [auth0_client_grant.my_client_grant]
   organization_id = auth0_organization.my_organization.id

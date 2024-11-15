@@ -144,3 +144,35 @@ func marshalCustomTextBody(b map[string]interface{}) (string, error) {
 
 	return buffer.String(), nil
 }
+
+func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *management.PromptRendering) error {
+	var (
+		idComponents           = strings.Split(data.Id(), ":")
+		promptName, screenName = idComponents[0], idComponents[1]
+	)
+
+	result := multierror.Append(
+		data.Set("prompt_type", promptName),
+		data.Set("screen_name", screenName),
+		data.Set("tenant", promptSetting.GetTenant()),
+		data.Set("rendering_mode", promptSetting.GetRenderingMode()),
+		data.Set("default_head_tags_disabled", promptSetting.GetDefaultHeadTagsDisabled()),
+		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
+		data.Set("head_tags", flattenHeadTags(promptSetting.HeadTags)),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenHeadTags(headTags []interface{}) string {
+	if headTags == nil {
+		return ""
+	}
+
+	headTagBytes, err := json.Marshal(headTags)
+	if err != nil {
+		return ""
+	}
+
+	return string(headTagBytes)
+}

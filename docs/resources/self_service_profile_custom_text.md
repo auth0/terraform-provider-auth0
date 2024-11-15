@@ -33,4 +33,15 @@ resource "auth0_self_service_profile_custom_text" "sso_custom_text" {
 
 - `id` (String) The ID of this resource.
 
+## Import
 
+Import is supported using the following syntax:
+
+```shell
+# This resource can be imported by specifying the
+# sso-profile-id, language and page separated by "::" (note the double colon)
+# <sso-profile-id>::<language>::<page>
+#
+# Example
+terraform import auth0_self_service_profile_custom_text.example "some-sso-id::en::get-started"
+```

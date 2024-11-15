@@ -28,6 +28,7 @@ func NewCustomTextResource() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"sso_id": {
 				Type:        schema.TypeString,
+				ForceNew:    true,
 				Required:    true,
 				Description: "The id of the self-service profile",
 			},

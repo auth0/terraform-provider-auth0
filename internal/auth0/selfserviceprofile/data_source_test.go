@@ -12,6 +12,9 @@ import (
 
 const testAGivenSelfServiceProfile = `
 resource "auth0_self_service_profile" "my_self_service_profile" {
+	name = "my-sso-profile"
+	description = "sample description"
+	allowed_strategies = ["oidc", "samlp"]
 	user_attributes	{
 		name		= "sample-name-{{.testName}}"
 		description = "sample-description"

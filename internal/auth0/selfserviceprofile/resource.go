@@ -23,6 +23,18 @@ func NewResource() *schema.Resource {
 		},
 		Description: "With this resource, you can create and manage Self-Service Profile for a tenant.",
 		Schema: map[string]*schema.Schema{
+			"name": {
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringLenBetween(1, 100),
+				Description:  "The name of the self-service Profile",
+			},
+			"description": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringLenBetween(1, 140),
+				Description:  "The description of the self-service Profile",
+			},
 			"user_attributes": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -85,6 +97,18 @@ func NewResource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"allowed_strategies": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"oidc", "samlp", "waad", "google-apps",
+						"adfs", "okta", "keycloak-samlp", "pingfederate"},
+						false),
+				},
+				Description: "List of IdP strategies that will be shown to users during the Self-Service SSO flow.",
 			},
 			"created_at": {
 				Type:        schema.TypeString,

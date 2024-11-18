@@ -34,8 +34,8 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
-				DiffSuppressFunc: func(_, old, new string, _ *schema.ResourceData) bool {
-					return old == "auth0|"+new
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return o == "auth0|"+n
 				},
 				Description: "ID of the user.",
 			},

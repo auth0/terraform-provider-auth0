@@ -1,6 +1,7 @@
 package prompt_test
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -9,14 +10,33 @@ import (
 )
 
 const (
-	testAccPromptScreenRenderWithoutSettings = `
-resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-  prompt_type     = "logout"
-  screen_name =  "logout"
+	testAccPromptScreenRenderWithoutScreensInfo = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+resource "auth0_prompt_screen_renderer" "prompt_screen_render" {
+	  prompt_type = "login-passwordless"
 }
 `
 
-	testAccPromptScreenRenderCreate = `
+	testAccPromptScreenRenderWithoutPromptsInfo = testAccGivenACustomDomain + testGivenABrandingTemplate + `
+resource "auth0_prompt_screen_renderer" "prompt_screen_render" {
+	  screen_name = "login-passwordless"
+}
+`
+
+	testAccPromptScreenRenderInvalidInfo = `
+resource "auth0_prompt_screen_renderer" "prompt_screen_render" {
+	  prompt_type = "login-xxxxx"
+      screen_name = "login-passwordless-email-code"
+}
+`
+
+	testAccPromptScreenRenderWithoutSettings = `
+resource "auth0_prompt_screen_renderer" "login-id" {
+  prompt_type     = "login-id"
+  screen_name =  "login-id"
+}
+`
+
+	testAccPromptScreenRenderCreate = testAccPromptScreenRenderWithoutSettings + `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
   prompt_type     = "logout"
   screen_name     =  "logout"
@@ -91,12 +111,9 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 }
 `
 
-	testAccPromptScreenRenderDelete = `
-data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-	  prompt_type = "logout"
-     screen_name = "logout"
-}`
-	testAccPromptScreenRenderDataAfterDelete = testAccPromptScreenPartialsDelete + `
+	testAccPromptScreenRenderDelete = testAccPromptScreenRenderWithoutSettings
+
+	testAccPromptScreenRenderDataAfterDelete = `
 data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 	  prompt_type = "logout"
       screen_name = "logout"
@@ -108,13 +125,25 @@ func TestAccPromptScreenSettings(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
+				Config:      testAccPromptScreenRenderWithoutScreensInfo,
+				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			},
+			{
+				Config:      testAccPromptScreenRenderWithoutPromptsInfo,
+				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+			},
+			{
+				Config:      testAccPromptScreenRenderInvalidInfo,
+				ExpectError: regexp.MustCompile("expected prompt_type to be one of"),
+			},
+			{
 				Config: testAccPromptScreenRenderWithoutSettings,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "logout"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "logout"),
-					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "standard"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "0"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "prompt_type", "login-id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "screen_name", "login-id"),
+					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.login-id", "id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "rendering_mode", "standard"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "context_configuration.#", "0"),
 				),
 			},
 			{

@@ -90,6 +90,18 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
   ]
 }
 `
+
+	testAccPromptScreenRenderDelete = `
+data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	  prompt_type = "logout"
+     screen_name = "logout"
+}`
+	testAccPromptScreenRenderDataAfterDelete = testAccPromptScreenPartialsDelete + `
+data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	  prompt_type = "logout"
+      screen_name = "logout"
+}
+`
 )
 
 func TestAccPromptScreenSettings(t *testing.T) {
@@ -123,6 +135,16 @@ func TestAccPromptScreenSettings(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "10"),
+				),
+			},
+			{
+				Config: testAccPromptScreenRenderDelete,
+			},
+			{
+				Config: testAccPromptScreenRenderDataAfterDelete,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "logout"),
+					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "standard"),
 				),
 			},
 		},

@@ -108,27 +108,56 @@ func redactDomain(i *cassette.Interaction, domain string) {
 }
 
 func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain string) {
-	create := i.Request.URL == "https://"+domain+"/api/v2/clients" &&
+	baseURL := "https://" + domain + "/api/v2/clients"
+	urlPath := strings.Split(i.Request.URL, "?")[0] // Strip query params
+
+	create := i.Request.URL == baseURL &&
 		i.Request.Method == http.MethodPost
 
-	read := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") &&
+	readList := urlPath == baseURL &&
+		i.Request.Method == http.MethodGet
+
+	readOne := strings.Contains(i.Request.URL, baseURL+"/") &&
 		!strings.Contains(i.Request.URL, "credentials") &&
 		i.Request.Method == http.MethodGet
 
-	update := strings.Contains(i.Request.URL, "https://"+domain+"/api/v2/clients/") &&
+	update := strings.Contains(i.Request.URL, baseURL+"/") &&
 		!strings.Contains(i.Request.URL, "credentials") &&
 		i.Request.Method == http.MethodPatch
 
-	if create || read || update {
+	if create || readList || readOne || update {
 		if i.Response.Code == http.StatusNotFound {
 			return
 		}
 
+		redacted := "[REDACTED]"
+
+		// Handle list response
+		if readList {
+			var response management.ClientList
+			err := json.Unmarshal([]byte(i.Response.Body), &response)
+			require.NoError(t, err)
+
+			for _, client := range response.Clients {
+				client.SigningKeys = []map[string]string{
+					{"cert": redacted},
+				}
+				if client.GetClientSecret() != "" {
+					client.ClientSecret = &redacted
+				}
+			}
+
+			responseBody, err := json.Marshal(response)
+			require.NoError(t, err)
+			i.Response.Body = string(responseBody)
+			return
+		}
+
+		// Handle single client response
 		var client management.Client
 		err := json.Unmarshal([]byte(i.Response.Body), &client)
 		require.NoError(t, err)
 
-		redacted := "[REDACTED]"
 		client.SigningKeys = []map[string]string{
 			{"cert": redacted},
 		}

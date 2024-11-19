@@ -15,6 +15,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/attackprotection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/branding"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/clients"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
@@ -155,6 +156,7 @@ func New() *schema.Provider {
 			"auth0_branding":                      branding.NewDataSource(),
 			"auth0_branding_theme":                branding.NewThemeDataSource(),
 			"auth0_client":                        client.NewDataSource(),
+			"auth0_clients":                       clients.NewDataSource(),
 			"auth0_connection":                    connection.NewDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),

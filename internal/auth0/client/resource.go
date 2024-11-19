@@ -15,6 +15,13 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
+var ValidAppTypes = []string{
+	"native", "spa", "regular_web", "non_interactive", "rms",
+	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
+	"egnyte", "newrelic", "office365", "salesforce", "sentry",
+	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
+}
+
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -53,14 +60,9 @@ func NewResource() *schema.Resource {
 				Description: "List of audiences/realms for SAML protocol. Used by the wsfed addon.",
 			},
 			"app_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"native", "spa", "regular_web", "non_interactive", "rms",
-					"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
-					"egnyte", "newrelic", "office365", "salesforce", "sentry",
-					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
-				}, false),
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
 					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +

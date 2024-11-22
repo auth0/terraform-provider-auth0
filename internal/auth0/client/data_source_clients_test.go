@@ -1,4 +1,4 @@
-package clients_test
+package client_test
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccGivenAClient = `
+const testAccGivenSomeClients = `
 resource "auth0_client" "my_client_1" {
     name = "Acceptance Test 1 - {{.testName}}"
     app_type = "non_interactive"
@@ -66,7 +66,7 @@ func TestAccDataClientsNameFilter(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientsWithNameFilter, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "2"),
@@ -87,7 +87,7 @@ func TestAccDataClientsAppTypeFilter(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientsWithAppTypeFilter, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithAppTypeFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "id"),
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
@@ -104,10 +104,12 @@ func TestAccDataClientsIsFirstPartyFilter(t *testing.T) {
 		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccGivenAClient+testAccDataClientsWithIsFirstPartyFilter, t.Name()),
+				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithIsFirstPartyFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "id"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.is_first_party", "true"),
+					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.name", fmt.Sprintf("Acceptance Test 1 - %v", t.Name())),
 				),
 			},
 		},

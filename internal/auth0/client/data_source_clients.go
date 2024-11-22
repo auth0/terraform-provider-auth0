@@ -1,4 +1,4 @@
-package clients
+package client
 
 import (
 	"context"
@@ -11,12 +11,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/client"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
-// NewDataSource will return a new auth0_clients data source.
-func NewDataSource() *schema.Resource {
+// NewClientsDataSource will return a new auth0_clients data source.
+func NewClientsDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readClientsForDataSource,
 		Description: "Data source to retrieve a list of Auth0 application clients with optional filtering.",
@@ -32,7 +31,7 @@ func NewDataSource() *schema.Resource {
 				Description: "Filter clients by application types.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringInSlice(client.ValidAppTypes, false),
+					ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				},
 			},
 			"is_first_party": {
@@ -53,7 +52,7 @@ func NewDataSource() *schema.Resource {
 }
 
 func coreClientDataSourceSchema() map[string]*schema.Schema {
-	clientSchema := client.NewDataSource().Schema
+	clientSchema := dataSourceSchema()
 
 	// Remove unused fields from the client schema.
 	fieldsToRemove := []string{

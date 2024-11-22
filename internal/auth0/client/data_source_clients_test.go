@@ -61,10 +61,24 @@ data "auth0_clients" "test" {
 }
 `
 
-func TestAccDataClientsNameFilter(t *testing.T) {
+const testAccDataClientsWithInvalidAppTypeFilter = `
+data "auth0_clients" "test" {
+    app_types = ["invalid"]
+}
+`
+
+func TestAccDataClients(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
 		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccDataClientsWithInvalidAppTypeFilter, t.Name()),
+				ExpectError: regexp.MustCompile(
+					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccGivenSomeClients, t.Name()),
+			},
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -78,14 +92,6 @@ func TestAccDataClientsNameFilter(t *testing.T) {
 					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.1.is_first_party"),
 				),
 			},
-		},
-	})
-}
-
-func TestAccDataClientsAppTypeFilter(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithAppTypeFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -95,14 +101,6 @@ func TestAccDataClientsAppTypeFilter(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.name", fmt.Sprintf("Acceptance Test 1 - %v", t.Name())),
 				),
 			},
-		},
-	})
-}
-
-func TestAccDataClientsIsFirstPartyFilter(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		PreventPostDestroyRefresh: true,
-		Steps: []resource.TestStep{
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithIsFirstPartyFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -110,25 +108,6 @@ func TestAccDataClientsIsFirstPartyFilter(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.is_first_party", "true"),
 					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.name", fmt.Sprintf("Acceptance Test 1 - %v", t.Name())),
-				),
-			},
-		},
-	})
-}
-
-const testAccDataClientsWithInvalidAppTypeFilter = `
-data "auth0_clients" "test" {
-    app_types = ["invalid"]
-}
-`
-
-func TestAccDataClientsInvalidAppTypeFilter(t *testing.T) {
-	acctest.Test(t, resource.TestCase{
-		Steps: []resource.TestStep{
-			{
-				Config: acctest.ParseTestName(testAccDataClientsWithInvalidAppTypeFilter, t.Name()),
-				ExpectError: regexp.MustCompile(
-					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
 				),
 			},
 		},

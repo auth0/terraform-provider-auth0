@@ -45,17 +45,17 @@ func NewDataSource() *schema.Resource {
 				Computed:    true,
 				Description: "List of clients matching the filter criteria.",
 				Elem: &schema.Resource{
-					Schema: CoreClientDataSourceSchema(),
+					Schema: coreClientDataSourceSchema(),
 				},
 			},
 		},
 	}
 }
 
-func CoreClientDataSourceSchema() map[string]*schema.Schema {
+func coreClientDataSourceSchema() map[string]*schema.Schema {
 	clientSchema := client.NewDataSource().Schema
 
-	// Remove unused fields from the client schema
+	// Remove unused fields from the client schema.
 	fieldsToRemove := []string{
 		"client_aliases",
 		"logo_uri",
@@ -121,7 +121,7 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 
 	var page int
 	for {
-		// Add current page parameter
+		// Add current page parameter.
 		params = append(params, management.Page(page))
 
 		list, err := api.Client.List(ctx, params...)
@@ -139,7 +139,7 @@ func readClientsForDataSource(ctx context.Context, data *schema.ResourceData, me
 			break
 		}
 
-		// Remove the page parameter and increment for next iteration
+		// Remove the page parameter and increment for next iteration.
 		params = params[:len(params)-1]
 		page++
 	}

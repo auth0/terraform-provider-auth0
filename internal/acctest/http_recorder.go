@@ -109,7 +109,7 @@ func redactDomain(i *cassette.Interaction, domain string) {
 
 func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain string) {
 	baseURL := "https://" + domain + "/api/v2/clients"
-	urlPath := strings.Split(i.Request.URL, "?")[0] // Strip query params
+	urlPath := strings.Split(i.Request.URL, "?")[0] // Strip query params.
 
 	create := i.Request.URL == baseURL &&
 		i.Request.Method == http.MethodPost
@@ -132,7 +132,7 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 
 		redacted := "[REDACTED]"
 
-		// Handle list response
+		// Handle list response.
 		if readList {
 			var response management.ClientList
 			err := json.Unmarshal([]byte(i.Response.Body), &response)
@@ -153,7 +153,7 @@ func redactSensitiveDataInClient(t *testing.T, i *cassette.Interaction, domain s
 			return
 		}
 
-		// Handle single client response
+		// Handle single client response.
 		var client management.Client
 		err := json.Unmarshal([]byte(i.Response.Body), &client)
 		require.NoError(t, err)

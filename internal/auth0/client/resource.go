@@ -15,6 +15,7 @@ import (
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
 
+// ValidAppTypes contains all valid values for client app_type.
 var ValidAppTypes = []string{
 	"native", "spa", "regular_web", "non_interactive", "rms",
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",

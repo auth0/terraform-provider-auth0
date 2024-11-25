@@ -54,7 +54,7 @@ make docs
 ```
 
 ## Signing your Commits
-We required all commits on the contributing PR to be signed.
+We require all commits on the contributing PR to be signed.
 
 - [Learn more about signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
 - [Signing old commits](https://stackoverflow.com/questions/41882919/is-there-a-way-to-gpg-sign-all-previous-commits)

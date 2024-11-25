@@ -158,18 +158,18 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 		data.Set("rendering_mode", promptSetting.GetRenderingMode()),
 		data.Set("default_head_tags_disabled", promptSetting.GetDefaultHeadTagsDisabled()),
 		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
-		data.Set("head_tags", flattenHeadTags(promptSetting.HeadTags)),
+		data.Set("head_tags", flattenHeadTags(promptSetting)),
 	)
 
 	return result.ErrorOrNil()
 }
 
-func flattenHeadTags(headTags []interface{}) string {
-	if headTags == nil {
+func flattenHeadTags(promptSetting *management.PromptRendering) string {
+	if promptSetting == nil || promptSetting.HeadTags == nil {
 		return ""
 	}
 
-	headTagBytes, err := json.Marshal(headTags)
+	headTagBytes, err := json.Marshal(promptSetting.HeadTags)
 	if err != nil {
 		return ""
 	}

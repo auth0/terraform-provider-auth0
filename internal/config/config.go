@@ -22,6 +22,7 @@ import (
 )
 
 const providerName = "Terraform-Provider-Auth0" // #nosec G101
+const MissingEnvVar = "MISSING"
 
 var version = "dev"
 
@@ -62,7 +63,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
 
-		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
+		if apiToken == MissingEnvVar && (clientID == MissingEnvVar || clientSecret == MissingEnvVar || domain == MissingEnvVar) {
 			return nil, diag.Diagnostics{
 				{
 					Severity: diag.Error,

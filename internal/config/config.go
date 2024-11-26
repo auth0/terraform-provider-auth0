@@ -22,6 +22,7 @@ import (
 )
 
 const providerName = "Terraform-Provider-Auth0" // #nosec G101
+// MissingEnvVar is used as a default value for EnvDefaultFunc for var lookups that have no value.
 const MissingEnvVar = "MISSING"
 
 var version = "dev"

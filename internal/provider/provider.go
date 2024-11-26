@@ -155,6 +155,7 @@ func New() *schema.Provider {
 			"auth0_branding":                      branding.NewDataSource(),
 			"auth0_branding_theme":                branding.NewThemeDataSource(),
 			"auth0_client":                        client.NewDataSource(),
+			"auth0_clients":                       client.NewClientsDataSource(),
 			"auth0_connection":                    connection.NewDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),

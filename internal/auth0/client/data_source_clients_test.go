@@ -82,14 +82,18 @@ func TestAccDataClients(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "id"),
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "2"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.0.name"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.0.app_type"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.0.is_first_party"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.1.name"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.1.app_type"),
-					resource.TestCheckResourceAttrSet("data.auth0_clients.test", "clients.1.is_first_party"),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_clients.test", "clients.*", map[string]string{
+						"name":           fmt.Sprintf("Acceptance Test 1 - %s", t.Name()),
+						"app_type":       "non_interactive",
+						"is_first_party": "true",
+						"description":    fmt.Sprintf("Description for client 1 %s", t.Name()),
+					}),
+					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_clients.test", "clients.*", map[string]string{
+						"name":           fmt.Sprintf("Acceptance Test 2 - %s", t.Name()),
+						"app_type":       "spa",
+						"is_first_party": "false",
+						"description":    fmt.Sprintf("Description for client 2 %s", t.Name()),
+					}),
 				),
 			},
 			{

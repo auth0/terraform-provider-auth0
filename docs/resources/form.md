@@ -87,6 +87,11 @@ resource "auth0_form" "my_form" {
     }
   })
 
+  messages {
+    errors = jsonencode({
+      ERR_REQUIRED_PROPERTY = "This field is required for user kyc."
+    })
+  }
   languages {
     default = "en"
     primary = "en"

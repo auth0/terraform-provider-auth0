@@ -18,7 +18,10 @@ func expandForm(data *schema.ResourceData) (*management.Form, error) {
 
 	form.Name = value.String(cfg.GetAttr("name"))
 	form.Languages = expandFomLanguages(cfg.GetAttr("languages"))
-	form.Messages = expandFomMessages(cfg.GetAttr("messages"))
+
+	if data.HasChange("messages") {
+		form.Messages = expandFomMessages(cfg.GetAttr("messages"))
+	}
 
 	if data.HasChange("translations") {
 		translations, err := expandStringInterfaceMap(data, "translations")
@@ -157,16 +160,14 @@ func expandStringInterfaceMap(data *schema.ResourceData, key string) (map[string
 }
 
 func convertToInterfaceMap(rawValue cty.Value) *map[string]interface{} {
-	if rawValue.IsNull() || !rawValue.CanIterateElements() {
+	if rawValue.IsNull() {
 		return nil
 	}
 
 	m := make(map[string]interface{})
-	for key, value := range rawValue.AsValueMap() {
-		if value.IsNull() {
-			continue
-		}
-		m[key] = value
+	m, err := structure.ExpandJsonFromString(rawValue.AsString())
+	if err != nil {
+		return &m
 	}
 
 	return &m

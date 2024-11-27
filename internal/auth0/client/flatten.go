@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -65,9 +66,8 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
 	if logout != nil {
 		return nil
-	} else {
-		return backchannelLogout.GetBackChannelLogoutURLs()
 	}
+	return backchannelLogout.GetBackChannelLogoutURLs()
 }
 
 func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
@@ -76,17 +76,26 @@ func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
 	}
 
 	flattened := map[string]interface{}{
-		"backchannel_logout_urls":            oidcLogout.GetBackChannelLogoutURLs(),
-		"backchannel_logout_initiators_mode": oidcLogout.GetBackChannelLogoutInitiators().GetMode(),
-	}
-
-	selectedInitiators := oidcLogout.GetBackChannelLogoutInitiators().GetSelectedInitiators()
-	if len(selectedInitiators) > 0 {
-		flattened["backchannel_logout_selected_initiators"] = selectedInitiators
+		"backchannel_logout_urls": oidcLogout.GetBackChannelLogoutURLs(),
+		"backchannel_logout_initiators": flattenBackChannelLogoutInitiators(
+			oidcLogout.GetBackChannelLogoutInitiators(),
+		),
 	}
 
 	return []interface{}{
 		flattened,
+	}
+}
+func flattenBackChannelLogoutInitiators(initiators *management.BackChannelLogoutInitiators) []interface{} {
+	if initiators == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"mode":                initiators.GetMode(),
+			"selected_initiators": initiators.GetSelectedInitiators(),
+		},
 	}
 }
 

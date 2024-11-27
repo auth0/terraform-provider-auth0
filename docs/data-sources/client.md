@@ -560,9 +560,17 @@ Read-Only:
 
 Read-Only:
 
-- `backchannel_logout_initiators_mode` (String)
-- `backchannel_logout_selected_initiators` (Set of String)
+- `backchannel_logout_initiators` (List of Object) (see [below for nested schema](#nestedobjatt--oidc_logout--backchannel_logout_initiators))
 - `backchannel_logout_urls` (Set of String)
+
+<a id="nestedobjatt--oidc_logout--backchannel_logout_initiators"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_initiators`
+
+Read-Only:
+
+- `mode` (String)
+- `selected_initiators` (Set of String)
+
 
 
 <a id="nestedatt--refresh_token"></a>

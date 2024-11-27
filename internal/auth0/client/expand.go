@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -159,15 +160,31 @@ func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
 
 	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
-		oidcLogout.BackChannelLogoutInitiators = &management.BackChannelLogoutInitiators{
-			Mode:               value.String(config.GetAttr("backchannel_logout_initiators_mode")),
-			SelectedInitiators: value.Strings(config.GetAttr("backchannel_logout_selected_initiators")),
-		}
-
+		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
 		return stop
 	})
 
 	return &oidcLogout
+}
+
+func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannelLogoutInitiators {
+	if config.IsNull() {
+		return nil
+	}
+
+	var initiators management.BackChannelLogoutInitiators
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		initiators.Mode = value.String(config.GetAttr("mode"))
+		initiators.SelectedInitiators = value.Strings(config.GetAttr("selected_initiators"))
+		return stop
+	})
+
+	if initiators == (management.BackChannelLogoutInitiators{}) {
+		return nil
+	}
+
+	return &initiators
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {

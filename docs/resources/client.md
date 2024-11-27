@@ -533,12 +533,23 @@ Optional:
 
 Required:
 
-- `backchannel_logout_initiators_mode` (String) Determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the backchannel_logout_selected_initiators set, `all` enables all current and future initiators.
 - `backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 
 Optional:
 
-- `backchannel_logout_selected_initiators` (Set of String) Contains the list of initiators to be enabled for the given client.
+- `backchannel_logout_initiators` (Block List, Max: 1) Configure OIDC logout initiators for the Client (see [below for nested schema](#nestedblock--oidc_logout--backchannel_logout_initiators))
+
+<a id="nestedblock--oidc_logout--backchannel_logout_initiators"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_initiators`
+
+Required:
+
+- `mode` (String) Determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the backchannel_logout_selected_initiators set, `all` enables all current and future initiators.
+
+Optional:
+
+- `selected_initiators` (Set of String) Contains the list of initiators to be enabled for the given client.
+
 
 
 <a id="nestedblock--refresh_token"></a>

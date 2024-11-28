@@ -1,4 +1,4 @@
-## v1.7.4
+## v1.8.0
 
 FEATURES:
 - `resource/auth0_self_service_profile_custom_text`: Add new resource which allow to set custom text for SSO Profile ([#1075](https://github.com/auth0/terraform-provider-auth0/pull/1075/))

@@ -1,3 +1,17 @@
+## v1.7.4
+
+FEATURES:
+- `resource/auth0_self_service_profile_custom_text`: Add new resource which allow to set custom text for SSO Profile ([#1075](https://github.com/auth0/terraform-provider-auth0/pull/1075/))
+- `data-source/auth0_clients`: Add data-source which allows retrieving a list of clients with filters ([#1080](https://github.com/auth0/terraform-provider-auth0/pull/1080/))
+
+ENHANCEMENTS:
+- `resource/auth0_client`: Add support for setting `oidc_backchannel_logout_initiators_mode` and `oidc_backchannel_logout_initiators` ([#1045](https://github.com/auth0/terraform-provider-auth0/pull/1045/))
+- `resource/auth0_self_service_profile`: Add support for setting `name`, `description`, `allowed_strategies` ([#1075](https://github.com/auth0/terraform-provider-auth0/pull/1075/))
+
+BUG FIXES:
+- `resource/auth0_form`: Update messages property with expand rule ([#1088](https://github.com/auth0/terraform-provider-auth0/pull/1088/)) 
+
+
 ## v1.7.3
 
 NOTES:

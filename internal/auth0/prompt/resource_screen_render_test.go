@@ -58,20 +58,20 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
   context_configuration = [
         "branding.settings",
-        "branding.themes.default",
-        "client.logo_uri",
-        "client.description",
-        "organization.display_name",
-        "organization.branding",
-        "screen.texts",
-        "tenant.name",
-        "tenant.friendly_name",
-        "tenant.enabled_locales",
-        "untrusted_data.submitted_form_data",
-        "untrusted_data.authorization_params.ui_locales",
-        "untrusted_data.authorization_params.login_hint",
-        "untrusted_data.authorization_params.screen_hint",
-        "user.organizations"
+		"branding.themes.default",
+		"client.logo_uri",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"tenant.friendly_name",
+		"tenant.enabled_locales",
+		"untrusted_data.submitted_form_data",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.screen_hint",
+		"untrusted_data.authorization_params.ui_locales",
+		"organization.metadata.key",
   ]
 }
 `
@@ -97,16 +97,17 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
   ])
 
   context_configuration = [
-        "branding.settings",
-        "branding.themes.default",
-        "client.logo_uri",
-        "client.description",
-        "organization.display_name",
-        "organization.branding",
-        "screen.texts",
-        "tenant.name",
-        "tenant.friendly_name",
-        "tenant.enabled_locales",
+      "branding.settings",
+		"branding.themes.default",
+		"client.logo_uri",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"tenant.friendly_name",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.ui_locales",
   ]
 }
 `
@@ -143,7 +144,6 @@ func TestAccPromptScreenSettings(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "screen_name", "login-id"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.login-id", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "rendering_mode", "standard"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "context_configuration.#", "0"),
 				),
 			},
 			{
@@ -163,7 +163,7 @@ func TestAccPromptScreenSettings(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "logout"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "10"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "11"),
 				),
 			},
 			{

@@ -1,12 +1,12 @@
 ---
 page_title: "Resource: auth0_prompt_screen_renderer"
 description: |-
-  With this resource, you can Configure the render settings for a specific screen.You can read more about this here https://auth0.com/docs/customize/universal-login-pages/.../acul.
+  With this resource, you can Configure the render settings for a specific screen.You can read more about this.
 ---
 
 # Resource: auth0_prompt_screen_renderer
 
-With this resource, you can Configure the render settings for a specific screen.You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/.../acul).
+With this resource, you can Configure the render settings for a specific screen.You can read more about this.
 
 ## Example Usage
 
@@ -21,16 +21,20 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
     "branding.themes.default",
     "client.logo_uri",
     "client.description",
+    "client.metadata.key",
     "organization.display_name",
     "organization.branding",
+    "organization.metadata.key",
     "screen.texts",
     "tenant.name",
     "tenant.friendly_name",
     "tenant.enabled_locales",
     "untrusted_data.submitted_form_data",
-    "untrusted_data.authorization_params.ui_locales",
     "untrusted_data.authorization_params.login_hint",
-    "untrusted_data.authorization_params.screen_hint"
+    "untrusted_data.authorization_params.screen_hint",
+    "untrusted_data.authorization_params.ui_locales",
+    "untrusted_data.authorization_params.ext-.key",
+    "transaction.connection.metadata.key"
   ]
   head_tags = jsonencode([
     {
@@ -54,7 +58,7 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 ### Required
 
 - `prompt_type` (String) The prompt that you are configuring settings for. Options are: `signup-id`, `signup`, `signup-password`, `login`, `login-id`, `login-password`, `login-passwordless`, `login-email-verification`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `reset-password`, `custom-form`, `consent`, `customized-consent`, `logout`, `mfa-push`, `mfa-otp`, `mfa-voice`, `mfa-phone`, `mfa-webauthn`, `mfa-sms`, `mfa-email`, `mfa-recovery-code`, `mfa`, `status`, `device-flow`, `email-verification`, `email-otp-challenge`, `organizations`, `invitation`, `common`, `passkeys`, `captcha`.
-- `screen_name` (String) The screen that you are configuring settings for. Options are: `login`, `login-id`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `login-passwordless-email-link`, `login-email-verification`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `reset-password-request`, `reset-password-email`, `reset-password`, `reset-password-success`, `reset-password-error`, `custom-form`, `consent`, `customized-consent`, `logout`, `mfa-push-welcome`, `mfa-push-enrollment-qr`, `mfa-push-enrollment-code`, `mfa-push-success`, `mfa-push-challenge-push`, `mfa-otp-challenge`, `device-code-activation`, `passkey-enrollment`.
+- `screen_name` (String) The screen that you are configuring settings for. Options are: `login`, `login-id`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `login-passwordless-email-link`, `login-email-verification`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `reset-password-request`, `reset-password-email`, `reset-password`, `reset-password-success`, `reset-password-error`, `reset-password-mfa-email-challenge`, `reset-password-mfa-otp-challenge`, `reset-password-mfa-phone-challenge`, `reset-password-mfa-push-challenge`, `reset-password-mfa-recovery-code-challenge`, `reset-password-mfa-sms-challenge`, `reset-password-mfa-voice-challenge`, `reset-password-mfa-webauthn-platform-challenge`, `reset-password-mfa-webauthn-roaming-challenge`, `custom-form`, `consent`, `customized-consent`, `logout`, `logout-complete`, `logout-aborted`, `mfa-push-welcome`, `mfa-push-enrollment-qr`, `mfa-push-enrollment-code`, `mfa-push-success`, `mfa-push-challenge-push`, `mfa-push-list`, `mfa-otp-enrollment-qr`, `mfa-otp-enrollment-code`, `mfa-otp-challenge`, `mfa-voice-enrollment`, `mfa-voice-challenge`, `mfa-phone-challenge`, `mfa-phone-enrollment`, `mfa-webauthn-platform-enrollment`, `mfa-webauthn-roaming-enrollment`, `mfa-webauthn-platform-challenge`, `mfa-webauthn-roaming-challenge`, `mfa-webauthn-change-key-nickname`, `mfa-webauthn-enrollment-success`, `mfa-webauthn-error`, `mfa-webauthn-not-available-error`, `mfa-country-codes`, `mfa-sms-enrollment`, `mfa-sms-challenge`, `mfa-sms-list`, `mfa-email-challenge`, `mfa-email-list`, `mfa-recovery-code-enrollment`, `mfa-recovery-code-challenge`, `mfa-detect-browser-capabilities`, `mfa-enroll-result`, `mfa-login-options`, `mfa-begin-enroll-options`, `status`, `device-code-activation`, `device-code-activation-allowed`, `device-code-activation-denied`, `device-code-confirmation`, `email-verification-result`, `email-otp-challenge`, `organization-selection`, `organization-picker`, `accept-invitation`, `redeem-ticket`, `passkey-enrollment`, `passkey-enrollment-local`, `interstitial-captcha`.
 
 ### Optional
 

@@ -154,7 +154,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 		Description: "With this resource, you can Configure the render settings for a specific screen." +
-			"You can read more about this [here](https://auth0.com/docs/customize/universal-login-pages/.../acul).",
+			"You can read more about this.",
 		Schema: map[string]*schema.Schema{
 			"prompt_type": {
 				Type:         schema.TypeString,
@@ -251,7 +251,7 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	prompt := management.PromptType(promptName)
 	screen := management.ScreenName(screenName)
 
-	promptSettings := &management.PromptRendering{RenderingMode: auth0.String(standardMode), ContextConfiguration: &[]string{}}
+	promptSettings := &management.PromptRendering{RenderingMode: auth0.String(standardMode)}
 	if err := api.Prompt.UpdateRendering(ctx, prompt, screen, promptSettings); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

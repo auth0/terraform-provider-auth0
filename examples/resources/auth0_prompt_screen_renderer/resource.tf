@@ -8,16 +8,20 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
     "branding.themes.default",
     "client.logo_uri",
     "client.description",
+    "client.metadata.key",
     "organization.display_name",
     "organization.branding",
+    "organization.metadata.key",
     "screen.texts",
     "tenant.name",
     "tenant.friendly_name",
     "tenant.enabled_locales",
     "untrusted_data.submitted_form_data",
-    "untrusted_data.authorization_params.ui_locales",
     "untrusted_data.authorization_params.login_hint",
-    "untrusted_data.authorization_params.screen_hint"
+    "untrusted_data.authorization_params.screen_hint",
+    "untrusted_data.authorization_params.ui_locales",
+    "untrusted_data.authorization_params.ext-.key",
+    "transaction.connection.metadata.key"
   ]
   head_tags = jsonencode([
     {

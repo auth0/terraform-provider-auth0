@@ -76,7 +76,7 @@ var (
 		string(management.ScreenResetPasswordMFAEmailChallenge),
 		string(management.ScreenResetPasswordMFAOTPChallenge),
 		string(management.ScreenResetPasswordMFAPhoneChallenge),
-		string(management.ScreenResetPasswordMFAPushChallenge),
+		string(management.ScreenResetPasswordMFAPushChallengePush),
 		string(management.ScreenResetPasswordMFARecoveryCodeChallenge),
 		string(management.ScreenResetPasswordMFASMSChallenge),
 		string(management.ScreenResetPasswordMFAVoiceChallenge),

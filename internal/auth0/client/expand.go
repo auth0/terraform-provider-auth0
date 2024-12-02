@@ -42,6 +42,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
+		OIDCLogout:                         expandOIDCLogout(data),
 		ClientMetadata:                     expandClientMetadata(data),
 		RefreshToken:                       expandClientRefreshToken(data),
 		JWTConfiguration:                   expandClientJWTConfiguration(data),
@@ -147,6 +148,43 @@ func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBack
 	return &management.OIDCBackchannelLogout{
 		BackChannelLogoutURLs: logoutUrls,
 	}
+}
+
+func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
+	oidcLogoutConfig := data.GetRawConfig().GetAttr("oidc_logout")
+	if oidcLogoutConfig.IsNull() {
+		return nil
+	}
+
+	var oidcLogout management.OIDCLogout
+
+	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
+		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
+		return stop
+	})
+
+	return &oidcLogout
+}
+
+func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannelLogoutInitiators {
+	if config.IsNull() {
+		return nil
+	}
+
+	var initiators management.BackChannelLogoutInitiators
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		initiators.Mode = value.String(config.GetAttr("mode"))
+		initiators.SelectedInitiators = value.Strings(config.GetAttr("selected_initiators"))
+		return stop
+	})
+
+	if initiators == (management.BackChannelLogoutInitiators{}) {
+		return nil
+	}
+
+	return &initiators
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {

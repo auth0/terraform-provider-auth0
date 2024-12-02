@@ -63,6 +63,42 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 	}
 }
 
+func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {
+	if logout != nil {
+		return nil
+	}
+	return backchannelLogout.GetBackChannelLogoutURLs()
+}
+
+func flattenOIDCLogout(oidcLogout *management.OIDCLogout) []interface{} {
+	if oidcLogout == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"backchannel_logout_urls": oidcLogout.GetBackChannelLogoutURLs(),
+		"backchannel_logout_initiators": flattenBackChannelLogoutInitiators(
+			oidcLogout.GetBackChannelLogoutInitiators(),
+		),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+func flattenBackChannelLogoutInitiators(initiators *management.BackChannelLogoutInitiators) []interface{} {
+	if initiators == nil {
+		return nil
+	}
+
+	return []interface{}{
+		map[string]interface{}{
+			"mode":                initiators.GetMode(),
+			"selected_initiators": initiators.GetSelectedInitiators(),
+		},
+	}
+}
+
 func flattenClientMobile(mobile *management.ClientMobile) []interface{} {
 	if mobile == nil {
 		return nil
@@ -557,7 +593,8 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("initiate_login_uri", client.GetInitiateLoginURI()),
 		data.Set("signing_keys", client.SigningKeys),
 		data.Set("client_metadata", client.GetClientMetadata()),
-		data.Set("oidc_backchannel_logout_urls", client.GetOIDCBackchannelLogout().GetBackChannelLogoutURLs()),
+		data.Set("oidc_backchannel_logout_urls", flattenOIDCBackchannelURLs(client.GetOIDCBackchannelLogout(), client.GetOIDCLogout())),
+		data.Set("oidc_logout", flattenOIDCLogout(client.GetOIDCLogout())),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
 		data.Set("default_organization", flattenDefaultOrganization(client.GetDefaultOrganization())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
@@ -800,4 +837,33 @@ func flattenCredentials(
 	}
 
 	return stateCredentials, nil
+}
+
+func flattenClientList(data *schema.ResourceData, clients []*management.Client) error {
+	if clients == nil {
+		return data.Set("clients", make([]map[string]interface{}, 0))
+	}
+
+	clientList := make([]map[string]interface{}, 0, len(clients))
+	for _, client := range clients {
+		clientMap := map[string]interface{}{
+			"client_id":                           client.GetClientID(),
+			"client_secret":                       client.GetClientSecret(),
+			"name":                                client.GetName(),
+			"description":                         client.GetDescription(),
+			"app_type":                            client.GetAppType(),
+			"is_first_party":                      client.GetIsFirstParty(),
+			"is_token_endpoint_ip_header_trusted": client.GetIsTokenEndpointIPHeaderTrusted(),
+			"callbacks":                           client.GetCallbacks(),
+			"allowed_logout_urls":                 client.GetAllowedLogoutURLs(),
+			"allowed_origins":                     client.GetAllowedOrigins(),
+			"allowed_clients":                     client.GetAllowedClients(),
+			"grant_types":                         client.GetGrantTypes(),
+			"web_origins":                         client.GetWebOrigins(),
+			"client_metadata":                     client.GetClientMetadata(),
+		}
+		clientList = append(clientList, clientMap)
+	}
+
+	return data.Set("clients", clientList)
 }

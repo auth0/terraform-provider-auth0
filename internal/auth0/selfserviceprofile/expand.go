@@ -12,8 +12,11 @@ func expandSelfServiceProfiles(data *schema.ResourceData) *management.SelfServic
 	cfg := data.GetRawConfig()
 
 	return &management.SelfServiceProfile{
-		UserAttributes: expandSelfServiceProfileUserAttributes(cfg.GetAttr("user_attributes")),
-		Branding:       expandBranding(cfg.GetAttr("branding")),
+		Name:              value.String(cfg.GetAttr("name")),
+		Description:       value.String(cfg.GetAttr("description")),
+		AllowedStrategies: value.Strings(cfg.GetAttr("allowed_strategies")),
+		UserAttributes:    expandSelfServiceProfileUserAttributes(cfg.GetAttr("user_attributes")),
+		Branding:          expandBranding(cfg.GetAttr("branding")),
 	}
 }
 

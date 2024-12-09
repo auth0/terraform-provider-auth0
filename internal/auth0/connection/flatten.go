@@ -453,6 +453,7 @@ func flattenConnectionOptionsOAuth2(
 		"pkce_enabled":             options.GetPKCEEnabled(),
 		"strategy_version":         options.GetStrategyVersion(),
 		"upstream_params":          upstreamParams,
+		"custom_headers":           options.CustomHeaders,
 	}
 
 	return optionsMap, nil

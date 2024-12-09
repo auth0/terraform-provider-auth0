@@ -105,7 +105,7 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 
 	promptSettings := &management.PromptRendering{}
 
-	promptSettings.RenderingMode = value.String(promptRawSettings.GetAttr("rendering_mode"))
+	promptSettings.RenderingMode = (*management.RenderingMode)(value.String(promptRawSettings.GetAttr("rendering_mode")))
 	promptSettings.ContextConfiguration = value.Strings(promptRawSettings.GetAttr("context_configuration"))
 	promptSettings.DefaultHeadTagsDisabled = value.Bool(promptRawSettings.GetAttr("default_head_tags_disabled"))
 	if data.HasChange("head_tags") {

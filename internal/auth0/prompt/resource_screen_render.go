@@ -251,7 +251,7 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	prompt := management.PromptType(promptName)
 	screen := management.ScreenName(screenName)
 
-	promptSettings := &management.PromptRendering{RenderingMode: auth0.String(standardMode)}
+	promptSettings := &management.PromptRendering{RenderingMode: (*management.RenderingMode)(auth0.String(standardMode))}
 	if err := api.Prompt.UpdateRendering(ctx, prompt, screen, promptSettings); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

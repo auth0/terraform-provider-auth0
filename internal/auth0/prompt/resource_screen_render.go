@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
@@ -137,10 +136,7 @@ var (
 		string(management.ScreenInterstitialCaptcha),
 	}
 
-	standardMode = "standard"
-	advancedMode = "advanced"
-
-	supportedRenderingModes = []string{standardMode, advancedMode}
+	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}
 )
 
 // NewPromptScreenRenderResource will return a new auth0_prompt_screen_renderer resource.
@@ -173,7 +169,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			"rendering_mode": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				Default:      standardMode,
+				Default:      management.RenderingModeStandard,
 				ValidateFunc: validation.StringInSlice(supportedRenderingModes, false),
 				Description: "Rendering mode" +
 					"Options are: `" + strings.Join(supportedRenderingModes, "`, `") + "`.",
@@ -186,6 +182,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			"context_configuration": {
 				Type:     schema.TypeSet,
 				Optional: true,
+				Computed: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -251,7 +248,7 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	prompt := management.PromptType(promptName)
 	screen := management.ScreenName(screenName)
 
-	promptSettings := &management.PromptRendering{RenderingMode: (*management.RenderingMode)(auth0.String(standardMode))}
+	promptSettings := &management.PromptRendering{RenderingMode: &management.RenderingModeStandard}
 	if err := api.Prompt.UpdateRendering(ctx, prompt, screen, promptSettings); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}

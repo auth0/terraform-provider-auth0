@@ -1,7 +1,7 @@
 ## v1.9.0
 
 FEATURES:
-- `resource/auth0_prompt_screen_renderer`: Add support for rendering the settings of prompt-screen ([#1077](https://github.com/auth0/terraform-provider-auth0/pull/1077))
+- `resource/auth0_prompt_screen_renderer`: Add new resource and data_source for rendering the settings of prompt-screen ([#1077](https://github.com/auth0/terraform-provider-auth0/pull/1077))
 
 
 ## v1.8.0

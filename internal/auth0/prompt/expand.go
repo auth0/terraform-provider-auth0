@@ -1,6 +1,8 @@
 package prompt
 
 import (
+	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -93,4 +95,44 @@ func expandInsertionPoints(insertionPointsList []cty.Value) map[management.Inser
 	}
 
 	return insertionPoints
+}
+
+func expandPromptSettings(data *schema.ResourceData) (*management.PromptRendering, error) {
+	promptRawSettings := data.GetRawConfig()
+	if promptRawSettings.IsNull() {
+		return nil, nil
+	}
+
+	promptSettings := &management.PromptRendering{}
+
+	promptSettings.RenderingMode = (*management.RenderingMode)(value.String(promptRawSettings.GetAttr("rendering_mode")))
+	promptSettings.ContextConfiguration = value.Strings(promptRawSettings.GetAttr("context_configuration"))
+	promptSettings.DefaultHeadTagsDisabled = value.Bool(promptRawSettings.GetAttr("default_head_tags_disabled"))
+	if data.HasChange("head_tags") {
+		promptSettings.HeadTags = expandInterfaceArray(data, "head_tags")
+	}
+
+	return promptSettings, nil
+}
+
+func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
+	_, newMetadata := d.GetChange(key)
+	result := make([]interface{}, 0)
+	if newMetadata == "" {
+		return result
+	}
+
+	if newMetadataStr, ok := newMetadata.(string); ok {
+		var newMetadataArr []interface{}
+		if err := json.Unmarshal([]byte(newMetadataStr), &newMetadataArr); err != nil {
+			return nil
+		}
+		return newMetadataArr
+	}
+
+	if newMetadataArr, ok := newMetadata.([]interface{}); ok {
+		return newMetadataArr
+	}
+
+	return result
 }

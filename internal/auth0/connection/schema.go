@@ -267,7 +267,7 @@ var optionsSchema = &schema.Schema{
 										Description: "Enables passkey authentication",
 										Type:        schema.TypeBool,
 										Required:    true,
-										Default:     true,
+										Default:     false,
 									},
 								},
 							},

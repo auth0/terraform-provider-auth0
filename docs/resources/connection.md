@@ -689,7 +689,7 @@ Optional:
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
-- `authentication_methods` (Block List, Max: 1) Enables and disables authentication methods including passwords and passkeys (see [below for nested schema](#nestedblock--authentication-methods))
+- `authentication_methods` (Map of String) Enables and disables authentication methods including passwords and passkeys (see [below for nested schema](#nestedblock--authentication-methods))
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
 - `digest_algorithm` (String) Sign Request Algorithm Digest.
@@ -783,8 +783,8 @@ Optional:
 <a id="nestedblock--authentication-methods"></a>
 Required:
 
-- `password` (Block List, Max: 1) Enables or disables password authentication (see [below for nested schema](#nestedblock--authentication-method))
-- `passkey` (Block List, Max: 1) Enables or disables passkey authentication (see [below for nested schema](#nestedblock--authentication-method))
+- `password` (Map) Enables or disables password authentication (see [below for nested schema](#nestedblock--authentication-method))
+- `passkey` (Map) Enables or disables passkey authentication (see [below for nested schema](#nestedblock--authentication-method))
 
 
 <a id="nestedblock--authentication-method"></a>

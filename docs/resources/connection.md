@@ -77,6 +77,15 @@ resource "auth0_connection" "my_connection" {
         max = 40
       }
     }
+    
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
+    }
 
     mfa {
       active                 = true
@@ -635,15 +644,6 @@ resource "auth0_connection" "okta" {
         "family_name" : "$${context.tokenset.family_name}"
       })
     }
-    
-    authentication_methods {
-      passkey {
-        enabled = true
-      }
-      password {
-        enabled = true
-      }
-    }
   }
 }
 ```
@@ -781,6 +781,7 @@ Optional:
 - `userinfo_scope` (String) This property defines the scopes that Auth0 sends to the IdP’s UserInfo endpoint when requested.
 
 <a id="nestedblock--authentication-methods"></a>
+### Nested Schema for `options.authentication_methods`
 Required:
 
 - `password` (Map) Enables or disables password authentication (see [below for nested schema](#nestedblock--authentication-method))
@@ -788,6 +789,7 @@ Required:
 
 
 <a id="nestedblock--authentication-method"></a>
+### Nested Schema for `options.authentication_methods.*`
 Required:
 
 - `enabled` (Boolean) Enables the authentication method

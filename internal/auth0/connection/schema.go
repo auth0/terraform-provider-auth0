@@ -254,12 +254,35 @@ var optionsSchema = &schema.Schema{
 			},
 			"authentication_methods": {
 				Type:     schema.TypeMap,
-				Required: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"enabled": {
-							Type:     schema.TypeBool,
-							Required: true,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeList,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"passkey": {
+								Type: schema.TypeList,
+								Elem: &schema.Resource{Schema: map[string]*schema.Schema{
+									"enabled": {
+										Type:     schema.TypeBool,
+										Required: true,
+										Default:  false,
+									},
+								}},
+								Required: true,
+								MaxItems: 1,
+							},
+							"password": {
+								Type: schema.TypeList,
+								Elem: &schema.Resource{Schema: map[string]*schema.Schema{
+									"enabled": {
+										Type:     schema.TypeBool,
+										Required: true,
+										Default:  true,
+									},
+								}},
+								Required: true,
+								MaxItems: 1,
+							},
 						},
 					},
 				},

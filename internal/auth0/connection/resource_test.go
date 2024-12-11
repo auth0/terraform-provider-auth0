@@ -2693,19 +2693,11 @@ func TestAuthenticationMethods(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testConnectionPingFederateConfigCreate, t.Name()),
+				Config: acctest.ParseTestName(testConnectionAuthenticationMethods, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.passkey.enabled", true),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.password.enabled", true),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testConnectionPingFederateConfigUpdate, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.passkey.enabled", true),
-					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.password.enabled", true),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.passkey.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.password.enabled", "true"),
 				),
 			},
 		},

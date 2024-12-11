@@ -185,8 +185,8 @@ func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			authMethods = &management.AuthenticationMethods{
-				Password: expandConnectionOptionsAuthenticationMethodsPassword(attributes),
-				Passkey:  expandConnectionOptionsAuthenticationMethodsPasskey(attributes),
+				Password: expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password")),
+				Passkey:  expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey")),
 			}
 			return stop
 		})

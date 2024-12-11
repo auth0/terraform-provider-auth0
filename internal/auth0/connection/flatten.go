@@ -225,6 +225,41 @@ func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOpti
 	}
 }
 
+func flattenAuthenticationMethods(authenticationMethods *management.AuthenticationMethods) interface{} {
+	if authenticationMethods == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.Passkey),
+		"password": flattenAuthenticationMethodPassword(authenticationMethods.Password),
+	}
+}
+
+func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
+	if passkeyAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passkeyAuthenticationMethod.Enabled,
+		},
+	}
+}
+
+func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *management.PasswordAuthenticationMethod) interface{} {
+	if passwordAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passwordAuthenticationMethod.Enabled,
+		},
+	}
+}
+
 func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
 	if identifier == nil {
 		return nil
@@ -324,11 +359,14 @@ func flattenConnectionOptionsAuth0(
 		"upstream_params":                      upstreamParams,
 		"precedence":                           options.GetPrecedence(),
 		"strategy_version":                     options.GetStrategyVersion(),
-		"authentication_methods":               options.GetAuthenticationMethods(),
 	}
 
 	if options.Attributes != nil {
 		optionsMap["attributes"] = []interface{}{flattenAttributes(options.GetAttributes())}
+	}
+
+	if options.AuthenticationMethods != nil {
+		optionsMap["authentication_methods"] = []interface{}{flattenAuthenticationMethods(options.GetAuthenticationMethods())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

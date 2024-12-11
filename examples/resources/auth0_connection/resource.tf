@@ -64,9 +64,13 @@ resource "auth0_connection" "my_connection" {
       return_enroll_settings = true
     }
 
-    authentication_methods = {
-      passkey = true
-      password = true
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
     }
   }
 }

@@ -74,6 +74,28 @@ var resourceSchema = map[string]*schema.Schema{
 	"options": optionsSchema,
 }
 
+var authMethodEnabled = map[string]*schema.Schema{
+	"enabled": {
+		Type:        schema.TypeBool,
+		Optional:    false,
+		Description: "Whether the authentication method is enabled or not"
+	}
+}
+
+var authMethods = map[string]*schema.Schema{
+	"password": {
+		Type:        schema.authMethodEnabled,
+		Optional:    false,
+		Description: "Controls if password authentication is enabled for this connection"
+	},
+	"passkey": {
+		Type:        schema.authMethodEnabled,
+		Optional:    false,
+		Description: "Controls if passkey authentication is enabled for this connection. See"
+	}
+}
+
+
 var optionsSchema = &schema.Schema{
 	Type:        schema.TypeList,
 	Computed:    true,
@@ -251,6 +273,11 @@ var optionsSchema = &schema.Schema{
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 				Description: "A map of scripts used to integrate with a custom database.",
+			},
+			"authentication_methods": {
+				Type:        schema.authMethods,
+				Optional:    true,
+				Description: "Enables and disables authentication methods for this database",
 			},
 			"scripts": {
 				Type:        schema.TypeMap,
@@ -1102,3 +1129,4 @@ var optionsSchema = &schema.Schema{
 		},
 	},
 }
+

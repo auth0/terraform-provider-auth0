@@ -180,6 +180,43 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
+func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.AuthenticationMethods {
+	var authMethods *management.AuthenticationMethods
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			authMethods = &management.AuthenticationMethods{
+				Password: expandConnectionOptionsAuthenticationMethodsPassword(attributes),
+				Passkey:  expandConnectionOptionsAuthenticationMethodsPasskey(attributes),
+			}
+			return stop
+		})
+	return authMethods
+}
+
+func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *management.PasswordAuthenticationMethod {
+	var passwordAuth *management.PasswordAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passwordAuth = &management.PasswordAuthenticationMethod{
+				Enabled: value.Bool(config.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passwordAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *management.PasskeyAuthenticationMethod {
+	var passwordAuth *management.PasskeyAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passwordAuth = &management.PasskeyAuthenticationMethod{
+				Enabled: value.Bool(config.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passwordAuth
+}
+
 func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
@@ -330,6 +367,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
+		AuthenticationMethods:            expandConnectionOptionsAuthenticationMethods(config.GetAttr("authentication_methods")),
 	}
 
 	config.GetAttr("validation").ForEachElement(

@@ -324,6 +324,7 @@ func flattenConnectionOptionsAuth0(
 		"upstream_params":                      upstreamParams,
 		"precedence":                           options.GetPrecedence(),
 		"strategy_version":                     options.GetStrategyVersion(),
+		"authentication_methods":               options.GetAuthenticationMethods(),
 	}
 
 	if options.Attributes != nil {

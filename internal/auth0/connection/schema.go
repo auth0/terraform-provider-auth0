@@ -253,36 +253,42 @@ var optionsSchema = &schema.Schema{
 				Description: "A map of scripts used to integrate with a custom database.",
 			},
 			"authentication_methods": {
-				Type:     schema.TypeMap,
-				Optional: true,
-				Elem: &schema.Schema{
-					Type: schema.TypeList,
-					Elem: &schema.Resource{
-						Schema: map[string]*schema.Schema{
-							"passkey": {
-								Type: schema.TypeList,
-								Elem: &schema.Resource{Schema: map[string]*schema.Schema{
+				Description: "Specifies the authentication methods and their configuration (enabled or disabled)",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"passkey": {
+							Description: "Configures passkey authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
 									"enabled": {
-										Type:     schema.TypeBool,
-										Required: true,
-										Default:  false,
+										Description: "Enables passkey authentication",
+										Type:        schema.TypeBool,
+										Required:    true,
+										Default:     true,
 									},
-								}},
-								Required: true,
-								MaxItems: 1,
+								},
 							},
-							"password": {
-								Type: schema.TypeList,
-								Elem: &schema.Resource{Schema: map[string]*schema.Schema{
+							Required: true,
+							MaxItems: 1,
+						},
+						"password": {
+							Description: "Configures password authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
 									"enabled": {
-										Type:     schema.TypeBool,
-										Required: true,
-										Default:  true,
+										Description: "Enables password authentication",
+										Type:        schema.TypeBool,
+										Required:    true,
+										Default:     true,
 									},
-								}},
-								Required: true,
-								MaxItems: 1,
+								},
 							},
+							Required: true,
+							MaxItems: 1,
 						},
 					},
 				},

@@ -256,6 +256,7 @@ var optionsSchema = &schema.Schema{
 				Description: "Specifies the authentication methods and their configuration (enabled or disabled)",
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"passkey": {
@@ -266,11 +267,13 @@ var optionsSchema = &schema.Schema{
 									"enabled": {
 										Description: "Enables passkey authentication",
 										Type:        schema.TypeBool,
-										Required:    true,
+										Optional:    true,
+										Computed:    true,
 									},
 								},
 							},
-							Required: true,
+							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 						},
 						"password": {
@@ -281,11 +284,13 @@ var optionsSchema = &schema.Schema{
 									"enabled": {
 										Description: "Enables password authentication",
 										Type:        schema.TypeBool,
-										Required:    true,
+										Optional:    true,
+										Computed:    true,
 									},
 								},
 							},
-							Required: true,
+							Optional: true,
+							Computed: true,
 							MaxItems: 1,
 						},
 					},

@@ -184,10 +184,11 @@ func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.
 	var authMethods *management.AuthenticationMethods
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
-			authMethods = &management.AuthenticationMethods{
-				Password: expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password")),
-				Passkey:  expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey")),
-			}
+			authMethods = &management.AuthenticationMethods{}
+
+			authMethods.Password = expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password"))
+			authMethods.Passkey = expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey"))
+
 			return stop
 		})
 	return authMethods
@@ -198,7 +199,7 @@ func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *man
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			passwordAuth = &management.PasswordAuthenticationMethod{
-				Enabled: value.Bool(config.GetAttr("enabled")),
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
 			}
 			return stop
 		})
@@ -210,7 +211,7 @@ func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *mana
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
 			passwordAuth = &management.PasskeyAuthenticationMethod{
-				Enabled: value.Bool(config.GetAttr("enabled")),
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
 			}
 			return stop
 		})
@@ -367,7 +368,6 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
-		AuthenticationMethods:            expandConnectionOptionsAuthenticationMethods(config.GetAttr("authentication_methods")),
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -482,6 +482,10 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 			return stop
 		},
 	)
+
+	if config.Type().HasAttribute("authentication_methods") && !config.GetAttr("authentication_methods").IsNull() {
+		options.AuthenticationMethods = expandConnectionOptionsAuthenticationMethods(config.GetAttr("authentication_methods"))
+	}
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))

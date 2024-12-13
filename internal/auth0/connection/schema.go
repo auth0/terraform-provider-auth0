@@ -296,6 +296,40 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"passkey_options": {
+				Description: "Defines options for the passkey authentication method",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"challenge_ui": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Controls the UI used to challenge the user for their passkey",
+							ValidateFunc: validation.StringInSlice([]string{
+								"both",
+								"autofill",
+								"button",
+							}, false),
+						},
+						"local_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection",
+						},
+						"progressive_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables progressive enrollment of passkeys for the connection",
+						},
+					},
+				},
+			},
 			"scripts": {
 				Type:        schema.TypeMap,
 				Elem:        &schema.Schema{Type: schema.TypeString},

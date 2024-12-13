@@ -236,6 +236,18 @@ func flattenAuthenticationMethods(authenticationMethods *management.Authenticati
 	}
 }
 
+func flattenPasskeyOptions(passkeyOptions *management.PasskeyOptions) interface{} {
+	if passkeyOptions == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"challenge_ui":                   passkeyOptions.GetChallengeUI(),
+		"local_enrollment_enabled":       passkeyOptions.GetLocalEnrollmentEnabled(),
+		"progressive_enrollment_enabled": passkeyOptions.GetProgressiveEnrollmentEnabled(),
+	}
+}
+
 func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
 	if passkeyAuthenticationMethod == nil {
 		return nil
@@ -367,6 +379,10 @@ func flattenConnectionOptionsAuth0(
 
 	if options.AuthenticationMethods != nil {
 		optionsMap["authentication_methods"] = []interface{}{flattenAuthenticationMethods(options.GetAuthenticationMethods())}
+	}
+
+	if options.PasskeyOptions != nil {
+		optionsMap["passkey_options"] = []interface{}{flattenPasskeyOptions(options.GetPasskeyOptions())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

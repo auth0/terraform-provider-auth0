@@ -26,7 +26,7 @@ var (
 		string(management.PromptPhoneIdentifierEnrollment),
 		string(management.PromptPhoneIdentifierChallenge),
 		string(management.PromptEmailIdentifierChallenge),
-		string(management.PromptCommon),
+		string(management.PromptPasskeys),
 		string(management.PromptCaptcha),
 	}
 	allowedScreensSettingsRenderer = []string{

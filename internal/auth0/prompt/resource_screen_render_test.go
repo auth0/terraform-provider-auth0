@@ -38,8 +38,8 @@ resource "auth0_prompt_screen_renderer" "login-id" {
 
 	testAccPromptScreenRenderCreate = testAccPromptScreenRenderWithoutSettings + `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-  prompt_type     = "logout"
-  screen_name     =  "logout"
+  prompt_type     = "login-password"
+  screen_name     =  "login-password"
   rendering_mode = "advanced"
 
   head_tags = jsonencode([
@@ -78,8 +78,8 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
 	testAccPromptScreenRenderUpdate = `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-  prompt_type     = "logout"
-  screen_name     =  "logout"
+  prompt_type     = "login-password"
+  screen_name     =  "login-password"
   rendering_mode = "advanced"
 
   head_tags = jsonencode([
@@ -116,8 +116,8 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
 	testAccPromptScreenRenderDataAfterDelete = `
 data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-	  prompt_type = "logout"
-      screen_name = "logout"
+	  prompt_type = "login-password"
+      screen_name = "login-password"
 }
 `
 )
@@ -149,8 +149,8 @@ func TestAccPromptScreenSettings(t *testing.T) {
 			{
 				Config: testAccPromptScreenRenderCreate,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "logout"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "logout"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "login-password"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "15"),
@@ -159,8 +159,8 @@ func TestAccPromptScreenSettings(t *testing.T) {
 			{
 				Config: testAccPromptScreenRenderUpdate,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "logout"),
-					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "logout"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "login-password"),
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "11"),
@@ -172,7 +172,7 @@ func TestAccPromptScreenSettings(t *testing.T) {
 			{
 				Config: testAccPromptScreenRenderDataAfterDelete,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "logout"),
+					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
 					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "standard"),
 				),
 			},

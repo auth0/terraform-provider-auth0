@@ -68,9 +68,7 @@ func NewVaultConnectionResource() *schema.Resource {
 				Optional:    true,
 				Description: "Configuration of the vault connection. (Mapping information must be provided as key/value pairs)",
 				Sensitive:   true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
+				Elem:        schema.TypeString,
 			},
 			"account_name": {
 				Type:        schema.TypeString,
@@ -79,7 +77,7 @@ func NewVaultConnectionResource() *schema.Resource {
 			},
 			"ready": {
 				Type:        schema.TypeBool,
-				Optional:    true,
+				Computed:    true,
 				Description: "Indicates if the vault connection is configured.",
 			},
 			"fingerprint": {

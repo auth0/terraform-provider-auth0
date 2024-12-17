@@ -37,12 +37,12 @@ resource "auth0_flow_vault_connection" "my_connection" {
 - `account_name` (String) Custom account name of the vault connection.
 - `environment` (String) Environment of the vault connection.
 - `fingerprint` (String) Fingerprint of the vault connection.
-- `ready` (Boolean) Indicates if the vault connection is configured.
 - `setup` (Map of String, Sensitive) Configuration of the vault connection. (Mapping information must be provided as key/value pairs)
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `ready` (Boolean) Indicates if the vault connection is configured.
 
 ## Import
 

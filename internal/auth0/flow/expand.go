@@ -48,10 +48,6 @@ func expandVaultConnection(data *schema.ResourceData) (*management.FlowVaultConn
 		vaultConnection.AccountName = value.String(cfg.GetAttr("account_name"))
 	}
 
-	if data.HasChange("ready") {
-		vaultConnection.Ready = value.Bool(cfg.GetAttr("ready"))
-	}
-
 	return vaultConnection, nil
 }
 

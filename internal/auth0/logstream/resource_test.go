@@ -20,6 +20,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "status", "paused"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "is_priority", "true"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_format", "JSONLINES"),
@@ -31,6 +32,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "is_priority", "false"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json; charset=utf-8"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_format", "JSONARRAY"),
@@ -42,6 +44,7 @@ func TestAccLogStreamHTTP(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "name", fmt.Sprintf("Acceptance-Test-LogStream-http-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "type", "http"),
+					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "is_priority", "false"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_endpoint", "https://example.com/webhook/logs"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_type", "application/json; charset=utf-8"),
 					resource.TestCheckResourceAttr("auth0_log_stream.my_log_stream", "sink.0.http_content_format", "JSONOBJECT"),
@@ -95,6 +98,7 @@ const testAccLogStreamHTTPConfig = `
 resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-http-{{.testName}}"
 	type = "http"
+	is_priority = true
 	status = "paused"
 	sink {
 	  http_endpoint = "https://example.com/webhook/logs"
@@ -109,6 +113,7 @@ const testAccLogStreamHTTPConfigUpdateFormatToJSONARRAY = `
 resource "auth0_log_stream" "my_log_stream" {
 	name = "Acceptance-Test-LogStream-http-{{.testName}}"
 	type = "http"
+	is_priority = false
 	sink {
 	  http_endpoint = "https://example.com/webhook/logs"
 	  http_content_type = "application/json; charset=utf-8"

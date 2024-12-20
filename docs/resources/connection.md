@@ -934,6 +934,7 @@ Optional:
 - `client_authorize_query` (String)
 - `client_id` (String)
 - `client_protocol` (String)
+- `enabled` (Boolean)
 
 
 <a id="nestedblock--options--mfa"></a>

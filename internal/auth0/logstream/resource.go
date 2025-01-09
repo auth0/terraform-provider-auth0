@@ -252,7 +252,6 @@ func NewResource() *schema.Resource {
 								},
 							},
 							Optional:    true,
-							Computed:    true,
 							Default:     nil,
 							Description: "Additional HTTP headers to be included as part of the HTTP request.",
 						},

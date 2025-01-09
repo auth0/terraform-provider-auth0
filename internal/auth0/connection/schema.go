@@ -905,6 +905,12 @@ var optionsSchema = &schema.Schema{
 										Computed:    false,
 										Description: "Defines whether Profile is required",
 									},
+									"verification_method": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification",
+									},
 									"signup": {
 										Type:        schema.TypeList,
 										Optional:    true,

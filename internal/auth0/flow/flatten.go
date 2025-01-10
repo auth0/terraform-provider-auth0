@@ -34,7 +34,6 @@ func flattenVaultConnection(data *schema.ResourceData, vaultConnection *manageme
 		data.Set("name", vaultConnection.GetName()),
 		data.Set("app_id", vaultConnection.GetAppID()),
 		data.Set("environment", vaultConnection.GetEnvironment()),
-		data.Set("setup", vaultConnection.GetSetup()),
 		data.Set("account_name", vaultConnection.GetAccountName()),
 		data.Set("ready", vaultConnection.GetReady()),
 		data.Set("fingerprint", vaultConnection.GetFingerprint()),

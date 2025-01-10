@@ -244,7 +244,8 @@ func NewResource() *schema.Resource {
 							Description: "Sent in the HTTP \"Authorization\" header with each request.",
 						},
 						"http_custom_headers": {
-							Type: schema.TypeList,
+							Type:     schema.TypeList,
+							Computed: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeMap,
 								Elem: &schema.Schema{

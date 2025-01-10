@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 	"os"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
@@ -145,6 +146,7 @@ func New() *schema.Provider {
 			"auth0_self_service_profile":             selfserviceprofile.NewResource(),
 			"auth0_self_service_profile_custom_text": selfserviceprofile.NewCustomTextResource(),
 			"auth0_tenant":                           tenant.NewResource(),
+			"auth0_token_exchange_profile":           tokenexchangeprofile.NewResource(),
 			"auth0_user":                             user.NewResource(),
 			"auth0_user_permission":                  user.NewPermissionResource(),
 			"auth0_user_permissions":                 user.NewPermissionsResource(),
@@ -172,6 +174,7 @@ func New() *schema.Provider {
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_signing_keys":                  signingkey.NewDataSource(),
 			"auth0_tenant":                        tenant.NewDataSource(),
+			"auth0_token_exchange_profile":        tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
 		},
 	}

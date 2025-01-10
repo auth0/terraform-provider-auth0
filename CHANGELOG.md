@@ -1,3 +1,17 @@
+## v1.9.1
+
+ENHANCEMENTS:
+- `resource/auth0_prompt_screen_renderer`: Update docs & unit tests related to auth0_prompt_screen_renderer  (`EA` Release) ([#1101](https://github.com/auth0/terraform-provider-auth0/pull/1101/))
+- `resource/auth0_flow_vault_connection`: Update `setup` & `ready` attributes schema for auth0_flow_vault_connection ([#1103](https://github.com/auth0/terraform-provider-auth0/pull/1103/))
+
+
+## v1.9.0
+
+FEATURES:
+- `resource/auth0_prompt_screen_renderer`: Add a resource for configuring the settings of prompt-screen ([#1077](https://github.com/auth0/terraform-provider-auth0/pull/1077))
+- `data-source/auth0_prompt_screen_renderer`: Add a data-source for retrieving prompt-screen settings ([#1077](https://github.com/auth0/terraform-provider-auth0/pull/1077))
+
+
 ## v1.8.0
 
 FEATURES:

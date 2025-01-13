@@ -116,7 +116,7 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 	// We need to also include the secrets that we're about to remove
 	// against the checks, not just the ones with which we are left.
 	oldSecrets, newSecrets := data.GetChange("secrets")
-	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
+	allSecrets := append(oldSecrets.(*schema.Set).List(), newSecrets.(*schema.Set).List())
 
 	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
 }
@@ -127,7 +127,42 @@ func checkForUnmanagedActionSecrets(
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
-		secretKeyName := secret.(map[string]interface{})["name"].(string)
+		// Check if the element can be asserted as a map
+		secretMap, ok := secret.(map[string]interface{})
+		if !ok {
+			// Manually attempt conversion if Terraform wraps elements differently
+			nestedList, isNestedList := secret.([]interface{})
+			if isNestedList && len(nestedList) > 0 {
+				convertedMap, canConvert := nestedList[0].(map[string]interface{})
+				if canConvert {
+					secretMap = convertedMap
+					ok = true
+				}
+			}
+		}
+
+		if !ok {
+			return diag.Diagnostics{
+				diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Invalid Configuration Format",
+					Detail:   "Secrets configuration contains improperly formatted elements. Each secret must be a map with 'name' and 'value'.",
+				},
+			}
+		}
+
+		// Safely extract the "name" field from the secret map
+		secretKeyName, nameOk := secretMap["name"].(string)
+		if !nameOk {
+			return diag.Diagnostics{
+				diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Invalid Secret Name",
+					Detail:   "Each secret in the configuration must have a valid 'name' as a string.",
+				},
+			}
+		}
+
 		secretKeysInConfigMap[secretKeyName] = true
 	}
 

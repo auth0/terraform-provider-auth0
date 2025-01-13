@@ -314,6 +314,7 @@ Read-Only:
 - `client_authorize_query` (String)
 - `client_id` (String)
 - `client_protocol` (String)
+- `enabled` (Boolean)
 
 
 <a id="nestedobjatt--options--mfa"></a>

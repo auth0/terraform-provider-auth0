@@ -866,6 +866,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
@@ -949,6 +950,7 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),

@@ -113,25 +113,22 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// Extract changes to secrets from the resource data
+	// Extract changes to secrets from the resource data.
 	oldSecrets, newSecrets := data.GetChange("secrets")
 
-	// Convert the secrets from *schema.Set to slices of interface{}
-	oldSecretsList := []interface{}{}
-	newSecretsList := []interface{}{}
+	// Stores the old and secrets from *schema.Set to slices of interface{}.
+	var secretsList []interface{}
 
 	if oldSecrets != nil {
-		oldSecretsList = oldSecrets.(*schema.Set).List()
+		secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
 	}
+
 	if newSecrets != nil {
-		newSecretsList = newSecrets.(*schema.Set).List()
+		secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
 	}
 
-	// Combine both sets into a single slice
-	allSecrets := append(oldSecretsList, newSecretsList...)
-
-	// Pass allSecrets to check for unmanaged action secrets
-	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
+	// Pass allSecrets to check for unmanaged action secrets.
+	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets())
 }
 
 func checkForUnmanagedActionSecrets(
@@ -140,10 +137,10 @@ func checkForUnmanagedActionSecrets(
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
-		// Check if the element can be asserted as a map
+		// Check if the element can be asserted as a map.
 		secretMap, ok := secret.(map[string]interface{})
 		if !ok {
-			// Manually attempt conversion if Terraform wraps elements differently
+			// Manually attempt conversion if Terraform wraps elements differently.
 			nestedList, isNestedList := secret.([]interface{})
 			if isNestedList && len(nestedList) > 0 {
 				convertedMap, canConvert := nestedList[0].(map[string]interface{})
@@ -164,7 +161,7 @@ func checkForUnmanagedActionSecrets(
 			}
 		}
 
-		// Safely extract the "name" field from the secret map
+		// Safely extract the "name" field from the secret map.
 		secretKeyName, nameOk := secretMap["name"].(string)
 		if !nameOk {
 			return diag.Diagnostics{

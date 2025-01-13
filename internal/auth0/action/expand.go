@@ -113,11 +113,24 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// We need to also include the secrets that we're about to remove
-	// against the checks, not just the ones with which we are left.
+	// Extract changes to secrets from the resource data
 	oldSecrets, newSecrets := data.GetChange("secrets")
-	allSecrets := append(oldSecrets.(*schema.Set).List(), newSecrets.(*schema.Set).List())
 
+	// Convert the secrets from *schema.Set to slices of interface{}
+	oldSecretsList := []interface{}{}
+	newSecretsList := []interface{}{}
+
+	if oldSecrets != nil {
+		oldSecretsList = oldSecrets.(*schema.Set).List()
+	}
+	if newSecrets != nil {
+		newSecretsList = newSecrets.(*schema.Set).List()
+	}
+
+	// Combine both sets into a single slice
+	allSecrets := append(oldSecretsList, newSecretsList...)
+
+	// Pass allSecrets to check for unmanaged action secrets
 	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
 }
 

@@ -23,6 +23,7 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key2", "bar"),
 					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_dictionary.0.enable", "true"),
@@ -72,6 +73,7 @@ resource "auth0_connection" "my_connection" {
 		key2 = "bar"
 	}
 	options {
+		strategy_version = 2
 		password_policy = "fair"
 		password_history {
 			enable = true
@@ -160,6 +162,324 @@ resource "auth0_connection" "my_connection" {
 }
 `
 
+const testAccConnectionOptionAttributesTemplate = `
+resource "auth0_connection" "my_connection" {
+	name = "Acceptance-Test-Connection-{{.testName}}"
+	is_domain_connection = true
+	strategy = "auth0"
+	options {
+		precedence = ["username","email","phone_number"]
+		{{.requires_username}}
+		{{.validation}}
+		{{.attributes}}
+		brute_force_protection = true
+	}
+}
+`
+
+func TestAccConnectionOptionsAttrPhoneNumber(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			phone_number {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.phone_number.0.signup.0.verification.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrEmail(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			email {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrUserName(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+				validation {
+					min_length = 1
+					max_length = 3
+					allowed_types {
+						email = true
+						phone_number = false
+					}
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "is_domain_connection", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.identifier.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.signup.0.status", "required"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.min_length", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.max_length", "3"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.email", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.username.0.validation.0.allowed_types.0.phone_number", "false"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(`data "auth0_tenant" "test_tenant_data" {}`, t.Name()),
+			},
+			{
+				Config: acctest.ParseTestName(`
+											data "auth0_connection" "my_connection" {
+											name = "Acceptance-Test-Connection-{{.testName}}"
+										}`,
+					t.Name()),
+				ExpectError: regexp.MustCompile(" No connection found"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrUserNameNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"requires_username": `requires_username = true`,
+		"testName":          t.Name(),
+		"validation":        ``,
+		"attributes": `attributes {
+			username {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: Cannot set both options.attributes and options.requires_username"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrNoActiveNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			phone_number {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			email {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			username {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: attributes must contain one active identifier"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrSetValidationNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation": `validation {
+			username {
+				min = 1
+				max =  5
+			}
+		}`,
+		"attributes": `attributes {
+			email {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "required"
+					verification {
+						active = false
+					}
+				}
+			}
+			username {
+				identifier {
+					active = false
+				}
+				profile_required = true
+				signup {
+					status = "required"
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("400 Bad Request: Cannot set both options.attributes and options.validation"),
+			},
+		},
+	})
+}
+
+func TestAccConnectionOptionsAttrInactiveSignUpNegative(t *testing.T) {
+	params := map[string]interface{}{
+		"testName":          t.Name(),
+		"requires_username": `requires_username = false`,
+		"validation":        ``,
+		"attributes": `attributes {
+			phone_number {
+				identifier {
+					active = true
+				}
+				profile_required = true
+				signup {
+					status = "inactive"
+					verification {
+						active = false
+					}
+				}
+			}
+		}`}
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseParametersInTemplate(testAccConnectionOptionAttributesTemplate, params),
+				ExpectError: regexp.MustCompile("attribute phone_number must also be required on signup"),
+			},
+		},
+	})
+}
+
 func TestAccConnectionAD(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -172,6 +492,7 @@ func TestAccConnectionAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.domain_aliases.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.tenant_domain", "example.com"),
 					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.use_kerberos", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.ad", "options.0.strategy_version", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.ips.*", "192.168.1.1"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.ad", "options.0.domain_aliases.*", "example.com"),
@@ -213,6 +534,7 @@ resource "auth0_connection" "ad" {
 	strategy = "ad"
 	show_as_button = true
 	options {
+		strategy_version = 2
 		disable_self_service_change_password = false
 		brute_force_protection = true
 		tenant_domain = "example.com"
@@ -269,6 +591,8 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.identity_api", "azure-active-directory-v1.0"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.strategy_version", "2"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.user_id_attribute", "oid"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
@@ -292,6 +616,7 @@ func TestAccConnectionAzureAD(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.identity_api", "azure-active-directory-v1.0"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.user_id_attribute", "sub"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.tenant_domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain", "example.onmicrosoft.com"),
 					resource.TestCheckResourceAttr("auth0_connection.azure_ad", "options.0.domain_aliases.#", "2"),
@@ -316,11 +641,12 @@ resource "auth0_connection" "azure_ad" {
 	strategy = "waad"
 	show_as_button = true
 	options {
-		identity_api  = "azure-active-directory-v1.0"
-		client_id     = "123456"
-		client_secret = "123456"
-		tenant_domain = "example.onmicrosoft.com"
-		domain        = "example.onmicrosoft.com"
+		identity_api     = "azure-active-directory-v1.0"
+		client_id        = "123456"
+		client_secret    = "123456"
+		strategy_version = 2
+		tenant_domain    = "example.onmicrosoft.com"
+		domain           = "example.onmicrosoft.com"
 		domain_aliases = [
 			"example.com",
 			"api.example.com"
@@ -328,6 +654,7 @@ resource "auth0_connection" "azure_ad" {
 		use_wsfed            = false
 		waad_protocol        = "openid-connect"
 		waad_common_endpoint = false
+		user_id_attribute    = "oid"
 		api_enable_users     = true
 		scopes               = [
 			"basic_profile",
@@ -363,6 +690,7 @@ resource "auth0_connection" "azure_ad" {
 		use_wsfed            = false
 		waad_protocol        = "openid-connect"
 		waad_common_endpoint = false
+		user_id_attribute    = "sub"
 		api_enable_users     = true
 		scopes               = [
 			"basic_profile",
@@ -396,6 +724,7 @@ func TestAccConnectionADFS(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.adfs_server", "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.api_enable_users", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.set_user_root_attributes", "on_each_login"),
+					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.0", "gender"),
 					resource.TestCheckResourceAttr("auth0_connection.adfs", "options.0.non_persistent_attrs.1", "hair_color"),
@@ -442,6 +771,7 @@ resource "auth0_connection" "adfs" {
 		icon_url = "https://example.com/logo.svg"
 		adfs_server = "https://raw.githubusercontent.com/auth0/terraform-provider-auth0/b5ed4fc037bcf7be0a8953033a3c3ffa1be17083/test/data/federation_metadata.xml"
 		sign_in_endpoint = "https://adfs.provider/wsfed"
+		strategy_version = 2
 		api_enable_users = false
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
@@ -545,7 +875,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "disabled"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "bind_all"),
 				),
 			},
 			{
@@ -571,7 +901,7 @@ func TestAccConnectionOIDC(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.connection_settings.0.pkce", "auto"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.#", "1"),
-					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "basic_profile"),
+					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.mapping_mode", "use_map"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.userinfo_scope", "openid email profile groups"),
 					resource.TestCheckResourceAttr("auth0_connection.oidc", "options.0.attribute_map.0.attributes", "{\"email\":\"${context.tokenset.email}\",\"email_verified\":\"${context.tokenset.email_verified}\",\"family_name\":\"${context.tokenset.family_name}\",\"given_name\":\"${context.tokenset.given_name}\",\"name\":\"${context.tokenset.name}\",\"nickname\":\"${context.tokenset.nickname}\",\"picture\":\"${context.tokenset.picture}\"}"),
 				),
@@ -611,8 +941,8 @@ resource "auth0_connection" "oidc" {
 	strategy = "oidc"
 	show_as_button = true
 	options {
-		client_id     = "123456"
-		client_secret = "123456"
+		client_id        = "123456"
+		client_secret    = "123456"
 		domain_aliases = [
 			"example.com",
 			"api.example.com"
@@ -638,7 +968,7 @@ resource "auth0_connection" "oidc" {
 		}
 
 		attribute_map {
-			mapping_mode = "basic_profile"
+			mapping_mode = "bind_all"
 		}
 	}
 }
@@ -671,7 +1001,7 @@ resource "auth0_connection" "oidc" {
 		}
 
 		attribute_map {
-			mapping_mode   = "basic_profile"
+			mapping_mode   = "use_map"
 			userinfo_scope = "openid email profile groups"
 			attributes     = jsonencode({
 				"name": "$${context.tokenset.name}",
@@ -919,6 +1249,7 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "strategy", "oauth2"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_id", "123456"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.client_secret", "123456"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.token_endpoint", "https://api.login.yahoo.com/oauth2/get_token"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.authorization_endpoint", "https://api.login.yahoo.com/oauth2/request_auth"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.scopes.#", "3"),
@@ -961,6 +1292,7 @@ resource "auth0_connection" "oauth2" {
 	options {
 		client_id     = "123456"
 		client_secret = "123456"
+		strategy_version = 2
 		token_endpoint         = "https://api.login.yahoo.com/oauth2/get_token"
 		authorization_endpoint = "https://api.login.yahoo.com/oauth2/request_auth"
 		scopes = [ "openid", "email", "profile" ]
@@ -1883,8 +2215,10 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://saml-from-metadata-xml.provider/sign_in"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.disable_sign_out", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", ""),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.metadata_xml"),
@@ -1944,6 +2278,7 @@ resource "auth0_connection" "my_connection" {
 
 		disable_sign_out         = false
 		user_id_attribute        = "https://saml.provider/imi/ns/identity-200810"
+		strategy_version         = 2
 		tenant_domain            = "example.com"
 		domain_aliases           = ["example.com", "example.coz"]
 		protocol_binding         = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
@@ -1966,6 +2301,7 @@ resource "auth0_connection" "my_connection" {
 		})
 
 		idp_initiated {
+			enabled = true
 			client_id              = "client_id"
 			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=30"
@@ -2037,6 +2373,7 @@ resource "auth0_connection" "my_connection" {
 		})
 
 		idp_initiated {
+			enabled = true
 			client_id              = "client_id"
 			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=60"
@@ -2134,6 +2471,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
@@ -2164,6 +2502,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 				),
@@ -2220,6 +2559,7 @@ EOF
 			}
 		})
 		idp_initiated {
+			enabled = true
 			client_id = "client_id"
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=30"
@@ -2270,6 +2610,7 @@ EOF
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
 		idp_initiated {
+			enabled = true
 			client_id = "client_id"
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=60"

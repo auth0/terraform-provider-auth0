@@ -2,7 +2,12 @@ package tenant
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+	"time"
 
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -10,6 +15,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 const (
@@ -24,6 +30,7 @@ func NewResource() *schema.Resource {
 		ReadContext:   readTenant,
 		UpdateContext: updateTenant,
 		DeleteContext: deleteTenant,
+		CustomizeDiff: validateTenant,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
@@ -145,6 +152,13 @@ func NewResource() *schema.Resource {
 							Description: "Indicates whether the tenant allows custom domains in emails. " +
 								"Before enabling this flag, you must have a custom domain with status: `ready`.",
 						},
+						"enable_sso": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Computed: true,
+							Description: "Flag indicating whether users will not be prompted to confirm log in before SSO redirection. " +
+								"This flag applies to existing tenants only; new tenants have it enforced as true.",
+						},
 						"enable_legacy_logs_search_v2": {
 							Type:        schema.TypeBool,
 							Optional:    true,
@@ -248,10 +262,17 @@ func NewResource() *schema.Resource {
 							Description: "Used to allow users to pick which factor to enroll with from the list of available MFA factors.",
 						},
 						"require_pushed_authorization_requests": {
+							Deprecated:  "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Computed:    true,
-							Description: "Makes the use of Pushed Authorization Requests mandatory for all clients across the tenant. This feature currently needs to be enabled on the tenant in order to make use of it.",
+							Description: "This Flag is not supported by the Auth0 Management API and will be removed in the next major release.",
+						},
+						"remove_alg_from_jwks": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Remove `alg` from jwks(JSON Web Key Sets).",
 						},
 					},
 				},
@@ -313,6 +334,48 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Whether to enable flexible factors for MFA in the PostLogin action.",
 			},
+			"acr_values_supported": {
+				Type:        schema.TypeSet,
+				Optional:    true,
+				Computed:    true,
+				Description: "List of supported ACR values.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"disable_acr_values_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Disable list of supported ACR values.",
+			},
+			"pushed_authorization_requests_supported": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Computed:    true,
+				Description: "Enable pushed authorization requests.",
+			},
+			"mtls": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for mTLS.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enable_endpoint_aliases": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Enable mTLS endpoint aliases.",
+						},
+						"disable": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Disable mTLS settings.",
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -333,14 +396,66 @@ func readTenant(ctx context.Context, data *schema.ResourceData, meta interface{}
 	return diag.FromErr(flattenTenant(data, tenant))
 }
 
+func validateTenant(_ context.Context, diff *schema.ResourceDiff, _ interface{}) error {
+	var result *multierror.Error
+	disableACRValues := diff.GetRawConfig().GetAttr("disable_acr_values_supported")
+	if !disableACRValues.IsNull() && disableACRValues.True() {
+		acrValues := diff.GetRawConfig().GetAttr("acr_values_supported")
+		if !acrValues.IsNull() && acrValues.LengthInt() > 0 {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable_acr_values_supported and acr_values_supported should be set"),
+			)
+		}
+	}
+
+	mtlsConfig := diff.GetRawConfig().GetAttr("mtls")
+	if !mtlsConfig.IsNull() {
+		var disable, enableEndpointAliases *bool
+
+		mtlsConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+			disable = value.Bool(cfg.GetAttr("disable"))
+			enableEndpointAliases = value.Bool(cfg.GetAttr("enable_endpoint_aliases"))
+			return stop
+		})
+		if disable != nil && *disable && enableEndpointAliases != nil && *enableEndpointAliases {
+			result = multierror.Append(
+				result,
+				fmt.Errorf("only one of disable and enable_endpoint_aliases should be set in the mtls block"),
+			)
+		}
+	}
+
+	return result.ErrorOrNil()
+}
+
 func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
 	tenant := expandTenant(data)
-
 	if err := api.Tenant.Update(ctx, tenant); err != nil {
 		return diag.FromErr(err)
 	}
+	// These call should NOT be needed, but the tests fail sometimes if it they not there.
+	time.Sleep(800 * time.Millisecond)
+
+	if isACRValuesSupportedNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"acr_values_supported": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	time.Sleep(200 * time.Millisecond)
+
+	if isMTLSConfigurationNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"mtls": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	time.Sleep(800 * time.Millisecond)
 
 	return readTenant(ctx, data, meta)
 }

@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"net/http"
+	"time"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -12,6 +14,14 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 )
+
+// ValidAppTypes contains all valid values for client app_type.
+var ValidAppTypes = []string{
+	"native", "spa", "regular_web", "non_interactive", "rms",
+	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
+	"egnyte", "newrelic", "office365", "salesforce", "sentry",
+	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
+}
 
 // NewResource will return a new auth0_client resource.
 func NewResource() *schema.Resource {
@@ -51,14 +61,9 @@ func NewResource() *schema.Resource {
 				Description: "List of audiences/realms for SAML protocol. Used by the wsfed addon.",
 			},
 			"app_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"native", "spa", "regular_web", "non_interactive", "rms",
-					"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
-					"egnyte", "newrelic", "office365", "salesforce", "sentry",
-					"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
-				}, false),
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
 					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
@@ -113,6 +118,8 @@ func NewResource() *schema.Resource {
 				},
 				Optional:    true,
 				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
+				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
+					"Please use `oidc_logout` for managing OIDC backchannel logout URLs.",
 			},
 			"grant_types": {
 				Type:        schema.TypeList,
@@ -187,9 +194,15 @@ func NewResource() *schema.Resource {
 							Description: "Permissions (scopes) included in JWTs.",
 						},
 						"alg": {
-							Type:        schema.TypeString,
-							Optional:    true,
-							Description: "Algorithm used to sign JWTs.",
+							Type:     schema.TypeString,
+							Optional: true,
+							ValidateFunc: validation.StringInSlice([]string{
+								"HS256",
+								"RS256",
+								"PS256",
+							}, false),
+							Description: "Algorithm used to sign JWTs. " +
+								"Can be one of `HS256`, `RS256`, `PS256`.",
 						},
 					},
 				},
@@ -1271,21 +1284,108 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_organization": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Computed:    true,
+				Description: "Configure and associate an organization with the Client",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"flows": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "Definition of the flow that needs to be configured. Eg. client_credentials",
+						},
+						"organization_id": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "The unique identifier of the organization",
+						},
+						"disable": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "If set, the `default_organization` will be removed.",
+						},
+					},
+				},
+			},
+			"compliance_level": {
+				Type:         schema.TypeString,
+				Optional:     true,
+				ValidateFunc: validation.StringInSlice([]string{"none", "fapi1_adv_pkj_par", "fapi1_adv_mtls_par"}, false),
+				Default:      nil,
+				Description: "Defines the compliance level for this client, which may restrict it's capabilities. " +
+					"Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.",
+			},
+			"require_proof_of_possession": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Makes the use of Proof-of-Possession mandatory for this client.",
+			},
+			"oidc_logout": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configure OIDC logout for the Client",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"backchannel_logout_urls": {
+							Type: schema.TypeSet,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+							Required:    true,
+							Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
+						},
+						"backchannel_logout_initiators": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Configure OIDC logout initiators for the Client",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"mode": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice([]string{"all", "custom"}, false),
+										Description:  "Determines the configuration method for enabling initiators. `custom` enables only the initiators listed in the backchannel_logout_selected_initiators set, `all` enables all current and future initiators.",
+									},
+									"selected_initiators": {
+										Type: schema.TypeSet,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+										Optional:    true,
+										Description: "Contains the list of initiators to be enabled for the given client.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
 
 func createClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	client, err := expandClient(data)
 
-	client := expandClient(data)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
 
 	data.SetId(client.GetClientID())
-
 	return readClient(ctx, data, meta)
 }
 
@@ -1304,9 +1404,13 @@ func readClient(ctx context.Context, data *schema.ResourceData, meta interface{}
 func updateClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if client := expandClient(data); clientHasChange(client) {
+	client, err := expandClient(data)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if clientHasChange(client) {
 		if client.GetAddons() != nil {
-			// In case we are switching addons, we need to be able to clear out the previous config.
 			resetAddons := &management.Client{
 				Addons: &management.ClientAddons{},
 			}
@@ -1318,8 +1422,17 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		if err := api.Client.Update(ctx, data.Id(), client); err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
-	}
 
+		time.Sleep(200 * time.Millisecond)
+
+		if isDefaultOrgNull(data) {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"default_organization": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+	}
 	return readClient(ctx, data, meta)
 }
 

@@ -39,12 +39,15 @@ data "auth0_client" "some-client-by-id" {
 - `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
+- `client_authentication_methods` (Set of Object) Defines client authentication methods. (see [below for nested schema](#nestedatt--client_authentication_methods))
 - `client_metadata` (Map of String) Metadata associated with the client, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed. Field names (max 255 chars) are alphanumeric and may only include the following special characters: `:,-+=_*?"/\()<>@ [Tab] [Space]`.
 - `client_secret` (String, Sensitive) Secret for the client. Keep this private. To access this attribute you need to add the `read:client_keys` scope to the Terraform client. Otherwise, the attribute will contain an empty string.
+- `compliance_level` (String) Defines the compliance level for this client, which may restrict it's capabilities. Can be one of `none`, `fapi1_adv_pkj_par`, `fapi1_adv_mtls_par`.
 - `cross_origin_auth` (Boolean) Whether this client can be used to make cross-origin authentication requests (`true`) or it is not allowed to make such requests (`false`).
 - `cross_origin_loc` (String) URL of the location in your site where the cross-origin verification takes place for the cross-origin auth flow when performing authentication in your own domain instead of Auth0 Universal Login page.
 - `custom_login_page` (String) The content (HTML, CSS, JS) of the custom login page.
 - `custom_login_page_on` (Boolean) Indicates whether a custom login page is to be used.
+- `default_organization` (List of Object) Configure and associate an organization with the Client (see [below for nested schema](#nestedatt--default_organization))
 - `description` (String) Description of the purpose of the client.
 - `encryption_key` (Map of String) Encryption used for WS-Fed responses with this client.
 - `form_template` (String) HTML form template to be used for WS-Federation.
@@ -59,14 +62,17 @@ data "auth0_client" "some-client-by-id" {
 - `native_social_login` (List of Object) Configuration settings to toggle native social login for mobile native applications. Once this is set it must stay set, with both resources set to `false` in order to change the `app_type`. (see [below for nested schema](#nestedatt--native_social_login))
 - `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
+- `oidc_logout` (List of Object) Configure OIDC logout for the Client (see [below for nested schema](#nestedatt--oidc_logout))
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
+- `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `signed_request_object` (Set of Object) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedatt--signed_request_object))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
-- `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic). Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
+- `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -402,6 +408,90 @@ Read-Only:
 
 
 
+<a id="nestedatt--client_authentication_methods"></a>
+### Nested Schema for `client_authentication_methods`
+
+Read-Only:
+
+- `private_key_jwt` (Set of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--private_key_jwt))
+- `self_signed_tls_client_auth` (Set of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--self_signed_tls_client_auth))
+- `tls_client_auth` (Set of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--tls_client_auth))
+
+<a id="nestedobjatt--client_authentication_methods--private_key_jwt"></a>
+### Nested Schema for `client_authentication_methods.private_key_jwt`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--private_key_jwt--credentials))
+
+<a id="nestedobjatt--client_authentication_methods--private_key_jwt--credentials"></a>
+### Nested Schema for `client_authentication_methods.private_key_jwt.credentials`
+
+Read-Only:
+
+- `algorithm` (String)
+- `created_at` (String)
+- `credential_type` (String)
+- `expires_at` (String)
+- `id` (String)
+- `key_id` (String)
+- `name` (String)
+- `updated_at` (String)
+
+
+
+<a id="nestedobjatt--client_authentication_methods--self_signed_tls_client_auth"></a>
+### Nested Schema for `client_authentication_methods.self_signed_tls_client_auth`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--self_signed_tls_client_auth--credentials))
+
+<a id="nestedobjatt--client_authentication_methods--self_signed_tls_client_auth--credentials"></a>
+### Nested Schema for `client_authentication_methods.self_signed_tls_client_auth.credentials`
+
+Read-Only:
+
+- `created_at` (String)
+- `credential_type` (String)
+- `id` (String)
+- `name` (String)
+- `updated_at` (String)
+
+
+
+<a id="nestedobjatt--client_authentication_methods--tls_client_auth"></a>
+### Nested Schema for `client_authentication_methods.tls_client_auth`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--client_authentication_methods--tls_client_auth--credentials))
+
+<a id="nestedobjatt--client_authentication_methods--tls_client_auth--credentials"></a>
+### Nested Schema for `client_authentication_methods.tls_client_auth.credentials`
+
+Read-Only:
+
+- `created_at` (String)
+- `credential_type` (String)
+- `id` (String)
+- `name` (String)
+- `subject_dn` (String)
+- `updated_at` (String)
+
+
+
+
+<a id="nestedatt--default_organization"></a>
+### Nested Schema for `default_organization`
+
+Read-Only:
+
+- `disable` (Boolean)
+- `flows` (List of String)
+- `organization_id` (String)
+
+
 <a id="nestedatt--jwt_configuration"></a>
 ### Nested Schema for `jwt_configuration`
 
@@ -465,6 +555,24 @@ Read-Only:
 
 
 
+<a id="nestedatt--oidc_logout"></a>
+### Nested Schema for `oidc_logout`
+
+Read-Only:
+
+- `backchannel_logout_initiators` (List of Object) (see [below for nested schema](#nestedobjatt--oidc_logout--backchannel_logout_initiators))
+- `backchannel_logout_urls` (Set of String)
+
+<a id="nestedobjatt--oidc_logout--backchannel_logout_initiators"></a>
+### Nested Schema for `oidc_logout.backchannel_logout_initiators`
+
+Read-Only:
+
+- `mode` (String)
+- `selected_initiators` (Set of String)
+
+
+
 <a id="nestedatt--refresh_token"></a>
 ### Nested Schema for `refresh_token`
 
@@ -477,5 +585,28 @@ Read-Only:
 - `leeway` (Number)
 - `rotation_type` (String)
 - `token_lifetime` (Number)
+
+
+<a id="nestedatt--signed_request_object"></a>
+### Nested Schema for `signed_request_object`
+
+Read-Only:
+
+- `credentials` (List of Object) (see [below for nested schema](#nestedobjatt--signed_request_object--credentials))
+- `required` (Boolean)
+
+<a id="nestedobjatt--signed_request_object--credentials"></a>
+### Nested Schema for `signed_request_object.credentials`
+
+Read-Only:
+
+- `algorithm` (String)
+- `created_at` (String)
+- `credential_type` (String)
+- `expires_at` (String)
+- `id` (String)
+- `key_id` (String)
+- `name` (String)
+- `updated_at` (String)
 
 

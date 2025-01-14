@@ -120,13 +120,15 @@ test-unit: ## Run unit tests. To run a specific test, pass the FILTER var. Usage
 
 test-acc: ## Run acceptance tests with http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc FILTER="TestAccResourceServer`
 	${call print, "Running acceptance tests with http recordings"}
-	@AUTH0_HTTP_RECORDINGS=on \
+	@terraform version; \
+		AUTH0_HTTP_RECORDINGS=on \
 		AUTH0_DOMAIN=terraform-provider-auth0-dev.eu.auth0.com \
 		TF_ACC=1 \
 		go test \
 		-v \
 		-run "$(FILTER)" \
 		-timeout 120m \
+		-parallel 1 \
 		-coverprofile="${GO_TEST_COVERAGE_FILE}" \
 		${GO_PACKAGES}
 
@@ -138,6 +140,7 @@ test-acc-record: ## Run acceptance tests and record http interactions. To run a 
 		-v \
 		-run "$(FILTER)" \
 		-timeout 120m \
+		-parallel 1 \
 		${GO_PACKAGES}
 
 test-acc-e2e: ## Run acceptance tests without http recordings. To run a specific test, pass the FILTER var. Usage `make test-acc-e2e FILTER="TestAccResourceServer`

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -179,6 +180,139 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
+	var coa *management.ConnectionOptionsAttributes
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			coa = &management.ConnectionOptionsAttributes{
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
+				Username:    expandConnectionOptionsUsernameAttribute(attributes),
+				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
+			}
+			return stop
+		})
+	return coa
+}
+
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
+	var coea *management.ConnectionOptionsEmailAttribute
+	config.GetAttr("email").ForEachElement(
+		func(_ cty.Value, email cty.Value) (stop bool) {
+			coea = &management.ConnectionOptionsEmailAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(email),
+				ProfileRequired: value.Bool(email.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(email),
+			}
+			return stop
+		})
+	return coea
+}
+
+func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.ConnectionOptionsUsernameAttribute {
+	var coua *management.ConnectionOptionsUsernameAttribute
+	config.GetAttr("username").ForEachElement(
+		func(_ cty.Value, username cty.Value) (stop bool) {
+			coua = &management.ConnectionOptionsUsernameAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(username),
+				ProfileRequired: value.Bool(username.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeUsernameSignup(username),
+				Validation:      expandConnectionOptionsAttributeValidation(username),
+			}
+			return stop
+		})
+	return coua
+}
+
+func expandConnectionOptionsPhoneNumberAttribute(config cty.Value) *management.ConnectionOptionsPhoneNumberAttribute {
+	var copa *management.ConnectionOptionsPhoneNumberAttribute
+	config.GetAttr("phone_number").ForEachElement(
+		func(_ cty.Value, phoneNumber cty.Value) (stop bool) {
+			copa = &management.ConnectionOptionsPhoneNumberAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(phoneNumber),
+				ProfileRequired: value.Bool(phoneNumber.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(phoneNumber),
+			}
+			return stop
+		})
+	return copa
+}
+
+func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.ConnectionOptionsAttributeIdentifier {
+	var coai *management.ConnectionOptionsAttributeIdentifier
+	config.GetAttr("identifier").ForEachElement(
+		func(_ cty.Value, identifier cty.Value) (stop bool) {
+			coai = &management.ConnectionOptionsAttributeIdentifier{
+				Active: value.Bool(identifier.GetAttr("active")),
+			}
+			return stop
+		})
+	return coai
+}
+
+func expandConnectionOptionsAttributeUsernameSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status: value.String(signup.GetAttr("status")),
+			}
+			return stop
+		})
+	return coas
+}
+
+func expandConnectionOptionsAttributeSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status:       value.String(signup.GetAttr("status")),
+				Verification: expandConnectionOptionsAttributeVerification(signup),
+			}
+			return stop
+		})
+	return coas
+}
+
+func expandConnectionOptionsAttributeVerification(config cty.Value) *management.ConnectionOptionsAttributeVerification {
+	var coav *management.ConnectionOptionsAttributeVerification
+	config.GetAttr("verification").ForEachElement(
+		func(_ cty.Value, verification cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeVerification{
+				Active: value.Bool(verification.GetAttr("active")),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeValidation(config cty.Value) *management.ConnectionOptionsAttributeValidation {
+	var coav *management.ConnectionOptionsAttributeValidation
+	config.GetAttr("validation").ForEachElement(
+		func(_ cty.Value, validation cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeValidation{
+				MinLength:    value.Int(validation.GetAttr("min_length")),
+				MaxLength:    value.Int(validation.GetAttr("max_length")),
+				AllowedTypes: expandConnectionOptionsAttributeAllowedTypes(validation),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.ConnectionOptionsAttributeAllowedTypes {
+	var coaat *management.ConnectionOptionsAttributeAllowedTypes
+	config.GetAttr("allowed_types").ForEachElement(
+		func(_ cty.Value, allowedTypes cty.Value) (stop bool) {
+			coaat = &management.ConnectionOptionsAttributeAllowedTypes{
+				Email:       value.Bool(allowedTypes.GetAttr("email")),
+				PhoneNumber: value.Bool(allowedTypes.GetAttr("phone_number")),
+			}
+			return stop
+		})
+	return coaat
+}
+
 func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
@@ -193,6 +327,9 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
+		Precedence:                       value.Strings(config.GetAttr("precedence")),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -371,6 +508,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	expandConnectionOptionsScopes(data, options)
@@ -555,6 +693,7 @@ func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interf
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
 		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
 		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -585,6 +724,8 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 		IdentityAPI:         value.String(config.GetAttr("identity_api")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
+		StrategyVersion:     value.Int(config.GetAttr("strategy_version")),
+		UserIDAttribute:     value.String(config.GetAttr("user_id_attribute")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -718,6 +859,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 		EntityID:           value.String(config.GetAttr("entity_id")),
 		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
 		MetadataURL:        value.String(config.GetAttr("metadata_url")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -727,6 +869,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
@@ -775,6 +918,7 @@ func expandConnectionOptionsADFS(_ *schema.ResourceData, config cty.Value) (inte
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
 		TrustEmailVerified: value.String(config.GetAttr("should_trust_email_verified_connection")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -809,6 +953,7 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
@@ -1081,4 +1226,35 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 	}
 
 	return warnings
+}
+
+func expandSCIMConfigurationMapping(data *schema.ResourceData) *[]management.SCIMConfigurationMapping {
+	srcMapping := data.Get("mapping").(*schema.Set)
+	mapping := make([]management.SCIMConfigurationMapping, 0, srcMapping.Len())
+	for _, item := range srcMapping.List() {
+		srcMap := item.(map[string]interface{})
+		mapping = append(mapping, management.SCIMConfigurationMapping{
+			Auth0: auth0.String(srcMap["auth0"].(string)),
+			SCIM:  auth0.String(srcMap["scim"].(string)),
+		})
+	}
+
+	return &mapping
+}
+
+func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfiguration {
+	cfg := data.GetRawConfig()
+	scimConfiguration := &management.SCIMConfiguration{}
+	if !cfg.GetAttr("user_id_attribute").IsNull() {
+		scimConfiguration.UserIDAttribute = auth0.String(data.Get("user_id_attribute").(string))
+	}
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		scimConfiguration.Mapping = expandSCIMConfigurationMapping(data)
+	}
+
+	if scimConfiguration.Mapping != nil || scimConfiguration.UserIDAttribute != nil {
+		return scimConfiguration
+	}
+
+	return nil
 }

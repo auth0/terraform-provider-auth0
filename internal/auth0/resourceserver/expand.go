@@ -31,8 +31,11 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.EnforcePolicies = value.Bool(cfg.GetAttr("enforce_policies"))
 		resourceServer.TokenDialect = value.String(cfg.GetAttr("token_dialect"))
 		resourceServer.VerificationLocation = value.String(cfg.GetAttr("verification_location"))
+		resourceServer.AuthorizationDetails = expandAuthorizationDetails(data)
+		resourceServer.TokenEncryption = expandTokenEncryption(data)
+		resourceServer.ConsentPolicy = expandConsentPolicy(data)
+		resourceServer.ProofOfPossession = expandProofOfPossession(data)
 	}
-
 	return resourceServer
 }
 
@@ -49,6 +52,186 @@ func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerSc
 	})
 
 	return &resourceServerScopes
+}
+
+func isConsentPolicyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("consent_policy") {
+		return false
+	}
+	consentPolicy := value.String(data.GetRawConfig().GetAttr("consent_policy"))
+	return consentPolicy != nil && *consentPolicy == "null"
+}
+
+func expandConsentPolicy(data *schema.ResourceData) *string {
+	if !data.IsNewResource() && !data.HasChange("consent_policy") {
+		return nil
+	} else if isConsentPolicyNull(data) {
+		return nil
+	}
+
+	return value.String(data.GetRawConfig().GetAttr("consent_policy"))
+}
+
+func isAuthorizationDetailsNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("authorization_details") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("authorization_details")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
+}
+
+func expandAuthorizationDetails(data *schema.ResourceData) *[]management.ResourceServerAuthorizationDetails {
+	if !data.IsNewResource() && !data.HasChange("authorization_details") {
+		return nil
+	} else if isAuthorizationDetailsNull(data) {
+		return nil
+	}
+
+	config := data.GetRawConfig().GetAttr("authorization_details")
+	authorizationDetails := make([]management.ResourceServerAuthorizationDetails, 0, config.LengthInt())
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		authorizationDetails = append(authorizationDetails, management.ResourceServerAuthorizationDetails{
+			Type: value.String(cfg.GetAttr("type")),
+		})
+
+		return stop
+	})
+
+	if len(authorizationDetails) == 0 {
+		return nil
+	}
+
+	return &authorizationDetails
+}
+
+func isTokenEncryptionNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("token_encryption") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("token_encryption")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
+}
+
+func expandTokenEncryption(data *schema.ResourceData) *management.ResourceServerTokenEncryption {
+	if !data.IsNewResource() && !data.HasChange("token_encryption") {
+		return nil
+	} else if isTokenEncryptionNull(data) {
+		return nil
+	}
+
+	var tokenEncryption management.ResourceServerTokenEncryption
+
+	config := data.GetRawConfig().GetAttr("token_encryption")
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenEncryption.Format = value.String(cfg.GetAttr("format"))
+		tokenEncryption.EncryptionKey = expandTokenEncryptionKey(cfg.GetAttr("encryption_key"))
+		return stop
+	})
+
+	if tokenEncryption == (management.ResourceServerTokenEncryption{}) {
+		return nil
+	}
+
+	return &tokenEncryption
+}
+
+func expandTokenEncryptionKey(config cty.Value) *management.ResourceServerTokenEncryptionKey {
+	if config.IsNull() {
+		return nil
+	}
+
+	var tokenEncryptionKey management.ResourceServerTokenEncryptionKey
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenEncryptionKey.Name = value.String(cfg.GetAttr("name"))
+		tokenEncryptionKey.Alg = value.String(cfg.GetAttr("algorithm"))
+		tokenEncryptionKey.Kid = value.String(cfg.GetAttr("kid"))
+		tokenEncryptionKey.Pem = value.String(cfg.GetAttr("pem"))
+		return stop
+	})
+
+	if tokenEncryptionKey == (management.ResourceServerTokenEncryptionKey{}) {
+		return nil
+	}
+
+	return &tokenEncryptionKey
+}
+
+func isProofOfPossessionNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("proof_of_possession") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("proof_of_possession")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+
+	return empty
+}
+
+func expandProofOfPossession(data *schema.ResourceData) *management.ResourceServerProofOfPossession {
+	if !data.IsNewResource() && !data.HasChange("proof_of_possession") {
+		return nil
+	} else if isProofOfPossessionNull(data) {
+		return nil
+	}
+
+	var proofOfPossession management.ResourceServerProofOfPossession
+
+	config := data.GetRawConfig().GetAttr("proof_of_possession")
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		proofOfPossession.Mechanism = value.String(cfg.GetAttr("mechanism"))
+		proofOfPossession.Required = value.Bool(cfg.GetAttr("required"))
+		return stop
+	})
+
+	if proofOfPossession == (management.ResourceServerProofOfPossession{}) {
+		return nil
+	}
+
+	return &proofOfPossession
 }
 
 func resourceServerIsAuth0ManagementAPI(state cty.Value) bool {

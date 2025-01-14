@@ -1,6 +1,8 @@
 package client
 
 import (
+	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -9,7 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandClient(data *schema.ResourceData) *management.Client {
+func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
 	client := &management.Client{
@@ -40,12 +42,16 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		EncryptionKey:                      value.MapOfStrings(config.GetAttr("encryption_key")),
 		IsTokenEndpointIPHeaderTrusted:     value.Bool(config.GetAttr("is_token_endpoint_ip_header_trusted")),
 		OIDCBackchannelLogout:              expandOIDCBackchannelLogout(data),
+		OIDCLogout:                         expandOIDCLogout(data),
 		ClientMetadata:                     expandClientMetadata(data),
 		RefreshToken:                       expandClientRefreshToken(data),
 		JWTConfiguration:                   expandClientJWTConfiguration(data),
 		Addons:                             expandClientAddons(data),
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
+		DefaultOrganization:                expandDefaultOrganization(data),
+		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
+		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -61,7 +67,73 @@ func expandClient(data *schema.ResourceData) *management.Client {
 		}
 	}
 
-	return client
+	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
+
+	for _, item := range defaultConfig.AsValueSlice() {
+		disable := item.GetAttr("disable")
+		organizationID := item.GetAttr("organization_id")
+		flows := item.GetAttr("flows")
+
+		if !disable.IsNull() && disable.True() {
+			if (!flows.IsNull() && flows.LengthInt() > 0) || (!organizationID.IsNull() && organizationID.AsString() != "") {
+				return nil, fmt.Errorf("cannot set both disable and either flows/organization_id")
+			}
+		}
+	}
+
+	return client, nil
+}
+
+func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefaultOrganization {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
+		return nil
+	}
+	var defaultOrg management.ClientDefaultOrganization
+
+	config := data.GetRawConfig().GetAttr("default_organization")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		if !disable.IsNull() && disable.True() {
+			stop = true
+		} else {
+			defaultOrg.Flows = value.Strings(cfg.GetAttr("flows"))
+			defaultOrg.OrganizationID = value.String(cfg.GetAttr("organization_id"))
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return nil
+	}
+	if defaultOrg == (management.ClientDefaultOrganization{}) {
+		return nil
+	}
+
+	return &defaultOrg
+}
+
+func isDefaultOrgNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
+		return false
+	}
+	empty := true
+	config := data.GetRawConfig()
+	defaultOrgConfig := config.GetAttr("default_organization")
+	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		flows := cfg.GetAttr("flows")
+		organizationID := cfg.GetAttr("organization_id")
+
+		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+	return empty
 }
 
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
@@ -76,6 +148,43 @@ func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBack
 	return &management.OIDCBackchannelLogout{
 		BackChannelLogoutURLs: logoutUrls,
 	}
+}
+
+func expandOIDCLogout(data *schema.ResourceData) *management.OIDCLogout {
+	oidcLogoutConfig := data.GetRawConfig().GetAttr("oidc_logout")
+	if oidcLogoutConfig.IsNull() {
+		return nil
+	}
+
+	var oidcLogout management.OIDCLogout
+
+	oidcLogoutConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		oidcLogout.BackChannelLogoutURLs = value.Strings(config.GetAttr("backchannel_logout_urls"))
+		oidcLogout.BackChannelLogoutInitiators = expandBackChannelLogoutInitiators(config.GetAttr("backchannel_logout_initiators"))
+		return stop
+	})
+
+	return &oidcLogout
+}
+
+func expandBackChannelLogoutInitiators(config cty.Value) *management.BackChannelLogoutInitiators {
+	if config.IsNull() {
+		return nil
+	}
+
+	var initiators management.BackChannelLogoutInitiators
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		initiators.Mode = value.String(config.GetAttr("mode"))
+		initiators.SelectedInitiators = value.Strings(config.GetAttr("selected_initiators"))
+		return stop
+	})
+
+	if initiators == (management.BackChannelLogoutInitiators{}) {
+		return nil
+	}
+
+	return &initiators
 }
 
 func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefreshToken {
@@ -872,6 +981,14 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 
 	if data.IsNewResource() || data.HasChange("scopes") {
 		clientGrant.Scope = value.Strings(cfg.GetAttr("scopes"))
+	}
+
+	if data.IsNewResource() || data.HasChange("allow_any_organization") {
+		clientGrant.AllowAnyOrganization = value.Bool(cfg.GetAttr("allow_any_organization"))
+	}
+
+	if data.IsNewResource() || data.HasChange("organization_usage") {
+		clientGrant.OrganizationUsage = value.String(cfg.GetAttr("organization_usage"))
 	}
 
 	return clientGrant

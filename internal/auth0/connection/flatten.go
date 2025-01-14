@@ -170,6 +170,125 @@ func flattenConnectionOptionsWindowsLive(
 	return optionsMap, nil
 }
 
+func flattenAttributes(connAttributes *management.ConnectionOptionsAttributes) interface{} {
+	if connAttributes == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"email":        flattenEmailAttribute(connAttributes.Email),
+		"username":     flattenUsernameAttribute(connAttributes.Username),
+		"phone_number": flattenPhoneNumberAttribute(connAttributes.PhoneNumber),
+	}
+}
+
+func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttribute) []map[string]interface{} {
+	if emailAttribute == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
+			"profile_required": emailAttribute.GetProfileRequired(),
+			"signup":           flattenSignUp(emailAttribute.GetSignup()),
+		},
+	}
+}
+
+func flattenUsernameAttribute(usernameAttribute *management.ConnectionOptionsUsernameAttribute) []map[string]interface{} {
+	if usernameAttribute == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(usernameAttribute.GetIdentifier()),
+			"profile_required": usernameAttribute.GetProfileRequired(),
+			"signup":           flattenUsernameSignUp(usernameAttribute.GetSignup()),
+			"validation":       flattenValidation(usernameAttribute.GetValidation()),
+		},
+	}
+}
+
+func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOptionsPhoneNumberAttribute) []map[string]interface{} {
+	if phoneNumberAttribute == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"identifier":       flattenIdentifier(phoneNumberAttribute.GetIdentifier()),
+			"profile_required": phoneNumberAttribute.GetProfileRequired(),
+			"signup":           flattenSignUp(phoneNumberAttribute.GetSignup()),
+		},
+	}
+}
+
+func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
+	if identifier == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"active": identifier.GetActive(),
+		},
+	}
+}
+
+func flattenSignUp(signup *management.ConnectionOptionsAttributeSignup) []map[string]interface{} {
+	if signup == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"status":       signup.GetStatus(),
+			"verification": flattenVerification(signup.GetVerification()),
+		},
+	}
+}
+
+func flattenUsernameSignUp(signup *management.ConnectionOptionsAttributeSignup) []map[string]interface{} {
+	if signup == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"status": signup.GetStatus(),
+		},
+	}
+}
+
+func flattenValidation(validation *management.ConnectionOptionsAttributeValidation) []map[string]interface{} {
+	if validation == nil {
+		return nil
+	}
+	return []map[string]interface{}{
+		{
+			"min_length": validation.GetMinLength(),
+			"max_length": validation.GetMaxLength(),
+			"allowed_types": []map[string]interface{}{
+				{
+					"email":        validation.GetAllowedTypes().GetEmail(),
+					"phone_number": validation.GetAllowedTypes().GetPhoneNumber(),
+				},
+			},
+		},
+	}
+}
+
+func flattenVerification(verification *management.ConnectionOptionsAttributeVerification) []map[string]interface{} {
+	if verification == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"active": verification.GetActive(),
+		},
+	}
+}
+
 func flattenConnectionOptionsAuth0(
 	data *schema.ResourceData,
 	rawOptions interface{},
@@ -203,6 +322,12 @@ func flattenConnectionOptionsAuth0(
 		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"upstream_params":                      upstreamParams,
+		"precedence":                           options.GetPrecedence(),
+		"strategy_version":                     options.GetStrategyVersion(),
+	}
+
+	if options.Attributes != nil {
+		optionsMap["attributes"] = []interface{}{flattenAttributes(options.GetAttributes())}
 	}
 
 	if options.PasswordComplexityOptions != nil {
@@ -326,6 +451,7 @@ func flattenConnectionOptionsOAuth2(
 		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
 		"icon_url":                 options.GetLogoURL(),
 		"pkce_enabled":             options.GetPKCEEnabled(),
+		"strategy_version":         options.GetStrategyVersion(),
 		"upstream_params":          upstreamParams,
 	}
 
@@ -689,6 +815,7 @@ func flattenConnectionOptionsAD(
 		"non_persistent_attrs":                 options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":             options.GetSetUserAttributes(),
 		"disable_self_service_change_password": options.GetDisableSelfServiceChangePassword(),
+		"strategy_version":                     options.GetStrategyVersion(),
 		"upstream_params":                      upstreamParams,
 	}
 
@@ -731,6 +858,8 @@ func flattenConnectionOptionsAzureAD(
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"strategy_version":                       options.GetStrategyVersion(),
+		"user_id_attribute":                      options.GetUserIDAttribute(),
 		"upstream_params":                        upstreamParams,
 	}
 
@@ -766,6 +895,7 @@ func flattenConnectionOptionsADFS(
 		"should_trust_email_verified_connection": options.GetTrustEmailVerified(),
 		"non_persistent_attrs":                   options.GetNonPersistentAttrs(),
 		"set_user_root_attributes":               options.GetSetUserAttributes(),
+		"strategy_version":                       options.GetStrategyVersion(),
 		"upstream_params":                        upstreamParams,
 	}
 
@@ -815,6 +945,7 @@ func flattenConnectionOptionsSAML(
 		"metadata_url":             options.GetMetadataURL(),
 		"metadata_xml":             data.Get("options.0.metadata_xml").(string), // Does not get read back.
 		"set_user_root_attributes": options.GetSetUserAttributes(),
+		"strategy_version":         options.GetStrategyVersion(),
 		"fields_map":               fieldsMap,
 		"upstream_params":          upstreamParams,
 	}
@@ -826,6 +957,7 @@ func flattenConnectionOptionsSAML(
 	if options.IdpInitiated != nil {
 		optionsMap["idp_initiated"] = []interface{}{
 			map[string]interface{}{
+				"enabled":                options.IdpInitiated.GetEnabled(),
 				"client_id":              options.IdpInitiated.GetClientID(),
 				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
 				"client_authorize_query": options.IdpInitiated.GetClientAuthorizeQuery(),
@@ -883,6 +1015,7 @@ func flattenConnectionOptionsPingFederate(
 		"upstream_params":          upstreamParams,
 		"idp_initiated": []map[string]interface{}{
 			{
+				"enabled":                options.GetIdpInitiated().GetEnabled(),
 				"client_id":              options.GetIdpInitiated().GetClientID(),
 				"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
 				"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),
@@ -919,4 +1052,29 @@ func flattenConnectionClients(data *schema.ResourceData, connection *management.
 	)
 
 	return result.ErrorOrNil()
+}
+
+func flattenSCIMMappings(mappings []management.SCIMConfigurationMapping) *[]map[string]string {
+	flattenedMappings := make([]map[string]string, 0, len(mappings))
+	for _, mapping := range mappings {
+		flattenedMappings = append(flattenedMappings, map[string]string{
+			"auth0": mapping.GetAuth0(),
+			"scim":  mapping.GetSCIM(),
+		})
+	}
+
+	return &flattenedMappings
+}
+
+func flattenSCIMConfiguration(data *schema.ResourceData, scimConfiguration *management.SCIMConfiguration) diag.Diagnostics {
+	result := multierror.Append(
+		data.Set("connection_id", scimConfiguration.GetConnectionID()),
+		data.Set("connection_name", scimConfiguration.GetConnectionName()),
+		data.Set("user_id_attribute", scimConfiguration.GetUserIDAttribute()),
+		data.Set("mapping", flattenSCIMMappings(scimConfiguration.GetMapping())),
+		data.Set("strategy", scimConfiguration.GetStrategy()),
+		data.Set("tenant_name", scimConfiguration.GetTenantName()),
+	)
+
+	return diag.FromErr(result.ErrorOrNil())
 }

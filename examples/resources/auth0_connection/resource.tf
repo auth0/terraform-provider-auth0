@@ -12,6 +12,7 @@ resource "auth0_connection" "my_connection" {
   options {
     password_policy                = "excellent"
     brute_force_protection         = true
+    strategy_version               = 2
     enabled_database_customization = true
     import_mode                    = false
     requires_username              = true

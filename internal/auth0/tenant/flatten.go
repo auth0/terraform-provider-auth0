@@ -25,6 +25,8 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
 		data.Set("allow_organization_name_in_authentication_api", tenant.GetAllowOrgNameInAuthAPI()),
 		data.Set("customize_mfa_in_postlogin_action", tenant.GetCustomizeMFAInPostLoginAction()),
+		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
+		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -33,6 +35,18 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 
 	if tenant.GetSessionLifetime() == 0 {
 		result = multierror.Append(result, data.Set("session_lifetime", sessionLifetimeDefault))
+	}
+
+	if tenant.GetACRValuesSupported() == nil {
+		result = multierror.Append(result,
+			data.Set("disable_acr_values_supported", true),
+			data.Set("acr_values_supported", nil),
+		)
+	} else {
+		result = multierror.Append(result,
+			data.Set("acr_values_supported", tenant.GetACRValuesSupported()),
+			data.Set("disable_acr_values_supported", false),
+		)
 	}
 
 	return result.ErrorOrNil()
@@ -49,6 +63,7 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["enable_pipeline2"] = flags.EnablePipeline2
 	m["enable_dynamic_client_registration"] = flags.EnableDynamicClientRegistration
 	m["enable_custom_domain_in_emails"] = flags.EnableCustomDomainInEmails
+	m["enable_sso"] = flags.EnableSSO
 	m["enable_legacy_logs_search_v2"] = flags.EnableLegacyLogsSearchV2
 	m["disable_clickjack_protection_headers"] = flags.DisableClickjackProtectionHeaders
 	m["enable_public_signup_user_exists_error"] = flags.EnablePublicSignupUserExistsError
@@ -66,7 +81,7 @@ func flattenTenantFlags(flags *management.TenantFlags) []interface{} {
 	m["dashboard_insights_view"] = flags.DashboardInsightsView
 	m["disable_fields_map_fix"] = flags.DisableFieldsMapFix
 	m["mfa_show_factor_list_on_enrollment"] = flags.MFAShowFactorListOnEnrollment
-	m["require_pushed_authorization_requests"] = flags.RequirePushedAuthorizationRequests
+	m["remove_alg_from_jwks"] = flags.RemoveAlgFromJWKS
 
 	return []interface{}{m}
 }
@@ -81,6 +96,17 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	m := make(map[string]interface{})
 	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
+
+	return []interface{}{m}
+}
+
+func flattenMTLSConfiguration(mtls *management.TenantMTLSConfiguration) []interface{} {
+	m := make(map[string]interface{})
+	if mtls == nil {
+		m["disable"] = true
+	} else {
+		m["enable_endpoint_aliases"] = mtls.EnableEndpointAliases
+	}
 
 	return []interface{}{m}
 }

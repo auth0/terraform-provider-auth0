@@ -1,0 +1,954 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 301
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"my-sso-profile","description":"sample description","allowed_strategies":["oidc","samlp"],"user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"branding":{"colors":{"primary":"#0059d6"},"logo_url":"https://mycompany.org/v2/logo.png"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 414
+        uncompressed: false
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 361.013833ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 480.865292ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 529.058041ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 369.14425ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.254550667s
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 3.378859417s
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 5.381368583s
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 3.392942041s
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 95
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"introduction":"Welcome! With only a few steps you'll be able to setup your new connection."}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! With only a few steps you''ll be able to setup your new connection."}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.690113916s
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! With only a few steps you''ll be able to setup your new connection."}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 375.2075ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 364.711042ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! With only a few steps you''ll be able to setup your new connection."}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.619083ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 309.317666ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! With only a few steps you''ll be able to setup your new connection."}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 335.527417ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 52
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"introduction":"Welcome! This is an updated Text"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! This is an updated Text"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.677875ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! This is an updated Text"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 932.155458ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 324.079583ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! This is an updated Text"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.343208ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 302.443041ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"introduction":"Welcome! This is an updated Text"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 327.195667ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.204708ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 294.143542ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_dLUJMxiQ4GoG3ewN8FnXNd","name":"my-sso-profile","description":"sample description","user_attributes":[{"name":"sample-name-{{.testName}}","description":"sample-description","is_optional":true}],"allowed_strategies":["oidc","samlp"],"created_at":"2024-11-13T18:34:23.410Z","updated_at":"2024-11-13T18:34:23.410Z","branding":{"logo_url":"https://mycompany.org/v2/logo.png","colors":{"primary":"#0059d6"}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 315.569542ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 325.537833ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: PUT
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 345.538791ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd/custom-text/en/get-started
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.849583ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.11.2
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_dLUJMxiQ4GoG3ewN8FnXNd
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 314.2045ms

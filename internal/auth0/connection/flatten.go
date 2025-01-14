@@ -1012,6 +1012,7 @@ func flattenConnectionOptionsSAML(
 	if options.IdpInitiated != nil {
 		optionsMap["idp_initiated"] = []interface{}{
 			map[string]interface{}{
+				"enabled":                options.IdpInitiated.GetEnabled(),
 				"client_id":              options.IdpInitiated.GetClientID(),
 				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
 				"client_authorize_query": options.IdpInitiated.GetClientAuthorizeQuery(),
@@ -1069,6 +1070,7 @@ func flattenConnectionOptionsPingFederate(
 		"upstream_params":          upstreamParams,
 		"idp_initiated": []map[string]interface{}{
 			{
+				"enabled":                options.GetIdpInitiated().GetEnabled(),
 				"client_id":              options.GetIdpInitiated().GetClientID(),
 				"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
 				"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),

@@ -597,6 +597,7 @@ var optionsSchema = &schema.Schema{
 			"set_user_root_attributes": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				Computed:     true,
 				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
 				Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
 					"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
@@ -777,6 +778,11 @@ var optionsSchema = &schema.Schema{
 					"with the properties: `client_id`, `client_protocol`, and `client_authorize_query`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
 						"client_id": {
 							Type:     schema.TypeString,
 							Optional: true,

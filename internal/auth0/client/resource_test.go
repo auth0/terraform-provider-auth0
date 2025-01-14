@@ -2456,6 +2456,8 @@ resource "auth0_client" "my_client" {
 	}
 }
 `
+
+// In this case, the default value should be set for OIDCLogout
 const testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig = `
 resource "auth0_client" "my_client" {
 	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
@@ -2497,7 +2499,7 @@ func TestAccClientOIDCLogout(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
 				),
 			},
 		},

@@ -75,9 +75,6 @@ func TestAccDataClients(t *testing.T) {
 					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
 				),
 			},
-			//{
-			//	Config: acctest.ParseTestName(testAccGivenSomeClients, t.Name()),
-			//},.
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(

@@ -140,18 +140,6 @@ func checkForUnmanagedActionSecrets(
 		// Check if the element can be asserted as a map.
 		secretMap, ok := secret.(map[string]interface{})
 		if !ok {
-			// Manually attempt conversion if Terraform wraps elements differently.
-			nestedList, isNestedList := secret.([]interface{})
-			if isNestedList && len(nestedList) > 0 {
-				convertedMap, canConvert := nestedList[0].(map[string]interface{})
-				if canConvert {
-					secretMap = convertedMap
-					ok = true
-				}
-			}
-		}
-
-		if !ok {
 			return diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,
@@ -163,7 +151,7 @@ func checkForUnmanagedActionSecrets(
 
 		// Safely extract the "name" field from the secret map.
 		secretKeyName, nameOk := secretMap["name"].(string)
-		if !nameOk {
+		if !nameOk || secretKeyName == "" {
 			return diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,

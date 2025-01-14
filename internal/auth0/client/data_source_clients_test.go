@@ -77,7 +77,7 @@ func TestAccDataClients(t *testing.T) {
 			},
 			//{
 			//	Config: acctest.ParseTestName(testAccGivenSomeClients, t.Name()),
-			//},
+			//},.
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(

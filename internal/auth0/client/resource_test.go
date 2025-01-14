@@ -2457,7 +2457,7 @@ resource "auth0_client" "my_client" {
 }
 `
 
-// In this case, the default value should be set for OIDCLogout
+// In this case, the default value should be set for OIDCLogout.
 const testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig = `
 resource "auth0_client" "my_client" {
 	name      = "Acceptance Test - OIDC Logout - {{.testName}}"

@@ -207,15 +207,15 @@ func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *man
 }
 
 func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *management.PasskeyAuthenticationMethod {
-	var passwordAuth *management.PasskeyAuthenticationMethod
+	var passkeyAuth *management.PasskeyAuthenticationMethod
 	config.ForEachElement(
 		func(_ cty.Value, attributes cty.Value) (stop bool) {
-			passwordAuth = &management.PasskeyAuthenticationMethod{
+			passkeyAuth = &management.PasskeyAuthenticationMethod{
 				Enabled: value.Bool(attributes.GetAttr("enabled")),
 			}
 			return stop
 		})
-	return passwordAuth
+	return passkeyAuth
 }
 
 func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.PasskeyOptions {

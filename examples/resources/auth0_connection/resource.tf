@@ -72,5 +72,10 @@ resource "auth0_connection" "my_connection" {
         enabled = true
       }
     }
+    passkey_options {
+      challenge_ui                   = "both"
+      local_enrollment_enabled       = true
+      progressive_enrollment_enabled = true
+    }
   }
 }

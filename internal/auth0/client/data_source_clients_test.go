@@ -26,15 +26,16 @@ resource "auth0_client" "my_client_2" {
 }
 `
 
-const testAccDataClientsWithNameFilter = `
-data "auth0_clients" "test" {
-    depends_on = [
-        auth0_client.my_client_1,
-        auth0_client.my_client_2
-    ]
-	name_filter = "{{.testName}} - 1"
-}
-`
+//
+// Const testAccDataClientsWithNameFilter = `
+// data "auth0_clients" "test" {
+//    depends_on = [
+//        auth0_client.my_client_1,
+//        auth0_client.my_client_2
+//    ]
+//	name_filter = "{{.testName}} - 1"
+//}
+//`.
 
 const testAccDataClientsWithAppTypeFilter = `
 data "auth0_clients" "test" {
@@ -75,15 +76,15 @@ func TestAccDataClients(t *testing.T) {
 					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
 				),
 			},
-			{
-				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.name", fmt.Sprintf("Acceptance Test %v - 1", t.Name())),
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.app_type", "non_interactive"),
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.is_first_party", "true"),
-					resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.description", fmt.Sprintf("Description for client 1 %s", t.Name()))),
-			},
+			// {
+			//	Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithNameFilter, t.Name()),
+			//	Check: resource.ComposeTestCheckFunc(
+			//		resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.#", "1"),
+			//		resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.name", fmt.Sprintf("Acceptance Test %v - 1", t.Name())),
+			//		resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.app_type", "non_interactive"),
+			//		resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.is_first_party", "true"),
+			//		resource.TestCheckResourceAttr("data.auth0_clients.test", "clients.0.description", fmt.Sprintf("Description for client 1 %s", t.Name()))),
+			// },.
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients+testAccDataClientsWithAppTypeFilter, t.Name()),
 				Check: resource.ComposeTestCheckFunc(

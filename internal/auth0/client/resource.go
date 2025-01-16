@@ -1386,6 +1386,8 @@ func createClient(ctx context.Context, data *schema.ResourceData, meta interface
 		return diag.FromErr(err)
 	}
 
+	time.Sleep(800 * time.Millisecond)
+
 	data.SetId(client.GetClientID())
 	return readClient(ctx, data, meta)
 }

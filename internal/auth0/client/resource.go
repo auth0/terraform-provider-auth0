@@ -1330,6 +1330,7 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1384,6 +1385,8 @@ func createClient(ctx context.Context, data *schema.ResourceData, meta interface
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
+
+	time.Sleep(800 * time.Millisecond)
 
 	data.SetId(client.GetClientID())
 	return readClient(ctx, data, meta)

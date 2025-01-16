@@ -93,7 +93,7 @@ func NewResource() *schema.Resource {
 				Description: "The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
 			},
 			"secrets": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported.",
 				Elem: &schema.Resource{

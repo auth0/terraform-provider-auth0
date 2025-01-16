@@ -520,10 +520,10 @@ var optionsSchema = &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login", "never_on_login"}, false),
 				Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
 					"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
-					"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
+					"include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.",
 			},
 			"non_persistent_attrs": {
 				Type:     schema.TypeSet,

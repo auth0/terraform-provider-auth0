@@ -20,8 +20,10 @@ Data source to retrieve a specific Auth0 Token Exchange Profile by `id`
 ### Read-Only
 
 - `action_id` (String) Unique identifier of the Action
+- `created_at` (String) The ISO 8601 formatted date the credential was created.
 - `name` (String) Name of the token exchange profile.
 - `subject_token_type` (String) Type of the subject token
 - `type` (String) Type of the token exchange profile
+- `updated_at` (String) The ISO 8601 formatted date the credential was updated.
 
 

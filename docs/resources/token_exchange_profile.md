@@ -25,6 +25,8 @@ With this resource, you can manage Auth0 Custom Token Exchange Profiles
 
 ### Read-Only
 
+- `created_at` (String) The ISO 8601 formatted date the credential was created.
 - `id` (String) The ID of this resource.
+- `updated_at` (String) The ISO 8601 formatted date the credential was updated.
 
 

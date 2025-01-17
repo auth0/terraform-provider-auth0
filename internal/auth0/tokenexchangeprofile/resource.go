@@ -43,6 +43,16 @@ func NewResource() *schema.Resource {
 				Computed:    true,
 				Description: "Type of the token exchange profile",
 			},
+			"created_at": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ISO 8601 formatted date the credential was created.",
+			},
+			"updated_at": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ISO 8601 formatted date the credential was updated.",
+			},
 		},
 	}
 }

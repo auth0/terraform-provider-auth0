@@ -231,8 +231,8 @@ func flattenAuthenticationMethods(authenticationMethods *management.Authenticati
 	}
 
 	return map[string]interface{}{
-		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.Passkey),
-		"password": flattenAuthenticationMethodPassword(authenticationMethods.Password),
+		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
+		"password": flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
 	}
 }
 

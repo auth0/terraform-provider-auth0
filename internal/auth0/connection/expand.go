@@ -258,9 +258,10 @@ func expandConnectionOptionsEmailAttribute(config cty.Value) *management.Connect
 	config.GetAttr("email").ForEachElement(
 		func(_ cty.Value, email cty.Value) (stop bool) {
 			coea = &management.ConnectionOptionsEmailAttribute{
-				Identifier:      expandConnectionOptionsAttributeIdentifier(email),
-				ProfileRequired: value.Bool(email.GetAttr("profile_required")),
-				Signup:          expandConnectionOptionsAttributeSignup(email),
+				Identifier:         expandConnectionOptionsAttributeIdentifier(email),
+				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
+				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
+				Signup:             expandConnectionOptionsAttributeSignup(email),
 			}
 			return stop
 		})

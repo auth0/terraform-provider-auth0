@@ -598,10 +598,10 @@ var optionsSchema = &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
 				Computed:     true,
-				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
+				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login", "never_on_login"}, false),
 				Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
 					"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
-					"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
+					"include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.",
 			},
 			"non_persistent_attrs": {
 				Type:     schema.TypeSet,
@@ -988,6 +988,12 @@ var optionsSchema = &schema.Schema{
 										Optional:    true,
 										Computed:    false,
 										Description: "Defines whether Profile is required",
+									},
+									"verification_method": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification",
 									},
 									"signup": {
 										Type:        schema.TypeList,

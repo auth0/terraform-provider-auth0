@@ -1,3 +1,17 @@
+## v1.10.0
+
+ENHANCEMENTS:
+- Support `password reset by otp code` email template and `verification_method` field in connection schema. ([#1113](https://github.com/auth0/terraform-provider-auth0/pull/1113/))
+- Update workflow to install terraform manually since ubuntu image has removed it ([#1116](https://github.com/auth0/terraform-provider-auth0/pull/1116/))
+- Support never_on_login as an allowed value for set_user_root_attributes ([#1123](https://github.com/auth0/terraform-provider-auth0/pull/1123/))
+
+
+BUG FIXES:
+- Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
+- Fix: IdP-initiated SSO Behavior by adding the missing enabled field to options param connections ([#1105](https://github.com/auth0/terraform-provider-auth0/pull/1105/))
+- Fix: Update example and docs for auth0_flow resource([#1129](https://github.com/auth0/terraform-provider-auth0/pull/1129/))
+- Fix: Update example and docs for auth0_prompt_screen_renderer resource([#1127](https://github.com/auth0/terraform-provider-auth0/pull/1127/))
+
 ## v1.9.1
 
 ENHANCEMENTS:

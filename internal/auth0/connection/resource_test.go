@@ -255,6 +255,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					active = true
 				}
 				profile_required = true
+				verification_method = "otp"
 				signup {
 					status = "required"
 					verification {
@@ -274,6 +275,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.identifier.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.verification_method", "otp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
 				),

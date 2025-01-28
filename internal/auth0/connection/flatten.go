@@ -189,9 +189,10 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 
 	return []map[string]interface{}{
 		{
-			"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
-			"profile_required": emailAttribute.GetProfileRequired(),
-			"signup":           flattenSignUp(emailAttribute.GetSignup()),
+			"identifier":          flattenIdentifier(emailAttribute.GetIdentifier()),
+			"profile_required":    emailAttribute.GetProfileRequired(),
+			"signup":              flattenSignUp(emailAttribute.GetSignup()),
+			"verification_method": emailAttribute.GetVerificationMethod(),
 		},
 	}
 }

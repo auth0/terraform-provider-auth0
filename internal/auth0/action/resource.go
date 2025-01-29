@@ -89,8 +89,9 @@ func NewResource() *schema.Resource {
 					"node12",
 					"node16",
 					"node18",
+					"node22",
 				}, false),
-				Description: "The Node runtime. Defaults to `node18`. Possible values are: `node16` (not recommended), or `node18` (recommended).",
+				Description: "The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`",
 			},
 			"secrets": {
 				Type:        schema.TypeSet,

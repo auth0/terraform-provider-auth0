@@ -58,7 +58,7 @@ resource "auth0_resource_server_scopes" "my_api_scopes" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -82,7 +82,7 @@ resource "auth0_resource_server_scopes" "my_api_scopes" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -90,7 +90,7 @@ const testAccDeleteResourceServerScopes = testAccGivenAResourceServerWithNoScope
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server.my_api ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -134,11 +134,11 @@ resource "auth0_resource_server_scopes" "my_api_scopes" {
 data "auth0_resource_server" "my_api" {
 	depends_on = [ auth0_resource_server_scopes.my_api_scopes ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
-func TestAccResourceServerScopes(t *testing.T) {
+func TestAccFrameworkResourceServerScopes(t *testing.T) {
 	testName := strings.ToLower(t.Name())
 
 	acctest.Test(t, resource.TestCase{
@@ -189,7 +189,7 @@ func TestAccResourceServerScopes(t *testing.T) {
 				ResourceName: "auth0_resource_server_scopes.my_api_scopes",
 				ImportState:  true,
 				ImportStateIdFunc: func(state *terraform.State) (string, error) {
-					return acctest.ExtractResourceAttributeFromState(state, "auth0_resource_server.my_api", "id")
+					return acctest.ExtractResourceAttributeFromState(state, "auth0_resource_server.my_api", "identifier")
 				},
 				ImportStatePersist: true,
 			},

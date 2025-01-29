@@ -20,14 +20,12 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/connection"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/customdomain"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/email"
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/encryptionkeymanager"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/guardian"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/hook"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/logstream"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/organization"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
@@ -114,7 +112,6 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":       customdomain.NewVerificationResource(),
 			"auth0_email_provider":                   email.NewResource(),
 			"auth0_email_template":                   email.NewTemplateResource(),
-			"auth0_encryption_key_manager":           encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_flow":                             flow.NewResource(),
 			"auth0_flow_vault_connection":            flow.NewVaultConnectionResource(),
 			"auth0_form":                             form.NewResource(),
@@ -136,9 +133,6 @@ func New() *schema.Provider {
 			"auth0_prompt_screen_partial":            prompt.NewScreenPartialResource(),
 			"auth0_prompt_screen_partials":           prompt.NewScreenPartialsResource(),
 			"auth0_prompt_screen_renderer":           prompt.NewPromptScreenRenderResource(),
-			"auth0_resource_server":                  resourceserver.NewResource(),
-			"auth0_resource_server_scope":            resourceserver.NewScopeResource(),
-			"auth0_resource_server_scopes":           resourceserver.NewScopesResource(),
 			"auth0_role":                             role.NewResource(),
 			"auth0_role_permission":                  role.NewPermissionResource(),
 			"auth0_role_permissions":                 role.NewPermissionsResource(),
@@ -170,7 +164,6 @@ func New() *schema.Provider {
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_prompt_screen_renderer":        prompt.NewPromptScreenRenderDataSource(),
-			"auth0_resource_server":               resourceserver.NewDataSource(),
 			"auth0_role":                          role.NewDataSource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_signing_keys":                  signingkey.NewDataSource(),

@@ -72,7 +72,7 @@ data "auth0_organization" "test" {
 
 func TestAccDataSourceOrganizationRequiredArguments(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_organization" "test" { }`,

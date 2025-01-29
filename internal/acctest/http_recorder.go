@@ -103,6 +103,8 @@ func redactDomain(i *cassette.Interaction, domain string) {
 
 	domainParts := strings.Split(domain, ".")
 
+	i.Response.Body = strings.ReplaceAll(i.Response.Body, domain, RecordingsDomain)
+	i.Request.Body = strings.ReplaceAll(i.Request.Body, domain, RecordingsDomain)
 	i.Response.Body = strings.ReplaceAll(i.Response.Body, domainParts[0], recordingsTenant)
 	i.Request.Body = strings.ReplaceAll(i.Request.Body, domainParts[0], recordingsTenant)
 }

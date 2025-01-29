@@ -54,6 +54,7 @@ Read-Only:
 - `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))
 - `attributes` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes))
 - `auth_params` (Map of String)
+- `authentication_methods` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods))
 - `authorization_endpoint` (String)
 - `brute_force_protection` (Boolean)
 - `client_id` (String)
@@ -97,6 +98,7 @@ Read-Only:
 - `mfa` (List of Object) (see [below for nested schema](#nestedobjatt--options--mfa))
 - `name` (String)
 - `non_persistent_attrs` (Set of String)
+- `passkey_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--passkey_options))
 - `password_complexity_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_complexity_options))
 - `password_dictionary` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_dictionary))
 - `password_history` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_history))
@@ -277,6 +279,31 @@ Read-Only:
 
 
 
+<a id="nestedobjatt--options--authentication_methods"></a>
+### Nested Schema for `options.authentication_methods`
+
+Read-Only:
+
+- `passkey` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--passkey))
+- `password` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--password))
+
+<a id="nestedobjatt--options--authentication_methods--passkey"></a>
+### Nested Schema for `options.authentication_methods.passkey`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--options--authentication_methods--password"></a>
+### Nested Schema for `options.authentication_methods.password`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+
 <a id="nestedobjatt--options--connection_settings"></a>
 ### Nested Schema for `options.connection_settings`
 
@@ -324,6 +351,16 @@ Read-Only:
 
 - `active` (Boolean)
 - `return_enroll_settings` (Boolean)
+
+
+<a id="nestedobjatt--options--passkey_options"></a>
+### Nested Schema for `options.passkey_options`
+
+Read-Only:
+
+- `challenge_ui` (String)
+- `local_enrollment_enabled` (Boolean)
+- `progressive_enrollment_enabled` (Boolean)
 
 
 <a id="nestedobjatt--options--password_complexity_options"></a>

@@ -180,6 +180,65 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
+func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.AuthenticationMethods {
+	var authMethods *management.AuthenticationMethods
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			authMethods = &management.AuthenticationMethods{}
+
+			authMethods.Password = expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password"))
+			authMethods.Passkey = expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey"))
+
+			return stop
+		})
+	return authMethods
+}
+
+func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *management.PasswordAuthenticationMethod {
+	var passwordAuth *management.PasswordAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passwordAuth = &management.PasswordAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passwordAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *management.PasskeyAuthenticationMethod {
+	var passkeyAuth *management.PasskeyAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passkeyAuth = &management.PasskeyAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passkeyAuth
+}
+
+func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.PasskeyOptions {
+	var passkeyOptions *management.PasskeyOptions
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passkeyOptions = &management.PasskeyOptions{}
+
+			if attributes.Type().HasAttribute("challenge_ui") {
+				passkeyOptions.ChallengeUI = value.String(attributes.GetAttr("challenge_ui"))
+			}
+			if attributes.Type().HasAttribute("local_enrollment_enabled") {
+				passkeyOptions.LocalEnrollmentEnabled = value.Bool(attributes.GetAttr("local_enrollment_enabled"))
+			}
+			if attributes.Type().HasAttribute("progressive_enrollment_enabled") {
+				passkeyOptions.ProgressiveEnrollmentEnabled = value.Bool(attributes.GetAttr("progressive_enrollment_enabled"))
+			}
+
+			return stop
+		})
+	return passkeyOptions
+}
+
 func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
 	var coa *management.ConnectionOptionsAttributes
 	config.ForEachElement(
@@ -445,6 +504,14 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 			return stop
 		},
 	)
+
+	if config.Type().HasAttribute("authentication_methods") && !config.GetAttr("authentication_methods").IsNull() {
+		options.AuthenticationMethods = expandConnectionOptionsAuthenticationMethods(config.GetAttr("authentication_methods"))
+	}
+
+	if config.Type().HasAttribute("passkey_options") && !config.GetAttr("passkey_options").IsNull() {
+		options.PasskeyOptions = expandConnectionOptionsPasskeyOptions(config.GetAttr("passkey_options"))
+	}
 
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))

@@ -82,6 +82,20 @@ resource "auth0_connection" "my_connection" {
       active                 = true
       return_enroll_settings = true
     }
+
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
+    }
+    passkey_options {
+      challenge_ui                   = "both"
+      local_enrollment_enabled       = true
+      progressive_enrollment_enabled = true
+    }
   }
 }
 ```
@@ -672,6 +686,7 @@ Optional:
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
 - `attributes` (Block List) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order (see [below for nested schema](#nestedblock--options--attributes))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
+- `authentication_methods` (Block List) Specifies the authentication methods and their configuration (enabled or disabled) (see [below for nested schema](#nestedblock--options--authentication_methods))
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
 - `client_id` (String) The strategy's client ID.
@@ -715,6 +730,7 @@ Optional:
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
+- `passkey_options` (Block List, Max: 1) Defines options for the passkey authentication method (see [below for nested schema](#nestedblock--options--passkey_options))
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))
 - `password_history` (Block List) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. (see [below for nested schema](#nestedblock--options--password_history))
@@ -898,6 +914,31 @@ Optional:
 
 
 
+<a id="nestedblock--options--authentication_methods"></a>
+### Nested Schema for `options.authentication_methods`
+
+Optional:
+
+- `passkey` (Block List, Max: 1) Configures passkey authentication (see [below for nested schema](#nestedblock--options--authentication_methods--passkey))
+- `password` (Block List, Max: 1) Configures password authentication (see [below for nested schema](#nestedblock--options--authentication_methods--password))
+
+<a id="nestedblock--options--authentication_methods--passkey"></a>
+### Nested Schema for `options.authentication_methods.passkey`
+
+Optional:
+
+- `enabled` (Boolean) Enables passkey authentication
+
+
+<a id="nestedblock--options--authentication_methods--password"></a>
+### Nested Schema for `options.authentication_methods.password`
+
+Optional:
+
+- `enabled` (Boolean) Enables password authentication
+
+
+
 <a id="nestedblock--options--connection_settings"></a>
 ### Nested Schema for `options.connection_settings`
 
@@ -945,6 +986,16 @@ Optional:
 
 - `active` (Boolean) Indicates whether multifactor authentication is enabled for this connection.
 - `return_enroll_settings` (Boolean) Indicates whether multifactor authentication enrollment settings will be returned.
+
+
+<a id="nestedblock--options--passkey_options"></a>
+### Nested Schema for `options.passkey_options`
+
+Optional:
+
+- `challenge_ui` (String) Controls the UI used to challenge the user for their passkey
+- `local_enrollment_enabled` (Boolean) Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection
+- `progressive_enrollment_enabled` (Boolean) Enables or disables progressive enrollment of passkeys for the connection
 
 
 <a id="nestedblock--options--password_complexity_options"></a>

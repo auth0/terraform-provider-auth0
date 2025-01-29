@@ -1314,6 +1314,22 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_exchange": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Allows configuration for token exchange",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"allow_any_profile_of_type": {
+							Required:    true,
+							Type:        schema.TypeList,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "List of allowed profile types for token exchange",
+						},
+					},
+				},
+			},
 			"compliance_level": {
 				Type:         schema.TypeString,
 				Optional:     true,

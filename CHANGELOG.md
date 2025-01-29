@@ -1,3 +1,13 @@
+## v1.11.0
+
+FEATURES:
+- `resource/auth0_token_exchange_profile`: Add a resource for managing Token Exchange Profile ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+- `data-source/auth0_token_exchange_profile`: Add a data-source for retrieving Token Exchange Profile ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+
+ENHANCEMENTS:
+- `resource/auth0_client`: Add support to set `token_exchange` property for a client ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+- `resource/auth0_connection`: Add support to set `authentication_methods` and `passkey_options` property for a connection ([#1099](https://github.com/auth0/terraform-provider-auth0/pull/1099))
+
 ## v1.10.0
 
 ENHANCEMENTS:

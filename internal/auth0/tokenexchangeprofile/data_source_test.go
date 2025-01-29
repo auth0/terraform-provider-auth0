@@ -2,10 +2,12 @@ package tokenexchangeprofile_test
 
 import (
 	"fmt"
-	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"regexp"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
 const testAGivenTokenExchangeProfile = `

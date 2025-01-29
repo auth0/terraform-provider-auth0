@@ -3,317 +3,317 @@ version: 2
 interactions:
     - id: 0
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 405
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: |
-              {"name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","strategy":"auth0","is_domain_connection":true,"options":{"brute_force_protection":true,"requires_username":false,"precedence":["username","email","phone_number"],"attributes":{"email":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required","verification":{"active":false}},"verification_method":"otp"}}}}
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
-          method: POST
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 405
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","strategy":"auth0","is_domain_connection":true,"options":{"brute_force_protection":true,"requires_username":false,"precedence":["username","email","phone_number"],"attributes":{"email":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required","verification":{"active":false}},"verification_method":"otp"}}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: 819
-          uncompressed: false
-          body: '{"id":"con_Czze8lJ9J8dZtzMc","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","brute_force_protection":true,"requires_username":false,"precedence":["username","email","phone_number"],"attributes":{"email":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required","verification":{"active":false}},"verification_method":"otp"}},"strategy_version":2,"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true}},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 201 Created
-          code: 201
-          duration: 396.520292ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 819
+        uncompressed: false
+        body: '{"id":"con_dxURYFAHYK4ARHm5","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","brute_force_protection":true,"requires_username":false,"precedence":["username","email","phone_number"],"attributes":{"email":{"identifier":{"active":true},"profile_required":true,"signup":{"status":"required","verification":{"active":false}},"verification_method":"otp"}},"strategy_version":2,"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true}},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 336.794ms
     - id: 1
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Czze8lJ9J8dZtzMc
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dxURYFAHYK4ARHm5
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"id":"con_Czze8lJ9J8dZtzMc","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true,"verification_method":"otp"}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"requires_username":false,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 332.07075ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_dxURYFAHYK4ARHm5","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true,"verification_method":"otp"}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"requires_username":false,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 314.985292ms
     - id: 2
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Czze8lJ9J8dZtzMc
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dxURYFAHYK4ARHm5
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"id":"con_Czze8lJ9J8dZtzMc","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true, "verification_method":"otp"}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","strategy_version":2,"requires_username":false,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 347.059292ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_dxURYFAHYK4ARHm5","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true,"verification_method":"otp"}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"requires_username":false,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 334.985125ms
     - id: 3
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dxURYFAHYK4ARHm5
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"picture_url":"https://example.com/logo.png","sandbox_version":"16","universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"sandbox_versions_available":["18","16"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 336.07175ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_dxURYFAHYK4ARHm5","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true,"verification_method":"otp"}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"requires_username":false,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.147709ms
     - id: 4
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Czze8lJ9J8dZtzMc
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"id":"con_Czze8lJ9J8dZtzMc","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"email":{"signup":{"status":"required","verification":{"active":false}},"identifier":{"active":true},"profile_required":true}},"precedence":["username","email","phone_number"],"passwordPolicy":"good","strategy_version":2,"requires_username":false,"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionOptionsAttrEmail"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 467.953042ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://app.com/logout","http://localhost/logout"],"default_redirection_uri":"https://example.com/login","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"friendly_name":"My Example Tenant","idle_session_lifetime":720,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":1080,"support_email":"support@example.com","support_url":"https://support.example.com","sessions":{"oidc_logout_prompt_enabled":false},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18","16"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.204875ms
     - id: 5
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Czze8lJ9J8dZtzMc
-          method: DELETE
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_dxURYFAHYK4ARHm5
+        method: DELETE
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: 41
-          uncompressed: false
-          body: '{"deleted_at":"2025-01-09T06:01:20.047Z"}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 202 Accepted
-          code: 202
-          duration: 333.875041ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2025-01-29T05:49:08.975Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 337.398209ms
     - id: 6
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"picture_url":"https://example.com/logo.png","sandbox_version":"16","universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"sandbox_versions_available":["18","16"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 327.826209ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://app.com/logout","http://localhost/logout"],"default_redirection_uri":"https://example.com/login","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"friendly_name":"My Example Tenant","idle_session_lifetime":720,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":1080,"support_email":"support@example.com","support_url":"https://support.example.com","sessions":{"oidc_logout_prompt_enabled":false},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18","16"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.944ms
     - id: 7
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/tenants/settings
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"picture_url":"https://example.com/logo.png","sandbox_version":"16","universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"sandbox_versions_available":["18","16"]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 323.559334ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"allowed_logout_urls":["https://app.com/logout","http://localhost/logout"],"default_redirection_uri":"https://example.com/login","enabled_locales":["en"],"flags":{"allow_changing_enable_sso":false,"disable_impersonation":true,"enable_sso":true,"new_universal_login_experience_enabled":true,"universal_login":true,"revoke_refresh_token_grant":false,"dashboard_new_onboarding":true,"disable_clickjack_protection_headers":false},"friendly_name":"My Example Tenant","idle_session_lifetime":720,"picture_url":"https://example.com/logo.png","sandbox_version":"18","session_lifetime":1080,"support_email":"support@example.com","support_url":"https://support.example.com","sessions":{"oidc_logout_prompt_enabled":false},"oidc_logout":{"rp_logout_end_session_endpoint_discovery":true},"universal_login":{"colors":{"page_background":"#FF4F40","primary":"#2A2E35"}},"session_cookie":{"mode":"non-persistent"},"sandbox_versions_available":["22","18","16"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.616583ms
     - id: 8
       request:
-          proto: HTTP/1.1
-          proto_major: 1
-          proto_minor: 1
-          content_length: 0
-          transfer_encoding: []
-          trailer: {}
-          host: terraform-provider-auth0-dev.eu.auth0.com
-          remote_addr: ""
-          request_uri: ""
-          body: ""
-          form: {}
-          headers:
-              Content-Type:
-                  - application/json
-              User-Agent:
-                  - Go-Auth0/1.14.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections?include_totals=true&page=0&per_page=50
-          method: GET
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections?include_totals=true&page=0&per_page=50
+        method: GET
       response:
-          proto: HTTP/2.0
-          proto_major: 2
-          proto_minor: 0
-          transfer_encoding: []
-          trailer: {}
-          content_length: -1
-          uncompressed: true
-          body: '{"total":3,"start":0,"limit":50,"connections":[{"id":"con_NgUj1aAYUvMI1smy","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"craig-test-okta-connection","is_domain_connection":false,"show_as_button":false,"display_name":"Craig Test Okta Workforce Connection","realms":["craig-test-okta-connection"],"enabled_clients":[]},{"id":"con_nxtsVa2XBrGFWqrj","options":{"email":true,"scope":["email","profile"],"profile":true},"strategy":"google-oauth2","name":"google-oauth2","is_domain_connection":false,"realms":["google-oauth2"],"enabled_clients":["i4LnBZLIAarAMmWvIJdXwFhwDGs9wlEW","CD7KYYaQgl5CKjfoV5NMVljTPxJlOFs9"]},{"id":"con_cerN9Nsm83juEPcC","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"Username-Password-Authentication","is_domain_connection":false,"realms":["Username-Password-Authentication"],"enabled_clients":["i4LnBZLIAarAMmWvIJdXwFhwDGs9wlEW","CD7KYYaQgl5CKjfoV5NMVljTPxJlOFs9"]}]}'
-          headers:
-              Content-Type:
-                  - application/json; charset=utf-8
-          status: 200 OK
-          code: 200
-          duration: 347.7365ms
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"total":15,"start":0,"limit":50,"connections":[{"id":"con_314s03qcdQ60fyLe","options":{"domain":"example.onmicrosoft.com","client_id":"123456","use_wsfed":false,"app_domain":"terraform-provider-auth0-dev.sus.auth0.com","ext_groups":true,"ext_profile":true,"thumbprints":["61371E3B9209CB2A91EA3CC34B98806E97B8D89C","747FA8B79576A3D71CAD00480782C09243E63148","80BB7D3978BC0FEEA94552635B9F0D67806DB007","ECC43C3B5A882DC61D34762AFEB67AB648F5776D"],"identity_api":"azure-active-directory-v1.0","basic_profile":true,"client_secret":"123456","tenant_domain":"example.onmicrosoft.com","waad_protocol":"openid-connect","domain_aliases":["api.example.com","example.com"],"upstream_params":{"screen_name":{"alias":"login_hint"}},"api_enable_users":true,"strategy_version":2,"userid_attribute":"sub","useCommonEndpoint":false,"waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Acceptance-Test-Azure-AD-sample","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/terraform-provider-auth0-dev/p/waad/L2ZuSzx1","is_domain_connection":false,"show_as_button":true,"display_name":"Acceptance-Test-Azure-AD-sample","realms":["Acceptance-Test-Azure-AD-sample"],"enabled_clients":[]},{"id":"con_7Xp23hOsnh7EQXTE","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-testaccdatasourceorganization","is_domain_connection":false,"realms":["Acceptance-Test-Connection-testaccdatasourceorganization"],"enabled_clients":[]},{"id":"con_KZQz0bnAlA9Q4TcT","options":{"totp":{"length":6,"time_step":100},"email":{"body":"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n    <style type=\"text/css\">.ExternalClass,.ExternalClass div,.ExternalClass font,.ExternalClass p,.ExternalClass span,.ExternalClass td,img{line-height:100%}#outlook a{padding:0}.ExternalClass,.ReadMsgBody{width:100%}a,blockquote,body,li,p,table,td{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}table,td{mso-table-lspace:0;mso-table-rspace:0}img{-ms-interpolation-mode:bicubic;border:0;height:auto;outline:0;text-decoration:none}table{border-collapse:collapse!important}#bodyCell,#bodyTable,body{height:100%!important;margin:0;padding:0;font-family:ProximaNova,sans-serif}#bodyCell{padding:20px}#bodyTable{width:600px}@font-face{font-family:ProximaNova;src:url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-regular-webfont-webfont.eot);src:url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-regular-webfont-webfont.eot?#iefix) format(''embedded-opentype''),url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-regular-webfont-webfont.woff) format(''woff'');font-weight:400;font-style:normal}@font-face{font-family:ProximaNova;src:url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-semibold-webfont-webfont.eot);src:url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-semibold-webfont-webfont.eot?#iefix) format(''embedded-opentype''),url(https://cdn.auth0.com/fonts/proxima-nova/proximanova-semibold-webfont-webfont.woff) format(''woff'');font-weight:600;font-style:normal}@media only screen and (max-width:480px){#bodyTable,body{width:100%!important}a,blockquote,body,li,p,table,td{-webkit-text-size-adjust:none!important}body{min-width:100%!important}#bodyTable{max-width:600px!important}#signIn{max-width:280px!important}}\n</style>\n  </head>\n  <body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\" style=\"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;margin: 0;padding: 0;font-family: &quot;ProximaNova&quot;, sans-serif;height: 100% !important;\"><center>\n  <table style=\"width: 600px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;font-family: &quot;ProximaNova&quot;, sans-serif;border-collapse: collapse !important;height: 100% !important;\" align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"100%\" width=\"100%\" id=\"bodyTable\">\n    <tr>\n      <td align=\"center\" valign=\"top\" id=\"bodyCell\" style=\"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;font-family: &quot;ProximaNova&quot;, sans-serif;height: 100% !important;\">\n      <div class=\"main\">\n        <p style=\"text-align: center;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%; margin-bottom: 30px;\">\n          <img src=\"https://cdn.auth0.com/styleguide/2.0.9/lib/logos/img/badge.png\" width=\"50\" alt=\"Your logo goes here\" style=\"-ms-interpolation-mode: bicubic;border: 0;height: auto;line-height: 100%;outline: none;text-decoration: none;\">\n        </p>\n\n        <!-- Email change content -->\n        {% if operation == ''change_email'' %}\n\n          <p style=\"font-size: 1.2em;line-height: 1.3;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\">Your email address has been updated.</p>\n\n        {% else %}\n\n          <!-- Signup email content -->\n          {% if send == ''link'' or send == ''link_ios'' or send == ''link_android'' %}\n\n            <p style=\"font-size: 1.2em;line-height: 1.3;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\">Click and confirm that you want to sign in to {{ application.name }}. This link will expire in three minutes.</p>\n\n            <div style=\"text-align:center\">\n            <a id=\"signIn\" style=\"text-transform: uppercase;letter-spacing: 1px;color: #ffffff;text-decoration: none;display: inline-block;min-height: 48px;line-height: 48px;padding-top: 0;padding-right: 26px;padding-bottom: 0;margin: 20px 0;padding-left: 26px;border: 0;outline: 0;background: #eb5424;font-size: 14px;font-style: normal;font-weight: 400;text-align: center;white-space: nowrap;border-radius: 3px;text-overflow: ellipsis;max-width: 280px;overflow: hidden;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\" href=\"{{ link }}\">Sign in to {{ application.name }}</a>\n            </div>\n\n            <p style=\"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\">Or sign in using this link:</p>\n            <p style=\"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\"><a style=\"font-size: 12px; color: #A9B3BC; text-decoration: none;word-break: break-all;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\" href=\"{{ link }}\">{{ link }}</a></p>\n\n            {% elsif send == ''code'' %}\n\n            <p style=\"font-size: 1.4em; line-height: 1.3;\">Your verification code is: <b>{{ code }}</b></p>\n\n          {% endif %}\n\n        {% endif %}\n\n        <p style=\"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\">If you are having any issues with your account, please don''t hesitate to contact us by replying to this mail.</p>\n\n        <br>\n        Thanks!\n        <br>\n\n        <strong>{{ application.name }}</strong>\n\n        <br><br>\n        <hr style=\"border: 2px solid #EAEEF3; border-bottom: 0; margin: 20px 0;\">\n        <p style=\"text-align: center;color: #A9B3BC;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;\">\n          If you did not make this request, please contact us by replying to this mail.\n        </p>\n      </div>\n      </td>\n    </tr>\n  </table>\n</center>\n</body>\n</html>","from":"test@okta.com","syntax":"liquid","subject":"Welcome to okta"},"authParams":{"scope":"openid email profile offline_access","response_type":"code"},"disable_signup":false,"non_persistent_attrs":[],"brute_force_protection":true},"strategy":"email","name":"email","is_domain_connection":false,"realms":["email"],"enabled_clients":[]},{"id":"con_4HNsAZWlBbHwNGGq","options":{"cert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","debug":false,"expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{"email":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","user_id":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"},"signingCert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"client_protocol":"oauth2","client_authorizequery":"redirect_uri=https%3A%2F%2Fexample.com"},"signInEndpoint":"https://example.com","signSAMLRequest":true},"strategy":"samlp","name":"SAML-IdP-sadTF","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/JC8Mjrmh","is_domain_connection":false,"show_as_button":true,"display_name":"IDP SSO","realms":["SAML-IdP-sadTF"],"enabled_clients":[]},{"id":"con_BqxidB5PNE63oZt1","options":{"cert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","debug":false,"expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{"email":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","user_id":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"},"signingCert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"enabled":true,"client_protocol":"oauth2","client_authorizequery":"redirect_uri=https%3A%2F%2Fexample.com"},"signInEndpoint":"https://example.com","signSAMLRequest":true},"strategy":"samlp","name":"SAML-IdP-ssadadTF","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/EZp2U66c","is_domain_connection":false,"show_as_button":true,"display_name":"IDP SSO","realms":["SAML-IdP-ssadadTF"],"enabled_clients":[]},{"id":"con_nqqvpZIL9GU1nogN","options":{"cert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","debug":false,"expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{"email":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","user_id":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"},"signingCert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"enabled":false,"client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","client_protocol":"oauth2","client_authorizequery":"redirect_uri=https%3A%2F%2Fexample.com"},"disableSignout":true,"signInEndpoint":"https://example.com","signOutEndpoint":"","signSAMLRequest":true},"strategy":"samlp","name":"SAML-IdP-TF","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/wFDGprHS","is_domain_connection":false,"show_as_button":true,"display_name":"IDP SSO","realms":["SAML-IdP-TF"],"enabled_clients":[]},{"id":"con_yTvmXC6EcjGF7brD","options":{"cert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","debug":false,"expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{"email":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","user_id":"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"},"signingCert":"-----BEGIN CERTIFICATE----- MIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL BQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL BgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqGSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwEb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkBFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSGM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1DruPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPpNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTPypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8GA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4tBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529rohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuCe6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUAWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs= -----END CERTIFICATE-----","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"enabled":true,"client_protocol":"oauth2","client_authorizequery":"redirect_uri=https%3A%2F%2Fexample.com"},"signInEndpoint":"https://example.com","signSAMLRequest":true},"strategy":"samlp","name":"SAML-IdP-TF-finalsajkfnbas","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/3SbfpsXJ","is_domain_connection":false,"show_as_button":true,"display_name":"IDP SSO","realms":["SAML-IdP-TF-finalsajkfnbas"],"enabled_clients":[]},{"id":"con_NwYK1fgcPuPaFAgr","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"username":{"signup":{"status":"required"},"identifier":{"active":true},"validation":{"max_length":3,"min_length":1,"allowed_types":{"email":true,"phone_number":false}},"profile_required":true}},"passwordPolicy":"good","strategy_version":2,"brute_force_protection":true},"strategy":"auth0","name":"string","is_domain_connection":false,"display_name":"string","realms":["string"],"enabled_clients":[]},{"id":"con_WtSg8alXaOqmWHxI","options":{"domain":"this-azure.com","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","use_wsfed":false,"ext_groups":false,"ext_profile":false,"thumbprints":["61371E3B9209CB2A91EA3CC34B98806E97B8D89C","747FA8B79576A3D71CAD00480782C09243E63148","80BB7D3978BC0FEEA94552635B9F0D67806DB007","ECC43C3B5A882DC61D34762AFEB67AB648F5776D"],"identity_api":"microsoft-identity-platform-v2.0","basic_profile":false,"client_secret":"H4m5NApDVlsx-WLTBF3Z4Gzr0T8ouIbhkMWbR53M7RIOEKWlvA707YSAFRtF3IVs","tenant_domain":"this-azure.com","waad_protocol":"openid-connect","api_enable_users":false,"userid_attribute":"oid","ext_nested_groups":false,"useCommonEndpoint":false,"waad_common_endpoint":false,"should_trust_email_verified_connection":"never_set_emails_as_verified"},"strategy":"waad","name":"Temp","is_domain_connection":false,"show_as_button":false,"display_name":"Temp","realms":["Temp"],"enabled_clients":[]},{"id":"con_lJHaIO7bZpeMxH9j","options":{"passkey_options":{"challenge_ui":"button","local_enrollment_enabled":false,"progressive_enrollment_enabled":false},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Testing-a-sample","is_domain_connection":false,"realms":["Testing-a-sample"],"enabled_clients":[]},{"id":"con_MqpvfaFmNCOilOSr","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Testingconn","is_domain_connection":false,"realms":["Testingconn"],"enabled_clients":[]},{"id":"con_P8aehazU12cWE3Ck","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL\nBQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL\nBgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqG\nSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQsw\nCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwE\nb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkB\nFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSG\nM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1Dr\nuPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPp\nNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L\n5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh\n4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTP\nypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8G\nA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8w\nDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4t\nBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529\nrohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuC\ne6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJ\nPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUA\nWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs=\n-----END CERTIFICATE-----\n","expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{},"signingCert":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyekNDQXBlZ0F3SUJBZ0lVWEdVYUZmTjRpSjI5Y2JYbW5Pb3djQlhFS2xnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1p6RUxNQWtHQTFVRUJoTUNTVTR4Q3pBSkJnTlZCQWdNQWt0Qk1Rd3dDZ1lEVlFRSERBTkNURkl4RFRBTApCZ05WQkFvTUJHOXJkR0V4Q3pBSkJnTlZCQXNNQWpJeU1RNHdEQVlEVlFRRERBVnRaSE5oWmpFUk1BOEdDU3FHClNJYjNEUUVKQVJZQ1pHWXdIaGNOTWpReE1qSXdNRFUxTlRVNVdoY05NelF4TWpFNE1EVTFOVFU1V2pCbk1Rc3cKQ1FZRFZRUUdFd0pKVGpFTE1Ba0dBMVVFQ0F3Q1MwRXhEREFLQmdOVkJBY01BMEpNVWpFTk1Bc0dBMVVFQ2d3RQpiMnQwWVRFTE1Ba0dBMVVFQ3d3Q01qSXhEakFNQmdOVkJBTU1CVzFrYzJGbU1SRXdEd1lKS29aSWh2Y05BUWtCCkZnSmtaakNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFPVmduUzF0TU9Ja25qU0cKTTVNZXZDZlN0ZzF3YWFaVnFVVEU1U2dVZEZCdFljMm9aemRTK2FKSUZaYkFmaXdZdzFPSzdMU3hwaEV3czFEcgp1UEpEcDlRM1hLWjl5Qmh1ZC8zU3N6ejc4YnlZTTIzNzdqZWdhM3A0TC9WWmphSEhlT3FkemNmbGN0UzBNaFBwCk5IYm5hcHgxbHBTN1gxSUpIR3VyQVd2S0ZkMk81MVpSanc4amVCRERYTUd6U2g0S3RJUTNmaEZ5ZitGa0FOOEwKNWE2eG5SRzRneUlsUEpFNHpLNFdDZVd2bzFTNFJ2SjlhNHNKZEUxZTE3VVhTT2FzQk1oMUpiMUl2dEdGS3lvaAo0dGdkcC81ZjkvTmpqWndWTFBTS2YzcjNLUVE1QUpHVUlFd3BwTDlZRmZNODBSckMwSlk0clVUMHFwbkFCd1RQCnlwdS9VZnNDQXdFQUFhTlRNRkV3SFFZRFZSME9CQllFRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1COEcKQTFVZEl3UVlNQmFBRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1BOEdBMVVkRXdFQi93UUZNQU1CQWY4dwpEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSVdEeWl4aUtHbm5SdmRSM0lzYS9mT2pqSW5VVXBoM0pkSkxrRTR0CkJoa3VlY2NocW4xWk1RZmlaZGlvSjA1WlJmbUlFb052ekhXTkZlVVZSVmNDcmlwdlZjN1lJY0NkYys4MHo1MjkKcm9oaGY3b0pDT3BIZlBQZDVxdk04NzVHQ3JTc2diVWdNelRYaFRKVnBEUDBacG9IR1gwQ29JVEVDbm41R051QwplNnZQS014OUlYNXg3NU5UdTQ1dmJsdUIxK1V6MHNpTXZwbDJIQkFUVWVvdk11WDJvL0FuSGFBUVFZVTM2em9KClB1azU3cHRudWNiWGtoWVZHOHVvOVhZSmxSVFM3R0FEaUQvaEVZWGlIUEhZa1VNS3N5NENBSmloSjZTSkVLVUEKV005UXovVFd6QXVza0NYK2dVZmx4RUZ6RGxsdXVrMVJPYzkrZHJadm9tTGtXZnM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{},"signInEndpoint":"https://tempur.com/login","digestAlgorithm":"","signSAMLRequest":true,"signatureAlgorithm":""},"strategy":"samlp","name":"TestingCOnn","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/TPa4C1dL","is_domain_connection":false,"show_as_button":false,"realms":["TestingCOnn"],"enabled_clients":[]},{"id":"con_EEnWFQkEWBBz7VhC","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL\nBQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL\nBgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqG\nSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQsw\nCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwE\nb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkB\nFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSG\nM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1Dr\nuPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPp\nNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L\n5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh\n4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTP\nypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8G\nA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8w\nDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4t\nBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529\nrohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuC\ne6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJ\nPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUA\nWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs=\n-----END CERTIFICATE-----\n","expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{},"signingCert":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyekNDQXBlZ0F3SUJBZ0lVWEdVYUZmTjRpSjI5Y2JYbW5Pb3djQlhFS2xnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1p6RUxNQWtHQTFVRUJoTUNTVTR4Q3pBSkJnTlZCQWdNQWt0Qk1Rd3dDZ1lEVlFRSERBTkNURkl4RFRBTApCZ05WQkFvTUJHOXJkR0V4Q3pBSkJnTlZCQXNNQWpJeU1RNHdEQVlEVlFRRERBVnRaSE5oWmpFUk1BOEdDU3FHClNJYjNEUUVKQVJZQ1pHWXdIaGNOTWpReE1qSXdNRFUxTlRVNVdoY05NelF4TWpFNE1EVTFOVFU1V2pCbk1Rc3cKQ1FZRFZRUUdFd0pKVGpFTE1Ba0dBMVVFQ0F3Q1MwRXhEREFLQmdOVkJBY01BMEpNVWpFTk1Bc0dBMVVFQ2d3RQpiMnQwWVRFTE1Ba0dBMVVFQ3d3Q01qSXhEakFNQmdOVkJBTU1CVzFrYzJGbU1SRXdEd1lKS29aSWh2Y05BUWtCCkZnSmtaakNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFPVmduUzF0TU9Ja25qU0cKTTVNZXZDZlN0ZzF3YWFaVnFVVEU1U2dVZEZCdFljMm9aemRTK2FKSUZaYkFmaXdZdzFPSzdMU3hwaEV3czFEcgp1UEpEcDlRM1hLWjl5Qmh1ZC8zU3N6ejc4YnlZTTIzNzdqZWdhM3A0TC9WWmphSEhlT3FkemNmbGN0UzBNaFBwCk5IYm5hcHgxbHBTN1gxSUpIR3VyQVd2S0ZkMk81MVpSanc4amVCRERYTUd6U2g0S3RJUTNmaEZ5ZitGa0FOOEwKNWE2eG5SRzRneUlsUEpFNHpLNFdDZVd2bzFTNFJ2SjlhNHNKZEUxZTE3VVhTT2FzQk1oMUpiMUl2dEdGS3lvaAo0dGdkcC81ZjkvTmpqWndWTFBTS2YzcjNLUVE1QUpHVUlFd3BwTDlZRmZNODBSckMwSlk0clVUMHFwbkFCd1RQCnlwdS9VZnNDQXdFQUFhTlRNRkV3SFFZRFZSME9CQllFRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1COEcKQTFVZEl3UVlNQmFBRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1BOEdBMVVkRXdFQi93UUZNQU1CQWY4dwpEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSVdEeWl4aUtHbm5SdmRSM0lzYS9mT2pqSW5VVXBoM0pkSkxrRTR0CkJoa3VlY2NocW4xWk1RZmlaZGlvSjA1WlJmbUlFb052ekhXTkZlVVZSVmNDcmlwdlZjN1lJY0NkYys4MHo1MjkKcm9oaGY3b0pDT3BIZlBQZDVxdk04NzVHQ3JTc2diVWdNelRYaFRKVnBEUDBacG9IR1gwQ29JVEVDbm41R051QwplNnZQS014OUlYNXg3NU5UdTQ1dmJsdUIxK1V6MHNpTXZwbDJIQkFUVWVvdk11WDJvL0FuSGFBUVFZVTM2em9KClB1azU3cHRudWNiWGtoWVZHOHVvOVhZSmxSVFM3R0FEaUQvaEVZWGlIUEhZa1VNS3N5NENBSmloSjZTSkVLVUEKV005UXovVFd6QXVza0NYK2dVZmx4RUZ6RGxsdXVrMVJPYzkrZHJadm9tTGtXZnM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"enabled":true},"signInEndpoint":"https://tempur.com/login","digestAlgorithm":"","signSAMLRequest":true,"signatureAlgorithm":""},"strategy":"samlp","name":"TestingCOnn2","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/TaAM5jNR","is_domain_connection":false,"show_as_button":false,"realms":["TestingCOnn2"],"enabled_clients":[]},{"id":"con_CPWEYFZ60m020umK","options":{"cert":"-----BEGIN CERTIFICATE-----\nMIIDrzCCApegAwIBAgIUXGUaFfN4iJ29cbXmnOowcBXEKlgwDQYJKoZIhvcNAQEL\nBQAwZzELMAkGA1UEBhMCSU4xCzAJBgNVBAgMAktBMQwwCgYDVQQHDANCTFIxDTAL\nBgNVBAoMBG9rdGExCzAJBgNVBAsMAjIyMQ4wDAYDVQQDDAVtZHNhZjERMA8GCSqG\nSIb3DQEJARYCZGYwHhcNMjQxMjIwMDU1NTU5WhcNMzQxMjE4MDU1NTU5WjBnMQsw\nCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExDDAKBgNVBAcMA0JMUjENMAsGA1UECgwE\nb2t0YTELMAkGA1UECwwCMjIxDjAMBgNVBAMMBW1kc2FmMREwDwYJKoZIhvcNAQkB\nFgJkZjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOVgnS1tMOIknjSG\nM5MevCfStg1waaZVqUTE5SgUdFBtYc2oZzdS+aJIFZbAfiwYw1OK7LSxphEws1Dr\nuPJDp9Q3XKZ9yBhud/3Sszz78byYM2377jega3p4L/VZjaHHeOqdzcflctS0MhPp\nNHbnapx1lpS7X1IJHGurAWvKFd2O51ZRjw8jeBDDXMGzSh4KtIQ3fhFyf+FkAN8L\n5a6xnRG4gyIlPJE4zK4WCeWvo1S4RvJ9a4sJdE1e17UXSOasBMh1Jb1IvtGFKyoh\n4tgdp/5f9/NjjZwVLPSKf3r3KQQ5AJGUIEwppL9YFfM80RrC0JY4rUT0qpnABwTP\nypu/UfsCAwEAAaNTMFEwHQYDVR0OBBYEFBJ9G94EUjHjJHZAQFN7KxY4ZBANMB8G\nA1UdIwQYMBaAFBJ9G94EUjHjJHZAQFN7KxY4ZBANMA8GA1UdEwEB/wQFMAMBAf8w\nDQYJKoZIhvcNAQELBQADggEBAIWDyixiKGnnRvdR3Isa/fOjjInUUph3JdJLkE4t\nBhkuecchqn1ZMQfiZdioJ05ZRfmIEoNvzHWNFeUVRVcCripvVc7YIcCdc+80z529\nrohhf7oJCOpHfPPd5qvM875GCrSsgbUgMzTXhTJVpDP0ZpoHGX0CoITECnn5GNuC\ne6vPKMx9IX5x75NTu45vbluB1+Uz0siMvpl2HBATUeovMuX2o/AnHaAQQYU36zoJ\nPuk57ptnucbXkhYVG8uo9XYJlRTS7GADiD/hEYXiHPHYkUMKsy4CAJihJ6SJEKUA\nWM9Qz/TWzAuskCX+gUflxEFzDlluuk1ROc9+drZvomLkWfs=\n-----END CERTIFICATE-----\n","expires":"2034-12-18T05:55:59.000Z","subject":{"commonName":"mdsaf","countryName":"IN","emailAddress":"df","localityName":"BLR","organizationName":"okta","stateOrProvinceName":"KA","organizationalUnitName":"22"},"fieldsMap":{},"signingCert":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyekNDQXBlZ0F3SUJBZ0lVWEdVYUZmTjRpSjI5Y2JYbW5Pb3djQlhFS2xnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1p6RUxNQWtHQTFVRUJoTUNTVTR4Q3pBSkJnTlZCQWdNQWt0Qk1Rd3dDZ1lEVlFRSERBTkNURkl4RFRBTApCZ05WQkFvTUJHOXJkR0V4Q3pBSkJnTlZCQXNNQWpJeU1RNHdEQVlEVlFRRERBVnRaSE5oWmpFUk1BOEdDU3FHClNJYjNEUUVKQVJZQ1pHWXdIaGNOTWpReE1qSXdNRFUxTlRVNVdoY05NelF4TWpFNE1EVTFOVFU1V2pCbk1Rc3cKQ1FZRFZRUUdFd0pKVGpFTE1Ba0dBMVVFQ0F3Q1MwRXhEREFLQmdOVkJBY01BMEpNVWpFTk1Bc0dBMVVFQ2d3RQpiMnQwWVRFTE1Ba0dBMVVFQ3d3Q01qSXhEakFNQmdOVkJBTU1CVzFrYzJGbU1SRXdEd1lKS29aSWh2Y05BUWtCCkZnSmtaakNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFPVmduUzF0TU9Ja25qU0cKTTVNZXZDZlN0ZzF3YWFaVnFVVEU1U2dVZEZCdFljMm9aemRTK2FKSUZaYkFmaXdZdzFPSzdMU3hwaEV3czFEcgp1UEpEcDlRM1hLWjl5Qmh1ZC8zU3N6ejc4YnlZTTIzNzdqZWdhM3A0TC9WWmphSEhlT3FkemNmbGN0UzBNaFBwCk5IYm5hcHgxbHBTN1gxSUpIR3VyQVd2S0ZkMk81MVpSanc4amVCRERYTUd6U2g0S3RJUTNmaEZ5ZitGa0FOOEwKNWE2eG5SRzRneUlsUEpFNHpLNFdDZVd2bzFTNFJ2SjlhNHNKZEUxZTE3VVhTT2FzQk1oMUpiMUl2dEdGS3lvaAo0dGdkcC81ZjkvTmpqWndWTFBTS2YzcjNLUVE1QUpHVUlFd3BwTDlZRmZNODBSckMwSlk0clVUMHFwbkFCd1RQCnlwdS9VZnNDQXdFQUFhTlRNRkV3SFFZRFZSME9CQllFRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1COEcKQTFVZEl3UVlNQmFBRkJKOUc5NEVVakhqSkhaQVFGTjdLeFk0WkJBTk1BOEdBMVVkRXdFQi93UUZNQU1CQWY4dwpEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSVdEeWl4aUtHbm5SdmRSM0lzYS9mT2pqSW5VVXBoM0pkSkxrRTR0CkJoa3VlY2NocW4xWk1RZmlaZGlvSjA1WlJmbUlFb052ekhXTkZlVVZSVmNDcmlwdlZjN1lJY0NkYys4MHo1MjkKcm9oaGY3b0pDT3BIZlBQZDVxdk04NzVHQ3JTc2diVWdNelRYaFRKVnBEUDBacG9IR1gwQ29JVEVDbm41R051QwplNnZQS014OUlYNXg3NU5UdTQ1dmJsdUIxK1V6MHNpTXZwbDJIQkFUVWVvdk11WDJvL0FuSGFBUVFZVTM2em9KClB1azU3cHRudWNiWGtoWVZHOHVvOVhZSmxSVFM3R0FEaUQvaEVZWGlIUEhZa1VNS3N5NENBSmloSjZTSkVLVUEKV005UXovVFd6QXVza0NYK2dVZmx4RUZ6RGxsdXVrMVJPYzkrZHJadm9tTGtXZnM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K","thumbprints":["8711358d1842454542ca6f3150643deae89e88f1"],"idpinitiated":{"enabled":true,"client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol"},"signInEndpoint":"https://tempur.com/login","digestAlgorithm":"","signSAMLRequest":true,"signatureAlgorithm":""},"strategy":"samlp","name":"TestingCOnn3","provisioning_ticket_url":"https://terraform-provider-auth0-dev.sus.auth0.com/p/samlp/PBJN5bYb","is_domain_connection":false,"show_as_button":false,"realms":["TestingCOnn3"],"enabled_clients":[]},{"id":"con_mTJBC8YsDRafWFmB","options":{"mfa":{"active":true,"return_enroll_settings":true},"attributes":{"username":{"signup":{"status":"required"},"identifier":{"active":true},"validation":{"max_length":100,"min_length":1,"allowed_types":{"email":false,"phone_number":false}},"profile_required":true}},"import_mode":false,"configuration":{},"customScripts":{"login":"function login(email, password, callback) {\n  // This script should authenticate a user against the credentials stored in\n  // your database.\n  // It is executed when a user attempts to log in or immediately after signing\n  // up (as a verification that the user was successfully signed up).\n  //\n  // Everything returned by this script will be set as part of the user profile\n  // and will be visible by any of the tenant admins. Avoid adding attributes\n  // with values such as passwords, keys, secrets, etc.\n  //\n  // The `password` parameter of this function is in plain text. It must be\n  // hashed/salted to match whatever is stored in your database. For example:\n  //\n  //     var bcrypt = require(''bcrypt@0.8.5'');\n  //     bcrypt.compare(password, dbPasswordHash, function(err, res)) { ... }\n  //\n  // There are three ways this script can finish:\n  // 1. The user''s credentials are valid. The returned user profile should be in\n  // the following format: https://auth0.com/docs/users/normalized/auth0/normalized-user-profile-schema\n  //     var profile = {\n  //       user_id: ..., // user_id is mandatory\n  //       email: ...,\n  //       [...]\n  //     };\n  //     callback(null, profile);\n  // 2. The user''s credentials are invalid\n  //     callback(new WrongUsernameOrPasswordError(email, \"my error message\"));\n  //\n  //    Note: Passing no arguments or a falsey first argument to\n  //    `WrongUsernameOrPasswordError` will result in the error being logged as\n  //    an `fu` event (invalid username/email) with an empty string for a user_id.\n  //    Providing a truthy first argument will result in the error being logged\n  //    as an `fp` event (the user exists, but the password is invalid) with a\n  //    user_id value of \"auth0|<first argument>\". See the `Log Event Type Codes`\n  //    documentation for more information about these event types:\n  //    https://auth0.com/docs/deploy-monitor/logs/log-event-type-codes\n  // 3. Something went wrong while trying to reach your database\n  //     callback(new Error(\"my error message\"));\n  //\n  // A list of Node.js modules which can be referenced is available here:\n  //\n  //    https://tehsis.github.io/webtaskio-canirequire/\n\n  const msg = ''Please implement the Login script for this database connection '' +\n    ''at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n","create":"function create(user, callback) {\n  // This script should create a user entry in your existing database. It will\n  // be executed when a user attempts to sign up, or when a user is created\n  // through the Auth0 dashboard or API.\n  // When this script has finished executing, the Login script will be\n  // executed immediately afterwards, to verify that the user was created\n  // successfully.\n  //\n  // The user object will always contain the following properties:\n  // * email: the user''s email\n  // * password: the password entered by the user, in plain text\n  // * tenant: the name of this Auth0 account\n  // * client_id: the client ID of the application where the user signed up, or\n  //              API key if created through the API or Auth0 dashboard\n  // * connection: the name of this database connection\n  //\n  // There are three ways this script can finish:\n  // 1. A user was successfully created\n  //     callback(null);\n  // 2. This user already exists in your database\n  //     callback(new ValidationError(\"user_exists\", \"my error message\"));\n  // 3. Something went wrong while trying to reach your database\n  //     callback(new Error(\"my error message\"));\n\n  const msg = ''Please implement the Create script for this database connection '' +\n    ''at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n","delete":"function remove(id, callback) {\n  // This script remove a user from your existing database.\n  // It is executed whenever a user is deleted from the API or Auth0 dashboard.\n  //\n  // There are two ways that this script can finish:\n  // 1. The user was removed successfully:\n  //     callback(null);\n  // 2. Something went wrong while trying to reach your database:\n  //     callback(new Error(\"my error message\"));\n\n  const msg = ''Please implement the Delete script for this database '' +\n    ''connection at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n","verify":"function verify(email, callback) {\n  // This script should mark the current user''s email address as verified in\n  // your database.\n  // It is executed whenever a user clicks the verification link sent by email.\n  // These emails can be customized at https://manage.auth0.com/#/emails.\n  // It is safe to assume that the user''s email already exists in your database,\n  // because verification emails, if enabled, are sent immediately after a\n  // successful signup.\n  //\n  // There are two ways that this script can finish:\n  // 1. The user''s email was verified successfully\n  //     callback(null, true);\n  // 2. Something went wrong while trying to reach your database:\n  //     callback(new Error(\"my error message\"));\n  //\n  // If an error is returned, it will be passed to the query string of the page\n  // where the user is being redirected to after clicking the verification link.\n  // For example, returning `callback(new Error(\"error\"))` and redirecting to\n  // https://example.com would redirect to the following URL:\n  //     https://example.com?email=alice%40example.com&message=error&success=false\n\n  const msg = ''Please implement the Verify script for this database connection '' +\n    ''at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n","get_user":"function getByEmail(email, callback) {\n  // This script should retrieve a user profile from your existing database,\n  // without authenticating the user.\n  // It is used to check if a user exists before executing flows that do not\n  // require authentication (signup and password reset).\n  //\n  // There are three ways this script can finish:\n  // 1. A user was successfully found. The profile should be in the following\n  // format: https://auth0.com/docs/users/normalized/auth0/normalized-user-profile-schema.\n  //     callback(null, profile);\n  // 2. A user was not found\n  //     callback(null);\n  // 3. Something went wrong while trying to reach your database:\n  //     callback(new Error(\"my error message\"));\n\n  const msg = ''Please implement the Get User script for this database connection '' +\n    ''at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n","change_password":"function changePassword(email, newPassword, callback) {\n  // This script should change the password stored for the current user in your\n  // database. It is executed when the user clicks on the confirmation link\n  // after a reset password request.\n  // The content and behavior of password confirmation emails can be customized\n  // here: https://manage.auth0.com/#/emails\n  // The `newPassword` parameter of this function is in plain text. It must be\n  // hashed/salted to match whatever is stored in your database.\n  //\n  // There are three ways that this script can finish:\n  // 1. The user''s password was updated successfully:\n  //     callback(null, true);\n  // 2. The user''s password was not updated:\n  //     callback(null, false);\n  // 3. Something went wrong while trying to reach your database:\n  //     callback(new Error(\"my error message\"));\n  //\n  // If an error is returned, it will be passed to the query string of the page\n  // where the user is being redirected to after clicking the confirmation link.\n  // For example, returning `callback(new Error(\"error\"))` and redirecting to\n  // https://example.com would redirect to the following URL:\n  //     https://example.com?email=alice%40example.com&message=error&success=false\n\n  const msg = ''Please implement the Change Password script for this database '' +\n    ''connection at https://manage.auth0.com/#/connections/database'';\n  return callback(new Error(msg));\n}\n"},"disable_signup":false,"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"password_history":{"size":5,"enable":false},"strategy_version":2,"password_dictionary":{"enable":false,"dictionary":[]},"authentication_methods":{"passkey":{"enabled":true},"password":{"enabled":true}},"brute_force_protection":true,"password_no_personal_info":{"enable":false},"password_complexity_options":{"min_length":8},"enabledDatabaseCustomization":false},"strategy":"auth0","name":"Username-Password-Authentication","is_domain_connection":false,"realms":["Username-Password-Authentication"],"enabled_clients":["Mt2OyVN7QphPhmFWgJMXtzzethEatko0","bpViNbMMF1X5J17kaB1jObShEVB81nol","QOV3kJkFtdFCikHw2IqZuwuCKt313IZq","5yzDGRUvTwaKPnuDhXbAfNNi1KudThAB","YdrzHRK5kSYBs8x1J8KdJMPVYOianAgy","e85tDjd8lVMidGGiQJ90i8r0d4KE7Dsy","b2e1T2VkVT83h4l4zuPuQTV6HvNwL3JV","KfSsUxrsX9jkIVYZMIQ1J0GAPK5ed3bc","MxzFp6Duq8v1gkWKDfQieyekgoLczOKv","0gfXrXjmQLU0ZXP9RiRJskvx23USUBl1","NJlvkZLOYAeVLpo1zEU1AmZ3oSF252pt","zrzGZtpVEGbVeLBHOMUWQLPQUX7zzz7z","EMYNlkLrJPfLQS1akCODZ2BeX6CJQeTq"]}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 331.041417ms

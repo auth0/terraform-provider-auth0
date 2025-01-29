@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
+                - Go-Auth0/1.14.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: 525
         uncompressed: false
-        body: '{"id":"con_YPFkIwpcI6ZHRizo","options":{"name":"SMS OTP","from":"+12345678","syntax":"md_with_macros","template":"@@password@@","totp":{"time_step":300,"length":6},"twilio_sid":"ABC123","twilio_token":"DEF456","messaging_service_sid":"GHI789","disable_signup":false,"brute_force_protection":true,"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+        body: '{"id":"con_q3z5qq1QEHs0EvG1","options":{"name":"SMS OTP","from":"+12345678","syntax":"md_with_macros","template":"@@password@@","totp":{"time_step":300,"length":6},"twilio_sid":"ABC123","twilio_token":"DEF456","messaging_service_sid":"GHI789","disable_signup":false,"brute_force_protection":true,"upstream_params":{"screen_name":{"alias":"login_hint"}}},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 174.971417ms
+        duration: 342.475208ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,8 +54,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YPFkIwpcI6ZHRizo
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_q3z5qq1QEHs0EvG1
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_YPFkIwpcI6ZHRizo","options":{"from":"+12345678","name":"SMS OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+        body: '{"id":"con_q3z5qq1QEHs0EvG1","options":{"from":"+12345678","name":"SMS OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.645583ms
+        duration: 429.103333ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,8 +89,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YPFkIwpcI6ZHRizo
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_q3z5qq1QEHs0EvG1
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_YPFkIwpcI6ZHRizo","options":{"from":"+12345678","name":"SMS OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
+        body: '{"id":"con_q3z5qq1QEHs0EvG1","options":{"from":"+12345678","name":"SMS OTP","totp":{"length":6,"time_step":300},"syntax":"md_with_macros","template":"@@password@@","twilio_sid":"ABC123","twilio_token":"DEF456","disable_signup":false,"upstream_params":{"screen_name":{"alias":"login_hint"}},"messaging_service_sid":"GHI789","brute_force_protection":true},"strategy":"sms","name":"Acceptance-Test-SMS-TestAccConnectionSMS","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-SMS-TestAccConnectionSMS"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 146.935042ms
+        duration: 328.206042ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_YPFkIwpcI6ZHRizo
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_q3z5qq1QEHs0EvG1
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -135,10 +135,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2024-09-12T21:26:57.898Z"}'
+        body: '{"deleted_at":"2025-01-29T05:48:02.599Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 143.160083ms
+        duration: 319.14125ms

@@ -355,6 +355,18 @@ var optionsSchema = &schema.Schema{
 				Sensitive:   true,
 				Description: "The strategy's client secret.",
 			},
+			"custom_headers": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeMap,
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
+					},
+				},
+				Optional:    true,
+				Default:     nil,
+				Description: "Configure extra headers to the Token endpoint of an OAuth 2.0 provider",
+			},
 			"allowed_audiences": {
 				Type:        schema.TypeSet,
 				Computed:    true,

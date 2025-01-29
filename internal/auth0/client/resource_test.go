@@ -59,6 +59,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
 
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
+
 	mobile {
 		android {
 			app_package_name = "com.example"
@@ -157,6 +161,7 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),

@@ -126,6 +126,7 @@ resource "auth0_client" "my_client" {
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
+- `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 ### Read-Only
@@ -567,6 +568,14 @@ Optional:
 - `infinite_token_lifetime` (Boolean) Whether refresh tokens should remain valid indefinitely. If false, `token_lifetime` should also be set.
 - `leeway` (Number) The amount of time in seconds in which a refresh token may be reused without triggering reuse detection.
 - `token_lifetime` (Number) The absolute lifetime of a refresh token in seconds.
+
+
+<a id="nestedblock--token_exchange"></a>
+### Nested Schema for `token_exchange`
+
+Required:
+
+- `allow_any_profile_of_type` (List of String) List of allowed profile types for token exchange
 
 ## Import
 

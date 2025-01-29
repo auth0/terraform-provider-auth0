@@ -73,6 +73,7 @@ data "auth0_client" "some-client-by-id" {
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
+- `token_exchange` (List of Object) Allows configuration for token exchange (see [below for nested schema](#nestedatt--token_exchange))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -608,5 +609,14 @@ Read-Only:
 - `key_id` (String)
 - `name` (String)
 - `updated_at` (String)
+
+
+
+<a id="nestedatt--token_exchange"></a>
+### Nested Schema for `token_exchange`
+
+Read-Only:
+
+- `allow_any_profile_of_type` (List of String)
 
 

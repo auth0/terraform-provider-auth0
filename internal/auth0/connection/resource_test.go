@@ -44,6 +44,11 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.challenge_ui", "both"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.local_enrollment_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.progressive_enrollment_enabled", "true"),
 				),
 			},
 			{
@@ -117,6 +122,19 @@ resource "auth0_connection" "my_connection" {
 			}
 		})
 		non_persistent_attrs = ["gender","hair_color"]
+		authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+		}
+		passkey_options {
+			challenge_ui                   = "both"
+			local_enrollment_enabled       = true
+			progressive_enrollment_enabled = true
+		}
 	}
 }
 `

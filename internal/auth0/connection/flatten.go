@@ -226,6 +226,53 @@ func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOpti
 	}
 }
 
+func flattenAuthenticationMethods(authenticationMethods *management.AuthenticationMethods) interface{} {
+	if authenticationMethods == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
+		"password": flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+	}
+}
+
+func flattenPasskeyOptions(passkeyOptions *management.PasskeyOptions) interface{} {
+	if passkeyOptions == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"challenge_ui":                   passkeyOptions.GetChallengeUI(),
+		"local_enrollment_enabled":       passkeyOptions.GetLocalEnrollmentEnabled(),
+		"progressive_enrollment_enabled": passkeyOptions.GetProgressiveEnrollmentEnabled(),
+	}
+}
+
+func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
+	if passkeyAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passkeyAuthenticationMethod.Enabled,
+		},
+	}
+}
+
+func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *management.PasswordAuthenticationMethod) interface{} {
+	if passwordAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passwordAuthenticationMethod.Enabled,
+		},
+	}
+}
+
 func flattenIdentifier(identifier *management.ConnectionOptionsAttributeIdentifier) []map[string]interface{} {
 	if identifier == nil {
 		return nil
@@ -329,6 +376,14 @@ func flattenConnectionOptionsAuth0(
 
 	if options.Attributes != nil {
 		optionsMap["attributes"] = []interface{}{flattenAttributes(options.GetAttributes())}
+	}
+
+	if options.AuthenticationMethods != nil {
+		optionsMap["authentication_methods"] = []interface{}{flattenAuthenticationMethods(options.GetAuthenticationMethods())}
+	}
+
+	if options.PasskeyOptions != nil {
+		optionsMap["passkey_options"] = []interface{}{flattenPasskeyOptions(options.GetPasskeyOptions())}
 	}
 
 	if options.PasswordComplexityOptions != nil {

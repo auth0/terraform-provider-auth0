@@ -49,6 +49,12 @@ func NewResource() *schema.Resource {
 				Description: "Type of the log stream, which indicates the sink provider. " +
 					"Options include: `" + strings.Join(validLogStreamTypes, "`, `") + "`.",
 			},
+			"is_priority": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Set True for priority log streams, False for non-priority",
+			},
 			"status": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -63,6 +69,7 @@ func NewResource() *schema.Resource {
 			"filters": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
 					" If omitted or empty, all events will be delivered. " +
 					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +
@@ -237,7 +244,8 @@ func NewResource() *schema.Resource {
 							Description: "Sent in the HTTP \"Authorization\" header with each request.",
 						},
 						"http_custom_headers": {
-							Type: schema.TypeList,
+							Type:     schema.TypeList,
+							Computed: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeMap,
 								Elem: &schema.Schema{

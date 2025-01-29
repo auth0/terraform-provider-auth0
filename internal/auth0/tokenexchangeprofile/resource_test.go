@@ -2,6 +2,7 @@ package tokenexchangeprofile_test
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -64,7 +65,10 @@ func TestTokenExchangeProfile(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(givenACustomTokenAction, t.Name()),
-				Check:  resource.ComposeTestCheckFunc(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_token_exchange_profile.my_token_exchange_profile", "id", ""),
+				),
+				ExpectError: regexp.MustCompile(`Not found: auth0_token_exchange_profile`),
 			},
 		},
 	})

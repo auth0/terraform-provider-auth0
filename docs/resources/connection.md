@@ -715,6 +715,8 @@ Optional:
 - `from` (String) Address to use as the sender.
 - `gateway_authentication` (Block List, Max: 1) Defines the parameters used to generate the auth token for the custom gateway. (see [below for nested schema](#nestedblock--options--gateway_authentication))
 - `gateway_url` (String) Defines a custom sms gateway to use instead of Twilio.
+- `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
+- `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))

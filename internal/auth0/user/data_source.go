@@ -24,9 +24,17 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
 	dataSourceSchema["user_id"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Required:    true,
-		Description: "ID of the user.",
+		Type:         schema.TypeString,
+		Optional:     true,
+		Description:  "ID of the user.",
+		AtLeastOneOf: []string{"user_id", "query"},
+	}
+
+	dataSourceSchema["query"] = &schema.Schema{
+		Type:         schema.TypeString,
+		Optional:     true,
+		Description:  "Lucene Query for retrieving a user.",
+		AtLeastOneOf: []string{"user_id", "query"},
 	}
 
 	dataSourceSchema["permissions"] = &schema.Schema{
@@ -73,15 +81,29 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	var user *management.User
 
 	userID := data.Get("user_id").(string)
-
-	user, err := api.User.Read(ctx, userID)
-	if err != nil {
-		return diag.FromErr(err)
+	if userID != "" {
+		u, err := api.User.Read(ctx, userID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		user = u
+		data.SetId(user.GetID())
+	} else {
+		query := data.Get("query").(string)
+		users, err := api.User.List(ctx, management.Parameter("q", query))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		if users.Length == 1 {
+			user = users.Users[0]
+			data.SetId(users.Users[0].GetID())
+		} else {
+			return diag.Errorf("Further improve the query to retrieve a single user from the query")
+		}
 	}
-
-	data.SetId(user.GetID())
 
 	var roles []*management.Role
 	var rolesPage int

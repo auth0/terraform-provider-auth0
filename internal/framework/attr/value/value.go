@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 // HasChange returns true if the attribute is modified from the previous value.
@@ -229,55 +228,85 @@ func contains(set []attr.Value, value attr.Value) bool {
 // AttrBool converts a *bool to a types.Bool value.
 func AttrBool(value *bool) types.Bool {
 	if value == nil {
-		return basetypes.NewBoolNull()
+		return types.BoolNull()
 	}
 
-	return basetypes.NewBoolValue(*value)
+	return types.BoolValue(*value)
 }
 
 // AttrString converts a *string to a types.String value.
 func AttrString(value *string) types.String {
 	if value == nil {
-		return basetypes.NewStringNull()
+		return types.StringNull()
 	}
 
-	return basetypes.NewStringValue(*value)
+	return types.StringValue(*value)
+}
+
+// AttrStringList converts a *[]string to a types.List value.
+func AttrStringList(values *[]string) types.List {
+	if values == nil {
+		return types.ListNull(types.StringType)
+	}
+	elements := make([]attr.Value, 0, len(*values))
+	for _, value := range *values {
+		element := types.StringValue(value)
+		elements = append(elements, element)
+	}
+	rval, _ := types.ListValue(types.StringType, elements)
+
+	return rval
+}
+
+// AttrStringSet converts a *[]string to a types.Set value.
+func AttrStringSet(values *[]string) types.Set {
+	if values == nil {
+		return types.SetNull(types.StringType)
+	}
+	elements := make([]attr.Value, 0, len(*values))
+	for _, value := range *values {
+		element := types.StringValue(value)
+		elements = append(elements, element)
+	}
+	rval, _ := types.SetValue(types.StringType, elements)
+
+	return rval
 }
 
 // AttrInt64 converts an *int64, *int32, or *int to a types.Int64 value.
 func AttrInt64[T int | int64 | int32](value *T) types.Int64 {
 	if value == nil {
-		return basetypes.NewInt64Null()
+		return types.Int64Null()
 	}
 
-	return basetypes.NewInt64Value(int64(*value))
+	return types.Int64Value(int64(*value))
 }
 
 // AttrInt32 converts an *int32 to a types.Int64 value.
 func AttrInt32(value *int32) types.Int32 {
 	if value == nil {
-		return basetypes.NewInt32Null()
+		return types.Int32Null()
 	}
 
-	return basetypes.NewInt32Value(*value)
+	return types.Int32Value(*value)
 }
 
 // AttrFloat64 converts a *float64 to a types.Float64 value.
 func AttrFloat64(value *float64) types.Float64 {
 	if value == nil {
-		return basetypes.NewFloat64Null()
+		return types.Float64Null()
 	}
 
-	return basetypes.NewFloat64Value(*value)
+	return types.Float64Value(*value)
 }
 
 // AttrFloat32 converts a *float32 to a types.Float32 value.
 func AttrFloat32(value *float32) types.Float32 {
 	if value == nil {
-		return basetypes.NewFloat32Null()
+		return types.Float32Null()
 	}
 
-	return basetypes.NewFloat32Value(*value)
+	return types.Float32Value(*value)
 }
 
 // AttrTime converts a *time.Time to a timetypes.RFC3339 value.

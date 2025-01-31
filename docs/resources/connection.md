@@ -483,22 +483,24 @@ resource "auth0_connection" "samlp" {
   strategy = "samlp"
 
   options {
-    debug               = false
-    signing_cert        = "<signing-certificate>"
-    sign_in_endpoint    = "https://saml.provider/sign_in"
-    sign_out_endpoint   = "https://saml.provider/sign_out"
-    disable_sign_out    = true
-    strategy_version    = 2
-    tenant_domain       = "example.com"
-    domain_aliases      = ["example.com", "alias.example.com"]
-    protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    request_template    = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-    user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
-    signature_algorithm = "rsa-sha256"
-    digest_algorithm    = "sha256"
-    icon_url            = "https://saml.provider/assets/logo.png"
-    entity_id           = "<entity_id>"
-    metadata_xml        = <<EOF
+    debug                           = false
+    signing_cert                    = "<signing-certificate>"
+    sign_in_endpoint                = "https://saml.provider/sign_in"
+    sign_out_endpoint               = "https://saml.provider/sign_out"
+    global_token_revocation_jwt_iss = "issuer.example.com"
+    global_token_revocation_jwt_sub = "user123"
+    disable_sign_out                = true
+    strategy_version                = 2
+    tenant_domain                   = "example.com"
+    domain_aliases                  = ["example.com", "alias.example.com"]
+    protocol_binding                = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    request_template                = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+    user_id_attribute               = "https://saml.provider/imi/ns/identity-200810"
+    signature_algorithm             = "rsa-sha256"
+    digest_algorithm                = "sha256"
+    icon_url                        = "https://saml.provider/assets/logo.png"
+    entity_id                       = "<entity_id>"
+    metadata_xml                    = <<EOF
     <?xml version="1.0"?>
     <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
       <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -507,7 +509,7 @@ resource "auth0_connection" "samlp" {
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
     EOF
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
+    metadata_url                    = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]

@@ -17,7 +17,7 @@ data "auth0_user" "user" {
 }
 `
 
-const testAccDataSourceUser = `
+const testAccDataSourceUserTemplate = `
 resource "auth0_resource_server" "resource_server" {
 	name       = "Acceptance Test - {{.testName}}"
 	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
@@ -97,12 +97,26 @@ resource "auth0_user_roles" "user_roles" {
 
 	user_id = auth0_user.user.id
 	roles   = [ auth0_role.owner.id, auth0_role.admin.id ]
-}
+}`
 
+const testAccDataSourceUserWithID = testAccDataSourceUserTemplate + `
 data "auth0_user" "test" {
 	depends_on = [ auth0_user_roles.user_roles ]
-
 	user_id = auth0_user.user.id
+}
+`
+
+const testAccDataSourceUserWithQueryUsername = testAccDataSourceUserTemplate + `
+data "auth0_user" "test" {
+	depends_on = [ auth0_user_roles.user_roles ]
+	query = "username:{{.testName}}"
+}
+`
+
+const testAccDataSourceUserWithQueryEmail = testAccDataSourceUserTemplate + `
+data "auth0_user" "test" {
+	depends_on = [ auth0_user_roles.user_roles ]
+	query = "email:{{.testName}}@acceptance.test.com"
 }
 `
 
@@ -116,7 +130,43 @@ func TestAccDataSourceUser(t *testing.T) {
 				ExpectError: regexp.MustCompile(`Error: 404 Not Found: The user does not exist.`),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataSourceUser, testName),
+				Config: acctest.ParseTestName(testAccDataSourceUserWithID, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.test", "email", fmt.Sprintf("%s@acceptance.test.com", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "user_id", fmt.Sprintf("auth0|%s", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "username", testName),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "email", fmt.Sprintf("%s@acceptance.test.com", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "name", "Firstname Lastname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "given_name", "Firstname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "family_name", "Lastname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "nickname", testName),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "picture", "https://www.example.com/picture.jpg"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "roles.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "user_metadata", `{"baz":"qux","foo":"bar"}`),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "app_metadata", `{"baz":"qux","foo":"bar"}`),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataSourceUserWithQueryUsername, testName),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_user.test", "email", fmt.Sprintf("%s@acceptance.test.com", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "user_id", fmt.Sprintf("auth0|%s", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "username", testName),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "email", fmt.Sprintf("%s@acceptance.test.com", testName)),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "name", "Firstname Lastname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "given_name", "Firstname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "family_name", "Lastname"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "nickname", testName),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "picture", "https://www.example.com/picture.jpg"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "roles.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "permissions.#", "2"),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "user_metadata", `{"baz":"qux","foo":"bar"}`),
+					resource.TestCheckResourceAttr("data.auth0_user.test", "app_metadata", `{"baz":"qux","foo":"bar"}`),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataSourceUserWithQueryEmail, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_user.test", "email", fmt.Sprintf("%s@acceptance.test.com", testName)),
 					resource.TestCheckResourceAttr("data.auth0_user.test", "user_id", fmt.Sprintf("auth0|%s", testName)),

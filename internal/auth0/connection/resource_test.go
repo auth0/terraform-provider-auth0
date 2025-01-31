@@ -2231,6 +2231,8 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_iss", "issuer.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_sub", "user123"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml-from-metadata-xml.provider/sign_out"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://saml-from-metadata-xml.provider/sign_in"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
@@ -2284,8 +2286,9 @@ resource "auth0_connection" "my_connection" {
 	display_name   = "Acceptance-Test-SAML-{{.testName}}"
 	strategy       = "samlp"
 	show_as_button = false
-
 	options {
+		global_token_revocation_jwt_iss = "issuer.example.com"
+		global_token_revocation_jwt_sub = "user123"
 		signing_key {
 			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
        		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"

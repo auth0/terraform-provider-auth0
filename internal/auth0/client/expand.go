@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"

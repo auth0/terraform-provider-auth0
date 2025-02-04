@@ -559,13 +559,13 @@ func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrg
 }
 
 func flattenTokenExchange(tokenExchange *management.ClientTokenExchange) []interface{} {
-	te := make(map[string]interface{})
-
-	if tokenExchange != nil {
-		te["allow_any_profile_of_type"] = tokenExchange.AllowAnyProfileOfType
+	if tokenExchange == nil {
+		return nil
 	}
-
-	return []interface{}{te}
+	t := map[string]interface{}{
+		"allow_any_profile_of_type": tokenExchange.AllowAnyProfileOfType,
+	}
+	return []interface{}{t}
 }
 
 func flattenClient(data *schema.ResourceData, client *management.Client) error {

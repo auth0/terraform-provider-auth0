@@ -40,6 +40,15 @@ func expandAction(data *schema.ResourceData) *management.Action {
 	return action
 }
 
+func isTokenExchangeInSupportedTriggers(actionTriggers []management.ActionTrigger) bool {
+	for _, actionTrigger := range actionTriggers {
+		if actionTrigger.GetID() == "custom-token-exchange" {
+			return true
+		}
+	}
+	return false
+}
+
 func expandActionTriggers(triggers cty.Value) []management.ActionTrigger {
 	if triggers.IsNull() {
 		return nil

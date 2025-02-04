@@ -20,7 +20,7 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 	// This is done, to support node18 as runtime.
 	// TODO: Remove this soon as node18 reaches EOL.
 
-	if action.GetRuntime() == "node18-actions" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
+	if action.GetRuntime() == "node18-actions" {
 		result = multierror.Append(result, data.Set("runtime", "node18"))
 	}
 
@@ -31,14 +31,6 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 	return result.ErrorOrNil()
 }
 
-func isTokenExchangeInSupportedTriggers(actionTriggers []management.ActionTrigger) bool {
-	for _, actionTrigger := range actionTriggers {
-		if actionTrigger.GetID() == "custom-token-exchange" {
-			return true
-		}
-	}
-	return false
-}
 func flattenActionTriggers(triggers []management.ActionTrigger) []interface{} {
 	var result []interface{}
 

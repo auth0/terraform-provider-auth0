@@ -15,7 +15,11 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 		data.Set("runtime", action.GetRuntime()),
 	)
 
-	if action.GetRuntime() == "node18-actions" {
+	// If custom-token-exchange is part of SupportedTriggers for an action,
+	// we'd not manipulate it's runtime value.
+	// This is done, to support node18-actions as runtime.
+
+	if action.GetRuntime() == "node18-actions" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
 		result = multierror.Append(result, data.Set("runtime", "node18"))
 	}
 
@@ -26,6 +30,14 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 	return result.ErrorOrNil()
 }
 
+func isTokenExchangeInSupportedTriggers(actionTriggers []management.ActionTrigger) bool {
+	for _, actionTrigger := range actionTriggers {
+		if actionTrigger.GetID() == "custom-token-exchange" {
+			return true
+		}
+	}
+	return false
+}
 func flattenActionTriggers(triggers []management.ActionTrigger) []interface{} {
 	var result []interface{}
 

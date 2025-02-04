@@ -32,7 +32,7 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
-	if action.GetRuntime() == "node18" {
+	if action.GetRuntime() == "node18" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
 		action.Runtime = auth0.String("node18-actions")
 	}
 

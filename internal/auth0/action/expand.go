@@ -32,7 +32,7 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
-	// TODO: Remove these soon as node18 reaches EOF.
+	// TODO: Remove this soon as node18 reaches EOL.
 	if action.GetRuntime() == "node18" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
 		action.Runtime = auth0.String("node18-actions")
 	}

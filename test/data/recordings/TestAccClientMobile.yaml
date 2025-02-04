@@ -6,14 +6,14 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 382
+        content_length: 478
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"oidc_logout":{}}
+            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","oidc_conformant":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"oidc_logout":{},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}
         form: {}
         headers:
             Content-Type:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 467.127875ms
+        duration: 482.056541ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,7 +55,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 351.042417ms
+        duration: 368.2245ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -90,7 +90,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 539.020958ms
+        duration: 360.043834ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -125,7 +125,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,33 +135,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF"]},"ios":{"team_id":"9JA89QQLNQ","app_bundle_identifier":"com.my.bundle.id"}},"native_social_login":{"apple":{"enabled":true},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 468.57625ms
+        duration: 352.010625ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 363
+        content_length: 386
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"oidc_logout":{}}
+            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","oidc_conformant":true,"mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"oidc_logout":{}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -171,13 +171,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.8045ms
+        duration: 345.963083ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -196,7 +196,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -206,13 +206,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 370.05825ms
+        duration: 363.341542ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -231,7 +231,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -241,13 +241,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 381.755167ms
+        duration: 352.704166ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -266,7 +266,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -276,33 +276,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":true}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 342.437167ms
+        duration: 353.129208ms
     - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 261
+        content_length: 284
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]}},"native_social_login":{"facebook":{"enabled":false}},"oidc_logout":{}}
+            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"native","oidc_conformant":true,"mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]}},"native_social_login":{"facebook":{"enabled":false}},"oidc_logout":{}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -312,13 +312,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 334.054958ms
+        duration: 371.820667ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -337,7 +337,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -347,13 +347,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 882.332792ms
+        duration: 369.016416ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -372,7 +372,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -382,13 +382,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 329.571834ms
+        duration: 362.47675ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -407,7 +407,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -417,33 +417,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"native","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 468.295875ms
+        duration: 366.8265ms
     - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 183
+        content_length: 206
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"non_interactive","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"oidc_logout":{}}
+            {"name":"Acceptance Test - Mobile - TestAccClientMobile","app_type":"non_interactive","oidc_conformant":true,"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"oidc_logout":{}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -453,13 +453,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 357.563709ms
+        duration: 345.836333ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -478,7 +478,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -488,13 +488,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.037166ms
+        duration: 371.887875ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -513,7 +513,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: GET
       response:
         proto: HTTP/2.0
@@ -523,13 +523,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - Mobile - TestAccClientMobile","client_id":"wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","mobile":{"android":{"app_package_name":"com.example","sha256_cert_fingerprints":["DE:AD:BE:EF","CA:DE:FF:AA"]},"ios":{"team_id":"1111111111","app_bundle_identifier":"com.my.auth0.bundle"}},"native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 363.084458ms
+        duration: 382.453834ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -548,7 +548,7 @@ interactions:
                 - application/json
             User-Agent:
                 - Go-Auth0/1.15.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/7t1PS7dxCkLX8gFRvU5sYrRVUL5eUyfu
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/wPL56OZaYQFu3WHW8lk3NgNvj5doCsyC
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -564,4 +564,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 433.958834ms
+        duration: 413.086833ms

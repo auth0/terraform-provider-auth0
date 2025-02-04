@@ -558,6 +558,16 @@ func flattenDefaultOrganization(defaultOrganization *management.ClientDefaultOrg
 	return []interface{}{do}
 }
 
+func flattenTokenExchange(tokenExchange *management.ClientTokenExchange) []interface{} {
+	te := make(map[string]interface{})
+
+	if tokenExchange != nil {
+		te["allow_any_profile_of_type"] = tokenExchange.AllowAnyProfileOfType
+	}
+
+	return []interface{}{te}
+}
+
 func flattenClient(data *schema.ResourceData, client *management.Client) error {
 	result := multierror.Append(
 		data.Set("client_id", client.GetClientID()),
@@ -597,6 +607,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("oidc_logout", flattenOIDCLogout(client.GetOIDCLogout())),
 		data.Set("require_pushed_authorization_requests", client.GetRequirePushedAuthorizationRequests()),
 		data.Set("default_organization", flattenDefaultOrganization(client.GetDefaultOrganization())),
+		data.Set("token_exchange", flattenTokenExchange(client.GetTokenExchange())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
 	)

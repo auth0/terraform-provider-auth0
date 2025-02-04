@@ -2,7 +2,6 @@ package client
 
 import (
 	"fmt"
-
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -50,6 +49,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
 		DefaultOrganization:                expandDefaultOrganization(data),
+		TokenExchange:                      expandTokenExchange(data),
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
@@ -109,6 +109,26 @@ func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefa
 	}
 
 	return &defaultOrg
+}
+
+func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExchange {
+	if !data.IsNewResource() && !data.HasChange("token_exchange") {
+		return nil
+	}
+	var tokenExchange management.ClientTokenExchange
+
+	config := data.GetRawConfig().GetAttr("token_exchange")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenExchange.AllowAnyProfileOfType = value.Strings(cfg.GetAttr("allow_any_profile_of_type"))
+		return stop
+	}) {
+		return nil
+	}
+	if tokenExchange == (management.ClientTokenExchange{}) {
+		return nil
+	}
+
+	return &tokenExchange
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {

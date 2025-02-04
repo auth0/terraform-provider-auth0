@@ -1,3 +1,10 @@
+## v1.11.1
+
+BUG FIXES:
+- `resource/auth0_client`: Add missing expand/flatten rules for `token_exchange` param ([#1145](https://github.com/auth0/terraform-provider-auth0/pull/1145/))
+- `resource/auth_action`: Add clause to support node18 action for `custom-token-exchange` trigger ([#1145](https://github.com/auth0/terraform-provider-auth0/pull/1145/))
+
+
 ## v1.11.0
 
 FEATURES:
@@ -7,6 +14,7 @@ FEATURES:
 ENHANCEMENTS:
 - `resource/auth0_client`: Add support to set `token_exchange` property for a client ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
 - `resource/auth0_connection`: Add support to set `authentication_methods` and `passkey_options` property for a connection ([#1099](https://github.com/auth0/terraform-provider-auth0/pull/1099))
+
 
 ## v1.10.0
 

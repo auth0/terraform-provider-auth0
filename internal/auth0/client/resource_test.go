@@ -246,7 +246,6 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),

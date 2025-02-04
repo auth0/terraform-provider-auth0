@@ -15,11 +15,6 @@ func flattenAction(data *schema.ResourceData, action *management.Action) error {
 		data.Set("runtime", action.GetRuntime()),
 	)
 
-	// If custom-token-exchange is part of SupportedTriggers for an action,
-	// we'd not manipulate it's runtime value.
-	// This is done, to support node18 as runtime.
-	// TODO: Remove this soon as node18 reaches EOL.
-
 	if action.GetRuntime() == "node18-actions" {
 		result = multierror.Append(result, data.Set("runtime", "node18"))
 	}

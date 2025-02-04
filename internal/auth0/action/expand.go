@@ -32,6 +32,9 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
+	// If custom-token-exchange is part of SupportedTriggers for an action,
+	// we'd not manipulate it's runtime value.
+	// This is done, to support node18 as runtime.
 	// TODO: Remove this soon as node18 reaches EOL.
 	if action.GetRuntime() == "node18" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
 		action.Runtime = auth0.String("node18-actions")

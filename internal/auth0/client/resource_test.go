@@ -58,7 +58,7 @@ const testAccCreateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
-
+	oidc_conformant = true
 	token_exchange {
 		allow_any_profile_of_type = ["custom_authentication"]
 	}
@@ -92,6 +92,11 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
+
 	mobile {
 		android {
 			app_package_name = "com.example"
@@ -121,6 +126,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	mobile {
 		android {
 			app_package_name = "com.example"
@@ -141,6 +150,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "non_interactive"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	native_social_login {
 		apple {
 			enabled = false
@@ -161,6 +174,7 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -181,6 +195,8 @@ func TestAccClientMobile(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUpdateMobileClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -202,6 +218,8 @@ func TestAccClientMobile(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUpdateMobileClientAgainByRemovingSomeFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -228,6 +246,7 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),

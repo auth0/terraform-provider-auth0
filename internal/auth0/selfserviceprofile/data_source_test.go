@@ -50,7 +50,7 @@ data "auth0_self_service_profile" "my_profile" {
 
 func TestSelfServiceDataSourceResourceRequiredId(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      testDataResourceWithoutID,

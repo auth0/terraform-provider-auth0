@@ -54,7 +54,7 @@ data "auth0_token_exchange_profile" "my_profile" {
 
 func TestTokenExchangeDataSourceResourceRequiredId(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      testDataResourceWithoutID,

@@ -38,7 +38,7 @@ data "auth0_clients" "first_party_apps" {
 
 ### Read-Only
 
-- `clients` (List of Object) List of clients matching the filter criteria. (see [below for nested schema](#nestedatt--clients))
+- `clients` (Set of Object) List of clients matching the filter criteria. (see [below for nested schema](#nestedatt--clients))
 - `id` (String) The ID of this resource.
 
 <a id="nestedatt--clients"></a>

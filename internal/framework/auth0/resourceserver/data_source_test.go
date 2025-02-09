@@ -58,7 +58,7 @@ const testAccDataResourceServerConfigByID = testAccGivenAResourceServerWithScope
 data "auth0_resource_server" "test" {
 	depends_on = [ auth0_resource_server_scopes.my_scopes ]
 
-	resource_server_id = auth0_resource_server.my_api.id
+	resource_server_id = auth0_resource_server.my_api.resource_server_id
 }
 `
 
@@ -68,19 +68,19 @@ data "auth0_resource_server" "auth0" {
 }
 `
 
-func TestAccDataSourceResourceServerRequiredArguments(t *testing.T) {
+func TestFrameworkDataSourceResourceServerRequiredArguments(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
-		ProviderFactories: acctest.TestFactories(),
+		ProtoV6ProviderFactories: acctest.TestProviderFactories(),
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_resource_server" "test" { }`,
-				ExpectError: regexp.MustCompile("one of `identifier,resource_server_id` must be specified"),
+				ExpectError: regexp.MustCompile("Invalid Attribute Combination"),
 			},
 		},
 	})
 }
 
-func TestAccDataSourceResourceServer(t *testing.T) {
+func TestAccFrameworkDataSourceResourceServer(t *testing.T) {
 	managementAPIIdentifier := "https://" + os.Getenv("AUTH0_DOMAIN") + "/api/v2/"
 
 	acctest.Test(t, resource.TestCase{
@@ -166,9 +166,9 @@ func TestAccDataSourceResourceServer(t *testing.T) {
 						"name":        "read:users",
 						"description": "Read Users",
 					}), // Checking just one to ensure that scopes are not empty, as they get expanded periodically.
-					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "verification_location", ""),
-					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "enforce_policies", "false"),
-					resource.TestCheckResourceAttr("data.auth0_resource_server.auth0", "token_dialect", ""),
+					resource.TestCheckNoResourceAttr("data.auth0_resource_server.auth0", "verification_location"),
+					resource.TestCheckNoResourceAttr("data.auth0_resource_server.auth0", "enforce_policies"),
+					resource.TestCheckNoResourceAttr("data.auth0_resource_server.auth0", "token_dialect"),
 				),
 			},
 		},

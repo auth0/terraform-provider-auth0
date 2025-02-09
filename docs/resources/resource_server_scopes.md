@@ -49,11 +49,10 @@ resource "auth0_resource_server_scopes" "my_api_scopes" {
 ### Required
 
 - `resource_server_identifier` (String) Identifier of the resource server that the scopes (permission) are associated with.
-- `scopes` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--scopes))
 
-### Read-Only
+### Optional
 
-- `id` (String) The ID of this resource.
+- `scopes` (Block Set) List of the scopes associated with a resource server. (see [below for nested schema](#nestedblock--scopes))
 
 <a id="nestedblock--scopes"></a>
 ### Nested Schema for `scopes`

@@ -27,7 +27,7 @@ func flattenCustomSocialConfiguration(customSocial *management.ClientNativeSocia
 		},
 		"google": []interface{}{
 			map[string]interface{}{
-				"enabled": customSocial.GetFacebook().GetEnabled(),
+				"enabled": customSocial.GetGoogle().GetEnabled(),
 			},
 		},
 	}

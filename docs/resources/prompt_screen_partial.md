@@ -31,7 +31,7 @@ resource "auth0_prompt_screen_partial" "login" {
 
 ### Required
 
-- `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
+- `prompt_type` (String) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`, `customized-consent`.
 - `screen_name` (String) The name of the screen associated with the partials
 
 ### Optional

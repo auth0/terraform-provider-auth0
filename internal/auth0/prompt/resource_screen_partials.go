@@ -20,6 +20,7 @@ var allowedPromptsWithPartials = []string{
 	string(management.PromptSignupID),
 	string(management.PromptSignupPassword),
 	string(management.PromptLoginPasswordLess),
+	string(management.PromptCustomizedConsent),
 }
 
 // NewScreenPartialsResource will return a new auth0_prompt_screen_partials (1:many) resource.

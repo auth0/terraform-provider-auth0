@@ -511,6 +511,7 @@ Optional:
 
 - `apple` (Block List, Max: 1) (see [below for nested schema](#nestedblock--native_social_login--apple))
 - `facebook` (Block List, Max: 1) (see [below for nested schema](#nestedblock--native_social_login--facebook))
+- `google` (Block List, Max: 1) (see [below for nested schema](#nestedblock--native_social_login--google))
 
 <a id="nestedblock--native_social_login--apple"></a>
 ### Nested Schema for `native_social_login.apple`
@@ -522,6 +523,14 @@ Optional:
 
 <a id="nestedblock--native_social_login--facebook"></a>
 ### Nested Schema for `native_social_login.facebook`
+
+Optional:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedblock--native_social_login--google"></a>
+### Nested Schema for `native_social_login.google`
 
 Optional:
 

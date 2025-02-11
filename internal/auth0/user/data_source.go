@@ -15,8 +15,9 @@ import (
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readUserForDataSource,
-		Description: "Data source to retrieve a specific Auth0 user by `user_id`.",
-		Schema:      dataSourceSchema(),
+		Description: "Data source to retrieve a specific Auth0 user by `user_id` or by `lucene query`. " +
+			"If filtered by Lucene Query, it should include sufficient filters to retrieve a unique user.",
+		Schema: dataSourceSchema(),
 	}
 }
 
@@ -97,6 +98,10 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		if err != nil {
 			return diag.FromErr(err)
 		}
+
+		// The data-source retrieves the roles and permissions for a user.
+		// Hence, it is important the search bottoms out to a single user.
+		// If multiple users are retrieved via Lucene Query, we prompt the user to add further filters.
 		if users.Length == 1 {
 			user = users.Users[0]
 			data.SetId(users.Users[0].GetID())
@@ -105,6 +110,7 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		}
 	}
 
+	// Populate Roles for the retrieved User.
 	var roles []*management.Role
 	var rolesPage int
 	for {
@@ -122,6 +128,7 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		rolesPage++
 	}
 
+	// Populate Permissions for the retrieved User.
 	var permissions []*management.Permission
 	var permissionsPage int
 	for {

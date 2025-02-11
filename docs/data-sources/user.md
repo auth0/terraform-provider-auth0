@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_user"
 description: |-
-  Data source to retrieve a specific Auth0 user by user_id.
+  Data source to retrieve a specific Auth0 user by user_id or by lucene query. If filtered by Lucene Query, it should include sufficient filters to retrieve a unique user.
 ---
 
 # Data Source: auth0_user
 
-Data source to retrieve a specific Auth0 user by `user_id`.
+Data source to retrieve a specific Auth0 user by `user_id` or by `lucene query`. If filtered by Lucene Query, it should include sufficient filters to retrieve a unique user.
 
 ## Example Usage
 

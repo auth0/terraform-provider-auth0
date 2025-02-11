@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 138
+        content_length: 205
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","app_type":"non_interactive"}
+            {"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","app_type":"non_interactive","token_endpoint_auth_method":"client_secret_post","oidc_logout":{}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
         method: POST
       response:
@@ -30,338 +30,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
+        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 450.056042ms
+        duration: 1.059188958s
     - id: 1
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pzZriljNXBNEaW9NSpRrborEYULX1dxK
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 111.988ms
-    - id: 2
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pzZriljNXBNEaW9NSpRrborEYULX1dxK
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 106.735084ms
-    - id: 3
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pzZriljNXBNEaW9NSpRrborEYULX1dxK
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 155.92225ms
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"total":4,"start":0,"limit":100,"clients":[{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Default App","callbacks":["http://localhost:8484"],"is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"Kqoad1upS7U9WL0TSASFuPMguc2Ttegh","callback_url_template":false,"client_secret":"7HpycYdsGe_6N5--QL3i9J77bn-1WyA1Aqv-ZAGK7F7X63ZVlKleZpPiUfTpXL8y","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Terraform Provider Auth0","is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":31557600,"idle_token_lifetime":2592000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"w1336KJwTZOudMX62U6xdeSTak3X2XpV","callback_url_template":false,"client_secret":"cw650tLZskdGmULHLcB2nLnRtOYifD7A1H2NEIhOO5Yc6H3H1oOMavufhVmSdfLV","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"token_endpoint_auth_method":"client_secret_post","app_type":"non_interactive","grant_types":["client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","is_first_party":true,"sso_disabled":false,"cross_origin_auth":false,"oidc_conformant":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","callback_url_template":false,"client_secret":"QGaxvptDQpRn2OmZ2Xtn635mzbXFXwH0SxX6Wm-4pcPkXHSo2i9pw-z7pfFA6FlC","jwt_configuration":{"lifetime_in_seconds":36000,"secret_encoded":false},"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":true,"callbacks":[],"is_first_party":true,"name":"All Applications","refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"owners":["mr|google-oauth2|102002633619863830825","mr|samlp|okta|will.vedder@auth0.com"],"custom_login_page":"<html><body>My Custom Login Page</body></html>","signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"o9HBfRCcqYIQmDQpaRIZAAQHCaTKdb1a","client_secret":"DiF90gv-nRqVxUxWXHxWVlXEvF5af7cn2fI359bJeONym7jEPk7rwRw7xy7NN_FD","custom_login_page_on":false}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 105.392958ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"total":4,"start":0,"limit":100,"clients":[{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Default App","callbacks":["http://localhost:8484"],"is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"Kqoad1upS7U9WL0TSASFuPMguc2Ttegh","callback_url_template":false,"client_secret":"7HpycYdsGe_6N5--QL3i9J77bn-1WyA1Aqv-ZAGK7F7X63ZVlKleZpPiUfTpXL8y","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Terraform Provider Auth0","is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":31557600,"idle_token_lifetime":2592000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"w1336KJwTZOudMX62U6xdeSTak3X2XpV","callback_url_template":false,"client_secret":"cw650tLZskdGmULHLcB2nLnRtOYifD7A1H2NEIhOO5Yc6H3H1oOMavufhVmSdfLV","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"token_endpoint_auth_method":"client_secret_post","app_type":"non_interactive","grant_types":["client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","is_first_party":true,"sso_disabled":false,"cross_origin_auth":false,"oidc_conformant":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","callback_url_template":false,"client_secret":"QGaxvptDQpRn2OmZ2Xtn635mzbXFXwH0SxX6Wm-4pcPkXHSo2i9pw-z7pfFA6FlC","jwt_configuration":{"lifetime_in_seconds":36000,"secret_encoded":false},"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":true,"callbacks":[],"is_first_party":true,"name":"All Applications","refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"owners":["mr|google-oauth2|102002633619863830825","mr|samlp|okta|will.vedder@auth0.com"],"custom_login_page":"<html><body>My Custom Login Page</body></html>","signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"o9HBfRCcqYIQmDQpaRIZAAQHCaTKdb1a","client_secret":"DiF90gv-nRqVxUxWXHxWVlXEvF5af7cn2fI359bJeONym7jEPk7rwRw7xy7NN_FD","custom_login_page_on":false}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 102.9585ms
-    - id: 6
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"total":4,"start":0,"limit":100,"clients":[{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Default App","callbacks":["http://localhost:8484"],"is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"Kqoad1upS7U9WL0TSASFuPMguc2Ttegh","callback_url_template":false,"client_secret":"7HpycYdsGe_6N5--QL3i9J77bn-1WyA1Aqv-ZAGK7F7X63ZVlKleZpPiUfTpXL8y","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Terraform Provider Auth0","is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":31557600,"idle_token_lifetime":2592000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"w1336KJwTZOudMX62U6xdeSTak3X2XpV","callback_url_template":false,"client_secret":"cw650tLZskdGmULHLcB2nLnRtOYifD7A1H2NEIhOO5Yc6H3H1oOMavufhVmSdfLV","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"token_endpoint_auth_method":"client_secret_post","app_type":"non_interactive","grant_types":["client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","is_first_party":true,"sso_disabled":false,"cross_origin_auth":false,"oidc_conformant":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","callback_url_template":false,"client_secret":"QGaxvptDQpRn2OmZ2Xtn635mzbXFXwH0SxX6Wm-4pcPkXHSo2i9pw-z7pfFA6FlC","jwt_configuration":{"lifetime_in_seconds":36000,"secret_encoded":false},"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":true,"callbacks":[],"is_first_party":true,"name":"All Applications","refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"owners":["mr|google-oauth2|102002633619863830825","mr|samlp|okta|will.vedder@auth0.com"],"custom_login_page":"<html><body>My Custom Login Page</body></html>","signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"o9HBfRCcqYIQmDQpaRIZAAQHCaTKdb1a","client_secret":"DiF90gv-nRqVxUxWXHxWVlXEvF5af7cn2fI359bJeONym7jEPk7rwRw7xy7NN_FD","custom_login_page_on":false}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 116.58375ms
-    - id: 7
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pzZriljNXBNEaW9NSpRrborEYULX1dxK
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 113.528167ms
-    - id: 8
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"total":4,"start":0,"limit":100,"clients":[{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Default App","callbacks":["http://localhost:8484"],"is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"Kqoad1upS7U9WL0TSASFuPMguc2Ttegh","callback_url_template":false,"client_secret":"7HpycYdsGe_6N5--QL3i9J77bn-1WyA1Aqv-ZAGK7F7X63ZVlKleZpPiUfTpXL8y","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Terraform Provider Auth0","is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":31557600,"idle_token_lifetime":2592000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"w1336KJwTZOudMX62U6xdeSTak3X2XpV","callback_url_template":false,"client_secret":"cw650tLZskdGmULHLcB2nLnRtOYifD7A1H2NEIhOO5Yc6H3H1oOMavufhVmSdfLV","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"token_endpoint_auth_method":"client_secret_post","app_type":"non_interactive","grant_types":["client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","is_first_party":true,"sso_disabled":false,"cross_origin_auth":false,"oidc_conformant":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","callback_url_template":false,"client_secret":"QGaxvptDQpRn2OmZ2Xtn635mzbXFXwH0SxX6Wm-4pcPkXHSo2i9pw-z7pfFA6FlC","jwt_configuration":{"lifetime_in_seconds":36000,"secret_encoded":false},"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":true,"callbacks":[],"is_first_party":true,"name":"All Applications","refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"owners":["mr|google-oauth2|102002633619863830825","mr|samlp|okta|will.vedder@auth0.com"],"custom_login_page":"<html><body>My Custom Login Page</body></html>","signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"o9HBfRCcqYIQmDQpaRIZAAQHCaTKdb1a","client_secret":"DiF90gv-nRqVxUxWXHxWVlXEvF5af7cn2fI359bJeONym7jEPk7rwRw7xy7NN_FD","custom_login_page_on":false}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 112.319834ms
-    - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"total":4,"start":0,"limit":100,"clients":[{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Default App","callbacks":["http://localhost:8484"],"is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"Kqoad1upS7U9WL0TSASFuPMguc2Ttegh","callback_url_template":false,"client_secret":"7HpycYdsGe_6N5--QL3i9J77bn-1WyA1Aqv-ZAGK7F7X63ZVlKleZpPiUfTpXL8y","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Terraform Provider Auth0","is_first_party":true,"oidc_conformant":true,"sso_disabled":false,"cross_origin_auth":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":31557600,"idle_token_lifetime":2592000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"w1336KJwTZOudMX62U6xdeSTak3X2XpV","callback_url_template":false,"client_secret":"cw650tLZskdGmULHLcB2nLnRtOYifD7A1H2NEIhOO5Yc6H3H1oOMavufhVmSdfLV","jwt_configuration":{"alg":"RS256","lifetime_in_seconds":36000,"secret_encoded":false},"token_endpoint_auth_method":"client_secret_post","app_type":"non_interactive","grant_types":["client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":false,"is_token_endpoint_ip_header_trusted":false,"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","is_first_party":true,"sso_disabled":false,"cross_origin_auth":false,"oidc_conformant":false,"refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"pzZriljNXBNEaW9NSpRrborEYULX1dxK","callback_url_template":false,"client_secret":"QGaxvptDQpRn2OmZ2Xtn635mzbXFXwH0SxX6Wm-4pcPkXHSo2i9pw-z7pfFA6FlC","jwt_configuration":{"lifetime_in_seconds":36000,"secret_encoded":false},"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true},{"tenant":"terraform-provider-auth0-dev","global":true,"callbacks":[],"is_first_party":true,"name":"All Applications","refresh_token":{"expiration_type":"non-expiring","leeway":0,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"token_lifetime":2592000,"idle_token_lifetime":1296000,"rotation_type":"non-rotating"},"owners":["mr|google-oauth2|102002633619863830825","mr|samlp|okta|will.vedder@auth0.com"],"custom_login_page":"<html><body>My Custom Login Page</body></html>","signing_keys":[{"cert":"-----BEGIN CERTIFICATE-----\r\nMIIDOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNV\r\nBAMTL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAu\r\nY29tMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMv\r\ndGVycmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20w\r\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1\r\njRX+qmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+\r\nWqS1F+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJ\r\no2Fwzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0K\r\nmFhw1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv\r\n/qLxKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCen\r\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq\r\n1eNX7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7\r\npOEYJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qc\r\ngyr4YaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPkn\r\nPJ6GL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4\r\nXxjtjA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d\r\n03TE9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YI\r\nM3F9PniaChrQ1vBAZg==\r\n-----END CERTIFICATE-----","pkcs7":"-----BEGIN PKCS7-----\r\nMIIDaAYJKoZIhvcNAQcCoIIDWTCCA1UCAQExADALBgkqhkiG9w0BBwGgggM9MIID\r\nOTCCAiGgAwIBAgIJXhd78QwsLiPkMA0GCSqGSIb3DQEBCwUAMDoxODA2BgNVBAMT\r\nL3RlcnJhZm9ybS1wcm92aWRlci1hdXRoMC1lMmUtdGVzdHMuZXUuYXV0aDAuY29t\r\nMB4XDTIzMDYxNTEwMjAyOFoXDTM3MDIyMTEwMjAyOFowOjE4MDYGA1UEAxMvdGVy\r\ncmFmb3JtLXByb3ZpZGVyLWF1dGgwLWUyZS10ZXN0cy5ldS5hdXRoMC5jb20wggEi\r\nMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDIDz7FwcVudBg6L1fWZun1jRX+\r\nqmzb53asskZE3HpI2PiVneNLSuMVmW8ciStiOHsPfCkFTStKXWRTA/6TN3i+WqS1\r\nF+7Ixuvsu2zGzdzgwEXb+nzWe7Q5+u3C/tDA9HX9rcef6S0hoRWyMY/4ObOJo2Fw\r\nzq7x/IKRaUy5R6/pTyRPUnFm+SqvJWSfu+5ah+aSuj/mxaGmugW8ueWxFS0KmFhw\r\n1DmhsjHKIo4Jrb3b5Ohqr2xbKG/zLdJfkHYZowhutReRfdzCjRd/t/cud+Iv/qLx\r\nKR0CluxvpjAmyw1bYtNP4OxVry3iXEq/Yh4gqnSpx/uVmmSLYh9Ks37rUCenAgMB\r\nAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFOAcj8ZDWthLndbq1eNX\r\n7sEvZ9ycMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAAxj7pOEY\r\nJdJrd5DPnF7W6/4XA48AgxqIzReZbL6ykXqlqnxgKRWqIdsLA0Wf1N3aO7qcgyr4\r\nYaqS63P6X4Fmn00/PR6AiqLLbs+s0dIjItUu7KtkHB9EOHtMKoEw8jzRcPknPJ6G\r\nL0VcpzJTXGQasdXIxPl0gbvjfeAFKVmlVXQo6HhCAy0hblSCQop3R7hjZrB4Xxjt\r\njA8N3L7VlQMI781vTV1fhuATOSu3Nkg3UHBReMK9JtzybfTKZFHK7vwuJs6d03TE\r\n9Ll45Nyy5O+P+1HOb+R0tFpk17dC8PSBZukw0WWdN8gZxnnajZeDaiorN0YIM3F9\r\nPniaChrQ1vBAZjEA\r\n-----END PKCS7-----\r\n","subject":"deprecated"}],"client_id":"o9HBfRCcqYIQmDQpaRIZAAQHCaTKdb1a","client_secret":"DiF90gv-nRqVxUxWXHxWVlXEvF5af7cn2fI359bJeONym7jEPk7rwRw7xy7NN_FD","custom_login_page_on":false}]}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 137.54725ms
-    - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -378,8 +54,253 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pzZriljNXBNEaW9NSpRrborEYULX1dxK
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 431.166834ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 729.776792ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 509.105792ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":100,"length":0,"total":9,"next":"","clients":[{"name":"terraform-e2e-auth0","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}},{"name":"API Explorer Application","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"organization_usage":"allow"},{"name":"CTE Demo","client_id":"5Ra4gVS4JuTFjuJYkhwIcRcfZIAIT2N0","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","client_id":"xl774jhA7nyg0mlNYb6RFdybfgDFULKD","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"test-client-223","client_id":"tEQ9i0TSqyblOJAb0LD8WvpgxnGf4Kn1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client-223","client_id":"VfXAisN0UNJalKZNSWEtUd5nE3NhqnYT","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","description":"hello","client_id":"VkLpDwBPhbZO0rS8WgwPQUv5rsL4cqZy","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}},{"name":"All Applications","client_id":"B28zWMhmmwnIIG4Sfgnupe8BtKcOaA8D","client_secret":"[REDACTED]","is_first_party":true,"callbacks":[],"signing_keys":[{"cert":"[REDACTED]"}],"cross_origin_authentication":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.036616125s
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":100,"length":0,"total":9,"next":"","clients":[{"name":"terraform-e2e-auth0","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}},{"name":"API Explorer Application","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"organization_usage":"allow"},{"name":"CTE Demo","client_id":"5Ra4gVS4JuTFjuJYkhwIcRcfZIAIT2N0","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","client_id":"xl774jhA7nyg0mlNYb6RFdybfgDFULKD","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"test-client-223","client_id":"tEQ9i0TSqyblOJAb0LD8WvpgxnGf4Kn1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client-223","client_id":"VfXAisN0UNJalKZNSWEtUd5nE3NhqnYT","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","description":"hello","client_id":"VkLpDwBPhbZO0rS8WgwPQUv5rsL4cqZy","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}},{"name":"All Applications","client_id":"B28zWMhmmwnIIG4Sfgnupe8BtKcOaA8D","client_secret":"[REDACTED]","is_first_party":true,"callbacks":[],"signing_keys":[{"cert":"[REDACTED]"}],"cross_origin_authentication":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 896.186375ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 376.54ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":100,"length":0,"total":9,"next":"","clients":[{"name":"terraform-e2e-auth0","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000}},{"name":"API Explorer Application","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"callbacks":[],"client_aliases":[],"allowed_clients":[],"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":true,"grant_types":["client_credentials","urn:openid:params:grant-type:ciba"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","native_social_login":{"apple":{"enabled":false},"facebook":{"enabled":false}},"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"organization_usage":"allow"},{"name":"CTE Demo","client_id":"5Ra4gVS4JuTFjuJYkhwIcRcfZIAIT2N0","client_secret":"[REDACTED]","app_type":"regular_web","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"alg":"RS256","lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","client_id":"xl774jhA7nyg0mlNYb6RFdybfgDFULKD","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"test-client-223","client_id":"tEQ9i0TSqyblOJAb0LD8WvpgxnGf4Kn1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client-223","client_id":"VfXAisN0UNJalKZNSWEtUd5nE3NhqnYT","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":true,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"token_exchange":{"allow_any_profile_of_type":["custom_authentication"]}},{"name":"test-client","description":"hello","client_id":"VkLpDwBPhbZO0rS8WgwPQUv5rsL4cqZy","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}},{"name":"Acceptance Test - TestAccDataClientByName","description":"Description for TestAccDataClientByName","client_id":"h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}},{"name":"All Applications","client_id":"B28zWMhmmwnIIG4Sfgnupe8BtKcOaA8D","client_secret":"[REDACTED]","is_first_party":true,"callbacks":[],"signing_keys":[{"cert":"[REDACTED]"}],"cross_origin_authentication":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000}}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 531.399625ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/h3CRWhAAu2qfA1z3bq12WKMxc9OiueC1
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -395,4 +316,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 236.649542ms
+        duration: 439.652584ms

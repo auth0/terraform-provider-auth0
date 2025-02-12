@@ -99,8 +99,9 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 			return diag.FromErr(err)
 		}
 
-		// The data-source retrieves the roles and permissions for a user.
-		// Hence, it is important the search bottoms out to a single user.
+		// The data-source retrieves the details about a user along with roles and permissions.
+		// The roles and permissions are slices.
+		// Hence, it is important that the search bottoms out to a single user.
 		// If multiple users are retrieved via Lucene Query, we prompt the user to add further filters.
 		if users.Length == 1 {
 			user = users.Users[0]

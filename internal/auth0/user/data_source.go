@@ -99,14 +99,17 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 			return diag.FromErr(err)
 		}
 
-		// The data-source retrieves the details about a user along with roles and permissions.
-		// The roles and permissions are slices.
-		// Hence, it is important that the search bottoms out to a single user.
-		// If multiple users are retrieved via Lucene Query, we prompt the user to add further filters.
-		if users.Length == 1 {
+		switch users.Length {
+		case 0:
+			return diag.Errorf("No users found. Note: if a user was just created/deleted, it takes some time for it to be indexed.")
+		case 1:
+			// The data-source retrieves the details about a user along with roles and permissions.
+			// The roles and permissions are slices.
+			// Hence, it is important that the search bottoms out to a single user.
+			// If multiple users are retrieved via Lucene Query, we prompt the user to add further filters.
 			user = users.Users[0]
 			data.SetId(users.Users[0].GetID())
-		} else {
+		default:
 			return diag.Errorf("Further improve the query to retrieve a single user from the query")
 		}
 	}

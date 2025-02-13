@@ -2,7 +2,6 @@ package branding
 
 import (
 	"context"
-	"fmt"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -33,15 +32,12 @@ func readPhoneProviderForDataSource(ctx context.Context, data *schema.ResourceDa
 	api := meta.(*config.Config).GetAPI()
 
 	phoneProviderID := data.Get("id").(string)
-
-	fmt.Println(phoneProviderID)
+	data.SetId(phoneProviderID)
 
 	phoneProviderConfig, err := api.Branding.ReadPhoneProvider(ctx, phoneProviderID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
-	fmt.Println(phoneProviderConfig)
 
 	return diag.FromErr(flattenPhoneProvider(data, phoneProviderConfig))
 }

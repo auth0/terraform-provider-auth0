@@ -82,6 +82,8 @@ Read-Only:
 - `from` (String)
 - `gateway_authentication` (List of Object) (see [below for nested schema](#nestedobjatt--options--gateway_authentication))
 - `gateway_url` (String)
+- `global_token_revocation_jwt_iss` (String)
+- `global_token_revocation_jwt_sub` (String)
 - `icon_url` (String)
 - `identity_api` (String)
 - `idp_initiated` (List of Object) (see [below for nested schema](#nestedobjatt--options--idp_initiated))

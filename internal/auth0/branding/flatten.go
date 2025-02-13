@@ -1,6 +1,7 @@
 package branding
 
 import (
+	"fmt"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -178,4 +179,46 @@ func flattenBrandingThemeWidget(widget management.BrandingThemeWidget) []interfa
 	}
 
 	return []interface{}{m}
+}
+
+func flattenPhoneProvider(data *schema.ResourceData, phoneProvider *management.BrandingPhoneProvider) error {
+	result := multierror.Append(
+		data.Set("name", phoneProvider.GetName()),
+		data.Set("disabled", phoneProvider.GetDisabled()),
+		//data.Set("credentials", flattenPhoneProviderCredentials(data, phoneProvider.GetName())),
+		data.Set("configuration", flattenPhoneProviderConfiguration(phoneProvider.Configuration)),
+		//data.Set("tenant", phoneProvider.GetTenant()),
+		//data.Set("channel", phoneProvider.GetChannel()),
+	)
+
+	fmt.Println(result)
+
+	return result.ErrorOrNil()
+}
+
+func flattenPhoneProviderConfiguration(configuration *management.BrandingPhoneProviderConfiguration) []interface{} {
+	return []interface{}{
+		map[string]interface{}{
+			"delivery_methods": configuration.GetDeliveryMethods(),
+			"sid":              configuration.GetSID(),
+			"mssid":            configuration.GetMSSID(),
+			"default_from":     configuration.GetDefaultFrom(),
+		},
+	}
+}
+
+func flattenPhoneProviderCredentials(data *schema.ResourceData, name string) []interface{} {
+	var credentials []interface{}
+
+	if name == "twilio" {
+		credentials = []interface{}{
+			map[string]interface{}{
+				"auth_token": data.Get("credentials.0.auth_token").(string),
+			},
+		}
+	} else {
+		credentials = nil
+	}
+
+	return credentials
 }

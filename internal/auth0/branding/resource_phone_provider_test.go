@@ -18,8 +18,7 @@ resource "auth0_phone_provider" "phone_provider_config" {
     configuration {
         delivery_methods = ["text","voice"]
         default_from = "+1234567890"
-        sid = "AC12XXXXXXXXXXXXXXXXXXXXXX"
-
+        sid = "sid1"
     }
 }
 `
@@ -35,7 +34,7 @@ resource "auth0_phone_provider" "phone_provider_config" {
     configuration {
         delivery_methods = ["text"]
         default_from = "+1234567890"
-        sid = "AC13XXXXXXXXXXXXXXXXXXXXXX"
+        sid = "sid2"
 
     }
 }
@@ -51,7 +50,7 @@ func TestAccCheckPhoneProvider(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.delivery_methods.#", "2"),
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.default_from", "+1234567890"),
-					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.sid", "AC12XXXXXXXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.sid", "sid1"),
 				),
 			},
 			{
@@ -61,7 +60,7 @@ func TestAccCheckPhoneProvider(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.delivery_methods.#", "1"),
 					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.default_from", "+1234567890"),
-					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.sid", "AC13XXXXXXXXXXXXXXXXXXXXXX"),
+					resource.TestCheckResourceAttr("auth0_phone_provider.phone_provider_config", "configuration.0.sid", "sid2"),
 				),
 			},
 		},

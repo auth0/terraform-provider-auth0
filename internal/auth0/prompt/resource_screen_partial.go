@@ -46,6 +46,11 @@ func NewScreenPartialResource() *schema.Resource {
 				Description: "The insertion points for the partials.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"form_content": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Content that goes inside the form",
+						},
 						"form_content_start": {
 							Type:        schema.TypeString,
 							Optional:    true,

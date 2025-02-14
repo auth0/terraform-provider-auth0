@@ -59,6 +59,11 @@ func NewScreenPartialsResource() *schema.Resource {
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+									"form_content": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Content that goes inside the form",
+									},
 									"form_content_start": {
 										Type:        schema.TypeString,
 										Optional:    true,

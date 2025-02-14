@@ -20,6 +20,7 @@ resource "auth0_prompt_screen_partial" "login" {
   prompt_type = "login"
   screen_name = "login"
   insertion_points {
+    form_content       = "<div>Form Content</div>"
     form_content_start = "<div>Form Content Start</div>"
     form_content_end   = "<div>Form Content End</div>"
   }
@@ -47,6 +48,7 @@ resource "auth0_prompt_screen_partial" "login" {
 
 Optional:
 
+- `form_content` (String) Content that goes inside the form
 - `form_content_end` (String) Content that goes at the end of the form.
 - `form_content_start` (String) Content that goes at the start of the form.
 - `form_footer_end` (String) Footer content for the end of the footer.

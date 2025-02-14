@@ -6,7 +6,7 @@ toolchain go1.22.5
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
-	github.com/auth0/go-auth0 v1.16.1-0.20250212051907-88b14d38822d
+	github.com/auth0/go-auth0 v1.16.1-0.20250214081046-f1ba443b8ace
 	github.com/google/go-cmp v0.6.0
 	github.com/hashicorp/go-cty v1.4.1-0.20200414143053-d3edf31b6320
 	github.com/hashicorp/go-multierror v1.1.1

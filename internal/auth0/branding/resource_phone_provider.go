@@ -2,13 +2,14 @@ package branding
 
 import (
 	"context"
-	"fmt"
+
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
 var supportedDeliveryMethods = []string{"voice", "text"}
@@ -107,37 +108,16 @@ func NewPhoneProviderResource() *schema.Resource {
 							RequiredWith: []string{"configuration.0.default_from"},
 						},
 					},
-					//CustomizeDiff: validateDefaultFromAndSID,
 				},
 			},
 		},
 	}
 }
 
-func validateDefaultFromAndSID(ctx context.Context, diff *schema.ResourceDiff, meta interface{}) error {
-	isUpdate := diff.Id() != "" // If ID exists, it's an update
-	_, defaultFromExists := diff.GetOk("default_from")
-	_, sidExists := diff.GetOk("sid")
-
-	if !isUpdate {
-		// Create validation
-		if (defaultFromExists && !sidExists) || (!defaultFromExists && sidExists) {
-			return fmt.Errorf("'default_from' and 'sid' must either be both set or both omitted")
-		}
-	} else {
-		// Update validation
-		if diff.HasChange("default_from") && !sidExists {
-			return fmt.Errorf("'sid' is required when updating 'default_from'")
-		}
-	}
-
-	return nil
-}
-
 func createPhoneProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if id, isConfigured := PhoneProviderIsConfigured(ctx, api); isConfigured {
+	if id, isConfigured := phoneProviderIsConfigured(ctx, api); isConfigured {
 		data.SetId(id)
 		return updatePhoneProvider(ctx, data, meta)
 	}
@@ -186,7 +166,7 @@ func deletePhoneProvider(ctx context.Context, data *schema.ResourceData, meta in
 	return nil
 }
 
-func PhoneProviderIsConfigured(ctx context.Context, api *management.Management) (string, bool) {
+func phoneProviderIsConfigured(ctx context.Context, api *management.Management) (string, bool) {
 	phoneProviders, _ := api.Branding.ListPhoneProviders(ctx)
 
 	if len(phoneProviders.Providers) > 0 {

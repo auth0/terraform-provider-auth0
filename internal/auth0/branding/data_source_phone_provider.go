@@ -2,10 +2,12 @@ package branding
 
 import (
 	"context"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
-	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/config"
+	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
 // NewPhoneProviderDataSource creates a new auth0_phone_provider data source.

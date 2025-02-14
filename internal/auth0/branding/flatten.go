@@ -205,9 +205,7 @@ func flattenPhoneProviderConfiguration(configuration *management.BrandingPhonePr
 }
 
 func flattenPhoneProviderCredentials(data *schema.ResourceData) []interface{} {
-	var credentials []interface{}
-
-	credentials = []interface{}{
+	credentials := []interface{}{
 		map[string]interface{}{
 			"auth_token": data.Get("credentials.0.auth_token").(string),
 		},

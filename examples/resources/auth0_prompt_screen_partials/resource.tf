@@ -17,3 +17,14 @@ resource "auth0_prompt_screen_partials" "prompt_screen_partials" {
     }
   }
 }
+
+resource "auth0_prompt_screen_partials" "customized-consent" {
+  prompt_type = "customized-consent"
+  screen_partials {
+    screen_name = "customized-consent"
+    insertion_points {
+      form_content = "<div>Form Content</div>"
+    }
+  }
+}
+

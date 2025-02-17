@@ -28,6 +28,9 @@ var (
 		string(management.PromptEmailIdentifierChallenge),
 		string(management.PromptPasskeys),
 		string(management.PromptCaptcha),
+		string(management.PromptLogin),
+		string(management.PromptSignup),
+		string(management.PromptResetPassword),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -42,6 +45,13 @@ var (
 		string(management.ScreenPasskeyEnrollment),
 		string(management.ScreenPasskeyEnrollmentLocal),
 		string(management.ScreenInterstitialCaptcha),
+		string(management.ScreenLogin),
+		string(management.ScreenSignup),
+		string(management.ScreenResetPasswordRequest),
+		string(management.ScreenResetPasswordEmail),
+		string(management.ScreenResetPassword),
+		string(management.ScreenResetPasswordSuccess),
+		string(management.ScreenResetPasswordError),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

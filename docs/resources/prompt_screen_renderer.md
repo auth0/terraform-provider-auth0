@@ -33,8 +33,7 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
     "untrusted_data.authorization_params.login_hint",
     "untrusted_data.authorization_params.screen_hint",
     "untrusted_data.authorization_params.ui_locales",
-    "untrusted_data.authorization_params.ext-.key",
-    "transaction.connection.metadata.key"
+    "untrusted_data.authorization_params.ext-key",
   ]
   head_tags = jsonencode([
     {
@@ -57,8 +56,8 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
 ### Required
 
-- `prompt_type` (String) The prompt that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkeys`, `captcha`.
-- `screen_name` (String) The screen that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkey-enrollment`, `passkey-enrollment-local`, `interstitial-captcha`.
+- `prompt_type` (String) The prompt that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkeys`, `captcha`, `login`, `signup`, `reset-password`.
+- `screen_name` (String) The screen that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkey-enrollment`, `passkey-enrollment-local`, `interstitial-captcha`, `login`, `signup`, `reset-password-request`, `reset-password-email`, `reset-password`, `reset-password-success`, `reset-password-error`.
 
 ### Optional
 

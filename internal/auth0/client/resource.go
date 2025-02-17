@@ -378,6 +378,20 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"google": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1314,6 +1328,22 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_exchange": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Allows configuration for token exchange",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"allow_any_profile_of_type": {
+							Required:    true,
+							Type:        schema.TypeList,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "List of allowed profile types for token exchange",
+						},
+					},
+				},
+			},
 			"compliance_level": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -1330,6 +1360,7 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1384,6 +1415,8 @@ func createClient(ctx context.Context, data *schema.ResourceData, meta interface
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
+
+	time.Sleep(800 * time.Millisecond)
 
 	data.SetId(client.GetClientID())
 	return readClient(ctx, data, meta)

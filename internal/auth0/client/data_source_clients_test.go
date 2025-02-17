@@ -10,14 +10,16 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccGivenSomeClients = `
+const testAccGivenOneClient = `
 resource "auth0_client" "my_client_1" {
     name = "Acceptance Test 1 - {{.testName}}"
     app_type = "non_interactive"
 		is_first_party = true
     description = "Description for client 1 {{.testName}}"
 }
+`
 
+const testAccGivenSomeClients = testAccGivenOneClient + `
 resource "auth0_client" "my_client_2" {
     name = "Acceptance Test 2 - {{.testName}}"
     app_type = "spa"
@@ -75,6 +77,12 @@ func TestAccDataClients(t *testing.T) {
 				ExpectError: regexp.MustCompile(
 					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
 				),
+			},
+			{
+				// We had to split this into two separate posts to work around an issue
+				// in the test recording library. We need to add X-Request-Id header to the POST requests
+				// to fix this, and make sure that go-vcr uses that to match requests.
+				Config: acctest.ParseTestName(testAccGivenOneClient, t.Name()),
 			},
 			{
 				Config: acctest.ParseTestName(testAccGivenSomeClients, t.Name()),

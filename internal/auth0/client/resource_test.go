@@ -85,7 +85,7 @@ resource "auth0_client" "my_client" {
 		}
 
 		google {
-			enabled = false
+			enabled = true
 		}
 	}
 }
@@ -123,7 +123,7 @@ resource "auth0_client" "my_client" {
 		}
 
 		google {
-			enabled = true
+			enabled = false
 		}
 	}
 }
@@ -198,7 +198,7 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "true"),
 				),
 			},
 			{
@@ -223,7 +223,7 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 			{

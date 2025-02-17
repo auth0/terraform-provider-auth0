@@ -43,6 +43,7 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		BaseFocusColor:          &baseFocusColor,
 		BaseHoverColor:          &baseHoverColor,
 		BodyText:                data.Get("colors.0.body_text").(string),
+		CaptchaWidgetTheme:      data.Get("colors.0.captcha_widget_theme").(string),
 		Error:                   data.Get("colors.0.error").(string),
 		Header:                  data.Get("colors.0.header").(string),
 		Icons:                   data.Get("colors.0.icons").(string),

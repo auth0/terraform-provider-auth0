@@ -95,6 +95,9 @@ func flattenInsertionPoints(insertionPoints map[management.InsertionPoint]string
 
 	flattened := make(map[string]interface{})
 
+	if v, exists := insertionPoints[management.InsertionPointFormContent]; exists {
+		flattened["form_content"] = v
+	}
 	if v, exists := insertionPoints[management.InsertionPointFormContentStart]; exists {
 		flattened["form_content_start"] = v
 	}

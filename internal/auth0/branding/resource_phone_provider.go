@@ -68,14 +68,14 @@ func NewPhoneProviderResource() *schema.Resource {
 						},
 					},
 				},
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					providerName := d.Get("name").(string) // Get another field's value
-					// For "twilio", allow changes only if the value has actually changed
+				DiffSuppressFunc: func(_, old, new string, d *schema.ResourceData) bool {
+					providerName := d.Get("name").(string) // Get another field's value.
+					// For "twilio", allow changes only if the value has actually changed.
 					if providerName == "twilio" && d.HasChange("auth_token") {
-						return false // Allow the diff if the auth_token has actually changed
+						return false // Allow the diff if the auth_token has actually changed.
 					}
 
-					return true // Allow changes otherwise
+					return true // Allow changes otherwise.
 				},
 			},
 			"configuration": {

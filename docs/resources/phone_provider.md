@@ -57,7 +57,7 @@ resource "auth0_action" "send_custom_phone" {
 resource "auth0_phone_provider" "custom_phone_provider" {
   depends_on = [auth0_action.send_custom_phone] # Ensure the action is created first with `custom-phone-provider` as the supported_triggers
   name       = "custom"                         # Indicates a custom implementation
-  disabled   = false                            # Disable the default email provider
+  disabled   = false                            # Disable the default phone provider
   configuration {
     delivery_methods = ["text", "voice"]
   }

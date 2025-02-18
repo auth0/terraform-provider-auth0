@@ -47,7 +47,7 @@ resource "auth0_phone_provider" "phone_provider" {
 
 data "auth0_phone_provider" "phone_provider" {
 	depends_on = [auth0_phone_provider.phone_provider]
-    id = "${auth0_phone_provider.phone_provider.id}"
+    id = auth0_phone_provider.phone_provider.id
 }
 `
 

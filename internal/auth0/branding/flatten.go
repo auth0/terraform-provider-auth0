@@ -206,17 +206,15 @@ func flattenPhoneProviderConfiguration(configuration *management.BrandingPhonePr
 }
 
 func flattenPhoneProviderCredentials(data *schema.ResourceData, name string) []interface{} {
-	var credentials []interface{}
+	authToken := data.Get("credentials.0.auth_token").(string)
 
-	if name == "twilio" {
-		credentials = []interface{}{
-			map[string]interface{}{
-				"auth_token": data.Get("credentials.0.auth_token").(string),
-			},
-		}
-	} else {
-		credentials = nil
+	if name == "custom" {
+		authToken = ""
 	}
 
-	return credentials
+	return []interface{}{
+		map[string]interface{}{
+			"auth_token": authToken,
+		},
+	}
 }

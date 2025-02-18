@@ -26,6 +26,7 @@ resource "auth0_branding_theme" "my_theme" {
 		base_focus_color = "#635dff"
 		base_hover_color = "#000000"
 		body_text = "#FF00CC"
+		captcha_widget_theme = "auto"
 		error = "#FF00CC"
 		header = "#FF00CC"
 		icons = "#FF00CC"
@@ -119,6 +120,7 @@ func TestAccDataSourceBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.base_focus_color", "#635dff"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.base_hover_color", "#000000"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.body_text", "#FF00CC"),
+					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.captcha_widget_theme", "auto"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.error", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.header", "#FF00CC"),
 					resource.TestCheckResourceAttr("data.auth0_branding_theme.test", "colors.0.icons", "#FF00CC"),

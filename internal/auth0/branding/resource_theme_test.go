@@ -41,6 +41,7 @@ resource "auth0_branding_theme" "my_theme" {
 
 	colors {
 		body_text = "#FF00CC"
+		captcha_widget_theme = "auto"
 		error = "#FF00CC"
 		header = "#FF00CC"
 		icons = "#FF00CC"
@@ -128,8 +129,8 @@ resource "auth0_branding_theme" "my_theme" {
 	colors {
 		base_focus_color = "#BBBBBB"
 		base_hover_color = "#CCCCCC"
-
 		body_text = "#00FF00"
+		captcha_widget_theme = "dark"
 		error = "#00FF00"
 		header = "#00FF00"
 		icons = "#00FF00"
@@ -220,6 +221,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_focus_color", "#635dff"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_hover_color", "#000000"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.body_text", "#1e212a"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.captcha_widget_theme", "auto"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.error", "#d03c38"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.header", "#1e212a"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.icons", "#65676e"),
@@ -284,6 +286,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "borders.0.widget_corner_radius", "3.57"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.#", "1"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.body_text", "#FF00CC"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.captcha_widget_theme", "auto"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.error", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.header", "#FF00CC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.icons", "#FF00CC"),
@@ -351,6 +354,7 @@ func TestAccBrandingTheme(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_focus_color", "#BBBBBB"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.base_hover_color", "#CCCCCC"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.body_text", "#00FF00"),
+					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.captcha_widget_theme", "dark"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.error", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.header", "#00FF00"),
 					resource.TestCheckResourceAttr("auth0_branding_theme.my_theme", "colors.0.icons", "#00FF00"),

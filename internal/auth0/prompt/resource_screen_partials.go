@@ -20,6 +20,7 @@ var allowedPromptsWithPartials = []string{
 	string(management.PromptSignupID),
 	string(management.PromptSignupPassword),
 	string(management.PromptLoginPasswordLess),
+	string(management.PromptCustomizedConsent),
 }
 
 // NewScreenPartialsResource will return a new auth0_prompt_screen_partials (1:many) resource.
@@ -58,6 +59,11 @@ func NewScreenPartialsResource() *schema.Resource {
 							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+									"form_content": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Content that goes inside the form",
+									},
 									"form_content_start": {
 										Type:        schema.TypeString,
 										Optional:    true,

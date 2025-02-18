@@ -272,6 +272,7 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 	nativeSocialLoginConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		nativeSocialLogin.Apple = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("apple"))
 		nativeSocialLogin.Facebook = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("facebook"))
+		nativeSocialLogin.Google = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("google"))
 		return stop
 	})
 

@@ -74,6 +74,9 @@ func expandInsertionPoints(insertionPointsList []cty.Value) map[management.Inser
 	for _, insertionPoint := range insertionPointsList {
 		insertionPointMap := insertionPoint.AsValueMap()
 
+		if v := insertionPointMap["form_content"]; !v.IsNull() {
+			insertionPoints[management.InsertionPointFormContent] = v.AsString()
+		}
 		if v := insertionPointMap["form_content_start"]; !v.IsNull() {
 			insertionPoints[management.InsertionPointFormContentStart] = v.AsString()
 		}

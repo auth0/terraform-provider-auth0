@@ -1,12 +1,12 @@
 ---
 page_title: "Data Source: auth0_phone_provider"
 description: |-
-  Data source to retrieve a specific Auth0 PhoneProvider by id.
+  Data source to retrieve a specific Auth0 Phone Provider by id.
 ---
 
 # Data Source: auth0_phone_provider
 
-Data source to retrieve a specific Auth0 PhoneProvider by `id`.
+Data source to retrieve a specific Auth0 Phone Provider by `id`.
 
 
 

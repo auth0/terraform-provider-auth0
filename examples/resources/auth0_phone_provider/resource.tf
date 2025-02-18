@@ -3,13 +3,14 @@ resource "auth0_phone_provider" "twilio_phone_provider" {
   name     = "twilio"
   disabled = false
   credentials {
-    auth_token = "werwer"
+    auth_token = "secretAuthToken"
   }
 
   configuration {
     delivery_methods = ["text", "voice"]
     default_from     = "+1234567890"
     sid              = "ACXXXXXXXXXXXXXXXX"
+    mssid            = "MSXXXXXXXXXXXXXXXX"
   }
 }
 

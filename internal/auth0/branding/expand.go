@@ -164,12 +164,7 @@ func expandPhoneProvider(config cty.Value) *management.BrandingPhoneProvider {
 		Name:          value.String(config.GetAttr("name")),
 		Disabled:      value.Bool(config.GetAttr("disabled")),
 		Configuration: expandPhoneProviderConfiguration(config.GetAttr("configuration")),
-	}
-
-	if phoneProvider.GetName() == "custom" {
-		phoneProvider.Credentials = &management.BrandingPhoneProviderCredential{}
-	} else {
-		phoneProvider.Credentials = expandPhoneProviderCredentials(config.GetAttr("credentials"))
+		Credentials:   expandPhoneProviderCredentials(config.GetAttr("credentials")),
 	}
 
 	return phoneProvider

@@ -184,7 +184,7 @@ func flattenPhoneProvider(data *schema.ResourceData, phoneProvider *management.B
 	result := multierror.Append(
 		data.Set("name", phoneProvider.GetName()),
 		data.Set("disabled", phoneProvider.GetDisabled()),
-		data.Set("credentials", flattenPhoneProviderCredentials(data)),
+		data.Set("credentials", flattenPhoneProviderCredentials(data, phoneProvider.GetName())),
 		data.Set("configuration", flattenPhoneProviderConfiguration(phoneProvider.GetConfiguration())),
 		data.Set("tenant", phoneProvider.GetTenant()),
 		data.Set("channel", phoneProvider.GetChannel()),
@@ -204,11 +204,17 @@ func flattenPhoneProviderConfiguration(configuration *management.BrandingPhonePr
 	}
 }
 
-func flattenPhoneProviderCredentials(data *schema.ResourceData) []interface{} {
-	credentials := []interface{}{
-		map[string]interface{}{
-			"auth_token": data.Get("credentials.0.auth_token").(string),
-		},
+func flattenPhoneProviderCredentials(data *schema.ResourceData, name string) []interface{} {
+	var credentials []interface{}
+
+	if name == "twilio" {
+		credentials = []interface{}{
+			map[string]interface{}{
+				"auth_token": data.Get("credentials.0.auth_token").(string),
+			},
+		}
+	} else {
+		credentials = nil
 	}
 
 	return credentials

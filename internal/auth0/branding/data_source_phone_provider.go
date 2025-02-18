@@ -14,7 +14,7 @@ import (
 func NewPhoneProviderDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readPhoneProviderForDataSource,
-		Description: "Data source to retrieve a specific Auth0 PhoneProvider by `id`.",
+		Description: "Data source to retrieve a specific Auth0 Phone Provider by `id`.",
 		Schema:      phoneProviderDataSourceSchema(),
 	}
 }

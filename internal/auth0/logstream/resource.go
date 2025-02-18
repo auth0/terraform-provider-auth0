@@ -69,7 +69,6 @@ func NewResource() *schema.Resource {
 			"filters": {
 				Type:     schema.TypeList,
 				Optional: true,
-				Computed: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
 					" If omitted or empty, all events will be delivered. " +
 					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +
@@ -244,8 +243,7 @@ func NewResource() *schema.Resource {
 							Description: "Sent in the HTTP \"Authorization\" header with each request.",
 						},
 						"http_custom_headers": {
-							Type:     schema.TypeList,
-							Computed: true,
+							Type: schema.TypeList,
 							Elem: &schema.Schema{
 								Type: schema.TypeMap,
 								Elem: &schema.Schema{

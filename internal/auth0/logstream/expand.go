@@ -26,9 +26,7 @@ func expandLogStream(data *schema.ResourceData) *management.LogStream {
 		logStream.Status = value.String(config.GetAttr("status"))
 	}
 
-	if data.HasChange("is_priority") {
-		logStream.IsPriority = value.Bool(config.GetAttr("is_priority"))
-	}
+	logStream.IsPriority = value.Bool(config.GetAttr("is_priority"))
 
 	filtersConfig := config.GetAttr("filters")
 	if !filtersConfig.IsNull() {

@@ -44,6 +44,11 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.challenge_ui", "both"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.local_enrollment_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.progressive_enrollment_enabled", "true"),
 				),
 			},
 			{
@@ -117,6 +122,19 @@ resource "auth0_connection" "my_connection" {
 			}
 		})
 		non_persistent_attrs = ["gender","hair_color"]
+		authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+		}
+		passkey_options {
+			challenge_ui                   = "both"
+			local_enrollment_enabled       = true
+			progressive_enrollment_enabled = true
+		}
 	}
 }
 `
@@ -237,6 +255,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					active = true
 				}
 				profile_required = true
+				verification_method = "otp"
 				signup {
 					status = "required"
 					verification {
@@ -256,6 +275,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.identifier.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.verification_method", "otp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
 				),
@@ -2211,6 +2231,8 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_iss", "issuer.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_sub", "user123"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml-from-metadata-xml.provider/sign_out"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://saml-from-metadata-xml.provider/sign_in"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
@@ -2264,8 +2286,9 @@ resource "auth0_connection" "my_connection" {
 	display_name   = "Acceptance-Test-SAML-{{.testName}}"
 	strategy       = "samlp"
 	show_as_button = false
-
 	options {
+		global_token_revocation_jwt_iss = "issuer.example.com"
+		global_token_revocation_jwt_sub = "user123"
 		signing_key {
 			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
        		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"

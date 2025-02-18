@@ -1,3 +1,40 @@
+## v1.12.0
+
+FEATURES:
+- `resource/auth0_prompt_screen_renderer`: Add new screens support to auth0_prompt_screen_renderer  (`EA` Release) ([#1144](https://github.com/auth0/terraform-provider-auth0/pull/1144/))
+
+## v1.11.1
+
+BUG FIXES:
+- `resource/auth0_client`: Add missing expand/flatten rules for `token_exchange` param ([#1145](https://github.com/auth0/terraform-provider-auth0/pull/1145/))
+- `resource/auth0_action`: Add clause to support node18 action for `custom-token-exchange` trigger ([#1145](https://github.com/auth0/terraform-provider-auth0/pull/1145/))
+
+
+## v1.11.0
+
+FEATURES:
+- `resource/auth0_token_exchange_profile`: Add a resource for managing Token Exchange Profile ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+- `data-source/auth0_token_exchange_profile`: Add a data-source for retrieving Token Exchange Profile ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+
+ENHANCEMENTS:
+- `resource/auth0_client`: Add support to set `token_exchange` property for a client ([#1119](https://github.com/auth0/terraform-provider-auth0/pull/1119))
+- `resource/auth0_connection`: Add support to set `authentication_methods` and `passkey_options` property for a connection ([#1099](https://github.com/auth0/terraform-provider-auth0/pull/1099))
+
+
+## v1.10.0
+
+ENHANCEMENTS:
+- Support `password reset by otp code` email template and `verification_method` field in connection schema. ([#1113](https://github.com/auth0/terraform-provider-auth0/pull/1113/))
+- Update workflow to install terraform manually since ubuntu image has removed it ([#1116](https://github.com/auth0/terraform-provider-auth0/pull/1116/))
+- Support never_on_login as an allowed value for set_user_root_attributes ([#1123](https://github.com/auth0/terraform-provider-auth0/pull/1123/))
+
+
+BUG FIXES:
+- Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
+- Fix: IdP-initiated SSO Behavior by adding the missing enabled field to options param connections ([#1105](https://github.com/auth0/terraform-provider-auth0/pull/1105/))
+- Fix: Update example and docs for auth0_flow resource([#1129](https://github.com/auth0/terraform-provider-auth0/pull/1129/))
+- Fix: Update example and docs for auth0_prompt_screen_renderer resource([#1127](https://github.com/auth0/terraform-provider-auth0/pull/1127/))
+
 ## v1.9.1
 
 ENHANCEMENTS:

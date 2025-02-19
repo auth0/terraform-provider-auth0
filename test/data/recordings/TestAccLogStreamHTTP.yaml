@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
+                - Go-Auth0/1.17.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams
         method: POST
       response:
@@ -30,13 +30,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"active","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"active","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 985.034875ms
+        duration: 950.869958ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,8 +55,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -66,13 +66,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 926.201167ms
+        duration: 889.551666ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -90,8 +90,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -101,13 +101,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 714.855375ms
+        duration: 399.614125ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -125,8 +125,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -136,33 +136,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 1.295653125s
+        duration: 658.89475ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 249
+        content_length: 268
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","sink":{"httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
+            {"name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","isPriority":false,"sink":{"httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs","httpAuthorization":"AKIAXXXXXXXXXXXXXXXX"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -172,13 +172,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 376.703417ms
+        duration: 958.933ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -196,8 +196,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -207,13 +207,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 905.10575ms
+        duration: 928.714167ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -231,8 +231,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -242,13 +242,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 339.860416ms
+        duration: 397.4355ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -266,8 +266,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -277,13 +277,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONARRAY","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 365.736375ms
+        duration: 412.794292ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -302,8 +302,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -313,13 +313,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 876.142916ms
+        duration: 363.562417ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -337,8 +337,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -348,13 +348,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 344.746042ms
+        duration: 341.53125ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -372,8 +372,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -383,13 +383,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 327.024ms
+        duration: 471.545041ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -407,8 +407,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -418,13 +418,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONOBJECT","httpContentType":"application/json; charset=utf-8","httpEndpoint":"https://example.com/webhook/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 335.312667ms
+        duration: 975.395083ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -443,8 +443,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -454,13 +454,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.665541ms
+        duration: 498.412583ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -478,8 +478,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -489,13 +489,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 902.77075ms
+        duration: 468.181041ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -513,8 +513,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -524,13 +524,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 362.291958ms
+        duration: 441.025667ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -548,8 +548,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -559,13 +559,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs"},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 368.812416ms
+        duration: 977.473166ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -584,8 +584,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -595,13 +595,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 358.457959ms
+        duration: 398.817875ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -619,8 +619,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -630,13 +630,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 352.669083ms
+        duration: 375.849042ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -654,8 +654,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -665,13 +665,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 875.945917ms
+        duration: 896.014833ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -689,8 +689,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -700,13 +700,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 367.813458ms
+        duration: 362.484042ms
     - id: 20
       request:
         proto: HTTP/1.1
@@ -725,8 +725,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -736,13 +736,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 359.22425ms
+        duration: 932.586291ms
     - id: 21
       request:
         proto: HTTP/1.1
@@ -760,8 +760,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -771,13 +771,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 891.172666ms
+        duration: 368.615541ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -795,8 +795,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: GET
       response:
         proto: HTTP/2.0
@@ -806,13 +806,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"lst_0000000000002453","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
+        body: '{"id":"lst_0000000000002466","name":"Acceptance-Test-LogStream-http-new-TestAccLogStreamHTTP","type":"http","status":"paused","sink":{"httpAuthorization":"AKIAXXXXXXXXXXXXXXXX","httpContentFormat":"JSONLINES","httpContentType":"application/json","httpEndpoint":"https://example.com/logs","httpCustomHeaders":[]},"isPriority":false}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 371.102542ms
+        duration: 361.432667ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -830,8 +830,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.13.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002453
+                - Go-Auth0/1.17.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/log-streams/lst_0000000000002466
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -847,4 +847,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 361.73ms
+        duration: 366.636875ms

@@ -1,3 +1,19 @@
+## v1.13.0
+
+ENHANCEMENTS:
+
+- `resource/auth0_connection`: Add support to set `global_token_revocation_jwt_iss` and `global_token_revocation_jwt_sub` property for a connection. ([#1142](https://github.com/auth0/terraform-provider-auth0/pull/1142/))
+- `data-source/auth0_user`: Add support to retrieve a user via lucene query ([#1141](https://github.com/auth0/terraform-provider-auth0/pull/1141/))
+- `resource/auth0_prompt_partials`: Add support to set prompt as `customized-consent` ([#1151](https://github.com/auth0/terraform-provider-auth0/pull/1151/))
+- `resource/auth0_prompt_screen_partial`: Add support to set `form_content` in insertion_points ([#1151](https://github.com/auth0/terraform-provider-auth0/pull/1151/))
+- `resource/auth0_prompt_screen_partials`: Add support to set `form_content` in insertion_points ([#1151](https://github.com/auth0/terraform-provider-auth0/pull/1151/))
+- `resource/auth0_client`: Add support to set options for `google` as part of `native_social_login` ([#1150](https://github.com/auth0/terraform-provider-auth0/pull/1150/))
+- `resource/auth0_branding_theme`: Add support to set `captcha_widget_theme` property ([#1154](https://github.com/auth0/terraform-provider-auth0/pull/1154/))
+- `resource/auth0_trigger_action`: Add `custom-token-exchange` and `custom-email-provider` to list of supported triggers ([#1155](https://github.com/auth0/terraform-provider-auth0/pull/1155/))
+- `resource/auth0_trigger_actions`: Add `custom-token-exchange` and `custom-email-provider` to list of supported triggers ([#1155](https://github.com/auth0/terraform-provider-auth0/pull/1155/))
+- `resource/auth0_log_stream`: Add support to set `is_priority` property ([#1102](https://github.com/auth0/terraform-provider-auth0/pull/1102/))
+
+
 ## v1.12.0
 
 FEATURES:

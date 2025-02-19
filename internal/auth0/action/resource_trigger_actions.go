@@ -39,10 +39,12 @@ func NewTriggerActionsResource() *schema.Resource {
 					"post-change-password",
 					"send-phone-message",
 					"password-reset-post-challenge",
+					"custom-token-exchange",
+					"custom-email-provider",
 				}, false),
 				Description: "The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, " +
 					"`pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, " +
-					"`password-reset-post-challenge`.",
+					"`password-reset-post-challenge`, `custom-token-exchange`, `custom-email-provider`.",
 			},
 			"actions": {
 				Type:     schema.TypeList,

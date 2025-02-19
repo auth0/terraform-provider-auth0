@@ -2,7 +2,7 @@
 
 ENHANCEMENTS:
 
-- `resource/auth0_connection`: Add support to set `global_token_revocation_jwt_iss` and `global_token_revocation_jwt_sub` property for a connection. ([#1142](https://github.com/auth0/terraform-provider-auth0/pull/1142/))
+- `resource/auth0_connection`: Add support to set `global_token_revocation_jwt_iss` and `global_token_revocation_jwt_sub` property for a connection ([#1142](https://github.com/auth0/terraform-provider-auth0/pull/1142/))
 - `data-source/auth0_user`: Add support to retrieve a user via lucene query ([#1141](https://github.com/auth0/terraform-provider-auth0/pull/1141/))
 - `resource/auth0_prompt_partials`: Add support to set prompt as `customized-consent` ([#1151](https://github.com/auth0/terraform-provider-auth0/pull/1151/))
 - `resource/auth0_prompt_screen_partial`: Add support to set `form_content` in insertion_points ([#1151](https://github.com/auth0/terraform-provider-auth0/pull/1151/))

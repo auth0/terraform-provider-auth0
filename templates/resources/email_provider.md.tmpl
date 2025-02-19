@@ -1,0 +1,35 @@
+---
+page_title: "{{.Type}}: {{.Name}}"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Type}}: {{.Name}}
+
+{{ .Description | trimspace }}
+
+!> This resource manages to create a max of 1 email provider for a tenant.
+To avoid potential issues, it is recommended not to try creating multiple email providers on the same tenant.
+
+!> If you are using the `auth0_email_provider` resource to create a `custom` email provider, you must ensure an action is created first with `custom-email-provider` as the supported_triggers
+
+
+{{ if .HasExample -}}
+
+## Example Usage
+
+{{ tffile .ExampleFile }}
+
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+{{ if .HasImport -}}
+
+## Import
+
+Import is supported using the following syntax:
+
+{{ codefile "shell" .ImportFile }}
+
+{{- end }}

@@ -31,7 +31,7 @@ resource "auth0_prompt_partials" "my_login_prompt_partials" {
 
 ### Required
 
-- `prompt` (String, Deprecated) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`.
+- `prompt` (String, Deprecated) The prompt that you are adding partials for. Options are: `login-id`, `login`, `login-password`, `signup`, `signup-id`, `signup-password`, `login-passwordless`, `customized-consent`.
 
 ### Optional
 

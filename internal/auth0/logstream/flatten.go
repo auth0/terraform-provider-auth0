@@ -10,6 +10,7 @@ func flattenLogStream(data *schema.ResourceData, logStream *management.LogStream
 	result := multierror.Append(
 		data.Set("name", logStream.GetName()),
 		data.Set("status", logStream.GetStatus()),
+		data.Set("is_priority", logStream.GetIsPriority()),
 		data.Set("type", logStream.GetType()),
 		data.Set("filters", logStream.Filters),
 		data.Set("sink", flattenLogStreamSink(data, logStream.Sink)),

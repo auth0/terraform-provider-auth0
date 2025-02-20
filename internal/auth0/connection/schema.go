@@ -866,6 +866,16 @@ var optionsSchema = &schema.Schema{
 				Description: "You can pass provider-specific parameters to an identity provider during " +
 					"authentication. The values can either be static per connection or dynamic per user.",
 			},
+			"global_token_revocation_jwt_iss": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the issuer of the JWT used for global token revocation for the SAML connection.",
+			},
+			"global_token_revocation_jwt_sub": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
+			},
 			"auth_params": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{

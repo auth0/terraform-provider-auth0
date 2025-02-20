@@ -538,6 +538,7 @@ Read-Only:
 
 - `apple` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--apple))
 - `facebook` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--facebook))
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--google))
 
 <a id="nestedobjatt--native_social_login--apple"></a>
 ### Nested Schema for `native_social_login.apple`
@@ -549,6 +550,14 @@ Read-Only:
 
 <a id="nestedobjatt--native_social_login--facebook"></a>
 ### Nested Schema for `native_social_login.facebook`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--native_social_login--google"></a>
+### Nested Schema for `native_social_login.google`
 
 Read-Only:
 

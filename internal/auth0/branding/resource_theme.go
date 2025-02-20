@@ -124,6 +124,13 @@ func NewThemeResource() *schema.Resource {
 							Default:     "#1e212a",
 							Description: "Body text. Defaults to `#1e212a`.",
 						},
+						"captcha_widget_theme": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							Default:      "auto",
+							ValidateFunc: validation.StringInSlice([]string{"auto", "dark", "light"}, false),
+							Description:  "Captcha Widget Theme.",
+						},
 						"error": {
 							Type:        schema.TypeString,
 							Optional:    true,

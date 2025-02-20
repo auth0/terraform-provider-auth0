@@ -60,7 +60,7 @@ func readActionForDataSource(ctx context.Context, data *schema.ResourceData, met
 	// but they are not part of this implementation.
 	actions, err := api.Action.List(ctx, management.Parameter("actionName", name))
 
-	// Handles API error
+	// Handles API error.
 	if err != nil {
 		return diag.FromErr(err)
 	}

@@ -189,9 +189,10 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 
 	return []map[string]interface{}{
 		{
-			"identifier":       flattenIdentifier(emailAttribute.GetIdentifier()),
-			"profile_required": emailAttribute.GetProfileRequired(),
-			"signup":           flattenSignUp(emailAttribute.GetSignup()),
+			"identifier":          flattenIdentifier(emailAttribute.GetIdentifier()),
+			"profile_required":    emailAttribute.GetProfileRequired(),
+			"signup":              flattenSignUp(emailAttribute.GetSignup()),
+			"verification_method": emailAttribute.GetVerificationMethod(),
 		},
 	}
 }
@@ -221,6 +222,53 @@ func flattenPhoneNumberAttribute(phoneNumberAttribute *management.ConnectionOpti
 			"identifier":       flattenIdentifier(phoneNumberAttribute.GetIdentifier()),
 			"profile_required": phoneNumberAttribute.GetProfileRequired(),
 			"signup":           flattenSignUp(phoneNumberAttribute.GetSignup()),
+		},
+	}
+}
+
+func flattenAuthenticationMethods(authenticationMethods *management.AuthenticationMethods) interface{} {
+	if authenticationMethods == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"passkey":  flattenAuthenticationMethodPasskey(authenticationMethods.GetPasskey()),
+		"password": flattenAuthenticationMethodPassword(authenticationMethods.GetPassword()),
+	}
+}
+
+func flattenPasskeyOptions(passkeyOptions *management.PasskeyOptions) interface{} {
+	if passkeyOptions == nil {
+		return nil
+	}
+
+	return map[string]interface{}{
+		"challenge_ui":                   passkeyOptions.GetChallengeUI(),
+		"local_enrollment_enabled":       passkeyOptions.GetLocalEnrollmentEnabled(),
+		"progressive_enrollment_enabled": passkeyOptions.GetProgressiveEnrollmentEnabled(),
+	}
+}
+
+func flattenAuthenticationMethodPasskey(passkeyAuthenticationMethod *management.PasskeyAuthenticationMethod) interface{} {
+	if passkeyAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passkeyAuthenticationMethod.Enabled,
+		},
+	}
+}
+
+func flattenAuthenticationMethodPassword(passwordAuthenticationMethod *management.PasswordAuthenticationMethod) interface{} {
+	if passwordAuthenticationMethod == nil {
+		return nil
+	}
+
+	return []map[string]bool{
+		{
+			"enabled": *passwordAuthenticationMethod.Enabled,
 		},
 	}
 }
@@ -328,6 +376,14 @@ func flattenConnectionOptionsAuth0(
 
 	if options.Attributes != nil {
 		optionsMap["attributes"] = []interface{}{flattenAttributes(options.GetAttributes())}
+	}
+
+	if options.AuthenticationMethods != nil {
+		optionsMap["authentication_methods"] = []interface{}{flattenAuthenticationMethods(options.GetAuthenticationMethods())}
+	}
+
+	if options.PasskeyOptions != nil {
+		optionsMap["passkey_options"] = []interface{}{flattenPasskeyOptions(options.GetPasskeyOptions())}
 	}
 
 	if options.PasswordComplexityOptions != nil {
@@ -926,28 +982,30 @@ func flattenConnectionOptionsSAML(
 	}
 
 	optionsMap := map[string]interface{}{
-		"signing_cert":             options.GetSigningCert(),
-		"protocol_binding":         options.GetProtocolBinding(),
-		"debug":                    options.GetDebug(),
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"sign_in_endpoint":         options.GetSignInEndpoint(),
-		"sign_out_endpoint":        options.GetSignOutEndpoint(),
-		"disable_sign_out":         options.GetDisableSignOut(),
-		"signature_algorithm":      options.GetSignatureAlgorithm(),
-		"digest_algorithm":         options.GetDigestAglorithm(),
-		"sign_saml_request":        options.GetSignSAMLRequest(),
-		"icon_url":                 options.GetLogoURL(),
-		"request_template":         options.GetRequestTemplate(),
-		"user_id_attribute":        options.GetUserIDAttribute(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"entity_id":                options.GetEntityID(),
-		"metadata_url":             options.GetMetadataURL(),
-		"metadata_xml":             data.Get("options.0.metadata_xml").(string), // Does not get read back.
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"strategy_version":         options.GetStrategyVersion(),
-		"fields_map":               fieldsMap,
-		"upstream_params":          upstreamParams,
+		"signing_cert":                    options.GetSigningCert(),
+		"protocol_binding":                options.GetProtocolBinding(),
+		"debug":                           options.GetDebug(),
+		"tenant_domain":                   options.GetTenantDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"sign_in_endpoint":                options.GetSignInEndpoint(),
+		"sign_out_endpoint":               options.GetSignOutEndpoint(),
+		"disable_sign_out":                options.GetDisableSignOut(),
+		"signature_algorithm":             options.GetSignatureAlgorithm(),
+		"digest_algorithm":                options.GetDigestAglorithm(),
+		"sign_saml_request":               options.GetSignSAMLRequest(),
+		"icon_url":                        options.GetLogoURL(),
+		"request_template":                options.GetRequestTemplate(),
+		"user_id_attribute":               options.GetUserIDAttribute(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"entity_id":                       options.GetEntityID(),
+		"metadata_url":                    options.GetMetadataURL(),
+		"metadata_xml":                    data.Get("options.0.metadata_xml").(string), // Does not get read back.
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"strategy_version":                options.GetStrategyVersion(),
+		"fields_map":                      fieldsMap,
+		"upstream_params":                 upstreamParams,
+		"global_token_revocation_jwt_iss": options.GetGlobalTokenRevocationJWTIss(),
+		"global_token_revocation_jwt_sub": options.GetGlobalTokenRevocationJWTSub(),
 	}
 
 	if options.GetSetUserAttributes() == "" {
@@ -957,6 +1015,7 @@ func flattenConnectionOptionsSAML(
 	if options.IdpInitiated != nil {
 		optionsMap["idp_initiated"] = []interface{}{
 			map[string]interface{}{
+				"enabled":                options.IdpInitiated.GetEnabled(),
 				"client_id":              options.IdpInitiated.GetClientID(),
 				"client_protocol":        options.IdpInitiated.GetClientProtocol(),
 				"client_authorize_query": options.IdpInitiated.GetClientAuthorizeQuery(),
@@ -1014,6 +1073,7 @@ func flattenConnectionOptionsPingFederate(
 		"upstream_params":          upstreamParams,
 		"idp_initiated": []map[string]interface{}{
 			{
+				"enabled":                options.GetIdpInitiated().GetEnabled(),
 				"client_id":              options.GetIdpInitiated().GetClientID(),
 				"client_protocol":        options.GetIdpInitiated().GetClientProtocol(),
 				"client_authorize_query": options.GetIdpInitiated().GetClientAuthorizeQuery(),

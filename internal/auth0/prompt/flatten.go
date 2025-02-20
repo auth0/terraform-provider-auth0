@@ -95,6 +95,9 @@ func flattenInsertionPoints(insertionPoints map[management.InsertionPoint]string
 
 	flattened := make(map[string]interface{})
 
+	if v, exists := insertionPoints[management.InsertionPointFormContent]; exists {
+		flattened["form_content"] = v
+	}
 	if v, exists := insertionPoints[management.InsertionPointFormContentStart]; exists {
 		flattened["form_content_start"] = v
 	}
@@ -143,4 +146,36 @@ func marshalCustomTextBody(b map[string]interface{}) (string, error) {
 	}
 
 	return buffer.String(), nil
+}
+
+func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *management.PromptRendering) error {
+	var (
+		idComponents           = strings.Split(data.Id(), ":")
+		promptName, screenName = idComponents[0], idComponents[1]
+	)
+
+	result := multierror.Append(
+		data.Set("prompt_type", promptName),
+		data.Set("screen_name", screenName),
+		data.Set("tenant", promptSetting.GetTenant()),
+		data.Set("rendering_mode", promptSetting.GetRenderingMode()),
+		data.Set("default_head_tags_disabled", promptSetting.GetDefaultHeadTagsDisabled()),
+		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
+		data.Set("head_tags", flattenHeadTags(promptSetting)),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenHeadTags(promptSetting *management.PromptRendering) string {
+	if promptSetting == nil || promptSetting.HeadTags == nil {
+		return ""
+	}
+
+	headTagBytes, err := json.Marshal(promptSetting.HeadTags)
+	if err != nil {
+		return ""
+	}
+
+	return string(headTagBytes)
 }

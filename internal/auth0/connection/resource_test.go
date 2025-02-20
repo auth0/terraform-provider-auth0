@@ -44,6 +44,11 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "hair_color"),
 					resource.TestCheckTypeSetElemAttr("auth0_connection.my_connection", "options.0.non_persistent_attrs.*", "gender"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.password.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.authentication_methods.0.passkey.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.challenge_ui", "both"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.local_enrollment_enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.passkey_options.0.progressive_enrollment_enabled", "true"),
 				),
 			},
 			{
@@ -117,6 +122,19 @@ resource "auth0_connection" "my_connection" {
 			}
 		})
 		non_persistent_attrs = ["gender","hair_color"]
+		authentication_methods {
+			passkey {
+				enabled = false
+			}
+			password {
+				enabled = true
+			}
+		}
+		passkey_options {
+			challenge_ui                   = "both"
+			local_enrollment_enabled       = true
+			progressive_enrollment_enabled = true
+		}
 	}
 }
 `
@@ -237,6 +255,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					active = true
 				}
 				profile_required = true
+				verification_method = "otp"
 				signup {
 					status = "required"
 					verification {
@@ -256,6 +275,7 @@ func TestAccConnectionOptionsAttrEmail(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.identifier.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.profile_required", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.verification_method", "otp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.status", "required"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.attributes.0.email.0.signup.0.verification.0.active", "false"),
 				),
@@ -2211,6 +2231,8 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "strategy", "samlp"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "show_as_button", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_iss", "issuer.example.com"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.global_token_revocation_jwt_sub", "user123"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_out_endpoint", "https://saml-from-metadata-xml.provider/sign_out"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.sign_in_endpoint", "https://saml-from-metadata-xml.provider/sign_in"),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.signing_cert"),
@@ -2218,6 +2240,7 @@ func TestAccConnectionSAML(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.entity_id", ""),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.fields_map", "{\"email\":[\"emailaddress\",\"nameidentifier\"],\"family_name\":\"surname\",\"name\":[\"name\",\"nameidentifier\"]}"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.metadata_url", ""),
 					resource.TestCheckResourceAttrSet("auth0_connection.my_connection", "options.0.metadata_xml"),
@@ -2263,8 +2286,9 @@ resource "auth0_connection" "my_connection" {
 	display_name   = "Acceptance-Test-SAML-{{.testName}}"
 	strategy       = "samlp"
 	show_as_button = false
-
 	options {
+		global_token_revocation_jwt_iss = "issuer.example.com"
+		global_token_revocation_jwt_sub = "user123"
 		signing_key {
 			key = "-----BEGIN PRIVATE KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
        		cert = "-----BEGIN PUBLIC KEY-----\nMIGf...bpP/t3\n+JGNGIRMj1hF1rnb6QIDAQAB\n-----END PUBLIC KEY-----\n"
@@ -2300,6 +2324,7 @@ resource "auth0_connection" "my_connection" {
 		})
 
 		idp_initiated {
+			enabled = true
 			client_id              = "client_id"
 			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=30"
@@ -2371,6 +2396,7 @@ resource "auth0_connection" "my_connection" {
 		})
 
 		idp_initiated {
+			enabled = true
 			client_id              = "client_id"
 			client_protocol        = "samlp"
 			client_authorize_query = "type=code&timeout=60"
@@ -2468,6 +2494,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=30"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", "{\"screen_name\":{\"alias\":\"login_hint\"}}"),
 				),
@@ -2498,6 +2525,7 @@ func TestAccConnectionPingFederate(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.#", "1"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_id", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_protocol", "samlp"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.idp_initiated.0.client_authorize_query", "type=code&timeout=60"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.upstream_params", ""),
 				),
@@ -2554,6 +2582,7 @@ EOF
 			}
 		})
 		idp_initiated {
+			enabled = true
 			client_id = "client_id"
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=30"
@@ -2604,6 +2633,7 @@ EOF
 		set_user_root_attributes = "on_each_login"
 		non_persistent_attrs = ["gender","hair_color"]
 		idp_initiated {
+			enabled = true
 			client_id = "client_id"
 			client_protocol = "samlp"
 			client_authorize_query = "type=code&timeout=60"

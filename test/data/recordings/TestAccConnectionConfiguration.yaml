@@ -19,7 +19,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
+                - Go-Auth0/1.14.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
+        content_length: 941
         uncompressed: false
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","brute_force_protection":true,"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ETXE4K0VneGZjblJpRmZrSFovaElWWFVhRUlOV0dpNEs1YnpVaHBOUkpFN2xwcllhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDdiMThjNyQ2NWJlYTBmODM2OGU5OTMwYWRmYWI4YzUkMWIyMDYxMDAwNjJiYjQxYTQwMmY4ZTUzZDMwMzE5ZTc=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EaVpQckVnd0FtdUpoNlVYZGRWM1R0N01hRUY1aG4wMHRMRkZYTDZSMmttTFFwcUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDhlZjg2MSQ3ZDZjZjAyNWIwMjM0MGEwMzYyYzY5NzAkNTQ4NDAzNDRmNjExODgzOGMzNmY5MzQ1MDQ4NzBlNjU="},"strategy_version":2,"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true}},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"mfa":{"active":true,"return_enroll_settings":true},"passwordPolicy":"good","brute_force_protection":true,"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDExi0Egx2lYFZiCnGFWhQC1waECJlTmqcu42XS4gAVIvIRT8aEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoD482EEgw8CJ+QYLPe7UpLZD4aEEtR50vXeL6vkLOEoDOC8ekaEPB6GqhVqkcZlx3F3TSqs9k="},"strategy_version":2,"authentication_methods":{"password":{"enabled":true},"passkey":{"enabled":false}},"passkey_options":{"challenge_ui":"both","progressive_enrollment_enabled":true,"local_enrollment_enabled":true}},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 192.284958ms
+        duration: 405.817458ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,8 +54,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ETXE4K0VneGZjblJpRmZrSFovaElWWFVhRUlOV0dpNEs1YnpVaHBOUkpFN2xwcllhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDdiMThjNyQ2NWJlYTBmODM2OGU5OTMwYWRmYWI4YzUkMWIyMDYxMDAwNjJiYjQxYTQwMmY4ZTUzZDMwMzE5ZTc=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EaVpQckVnd0FtdUpoNlVYZGRWM1R0N01hRUY1aG4wMHRMRkZYTDZSMmttTFFwcUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDhlZjg2MSQ3ZDZjZjAyNWIwMjM0MGEwMzYyYzY5NzAkNTQ4NDAzNDRmNjExODgzOGMzNmY5MzQ1MDQ4NzBlNjU="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDExi0Egx2lYFZiCnGFWhQC1waECJlTmqcu42XS4gAVIvIRT8aEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoD482EEgw8CJ+QYLPe7UpLZD4aEEtR50vXeL6vkLOEoDOC8ekaEPB6GqhVqkcZlx3F3TSqs9k="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 143.705125ms
+        duration: 320.077291ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,8 +89,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ETXE4K0VneGZjblJpRmZrSFovaElWWFVhRUlOV0dpNEs1YnpVaHBOUkpFN2xwcllhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDdiMThjNyQ2NWJlYTBmODM2OGU5OTMwYWRmYWI4YzUkMWIyMDYxMDAwNjJiYjQxYTQwMmY4ZTUzZDMwMzE5ZTc=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EaVpQckVnd0FtdUpoNlVYZGRWM1R0N01hRUY1aG4wMHRMRkZYTDZSMmttTFFwcUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDhlZjg2MSQ3ZDZjZjAyNWIwMjM0MGEwMzYyYzY5NzAkNTQ4NDAzNDRmNjExODgzOGMzNmY5MzQ1MDQ4NzBlNjU="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDExi0Egx2lYFZiCnGFWhQC1waECJlTmqcu42XS4gAVIvIRT8aEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoD482EEgw8CJ+QYLPe7UpLZD4aEEtR50vXeL6vkLOEoDOC8ekaEPB6GqhVqkcZlx3F3TSqs9k="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.805ms
+        duration: 351.129209ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,13 +135,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ETXE4K0VneGZjblJpRmZrSFovaElWWFVhRUlOV0dpNEs1YnpVaHBOUkpFN2xwcllhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDdiMThjNyQ2NWJlYTBmODM2OGU5OTMwYWRmYWI4YzUkMWIyMDYxMDAwNjJiYjQxYTQwMmY4ZTUzZDMwMzE5ZTc=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EaVpQckVnd0FtdUpoNlVYZGRWM1R0N01hRUY1aG4wMHRMRkZYTDZSMmttTFFwcUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDhlZjg2MSQ3ZDZjZjAyNWIwMjM0MGEwMzYyYzY5NzAkNTQ4NDAzNDRmNjExODgzOGMzNmY5MzQ1MDQ4NzBlNjU="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDExi0Egx2lYFZiCnGFWhQC1waECJlTmqcu42XS4gAVIvIRT8aEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoD482EEgw8CJ+QYLPe7UpLZD4aEEtR50vXeL6vkLOEoDOC8ekaEPB6GqhVqkcZlx3F3TSqs9k="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 152.975959ms
+        duration: 324.342625ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -159,8 +159,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -170,13 +170,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ETXE4K0VneGZjblJpRmZrSFovaElWWFVhRUlOV0dpNEs1YnpVaHBOUkpFN2xwcllhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDdiMThjNyQ2NWJlYTBmODM2OGU5OTMwYWRmYWI4YzUkMWIyMDYxMDAwNjJiYjQxYTQwMmY4ZTUzZDMwMzE5ZTc=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EaVpQckVnd0FtdUpoNlVYZGRWM1R0N01hRUY1aG4wMHRMRkZYTDZSMmttTFFwcUVhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDhlZjg2MSQ3ZDZjZjAyNWIwMjM0MGEwMzYyYzY5NzAkNTQ4NDAzNDRmNjExODgzOGMzNmY5MzQ1MDQ4NzBlNjU="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"mfa":{"active":true,"return_enroll_settings":true},"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDExi0Egx2lYFZiCnGFWhQC1waECJlTmqcu42XS4gAVIvIRT8aEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoD482EEgw8CJ+QYLPe7UpLZD4aEEtR50vXeL6vkLOEoDOC8ekaEPB6GqhVqkcZlx3F3TSqs9k="},"passwordPolicy":"good","passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"strategy_version":2,"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.360917ms
+        duration: 337.435083ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -195,8 +195,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -206,13 +206,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EY3BLckVnek0weEdIOWxIU0JRUEV2VnNhRUdKZHQ0dUNTemZGaE0wb0FCcjdSaHdhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGYwYTEwMyRlYzE2MDA4OTVlMDdjOWZiZTQ1ZTI0NmQkMDdlM2Y5ZTA1YmJjNGUzZmUwZmZiMTA2NDJhOTkxY2I=","baz":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EWFB6Z0VnelNXelpheTRIeG1XR0d4SmdhRUhaL29OdGlLZ2hJRDJHTlJkcThDaW9hRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDRkMjUyOCRhODc1N2NiNTM2ZTRhMzM3NDFlZGIzZGIkZjg0MWJmZTc5MzlhNDIzNTg4NTU4MGViZjIyMzM4NjU=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ENE5oOEVneEZVT2pNTXJjcEIwRHVEdFFhRU5jVkZoYzkveVZYc1BsMGx3VFlHMDRhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI5MjBkNyQ3MzZkNjc5OGNiODhiNzVhM2E1YmE2YmUkMTMzNWZlZGY5Y2NjYzBlZGJkNDE2NDdlY2E1YmNjMTk="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDT3dvEgwyx+Gec9EZ3SARXdwaEI5x2NKHfo4a2cRVMbzCm+0aEPB6GqhVqkcZlx3F3TSqs9k=","baz":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDjo6lEgwKgcxMxvYxz/DJFdAaEMC7827DVlCx2MB2RMTUMHAaEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDBL5bEgw1vdle21KJlXVGVWIaEDkfXh1SsfugIZbQkfqP5xAaEPB6GqhVqkcZlx3F3TSqs9k="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 178.38775ms
+        duration: 351.857333ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -230,8 +230,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -241,13 +241,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EY3BLckVnek0weEdIOWxIU0JRUEV2VnNhRUdKZHQ0dUNTemZGaE0wb0FCcjdSaHdhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGYwYTEwMyRlYzE2MDA4OTVlMDdjOWZiZTQ1ZTI0NmQkMDdlM2Y5ZTA1YmJjNGUzZmUwZmZiMTA2NDJhOTkxY2I=","baz":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EWFB6Z0VnelNXelpheTRIeG1XR0d4SmdhRUhaL29OdGlLZ2hJRDJHTlJkcThDaW9hRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDRkMjUyOCRhODc1N2NiNTM2ZTRhMzM3NDFlZGIzZGIkZjg0MWJmZTc5MzlhNDIzNTg4NTU4MGViZjIyMzM4NjU=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ENE5oOEVneEZVT2pNTXJjcEIwRHVEdFFhRU5jVkZoYzkveVZYc1BsMGx3VFlHMDRhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI5MjBkNyQ3MzZkNjc5OGNiODhiNzVhM2E1YmE2YmUkMTMzNWZlZGY5Y2NjYzBlZGJkNDE2NDdlY2E1YmNjMTk="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDT3dvEgwyx+Gec9EZ3SARXdwaEI5x2NKHfo4a2cRVMbzCm+0aEPB6GqhVqkcZlx3F3TSqs9k=","baz":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDjo6lEgwKgcxMxvYxz/DJFdAaEMC7827DVlCx2MB2RMTUMHAaEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDBL5bEgw1vdle21KJlXVGVWIaEDkfXh1SsfugIZbQkfqP5xAaEPB6GqhVqkcZlx3F3TSqs9k="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 140.774583ms
+        duration: 327.930708ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -265,8 +265,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: GET
       response:
         proto: HTTP/2.0
@@ -276,13 +276,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_JQw9hhjEytXA8cx2","options":{"configuration":{"bar":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EY3BLckVnek0weEdIOWxIU0JRUEV2VnNhRUdKZHQ0dUNTemZGaE0wb0FCcjdSaHdhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGYwYTEwMyRlYzE2MDA4OTVlMDdjOWZiZTQ1ZTI0NmQkMDdlM2Y5ZTA1YmJjNGUzZmUwZmZiMTA2NDJhOTkxY2I=","baz":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9EWFB6Z0VnelNXelpheTRIeG1XR0d4SmdhRUhaL29OdGlLZ2hJRDJHTlJkcThDaW9hRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJDRkMjUyOCRhODc1N2NiNTM2ZTRhMzM3NDFlZGIzZGIkZjg0MWJmZTc5MzlhNDIzNTg4NTU4MGViZjIyMzM4NjU=","foo":"CgRlZmdoEqgBQ2tJS0lEMWhCei9YVFZsTlZhaVBlOWY2clQrTmxiYXRxdTR6YWowTHZUenkzRDF1RWd4cEdSZDNqZStmVjduSlVwOGFFQTBGN1BpNzV0cXdSemE2Y1N5U0tRVVNKUW9ENE5oOEVneEZVT2pNTXJjcEIwRHVEdFFhRU5jVkZoYzkveVZYc1BsMGx3VFlHMDRhRUhkY2wzS2JnMG40alNmdFE3a3IyQ1E9Gkg1LjAkMDAwJGI5MjBkNyQ3MzZkNjc5OGNiODhiNzVhM2E1YmE2YmUkMTMzNWZlZGY5Y2NjYzBlZGJkNDE2NDdlY2E1YmNjMTk="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
+        body: '{"id":"con_2wRfaWeV5noZO6ko","options":{"configuration":{"bar":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDT3dvEgwyx+Gec9EZ3SARXdwaEI5x2NKHfo4a2cRVMbzCm+0aEPB6GqhVqkcZlx3F3TSqs9k=","baz":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDjo6lEgwKgcxMxvYxz/DJFdAaEMC7827DVlCx2MB2RMTUMHAaEPB6GqhVqkcZlx3F3TSqs9k=","foo":"CkIKIFB7R8wZCpI7EmB+Xi0yrkcsnlo9S4lw0w0fZNRPLoK1Egwup/B8S+PhjMznpJAaEFY09s+i9mJHrG6itFiWxVESJQoDBL5bEgw1vdle21KJlXVGVWIaEDkfXh1SsfugIZbQkfqP5xAaEPB6GqhVqkcZlx3F3TSqs9k="},"passkey_options":{"challenge_ui":"both","local_enrollment_enabled":true,"progressive_enrollment_enabled":true},"authentication_methods":{"passkey":{"enabled":false},"password":{"enabled":true}},"brute_force_protection":true},"strategy":"auth0","name":"Acceptance-Test-Connection-TestAccConnectionConfiguration","is_domain_connection":true,"enabled_clients":[],"realms":["Acceptance-Test-Connection-TestAccConnectionConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 149.457416ms
+        duration: 310.859542ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -300,8 +300,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_JQw9hhjEytXA8cx2
+                - Go-Auth0/1.14.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_2wRfaWeV5noZO6ko
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -311,10 +311,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2024-09-12T21:26:35.501Z"}'
+        body: '{"deleted_at":"2025-01-29T05:46:52.083Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 145.994792ms
+        duration: 322.385208ms

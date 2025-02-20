@@ -252,6 +252,84 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "A map of scripts used to integrate with a custom database.",
 			},
+			"authentication_methods": {
+				Description: "Specifies the authentication methods and their configuration (enabled or disabled)",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"passkey": {
+							Description: "Configures passkey authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables passkey authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
+						"password": {
+							Description: "Configures password authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables password authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
+					},
+				},
+			},
+			"passkey_options": {
+				Description: "Defines options for the passkey authentication method",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"challenge_ui": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Controls the UI used to challenge the user for their passkey",
+							ValidateFunc: validation.StringInSlice([]string{
+								"both",
+								"autofill",
+								"button",
+							}, false),
+						},
+						"local_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection",
+						},
+						"progressive_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables progressive enrollment of passkeys for the connection",
+						},
+					},
+				},
+			},
 			"scripts": {
 				Type:        schema.TypeMap,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -519,10 +597,11 @@ var optionsSchema = &schema.Schema{
 			"set_user_root_attributes": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login", "never_on_login"}, false),
 				Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
 					"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
-					"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
+					"include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.",
 			},
 			"non_persistent_attrs": {
 				Type:     schema.TypeSet,
@@ -699,6 +778,11 @@ var optionsSchema = &schema.Schema{
 					"with the properties: `client_id`, `client_protocol`, and `client_authorize_query`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
 						"client_id": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -781,6 +865,16 @@ var optionsSchema = &schema.Schema{
 				ValidateFunc: validation.StringIsJSON,
 				Description: "You can pass provider-specific parameters to an identity provider during " +
 					"authentication. The values can either be static per connection or dynamic per user.",
+			},
+			"global_token_revocation_jwt_iss": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the issuer of the JWT used for global token revocation for the SAML connection.",
+			},
+			"global_token_revocation_jwt_sub": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
 			},
 			"auth_params": {
 				Type: schema.TypeMap,
@@ -904,6 +998,12 @@ var optionsSchema = &schema.Schema{
 										Optional:    true,
 										Computed:    false,
 										Description: "Defines whether Profile is required",
+									},
+									"verification_method": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification",
 									},
 									"signup": {
 										Type:        schema.TypeList,

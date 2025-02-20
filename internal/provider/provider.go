@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
@@ -133,6 +135,7 @@ func New() *schema.Provider {
 			"auth0_prompt_partials":                  prompt.NewPartialsResource(),
 			"auth0_prompt_screen_partial":            prompt.NewScreenPartialResource(),
 			"auth0_prompt_screen_partials":           prompt.NewScreenPartialsResource(),
+			"auth0_prompt_screen_renderer":           prompt.NewPromptScreenRenderResource(),
 			"auth0_resource_server":                  resourceserver.NewResource(),
 			"auth0_resource_server_scope":            resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":           resourceserver.NewScopesResource(),
@@ -144,6 +147,7 @@ func New() *schema.Provider {
 			"auth0_self_service_profile":             selfserviceprofile.NewResource(),
 			"auth0_self_service_profile_custom_text": selfserviceprofile.NewCustomTextResource(),
 			"auth0_tenant":                           tenant.NewResource(),
+			"auth0_token_exchange_profile":           tokenexchangeprofile.NewResource(),
 			"auth0_user":                             user.NewResource(),
 			"auth0_user_permission":                  user.NewPermissionResource(),
 			"auth0_user_permissions":                 user.NewPermissionsResource(),
@@ -165,11 +169,13 @@ func New() *schema.Provider {
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
+			"auth0_prompt_screen_renderer":        prompt.NewPromptScreenRenderDataSource(),
 			"auth0_resource_server":               resourceserver.NewDataSource(),
 			"auth0_role":                          role.NewDataSource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),
 			"auth0_signing_keys":                  signingkey.NewDataSource(),
 			"auth0_tenant":                        tenant.NewDataSource(),
+			"auth0_token_exchange_profile":        tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
 		},
 	}

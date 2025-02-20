@@ -56,14 +56,17 @@ func readActionForDataSource(ctx context.Context, data *schema.ResourceData, met
 	// The Actions List API works on an exact name match.
 	// Therefore, no need to create a List of Actions.
 	// Either it's an exact match, or no match.
-	// There are other params like deployed and triggerId to use as query param,
+	// There are other params like deployed and triggerId that can be used as query param via API,
 	// but they are not part of this implementation.
 	actions, err := api.Action.List(ctx, management.Parameter("actionName", name))
+
+	// Handles API error
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
 	if len(actions.Actions) == 1 {
-		data.SetId(*(actions.Actions[0].ID))
+		data.SetId(actions.Actions[0].GetID())
 		return diag.FromErr(flattenAction(data, actions.Actions[0]))
 	}
 	return diag.Errorf("No action found with \"name\" = %q", name)

@@ -62,7 +62,7 @@ var (
 		"email-verification", "invitation", "login", "login-email-verification", "login-id", "login-password",
 		"login-passwordless", "logout", "mfa", "mfa-email", "mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code",
 		"mfa-sms", "mfa-voice", "mfa-webauthn", "organizations", "passkeys", "phone-identifier-challenge",
-		"phone-identifier-enrollment", "reset-password", "signup", "signup-id", "signup-password", "status",
+		"phone-identifier-enrollment", "email-identifier-challenge", "reset-password", "signup", "signup-id", "signup-password", "status",
 	}
 
 	availableLanguages = fetchLanguages()

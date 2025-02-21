@@ -579,6 +579,19 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
+	customHeadersConfig := config.GetAttr("custom_headers")
+
+	if !customHeadersConfig.IsNull() {
+		customHeaders := make([]map[string]string, 0)
+
+		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
+			customHeaders = append(customHeaders, *value.MapOfStrings(httpHeader))
+			return stop
+		})
+
+		options.CustomHeaders = &customHeaders
+	}
+
 	expandConnectionOptionsScopes(data, options)
 
 	var err error

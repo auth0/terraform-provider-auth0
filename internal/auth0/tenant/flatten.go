@@ -27,6 +27,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("customize_mfa_in_postlogin_action", tenant.GetCustomizeMFAInPostLoginAction()),
 		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
+		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -106,6 +107,21 @@ func flattenMTLSConfiguration(mtls *management.TenantMTLSConfiguration) []interf
 		m["disable"] = true
 	} else {
 		m["enable_endpoint_aliases"] = mtls.EnableEndpointAliases
+	}
+
+	return []interface{}{m}
+}
+
+func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []interface{} {
+	m := make(map[string]interface{})
+	if errorPage == nil {
+		m["html"] = nil
+		m["show_log_link"] = true
+		m["url"] = nil
+	} else {
+		m["html"] = errorPage.GetHTML()
+		m["show_log_link"] = errorPage.GetShowLogLink()
+		m["url"] = errorPage.GetURL()
 	}
 
 	return []interface{}{m}

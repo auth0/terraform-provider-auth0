@@ -41,6 +41,12 @@ resource "auth0_tenant" "my_tenant" {
   sessions {
     oidc_logout_prompt_enabled = false
   }
+
+  error_page {
+    html          = "<html></html>"
+    show_log_link = false
+    url           = "https://example.com/error"
+  }
 }
 ```
 
@@ -58,6 +64,7 @@ resource "auth0_tenant" "my_tenant" {
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
+- `error_page` (Block List, Max: 1) Configuration for the error page (see [below for nested schema](#nestedblock--error_page))
 - `flags` (Block List, Max: 1) Configuration settings for tenant flags. (see [below for nested schema](#nestedblock--flags))
 - `friendly_name` (String) Friendly name for the tenant.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
@@ -74,6 +81,16 @@ resource "auth0_tenant" "my_tenant" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--error_page"></a>
+### Nested Schema for `error_page`
+
+Optional:
+
+- `html` (String) Custom Error HTML (Liquid syntax is supported)
+- `show_log_link` (Boolean) Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).
+- `url` (String) URL to redirect to when an error occurs instead of showing the default error page
+
 
 <a id="nestedblock--flags"></a>
 ### Nested Schema for `flags`

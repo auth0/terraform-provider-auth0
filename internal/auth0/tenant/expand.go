@@ -34,6 +34,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
 		ACRValuesSupported:                   expandACRValuesSupported(data),
 		MTLS:                                 expandMTLSConfiguration(data),
+		ErrorPage:                            expandErrorPageConfiguration(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -170,4 +171,25 @@ func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSCo
 	}
 
 	return &mtls
+}
+
+func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantErrorPage {
+	if !data.IsNewResource() && !data.HasChange("error_page") {
+		return nil
+	}
+	var errorPage management.TenantErrorPage
+
+	config := data.GetRawConfig().GetAttr("error_page")
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		errorPage.HTML = value.String(cfg.GetAttr("html"))
+		errorPage.ShowLogLink = value.Bool(cfg.GetAttr("show_log_link"))
+		errorPage.URL = value.String(cfg.GetAttr("url"))
+		return stop
+	})
+
+	if errorPage == (management.TenantErrorPage{}) {
+		return nil
+	}
+
+	return &errorPage
 }

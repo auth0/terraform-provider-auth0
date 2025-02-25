@@ -45,7 +45,7 @@ resource "auth0_trigger_action" "post_login_alert_action" {
 ### Required
 
 - `action_id` (String) The ID of the action to bind to the trigger.
-- `trigger` (String) The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`.
+- `trigger` (String) The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-token-exchange`, `custom-email-provider`, `custom-phone-provider`.
 
 ### Optional
 

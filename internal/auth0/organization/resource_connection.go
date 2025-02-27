@@ -3,7 +3,6 @@ package organization
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -38,9 +37,24 @@ func NewConnectionResource() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
-				Description: "When true, all users that log in with this connection will be automatically granted " +
-					"membership in the organization. When false, users must be granted membership in the organization" +
-					" before logging in with this connection.",
+				Description: "When `true`, all users that log in with this connection will be automatically granted " +
+					"membership in the organization. When `false`, users must be granted membership in the organization " +
+					"before logging in with this connection.",
+			},
+			"is_signup_enabled": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+				Description: "Determines whether organization sign-up should be enabled for this " +
+					"organization connection. Only applicable for database connections. " +
+					"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
+			},
+			"show_as_button": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  true,
+				Description: "Determines whether a connection should be displayed on this organization’s " +
+					"login prompt. Only applicable for enterprise connections.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -58,22 +72,14 @@ func NewConnectionResource() *schema.Resource {
 
 func createOrganizationConnection(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
 	organizationID := data.Get("organization_id").(string)
-
-	connectionID := data.Get("connection_id").(string)
-	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
-
-	organizationConnection := &management.OrganizationConnection{
-		ConnectionID:            &connectionID,
-		AssignMembershipOnLogin: &assignMembershipOnLogin,
-	}
+	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
 
 	if err := api.Organization.AddConnection(ctx, organizationID, organizationConnection); err != nil {
 		return diag.FromErr(err)
 	}
 
-	internalSchema.SetResourceGroupID(data, organizationID, connectionID)
+	internalSchema.SetResourceGroupID(data, organizationID, organizationConnection.GetConnectionID())
 
 	return readOrganizationConnection(ctx, data, meta)
 }
@@ -96,13 +102,11 @@ func updateOrganizationConnection(ctx context.Context, data *schema.ResourceData
 	api := meta.(*config.Config).GetAPI()
 
 	organizationID := data.Get("organization_id").(string)
+	organizationConnection := expandOrganizationConnection(data.GetRawConfig())
+	connectionID := organizationConnection.GetConnectionID()
 
-	connectionID := data.Get("connection_id").(string)
-	assignMembershipOnLogin := data.Get("assign_membership_on_login").(bool)
-
-	organizationConnection := &management.OrganizationConnection{
-		AssignMembershipOnLogin: &assignMembershipOnLogin,
-	}
+	// UpdateConnection doesn't like this to be set.
+	organizationConnection.ConnectionID = nil
 
 	if err := api.Organization.UpdateConnection(ctx, organizationID, connectionID, organizationConnection); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

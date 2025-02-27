@@ -39,14 +39,20 @@ func expandOrganizationBranding(brandingList cty.Value) *management.Organization
 	return organizationBranding
 }
 
+func expandOrganizationConnection(connectionCfg cty.Value) *management.OrganizationConnection {
+	return &management.OrganizationConnection{
+		ConnectionID:            value.String(connectionCfg.GetAttr("connection_id")),
+		AssignMembershipOnLogin: value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
+		IsSignupEnabled:         value.Bool(connectionCfg.GetAttr("is_signup_enabled")),
+		ShowAsButton:            value.Bool(connectionCfg.GetAttr("show_as_button")),
+	}
+}
+
 func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConnection {
 	connections := make([]*management.OrganizationConnection, 0)
 
 	cfg.ForEachElement(func(_ cty.Value, connectionCfg cty.Value) (stop bool) {
-		connections = append(connections, &management.OrganizationConnection{
-			ConnectionID:            value.String(connectionCfg.GetAttr("connection_id")),
-			AssignMembershipOnLogin: value.Bool(connectionCfg.GetAttr("assign_membership_on_login")),
-		})
+		connections = append(connections, expandOrganizationConnection(connectionCfg))
 
 		return stop
 	})

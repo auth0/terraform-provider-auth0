@@ -6,20 +6,19 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Cthis-user-id-does-not-exist
         method: GET
       response:
@@ -36,7 +35,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 404 Not Found
         code: 404
-        duration: 264.435375ms
+        duration: 354.549542ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -55,7 +54,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
         method: POST
       response:
@@ -66,33 +65,140 @@ interactions:
         trailer: {}
         content_length: 324
         uncompressed: false
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 108.189542ms
+        duration: 357.538375ms
     - id: 2
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 31
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            null
+            {"authorization_details":null}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64f34b6d2c9c1a3c4e754ca9
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.978208ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 26
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"token_encryption":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 365.148042ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 29
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"proof_of_possession":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 563.2295ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
         method: GET
       response:
         proto: HTTP/2.0
@@ -102,32 +208,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 101.91525ms
-    - id: 3
+        duration: 356.130833ms
+    - id: 6
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
         method: GET
       response:
@@ -138,14 +243,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 95.821458ms
-    - id: 4
+        duration: 400.522792ms
+    - id: 7
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -163,7 +268,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
         method: PATCH
       response:
@@ -174,32 +279,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 115.982875ms
-    - id: 5
+        duration: 668.353ms
+    - id: 8
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
         method: GET
       response:
@@ -210,14 +314,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 113.397334ms
-    - id: 6
+        duration: 789.369083ms
+    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -235,7 +339,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
         method: POST
       response:
@@ -246,33 +350,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 119.691375ms
-    - id: 7
+        duration: 1.071537833s
+    - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_bLLS74ONX2ilj1SP
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
         method: GET
       response:
         proto: HTTP/2.0
@@ -282,14 +385,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.465417ms
-    - id: 8
+        duration: 1.190749125s
+    - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -307,7 +410,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles
         method: POST
       response:
@@ -318,33 +421,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 168.151167ms
-    - id: 9
+        duration: 2.156630083s
+    - id: 12
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_4gYmK3wdokLkRTVd
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
         method: GET
       response:
         proto: HTTP/2.0
@@ -354,14 +456,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 222.325833ms
-    - id: 10
+        duration: 1.58502325s
+    - id: 13
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -379,7 +481,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
         method: POST
       response:
@@ -390,32 +492,31 @@ interactions:
         trailer: {}
         content_length: 610
         uncompressed: false
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 362.578458ms
-    - id: 11
+        duration: 623.0785ms
+    - id: 14
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
         method: GET
       response:
@@ -426,14 +527,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 109.907792ms
-    - id: 12
+        duration: 379.25575ms
+    - id: 15
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -451,7 +552,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions
         method: POST
       response:
@@ -468,26 +569,25 @@ interactions:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 127.529459ms
-    - id: 13
+        duration: 372.819417ms
+    - id: 16
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -504,8 +604,8 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 104.371375ms
-    - id: 14
+        duration: 453.773167ms
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -517,13 +617,13 @@ interactions:
         remote_addr: ""
         request_uri: ""
         body: |
-            {"roles":["rol_4gYmK3wdokLkRTVd","rol_bLLS74ONX2ilj1SP"]}
+            {"roles":["rol_YO2dtXKCFWZw8XoK","rol_3c5LlNoj2CfignUg"]}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles
         method: POST
       response:
@@ -540,206 +640,25 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 163.381542ms
-    - id: 15
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 104.487833ms
-    - id: 16
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 152.829583ms
-    - id: 17
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 105.801083ms
+        duration: 329.176167ms
     - id: 18
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.550834ms
-    - id: 19
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 95.613ms
-    - id: 20
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -750,32 +669,101 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 180.828542ms
-    - id: 21
+        duration: 420.928292ms
+    - id: 19
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.708542ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 402.634709ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -792,27 +780,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.315458ms
+        duration: 323.375209ms
     - id: 22
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64f34b6d2c9c1a3c4e754ca9
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
         method: GET
       response:
         proto: HTTP/2.0
@@ -822,32 +809,136 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 98.896ms
+        duration: 340.202416ms
     - id: 23
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 431.976166ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 363.385042ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.174209ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
         method: GET
       response:
@@ -858,141 +949,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 94.071292ms
-    - id: 24
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_bLLS74ONX2ilj1SP
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 105.20075ms
-    - id: 25
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_4gYmK3wdokLkRTVd
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 99.352042ms
-    - id: 26
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 90.062625ms
+        duration: 321.000833ms
     - id: 27
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
         method: GET
       response:
         proto: HTTP/2.0
@@ -1002,33 +984,32 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 111.283084ms
+        duration: 330.72225ms
     - id: 28
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
         method: GET
       response:
         proto: HTTP/2.0
@@ -1038,32 +1019,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 196.3685ms
+        duration: 364.476375ms
     - id: 29
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
         method: GET
       response:
@@ -1074,68 +1054,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 102.311292ms
+        duration: 328.417791ms
     - id: 30
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 107.561625ms
-    - id: 31
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 5
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            null
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -1152,26 +1095,60 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 118.229ms
-    - id: 32
+        duration: 328.028917ms
+    - id: 31
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 317.900042ms
+    - id: 32
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
         method: GET
       response:
@@ -1182,32 +1159,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"created_at":"2023-09-02T14:49:19.312Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2023-09-02T14:49:19.312Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 105.174ms
+        duration: 326.8405ms
     - id: 33
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -1218,32 +1194,31 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"roles":[{"id":"rol_4gYmK3wdokLkRTVd","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_bLLS74ONX2ilj1SP","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 121.786375ms
+        duration: 344.08475ms
     - id: 34
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 5
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            null
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
+                - Go-Auth0/1.15.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
         method: GET
       response:
@@ -1260,79 +1235,77 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 132.7035ms
+        duration: 376.998375ms
     - id: 35
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 58
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"roles":["rol_4gYmK3wdokLkRTVd","rol_bLLS74ONX2ilj1SP"]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles
-        method: DELETE
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 162.959916ms
+        status: 200 OK
+        code: 200
+        duration: 341.255917ms
     - id: 36
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 278
+        content_length: 0
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: |
-            {"permissions":[{"resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","permission_name":"create:foo"},{"resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","permission_name":"read:foo"}]}
+        body: ""
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions
-        method: DELETE
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 133.178458ms
+        status: 200 OK
+        code: 200
+        duration: 313.374542ms
     - id: 37
       request:
         proto: HTTP/1.1
@@ -1350,117 +1323,9 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 0
-        uncompressed: false
-        body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 204 No Content
-        code: 204
-        duration: 186.220042ms
-    - id: 38
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 3
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_4gYmK3wdokLkRTVd
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 2
-        uncompressed: false
-        body: '{}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 145.882833ms
-    - id: 39
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 3
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_bLLS74ONX2ilj1SP
-        method: DELETE
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 2
-        uncompressed: false
-        body: '{}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 123.127583ms
-    - id: 40
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 14
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"scopes":[]}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
-        method: PATCH
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
+        method: GET
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -1469,13 +1334,118 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"64f34b6d2c9c1a3c4e754ca9","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 184.2685ms
+        duration: 334.780916ms
+    - id: 38
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.15775ms
+    - id: 39
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 329.254333ms
+    - id: 40
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.973792ms
     - id: 41
       request:
         proto: HTTP/1.1
@@ -1493,8 +1463,1409 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.0.2
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/64f34b6d2c9c1a3c4e754ca9
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 360.009333ms
+    - id: 42
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=username%3Atestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 376.017917ms
+    - id: 43
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 357.427292ms
+    - id: 44
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 366.861083ms
+    - id: 45
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=username%3Atestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.560834ms
+    - id: 46
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.070834ms
+    - id: 47
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 358.397875ms
+    - id: 48
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 314.219708ms
+    - id: 49
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 320.816292ms
+    - id: 50
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.733625ms
+    - id: 51
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 318.792ms
+    - id: 52
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 316.381542ms
+    - id: 53
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 353.798125ms
+    - id: 54
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 329.159417ms
+    - id: 55
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=username%3Atestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 372.744917ms
+    - id: 56
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 344.285875ms
+    - id: 57
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 337.159375ms
+    - id: 58
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 336.1775ms
+    - id: 59
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.439375ms
+    - id: 60
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 325.550416ms
+    - id: 61
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.375584ms
+    - id: 62
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.847708ms
+    - id: 63
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.373042ms
+    - id: 64
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 332.138375ms
+    - id: 65
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=email%3Atestaccdatasourceuser%40acceptance.test.com
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 330.856958ms
+    - id: 66
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.600333ms
+    - id: 67
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.708417ms
+    - id: 68
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=email%3Atestaccdatasourceuser%40acceptance.test.com
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 409.95075ms
+    - id: 69
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.337834ms
+    - id: 70
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 319.781834ms
+    - id: 71
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.214875ms
+    - id: 72
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:foo","description":"Can create Foo"},{"value":"read:foo","description":"Can read Foo"}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.83125ms
+    - id: 73
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.654ms
+    - id: 74
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 342.412833ms
+    - id: 75
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-01-31T00:41:28.398Z","email":"testaccdatasourceuser@acceptance.test.com","email_verified":false,"family_name":"Lastname","given_name":"Firstname","identities":[{"user_id":"testaccdatasourceuser","connection":"Username-Password-Authentication","provider":"auth0","isSocial":false}],"name":"Firstname Lastname","nickname":"testaccdatasourceuser","picture":"https://www.example.com/picture.jpg","updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"username":"testaccdatasourceuser","app_metadata":{"baz":"qux","foo":"bar"}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 322.874042ms
+    - id: 76
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.590958ms
+    - id: 77
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 326.647ms
+    - id: 78
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users?include_totals=true&per_page=50&q=email%3Atestaccdatasourceuser%40acceptance.test.com
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"start":0,"limit":50,"length":1,"users":[{"created_at":"2025-01-31T00:41:28.398Z","identities":[{"connection":"Username-Password-Authentication","user_id":"testaccdatasourceuser","provider":"auth0","isSocial":false}],"picture":"https://www.example.com/picture.jpg","given_name":"Firstname","nickname":"testaccdatasourceuser","email_verified":false,"updated_at":"2025-01-31T00:41:28.398Z","user_id":"auth0|testaccdatasourceuser","name":"Firstname Lastname","username":"testaccdatasourceuser","user_metadata":{"baz":"qux","foo":"bar"},"email":"testaccdatasourceuser@acceptance.test.com","family_name":"Lastname","app_metadata":{"baz":"qux","foo":"bar"}}],"total":1}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 361.437875ms
+    - id: 79
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"roles":[{"id":"rol_YO2dtXKCFWZw8XoK","name":"Test Admin testaccdatasourceuser","description":"Administrator testaccdatasourceuser"},{"id":"rol_3c5LlNoj2CfignUg","name":"Test Owner testaccdatasourceuser","description":"Owner testaccdatasourceuser"}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 337.884042ms
+    - id: 80
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions?include_totals=true&page=0&per_page=100
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"permissions":[{"permission_name":"create:foo","description":"Can create Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]},{"permission_name":"read:foo","description":"Can read Foo","resource_server_name":"Acceptance Test - testaccdatasourceuser","resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","sources":[{"source_id":"","source_name":"","source_type":"DIRECT"}]}],"start":0,"limit":100,"total":2}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 371.227667ms
+    - id: 81
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 58
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"roles":["rol_YO2dtXKCFWZw8XoK","rol_3c5LlNoj2CfignUg"]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/roles
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -1510,4 +2881,218 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 315.572542ms
+        duration: 330.609834ms
+    - id: 82
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 278
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"permissions":[{"resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","permission_name":"create:foo"},{"resource_server_identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","permission_name":"read:foo"}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser/permissions
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 336.342291ms
+    - id: 83
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7Ctestaccdatasourceuser
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 461.20275ms
+    - id: 84
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_YO2dtXKCFWZw8XoK
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 354.238292ms
+    - id: 85
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 3
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/roles/rol_3c5LlNoj2CfignUg
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 2
+        uncompressed: false
+        body: '{}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 346.617625ms
+    - id: 86
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 14
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fuat.api.terraform-provider-auth0.com%2Ftestaccdatasourceuser
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"679c1c2e7a696722a188f84b","name":"Acceptance Test - testaccdatasourceuser","identifier":"https://uat.api.terraform-provider-auth0.com/testaccdatasourceuser","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 398.428041ms
+    - id: 87
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.15.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/679c1c2e7a696722a188f84b
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 363.747875ms

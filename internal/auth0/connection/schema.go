@@ -15,6 +15,7 @@ var resourceSchema = map[string]*schema.Schema{
 	"display_name": {
 		Type:        schema.TypeString,
 		Optional:    true,
+		Computed:    true,
 		Description: "Name used in login screen.",
 	},
 	"is_domain_connection": {
@@ -250,6 +251,84 @@ var optionsSchema = &schema.Schema{
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 				Description: "A map of scripts used to integrate with a custom database.",
+			},
+			"authentication_methods": {
+				Description: "Specifies the authentication methods and their configuration (enabled or disabled)",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"passkey": {
+							Description: "Configures passkey authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables passkey authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
+						"password": {
+							Description: "Configures password authentication",
+							Type:        schema.TypeList,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Description: "Enables password authentication",
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    true,
+									},
+								},
+							},
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+						},
+					},
+				},
+			},
+			"passkey_options": {
+				Description: "Defines options for the passkey authentication method",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"challenge_ui": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Controls the UI used to challenge the user for their passkey",
+							ValidateFunc: validation.StringInSlice([]string{
+								"both",
+								"autofill",
+								"button",
+							}, false),
+						},
+						"local_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection",
+						},
+						"progressive_enrollment_enabled": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Enables or disables progressive enrollment of passkeys for the connection",
+						},
+					},
+				},
 			},
 			"scripts": {
 				Type:        schema.TypeMap,
@@ -527,14 +606,14 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Specifies whether or not request info should be forwarded to sms gateway.",
 			},
-
 			"set_user_root_attributes": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login"}, false),
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice([]string{"on_each_login", "on_first_login", "never_on_login"}, false),
 				Description: "Determines whether to sync user profile attributes (`name`, `given_name`, " +
 					"`family_name`, `nickname`, `picture`) at each login or only on the first login. Options " +
-					"include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.",
+					"include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.",
 			},
 			"non_persistent_attrs": {
 				Type:     schema.TypeSet,
@@ -701,7 +780,7 @@ var optionsSchema = &schema.Schema{
 			"user_id_attribute": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "Attribute in the SAML token that will be mapped to the user_id property in Auth0.",
+				Description: "Attribute in the token that will be mapped to the user_id property in Auth0.",
 			},
 			"idp_initiated": {
 				Type:     schema.TypeList,
@@ -711,6 +790,11 @@ var optionsSchema = &schema.Schema{
 					"with the properties: `client_id`, `client_protocol`, and `client_authorize_query`.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+						"enabled": {
+							Type:     schema.TypeBool,
+							Optional: true,
+							Default:  false,
+						},
 						"client_id": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -794,6 +878,16 @@ var optionsSchema = &schema.Schema{
 				Description: "You can pass provider-specific parameters to an identity provider during " +
 					"authentication. The values can either be static per connection or dynamic per user.",
 			},
+			"global_token_revocation_jwt_iss": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the issuer of the JWT used for global token revocation for the SAML connection.",
+			},
+			"global_token_revocation_jwt_sub": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the subject of the JWT used for global token revocation for the SAML connection.",
+			},
 			"auth_params": {
 				Type: schema.TypeMap,
 				Elem: &schema.Schema{
@@ -861,6 +955,261 @@ var optionsSchema = &schema.Schema{
 				Description: "By default Auth0 maps `user_id` to `email`. Enabling this setting changes the behavior " +
 					"to map `user_id` to 'id' instead. This can only be defined on a new Google Workspace connection " +
 					"and can not be changed once set.",
+			},
+			"precedence": {
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+					ValidateFunc: validation.StringInSlice([]string{
+						"email",
+						"phone_number",
+						"username",
+					}, true),
+				},
+				MaxItems: 3,
+				Optional: true,
+				Computed: false,
+				Description: "Order of attributes for precedence in identification." +
+					"Valid values: email, phone_number, username. " +
+					"If Precedence is set, it must contain all values (email, phone_number, username) in specific order",
+			},
+			"attributes": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: false,
+				Description: "Order of attributes for precedence in identification." +
+					"Valid values: email, phone_number, username. " +
+					"If Precedence is set, it must contain all values (email, phone_number, username) in specific order",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"email": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    false,
+							Description: "Connection Options for Email Attribute",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"identifier": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Connection Options Email Attribute Identifier",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"active": {
+													Type:        schema.TypeBool,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines whether email attribute is active as an identifier",
+												},
+											},
+										},
+									},
+									"profile_required": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines whether Profile is required",
+									},
+									"verification_method": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Computed:    true,
+										Description: "Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification",
+									},
+									"signup": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines signup settings for Email attribute",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"status": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines signup status for Email Attribute",
+												},
+												"verification": {
+													Type:        schema.TypeList,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines settings for Verification under Email attribute",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"active": {
+																Type:        schema.TypeBool,
+																Optional:    true,
+																Computed:    false,
+																Description: "Defines verification settings for signup attribute",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"username": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    false,
+							Description: "Connection Options for User Name Attribute",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"identifier": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Connection options for User Name Attribute Identifier",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"active": {
+													Type:        schema.TypeBool,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines whether UserName attribute is active as an identifier",
+												},
+											},
+										},
+									},
+									"profile_required": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines whether Profile is required",
+									},
+									"signup": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines signup settings for User Name attribute",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"status": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines whether User Name attribute is active as an identifier",
+												},
+											},
+										},
+									},
+									"validation": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    true,
+										Description: "Defines validation settings for User Name attribute",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"min_length": {
+													Type:        schema.TypeInt,
+													Optional:    true,
+													Computed:    true,
+													Description: "Defines Min Length for User Name attribute",
+												},
+												"max_length": {
+													Type:        schema.TypeInt,
+													Optional:    true,
+													Computed:    true,
+													Description: "Defines Max Length for User Name attribute",
+												},
+												"allowed_types": {
+													Type:        schema.TypeList,
+													Optional:    true,
+													Computed:    true,
+													Description: "Defines allowed types for for UserName attribute",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"email": {
+																Type:        schema.TypeBool,
+																Optional:    true,
+																Computed:    true,
+																Description: "One of the allowed types for UserName signup attribute",
+															},
+															"phone_number": {
+																Type:        schema.TypeBool,
+																Optional:    true,
+																Computed:    true,
+																Description: "One of the allowed types for UserName signup attribute",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						"phone_number": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    false,
+							Description: "Connection Options for Phone Number Attribute",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"identifier": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Connection Options Phone Number Attribute Identifier",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"active": {
+													Type:        schema.TypeBool,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines whether Phone Number attribute is active as an identifier",
+												},
+											},
+										},
+									},
+									"profile_required": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines whether Profile is required",
+									},
+									"signup": {
+										Type:        schema.TypeList,
+										Optional:    true,
+										Computed:    false,
+										Description: "Defines signup settings for Phone Number attribute",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"status": {
+													Type:        schema.TypeString,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines status of signup for Phone Number attribute ",
+												},
+												"verification": {
+													Type:        schema.TypeList,
+													Optional:    true,
+													Computed:    false,
+													Description: "Defines verification settings for Phone Number attribute",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+															"active": {
+																Type:        schema.TypeBool,
+																Optional:    true,
+																Computed:    false,
+																Description: "Defines verification settings for Phone Number attribute",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	},

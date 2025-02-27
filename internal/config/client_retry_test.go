@@ -19,7 +19,7 @@ func TestCustomClientWithRetries(t *testing.T) {
 	t.Run("it retries on rate limit error", func(t *testing.T) {
 		apiCalls := 0
 		fail := true
-		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, _ *http.Request) {
 			apiCalls++
 
 			if fail {
@@ -55,7 +55,7 @@ func TestCustomClientWithRetries(t *testing.T) {
 	t.Run("it retries on server error", func(t *testing.T) {
 		apiCalls := 0
 		fail := true
-		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, _ *http.Request) {
 			apiCalls++
 
 			if fail {
@@ -88,7 +88,7 @@ func TestCustomClientWithRetries(t *testing.T) {
 
 	t.Run("it does not retry more than 3 times on server error", func(t *testing.T) {
 		apiCalls := 0
-		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		testServer := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, _ *http.Request) {
 			apiCalls++
 			writer.WriteHeader(500)
 		}))

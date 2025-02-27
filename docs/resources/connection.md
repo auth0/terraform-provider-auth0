@@ -11,6 +11,7 @@ With Auth0, you can define sources of users, otherwise known as connections, whi
 ~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allows the
 creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
 
+~> When updating the `options` parameter, ensure that all nested fields within the `options` schema are explicitly defined. Failing to do so may result in the loss of existing configurations.
 
 ## Example Usage
 
@@ -31,6 +32,7 @@ resource "auth0_connection" "my_connection" {
   options {
     password_policy                = "excellent"
     brute_force_protection         = true
+    strategy_version               = 2
     enabled_database_customization = true
     import_mode                    = false
     requires_username              = true
@@ -80,6 +82,20 @@ resource "auth0_connection" "my_connection" {
     mfa {
       active                 = true
       return_enroll_settings = true
+    }
+
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
+    }
+    passkey_options {
+      challenge_ui                   = "both"
+      local_enrollment_enabled       = true
+      progressive_enrollment_enabled = true
     }
   }
 }
@@ -253,6 +269,7 @@ resource "auth0_connection" "oauth2" {
   options {
     client_id              = "<client-id>"
     client_secret          = "<client-secret>"
+    strategy_version       = 2
     scopes                 = ["basic_profile", "profile", "email"]
     token_endpoint         = "https://auth.example.com/oauth2/token"
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
@@ -284,6 +301,7 @@ resource "auth0_connection" "ad" {
     disable_self_service_change_password = true
     brute_force_protection               = true
     tenant_domain                        = "example.com"
+    strategy_version                     = 2
     icon_url                             = "https://example.com/assets/logo.png"
     domain_aliases = [
       "example.com",
@@ -312,12 +330,14 @@ resource "auth0_connection" "azure_ad" {
   strategy       = "waad"
   show_as_button = true
   options {
-    identity_api  = "azure-active-directory-v1.0"
-    client_id     = "123456"
-    client_secret = "123456"
-    app_id        = "app-id-123"
-    tenant_domain = "example.onmicrosoft.com"
-    domain        = "example.onmicrosoft.com"
+    identity_api      = "azure-active-directory-v1.0"
+    client_id         = "123456"
+    client_secret     = "123456"
+    strategy_version  = 2
+    user_id_attribute = "oid"
+    app_id            = "app-id-123"
+    tenant_domain     = "example.onmicrosoft.com"
+    domain            = "example.onmicrosoft.com"
     domain_aliases = [
       "example.com",
       "api.example.com"
@@ -463,21 +483,24 @@ resource "auth0_connection" "samlp" {
   strategy = "samlp"
 
   options {
-    debug               = false
-    signing_cert        = "<signing-certificate>"
-    sign_in_endpoint    = "https://saml.provider/sign_in"
-    sign_out_endpoint   = "https://saml.provider/sign_out"
-    disable_sign_out    = true
-    tenant_domain       = "example.com"
-    domain_aliases      = ["example.com", "alias.example.com"]
-    protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    request_template    = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-    user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
-    signature_algorithm = "rsa-sha256"
-    digest_algorithm    = "sha256"
-    icon_url            = "https://saml.provider/assets/logo.png"
-    entity_id           = "<entity_id>"
-    metadata_xml        = <<EOF
+    debug                           = false
+    signing_cert                    = "<signing-certificate>"
+    sign_in_endpoint                = "https://saml.provider/sign_in"
+    sign_out_endpoint               = "https://saml.provider/sign_out"
+    global_token_revocation_jwt_iss = "issuer.example.com"
+    global_token_revocation_jwt_sub = "user123"
+    disable_sign_out                = true
+    strategy_version                = 2
+    tenant_domain                   = "example.com"
+    domain_aliases                  = ["example.com", "alias.example.com"]
+    protocol_binding                = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    request_template                = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+    user_id_attribute               = "https://saml.provider/imi/ns/identity-200810"
+    signature_algorithm             = "rsa-sha256"
+    digest_algorithm                = "sha256"
+    icon_url                        = "https://saml.provider/assets/logo.png"
+    entity_id                       = "<entity_id>"
+    metadata_xml                    = <<EOF
     <?xml version="1.0"?>
     <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
       <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -486,7 +509,7 @@ resource "auth0_connection" "samlp" {
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
     EOF
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
+    metadata_url                    = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
@@ -664,7 +687,9 @@ Optional:
 - `api_enable_users` (Boolean) Enable API Access to users.
 - `app_id` (String) App ID.
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
+- `attributes` (Block List) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order (see [below for nested schema](#nestedblock--options--attributes))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
+- `authentication_methods` (Block List) Specifies the authentication methods and their configuration (enabled or disabled) (see [below for nested schema](#nestedblock--options--authentication_methods))
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
 - `client_id` (String) The strategy's client ID.
@@ -693,6 +718,8 @@ Optional:
 - `from` (String) Address to use as the sender.
 - `gateway_authentication` (Block List, Max: 1) Defines the parameters used to generate the auth token for the custom gateway. (see [below for nested schema](#nestedblock--options--gateway_authentication))
 - `gateway_url` (String) Defines a custom sms gateway to use instead of Twilio.
+- `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
+- `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))
@@ -709,6 +736,7 @@ Optional:
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
+- `passkey_options` (Block List, Max: 1) Defines options for the passkey authentication method (see [below for nested schema](#nestedblock--options--passkey_options))
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))
 - `password_history` (Block List) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. (see [below for nested schema](#nestedblock--options--password_history))
@@ -716,13 +744,14 @@ Optional:
 - `password_policy` (String) Indicates level of password strength to enforce during authentication. A strong password policy will make it difficult, if not improbable, for someone to guess a password through either manual or automated means. Options include `none`, `low`, `fair`, `good`, `excellent`.
 - `ping_federate_base_url` (String) Ping Federate Server URL.
 - `pkce_enabled` (Boolean) Enables Proof Key for Code Exchange (PKCE) functionality for OAuth2 connections.
+- `precedence` (List of String) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.
 - `request_template` (String) Template that formats the SAML request.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
-- `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.
+- `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.
 - `sign_in_endpoint` (String) SAML single login URL for the connection.
 - `sign_out_endpoint` (String) SAML single logout URL for the connection.
@@ -745,7 +774,7 @@ Optional:
 - `use_cert_auth` (Boolean) Indicates whether to use cert auth or not.
 - `use_kerberos` (Boolean) Indicates whether to use Kerberos or not.
 - `use_wsfed` (Boolean) Whether to use WS-Fed.
-- `user_id_attribute` (String) Attribute in the SAML token that will be mapped to the user_id property in Auth0.
+- `user_id_attribute` (String) Attribute in the token that will be mapped to the user_id property in Auth0.
 - `userinfo_endpoint` (String) User info endpoint.
 - `validation` (Block List, Max: 1) Validation of the minimum and maximum values allowed for a user to have as username. (see [below for nested schema](#nestedblock--options--validation))
 - `waad_common_endpoint` (Boolean) Indicates whether to use the common endpoint rather than the default endpoint. Typically enabled if you're using this for a multi-tenant application in Azure AD.
@@ -762,6 +791,158 @@ Optional:
 
 - `attributes` (String) This property is an object containing mapping information that allows Auth0 to interpret incoming claims from the IdP. Mapping information must be provided as key/value pairs.
 - `userinfo_scope` (String) This property defines the scopes that Auth0 sends to the IdP’s UserInfo endpoint when requested.
+
+
+<a id="nestedblock--options--attributes"></a>
+### Nested Schema for `options.attributes`
+
+Optional:
+
+- `email` (Block List) Connection Options for Email Attribute (see [below for nested schema](#nestedblock--options--attributes--email))
+- `phone_number` (Block List) Connection Options for Phone Number Attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number))
+- `username` (Block List) Connection Options for User Name Attribute (see [below for nested schema](#nestedblock--options--attributes--username))
+
+<a id="nestedblock--options--attributes--email"></a>
+### Nested Schema for `options.attributes.email`
+
+Optional:
+
+- `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
+- `verification_method` (String) Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification
+
+<a id="nestedblock--options--attributes--email--identifier"></a>
+### Nested Schema for `options.attributes.email.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether email attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--email--signup"></a>
+### Nested Schema for `options.attributes.email.signup`
+
+Optional:
+
+- `status` (String) Defines signup status for Email Attribute
+- `verification` (Block List) Defines settings for Verification under Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup--verification))
+
+<a id="nestedblock--options--attributes--email--signup--verification"></a>
+### Nested Schema for `options.attributes.email.signup.verification`
+
+Optional:
+
+- `active` (Boolean) Defines verification settings for signup attribute
+
+
+
+
+<a id="nestedblock--options--attributes--phone_number"></a>
+### Nested Schema for `options.attributes.phone_number`
+
+Optional:
+
+- `identifier` (Block List) Connection Options Phone Number Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--phone_number--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for Phone Number attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number--signup))
+
+<a id="nestedblock--options--attributes--phone_number--identifier"></a>
+### Nested Schema for `options.attributes.phone_number.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether Phone Number attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--phone_number--signup"></a>
+### Nested Schema for `options.attributes.phone_number.signup`
+
+Optional:
+
+- `status` (String) Defines status of signup for Phone Number attribute
+- `verification` (Block List) Defines verification settings for Phone Number attribute (see [below for nested schema](#nestedblock--options--attributes--phone_number--signup--verification))
+
+<a id="nestedblock--options--attributes--phone_number--signup--verification"></a>
+### Nested Schema for `options.attributes.phone_number.signup.verification`
+
+Optional:
+
+- `active` (Boolean) Defines verification settings for Phone Number attribute
+
+
+
+
+<a id="nestedblock--options--attributes--username"></a>
+### Nested Schema for `options.attributes.username`
+
+Optional:
+
+- `identifier` (Block List) Connection options for User Name Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--username--identifier))
+- `profile_required` (Boolean) Defines whether Profile is required
+- `signup` (Block List) Defines signup settings for User Name attribute (see [below for nested schema](#nestedblock--options--attributes--username--signup))
+- `validation` (Block List) Defines validation settings for User Name attribute (see [below for nested schema](#nestedblock--options--attributes--username--validation))
+
+<a id="nestedblock--options--attributes--username--identifier"></a>
+### Nested Schema for `options.attributes.username.identifier`
+
+Optional:
+
+- `active` (Boolean) Defines whether UserName attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--username--signup"></a>
+### Nested Schema for `options.attributes.username.signup`
+
+Optional:
+
+- `status` (String) Defines whether User Name attribute is active as an identifier
+
+
+<a id="nestedblock--options--attributes--username--validation"></a>
+### Nested Schema for `options.attributes.username.validation`
+
+Optional:
+
+- `allowed_types` (Block List) Defines allowed types for for UserName attribute (see [below for nested schema](#nestedblock--options--attributes--username--validation--allowed_types))
+- `max_length` (Number) Defines Max Length for User Name attribute
+- `min_length` (Number) Defines Min Length for User Name attribute
+
+<a id="nestedblock--options--attributes--username--validation--allowed_types"></a>
+### Nested Schema for `options.attributes.username.validation.allowed_types`
+
+Optional:
+
+- `email` (Boolean) One of the allowed types for UserName signup attribute
+- `phone_number` (Boolean) One of the allowed types for UserName signup attribute
+
+
+
+
+
+<a id="nestedblock--options--authentication_methods"></a>
+### Nested Schema for `options.authentication_methods`
+
+Optional:
+
+- `passkey` (Block List, Max: 1) Configures passkey authentication (see [below for nested schema](#nestedblock--options--authentication_methods--passkey))
+- `password` (Block List, Max: 1) Configures password authentication (see [below for nested schema](#nestedblock--options--authentication_methods--password))
+
+<a id="nestedblock--options--authentication_methods--passkey"></a>
+### Nested Schema for `options.authentication_methods.passkey`
+
+Optional:
+
+- `enabled` (Boolean) Enables passkey authentication
+
+
+<a id="nestedblock--options--authentication_methods--password"></a>
+### Nested Schema for `options.authentication_methods.password`
+
+Optional:
+
+- `enabled` (Boolean) Enables password authentication
+
 
 
 <a id="nestedblock--options--connection_settings"></a>
@@ -801,6 +982,7 @@ Optional:
 - `client_authorize_query` (String)
 - `client_id` (String)
 - `client_protocol` (String)
+- `enabled` (Boolean)
 
 
 <a id="nestedblock--options--mfa"></a>
@@ -810,6 +992,16 @@ Optional:
 
 - `active` (Boolean) Indicates whether multifactor authentication is enabled for this connection.
 - `return_enroll_settings` (Boolean) Indicates whether multifactor authentication enrollment settings will be returned.
+
+
+<a id="nestedblock--options--passkey_options"></a>
+### Nested Schema for `options.passkey_options`
+
+Optional:
+
+- `challenge_ui` (String) Controls the UI used to challenge the user for their passkey
+- `local_enrollment_enabled` (Boolean) Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection
+- `progressive_enrollment_enabled` (Boolean) Enables or disables progressive enrollment of passkeys for the connection
 
 
 <a id="nestedblock--options--password_complexity_options"></a>

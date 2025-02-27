@@ -51,6 +51,7 @@ Read-Only:
 - `base_focus_color` (String)
 - `base_hover_color` (String)
 - `body_text` (String)
+- `captcha_widget_theme` (String)
 - `error` (String)
 - `header` (String)
 - `icons` (String)

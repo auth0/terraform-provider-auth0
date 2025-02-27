@@ -52,7 +52,9 @@ Read-Only:
 - `api_enable_users` (Boolean)
 - `app_id` (String)
 - `attribute_map` (List of Object) (see [below for nested schema](#nestedobjatt--options--attribute_map))
+- `attributes` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes))
 - `auth_params` (Map of String)
+- `authentication_methods` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods))
 - `authorization_endpoint` (String)
 - `brute_force_protection` (Boolean)
 - `client_id` (String)
@@ -81,6 +83,8 @@ Read-Only:
 - `from` (String)
 - `gateway_authentication` (List of Object) (see [below for nested schema](#nestedobjatt--options--gateway_authentication))
 - `gateway_url` (String)
+- `global_token_revocation_jwt_iss` (String)
+- `global_token_revocation_jwt_sub` (String)
 - `icon_url` (String)
 - `identity_api` (String)
 - `idp_initiated` (List of Object) (see [below for nested schema](#nestedobjatt--options--idp_initiated))
@@ -97,6 +101,7 @@ Read-Only:
 - `mfa` (List of Object) (see [below for nested schema](#nestedobjatt--options--mfa))
 - `name` (String)
 - `non_persistent_attrs` (Set of String)
+- `passkey_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--passkey_options))
 - `password_complexity_options` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_complexity_options))
 - `password_dictionary` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_dictionary))
 - `password_history` (List of Object) (see [below for nested schema](#nestedobjatt--options--password_history))
@@ -104,6 +109,7 @@ Read-Only:
 - `password_policy` (String)
 - `ping_federate_base_url` (String)
 - `pkce_enabled` (Boolean)
+- `precedence` (List of String)
 - `protocol_binding` (String)
 - `provider` (String)
 - `request_template` (String)
@@ -149,6 +155,158 @@ Read-Only:
 - `userinfo_scope` (String)
 
 
+<a id="nestedobjatt--options--attributes"></a>
+### Nested Schema for `options.attributes`
+
+Read-Only:
+
+- `email` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email))
+- `phone_number` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number))
+- `username` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username))
+
+<a id="nestedobjatt--options--attributes--email"></a>
+### Nested Schema for `options.attributes.email`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup))
+- `verification_method` (String)
+
+<a id="nestedobjatt--options--attributes--email--identifier"></a>
+### Nested Schema for `options.attributes.email.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--email--signup"></a>
+### Nested Schema for `options.attributes.email.signup`
+
+Read-Only:
+
+- `status` (String)
+- `verification` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup--verification))
+
+<a id="nestedobjatt--options--attributes--email--signup--verification"></a>
+### Nested Schema for `options.attributes.email.signup.verification`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+
+
+<a id="nestedobjatt--options--attributes--phone_number"></a>
+### Nested Schema for `options.attributes.phone_number`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--signup))
+
+<a id="nestedobjatt--options--attributes--phone_number--identifier"></a>
+### Nested Schema for `options.attributes.phone_number.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--phone_number--signup"></a>
+### Nested Schema for `options.attributes.phone_number.signup`
+
+Read-Only:
+
+- `status` (String)
+- `verification` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--phone_number--signup--verification))
+
+<a id="nestedobjatt--options--attributes--phone_number--signup--verification"></a>
+### Nested Schema for `options.attributes.phone_number.signup.verification`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+
+
+<a id="nestedobjatt--options--attributes--username"></a>
+### Nested Schema for `options.attributes.username`
+
+Read-Only:
+
+- `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--identifier))
+- `profile_required` (Boolean)
+- `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--signup))
+- `validation` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--validation))
+
+<a id="nestedobjatt--options--attributes--username--identifier"></a>
+### Nested Schema for `options.attributes.username.identifier`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedobjatt--options--attributes--username--signup"></a>
+### Nested Schema for `options.attributes.username.signup`
+
+Read-Only:
+
+- `status` (String)
+
+
+<a id="nestedobjatt--options--attributes--username--validation"></a>
+### Nested Schema for `options.attributes.username.validation`
+
+Read-Only:
+
+- `allowed_types` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--username--validation--allowed_types))
+- `max_length` (Number)
+- `min_length` (Number)
+
+<a id="nestedobjatt--options--attributes--username--validation--allowed_types"></a>
+### Nested Schema for `options.attributes.username.validation.allowed_types`
+
+Read-Only:
+
+- `email` (Boolean)
+- `phone_number` (Boolean)
+
+
+
+
+
+<a id="nestedobjatt--options--authentication_methods"></a>
+### Nested Schema for `options.authentication_methods`
+
+Read-Only:
+
+- `passkey` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--passkey))
+- `password` (List of Object) (see [below for nested schema](#nestedobjatt--options--authentication_methods--password))
+
+<a id="nestedobjatt--options--authentication_methods--passkey"></a>
+### Nested Schema for `options.authentication_methods.passkey`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--options--authentication_methods--password"></a>
+### Nested Schema for `options.authentication_methods.password`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+
 <a id="nestedobjatt--options--connection_settings"></a>
 ### Nested Schema for `options.connection_settings`
 
@@ -186,6 +344,7 @@ Read-Only:
 - `client_authorize_query` (String)
 - `client_id` (String)
 - `client_protocol` (String)
+- `enabled` (Boolean)
 
 
 <a id="nestedobjatt--options--mfa"></a>
@@ -195,6 +354,16 @@ Read-Only:
 
 - `active` (Boolean)
 - `return_enroll_settings` (Boolean)
+
+
+<a id="nestedobjatt--options--passkey_options"></a>
+### Nested Schema for `options.passkey_options`
+
+Read-Only:
+
+- `challenge_ui` (String)
+- `local_enrollment_enabled` (Boolean)
+- `progressive_enrollment_enabled` (Boolean)
 
 
 <a id="nestedobjatt--options--password_complexity_options"></a>

@@ -155,6 +155,7 @@ Optional:
 - `base_focus_color` (String) Base focus color. Defaults to `#635dff`.
 - `base_hover_color` (String) Base hover color. Defaults to `#000000`.
 - `body_text` (String) Body text. Defaults to `#1e212a`.
+- `captcha_widget_theme` (String) Captcha Widget Theme.
 - `error` (String) Error. Defaults to `#d03c38`.
 - `header` (String) Header. Defaults to `#1e212a`.
 - `icons` (String) Icons. Defaults to `#65676e`.

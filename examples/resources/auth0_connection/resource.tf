@@ -12,6 +12,7 @@ resource "auth0_connection" "my_connection" {
   options {
     password_policy                = "excellent"
     brute_force_protection         = true
+    strategy_version               = 2
     enabled_database_customization = true
     import_mode                    = false
     requires_username              = true
@@ -61,6 +62,20 @@ resource "auth0_connection" "my_connection" {
     mfa {
       active                 = true
       return_enroll_settings = true
+    }
+
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
+    }
+    passkey_options {
+      challenge_ui                   = "both"
+      local_enrollment_enabled       = true
+      progressive_enrollment_enabled = true
     }
   }
 }

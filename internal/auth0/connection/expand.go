@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -179,6 +180,199 @@ func expandConnectionOptionsGitHub(data *schema.ResourceData, config cty.Value) 
 	return options, diag.FromErr(err)
 }
 
+func expandConnectionOptionsAuthenticationMethods(config cty.Value) *management.AuthenticationMethods {
+	var authMethods *management.AuthenticationMethods
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			authMethods = &management.AuthenticationMethods{}
+
+			authMethods.Password = expandConnectionOptionsAuthenticationMethodsPassword(attributes.GetAttr("password"))
+			authMethods.Passkey = expandConnectionOptionsAuthenticationMethodsPasskey(attributes.GetAttr("passkey"))
+
+			return stop
+		})
+	return authMethods
+}
+
+func expandConnectionOptionsAuthenticationMethodsPassword(config cty.Value) *management.PasswordAuthenticationMethod {
+	var passwordAuth *management.PasswordAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passwordAuth = &management.PasswordAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passwordAuth
+}
+
+func expandConnectionOptionsAuthenticationMethodsPasskey(config cty.Value) *management.PasskeyAuthenticationMethod {
+	var passkeyAuth *management.PasskeyAuthenticationMethod
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passkeyAuth = &management.PasskeyAuthenticationMethod{
+				Enabled: value.Bool(attributes.GetAttr("enabled")),
+			}
+			return stop
+		})
+	return passkeyAuth
+}
+
+func expandConnectionOptionsPasskeyOptions(config cty.Value) *management.PasskeyOptions {
+	var passkeyOptions *management.PasskeyOptions
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			passkeyOptions = &management.PasskeyOptions{}
+
+			if attributes.Type().HasAttribute("challenge_ui") {
+				passkeyOptions.ChallengeUI = value.String(attributes.GetAttr("challenge_ui"))
+			}
+			if attributes.Type().HasAttribute("local_enrollment_enabled") {
+				passkeyOptions.LocalEnrollmentEnabled = value.Bool(attributes.GetAttr("local_enrollment_enabled"))
+			}
+			if attributes.Type().HasAttribute("progressive_enrollment_enabled") {
+				passkeyOptions.ProgressiveEnrollmentEnabled = value.Bool(attributes.GetAttr("progressive_enrollment_enabled"))
+			}
+
+			return stop
+		})
+	return passkeyOptions
+}
+
+func expandConnectionOptionsAttributes(config cty.Value) *management.ConnectionOptionsAttributes {
+	var coa *management.ConnectionOptionsAttributes
+	config.ForEachElement(
+		func(_ cty.Value, attributes cty.Value) (stop bool) {
+			coa = &management.ConnectionOptionsAttributes{
+				Email:       expandConnectionOptionsEmailAttribute(attributes),
+				Username:    expandConnectionOptionsUsernameAttribute(attributes),
+				PhoneNumber: expandConnectionOptionsPhoneNumberAttribute(attributes),
+			}
+			return stop
+		})
+	return coa
+}
+
+func expandConnectionOptionsEmailAttribute(config cty.Value) *management.ConnectionOptionsEmailAttribute {
+	var coea *management.ConnectionOptionsEmailAttribute
+	config.GetAttr("email").ForEachElement(
+		func(_ cty.Value, email cty.Value) (stop bool) {
+			coea = &management.ConnectionOptionsEmailAttribute{
+				Identifier:         expandConnectionOptionsAttributeIdentifier(email),
+				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
+				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
+				Signup:             expandConnectionOptionsAttributeSignup(email),
+			}
+			return stop
+		})
+	return coea
+}
+
+func expandConnectionOptionsUsernameAttribute(config cty.Value) *management.ConnectionOptionsUsernameAttribute {
+	var coua *management.ConnectionOptionsUsernameAttribute
+	config.GetAttr("username").ForEachElement(
+		func(_ cty.Value, username cty.Value) (stop bool) {
+			coua = &management.ConnectionOptionsUsernameAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(username),
+				ProfileRequired: value.Bool(username.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeUsernameSignup(username),
+				Validation:      expandConnectionOptionsAttributeValidation(username),
+			}
+			return stop
+		})
+	return coua
+}
+
+func expandConnectionOptionsPhoneNumberAttribute(config cty.Value) *management.ConnectionOptionsPhoneNumberAttribute {
+	var copa *management.ConnectionOptionsPhoneNumberAttribute
+	config.GetAttr("phone_number").ForEachElement(
+		func(_ cty.Value, phoneNumber cty.Value) (stop bool) {
+			copa = &management.ConnectionOptionsPhoneNumberAttribute{
+				Identifier:      expandConnectionOptionsAttributeIdentifier(phoneNumber),
+				ProfileRequired: value.Bool(phoneNumber.GetAttr("profile_required")),
+				Signup:          expandConnectionOptionsAttributeSignup(phoneNumber),
+			}
+			return stop
+		})
+	return copa
+}
+
+func expandConnectionOptionsAttributeIdentifier(config cty.Value) *management.ConnectionOptionsAttributeIdentifier {
+	var coai *management.ConnectionOptionsAttributeIdentifier
+	config.GetAttr("identifier").ForEachElement(
+		func(_ cty.Value, identifier cty.Value) (stop bool) {
+			coai = &management.ConnectionOptionsAttributeIdentifier{
+				Active: value.Bool(identifier.GetAttr("active")),
+			}
+			return stop
+		})
+	return coai
+}
+
+func expandConnectionOptionsAttributeUsernameSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status: value.String(signup.GetAttr("status")),
+			}
+			return stop
+		})
+	return coas
+}
+
+func expandConnectionOptionsAttributeSignup(config cty.Value) *management.ConnectionOptionsAttributeSignup {
+	var coas *management.ConnectionOptionsAttributeSignup
+	config.GetAttr("signup").ForEachElement(
+		func(_ cty.Value, signup cty.Value) (stop bool) {
+			coas = &management.ConnectionOptionsAttributeSignup{
+				Status:       value.String(signup.GetAttr("status")),
+				Verification: expandConnectionOptionsAttributeVerification(signup),
+			}
+			return stop
+		})
+	return coas
+}
+
+func expandConnectionOptionsAttributeVerification(config cty.Value) *management.ConnectionOptionsAttributeVerification {
+	var coav *management.ConnectionOptionsAttributeVerification
+	config.GetAttr("verification").ForEachElement(
+		func(_ cty.Value, verification cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeVerification{
+				Active: value.Bool(verification.GetAttr("active")),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeValidation(config cty.Value) *management.ConnectionOptionsAttributeValidation {
+	var coav *management.ConnectionOptionsAttributeValidation
+	config.GetAttr("validation").ForEachElement(
+		func(_ cty.Value, validation cty.Value) (stop bool) {
+			coav = &management.ConnectionOptionsAttributeValidation{
+				MinLength:    value.Int(validation.GetAttr("min_length")),
+				MaxLength:    value.Int(validation.GetAttr("max_length")),
+				AllowedTypes: expandConnectionOptionsAttributeAllowedTypes(validation),
+			}
+			return stop
+		})
+	return coav
+}
+
+func expandConnectionOptionsAttributeAllowedTypes(config cty.Value) *management.ConnectionOptionsAttributeAllowedTypes {
+	var coaat *management.ConnectionOptionsAttributeAllowedTypes
+	config.GetAttr("allowed_types").ForEachElement(
+		func(_ cty.Value, allowedTypes cty.Value) (stop bool) {
+			coaat = &management.ConnectionOptionsAttributeAllowedTypes{
+				Email:       value.Bool(allowedTypes.GetAttr("email")),
+				PhoneNumber: value.Bool(allowedTypes.GetAttr("phone_number")),
+			}
+			return stop
+		})
+	return coaat
+}
+
 func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptions{
 		PasswordPolicy:                   value.String(config.GetAttr("password_policy")),
@@ -193,6 +387,9 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		RequiresUsername:                 value.Bool(config.GetAttr("requires_username")),
 		CustomScripts:                    value.MapOfStrings(config.GetAttr("custom_scripts")),
 		Configuration:                    value.MapOfStrings(config.GetAttr("configuration")),
+		Precedence:                       value.Strings(config.GetAttr("precedence")),
+		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -308,6 +505,14 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		},
 	)
 
+	if config.Type().HasAttribute("authentication_methods") && !config.GetAttr("authentication_methods").IsNull() {
+		options.AuthenticationMethods = expandConnectionOptionsAuthenticationMethods(config.GetAttr("authentication_methods"))
+	}
+
+	if config.Type().HasAttribute("passkey_options") && !config.GetAttr("passkey_options").IsNull() {
+		options.PasskeyOptions = expandConnectionOptionsPasskeyOptions(config.GetAttr("passkey_options"))
+	}
+
 	var err error
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))
 
@@ -371,6 +576,7 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		LogoURL:            value.String(config.GetAttr("icon_url")),
 		PKCEEnabled:        value.Bool(config.GetAttr("pkce_enabled")),
 		Scripts:            value.MapOfStrings(config.GetAttr("scripts")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	customHeadersConfig := config.GetAttr("custom_headers")
@@ -568,6 +774,7 @@ func expandConnectionOptionsAD(_ *schema.ResourceData, config cty.Value) (interf
 		NonPersistentAttrs:               value.Strings(config.GetAttr("non_persistent_attrs")),
 		BruteForceProtection:             value.Bool(config.GetAttr("brute_force_protection")),
 		DisableSelfServiceChangePassword: value.Bool(config.GetAttr("disable_self_service_change_password")),
+		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -598,6 +805,8 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 		IdentityAPI:         value.String(config.GetAttr("identity_api")),
 		NonPersistentAttrs:  value.Strings(config.GetAttr("non_persistent_attrs")),
 		TrustEmailVerified:  value.String(config.GetAttr("should_trust_email_verified_connection")),
+		StrategyVersion:     value.Int(config.GetAttr("strategy_version")),
+		UserIDAttribute:     value.String(config.GetAttr("user_id_attribute")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -709,24 +918,27 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 
 func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsSAML{
-		Debug:              value.Bool(config.GetAttr("debug")),
-		SigningCert:        value.String(config.GetAttr("signing_cert")),
-		ProtocolBinding:    value.String(config.GetAttr("protocol_binding")),
-		TenantDomain:       value.String(config.GetAttr("tenant_domain")),
-		DomainAliases:      value.Strings(config.GetAttr("domain_aliases")),
-		SignInEndpoint:     value.String(config.GetAttr("sign_in_endpoint")),
-		SignOutEndpoint:    value.String(config.GetAttr("sign_out_endpoint")),
-		DisableSignOut:     value.Bool(config.GetAttr("disable_sign_out")),
-		SignatureAlgorithm: value.String(config.GetAttr("signature_algorithm")),
-		DigestAglorithm:    value.String(config.GetAttr("digest_algorithm")),
-		SignSAMLRequest:    value.Bool(config.GetAttr("sign_saml_request")),
-		RequestTemplate:    value.String(config.GetAttr("request_template")),
-		UserIDAttribute:    value.String(config.GetAttr("user_id_attribute")),
-		LogoURL:            value.String(config.GetAttr("icon_url")),
-		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
-		EntityID:           value.String(config.GetAttr("entity_id")),
-		MetadataXML:        value.String(config.GetAttr("metadata_xml")),
-		MetadataURL:        value.String(config.GetAttr("metadata_url")),
+		Debug:                       value.Bool(config.GetAttr("debug")),
+		SigningCert:                 value.String(config.GetAttr("signing_cert")),
+		ProtocolBinding:             value.String(config.GetAttr("protocol_binding")),
+		TenantDomain:                value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:               value.Strings(config.GetAttr("domain_aliases")),
+		SignInEndpoint:              value.String(config.GetAttr("sign_in_endpoint")),
+		SignOutEndpoint:             value.String(config.GetAttr("sign_out_endpoint")),
+		DisableSignOut:              value.Bool(config.GetAttr("disable_sign_out")),
+		SignatureAlgorithm:          value.String(config.GetAttr("signature_algorithm")),
+		DigestAglorithm:             value.String(config.GetAttr("digest_algorithm")),
+		SignSAMLRequest:             value.Bool(config.GetAttr("sign_saml_request")),
+		RequestTemplate:             value.String(config.GetAttr("request_template")),
+		UserIDAttribute:             value.String(config.GetAttr("user_id_attribute")),
+		LogoURL:                     value.String(config.GetAttr("icon_url")),
+		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
+		EntityID:                    value.String(config.GetAttr("entity_id")),
+		MetadataXML:                 value.String(config.GetAttr("metadata_xml")),
+		MetadataURL:                 value.String(config.GetAttr("metadata_url")),
+		StrategyVersion:             value.Int(config.GetAttr("strategy_version")),
+		GlobalTokenRevocationJWTIss: value.String(config.GetAttr("global_token_revocation_jwt_iss")),
+		GlobalTokenRevocationJWTSub: value.String(config.GetAttr("global_token_revocation_jwt_sub")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -736,6 +948,7 @@ func expandConnectionOptionsSAML(_ *schema.ResourceData, config cty.Value) (inte
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
@@ -784,6 +997,7 @@ func expandConnectionOptionsADFS(_ *schema.ResourceData, config cty.Value) (inte
 		EnableUsersAPI:     value.Bool(config.GetAttr("api_enable_users")),
 		TrustEmailVerified: value.String(config.GetAttr("should_trust_email_verified_connection")),
 		NonPersistentAttrs: value.Strings(config.GetAttr("non_persistent_attrs")),
+		StrategyVersion:    value.Int(config.GetAttr("strategy_version")),
 	}
 
 	options.SetUserAttributes = value.String(config.GetAttr("set_user_root_attributes"))
@@ -818,6 +1032,7 @@ func expandConnectionOptionsPingFederate(_ *schema.ResourceData, config cty.Valu
 
 	config.GetAttr("idp_initiated").ForEachElement(func(_ cty.Value, idp cty.Value) (stop bool) {
 		options.IdpInitiated = &management.ConnectionOptionsSAMLIdpInitiated{
+			Enabled:              value.Bool(idp.GetAttr("enabled")),
 			ClientID:             value.String(idp.GetAttr("client_id")),
 			ClientProtocol:       value.String(idp.GetAttr("client_protocol")),
 			ClientAuthorizeQuery: value.String(idp.GetAttr("client_authorize_query")),
@@ -1090,4 +1305,35 @@ func checkForUnmanagedConfigurationSecrets(configFromTF, configFromAPI map[strin
 	}
 
 	return warnings
+}
+
+func expandSCIMConfigurationMapping(data *schema.ResourceData) *[]management.SCIMConfigurationMapping {
+	srcMapping := data.Get("mapping").(*schema.Set)
+	mapping := make([]management.SCIMConfigurationMapping, 0, srcMapping.Len())
+	for _, item := range srcMapping.List() {
+		srcMap := item.(map[string]interface{})
+		mapping = append(mapping, management.SCIMConfigurationMapping{
+			Auth0: auth0.String(srcMap["auth0"].(string)),
+			SCIM:  auth0.String(srcMap["scim"].(string)),
+		})
+	}
+
+	return &mapping
+}
+
+func expandSCIMConfiguration(data *schema.ResourceData) *management.SCIMConfiguration {
+	cfg := data.GetRawConfig()
+	scimConfiguration := &management.SCIMConfiguration{}
+	if !cfg.GetAttr("user_id_attribute").IsNull() {
+		scimConfiguration.UserIDAttribute = auth0.String(data.Get("user_id_attribute").(string))
+	}
+	if !cfg.GetAttr("mapping").IsNull() && cfg.GetAttr("mapping").AsValueSet().Length() > 0 {
+		scimConfiguration.Mapping = expandSCIMConfigurationMapping(data)
+	}
+
+	if scimConfiguration.Mapping != nil || scimConfiguration.UserIDAttribute != nil {
+		return scimConfiguration
+	}
+
+	return nil
 }

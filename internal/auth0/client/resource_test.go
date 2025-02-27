@@ -58,6 +58,10 @@ const testAccCreateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 
 	mobile {
 		android {
@@ -79,6 +83,10 @@ resource "auth0_client" "my_client" {
 		facebook {
 			enabled = false
 		}
+
+		google {
+			enabled = true
+		}
 	}
 }
 `
@@ -87,6 +95,11 @@ const testAccUpdateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
+
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 
 	mobile {
 		android {
@@ -108,6 +121,10 @@ resource "auth0_client" "my_client" {
 		facebook {
 			enabled = true
 		}
+
+		google {
+			enabled = false
+		}
 	}
 }
 `
@@ -117,6 +134,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	mobile {
 		android {
 			app_package_name = "com.example"
@@ -137,6 +158,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "non_interactive"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	native_social_login {
 		apple {
 			enabled = false
@@ -157,6 +182,8 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -170,12 +197,16 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "true"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccUpdateMobileClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -191,12 +222,16 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccUpdateMobileClientAgainByRemovingSomeFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -212,6 +247,8 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 			{
@@ -223,6 +260,7 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -237,6 +275,8 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 		},
@@ -2311,6 +2351,194 @@ func TestAccClientCanSetDefaultAuthMethodOnCreate(t *testing.T) {
 			},
 			{
 				Config: acctest.ParseTestName(testAccCreateRegularWebAppClientDefault, t.Name()), // Needed to reset the testing framework after the import state.
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithDefaultOrganization = `
+resource "auth0_organization" "my_org" {
+	name         = "temp-org"
+	display_name = "temp-org"
+}
+
+data "auth0_organization" "my_org" {
+	depends_on = [ resource.auth0_organization.my_org ]
+	name = "temp-org"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [ data.auth0_organization.my_org ]
+    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+    default_organization {
+        flows = ["client_credentials"]
+        organization_id = data.auth0_organization.my_org.id
+    }
+}
+`
+
+const testAccUpdateClientWithDefaultOrganization = `
+resource "auth0_organization" "my_new_org" {
+	name         = "temp-new-org"
+	display_name = "temp-new-org"
+}
+
+data "auth0_organization" "my_new_org" {
+	depends_on = [ resource.auth0_organization.my_new_org ]
+	name = "temp-new-org"
+}
+
+resource "auth0_client" "my_client" {
+	depends_on = [ data.auth0_organization.my_new_org ]
+    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+    default_organization {
+        flows = ["client_credentials"]
+        organization_id = data.auth0_organization.my_new_org.id
+    }
+}
+`
+
+const testAccUpdateClientRemoveDefaultOrganization = `
+resource "auth0_client" "my_client" {
+    name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+    default_organization {
+		disable = true
+    }
+}
+`
+
+const testAccUpdateClientDefaultOrganizationFlowsOnly = `
+resource "auth0_client" "my_client" {
+   name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+   default_organization {
+		flows = ["client_credentials"]
+   }
+}
+`
+
+const testAccUpdateClientDefaultOrganizationOrgIDOnly = `
+resource "auth0_client" "my_client" {
+   name = "Acceptance Test - DefaultOrganization - {{.testName}}"
+   default_organization {
+       organization_id = "org_z5YvxlXPO0NspoIa"
+   }
+}
+`
+
+func TestAccClientWithDefaultOrganization(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithDefaultOrganization, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.0", "client_credentials"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "default_organization.0.organization_id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithDefaultOrganization, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.0", "client_credentials"),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "default_organization.0.organization_id"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientRemoveDefaultOrganization, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - DefaultOrganization - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.disable", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.flows.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "default_organization.0.organization_id", ""),
+				),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationFlowsOnly, t.Name()),
+				ExpectError: regexp.MustCompile("400 Bad Request"),
+			},
+			{
+				Config:      acctest.ParseTestName(testAccUpdateClientDefaultOrganizationOrgIDOnly, t.Name()),
+				ExpectError: regexp.MustCompile("400 Bad Request"),
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithOIDCLogout = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+
+	oidc_logout {
+    	backchannel_logout_urls = ["https://auth0.test/all/logout"]
+		backchannel_logout_initiators {
+			mode = "all"
+		}
+    }
+}
+`
+
+const testAccUpdateClientWithOIDCLogout = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+
+	oidc_logout {
+		backchannel_logout_urls = ["https://auth0.test/custom/logout"]
+		backchannel_logout_initiators {
+			mode = "custom"
+			selected_initiators = ["rp-logout", "idp-logout", "password-changed", "session-expired"]
+		}
+	}
+}
+`
+const testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - OIDC Logout - {{.testName}}"
+	app_type  = "spa"
+}
+`
+
+func TestAccClientOIDCLogout(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithOIDCLogout, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.0", "https://auth0.test/all/logout"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "all"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithOIDCLogout, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_urls.0", "https://auth0.test/custom/logout"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.mode", "custom"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.0.backchannel_logout_initiators.0.selected_initiators.#", "4"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithOIDCLogoutWhenRemovedFromConfig, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+				),
 			},
 		},
 	})

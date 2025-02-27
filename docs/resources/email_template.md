@@ -47,7 +47,7 @@ resource "auth0_email_template" "my_email_template" {
 - `from` (String) Email address to use as the sender. You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).
 - `subject` (String) Subject line of the email. You can include [common variables](https://auth0.com/docs/customize/email/email-templates#common-variables).
 - `syntax` (String) Syntax of the template body. You can use either text or HTML with Liquid syntax.
-- `template` (String) Template name. Options include `verify_email`, `verify_email_by_code`, `reset_email`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
+- `template` (String) Template name. Options include `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `change_password` (legacy), or `password_reset` (legacy).
 
 ### Optional
 

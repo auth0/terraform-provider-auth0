@@ -19,10 +19,14 @@ resource "auth0_organization_connections" "one-to-many" {
   enabled_connections {
     connection_id              = auth0_connection.my_connection-1.id
     assign_membership_on_login = true
+    is_signup_enabled          = false
+    show_as_button             = true
   }
 
   enabled_connections {
     connection_id              = auth0_connection.my_connection-2.id
     assign_membership_on_login = true
+    is_signup_enabled          = false
+    show_as_button             = true
   }
 }

@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	"strings"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -52,6 +53,19 @@ func dataSourceSchema() map[string]*schema.Schema {
 						"automatically granted membership in the organization. When `false`, users must be " +
 						"granted membership in the organization before logging in with this connection.",
 				},
+				"is_signup_enabled": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: "Determines whether organization sign-up should be enabled for this " +
+						"organization connection. Only applicable for database connections. " +
+						"Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.",
+				},
+				"show_as_button": {
+					Type:     schema.TypeBool,
+					Computed: true,
+					Description: "Determines whether a connection should be displayed on this organization’s " +
+						"login prompt. Only applicable for enterprise connections.",
+				},
 			},
 		},
 	}
@@ -63,6 +77,15 @@ func dataSourceSchema() map[string]*schema.Schema {
 		},
 		Computed:    true,
 		Description: "User ID(s) that are members of the organization.",
+	}
+
+	dataSourceSchema["client_grants"] = &schema.Schema{
+		Type: schema.TypeSet,
+		Elem: &schema.Schema{
+			Type: schema.TypeString,
+		},
+		Computed:    true,
+		Description: "Client Grant ID(s) that are associated to the organization.",
 	}
 
 	return dataSourceSchema
@@ -88,7 +111,12 @@ func readOrganizationForDataSource(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
-	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers))
+	foundClientGrants, err := fetchAllOrganizationClientGrants(ctx, api, foundOrganization.GetID())
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	return diag.FromErr(flattenOrganizationForDataSource(data, foundOrganization, foundConnections, foundMembers, foundClientGrants))
 }
 
 func findOrganizationByIDOrName(
@@ -127,26 +155,52 @@ func fetchAllOrganizationConnections(ctx context.Context, api *management.Manage
 	return foundConnections, nil
 }
 
-func fetchAllOrganizationMembers(ctx context.Context, api *management.Management, organizationID string) ([]string, error) {
-	foundMembers := make([]string, 0)
-	var page int
+func fetchAllOrganizationMembers(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]management.OrganizationMember, error) {
+	var foundMembers []management.OrganizationMember
+	var from string
+
+	options := []management.RequestOption{
+		management.Take(100),
+		management.IncludeFields("user_id"),
+	}
 
 	for {
-		members, err := api.Organization.Members(ctx, organizationID, management.Page(page), management.PerPage(100))
+		if from != "" {
+			options = append(options, management.From(from))
+		}
+
+		membersList, err := api.Organization.Members(ctx, organizationID, options...)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, member := range members.Members {
-			foundMembers = append(foundMembers, member.GetUserID())
-		}
-
-		if !members.HasNext() {
+		foundMembers = append(foundMembers, membersList.Members...)
+		if !membersList.HasNext() {
 			break
 		}
 
-		page++
+		from = membersList.Next
 	}
 
 	return foundMembers, nil
+}
+
+func fetchAllOrganizationClientGrants(
+	ctx context.Context,
+	api *management.Management,
+	organizationID string,
+) ([]*management.ClientGrant, error) {
+	clientGrantList, err := api.Organization.ClientGrants(ctx, organizationID)
+	if err != nil {
+		if strings.Contains(err.Error(), "Insufficient scope") {
+			return []*management.ClientGrant{}, nil
+		}
+		return nil, err
+	}
+
+	return clientGrantList.ClientGrants, nil
 }

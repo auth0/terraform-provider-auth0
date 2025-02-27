@@ -92,6 +92,7 @@ func flattenBrandingThemeColors(colors management.BrandingThemeColors) []interfa
 		"base_focus_color":          colors.GetBaseFocusColor(),
 		"base_hover_color":          colors.GetBaseHoverColor(),
 		"body_text":                 colors.BodyText,
+		"captcha_widget_theme":      colors.CaptchaWidgetTheme,
 		"error":                     colors.Error,
 		"header":                    colors.Header,
 		"icons":                     colors.Icons,

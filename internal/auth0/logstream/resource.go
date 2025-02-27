@@ -49,6 +49,12 @@ func NewResource() *schema.Resource {
 				Description: "Type of the log stream, which indicates the sink provider. " +
 					"Options include: `" + strings.Join(validLogStreamTypes, "`, `") + "`.",
 			},
+			"is_priority": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Set True for priority log streams, False for non-priority",
+			},
 			"status": {
 				Type:     schema.TypeString,
 				Optional: true,

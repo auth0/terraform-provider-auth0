@@ -54,13 +54,24 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 // *management.Management client and *mutex.KeyValue is stored
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
-	return func(ctx context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		domain := data.Get("domain").(string)
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
 		apiToken := data.Get("api_token").(string)
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
+
+		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
+			return nil, diag.Diagnostics{
+				{
+					Severity: diag.Error,
+					Summary:  "Missing environment variables",
+					Detail: fmt.Sprintf("Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. " +
+						"Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs"),
+				},
+			}
+		}
 
 		apiClient, err := management.New(domain,
 			authenticationOption(clientID, clientSecret, apiToken, audience),

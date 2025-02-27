@@ -49,6 +49,20 @@ func SetExistingAttributesAsOptional(schema map[string]*schema.Schema, keys ...s
 	}
 }
 
+// SetExistingAttributesAsRequired updates the schema of existing top level attributes by
+// ensuring they are required by setting Computed and Optional to false and Required to true.
+func SetExistingAttributesAsRequired(schema map[string]*schema.Schema, keys ...string) {
+	for _, attribute := range keys {
+		if _, ok := schema[attribute]; !ok {
+			continue
+		}
+
+		schema[attribute].Computed = false
+		schema[attribute].Optional = false
+		schema[attribute].Required = true
+	}
+}
+
 // Clone returns a shallow clone of m.
 func Clone[M ~map[K]V, K comparable, V any](m M) M {
 	if m == nil {

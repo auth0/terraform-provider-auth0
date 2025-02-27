@@ -48,6 +48,21 @@ func NewGrantResource() *schema.Resource {
 				Required:    true,
 				Description: "Permissions (scopes) included in this grant.",
 			},
+			"organization_usage": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"allow", "deny", "require",
+				}, true),
+				Description: "Defines whether organizations can be used with client credentials exchanges " +
+					"for this grant. (defaults to deny when not defined)",
+			},
+			"allow_any_organization": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Description: "If enabled, any organization can be used with this grant. If disabled (default), " +
+					"the grant must be explicitly assigned to the desired organizations.",
+			},
 		},
 	}
 }

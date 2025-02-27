@@ -22,10 +22,17 @@ func Organizations() {
 				return err
 			}
 
-			var page int
 			var result *multierror.Error
+			var from string
+			options := []management.RequestOption{
+				management.Take(100),
+			}
 			for {
-				organizationList, err := api.Organization.List(ctx, management.Page(page))
+				if from != "" {
+					options = append(options, management.From(from))
+				}
+
+				organizationList, err := api.Organization.List(ctx, options...)
 				if err != nil {
 					return err
 				}
@@ -42,10 +49,12 @@ func Organizations() {
 						log.Printf("[DEBUG] ✗ %s", organization.GetName())
 					}
 				}
+
 				if !organizationList.HasNext() {
 					break
 				}
-				page++
+
+				from = organizationList.Next
 			}
 
 			return result.ErrorOrNil()

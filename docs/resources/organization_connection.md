@@ -30,6 +30,8 @@ resource "auth0_organization_connection" "my_org_conn" {
   organization_id            = auth0_organization.my_organization.id
   connection_id              = auth0_connection.my_connection.id
   assign_membership_on_login = true
+  is_signup_enabled          = false
+  show_as_button             = true
 }
 ```
 
@@ -43,7 +45,9 @@ resource "auth0_organization_connection" "my_org_conn" {
 
 ### Optional
 
-- `assign_membership_on_login` (Boolean) When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
+- `assign_membership_on_login` (Boolean) When `true`, all users that log in with this connection will be automatically granted membership in the organization. When `false`, users must be granted membership in the organization before logging in with this connection.
+- `is_signup_enabled` (Boolean) Determines whether organization sign-up should be enabled for this organization connection. Only applicable for database connections. Note: `is_signup_enabled` can only be `true` if `assign_membership_on_login` is `true`.
+- `show_as_button` (Boolean) Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections.
 
 ### Read-Only
 

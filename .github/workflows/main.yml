@@ -19,6 +19,9 @@ jobs:
           go-version-file: go.mod
           check-latest: true
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
       - name: Check that docs were generated
         run: make check-docs
 
@@ -40,6 +43,9 @@ jobs:
         with:
           go-version-file: go.mod
           check-latest: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
       - name: Run tests
         run: make test-acc

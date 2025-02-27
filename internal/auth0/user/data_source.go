@@ -15,8 +15,9 @@ import (
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readUserForDataSource,
-		Description: "Data source to retrieve a specific Auth0 user by `user_id`.",
-		Schema:      dataSourceSchema(),
+		Description: "Data source to retrieve a specific Auth0 user by `user_id` or by `lucene query`. " +
+			"If filtered by Lucene Query, it should include sufficient filters to retrieve a unique user.",
+		Schema: dataSourceSchema(),
 	}
 }
 
@@ -24,9 +25,17 @@ func dataSourceSchema() map[string]*schema.Schema {
 	dataSourceSchema := internalSchema.TransformResourceToDataSource(internalSchema.Clone(NewResource().Schema))
 
 	dataSourceSchema["user_id"] = &schema.Schema{
-		Type:        schema.TypeString,
-		Required:    true,
-		Description: "ID of the user.",
+		Type:         schema.TypeString,
+		Optional:     true,
+		Description:  "ID of the user.",
+		AtLeastOneOf: []string{"user_id", "query"},
+	}
+
+	dataSourceSchema["query"] = &schema.Schema{
+		Type:         schema.TypeString,
+		Optional:     true,
+		Description:  "Lucene Query for retrieving a user.",
+		AtLeastOneOf: []string{"user_id", "query"},
 	}
 
 	dataSourceSchema["permissions"] = &schema.Schema{
@@ -73,16 +82,39 @@ func dataSourceSchema() map[string]*schema.Schema {
 
 func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	var user *management.User
 
 	userID := data.Get("user_id").(string)
+	if userID != "" {
+		u, err := api.User.Read(ctx, userID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		user = u
+		data.SetId(user.GetID())
+	} else {
+		query := data.Get("query").(string)
+		users, err := api.User.List(ctx, management.Parameter("q", query))
+		if err != nil {
+			return diag.FromErr(err)
+		}
 
-	user, err := api.User.Read(ctx, userID)
-	if err != nil {
-		return diag.FromErr(err)
+		switch users.Length {
+		case 0:
+			return diag.Errorf("No users found. Note: if a user was just created/deleted, it takes some time for it to be indexed.")
+		case 1:
+			// The data-source retrieves the details about a user along with roles and permissions.
+			// The roles and permissions are slices.
+			// Hence, it is important that the search bottoms out to a single user.
+			// If multiple users are retrieved via Lucene Query, we prompt the user to add further filters.
+			user = users.Users[0]
+			data.SetId(users.Users[0].GetID())
+		default:
+			return diag.Errorf("Further improve the query to retrieve a single user from the query")
+		}
 	}
 
-	data.SetId(user.GetID())
-
+	// Populate Roles for the retrieved User.
 	var roles []*management.Role
 	var rolesPage int
 	for {
@@ -100,6 +132,7 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 		rolesPage++
 	}
 
+	// Populate Permissions for the retrieved User.
 	var permissions []*management.Permission
 	var permissionsPage int
 	for {

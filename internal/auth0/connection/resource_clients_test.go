@@ -163,6 +163,9 @@ resource "auth0_connection_clients" "my_conn_client_assoc" {
 func TestAccConnectionClientsImport(t *testing.T) {
 	if os.Getenv("AUTH0_DOMAIN") != acctest.RecordingsDomain {
 		// The test runs only with recordings as it requires an initial setup.
+		// If you need to re-record it, comment out the t.Skip, create the
+		// resources defined above and fix the IDs in the test before running
+		// make record.
 		t.Skip()
 	}
 
@@ -172,21 +175,21 @@ func TestAccConnectionClientsImport(t *testing.T) {
 				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
 				ResourceName:       "auth0_connection.my_conn",
 				ImportState:        true,
-				ImportStateId:      "con_ouKiPbGv6eONERfA",
+				ImportStateId:      "con_QfclIwGFilDZfig3",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
 				ResourceName:       "auth0_client.my_client-1",
 				ImportState:        true,
-				ImportStateId:      "TGIXl1IBOpFmwBpxuCLsoXwl5OQBa1Z7",
+				ImportStateId:      "iUytqzFf4KueZRmFL7DRFNqn8RrQGu5Q",
 				ImportStatePersist: true,
 			},
 			{
 				Config:             acctest.ParseTestName(testAccConnectionClientsImport, t.Name()),
 				ResourceName:       "auth0_connection_clients.my_conn_client_assoc",
 				ImportState:        true,
-				ImportStateId:      "con_ouKiPbGv6eONERfA",
+				ImportStateId:      "con_QfclIwGFilDZfig3",
 				ImportStatePersist: true,
 			},
 			{

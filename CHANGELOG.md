@@ -1,3 +1,9 @@
+## v1.13.1
+
+FEATURES:
+- `resource/auth0_prompt_screen_renderer`: Add support for new screens( `EA` Release) ([#1158](https://github.com/auth0/terraform-provider-auth0/pull/1158/))
+
+
 ## v1.13.0
 
 ENHANCEMENTS:
@@ -17,7 +23,7 @@ ENHANCEMENTS:
 ## v1.12.0
 
 FEATURES:
-- `resource/auth0_prompt_screen_renderer`: Add new screens support to auth0_prompt_screen_renderer  (`EA` Release) ([#1144](https://github.com/auth0/terraform-provider-auth0/pull/1144/))
+- `resource/auth0_prompt_screen_renderer`: Add support for new screens (`EA` Release) ([#1144](https://github.com/auth0/terraform-provider-auth0/pull/1144/))
 
 ## v1.11.1
 
@@ -40,16 +46,18 @@ ENHANCEMENTS:
 ## v1.10.0
 
 ENHANCEMENTS:
-- Support `password reset by otp code` email template and `verification_method` field in connection schema. ([#1113](https://github.com/auth0/terraform-provider-auth0/pull/1113/))
-- Update workflow to install terraform manually since ubuntu image has removed it ([#1116](https://github.com/auth0/terraform-provider-auth0/pull/1116/))
-- Support never_on_login as an allowed value for set_user_root_attributes ([#1123](https://github.com/auth0/terraform-provider-auth0/pull/1123/))
-
+- `resource/auth0_connection` - Add a Support `password reset by otp code` email template and `verification_method` field in connection schema. ([#1113](https://github.com/auth0/terraform-provider-auth0/pull/1113/))
+- `resource/auth0_connection` - Support never_on_login as an allowed value for set_user_root_attributes ([#1123](https://github.com/auth0/terraform-provider-auth0/pull/1123/))
 
 BUG FIXES:
-- Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
-- Fix: IdP-initiated SSO Behavior by adding the missing enabled field to options param connections ([#1105](https://github.com/auth0/terraform-provider-auth0/pull/1105/))
-- Fix: Update example and docs for auth0_flow resource([#1129](https://github.com/auth0/terraform-provider-auth0/pull/1129/))
-- Fix: Update example and docs for auth0_prompt_screen_renderer resource([#1127](https://github.com/auth0/terraform-provider-auth0/pull/1127/))
+- `resource/auth0_actions` - Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
+- `data-source/auth0_connection`- Fix: IdP-initiated SSO Behavior by adding the missing enabled field to options param connections ([#1105](https://github.com/auth0/terraform-provider-auth0/pull/1105/))
+- `resource/auth0_flow` - Fix: Update example and docs for auth0_flow resource([#1129](https://github.com/auth0/terraform-provider-auth0/pull/1129/))
+- `resource/auth0_prompt_screen_renderer` - Fix: Update example and docs for auth0_prompt_screen_renderer resource([#1127](https://github.com/auth0/terraform-provider-auth0/pull/1127/))
+
+NOTES:
+- Update workflow to install terraform manually since ubuntu image has removed it ([#1116](https://github.com/auth0/terraform-provider-auth0/pull/1116/))
+
 
 ## v1.9.1
 

@@ -8,12 +8,15 @@ description: |-
 
 Actions are secure, tenant-specific, versioned functions written in Node.js that execute at certain points during the Auth0 runtime. Actions are used to customize and extend Auth0's capabilities with custom logic.
 
+-> An action bound to a trigger cannot be deleted. To destroy such an action, the trigger binding must first be deleted.
+A binding is usually managed by [auth0_trigger_action](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/trigger_action) resource.
+The provider also supports a 1:many variant [auth0_trigger_actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/trigger_actions).
+If by any means, a binding is missing is the state file, it can be imported to the state and deleted, before attempting to delete the action.
+
+
 ## Example Usage
 
 ```terraform
-// Note : we are unable to delete an action bound to a trigger
-// So, first try to import the auth0_trigger_action with the corresponding trigger id
-// and delete the imported auth0_trigger_action's resource to delete the action.
 resource "auth0_action" "my_action" {
   name    = format("Test Action %s", timestamp())
   runtime = "node18"

@@ -8,6 +8,9 @@ description: |-
 
 With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email providers, so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
 
+-> For configuring a custom email provider, an action with supported triggers custom-email-provider must exist.
+
+
 ## Example Usage
 
 ```terraform
@@ -75,10 +78,10 @@ resource "auth0_email_provider" "ms365_email_provider" {
   }
 }
 
-# This is an example on how to set up the email provider with a custom action.
-# Make sure a corresponding action exists with custom-email-provider as supported triggers
-resource "auth0_action" "send_custom_email" {
-  name    = "Custom Email Provider"
+# Below is an example of how to set up a custom email provider.
+# The action with custom-email-provider as supported_triggers is a prerequisite.
+resource "auth0_action" "custom_email_provider_action" {
+  name    = "custom-email-provider-action"
   runtime = "node18"
   deploy  = true
   code    = <<-EOT
@@ -95,7 +98,6 @@ resource "auth0_action" "send_custom_email" {
    };
   EOT
 
-
   supported_triggers {
     id      = "custom-email-provider"
     version = "v1"
@@ -103,9 +105,9 @@ resource "auth0_action" "send_custom_email" {
 }
 
 resource "auth0_email_provider" "custom_email_provider" {
-  depends_on           = [auth0_action.send_custom_email] # Ensure the action is created first with `custom-email-provider` as the supported_triggers
-  name                 = "custom"                         # Indicates a custom implementation
-  enabled              = true                             # Disable the default email provider
+  depends_on           = [auth0_action.custom_email_provider_action] # Ensuring the action is created first with `custom-email-provider` as the supported_triggers
+  name                 = "custom"                                    # Indicates a custom implementation
+  enabled              = true
   default_from_address = "accounts@example.com"
   credentials {}
 }

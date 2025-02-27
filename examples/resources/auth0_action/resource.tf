@@ -1,6 +1,3 @@
-// Note : we are unable to delete an action bound to a trigger
-// So, first try to import the auth0_trigger_action with the corresponding trigger id
-// and delete the imported auth0_trigger_action's resource to delete the action.
 resource "auth0_action" "my_action" {
   name    = format("Test Action %s", timestamp())
   runtime = "node18"

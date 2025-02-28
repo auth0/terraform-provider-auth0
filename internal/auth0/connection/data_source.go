@@ -11,7 +11,7 @@ import (
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
-// NewDataSource will return a new auth0_connection_client data source.
+// NewDataSource will return a new auth0_connection data source.
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readConnectionForDataSource,

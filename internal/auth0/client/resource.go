@@ -77,10 +77,11 @@ func NewResource() *schema.Resource {
 					"If none is set, the default badge for the application type will be shown.",
 			},
 			"is_first_party": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Indicates whether this client is a first-party client.",
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Indicates whether this client is a first-party client." +
+					"Defaults to true from the API",
 			},
 			"is_token_endpoint_ip_header_trusted": {
 				Type:     schema.TypeBool,

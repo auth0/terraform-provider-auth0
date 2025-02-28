@@ -54,7 +54,7 @@ data "auth0_client" "some-client-by-id" {
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
-- `is_first_party` (Boolean) Indicates whether this client is a first-party client.
+- `is_first_party` (Boolean) Indicates whether this client is a first-party client.Defaults to true from the API
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwt_configuration` (List of Object) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedatt--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.

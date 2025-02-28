@@ -376,6 +376,34 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"error_page": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Configuration for the error page",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"html": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Custom Error HTML (Liquid syntax is supported)",
+						},
+						"show_log_link": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).",
+						},
+						"url": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "URL to redirect to when an error occurs instead of showing the default error page",
+						},
+					},
+				},
+			},
 		},
 	}
 }

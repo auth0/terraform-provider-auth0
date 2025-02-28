@@ -90,4 +90,15 @@ func TestFlattenTenant(t *testing.T) {
 		assert.NoError(t, err)
 		assert.True(t, mockResourceData.Get("mtls").([]interface{})[0].(map[string]interface{})["disable"].(bool))
 	})
+
+	t.Run("it sets the error_page to nil if there is nothing set", func(t *testing.T) {
+		tenant := management.Tenant{
+			ErrorPage: nil,
+		}
+
+		err := flattenTenant(mockResourceData, &tenant)
+
+		assert.NoError(t, err)
+		assert.Equal(t, mockResourceData.Get("error_page"), []interface{}{interface{}(nil)})
+	})
 }

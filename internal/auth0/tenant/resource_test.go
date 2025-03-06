@@ -88,6 +88,10 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_tenant.my_tenant", "acr_values_supported.*", "bar"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.#", "1"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.disable", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html></html>"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.url", "https://mycompany.org/error"),
 				),
 			},
 			{
@@ -333,6 +337,11 @@ resource "auth0_tenant" "my_tenant" {
 	}
 	mtls {
 		disable = true
+	}
+	error_page {
+		html          = "<html></html>"
+		show_log_link = false
+		url           = "https://mycompany.org/error"
 	}
 }
 `

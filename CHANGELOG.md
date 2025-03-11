@@ -71,7 +71,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
-- `resource/auth0_actions` - Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
+- `resource/auth0_action` - Fix: Dynamic block for action.Secrets and iterates via k/v ([#1115](https://github.com/auth0/terraform-provider-auth0/pull/1115/))
 - `data-source/auth0_connection`- Fix: IdP-initiated SSO Behavior by adding the missing enabled field to options param connections ([#1105](https://github.com/auth0/terraform-provider-auth0/pull/1105/))
 - `resource/auth0_flow` - Fix: Update example and docs for auth0_flow resource([#1129](https://github.com/auth0/terraform-provider-auth0/pull/1129/))
 - `resource/auth0_prompt_screen_renderer` - Fix: Update example and docs for auth0_prompt_screen_renderer resource([#1127](https://github.com/auth0/terraform-provider-auth0/pull/1127/))

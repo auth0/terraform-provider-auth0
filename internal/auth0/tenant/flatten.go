@@ -23,6 +23,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
+		data.Set("oidc_logout", flattenTenantOidcLogout(tenant.GetOIDCLogout())),
 		data.Set("allow_organization_name_in_authentication_api", tenant.GetAllowOrgNameInAuthAPI()),
 		data.Set("customize_mfa_in_postlogin_action", tenant.GetCustomizeMFAInPostLoginAction()),
 		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
@@ -96,6 +97,13 @@ func flattenTenantSessionCookie(sessionCookie *management.TenantSessionCookie) [
 func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	m := make(map[string]interface{})
 	m["oidc_logout_prompt_enabled"] = sessions.GetOIDCLogoutPromptEnabled()
+
+	return []interface{}{m}
+}
+
+func flattenTenantOidcLogout(oidcLogout *management.TenantOIDCLogout) []interface{} {
+	m := make(map[string]interface{})
+	m["rp_logout_end_session_endpoint_discovery"] = oidcLogout.GetOIDCResourceProviderLogoutEndSessionEndpointDiscovery()
 
 	return []interface{}{m}
 }

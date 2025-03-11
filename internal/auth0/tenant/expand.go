@@ -29,6 +29,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		Flags:                                expandTenantFlags(config.GetAttr("flags")),
 		SessionCookie:                        expandTenantSessionCookie(config.GetAttr("session_cookie")),
 		Sessions:                             expandTenantSessions(config.GetAttr("sessions")),
+		OIDCLogout:                           expandTenantOIDCLogout(config.GetAttr("oidc_logout")),
 		AllowOrgNameInAuthAPI:                value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
 		CustomizeMFAInPostLoginAction:        value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
 		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
@@ -108,6 +109,21 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	}
 
 	return &sessions
+}
+
+func expandTenantOIDCLogout(config cty.Value) *management.TenantOIDCLogout {
+	var oidcLogout management.TenantOIDCLogout
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery = value.Bool(cfg.GetAttr("rp_logout_end_session_endpoint_discovery"))
+		return stop
+	})
+
+	if oidcLogout == (management.TenantOIDCLogout{}) {
+		return nil
+	}
+
+	return &oidcLogout
 }
 
 func isACRValuesSupportedNull(data *schema.ResourceData) bool {

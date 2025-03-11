@@ -322,6 +322,22 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"oidc_logout": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Settings related to OIDC RP-initiated Logout.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"rp_logout_end_session_endpoint_discovery": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration.",
+						},
+					},
+				},
+			},
 			"allow_organization_name_in_authentication_api": {
 				Type:        schema.TypeBool,
 				Optional:    true,

@@ -157,6 +157,7 @@ func New() *schema.Provider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
+			"auth0_action":                        action.NewDataSource(),
 			"auth0_branding":                      branding.NewDataSource(),
 			"auth0_branding_theme":                branding.NewThemeDataSource(),
 			"auth0_client":                        client.NewDataSource(),

@@ -61,8 +61,9 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		apiToken := data.Get("api_token").(string)
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
+		dynamicCredentials := data.Get("dynamic_credentials").(bool)
 
-		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
+		if !dynamicCredentials && apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
 			return nil, diag.Diagnostics{
 				{
 					Severity: diag.Error,

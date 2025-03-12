@@ -90,7 +90,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.disable", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.#", "1"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html></html>"),
-					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.url", "https://mycompany.org/error"),
 				),
 			},

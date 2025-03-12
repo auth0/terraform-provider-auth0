@@ -379,7 +379,7 @@ func NewResource() *schema.Resource {
 			"error_page": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
+				Computed:    false,
 				MaxItems:    1,
 				Description: "Configuration for the error page",
 				Elem: &schema.Resource{

@@ -130,6 +130,7 @@ func New() *schema.Provider {
 			"auth0_organization_member_roles":        organization.NewMemberRolesResource(),
 			"auth0_organization_members":             organization.NewMembersResource(),
 			"auth0_pages":                            page.NewResource(),
+			"auth0_phone_provider":                   branding.NewPhoneProviderResource(),
 			"auth0_prompt":                           prompt.NewResource(),
 			"auth0_prompt_custom_text":               prompt.NewCustomTextResource(),
 			"auth0_prompt_partials":                  prompt.NewPartialsResource(),
@@ -156,6 +157,7 @@ func New() *schema.Provider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"auth0_attack_protection":             attackprotection.NewDataSource(),
+			"auth0_action":                        action.NewDataSource(),
 			"auth0_branding":                      branding.NewDataSource(),
 			"auth0_branding_theme":                branding.NewThemeDataSource(),
 			"auth0_client":                        client.NewDataSource(),
@@ -168,6 +170,7 @@ func New() *schema.Provider {
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
+			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_prompt_screen_renderer":        prompt.NewPromptScreenRenderDataSource(),
 			"auth0_resource_server":               resourceserver.NewDataSource(),

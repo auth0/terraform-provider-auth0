@@ -52,13 +52,9 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		networkACL.Rule.Match = expandNetworkACLRuleMatch(matchMap)
 	}
 
-	// Ensure NotMatch is always included, even if empty
 	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
 		notMatchMap := notMatch[0].(map[string]interface{})
 		networkACL.Rule.NotMatch = expandNetworkACLRuleMatch(notMatchMap)
-	} else {
-		// Create an empty NotMatch object if not provided
-		networkACL.Rule.NotMatch = &management.NetworkACLRuleMatch{}
 	}
 
 	if scope, ok := rule["scope"].(string); ok {

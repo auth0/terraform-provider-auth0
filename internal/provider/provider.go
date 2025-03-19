@@ -1,8 +1,9 @@
 package provider
 
 import (
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
 	"os"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 

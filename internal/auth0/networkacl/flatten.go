@@ -47,7 +47,7 @@ func flattenNetworkACL(data *schema.ResourceData, networkACL *management.Network
 			rule["scope"] = networkACL.Rule.Scope
 		}
 
-		// Only set the rule if we have at least one field
+		// Only set the rule if we have at least one field.
 		if len(rule) > 0 {
 			if err := data.Set("rule", []interface{}{rule}); err != nil {
 				result = multierror.Append(result, err)
@@ -72,7 +72,7 @@ func flattenNetworkACLRuleAction(action *management.NetworkACLRuleAction) []inte
 		"redirect": action.Redirect,
 	}
 
-	// Only include redirect_uri if it's not nil
+	// Only include redirect_uri if it's not nil.
 	if action.RedirectURI != nil {
 		actionMap["redirect_uri"] = action.RedirectURI
 	}
@@ -89,17 +89,17 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 
 	m := map[string]interface{}{}
 
-	// Only set fields that are not nil
+	// Only set fields that are not nil.
 	if match.AnonymousProxy != nil {
 		m["anonymous_proxy"] = match.AnonymousProxy
 	}
 
-	// Handle slice of integers
+	// Handle slice of integers.
 	if len(match.Asns) > 0 {
 		m["asns"] = match.Asns
 	}
 
-	// Handle string slices - only set if not nil and not empty
+	// Handle string slices - only set if not nil and not empty.
 	if match.GeoCountryCodes != nil && len(*match.GeoCountryCodes) > 0 {
 		m["geo_country_codes"] = *match.GeoCountryCodes
 	}
@@ -128,7 +128,7 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 		m["user_agents"] = *match.UserAgents
 	}
 
-	// Only return a non-empty map
+	// Only return a non-empty map.
 	if len(m) > 0 {
 		return []interface{}{m}
 	}

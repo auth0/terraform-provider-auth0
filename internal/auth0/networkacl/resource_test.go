@@ -90,7 +90,7 @@ resource "auth0_network_acl" "my_acl" {
 }
 `
 
-// checkNetworkACLExists verifies the resource exists in Auth0
+// checkNetworkACLExists verifies the resource exists in Auth0.
 func checkNetworkACLExists(resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
 		rs, ok := state.RootModule().Resources[resourceName]
@@ -180,7 +180,7 @@ func TestAccNetworkACL(t *testing.T) {
 	})
 }
 
-// Test validation errors
+// Test validation errors.
 const testAccNetworkACLInvalidAction = `
 resource "auth0_network_acl" "my_acl" {
 	description = "Invalid Action - {{.testName}}"
@@ -297,7 +297,7 @@ func TestAccNetworkACLValidation(t *testing.T) {
 	})
 }
 
-// Test for edge cases and maximum values
+// Test for edge cases and maximum values.
 func TestAccNetworkACLEdgeCases(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{

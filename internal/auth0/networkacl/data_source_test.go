@@ -11,7 +11,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-// checkNetworkACLDataSourceExists verifies the data source exists in state
+// checkNetworkACLDataSourceExists verifies the data source exists in state.
 func checkNetworkACLDataSourceExists(resourceName string) resource.TestCheckFunc {
 	return func(state *terraform.State) error {
 		rs, ok := state.RootModule().Resources[resourceName]

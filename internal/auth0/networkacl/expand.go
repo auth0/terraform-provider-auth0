@@ -12,12 +12,12 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 	cfg := data.GetRawConfig()
 	networkACL := &management.NetworkACL{}
 
-	// Required fields should always be included
+	// Required fields should always be included.
 	networkACL.Description = value.String(cfg.GetAttr("description"))
 	networkACL.Active = value.Bool(cfg.GetAttr("active"))
 	networkACL.Priority = value.Int(cfg.GetAttr("priority"))
 
-	// Rule is required, so we can directly access it
+	// Rule is required, so we can directly access it.
 	rule := data.Get("rule").([]interface{})[0].(map[string]interface{})
 	networkACL.Rule = &management.NetworkACLRule{}
 
@@ -25,7 +25,7 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		actionMap := action[0].(map[string]interface{})
 		networkACL.Rule.Action = &management.NetworkACLRuleAction{}
 
-		// Only set properties that are explicitly true
+		// Only set properties that are explicitly true.
 		if block, ok := actionMap["block"].(bool); ok && block {
 			networkACL.Rule.Action.Block = auth0.Bool(true)
 		}
@@ -40,7 +40,7 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 
 		if redirect, ok := actionMap["redirect"].(bool); ok && redirect {
 			networkACL.Rule.Action.Redirect = auth0.Bool(true)
-			// Only set RedirectURI if redirect is true
+			// Only set RedirectURI if redirect is true.
 			if redirectURI, ok := actionMap["redirect_uri"].(string); ok && redirectURI != "" {
 				networkACL.Rule.Action.RedirectURI = auth0.String(redirectURI)
 			}

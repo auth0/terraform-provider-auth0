@@ -99,6 +99,6 @@ func TestFlattenTenant(t *testing.T) {
 		err := flattenTenant(mockResourceData, &tenant)
 
 		assert.NoError(t, err)
-		assert.Equal(t, mockResourceData.Get("error_page"), []interface{}{interface{}(nil)})
+		assert.Equal(t, mockResourceData.Get("error_page"), []interface{}{})
 	})
 }

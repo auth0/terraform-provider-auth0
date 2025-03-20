@@ -173,10 +173,40 @@ func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSCo
 	return &mtls
 }
 
+func isErrorPageConfigurationNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("error_page") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("error_page")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		html := cfg.GetAttr("html")
+		showLogLink := cfg.GetAttr("show_log_link")
+		url := cfg.GetAttr("url")
+
+		// If any of the attributes are set, the error_page is NOT null/empty.
+		if (!html.IsNull() && html.AsString() != "") ||
+			(!showLogLink.IsNull() && showLogLink.True() ||
+				(!url.IsNull() && url.AsString() != "")) {
+			empty = false
+		}
+		return stop
+	}) {
+		// Early return if the block is explicitly set to `null`.
+		return true
+	}
+
+	return empty
+}
+
 func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantErrorPage {
 	if !data.IsNewResource() && !data.HasChange("error_page") {
 		return nil
+	} else if isErrorPageConfigurationNull(data) {
+		return nil
 	}
+
 	var errorPage management.TenantErrorPage
 
 	config := data.GetRawConfig().GetAttr("error_page")

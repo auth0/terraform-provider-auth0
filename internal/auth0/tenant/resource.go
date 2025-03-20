@@ -379,7 +379,6 @@ func NewResource() *schema.Resource {
 			"error_page": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    false,
 				MaxItems:    1,
 				Description: "Configuration for the error page",
 				Elem: &schema.Resource{
@@ -387,13 +386,11 @@ func NewResource() *schema.Resource {
 						"html": {
 							Type:        schema.TypeString,
 							Optional:    true,
-							Computed:    true,
 							Description: "Custom Error HTML (Liquid syntax is supported)",
 						},
 						"show_log_link": {
 							Type:        schema.TypeBool,
 							Optional:    true,
-							Computed:    true,
 							Description: "Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).",
 						},
 						"url": {
@@ -484,6 +481,23 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 	time.Sleep(800 * time.Millisecond)
+
+	if isErrorPageConfigurationNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"error_page": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	// Check if error_page is explicitly set to null in Terraform configuration
+	if attr := data.GetRawConfig().GetAttr("error_page"); attr.IsNull() {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"error_page": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	return readTenant(ctx, data, meta)
 }

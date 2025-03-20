@@ -113,12 +113,15 @@ func flattenMTLSConfiguration(mtls *management.TenantMTLSConfiguration) []interf
 }
 
 func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []interface{} {
-	m := make(map[string]interface{})
-	if errorPage != nil {
-		m["html"] = errorPage.GetHTML()
-		m["show_log_link"] = errorPage.GetShowLogLink()
-		m["url"] = errorPage.GetURL()
+	if errorPage == nil {
+		return nil
 	}
+
+	m := make(map[string]interface{})
+
+	m["html"] = errorPage.GetHTML()
+	m["show_log_link"] = errorPage.GetShowLogLink()
+	m["url"] = errorPage.GetURL()
 
 	return []interface{}{m}
 }

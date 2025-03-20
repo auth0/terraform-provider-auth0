@@ -61,6 +61,10 @@ var (
 		string(management.ScreenResetPassword),
 		string(management.ScreenResetPasswordSuccess),
 		string(management.ScreenResetPasswordError),
+		string(management.ScreenResetPasswordMFAEmailChallenge),
+		string(management.ScreenResetPasswordMFAOTPChallenge),
+		string(management.ScreenResetPasswordMFAPushChallengePush),
+		string(management.ScreenResetPasswordMFASMSChallenge),
 		string(management.ScreenMFADetectBrowserCapabilities),
 		string(management.ScreenMFAEnrollResult),
 		string(management.ScreenMFABeginEnrollOptions),
@@ -83,10 +87,6 @@ var (
 		string(management.ScreenMFAOTPChallenge),
 		string(management.ScreenMFAOTPEnrollmentCode),
 		string(management.ScreenMFAOTPEnrollmentQR),
-		string(management.ScreenResetPasswordMFAEmailChallenge),
-		string(management.ScreenResetPasswordMFAOTPChallenge),
-		string(management.ScreenResetPasswordMFAPushChallengePush),
-		string(management.ScreenResetPasswordMFASMSChallenge),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

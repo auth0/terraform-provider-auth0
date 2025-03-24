@@ -29,11 +29,13 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		Flags:                                expandTenantFlags(config.GetAttr("flags")),
 		SessionCookie:                        expandTenantSessionCookie(config.GetAttr("session_cookie")),
 		Sessions:                             expandTenantSessions(config.GetAttr("sessions")),
+		OIDCLogout:                           expandTenantOIDCLogout(config.GetAttr("oidc_logout")),
 		AllowOrgNameInAuthAPI:                value.Bool(config.GetAttr("allow_organization_name_in_authentication_api")),
 		CustomizeMFAInPostLoginAction:        value.Bool(config.GetAttr("customize_mfa_in_postlogin_action")),
 		PushedAuthorizationRequestsSupported: value.Bool(config.GetAttr("pushed_authorization_requests_supported")),
 		ACRValuesSupported:                   expandACRValuesSupported(data),
 		MTLS:                                 expandMTLSConfiguration(data),
+		ErrorPage:                            expandErrorPageConfiguration(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -110,6 +112,21 @@ func expandTenantSessions(config cty.Value) *management.TenantSessions {
 	return &sessions
 }
 
+func expandTenantOIDCLogout(config cty.Value) *management.TenantOIDCLogout {
+	var oidcLogout management.TenantOIDCLogout
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		oidcLogout.OIDCResourceProviderLogoutEndSessionEndpointDiscovery = value.Bool(cfg.GetAttr("rp_logout_end_session_endpoint_discovery"))
+		return stop
+	})
+
+	if oidcLogout == (management.TenantOIDCLogout{}) {
+		return nil
+	}
+
+	return &oidcLogout
+}
+
 func isACRValuesSupportedNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("disable_acr_values_supported") && !data.HasChange("acr_values_supported") {
 		return false
@@ -170,4 +187,55 @@ func expandMTLSConfiguration(data *schema.ResourceData) *management.TenantMTLSCo
 	}
 
 	return &mtls
+}
+
+func isErrorPageConfigurationNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("error_page") {
+		return false
+	}
+	empty := true
+
+	config := data.GetRawConfig().GetAttr("error_page")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		html := cfg.GetAttr("html")
+		showLogLink := cfg.GetAttr("show_log_link")
+		url := cfg.GetAttr("url")
+
+		// If any of the attributes are set, the error_page is NOT null/empty.
+		if (!html.IsNull() && html.AsString() != "") ||
+			(!showLogLink.IsNull() && showLogLink.True() ||
+				(!url.IsNull() && url.AsString() != "")) {
+			empty = false
+		}
+		return stop
+	}) {
+		// Early return if the block is explicitly set to `null`.
+		return true
+	}
+
+	return empty
+}
+
+func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantErrorPage {
+	if !data.IsNewResource() && !data.HasChange("error_page") {
+		return nil
+	} else if isErrorPageConfigurationNull(data) {
+		return nil
+	}
+
+	var errorPage management.TenantErrorPage
+
+	config := data.GetRawConfig().GetAttr("error_page")
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		errorPage.HTML = value.String(cfg.GetAttr("html"))
+		errorPage.ShowLogLink = value.Bool(cfg.GetAttr("show_log_link"))
+		errorPage.URL = value.String(cfg.GetAttr("url"))
+		return stop
+	})
+
+	if errorPage == (management.TenantErrorPage{}) {
+		return nil
+	}
+
+	return &errorPage
 }

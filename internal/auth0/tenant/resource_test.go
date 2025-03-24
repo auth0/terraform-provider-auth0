@@ -70,6 +70,10 @@ resource "auth0_tenant" "my_tenant" {
 	mtls {
 		enable_endpoint_aliases = true
 	}
+
+	oidc_logout {
+		rp_logout_end_session_endpoint_discovery = true
+	}
 }
 `
 
@@ -208,6 +212,10 @@ resource "auth0_tenant" "my_tenant" {
 		show_log_link = false
 		url           = "https://mycompany.org/error"
 	}
+
+	oidc_logout {
+		rp_logout_end_session_endpoint_discovery = false
+	}
 }
 `
 
@@ -252,7 +260,6 @@ resource "auth0_tenant" "my_tenant" {
     mtls {
 		enable_endpoint_aliases = true
 	}
-
 }
 `
 
@@ -300,6 +307,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.#", "1"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.enable_endpoint_aliases", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.0.disable", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "oidc_logout.0.rp_logout_end_session_endpoint_discovery", "true"),
 				),
 			},
 			{
@@ -338,6 +346,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.html", "<html></html>"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.show_log_link", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "error_page.0.url", "https://mycompany.org/error"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "oidc_logout.0.rp_logout_end_session_endpoint_discovery", "false"),
 				),
 			},
 			{

@@ -36,6 +36,7 @@ data "auth0_tenant" "my_tenant" {}
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.
 - `mtls` (List of Object) Configuration for mTLS. (see [below for nested schema](#nestedatt--mtls))
+- `oidc_logout` (List of Object) Settings related to OIDC RP-initiated Logout. (see [below for nested schema](#nestedatt--oidc_logout))
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
@@ -94,6 +95,14 @@ Read-Only:
 
 - `disable` (Boolean)
 - `enable_endpoint_aliases` (Boolean)
+
+
+<a id="nestedatt--oidc_logout"></a>
+### Nested Schema for `oidc_logout`
+
+Read-Only:
+
+- `rp_logout_end_session_endpoint_discovery` (Boolean)
 
 
 <a id="nestedatt--session_cookie"></a>

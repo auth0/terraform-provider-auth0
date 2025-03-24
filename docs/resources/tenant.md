@@ -69,6 +69,7 @@ resource "auth0_tenant" "my_tenant" {
 - `friendly_name` (String) Friendly name for the tenant.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `mtls` (Block List, Max: 1) Configuration for mTLS. (see [below for nested schema](#nestedblock--mtls))
+- `oidc_logout` (Block List, Max: 1) Settings related to OIDC RP-initiated Logout. (see [below for nested schema](#nestedblock--oidc_logout))
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
@@ -131,6 +132,14 @@ Optional:
 
 - `disable` (Boolean) Disable mTLS settings.
 - `enable_endpoint_aliases` (Boolean) Enable mTLS endpoint aliases.
+
+
+<a id="nestedblock--oidc_logout"></a>
+### Nested Schema for `oidc_logout`
+
+Required:
+
+- `rp_logout_end_session_endpoint_discovery` (Boolean) Enable the end_session_endpoint URL in the .well-known discovery configuration.
 
 
 <a id="nestedblock--session_cookie"></a>

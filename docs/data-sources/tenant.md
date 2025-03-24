@@ -29,6 +29,7 @@ data "auth0_tenant" "my_tenant" {}
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `domain` (String) Your Auth0 domain name.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
+- `error_page` (List of Object) Configuration for the error page (see [below for nested schema](#nestedatt--error_page))
 - `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
 - `friendly_name` (String) Friendly name for the tenant.
 - `id` (String) The ID of this resource.
@@ -44,6 +45,16 @@ data "auth0_tenant" "my_tenant" {}
 - `sessions` (List of Object) Sessions related settings for the tenant. (see [below for nested schema](#nestedatt--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
+
+<a id="nestedatt--error_page"></a>
+### Nested Schema for `error_page`
+
+Read-Only:
+
+- `html` (String)
+- `show_log_link` (Boolean)
+- `url` (String)
+
 
 <a id="nestedatt--flags"></a>
 ### Nested Schema for `flags`

@@ -25,4 +25,10 @@ resource "auth0_tenant" "my_tenant" {
   sessions {
     oidc_logout_prompt_enabled = false
   }
+
+  error_page {
+    html          = "<html></html>"
+    show_log_link = false
+    url           = "https://example.com/error"
+  }
 }

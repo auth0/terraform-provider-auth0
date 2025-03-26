@@ -1,0 +1,319 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 175
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"action":{"block":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 298
+        uncompressed: false
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 261.329541ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 240.4945ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_invalid_id
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 113
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Network ACL id is not a valid UUID","errorCode":"invalid_uri"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 240.926833ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 239.119167ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 320.513459ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 250.766834ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 228.06225ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 233.435416ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 24
+        uncompressed: false
+        body: '{"code":204,"object":""}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 241.684667ms

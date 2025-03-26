@@ -1,0 +1,249 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 513
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"action":{"allow":true},"match":{"anonymous_proxy":false,"asns":[1234,5678],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"user_agents":["Mozilla/5.0","Chrome/91.0"]},"scope":"authentication"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 636
+        uncompressed: false
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 507.66175ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 227.188458ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 229.323292ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 223.702417ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 217.441375ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 243.176458ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 24
+        uncompressed: false
+        body: '{"code":204,"object":""}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 245.04475ms

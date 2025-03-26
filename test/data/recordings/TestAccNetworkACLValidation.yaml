@@ -1,0 +1,75 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 187
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Invalid Action - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"block":true,"allow":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 897
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Payload validation error: ''None of the valid schemas were met'' on property rule ({description}). Inner errors: [ Payload validation error: ''None of the valid schemas were met'' on property rule.action ({description}). Inner errors: [ Payload validation error: ''Additional properties not allowed: allow'' on property action ({description}). (also) Payload validation error: ''Additional properties not allowed: block'' on property action ({description}). (also) Payload validation error: ''Missing required property: log'' on property action. (also) Payload validation error: ''Missing required property: redirect'' on property action. (also) Payload validation error: ''Missing required property: redirect_uri'' on property action. ]. (also) Payload validation error: ''Missing required property: not_match'' on property rule. ].","errorCode":"invalid_body"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 220.7605ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 183
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Missing Redirect URI - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"redirect":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 758
+        uncompressed: false
+        body: '{"statusCode":400,"error":"Bad Request","message":"Payload validation error: ''None of the valid schemas were met'' on property rule ({description}). Inner errors: [ Payload validation error: ''None of the valid schemas were met'' on property rule.action ({description}). Inner errors: [ Payload validation error: ''Missing required property: block'' on property action. (also) Payload validation error: ''Missing required property: allow'' on property action. (also) Payload validation error: ''Missing required property: log'' on property action. (also) Payload validation error: ''Missing required property: redirect_uri'' on property action. ]. (also) Payload validation error: ''Missing required property: not_match'' on property rule. ].","errorCode":"invalid_body"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 400 Bad Request
+        code: 400
+        duration: 217.068834ms

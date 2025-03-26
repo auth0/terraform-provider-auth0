@@ -322,6 +322,22 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"oidc_logout": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Settings related to OIDC RP-initiated Logout.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"rp_logout_end_session_endpoint_discovery": {
+							Type:        schema.TypeBool,
+							Required:    true,
+							Description: "Enable the end_session_endpoint URL in the .well-known discovery configuration.",
+						},
+					},
+				},
+			},
 			"allow_organization_name_in_authentication_api": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -372,6 +388,31 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeBool,
 							Optional:    true,
 							Description: "Disable mTLS settings.",
+						},
+					},
+				},
+			},
+			"error_page": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Configuration for the error page",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"html": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Custom Error HTML (Liquid syntax is supported)",
+						},
+						"show_log_link": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "Whether to show the link to log as part of the default error page (true, default) or not to show the link (false).",
+						},
+						"url": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "URL to redirect to when an error occurs instead of showing the default error page",
 						},
 					},
 				},
@@ -456,6 +497,23 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 	time.Sleep(800 * time.Millisecond)
+
+	if isErrorPageConfigurationNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"error_page": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	// Check if error_page is explicitly set to null in Terraform configuration.
+	if attr := data.GetRawConfig().GetAttr("error_page"); attr.IsNull() {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
+			"error_page": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	return readTenant(ctx, data, meta)
 }

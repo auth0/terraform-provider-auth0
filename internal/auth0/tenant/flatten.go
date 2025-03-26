@@ -23,10 +23,12 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("flags", flattenTenantFlags(tenant.GetFlags())),
 		data.Set("session_cookie", flattenTenantSessionCookie(tenant.GetSessionCookie())),
 		data.Set("sessions", flattenTenantSessions(tenant.GetSessions())),
+		data.Set("oidc_logout", flattenTenantOidcLogout(tenant.GetOIDCLogout())),
 		data.Set("allow_organization_name_in_authentication_api", tenant.GetAllowOrgNameInAuthAPI()),
 		data.Set("customize_mfa_in_postlogin_action", tenant.GetCustomizeMFAInPostLoginAction()),
 		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
+		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -100,6 +102,13 @@ func flattenTenantSessions(sessions *management.TenantSessions) []interface{} {
 	return []interface{}{m}
 }
 
+func flattenTenantOidcLogout(oidcLogout *management.TenantOIDCLogout) []interface{} {
+	m := make(map[string]interface{})
+	m["rp_logout_end_session_endpoint_discovery"] = oidcLogout.GetOIDCResourceProviderLogoutEndSessionEndpointDiscovery()
+
+	return []interface{}{m}
+}
+
 func flattenMTLSConfiguration(mtls *management.TenantMTLSConfiguration) []interface{} {
 	m := make(map[string]interface{})
 	if mtls == nil {
@@ -107,6 +116,20 @@ func flattenMTLSConfiguration(mtls *management.TenantMTLSConfiguration) []interf
 	} else {
 		m["enable_endpoint_aliases"] = mtls.EnableEndpointAliases
 	}
+
+	return []interface{}{m}
+}
+
+func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []interface{} {
+	if errorPage == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	m["html"] = errorPage.GetHTML()
+	m["show_log_link"] = errorPage.GetShowLogLink()
+	m["url"] = errorPage.GetURL()
 
 	return []interface{}{m}
 }

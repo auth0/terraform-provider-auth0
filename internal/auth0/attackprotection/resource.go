@@ -112,6 +112,32 @@ func NewResource() *schema.Resource {
 								},
 							},
 						},
+						"pre_change_password": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Computed:    true,
+							MaxItems:    1,
+							Description: "Configuration options that apply before every password change attempt. ",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"shields": {
+										Type:     schema.TypeSet,
+										Optional: true,
+										Computed: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+											ValidateFunc: validation.StringInSlice([]string{
+												"block",
+												"admin_notification",
+											}, false),
+										},
+										Description: "Action to take when a breached password is detected before the password is changed. " +
+											"Possible values: `block` (block compromised credentials for new accounts), " +
+											"`admin_notification` (send an email notification with a summary of compromised credentials in new accounts).",
+									},
+								},
+							},
+						},
 					},
 				},
 			},

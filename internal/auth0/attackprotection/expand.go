@@ -97,22 +97,28 @@ func expandBreachedPasswordDetection(data *schema.ResourceData) *management.Brea
 				AdminNotificationFrequency: value.Strings(breach.GetAttr("admin_notification_frequency")),
 			}
 
+			preUserRegistration := &management.BreachedPasswordDetectionPreUserRegistration{}
+			preChangePassword := &management.BreachedPasswordDetectionPreChangePassword{}
 			breach.GetAttr("pre_user_registration").ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-				preUserRegistration := &management.BreachedPasswordDetectionPreUserRegistration{
-					Shields: value.Strings(cfg.GetAttr("shields")),
-				}
-
-				if bpd.Stage != nil {
-					bpd.Stage.PreUserRegistration = preUserRegistration
-					return stop
-				}
-
-				bpd.Stage = &management.BreachedPasswordDetectionStage{
-					PreUserRegistration: preUserRegistration,
-				}
-
+				preUserRegistration.Shields = value.Strings(cfg.GetAttr("shields"))
 				return stop
 			})
+
+			breach.GetAttr("pre_change_password").ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+				preChangePassword.Shields = value.Strings(cfg.GetAttr("shields"))
+				return stop
+			})
+
+			if bpd.Stage != nil {
+				bpd.Stage.PreUserRegistration = preUserRegistration
+				bpd.Stage.PreChangePassword = preChangePassword
+				return stop
+			}
+
+			bpd.Stage = &management.BreachedPasswordDetectionStage{
+				PreUserRegistration: preUserRegistration,
+				PreChangePassword:   preChangePassword,
+			}
 
 			return stop
 		},

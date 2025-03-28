@@ -51,6 +51,7 @@ FEATURES:
 
 - `resource/auth0_prompt_screen_renderer`: Add support for new screens (`EA` Release) ([#1144](https://github.com/auth0/terraform-provider-auth0/pull/1144/))
 
+
 ## v1.11.1
 
 BUG FIXES:

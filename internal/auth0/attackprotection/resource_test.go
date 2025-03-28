@@ -27,6 +27,10 @@ resource "auth0_attack_protection" "my_protection" {
 		pre_user_registration {
 			shields = ["block"]
 		}
+
+		pre_change_password {
+			shields = ["block"]
+		}
 	}
 }
 `
@@ -40,6 +44,10 @@ resource "auth0_attack_protection" "my_protection" {
 		method = "standard"
 
 		pre_user_registration {
+			shields = ["block", "admin_notification"]
+		}
+
+		pre_change_password {
 			shields = ["block", "admin_notification"]
 		}
 	}
@@ -63,7 +71,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.enabled", "true"),
 				),
 			},
@@ -73,7 +81,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.shields.*", "admin_notification"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.shields.*", "block"),
@@ -81,6 +89,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.admin_notification_frequency.*", "monthly"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.method", "standard"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_user_registration.0.shields.*", "block"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_change_password.0.shields.*", "block"),
 				),
 			},
 			{
@@ -89,7 +98,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.shields.*", "admin_notification"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.shields.*", "block"),
@@ -101,6 +110,8 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.method", "standard"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_user_registration.0.shields.*", "block"),
 					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_user_registration.0.shields.*", "admin_notification"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_change_password.0.shields.*", "block"),
+					resource.TestCheckTypeSetElemAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.pre_change_password.0.shields.*", "admin_notification"),
 				),
 			},
 			{
@@ -109,7 +120,7 @@ func TestAccAttackProtectionBreachedPasswordDetection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "brute_force_protection.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "suspicious_ip_throttling.#", "1"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.#", "1"),
-					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "5"),
+					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.%", "6"),
 					resource.TestCheckResourceAttr("auth0_attack_protection.my_protection", "breached_password_detection.0.enabled", "false"),
 				),
 			},

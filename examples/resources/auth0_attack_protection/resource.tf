@@ -32,5 +32,9 @@ resource "auth0_attack_protection" "my_protection" {
     pre_user_registration {
       shields = ["block"]
     }
+
+    pre_change_password {
+      shields = ["block", "admin_notification"]
+    }
   }
 }

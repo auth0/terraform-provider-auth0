@@ -62,6 +62,7 @@ Read-Only:
 - `community_base_url` (String)
 - `configuration` (Map of String)
 - `connection_settings` (List of Object) (see [below for nested schema](#nestedobjatt--options--connection_settings))
+- `custom_headers` (List of Map of String)
 - `custom_scripts` (Map of String)
 - `debug` (Boolean)
 - `decryption_key` (List of Object) (see [below for nested schema](#nestedobjatt--options--decryption_key))

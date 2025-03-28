@@ -1,3 +1,13 @@
+## v1.15.0
+
+ENHANCEMENTS:
+- `resource/auth0_connection`: Add support to configure `custom_headers` attribute in Connection Options ([#917](https://github.com/auth0/terraform-provider-auth0/pull/917/))
+- `resource/auth0_attack_protection`: Add support to configure `pre_change_password` attribute ([#1196](https://github.com/auth0/terraform-provider-auth0/pull/1196/))
+- `resource/auth0_prompt_screen_renderer`: Add support for 12 new screens ([#1191](https://github.com/auth0/terraform-provider-auth0/pull/1191/))
+- `resource/auth0_tenant`: Add support to set `rp_logout_end_session_endpoint_discovery` property ([#1192](https://github.com/auth0/terraform-provider-auth0/pull/1192/))
+- `resource/auth0_tenant`: Add support to configure `error_page` attribute ([#1163](https://github.com/auth0/terraform-provider-auth0/pull/1163/))
+
+
 ## v1.14.0
 
 FEATURES:
@@ -15,7 +25,7 @@ ENHANCEMENTS:
 ## v1.13.1
 
 FEATURES:
-
+      
 - `resource/auth0_prompt_screen_renderer`: Add support for new screens( `EA` Release) ([#1158](https://github.com/auth0/terraform-provider-auth0/pull/1158/))
 
 
@@ -40,6 +50,7 @@ ENHANCEMENTS:
 FEATURES:
 
 - `resource/auth0_prompt_screen_renderer`: Add support for new screens (`EA` Release) ([#1144](https://github.com/auth0/terraform-provider-auth0/pull/1144/))
+
 
 ## v1.11.1
 

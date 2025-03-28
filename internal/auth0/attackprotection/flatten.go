@@ -50,6 +50,11 @@ func flattenBreachedPasswordProtection(bpd *management.BreachedPasswordDetection
 					"shields": bpd.GetStage().GetPreUserRegistration().GetShields(),
 				},
 			},
+			"pre_change_password": []interface{}{
+				map[string][]string{
+					"shields": bpd.GetStage().GetPreChangePassword().GetShields(),
+				},
+			},
 		},
 	}
 }

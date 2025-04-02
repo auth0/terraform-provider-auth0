@@ -14,14 +14,19 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
-
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/zalando/go-keyring"
 )
 
 const providerName = "Terraform-Provider-Auth0" // #nosec G101
+const secretAccessToken = "Auth0 CLI Access Token"
+
+// Access tokens have no size limit, but should be smaller than (50*2048) bytes.
+// The max number of loops safeguards against infinite loops, however unlikely.
+const secretAccessTokenMaxChunks = 50
 
 var version = "dev"
 
@@ -55,14 +60,34 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		var apiToken string
 		domain := data.Get("domain").(string)
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
-		apiToken := data.Get("api_token").(string)
+		apiToken = data.Get("api_token").(string)
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
+		cliLogin := data.Get("cli_login").(bool)
 
-		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
+		if cliLogin && domain != "" {
+			// No cred found: give suitable warning and ask to login via auth0-cli
+			// Or use another method to authenticate the provider by setting cli_login = false
+
+			var tempToken string
+			for i := 0; i < secretAccessTokenMaxChunks; i++ {
+				a, err := keyring.Get(fmt.Sprintf("%s %d", secretAccessToken, i), domain)
+				if err == keyring.ErrNotFound || err != nil {
+					break
+				}
+				tempToken += a
+			}
+			if tempToken != "" {
+				apiToken = tempToken
+			}
+
+		}
+
+		if (apiToken == "" || domain == "") && (clientID == "" || clientSecret == "" || domain == "") {
 			return nil, diag.Diagnostics{
 				{
 					Severity: diag.Error,

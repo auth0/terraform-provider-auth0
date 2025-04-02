@@ -900,7 +900,7 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 
 	samlpCfg.ForEachElement(func(_ cty.Value, samlpCfg cty.Value) (stop bool) {
 		samlpAddon = management.SAML2ClientAddon{
-			Mappings:                       value.MapOfStrings(samlpCfg.GetAttr("mappings")),
+			//Mappings:                       value.MapOfStrings(samlpCfg.GetAttr("mappings")),
 			Audience:                       value.String(samlpCfg.GetAttr("audience")),
 			Recipient:                      value.String(samlpCfg.GetAttr("recipient")),
 			CreateUPNClaim:                 value.Bool(samlpCfg.GetAttr("create_upn_claim")),

@@ -1,4 +1,4 @@
-## v1.16.0
+## v1.15.0
 
 ENHANCEMENTS:
 - `resource/auth0_connection`: Add support to configure `custom_headers` attribute in Connection Options ([#917](https://github.com/auth0/terraform-provider-auth0/pull/917/))

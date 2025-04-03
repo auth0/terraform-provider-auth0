@@ -9,7 +9,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 
-	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -93,7 +93,7 @@ func New() *schema.Provider {
 					}
 					return v == "1" || v == "true" || v == "on", nil
 				},
-				Description: "",
+				Description: "While toggled on, the API token gets fetched from the keyring for the given domain",
 			},
 			"debug": {
 				Type:     schema.TypeBool,

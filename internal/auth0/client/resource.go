@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 	"net/http"
 	"time"
 
@@ -1111,13 +1110,9 @@ func NewResource() *schema.Resource {
 											"callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
-										Type:             schema.TypeString,
-										Optional:         true,
-										ValidateFunc:     validation.StringIsJSON,
-										DiffSuppressFunc: structure.SuppressJsonDiff,
-										Description: "Mappings between the Auth0 user profile property " +
-											"name (`name`) and the output attributes on the SAML " +
-											"attribute in the assertion (`value`).",
+										Type:     schema.TypeString,
+										Optional: true,
+										Elem:     schema.TypeString,
 									},
 									"create_upn_claim": {
 										Type:     schema.TypeBool,

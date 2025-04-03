@@ -9,7 +9,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 
-	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -82,6 +82,18 @@ func New() *schema.Provider {
 					"It can also be sourced from the `AUTH0_API_TOKEN` environment variable. " +
 					"It can be used instead of `client_id` + `client_secret`. " +
 					"If both are specified, `api_token` will be used over `client_id` + `client_secret` fields.",
+			},
+			"cli_login": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_CLI_LOGIN")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "While toggled on, the API token gets fetched from the keyring for the given domain",
 			},
 			"debug": {
 				Type:     schema.TypeBool,

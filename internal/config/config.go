@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -14,14 +15,20 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
-
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/zalando/go-keyring"
 )
 
 const providerName = "Terraform-Provider-Auth0" // #nosec G101
+const secretAccessToken = "Auth0 CLI Access Token"
+
+// Access tokens have no size limit, but should be smaller than (50*2048) bytes.
+// The max number of loops safeguards against infinite loops, however unlikely.
+const secretAccessTokenMaxChunks = 50
 
 var version = "dev"
 
@@ -55,22 +62,82 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		var apiToken string
 		domain := data.Get("domain").(string)
 		clientID := data.Get("client_id").(string)
 		clientSecret := data.Get("client_secret").(string)
-		apiToken := data.Get("api_token").(string)
+		apiToken = data.Get("api_token").(string)
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
+		cliLogin := data.Get("cli_login").(bool)
 
-		if apiToken == "" && (clientID == "" || clientSecret == "" || domain == "") {
-			return nil, diag.Diagnostics{
-				{
+		switch {
+		case cliLogin:
+			// Ensure domain is present
+			if domain == "" {
+				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
-					Summary:  "Missing environment variables",
-					Detail: fmt.Sprintf("Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. " +
-						"Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs"),
-				},
+					Summary:  "Missing required configuration",
+					Detail:   "The 'AUTH0_DOMAIN' must be specified along with the 'AUTH0_CLI_LOGIN'",
+				}}
 			}
+
+			// Check for tempToken when cliLogin is enabled
+			var tempToken string
+			for i := 0; i < secretAccessTokenMaxChunks; i++ {
+				a, err := keyring.Get(fmt.Sprintf("%s %d", secretAccessToken, i), domain)
+				if errors.Is(err, keyring.ErrNotFound) || err != nil {
+					break
+				}
+				tempToken += a
+			}
+
+			if tempToken == "" {
+				return nil, diag.Diagnostics{{
+					Severity: diag.Error,
+					Summary:  "Authentication required",
+					Detail:   "No authentication credentials found. Please log in using auth0 login via auth0-cli or disable CLI authentication by setting AUTH0_CLI_LOGIN to false..",
+				}}
+			}
+
+			// Check if the token is expired
+			if err := validateTokenExpiry(tempToken); err != nil {
+				return nil, diag.Diagnostics{{
+					Severity: diag.Error,
+					Summary:  "Token validation failed",
+					Detail:   err.Error(),
+				}}
+			}
+
+			// Set the apiToken to the tempToken
+			apiToken = tempToken
+
+		case apiToken != "":
+			// Ensure domain is present
+			if domain == "" {
+				return nil, diag.Diagnostics{{
+					Severity: diag.Error,
+					Summary:  "Missing required configuration",
+					Detail:   "The 'AUTH0_DOMAIN' must be specified along with the 'AUTH0_API_TOKEN'.",
+				}}
+			}
+
+		case clientID != "" && clientSecret != "":
+			// Ensure domain is present
+			if domain == "" {
+				return nil, diag.Diagnostics{{
+					Severity: diag.Error,
+					Summary:  "Missing required configuration",
+					Detail:   "The 'AUTH0_DOMAIN' must be specified.",
+				}}
+			}
+
+		default:
+			return nil, diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Missing environment variables",
+				Detail:   "Either AUTH0_API_TOKEN, or AUTH0_CLIENT_ID & AUTH0_CLIENT_SECRET with AUTH0_DOMAIN must be configured.",
+			}}
 		}
 
 		apiClient, err := management.New(domain,
@@ -87,6 +154,30 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 
 		return New(apiClient), nil
 	}
+}
+
+func validateTokenExpiry(tokenString string) error {
+	// Decode JWT token without verification
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	if err != nil {
+		return fmt.Errorf("invalid token: the retrieved auth0-cli token is not a valid JWT")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return fmt.Errorf("invalid token format: unable to parse token claims")
+	}
+
+	exp, ok := claims["exp"].(float64)
+	if !ok {
+		return fmt.Errorf("missing expiration: the token does not contain an expiration claim")
+	}
+
+	if time.Now().Unix() > int64(exp) {
+		return fmt.Errorf("expired token: the stored auth0-cli token has expired. Please log in again")
+	}
+
+	return nil
 }
 
 // userAgent computes the desired User-Agent header for the *management.Management client.

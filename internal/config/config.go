@@ -96,8 +96,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
 					Summary:  "Authentication required",
-					Detail: "No authentication credentials were found. Please log in using `auth0 login` via auth0-cli, " +
-						"or disable CLI authentication by setting `cli_login = false` in your configuration.",
+					Detail:   "No authentication credentials found. Please log in using auth0 login via auth0-cli or disable CLI authentication by setting AUTH0_CLI_LOGIN to false..",
 				}}
 			}
 

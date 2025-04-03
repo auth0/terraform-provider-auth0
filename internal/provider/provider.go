@@ -55,28 +55,28 @@ func New() *schema.Provider {
 					"It can also be sourced from the `AUTH0_AUDIENCE` environment variable.",
 			},
 			"client_id": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ID", nil),
-				//RequiredWith:  []string{"client_secret"},
-				//ConflictsWith: []string{"api_token"},
+				Type:          schema.TypeString,
+				Optional:      true,
+				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_CLIENT_ID", nil),
+				RequiredWith:  []string{"client_secret"},
+				ConflictsWith: []string{"api_token"},
 				Description: "Your Auth0 client ID. " +
 					"It can also be sourced from the `AUTH0_CLIENT_ID` environment variable.",
 			},
 			"client_secret": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_SECRET", nil),
-				//RequiredWith:  []string{"client_id"},
-				//ConflictsWith: []string{"api_token"},
+				Type:          schema.TypeString,
+				Optional:      true,
+				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_CLIENT_SECRET", nil),
+				RequiredWith:  []string{"client_id"},
+				ConflictsWith: []string{"api_token"},
 				Description: "Your Auth0 client secret. " +
 					"It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.",
 			},
 			"api_token": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AUTH0_API_TOKEN", nil),
-				//ConflictsWith: []string{"client_id", "client_secret"},
+				Type:          schema.TypeString,
+				Optional:      true,
+				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_API_TOKEN", nil),
+				ConflictsWith: []string{"client_id", "client_secret"},
 				Description: "Your Auth0 [management api access token]" +
 					"(https://auth0.com/docs/security/tokens/access-tokens/management-api-access-tokens). " +
 					"It can also be sourced from the `AUTH0_API_TOKEN` environment variable. " +

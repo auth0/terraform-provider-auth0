@@ -1110,9 +1110,12 @@ func NewResource() *schema.Resource {
 											"callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
-										Type:     schema.TypeString,
+										Type:     schema.TypeMap,
 										Optional: true,
 										Elem:     schema.TypeString,
+										Description: "Mappings between the Auth0 user profile property " +
+											"name (`name`) and the output attributes on the SAML " +
+											"attribute in the assertion (`value`).",
 									},
 									"create_upn_claim": {
 										Type:     schema.TypeBool,

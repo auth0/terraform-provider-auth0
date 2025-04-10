@@ -2,6 +2,7 @@ package customdomain_test
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -27,6 +28,10 @@ func TestAccDataSourceCustomDomain(t *testing.T) {
 
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
+			{
+				Config:      `data "auth0_custom_domain" "test" {}`,
+				ExpectError: regexp.MustCompile("no custom domain configured on tenant"),
+			},
 			{
 				Config: acctest.ParseTestName(testAccDataSourceCustomDomain, testName),
 				Check: resource.ComposeTestCheckFunc(

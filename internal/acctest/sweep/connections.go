@@ -22,14 +22,19 @@ func Connections() {
 				return err
 			}
 
-			var page int
+			var from string
+
+			options := []management.RequestOption{
+				management.IncludeFields("id", "name"),
+				management.Take(100),
+			}
 			var result *multierror.Error
 			for {
-				connectionList, err := api.Connection.List(
-					ctx,
-					management.IncludeFields("id", "name"),
-					management.Page(page),
-				)
+				if from != "" {
+					options = append(options, management.From(from))
+				}
+
+				connectionList, err := api.Connection.List(ctx, options...)
 				if err != nil {
 					return err
 				}
@@ -45,10 +50,12 @@ func Connections() {
 						log.Printf("[DEBUG] ✗ %s", connection.GetName())
 					}
 				}
+
 				if !connectionList.HasNext() {
 					break
 				}
-				page++
+
+				from = connectionList.Next
 			}
 
 			return result.ErrorOrNil()

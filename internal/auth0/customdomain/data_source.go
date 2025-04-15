@@ -2,6 +2,7 @@ package customdomain
 
 import (
 	"context"
+	"errors"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -31,6 +32,9 @@ func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceDat
 		return diag.FromErr(err)
 	}
 
+	if len(customDomains) == 0 {
+		return diag.FromErr(errors.New("no custom domain configured on tenant"))
+	}
 	// At the moment there can only ever
 	// be one custom domain configured.
 	customDomain := customDomains[0]

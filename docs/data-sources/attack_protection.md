@@ -32,8 +32,17 @@ Read-Only:
 - `admin_notification_frequency` (Set of String)
 - `enabled` (Boolean)
 - `method` (String)
+- `pre_change_password` (List of Object) (see [below for nested schema](#nestedobjatt--breached_password_detection--pre_change_password))
 - `pre_user_registration` (List of Object) (see [below for nested schema](#nestedobjatt--breached_password_detection--pre_user_registration))
 - `shields` (Set of String)
+
+<a id="nestedobjatt--breached_password_detection--pre_change_password"></a>
+### Nested Schema for `breached_password_detection.pre_change_password`
+
+Read-Only:
+
+- `shields` (Set of String)
+
 
 <a id="nestedobjatt--breached_password_detection--pre_user_registration"></a>
 ### Nested Schema for `breached_password_detection.pre_user_registration`

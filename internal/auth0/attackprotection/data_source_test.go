@@ -19,6 +19,10 @@ resource "auth0_attack_protection" "my_protection" {
 		pre_user_registration {
 			shields = ["block"]
 		}
+
+		pre_change_password {
+			shields = ["block"]
+		}
 	}
 
 	brute_force_protection {
@@ -56,7 +60,7 @@ func TestAccDataSourceAttackProtection(t *testing.T) {
 				Config: testAccDataSourceAttackProtection,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "breached_password_detection.#", "1"),
-					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "breached_password_detection.0.%", "5"),
+					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "breached_password_detection.0.%", "6"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "breached_password_detection.0.enabled", "true"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.shields.*", "admin_notification"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.shields.*", "block"),
@@ -64,6 +68,7 @@ func TestAccDataSourceAttackProtection(t *testing.T) {
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.admin_notification_frequency.*", "monthly"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "breached_password_detection.0.method", "standard"),
 					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.pre_user_registration.0.shields.*", "block"),
+					resource.TestCheckTypeSetElemAttr("data.auth0_attack_protection.test", "breached_password_detection.0.pre_change_password.0.shields.*", "block"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.%", "5"),
 					resource.TestCheckResourceAttr("data.auth0_attack_protection.test", "brute_force_protection.0.enabled", "true"),

@@ -58,7 +58,6 @@ Read-Only:
 
 Read-Only:
 
-- `anonymous_proxy` (Boolean)
 - `asns` (List of Number)
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)
@@ -74,7 +73,6 @@ Read-Only:
 
 Read-Only:
 
-- `anonymous_proxy` (Boolean)
 - `asns` (List of Number)
 - `geo_country_codes` (List of String)
 - `geo_subdivision_codes` (List of String)

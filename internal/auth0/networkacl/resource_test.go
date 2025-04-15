@@ -22,7 +22,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -39,7 +39,6 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "authentication"
 		match {
-			anonymous_proxy = false
 			asns = [1234, 5678]
 			geo_country_codes = ["US", "CA"]
 			geo_subdivision_codes = ["US-NY", "CA-ON"]
@@ -64,7 +63,6 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "management"
 		not_match {
-			anonymous_proxy = true
 			asns = [9876]
 			geo_country_codes = ["UK"]
 		}
@@ -84,7 +82,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -117,7 +115,6 @@ func TestAccNetworkACL(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "10"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "tenant"),
-					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.anonymous_proxy", "true"),
 					resource.TestCheckResourceAttrSet("auth0_network_acl.my_acl", "id"),
 				),
 			},
@@ -134,7 +131,6 @@ func TestAccNetworkACL(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "2"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.allow", "true"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "authentication"),
-					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.anonymous_proxy", "false"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.#", "2"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "1234"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.asns.1", "5678"),
@@ -157,7 +153,6 @@ func TestAccNetworkACL(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "priority", "3"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.log", "true"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "management"),
-					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.anonymous_proxy", "true"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.asns.#", "1"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.asns.0", "9876"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.not_match.0.geo_country_codes.#", "1"),
@@ -173,7 +168,6 @@ func TestAccNetworkACL(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.redirect", "true"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.action.0.redirect_uri", "https://example.com/blocked"),
 					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.scope", "tenant"),
-					resource.TestCheckResourceAttr("auth0_network_acl.my_acl", "rule.0.match.0.anonymous_proxy", "true"),
 				),
 			},
 		},
@@ -193,7 +187,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -226,7 +220,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -243,7 +237,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "invalid_scope"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -260,7 +254,6 @@ resource "auth0_network_acl" "max_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
 			asns = [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010]
 			geo_country_codes = ["US", "CA", "UK", "DE", "FR", "JP", "AU", "BR", "IN", "CN"]
 			geo_subdivision_codes = ["US-NY", "US-CA", "US-TX", "CA-ON", "CA-QC", "UK-LND", "DE-BE", "FR-75", "JP-13", "AU-NSW"]

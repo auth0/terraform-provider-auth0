@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 187
+        content_length: 178
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"description":"Invalid Action - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"block":true,"allow":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+            {"description":"Invalid Action - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"block":true,"allow":true},"match":{"asns":[9453]},"scope":"tenant"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
+                - Go-Auth0/1.19.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
         method: POST
       response:
@@ -36,26 +36,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 220.7605ms
+        duration: 241.631958ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 183
+        content_length: 174
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"description":"Missing Redirect URI - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"redirect":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+            {"description":"Missing Redirect URI - TestAccNetworkACLValidation","active":true,"priority":10,"rule":{"action":{"redirect":true},"match":{"asns":[9453]},"scope":"tenant"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
+                - Go-Auth0/1.19.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
         method: POST
       response:
@@ -72,4 +72,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 217.068834ms
+        duration: 234.316333ms

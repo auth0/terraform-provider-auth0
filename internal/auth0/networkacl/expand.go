@@ -71,10 +71,6 @@ func expandNetworkACLRuleMatch(m map[string]interface{}) *management.NetworkACLR
 
 	match := &management.NetworkACLRuleMatch{}
 
-	if v, ok := m["anonymous_proxy"]; ok {
-		match.AnonymousProxy = auth0.Bool(v.(bool))
-	}
-
 	if asns, ok := m["asns"].([]interface{}); ok {
 		if len(asns) == 0 {
 			match.Asns = nil

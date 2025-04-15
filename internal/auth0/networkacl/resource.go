@@ -94,11 +94,6 @@ var networkACLRuleMatchSchema = &schema.Schema{
 	Description: "The configuration for the Network ACL Rule",
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"anonymous_proxy": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: "Anonymous Proxy as reported by GeoIP",
-			},
 			"asns": {
 				Type:        schema.TypeList,
 				Optional:    true,

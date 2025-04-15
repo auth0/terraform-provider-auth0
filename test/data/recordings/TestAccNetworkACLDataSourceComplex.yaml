@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 513
+        content_length: 489
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"action":{"allow":true},"match":{"anonymous_proxy":false,"asns":[1234,5678],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"user_agents":["Mozilla/5.0","Chrome/91.0"]},"scope":"authentication"}}
+            {"description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"action":{"allow":true},"match":{"asns":[1234,5678],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"user_agents":["Mozilla/5.0","Chrome/91.0"]},"scope":"authentication"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
+                - Go-Auth0/1.19.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 636
+        content_length: 602
         uncompressed: false
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z"}'
+        body: '{"description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 507.66175ms
+        duration: 508.041333ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,8 +54,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","deleted_at":null,"id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 227.188458ms
+        duration: 228.95125ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,8 +89,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","deleted_at":null,"id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 229.323292ms
+        duration: 240.751542ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,13 +135,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","deleted_at":null,"id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 223.702417ms
+        duration: 234.978709ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -159,8 +159,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: GET
       response:
         proto: HTTP/2.0
@@ -170,13 +170,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","deleted_at":null,"id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 217.441375ms
+        duration: 229.225ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -194,8 +194,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: GET
       response:
         proto: HTTP/2.0
@@ -205,13 +205,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"d443e485-1ae1-4447-8e86-3debbd91d709","tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"anonymous_proxy":false,"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-03-26T13:54:47.140Z","updated_at":"2025-03-26T13:54:47.140Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Complex ACL - TestAccNetworkACLDataSourceComplex","active":true,"priority":5,"rule":{"match":{"asns":[1234,5678],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8"],"ipv6_cidrs":["2001:db8::/32"],"user_agents":["Mozilla/5.0","Chrome/91.0"],"ja3_fingerprints":["ja3fingerprint1","ja3fingerprint2"],"ja4_fingerprints":["ja4fingerprint1","ja4fingerprint2"],"geo_country_codes":["US","CA"],"geo_subdivision_codes":["US-NY","CA-ON"]},"scope":"authentication","action":{"allow":true}},"created_at":"2025-04-15T06:27:21.913Z","updated_at":"2025-04-15T06:27:21.913Z","deleted_at":null,"id":"acl_hwZamLGQsL55EkYqpWrwVw"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 243.176458ms
+        duration: 319.753292ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -229,8 +229,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/d443e485-1ae1-4447-8e86-3debbd91d709
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_hwZamLGQsL55EkYqpWrwVw
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -246,4 +246,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 245.04475ms
+        duration: 306.751833ms

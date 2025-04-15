@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 175
+        content_length: 166
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"action":{"block":true},"match":{"anonymous_proxy":true},"scope":"tenant"}}
+            {"description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"action":{"block":true},"match":{"asns":[9453]},"scope":"tenant"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
+                - Go-Auth0/1.19.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 298
+        content_length: 279
         uncompressed: false
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z"}'
+        body: '{"description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 261.329541ms
+        duration: 285.165125ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,8 +54,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 240.4945ms
+        duration: 270.246708ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,7 +89,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
+                - Go-Auth0/1.19.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_invalid_id
         method: GET
       response:
@@ -98,15 +98,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 113
+        content_length: 156
         uncompressed: false
-        body: '{"statusCode":400,"error":"Bad Request","message":"Network ACL id is not a valid UUID","errorCode":"invalid_uri"}'
+        body: '{"statusCode":400,"error":"Bad Request","message":"Network ACL id is not a valid ACL ID in the form ''acl_XXXXXXXXXXXXXXXXXXXXXX''","errorCode":"invalid_uri"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 400 Bad Request
         code: 400
-        duration: 240.926833ms
+        duration: 260.149833ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,13 +135,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 239.119167ms
+        duration: 328.474708ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -159,8 +159,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -170,13 +170,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 320.513459ms
+        duration: 272.013834ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -194,8 +194,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -205,13 +205,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 250.766834ms
+        duration: 240.342ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -229,8 +229,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -240,13 +240,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 228.06225ms
+        duration: 264.3235ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -264,8 +264,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: GET
       response:
         proto: HTTP/2.0
@@ -275,13 +275,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"ea8082da-2924-4bbf-aa5c-aef5db2687d5","tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"anonymous_proxy":true},"scope":"tenant","action":{"block":true}},"created_at":"2025-03-26T13:54:27.613Z","updated_at":"2025-03-26T13:54:27.613Z","deleted_at":null}'
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Acceptance Test - TestAccNetworkACLDataSource","active":true,"priority":10,"rule":{"match":{"asns":[9453]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-15T06:27:02.014Z","updated_at":"2025-04-15T06:27:02.014Z","deleted_at":null,"id":"acl_wyhrktoP9iDT9MmBC8Hf2j"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 233.435416ms
+        duration: 240.409834ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -299,8 +299,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.18.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/ea8082da-2924-4bbf-aa5c-aef5db2687d5
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_wyhrktoP9iDT9MmBC8Hf2j
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -316,4 +316,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 241.684667ms
+        duration: 255.424791ms

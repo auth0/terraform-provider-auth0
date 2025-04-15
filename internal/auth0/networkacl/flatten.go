@@ -89,11 +89,6 @@ func flattenNetworkACLRule(match *management.NetworkACLRuleMatch) []interface{} 
 
 	m := map[string]interface{}{}
 
-	// Only set fields that are not nil.
-	if match.AnonymousProxy != nil {
-		m["anonymous_proxy"] = match.AnonymousProxy
-	}
-
 	// Handle slice of integers.
 	if len(match.Asns) > 0 {
 		m["asns"] = match.Asns

@@ -72,7 +72,6 @@ Optional:
 
 Optional:
 
-- `anonymous_proxy` (Boolean) Anonymous Proxy as reported by GeoIP
 - `asns` (List of Number) ASNs. Must contain between 1 and 10 unique items.
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.
 - `geo_subdivision_codes` (List of String) Geo Subdivision Codes. Must contain between 1 and 10 unique items.
@@ -88,7 +87,6 @@ Optional:
 
 Optional:
 
-- `anonymous_proxy` (Boolean) Anonymous Proxy as reported by GeoIP
 - `asns` (List of Number) ASNs. Must contain between 1 and 10 unique items.
 - `geo_country_codes` (List of String) Geo Country Codes. Must contain between 1 and 10 unique items.
 - `geo_subdivision_codes` (List of String) Geo Subdivision Codes. Must contain between 1 and 10 unique items.

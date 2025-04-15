@@ -37,7 +37,7 @@ resource "auth0_network_acl" "my_acl" {
 		}
 		scope = "tenant"
 		match {
-			anonymous_proxy = true
+			asns = [9453]
 		}
 	}
 }
@@ -54,7 +54,6 @@ resource "auth0_network_acl" "complex_acl" {
 		}
 		scope = "authentication"
 		match {
-			anonymous_proxy = false
 			asns = [1234, 5678]
 			geo_country_codes = ["US", "CA"]
 			geo_subdivision_codes = ["US-NY", "CA-ON"]
@@ -102,7 +101,7 @@ func TestAccNetworkACLDataSource(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataNetworkACLConfigWithInvalidID, t.Name()),
 				ExpectError: regexp.MustCompile(
-					`Error: (404 Not Found|400 Bad Request: Network ACL id is not a valid UUID)`,
+					`Error: (404 Not Found|400 Bad Request: Network ACL id is not a valid)`,
 				),
 			},
 			{
@@ -114,7 +113,7 @@ func TestAccNetworkACLDataSource(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_network_acl.my_acl", "priority", "10"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.my_acl", "rule.0.action.0.block", "true"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.my_acl", "rule.0.scope", "tenant"),
-					resource.TestCheckResourceAttr("data.auth0_network_acl.my_acl", "rule.0.match.0.anonymous_proxy", "true"),
+					resource.TestCheckResourceAttr("data.auth0_network_acl.my_acl", "rule.0.match.0.asns.0", "9453"),
 				),
 			},
 		},
@@ -133,7 +132,6 @@ func TestAccNetworkACLDataSourceComplex(t *testing.T) {
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "priority", "5"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.action.0.allow", "true"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.scope", "authentication"),
-					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.match.0.anonymous_proxy", "false"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.match.0.asns.#", "2"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.match.0.asns.0", "1234"),
 					resource.TestCheckResourceAttr("data.auth0_network_acl.complex_acl", "rule.0.match.0.asns.1", "5678"),

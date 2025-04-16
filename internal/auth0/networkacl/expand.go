@@ -1,6 +1,8 @@
 package networkacl
 
 import (
+	"fmt"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -38,6 +40,11 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 			networkACL.Rule.Action.Log = auth0.Bool(true)
 		}
 
+		// Validate the redirect action.
+		if err := validateActionRedirect(actionMap); err != nil {
+			return nil, err
+		}
+
 		if redirect, ok := actionMap["redirect"].(bool); ok && redirect {
 			networkACL.Rule.Action.Redirect = auth0.Bool(true)
 			// Only set RedirectURI if redirect is true.
@@ -47,14 +54,25 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 		}
 	}
 
+	// Validate match and not_match.
+	if err := validateMatchAndNotMatch(rule); err != nil {
+		return nil, err
+	}
+
 	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
-		matchMap := match[0].(map[string]interface{})
-		networkACL.Rule.Match = expandNetworkACLRuleMatch(matchMap)
+		if matchElem := match[0]; matchElem != nil {
+			if matchMap, ok := matchElem.(map[string]interface{}); ok {
+				networkACL.Rule.Match = expandNetworkACLRuleMatch(matchMap)
+			}
+		}
 	}
 
 	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
-		notMatchMap := notMatch[0].(map[string]interface{})
-		networkACL.Rule.NotMatch = expandNetworkACLRuleMatch(notMatchMap)
+		if notMatchElem := notMatch[0]; notMatchElem != nil {
+			if notMatchMap, ok := notMatchElem.(map[string]interface{}); ok {
+				networkACL.Rule.NotMatch = expandNetworkACLRuleMatch(notMatchMap)
+			}
+		}
 	}
 
 	if scope, ok := rule["scope"].(string); ok {
@@ -126,4 +144,53 @@ func expandStringList(list []interface{}) *[]string {
 		}
 	}
 	return &result
+}
+
+func validateMatchAndNotMatch(rule map[string]interface{}) error {
+	matchExists := false
+	notMatchExists := false
+
+	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
+		matchExists = true
+		// Check if match has any criteria.
+		if matchMap, ok := match[0].(map[string]interface{}); ok {
+			matchObj := expandNetworkACLRuleMatch(matchMap)
+			if isEmptyNetworkACLRuleMatch(matchObj) {
+				return fmt.Errorf("when 'match' is specified, it must contain at least one match criteria")
+			}
+		}
+	}
+
+	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
+		notMatchExists = true
+		// Check if not_match has any criteria.
+		if notMatchMap, ok := notMatch[0].(map[string]interface{}); ok {
+			notMatchObj := expandNetworkACLRuleMatch(notMatchMap)
+			if isEmptyNetworkACLRuleMatch(notMatchObj) {
+				return fmt.Errorf("when 'not_match' is specified, it must contain at least one match criteria")
+			}
+		}
+	}
+
+	if matchExists && notMatchExists {
+		return fmt.Errorf("a network ACL rule cannot specify both 'match' and 'not_match' simultaneously")
+	}
+
+	return nil
+}
+
+func isEmptyNetworkACLRuleMatch(match *management.NetworkACLRuleMatch) bool {
+	// Check if all fields are nil or empty.
+	return len(match.Asns) == 0 && match.GetGeoCountryCodes() == nil && match.GetGeoSubdivisionCodes() == nil &&
+		match.GetIPv4Cidrs() == nil && match.GetIPv6Cidrs() == nil && match.GetJa3Fingerprints() == nil && match.GetJa4Fingerprints() == nil && match.GetUserAgents() == nil
+}
+
+func validateActionRedirect(actionMap map[string]interface{}) error {
+	// Add check when 'redirect_uri' action is specified, 'redirect' must also be true.
+	if redirectURI, ok := actionMap["redirect_uri"].(string); ok && redirectURI != "" {
+		if redirect, ok := actionMap["redirect"].(bool); ok && !redirect {
+			return fmt.Errorf("when 'redirect_uri' action is specified, 'redirect' must also be true")
+		}
+	}
+	return nil
 }

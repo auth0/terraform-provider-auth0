@@ -56,7 +56,7 @@ resource "auth0_network_acl" "my_network_acl_not_match" {
 
 - `active` (Boolean) Whether the Network ACL is active
 - `description` (String) The description of the Network ACL
-- `priority` (Number) The priority of the Network ACL
+- `priority` (Number) The priority of the Network ACL. Must be unique between 1 and 10.
 - `rule` (Block List, Min: 1, Max: 1) The rule of the Network ACL (see [below for nested schema](#nestedblock--rule))
 
 ### Read-Only

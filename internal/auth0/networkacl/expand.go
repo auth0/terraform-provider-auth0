@@ -1,7 +1,7 @@
 package networkacl
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
@@ -156,7 +156,7 @@ func validateMatchAndNotMatch(rule map[string]interface{}) error {
 		if matchMap, ok := match[0].(map[string]interface{}); ok {
 			matchObj := expandNetworkACLRuleMatch(matchMap)
 			if isEmptyNetworkACLRuleMatch(matchObj) {
-				return fmt.Errorf("when 'match' is specified, it must contain at least one match criteria")
+				return errors.New("when 'match' is specified, it must contain at least one match criteria")
 			}
 		}
 	}
@@ -167,13 +167,13 @@ func validateMatchAndNotMatch(rule map[string]interface{}) error {
 		if notMatchMap, ok := notMatch[0].(map[string]interface{}); ok {
 			notMatchObj := expandNetworkACLRuleMatch(notMatchMap)
 			if isEmptyNetworkACLRuleMatch(notMatchObj) {
-				return fmt.Errorf("when 'not_match' is specified, it must contain at least one match criteria")
+				return errors.New("when 'not_match' is specified, it must contain at least one match criteria")
 			}
 		}
 	}
 
 	if matchExists && notMatchExists {
-		return fmt.Errorf("a network ACL rule cannot specify both 'match' and 'not_match' simultaneously")
+		return errors.New("a network ACL rule cannot specify both 'match' and 'not_match' simultaneously")
 	}
 
 	return nil
@@ -189,7 +189,7 @@ func validateActionRedirect(actionMap map[string]interface{}) error {
 	// Add check when 'redirect_uri' action is specified, 'redirect' must also be true.
 	if redirectURI, ok := actionMap["redirect_uri"].(string); ok && redirectURI != "" {
 		if redirect, ok := actionMap["redirect"].(bool); ok && !redirect {
-			return fmt.Errorf("when 'redirect_uri' action is specified, 'redirect' must also be true")
+			return errors.New("the 'redirect' must be set to true when a 'redirect_uri' is specified")
 		}
 	}
 	return nil

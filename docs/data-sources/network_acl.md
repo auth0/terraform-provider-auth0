@@ -28,7 +28,7 @@ data "auth0_network_acl" "my__network_acl" {
 
 - `active` (Boolean) Whether the Network ACL is active
 - `description` (String) The description of the Network ACL
-- `priority` (Number) The priority of the Network ACL
+- `priority` (Number) The priority of the Network ACL. Must be unique between 1 and 10.
 - `rule` (List of Object) The rule of the Network ACL (see [below for nested schema](#nestedatt--rule))
 
 <a id="nestedatt--rule"></a>

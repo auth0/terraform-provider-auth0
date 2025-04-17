@@ -157,7 +157,7 @@ var networkACLRuleActionSchema = &schema.Schema{
 				Type:         schema.TypeBool,
 				Optional:     true,
 				Description:  "If true, blocks the request. When using block action, no other properties should be set.",
-				AtLeastOneOf: []string{"rule.0.action.block", "rule.0.action.0.allow", "rule.0.action.0.log", "rule.0.action.0.redirect"},
+				AtLeastOneOf: []string{"rule.0.action.0.block", "rule.0.action.0.allow", "rule.0.action.0.log", "rule.0.action.0.redirect"},
 			},
 			"allow": {
 				Type:         schema.TypeBool,

@@ -1,0 +1,179 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 1163
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"description":"Max Values Test - TestAccNetworkACLEdgeCases","active":true,"priority":9,"rule":{"action":{"block":true},"match":{"asns":[1001,1002,1003,1004,1005,1006,1007,1008,1009,1010],"geo_country_codes":["US","CA","UK","DE","FR","JP","AU","BR","IN","CN"],"geo_subdivision_codes":["US-NY","US-CA","US-TX","CA-ON","CA-QC","UK-LND","DE-BE","FR-75","JP-13","AU-NSW"],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8","172.16.0.0/12","100.64.0.0/10","169.254.0.0/16","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","198.18.0.0/15","203.0.113.0/24"],"ipv6_cidrs":["2001:db8::/32","2001:0db8:0000:0000:0000:0000:0000:0000/32","2001:0db8:1234::/48","2001:0db8:5678::/48","2001:0db8:9abc::/48","2001:0db8:def0::/48","2001:0db8:1111::/48","2001:0db8:2222::/48","2001:0db8:3333::/48","2001:0db8:4444::/48"],"ja3_fingerprints":["ja3_1","ja3_2","ja3_3","ja3_4","ja3_5","ja3_6","ja3_7","ja3_8","ja3_9","ja3_10"],"ja4_fingerprints":["ja4_1","ja4_2","ja4_3","ja4_4","ja4_5","ja4_6","ja4_7","ja4_8","ja4_9","ja4_10"],"user_agents":["Mozilla/5.0","Chrome/91.0","Safari/14.0","Firefox/89.0","Edge/91.0","Opera/76.0","IE/11.0","Android/11.0","iOS/14.0","Bot/2.0"]},"scope":"tenant"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"description":"Max Values Test - TestAccNetworkACLEdgeCases","active":true,"priority":9,"rule":{"match":{"asns":[1001,1002,1003,1004,1005,1006,1007,1008,1009,1010],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8","172.16.0.0/12","100.64.0.0/10","169.254.0.0/16","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","198.18.0.0/15","203.0.113.0/24"],"ipv6_cidrs":["2001:db8::/32","2001:0db8:0000:0000:0000:0000:0000:0000/32","2001:0db8:1234::/48","2001:0db8:5678::/48","2001:0db8:9abc::/48","2001:0db8:def0::/48","2001:0db8:1111::/48","2001:0db8:2222::/48","2001:0db8:3333::/48","2001:0db8:4444::/48"],"user_agents":["Mozilla/5.0","Chrome/91.0","Safari/14.0","Firefox/89.0","Edge/91.0","Opera/76.0","IE/11.0","Android/11.0","iOS/14.0","Bot/2.0"],"ja3_fingerprints":["ja3_1","ja3_2","ja3_3","ja3_4","ja3_5","ja3_6","ja3_7","ja3_8","ja3_9","ja3_10"],"ja4_fingerprints":["ja4_1","ja4_2","ja4_3","ja4_4","ja4_5","ja4_6","ja4_7","ja4_8","ja4_9","ja4_10"],"geo_country_codes":["US","CA","UK","DE","FR","JP","AU","BR","IN","CN"],"geo_subdivision_codes":["US-NY","US-CA","US-TX","CA-ON","CA-QC","UK-LND","DE-BE","FR-75","JP-13","AU-NSW"]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-17T05:27:14.603Z","updated_at":"2025-04-17T05:27:14.603Z","id":"acl_nf57ZjYVmtAPkmy4dfoFJJ"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 237.255708ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_nf57ZjYVmtAPkmy4dfoFJJ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Max Values Test - TestAccNetworkACLEdgeCases","active":true,"priority":9,"rule":{"match":{"asns":[1001,1002,1003,1004,1005,1006,1007,1008,1009,1010],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8","172.16.0.0/12","100.64.0.0/10","169.254.0.0/16","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","198.18.0.0/15","203.0.113.0/24"],"ipv6_cidrs":["2001:db8::/32","2001:0db8:0000:0000:0000:0000:0000:0000/32","2001:0db8:1234::/48","2001:0db8:5678::/48","2001:0db8:9abc::/48","2001:0db8:def0::/48","2001:0db8:1111::/48","2001:0db8:2222::/48","2001:0db8:3333::/48","2001:0db8:4444::/48"],"user_agents":["Mozilla/5.0","Chrome/91.0","Safari/14.0","Firefox/89.0","Edge/91.0","Opera/76.0","IE/11.0","Android/11.0","iOS/14.0","Bot/2.0"],"ja3_fingerprints":["ja3_1","ja3_2","ja3_3","ja3_4","ja3_5","ja3_6","ja3_7","ja3_8","ja3_9","ja3_10"],"ja4_fingerprints":["ja4_1","ja4_2","ja4_3","ja4_4","ja4_5","ja4_6","ja4_7","ja4_8","ja4_9","ja4_10"],"geo_country_codes":["US","CA","UK","DE","FR","JP","AU","BR","IN","CN"],"geo_subdivision_codes":["US-NY","US-CA","US-TX","CA-ON","CA-QC","UK-LND","DE-BE","FR-75","JP-13","AU-NSW"]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-17T05:27:14.603Z","updated_at":"2025-04-17T05:27:14.603Z","deleted_at":null,"id":"acl_nf57ZjYVmtAPkmy4dfoFJJ"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 291.280416ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_nf57ZjYVmtAPkmy4dfoFJJ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Max Values Test - TestAccNetworkACLEdgeCases","active":true,"priority":9,"rule":{"match":{"asns":[1001,1002,1003,1004,1005,1006,1007,1008,1009,1010],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8","172.16.0.0/12","100.64.0.0/10","169.254.0.0/16","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","198.18.0.0/15","203.0.113.0/24"],"ipv6_cidrs":["2001:db8::/32","2001:0db8:0000:0000:0000:0000:0000:0000/32","2001:0db8:1234::/48","2001:0db8:5678::/48","2001:0db8:9abc::/48","2001:0db8:def0::/48","2001:0db8:1111::/48","2001:0db8:2222::/48","2001:0db8:3333::/48","2001:0db8:4444::/48"],"user_agents":["Mozilla/5.0","Chrome/91.0","Safari/14.0","Firefox/89.0","Edge/91.0","Opera/76.0","IE/11.0","Android/11.0","iOS/14.0","Bot/2.0"],"ja3_fingerprints":["ja3_1","ja3_2","ja3_3","ja3_4","ja3_5","ja3_6","ja3_7","ja3_8","ja3_9","ja3_10"],"ja4_fingerprints":["ja4_1","ja4_2","ja4_3","ja4_4","ja4_5","ja4_6","ja4_7","ja4_8","ja4_9","ja4_10"],"geo_country_codes":["US","CA","UK","DE","FR","JP","AU","BR","IN","CN"],"geo_subdivision_codes":["US-NY","US-CA","US-TX","CA-ON","CA-QC","UK-LND","DE-BE","FR-75","JP-13","AU-NSW"]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-17T05:27:14.603Z","updated_at":"2025-04-17T05:27:14.603Z","deleted_at":null,"id":"acl_nf57ZjYVmtAPkmy4dfoFJJ"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 313.457875ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_nf57ZjYVmtAPkmy4dfoFJJ
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"tenant_id":"terraform-provider-auth0-dev","description":"Max Values Test - TestAccNetworkACLEdgeCases","active":true,"priority":9,"rule":{"match":{"asns":[1001,1002,1003,1004,1005,1006,1007,1008,1009,1010],"ipv4_cidrs":["192.168.1.0/24","10.0.0.0/8","172.16.0.0/12","100.64.0.0/10","169.254.0.0/16","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","198.18.0.0/15","203.0.113.0/24"],"ipv6_cidrs":["2001:db8::/32","2001:0db8:0000:0000:0000:0000:0000:0000/32","2001:0db8:1234::/48","2001:0db8:5678::/48","2001:0db8:9abc::/48","2001:0db8:def0::/48","2001:0db8:1111::/48","2001:0db8:2222::/48","2001:0db8:3333::/48","2001:0db8:4444::/48"],"user_agents":["Mozilla/5.0","Chrome/91.0","Safari/14.0","Firefox/89.0","Edge/91.0","Opera/76.0","IE/11.0","Android/11.0","iOS/14.0","Bot/2.0"],"ja3_fingerprints":["ja3_1","ja3_2","ja3_3","ja3_4","ja3_5","ja3_6","ja3_7","ja3_8","ja3_9","ja3_10"],"ja4_fingerprints":["ja4_1","ja4_2","ja4_3","ja4_4","ja4_5","ja4_6","ja4_7","ja4_8","ja4_9","ja4_10"],"geo_country_codes":["US","CA","UK","DE","FR","JP","AU","BR","IN","CN"],"geo_subdivision_codes":["US-NY","US-CA","US-TX","CA-ON","CA-QC","UK-LND","DE-BE","FR-75","JP-13","AU-NSW"]},"scope":"tenant","action":{"block":true}},"created_at":"2025-04-17T05:27:14.603Z","updated_at":"2025-04-17T05:27:14.603Z","deleted_at":null,"id":"acl_nf57ZjYVmtAPkmy4dfoFJJ"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 232.32875ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/network-acls/acl_nf57ZjYVmtAPkmy4dfoFJJ
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 24
+        uncompressed: false
+        body: '{"code":204,"object":""}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 223.494541ms

@@ -71,9 +71,13 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 
 	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
 		if matchElem := match[0]; matchElem != nil {
-			if matchMap, ok := matchElem.(map[string]interface{}); ok {
+			matchMap, ok := matchElem.(map[string]interface{})
+			if ok {
 				networkACL.Rule.Match = expandNetworkACLRuleMatch(matchMap)
 			}
+		} else {
+			// Send empty match object when the element is nil.
+			networkACL.Rule.Match = &management.NetworkACLRuleMatch{}
 		}
 	}
 
@@ -82,6 +86,9 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 			if notMatchMap, ok := notMatchElem.(map[string]interface{}); ok {
 				networkACL.Rule.NotMatch = expandNetworkACLRuleMatch(notMatchMap)
 			}
+		} else {
+			// Send empty not_match object when the element is nil.
+			networkACL.Rule.NotMatch = &management.NetworkACLRuleMatch{}
 		}
 	}
 
@@ -162,12 +169,10 @@ func validateMatchAndNotMatch(rule map[string]interface{}) error {
 
 	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
 		matchExists = true
-		// No longer validate that match has criteria - allow empty objects.
 	}
 
 	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
 		notMatchExists = true
-		// No longer validate that not_match has criteria - allow empty objects.
 	}
 
 	if matchExists && notMatchExists {
@@ -199,7 +204,7 @@ func validateExactlyOneAction(action []interface{}) (map[string]interface{}, err
 
 	actionMap, ok := action[0].(map[string]interface{})
 	if !ok {
-		return nil, errors.New("invalid action format")
+		return nil, errors.New("invalid 'action' format at least one action type (block, allow, log, or redirect) must be specified")
 	}
 	// Count how many action types are set to true.
 	count := 0

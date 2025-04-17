@@ -36,7 +36,7 @@ func NewResource() *schema.Resource {
 			"priority": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				Description: "The priority of the Network ACL. Must be unique between 1 and 10.",
+				Description: "The priority of the Network ACL. Must be unique between 1 and 1000.",
 			},
 			"rule": networkACLRuleSchema,
 		},
@@ -154,28 +154,24 @@ var networkACLRuleActionSchema = &schema.Schema{
 	Elem: &schema.Resource{
 		Schema: map[string]*schema.Schema{
 			"block": {
-				Type:         schema.TypeBool,
-				Optional:     true,
-				Description:  "If true, blocks the request. When using block action, no other properties should be set.",
-				AtLeastOneOf: []string{"rule.action.0.block", "rule.action.0.allow", "rule.action.0.log", "rule.action.0.redirect"},
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "If true, blocks the request. When using block action, no other properties should be set.",
 			},
 			"allow": {
-				Type:         schema.TypeBool,
-				Optional:     true,
-				Description:  "If true, allows the request. When using allow action, no other properties should be set.",
-				AtLeastOneOf: []string{"rule.action.0.block", "rule.action.0.allow", "rule.action.0.log", "rule.action.0.redirect"},
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "If true, allows the request. When using allow action, no other properties should be set.",
 			},
 			"log": {
-				Type:         schema.TypeBool,
-				Optional:     true,
-				Description:  "If true, logs the request. When using log action, no other properties should be set.",
-				AtLeastOneOf: []string{"rule.action.0.block", "rule.action.0.allow", "rule.action.0.log", "rule.action.0.redirect"},
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "If true, logs the request. When using log action, no other properties should be set.",
 			},
 			"redirect": {
-				Type:         schema.TypeBool,
-				Optional:     true,
-				Description:  "If true, redirects the request. When using redirect action, redirect_uri must also be specified.",
-				AtLeastOneOf: []string{"rule.action.0.block", "rule.action.0.allow", "rule.action.0.log", "rule.action.0.redirect"},
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "If true, redirects the request. When using redirect action, redirect_uri must also be specified.",
 			},
 			"redirect_uri": {
 				Type:        schema.TypeString,

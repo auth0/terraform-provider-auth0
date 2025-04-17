@@ -272,7 +272,7 @@ func TestAccNetworkACLValidation(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLInvalidAction, t.Name()),
-				ExpectError: regexp.MustCompile("None of the valid schemas were met"),
+				ExpectError: regexp.MustCompile("only one action type"),
 			},
 			{
 				Config:      acctest.ParseTestName(testAccNetworkACLMissingMatch, t.Name()),

@@ -19,13 +19,23 @@ func expandNetworkACL(data *schema.ResourceData) (*management.NetworkACL, error)
 	networkACL.Active = value.Bool(cfg.GetAttr("active"))
 	networkACL.Priority = value.Int(cfg.GetAttr("priority"))
 
-	// Rule is required, so we can directly access it.
-	rule := data.Get("rule").([]interface{})[0].(map[string]interface{})
+	// Validate that the rule is present.
+	rule, err := validateRule(data.Get("rule").([]interface{}))
+	if err != nil {
+		return nil, err
+	}
+
+	// Initialize the Rule field before accessing it.
 	networkACL.Rule = &management.NetworkACLRule{}
 
-	if action, ok := rule["action"].([]interface{}); ok && len(action) > 0 {
-		actionMap := action[0].(map[string]interface{})
+	if action, ok := rule["action"].([]interface{}); ok {
 		networkACL.Rule.Action = &management.NetworkACLRuleAction{}
+
+		// Validate that the action is present.
+		actionMap, err := validateExactlyOneAction(action)
+		if err != nil {
+			return nil, err
+		}
 
 		// Only set properties that are explicitly true.
 		if block, ok := actionMap["block"].(bool); ok && block {
@@ -185,6 +195,57 @@ func isEmptyNetworkACLRuleMatch(match *management.NetworkACLRuleMatch) bool {
 		match.GetIPv4Cidrs() == nil && match.GetIPv6Cidrs() == nil && match.GetJa3Fingerprints() == nil && match.GetJa4Fingerprints() == nil && match.GetUserAgents() == nil
 }
 
+// Ensures Network ACL has a valid rule configuration - Auth0 requires this for proper ACL operation.
+func validateRule(ruleData []interface{}) (map[string]interface{}, error) {
+	if len(ruleData) == 0 {
+		return nil, errors.New("rule is required")
+	}
+
+	rule, ok := ruleData[0].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("invalid rule format")
+	}
+
+	return rule, nil
+}
+
+// Auth0 Network ACL rules must have exactly one action type to avoid ambiguous behavior.
+func validateExactlyOneAction(action []interface{}) (map[string]interface{}, error) {
+	if len(action) == 0 {
+		return nil, errors.New("action is required")
+	}
+
+	actionMap, ok := action[0].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("invalid action format")
+	}
+	// Count how many action types are set to true.
+	count := 0
+	if block, ok := actionMap["block"].(bool); ok && block {
+		count++
+	}
+	if allow, ok := actionMap["allow"].(bool); ok && allow {
+		count++
+	}
+	if log, ok := actionMap["log"].(bool); ok && log {
+		count++
+	}
+	if redirect, ok := actionMap["redirect"].(bool); ok && redirect {
+		count++
+	}
+
+	// Validate that exactly one action type is set.
+	if count == 0 {
+		return nil, errors.New("at least one action type (block, allow, log, or redirect) must be specified")
+	}
+	if count > 1 {
+		return nil, errors.New("only one action type (block, allow, log, or redirect) can be specified")
+	}
+
+	return actionMap, nil
+}
+
+// Prevents inconsistent configuration where redirect_uri exists but redirect action is disabled.
 func validateActionRedirect(actionMap map[string]interface{}) error {
 	// Add check when 'redirect_uri' action is specified, 'redirect' must also be true.
 	if redirectURI, ok := actionMap["redirect_uri"].(string); ok && redirectURI != "" {

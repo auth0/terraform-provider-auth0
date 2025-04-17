@@ -162,24 +162,12 @@ func validateMatchAndNotMatch(rule map[string]interface{}) error {
 
 	if match, ok := rule["match"].([]interface{}); ok && len(match) > 0 {
 		matchExists = true
-		// Check if match has any criteria.
-		if matchMap, ok := match[0].(map[string]interface{}); ok {
-			matchObj := expandNetworkACLRuleMatch(matchMap)
-			if isEmptyNetworkACLRuleMatch(matchObj) {
-				return errors.New("when 'match' is specified, it must contain at least one match criteria")
-			}
-		}
+		// No longer validate that match has criteria - allow empty objects.
 	}
 
 	if notMatch, ok := rule["not_match"].([]interface{}); ok && len(notMatch) > 0 {
 		notMatchExists = true
-		// Check if not_match has any criteria.
-		if notMatchMap, ok := notMatch[0].(map[string]interface{}); ok {
-			notMatchObj := expandNetworkACLRuleMatch(notMatchMap)
-			if isEmptyNetworkACLRuleMatch(notMatchObj) {
-				return errors.New("when 'not_match' is specified, it must contain at least one match criteria")
-			}
-		}
+		// No longer validate that not_match has criteria - allow empty objects.
 	}
 
 	if matchExists && notMatchExists {
@@ -187,12 +175,6 @@ func validateMatchAndNotMatch(rule map[string]interface{}) error {
 	}
 
 	return nil
-}
-
-func isEmptyNetworkACLRuleMatch(match *management.NetworkACLRuleMatch) bool {
-	// Check if all fields are nil or empty.
-	return len(match.Asns) == 0 && match.GetGeoCountryCodes() == nil && match.GetGeoSubdivisionCodes() == nil &&
-		match.GetIPv4Cidrs() == nil && match.GetIPv6Cidrs() == nil && match.GetJa3Fingerprints() == nil && match.GetJa4Fingerprints() == nil && match.GetUserAgents() == nil
 }
 
 // Ensures Network ACL has a valid rule configuration - Auth0 requires this for proper ACL operation.

@@ -36,7 +36,7 @@ func NewResource() *schema.Resource {
 			"priority": {
 				Type:        schema.TypeInt,
 				Required:    true,
-				Description: "The priority of the Network ACL. Must be unique between 1 and 1000.",
+				Description: "The priority of the Network ACL. Must be unique between 1 and 10.",
 			},
 			"rule": networkACLRuleSchema,
 		},

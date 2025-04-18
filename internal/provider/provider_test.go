@@ -49,6 +49,34 @@ func TestProvider_debugDefaults(t *testing.T) {
 	}
 }
 
+func TestProvider_dynamicCredentialsDefaults(t *testing.T) {
+	for value, expected := range map[string]bool{
+		"1":     true,
+		"true":  true,
+		"on":    true,
+		"0":     false,
+		"off":   false,
+		"false": false,
+		"foo":   false,
+		"":      false,
+	} {
+		_ = os.Unsetenv("AUTH0_DYNAMIC_CREDENTIALS")
+		if value != "" {
+			_ = os.Setenv("AUTH0_DYNAMIC_CREDENTIALS", value)
+		}
+
+		p := New()
+		dynamicCredentials, err := p.Schema["dynamic_credentials"].DefaultValue()
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+
+		if dynamicCredentials.(bool) != expected {
+			t.Fatalf("Expected dynamic_credentials to be %v, but got %v", expected, dynamicCredentials)
+		}
+	}
+}
+
 func TestProvider_configValidation(t *testing.T) {
 	testCases := []struct {
 		name           string

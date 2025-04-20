@@ -3,6 +3,8 @@ package branding
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/go-cty/cty"
+	"net/http"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -70,15 +72,14 @@ func NewResource() *schema.Resource {
 			"font": {
 				Type:        schema.TypeList,
 				Optional:    true,
-				Computed:    true,
+				Default:     nil,
 				MaxItems:    1,
 				Description: "Configuration settings to customize the font.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"url": {
 							Type:        schema.TypeString,
-							Optional:    true,
-							Computed:    true,
+							Required:    true,
 							Description: "URL for the custom font.",
 						},
 					},
@@ -137,6 +138,22 @@ func updateBranding(ctx context.Context, data *schema.ResourceData, meta interfa
 		}
 	}
 
+	if isFontConfigurationNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("branding"), map[string]interface{}{
+			"font": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	if isColorsConfigurationNull(data) && !data.IsNewResource() {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("branding"), map[string]interface{}{
+			"colors": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
 	oldUL, newUL := data.GetChange("universal_login")
 	oldUniversalLogin := oldUL.([]interface{})
 	newUniversalLogin := newUL.([]interface{})
@@ -173,6 +190,54 @@ func deleteBranding(ctx context.Context, _ *schema.ResourceData, meta interface{
 	}
 
 	return nil
+}
+
+func isFontConfigurationNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("font") {
+		return false
+	}
+
+	empty := true
+	rawConfig := data.GetRawConfig().GetAttr("font")
+
+	if rawConfig.IsNull() || rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		url := cfg.GetAttr("url")
+
+		if !url.IsNull() && url.AsString() != "" {
+			empty = false
+		}
+		return stop
+	}) {
+		// font is explicitly null
+		return true
+	}
+
+	return empty
+}
+
+func isColorsConfigurationNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("colors") {
+		return false
+	}
+
+	empty := true
+	rawConfig := data.GetRawConfig().GetAttr("colors")
+
+	if rawConfig.IsNull() || rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		pageBackground := cfg.GetAttr("page_background")
+		primary := cfg.GetAttr("primary")
+
+		if (!pageBackground.IsNull() && pageBackground.AsString() != "") ||
+			(!primary.IsNull() && primary.AsString() != "") {
+			empty = false
+		}
+		return stop
+	}) {
+		// colors is explicitly null
+		return true
+	}
+
+	return empty
 }
 
 func checkForCustomDomains(ctx context.Context, api *management.Management) error {

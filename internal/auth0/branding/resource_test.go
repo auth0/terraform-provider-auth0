@@ -11,7 +11,7 @@ import (
 
 const testAccGivenACustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "auth.terraform-provider-auth0.com"
+	domain = "auth.terraform-provider-auth0-e2e-tests.com"
 	type   = "auth0_managed_certs"
 }
 `
@@ -122,7 +122,7 @@ func TestAccBranding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v1/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "favicon_url", "https://mycompany.org/favicon.ico"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.#", "1"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "0"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "0"),
 				),
 			},
@@ -150,7 +150,7 @@ func TestAccBranding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v1/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "favicon_url", "https://mycompany.org/favicon.ico"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.#", "1"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "0"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "0"),
 				),
 			},
@@ -167,7 +167,7 @@ func TestAccBranding(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "logo_url", "https://mycompany.org/v1/logo.png"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "favicon_url", "https://mycompany.org/favicon.ico"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "colors.#", "1"),
-					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "1"),
+					resource.TestCheckResourceAttr("auth0_branding.my_brand", "font.#", "0"),
 					resource.TestCheckResourceAttr("auth0_branding.my_brand", "universal_login.#", "0"),
 				),
 			},

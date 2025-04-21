@@ -211,6 +211,7 @@ func NewResource() *schema.Resource {
 			"encryption_key": {
 				Type:        schema.TypeMap,
 				Optional:    true,
+				Default:     nil,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Encryption used for WS-Fed responses with this client.",
 			},

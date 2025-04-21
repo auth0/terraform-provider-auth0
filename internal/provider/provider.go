@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
@@ -129,6 +131,7 @@ func New() *schema.Provider {
 			"auth0_organization_member_role":         organization.NewMemberRoleResource(),
 			"auth0_organization_member_roles":        organization.NewMemberRolesResource(),
 			"auth0_organization_members":             organization.NewMembersResource(),
+			"auth0_network_acl":                      networkacl.NewResource(),
 			"auth0_pages":                            page.NewResource(),
 			"auth0_phone_provider":                   branding.NewPhoneProviderResource(),
 			"auth0_prompt":                           prompt.NewResource(),
@@ -169,6 +172,7 @@ func New() *schema.Provider {
 			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
+			"auth0_network_acl":                   networkacl.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),

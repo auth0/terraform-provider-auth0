@@ -64,8 +64,22 @@ func flattenClientRefreshTokenConfiguration(refreshToken *management.ClientRefre
 			"infinite_token_lifetime":      refreshToken.GetInfiniteTokenLifetime(),
 			"infinite_idle_token_lifetime": refreshToken.GetInfiniteIdleTokenLifetime(),
 			"idle_token_lifetime":          refreshToken.GetIdleTokenLifetime(),
+			"policies":                     flattenRefreshTokenPolicies(refreshToken.GetPolicies()),
 		},
 	}
+}
+
+func flattenRefreshTokenPolicies(policies []management.ClientRefreshTokenPolicy) []interface{} {
+	var result []interface{}
+
+	for _, policy := range policies {
+		result = append(result, map[string]interface{}{
+			"audience": policy.GetAudience(),
+			"scope":    policy.GetScope(),
+		})
+	}
+
+	return result
 }
 
 func flattenOIDCBackchannelURLs(backchannelLogout *management.OIDCBackchannelLogout, logout *management.OIDCLogout) []string {

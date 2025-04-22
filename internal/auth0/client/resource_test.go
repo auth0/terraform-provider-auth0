@@ -291,6 +291,10 @@ resource "auth0_client" "my_client" {
 	refresh_token {
 		rotation_type   = "non-rotating"
 		expiration_type = "non-expiring"
+		policies {
+			audience = "https://periscope"
+			scope = ["create:bar"]
+		}
 
 		# Intentionally not setting leeway,
 		# token_lifetime, infinite_token_lifetime,
@@ -302,6 +306,11 @@ resource "auth0_client" "my_client" {
 `
 
 const testAccUpdateClientWithRefreshToken = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Client Grant - {{.testName}}"
+	identifier = "https://prod.tf"
+}
+
 resource "auth0_client" "my_client" {
 	name      = "Acceptance Test - Refresh Token - {{.testName}}"
 	app_type  = "spa"
@@ -314,6 +323,10 @@ resource "auth0_client" "my_client" {
 		infinite_token_lifetime = true
 		infinite_idle_token_lifetime = true
 		idle_token_lifetime = 128000
+		policies {
+			audience = "https://periscope"
+			scope = []
+		}
 	}
 }
 `
@@ -336,6 +349,8 @@ func TestAccClientRefreshToken(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.audience", "https://periscope"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.scope.0", "create:bar"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.leeway"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.token_lifetime"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.infinite_token_lifetime"),
@@ -356,6 +371,8 @@ func TestAccClientRefreshToken(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_token_lifetime", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "128000"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.audience", "https://periscope"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.scope.#", "0"),
 				),
 			},
 			{

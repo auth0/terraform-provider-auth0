@@ -138,7 +138,7 @@ func updateBranding(ctx context.Context, data *schema.ResourceData, meta interfa
 		}
 	}
 
-	if isFontConfigurationNull(data) {
+	if isFontConfigurationNull(data) && !data.IsNewResource() {
 		if err := api.Request(ctx, http.MethodPatch, api.URI("branding"), map[string]interface{}{
 			"font": nil,
 		}); err != nil {

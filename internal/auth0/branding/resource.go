@@ -146,14 +146,6 @@ func updateBranding(ctx context.Context, data *schema.ResourceData, meta interfa
 		}
 	}
 
-	if isColorsConfigurationNull(data) && !data.IsNewResource() {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("branding"), map[string]interface{}{
-			"colors": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-
 	oldUL, newUL := data.GetChange("universal_login")
 	oldUniversalLogin := oldUL.([]interface{})
 	newUniversalLogin := newUL.([]interface{})
@@ -209,31 +201,6 @@ func isFontConfigurationNull(data *schema.ResourceData) bool {
 		return stop
 	}) {
 		// font is explicitly null
-		return true
-	}
-
-	return empty
-}
-
-func isColorsConfigurationNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("colors") {
-		return false
-	}
-
-	empty := true
-	rawConfig := data.GetRawConfig().GetAttr("colors")
-
-	if rawConfig.IsNull() || rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		pageBackground := cfg.GetAttr("page_background")
-		primary := cfg.GetAttr("primary")
-
-		if (!pageBackground.IsNull() && pageBackground.AsString() != "") ||
-			(!primary.IsNull() && primary.AsString() != "") {
-			empty = false
-		}
-		return stop
-	}) {
-		// colors is explicitly null
 		return true
 	}
 

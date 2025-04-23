@@ -118,6 +118,7 @@ func NewResource() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional:    true,
+				Computed:    true,
 				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
 					"Please use `oidc_logout` for managing OIDC backchannel logout URLs.",

@@ -200,7 +200,7 @@ func isFontConfigurationNull(data *schema.ResourceData) bool {
 		}
 		return stop
 	}) {
-		// font is explicitly null
+		// Early return if the block is explicitly set to `null`.
 		return true
 	}
 

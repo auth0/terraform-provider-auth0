@@ -11,7 +11,7 @@ import (
 
 const testAccGivenACustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "auth.terraform-provider-auth0-e2e-tests.com"
+	domain = "auth.terraform-provider-auth0.com"
 	type   = "auth0_managed_certs"
 }
 `

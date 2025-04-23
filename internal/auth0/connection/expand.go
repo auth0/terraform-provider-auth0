@@ -390,6 +390,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
+		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
 	}
 
 	config.GetAttr("validation").ForEachElement(

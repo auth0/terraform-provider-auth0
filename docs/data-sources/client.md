@@ -593,8 +593,18 @@ Read-Only:
 - `infinite_idle_token_lifetime` (Boolean)
 - `infinite_token_lifetime` (Boolean)
 - `leeway` (Number)
+- `policies` (Set of Object) (see [below for nested schema](#nestedobjatt--refresh_token--policies))
 - `rotation_type` (String)
 - `token_lifetime` (Number)
+
+<a id="nestedobjatt--refresh_token--policies"></a>
+### Nested Schema for `refresh_token.policies`
+
+Read-Only:
+
+- `audience` (String)
+- `scope` (List of String)
+
 
 
 <a id="nestedatt--signed_request_object"></a>

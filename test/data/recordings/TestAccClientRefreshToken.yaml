@@ -6,14 +6,193 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 292
+        content_length: 181
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","app_type":"spa","token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","policies":[{"audience":"https://periscope","scope":["create:bar"]}]},"oidc_logout":{}}
+            {"name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 287
+        uncompressed: false
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 475.108291ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 31
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"authorization_details":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 513.989792ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 26
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"token_encryption":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 363.763917ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 29
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"proof_of_possession":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 348.491541ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 582.812958ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 441
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","app_type":"spa","is_first_party":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_logout":{}}
         form: {}
         headers:
             Content-Type:
@@ -28,12 +207,856 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 187
+        content_length: 96
         uncompressed: false
         body: '{"signing_keys":[{"cert":"[REDACTED]"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 400 Bad Request
-        code: 400
-        duration: 458.10125ms
+        status: 500 Internal Server Error
+        code: 500
+        duration: 843.828333ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.483475416s
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 53
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[{"value":"create:bar","description":""}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.3539105s
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.51080775s
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 441
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","app_type":"spa","is_first_party":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_logout":{}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 3.264679333s
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 2.679982125s
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.71107825s
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.728775s
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 1.725413417s
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 960.591167ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 346.77425ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":["create:bar"]}]},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 363.743458ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 393
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","app_type":"spa","is_first_party":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]},"oidc_logout":{}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 426.884708ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 350.839666ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 338.72125ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 436.418084ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 444.528166ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 327.749959ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 352.583083ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 964.673709ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[{"value":"create:bar","description":""}]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 384.68425ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 14
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"scopes":[]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/https:%2F%2Fmrrt
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"680876c5536c6a2bced05c0c","name":"Acceptance Test - Client Grant - TestAccClientRefreshToken","identifier":"https://mrrt","allow_offline_access":true,"skip_consent_for_verifiable_first_party_clients":true,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256","scopes":[]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 454.208125ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/680876c5536c6a2bced05c0c
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 395.082291ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test - Refresh Token - TestAccClientRefreshToken","client_id":"nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za","client_secret":"[REDACTED]","app_type":"spa","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token"],"custom_login_page_on":true,"token_endpoint_auth_method":"none","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":60,"token_lifetime":256000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":128000,"policies":[{"audience":"https://mrrt","scope":[]}]}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 369.130708ms
+    - id: 29
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.19.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nEJVyGEq2MmgeGV4NYro7tdFFQh9e5Za
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 513.338584ms

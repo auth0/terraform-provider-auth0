@@ -1211,6 +1211,11 @@ var optionsSchema = &schema.Schema{
 					},
 				},
 			},
+			"realm_fallback": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Allows configuration if connections_realm_fallback flag is enabled for the tenant",
+			},
 		},
 	},
 }

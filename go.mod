@@ -6,7 +6,7 @@ toolchain go1.23.7
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
-	github.com/auth0/go-auth0 v1.19.0
+	github.com/auth0/go-auth0 v1.19.1-0.20250415185812-28bed30ed778
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -80,7 +80,7 @@ require (
 	golang.org/x/exp v0.0.0-20240525044651-4c93da0ed11d // indirect
 	golang.org/x/mod v0.22.0 // indirect
 	golang.org/x/net v0.37.0 // indirect
-	golang.org/x/oauth2 v0.28.0 // indirect
+	golang.org/x/oauth2 v0.29.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/text v0.23.0 // indirect

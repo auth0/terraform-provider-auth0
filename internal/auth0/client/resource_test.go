@@ -2543,3 +2543,106 @@ func TestAccClientOIDCLogout(t *testing.T) {
 		},
 	})
 }
+
+const testAccCreateClientWithSessionTransfer = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		allowed_authentication_methods = ["cookie", "query"]
+		enforce_device_binding = "asn"
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer1 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = false
+		enforce_device_binding = "none"
+		allowed_authentication_methods = []
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer2 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		enforce_device_binding = "ip"
+		allowed_authentication_methods = ["query"]
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer3 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+}`
+
+func TestAccClientSessionTransfer(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithSessionTransfer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "asn"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "none"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer2, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.0", "query"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer3, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.#", "0"),
+				),
+			},
+		},
+	})
+}

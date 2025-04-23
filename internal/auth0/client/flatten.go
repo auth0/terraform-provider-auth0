@@ -615,8 +615,25 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("token_exchange", flattenTokenExchange(client.GetTokenExchange())),
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
+		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 	)
 	return result.ErrorOrNil()
+}
+
+func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []interface{} {
+	if sessionTransfer == nil {
+		return nil
+	}
+
+	t := map[string]interface{}{
+		"can_create_session_transfer_token": sessionTransfer.GetCanCreateSessionTransferToken(),
+		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
+		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
+	}
+
+	return []interface{}{
+		t,
+	}
 }
 
 func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {

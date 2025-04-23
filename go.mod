@@ -17,6 +17,8 @@ require (
 	gopkg.in/dnaeon/go-vcr.v3 v3.2.0
 )
 
+replace github.com/auth0/go-auth0 v1.19.0 => ../go-auth0
+
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/Kunde21/markdownfmt/v3 v3.1.0 // indirect

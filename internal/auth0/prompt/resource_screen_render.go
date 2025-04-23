@@ -37,8 +37,6 @@ var (
 		string(management.PromptMFAPush),
 		string(management.PromptInvitation),
 		string(management.PromptOrganizations),
-		string(management.PromptConsent),
-		string(management.PromptCustomizedConsent),
 		string(management.PromptMFAOTP),
 	}
 	allowedScreensSettingsRenderer = []string{
@@ -82,8 +80,6 @@ var (
 		string(management.ScreenAcceptInvitation),
 		string(management.ScreenOrganizationSelection),
 		string(management.ScreenOrganizationPicker),
-		string(management.ScreenConsent),
-		string(management.ScreenCustomizedConsent),
 		string(management.ScreenMFAOTPChallenge),
 		string(management.ScreenMFAOTPEnrollmentCode),
 		string(management.ScreenMFAOTPEnrollmentQR),

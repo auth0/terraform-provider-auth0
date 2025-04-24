@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"github.com/hashicorp/go-cty/cty"
 	"net/http"
 	"time"
 
@@ -1467,8 +1468,41 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 				return diag.FromErr(err)
 			}
 		}
+
+		if isEncryptionKeyNull(data) && !data.IsNewResource() {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"encryption_key": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+
 	}
 	return readClient(ctx, data, meta)
+}
+
+func isEncryptionKeyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("encryption_key") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("encryption_key")
+
+	// Case 1: encryption_key is explicitly null
+	if config.IsNull() {
+		return true
+	}
+
+	// Case 2: encryption_key is empty or all fields are empty strings
+	empty := true
+	config.ForEachElement(func(key, val cty.Value) (stop bool) {
+		if !val.IsNull() && val.AsString() != "" {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

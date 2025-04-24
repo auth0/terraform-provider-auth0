@@ -616,8 +616,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 	)
 
-	if client.EncryptionKey != nil {
+	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
 		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
+		//} else {
+		//	result = multierror.Append(data.Set("encryption_key", nil))
 	}
 
 	return result.ErrorOrNil()

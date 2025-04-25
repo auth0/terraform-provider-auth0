@@ -506,15 +506,6 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 		}
 	}
 
-	// Check if error_page is explicitly set to null in Terraform configuration.
-	if attr := data.GetRawConfig().GetAttr("error_page"); attr.IsNull() {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"error_page": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-
 	return readTenant(ctx, data, meta)
 }
 

@@ -2,11 +2,11 @@ package client
 
 import (
 	"context"
-	"github.com/hashicorp/go-cty/cty"
 	"net/http"
 	"time"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -1476,7 +1476,6 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 				return diag.FromErr(err)
 			}
 		}
-
 	}
 	return readClient(ctx, data, meta)
 }
@@ -1488,14 +1487,14 @@ func isEncryptionKeyNull(data *schema.ResourceData) bool {
 
 	config := data.GetRawConfig().GetAttr("encryption_key")
 
-	// Case 1: encryption_key is explicitly null
+	// Case 1: encryption_key is explicitly null.
 	if config.IsNull() {
 		return true
 	}
 
-	// Case 2: encryption_key is empty or all fields are empty strings
+	// Case 2: encryption_key is empty or all fields are empty strings.
 	empty := true
-	config.ForEachElement(func(key, val cty.Value) (stop bool) {
+	config.ForEachElement(func(_, val cty.Value) (stop bool) {
 		if !val.IsNull() && val.AsString() != "" {
 			empty = false
 		}

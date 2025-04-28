@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -211,6 +212,7 @@ func NewResource() *schema.Resource {
 			"encryption_key": {
 				Type:        schema.TypeMap,
 				Optional:    true,
+				Default:     nil,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Encryption used for WS-Fed responses with this client.",
 			},
@@ -1466,8 +1468,40 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 				return diag.FromErr(err)
 			}
 		}
+
+		if isEncryptionKeyNull(data) && !data.IsNewResource() {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"encryption_key": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
 	}
 	return readClient(ctx, data, meta)
+}
+
+func isEncryptionKeyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("encryption_key") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("encryption_key")
+
+	// Case 1: encryption_key is explicitly null.
+	if config.IsNull() {
+		return true
+	}
+
+	// Case 2: encryption_key is empty or all fields are empty strings.
+	empty := true
+	config.ForEachElement(func(_, val cty.Value) (stop bool) {
+		if !val.IsNull() && val.AsString() != "" {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

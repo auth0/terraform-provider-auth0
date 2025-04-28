@@ -39,7 +39,7 @@ better alternative.
 - `audience` (String) Your Auth0 audience when using a custom domain. It can also be sourced from the `AUTH0_AUDIENCE` environment variable.
 - `client_id` (String) Your Auth0 client ID. It can also be sourced from the `AUTH0_CLIENT_ID` environment variable.
 - `client_secret` (String) Your Auth0 client secret. It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.
-- `debug` (Boolean) Indicates whether to turn on debug mode.
+- `debug` (Boolean) Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.
 - `domain` (String) Your Auth0 domain name. It can also be sourced from the `AUTH0_DOMAIN` environment variable.
 - `dynamic_credentials` (Boolean) Indicates whether credentials will be dynamically passed to the provider fromother terraform resources.
 

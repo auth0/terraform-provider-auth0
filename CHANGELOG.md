@@ -1,4 +1,4 @@
-## v1.17.0
+## v1.18.0
 
 ENHANCEMENTS:
 

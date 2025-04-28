@@ -45,6 +45,10 @@ resource "auth0_attack_protection" "my_protection" {
     pre_user_registration {
       shields = ["block"]
     }
+
+    pre_change_password {
+      shields = ["block", "admin_notification"]
+    }
   }
 }
 ```
@@ -73,8 +77,17 @@ Optional:
 
 - `admin_notification_frequency` (Set of String) When `admin_notification` is enabled within the `shields` property, determines how often email notifications are sent. Possible values: `immediately`, `daily`, `weekly`, `monthly`.
 - `method` (String) The subscription level for breached password detection methods. Use "enhanced" to enable Credential Guard. Possible values: `standard`, `enhanced`.
+- `pre_change_password` (Block List, Max: 1) Configuration options that apply before every password change attempt. (see [below for nested schema](#nestedblock--breached_password_detection--pre_change_password))
 - `pre_user_registration` (Block List, Max: 1) Configuration options that apply before every user registration attempt. Only available on public tenants. (see [below for nested schema](#nestedblock--breached_password_detection--pre_user_registration))
 - `shields` (Set of String) Action to take when a breached password is detected. Options include: `block` (block compromised user accounts), `user_notification` (send an email to user when we detect that they are using compromised credentials) and `admin_notification` (send an email with a summary of the number of accounts logging in with compromised credentials).
+
+<a id="nestedblock--breached_password_detection--pre_change_password"></a>
+### Nested Schema for `breached_password_detection.pre_change_password`
+
+Optional:
+
+- `shields` (Set of String) Action to take when a breached password is detected before the password is changed. Possible values: `block` (block compromised credentials for new accounts), `admin_notification` (send an email notification with a summary of compromised credentials in new accounts).
+
 
 <a id="nestedblock--breached_password_detection--pre_user_registration"></a>
 ### Nested Schema for `breached_password_detection.pre_user_registration`

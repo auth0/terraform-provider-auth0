@@ -41,6 +41,7 @@ better alternative.
 - `client_secret` (String) Your Auth0 client secret. It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.
 - `debug` (Boolean) Indicates whether to turn on debug mode.
 - `domain` (String) Your Auth0 domain name. It can also be sourced from the `AUTH0_DOMAIN` environment variable.
+- `dynamic_credentials` (Boolean) Indicates whether credentials will be dynamically passed to the provider fromother terraform resources.
 
 ## Environment Variables
 

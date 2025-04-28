@@ -97,6 +97,19 @@ func New() *schema.Provider {
 				},
 				Description: "Indicates whether to turn on debug mode.",
 			},
+			"dynamic_credentials": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_DYNAMIC_CREDENTIALS")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "Indicates whether credentials will be dynamically passed to the provider from" +
+					"other terraform resources.",
+			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                           action.NewResource(),

@@ -95,7 +95,7 @@ func New() *schema.Provider {
 					}
 					return v == "1" || v == "true" || v == "on", nil
 				},
-				Description: "Indicates whether to turn on debug mode.",
+				Description: "Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

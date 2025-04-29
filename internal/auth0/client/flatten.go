@@ -602,7 +602,6 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("native_social_login", flattenCustomSocialConfiguration(client.GetNativeSocialLogin())),
 		data.Set("jwt_configuration", flattenClientJwtConfiguration(client.GetJWTConfiguration())),
 		data.Set("refresh_token", flattenClientRefreshTokenConfiguration(client.GetRefreshToken())),
-		data.Set("encryption_key", client.GetEncryptionKey()),
 		data.Set("addons", flattenClientAddons(client.GetAddons())),
 		data.Set("mobile", flattenClientMobile(client.GetMobile())),
 		data.Set("initiate_login_uri", client.GetInitiateLoginURI()),
@@ -617,6 +616,11 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 	)
+
+	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
+		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
+	}
+
 	return result.ErrorOrNil()
 }
 

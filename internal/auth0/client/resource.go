@@ -1560,16 +1560,16 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 		return false
 	}
 
-	config := data.GetRawConfig().GetAttr("session_transfer")
+	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
 
-	// If the session_transfer block is explicitly set to null
-	if config.IsNull() {
+	// If the session_transfer block is explicitly set to null.
+	if rawConfig.IsNull() {
 		return true
 	}
 
-	// If the session_transfer block exists, but all fields inside it are null or not set
+	// If the session_transfer block exists, but all fields inside it are null or not set.
 	empty := true
-	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		canCreate := cfg.GetAttr("can_create_session_transfer_token")
 		enforceBinding := cfg.GetAttr("enforce_device_binding")
 		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
@@ -1585,26 +1585,3 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 
 	return empty
 }
-
-//func isAllowedAuthMethodsExplicitlyNull(data *schema.ResourceData) bool {
-//	if !data.IsNewResource() && !data.HasChange("session_transfer") {
-//		return false
-//	}
-//
-//	sessionTransfer := data.GetRawConfig().GetAttr("session_transfer")
-//	if sessionTransfer.IsNull() {
-//		// session_transfer block itself is removed/null — ignore
-//		return false
-//	}
-//
-//	explicitlyNull := false
-//	sessionTransfer.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-//		methods := cfg.GetAttr("allowed_authentication_methods")
-//		if methods.IsNull() {
-//			explicitlyNull = true
-//		}
-//		return stop
-//	})
-//
-//	return explicitlyNull
-//}

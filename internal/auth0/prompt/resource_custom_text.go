@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -58,11 +59,39 @@ func fetchLanguages() []string {
 
 var (
 	availablePrompts = []string{
-		"captcha", "common", "consent", "custom-form", "customized-consent", "device-flow", "email-otp-challenge",
-		"email-verification", "invitation", "login", "login-email-verification", "login-id", "login-password",
-		"login-passwordless", "logout", "mfa", "mfa-email", "mfa-otp", "mfa-phone", "mfa-push", "mfa-recovery-code",
-		"mfa-sms", "mfa-voice", "mfa-webauthn", "organizations", "passkeys", "phone-identifier-challenge",
-		"phone-identifier-enrollment", "reset-password", "signup", "signup-id", "signup-password", "status",
+		string(management.PromptLogin),
+		string(management.PromptLoginID),
+		string(management.PromptLoginPassword),
+		string(management.PromptLoginPasswordLess),
+		string(management.PromptLoginEmailVerification),
+		string(management.PromptSignup),
+		string(management.PromptSignupID),
+		string(management.PromptSignupPassword),
+		string(management.PromptPhoneIdentifierEnrollment),
+		string(management.PromptPhoneIdentifierChallenge),
+		string(management.PromptEmailIdentifierChallenge),
+		string(management.PromptResetPassword),
+		string(management.PromptCustomForm),
+		string(management.PromptConsent),
+		string(management.PromptLogout),
+		string(management.PromptMFAPush),
+		string(management.PromptMFAOTP),
+		string(management.PromptMFAVoice),
+		string(management.PromptMFAPhone),
+		string(management.PromptMFAWebAuthn),
+		string(management.PromptMFASMS),
+		string(management.PromptMFAEmail),
+		string(management.PromptMFARecoveryCode),
+		string(management.PromptMFA),
+		string(management.PromptStatus),
+		string(management.PromptDeviceFlow),
+		string(management.PromptEmailVerification),
+		string(management.PromptEmailOTPChallenge),
+		string(management.PromptOrganizations),
+		string(management.PromptInvitation),
+		string(management.PromptCommon),
+		string(management.PromptPasskeys),
+		string(management.PromptCaptcha),
 	}
 
 	availableLanguages = fetchLanguages()

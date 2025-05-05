@@ -54,7 +54,7 @@ Optional:
 <a id="nestedblock--font"></a>
 ### Nested Schema for `font`
 
-Optional:
+Required:
 
 - `url` (String) URL for the custom font.
 

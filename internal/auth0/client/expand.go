@@ -52,6 +52,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		DefaultOrganization:                expandDefaultOrganization(data),
 		TokenExchange:                      expandTokenExchange(data),
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
+		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
 
@@ -224,6 +225,7 @@ func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefre
 		refreshToken.InfiniteTokenLifetime = value.Bool(config.GetAttr("infinite_token_lifetime"))
 		refreshToken.InfiniteIdleTokenLifetime = value.Bool(config.GetAttr("infinite_idle_token_lifetime"))
 		refreshToken.IdleTokenLifetime = value.Int(config.GetAttr("idle_token_lifetime"))
+		refreshToken.Policies = expandRefreshTokenPolicies(config.GetAttr("policies"))
 		return stop
 	})
 
@@ -232,6 +234,20 @@ func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefre
 	}
 
 	return &refreshToken
+}
+
+func expandRefreshTokenPolicies(policies cty.Value) *[]management.ClientRefreshTokenPolicy {
+	clientRefreshTokenPolicy := make([]management.ClientRefreshTokenPolicy, 0)
+
+	policies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
+		clientRefreshTokenPolicy = append(clientRefreshTokenPolicy, management.ClientRefreshTokenPolicy{
+			Audience: value.String(dep.GetAttr("audience")),
+			Scope:    value.Strings(dep.GetAttr("scope")),
+		})
+		return stop
+	})
+
+	return &clientRefreshTokenPolicy
 }
 
 func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJWTConfiguration {
@@ -1014,4 +1030,26 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	}
 
 	return clientGrant
+}
+
+func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfer {
+	if !data.IsNewResource() && !data.HasChange("session_transfer") {
+		return nil
+	}
+
+	sessionTransferConfig := data.GetRawConfig().GetAttr("session_transfer")
+	if sessionTransferConfig.IsNull() {
+		return nil
+	}
+
+	var sessionTransfer management.SessionTransfer
+
+	sessionTransferConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		sessionTransfer.CanCreateSessionTransferToken = value.Bool(config.GetAttr("can_create_session_transfer_token"))
+		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
+		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
+		return stop
+	})
+
+	return &sessionTransfer
 }

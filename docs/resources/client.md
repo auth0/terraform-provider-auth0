@@ -154,6 +154,7 @@ resource "auth0_client" "my_client" {
 - `refresh_token` (Block List, Max: 1) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedblock--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `session_transfer` (Block List, Max: 1) (see [below for nested schema](#nestedblock--session_transfer))
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
@@ -606,7 +607,27 @@ Optional:
 - `infinite_idle_token_lifetime` (Boolean) Whether inactive refresh tokens should remain valid indefinitely.
 - `infinite_token_lifetime` (Boolean) Whether refresh tokens should remain valid indefinitely. If false, `token_lifetime` should also be set.
 - `leeway` (Number) The amount of time in seconds in which a refresh token may be reused without triggering reuse detection.
+- `policies` (Block Set) A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers (see [below for nested schema](#nestedblock--refresh_token--policies))
 - `token_lifetime` (Number) The absolute lifetime of a refresh token in seconds.
+
+<a id="nestedblock--refresh_token--policies"></a>
+### Nested Schema for `refresh_token.policies`
+
+Required:
+
+- `audience` (String) The identifier of the resource server to which the Multi Resource Refresh Token Policy applies
+- `scope` (List of String) The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used
+
+
+
+<a id="nestedblock--session_transfer"></a>
+### Nested Schema for `session_transfer`
+
+Optional:
+
+- `allowed_authentication_methods` (Set of String)
+- `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
+- `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
 
 
 <a id="nestedblock--token_exchange"></a>

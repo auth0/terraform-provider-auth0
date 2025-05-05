@@ -8,6 +8,12 @@ description: |-
 
 With Auth0, you can have standard welcome, password reset, and account verification email-based workflows built right into Auth0. This resource allows you to configure email providers, so you can route all emails that are part of Auth0's authentication workflows through the supported high-volume email service of your choice.
 
+!> This resource manages to create a max of 1 email provider for a tenant.
+To avoid potential issues, it is recommended not to try creating multiple email providers on the same tenant.
+
+!> If you are using the `auth0_email_provider` resource to create a `custom` email provider, you must ensure an action is created first with `custom-email-provider` as the supported_triggers
+
+
 ## Example Usage
 
 ```terraform
@@ -75,10 +81,35 @@ resource "auth0_email_provider" "ms365_email_provider" {
   }
 }
 
-# This is an example on how to set up the email provider with a custom action.
-# Make sure a corresponding action exists with custom-email-provider as supported triggers
+# Below is an example of how to set up a custom email provider.
+# The action with custom-email-provider as supported_triggers is a prerequisite.
+resource "auth0_action" "custom_email_provider_action" {
+  name    = "custom-email-provider-action"
+  runtime = "node18"
+  deploy  = true
+  code    = <<-EOT
+  /**
+   * Handler to be executed while sending an email notification.
+   *
+   * @param {Event} event - Details about the user and the context in which they are logging in.
+   * @param {CustomEmailProviderAPI} api - Methods and utilities to help change the behavior of sending a email notification.
+   */
+   exports.onExecuteCustomEmailProvider = async (event, api) => {
+    // Code goes here
+    console.log(event);
+    return;
+   };
+  EOT
+
+  supported_triggers {
+    id      = "custom-email-provider"
+    version = "v1"
+  }
+}
+
 resource "auth0_email_provider" "custom_email_provider" {
-  name                 = "custom"
+  depends_on           = [auth0_action.custom_email_provider_action] # Ensuring the action is created first with `custom-email-provider` as the supported_triggers
+  name                 = "custom"                                    # Indicates a custom implementation
   enabled              = true
   default_from_address = "accounts@example.com"
   credentials {}

@@ -43,6 +43,7 @@ func expandBrandingTheme(data *schema.ResourceData) management.BrandingTheme {
 		BaseFocusColor:          &baseFocusColor,
 		BaseHoverColor:          &baseHoverColor,
 		BodyText:                data.Get("colors.0.body_text").(string),
+		CaptchaWidgetTheme:      data.Get("colors.0.captcha_widget_theme").(string),
 		Error:                   data.Get("colors.0.error").(string),
 		Header:                  data.Get("colors.0.header").(string),
 		Icons:                   data.Get("colors.0.icons").(string),
@@ -157,4 +158,41 @@ func expandBrandingUniversalLogin(config cty.Value) *management.BrandingUniversa
 	}
 
 	return &universalLogin
+}
+
+func expandPhoneProvider(config cty.Value) *management.BrandingPhoneProvider {
+	phoneProvider := &management.BrandingPhoneProvider{
+		Name:          value.String(config.GetAttr("name")),
+		Disabled:      value.Bool(config.GetAttr("disabled")),
+		Configuration: expandPhoneProviderConfiguration(config.GetAttr("configuration")),
+		Credentials:   expandPhoneProviderCredentials(config.GetAttr("credentials")),
+	}
+
+	return phoneProvider
+}
+
+func expandPhoneProviderConfiguration(config cty.Value) *management.BrandingPhoneProviderConfiguration {
+	var configuration management.BrandingPhoneProviderConfiguration
+
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		configuration.DeliveryMethods = value.Strings(config.GetAttr("delivery_methods"))
+		configuration.SID = value.String(config.GetAttr("sid"))
+		configuration.MSSID = value.String(config.GetAttr("mssid"))
+		configuration.DefaultFrom = value.String(config.GetAttr("default_from"))
+
+		return stop
+	})
+
+	return &configuration
+}
+
+func expandPhoneProviderCredentials(config cty.Value) *management.BrandingPhoneProviderCredential {
+	credentials := &management.BrandingPhoneProviderCredential{}
+
+	config.ForEachElement(func(_ cty.Value, credential cty.Value) (stop bool) {
+		credentials.AuthToken = value.String(credential.GetAttr("auth_token"))
+		return stop
+	})
+
+	return credentials
 }

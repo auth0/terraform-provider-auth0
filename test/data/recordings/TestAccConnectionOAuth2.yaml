@@ -6,20 +6,20 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 539
+        content_length: 559
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","strategy":"oauth2","is_domain_connection":false,"options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","set_user_root_attributes":"on_each_login","pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["email","openid","profile"]}}
+            {"name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","strategy":"oauth2","is_domain_connection":false,"options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","set_user_root_attributes":"on_each_login","pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}},"custom_headers":[],"scope":["email","openid","profile"]}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
+                - Go-Auth0/1.18.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -28,15 +28,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 647
+        content_length: 667
         uncompressed: false
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","set_user_root_attributes":"on_each_login","pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}},"scope":["email","openid","profile"]},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"client_id":"123456","client_secret":"123456","strategy_version":2,"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","tokenURL":"https://api.login.yahoo.com/oauth2/get_token","set_user_root_attributes":"on_each_login","pkce_enabled":true,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"upstream_params":{"screen_name":{"alias":"login_hint"}},"custom_headers":[],"scope":["email","openid","profile"]},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 176.859ms
+        duration: 431.104208ms
     - id: 1
       request:
         proto: HTTP/1.1
@@ -54,8 +54,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: GET
       response:
         proto: HTTP/2.0
@@ -65,13 +65,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","custom_headers":[],"upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 181.060208ms
+        duration: 364.715542ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,8 +89,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","custom_headers":[],"upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 170.520667ms
+        duration: 379.039125ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: GET
       response:
         proto: HTTP/2.0
@@ -135,33 +135,33 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid","profile"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"tokenURL":"https://api.login.yahoo.com/oauth2/get_token","client_id":"123456","pkce_enabled":true,"client_secret":"123456","custom_headers":[],"upstream_params":{"screen_name":{"alias":"login_hint"}},"authorizationURL":"https://api.login.yahoo.com/oauth2/request_auth","strategy_version":2,"set_user_root_attributes":"on_each_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.729458ms
+        duration: 418.800334ms
     - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 417
+        content_length: 498
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"is_domain_connection":false,"options":{"client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","tokenURL":"https://api.paypal.com/v1/oauth2/token","set_user_root_attributes":"on_first_login","icon_url":"https://cdn.paypal.com/assets/logo.png","pkce_enabled":false,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"scope":["email","openid"]}}
+            {"is_domain_connection":false,"options":{"client_id":"1234567","client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","tokenURL":"https://api.paypal.com/v1/oauth2/token","set_user_root_attributes":"on_first_login","icon_url":"https://cdn.paypal.com/assets/logo.png","pkce_enabled":false,"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"custom_headers":[{"header":"foo","value":"bar"},{"header":"bar","value":"foo"}],"scope":["email","openid"]}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -171,13 +171,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","custom_headers":[{"value":"bar","header":"foo"},{"value":"foo","header":"bar"}],"authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 156.600209ms
+        duration: 689.706167ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -195,8 +195,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: GET
       response:
         proto: HTTP/2.0
@@ -206,13 +206,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","custom_headers":[{"value":"bar","header":"foo"},{"value":"foo","header":"bar"}],"authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.736791ms
+        duration: 565.96225ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -230,8 +230,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: GET
       response:
         proto: HTTP/2.0
@@ -241,13 +241,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_Xfqyr0lqTg9cPvLU","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
+        body: '{"id":"con_hQYh2a5vGgxMPjld","options":{"scope":["email","openid"],"scripts":{"fetchUserProfile":"function( { return callback(null) }"},"icon_url":"https://cdn.paypal.com/assets/logo.png","tokenURL":"https://api.paypal.com/v1/oauth2/token","client_id":"1234567","pkce_enabled":false,"client_secret":"1234567","custom_headers":[{"value":"bar","header":"foo"},{"value":"foo","header":"bar"}],"authorizationURL":"https://www.paypal.com/signin/authorize","set_user_root_attributes":"on_first_login"},"strategy":"oauth2","name":"Acceptance-Test-OAuth2-TestAccConnectionOAuth2","is_domain_connection":false,"enabled_clients":[],"realms":["Acceptance-Test-OAuth2-TestAccConnectionOAuth2"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 139.771083ms
+        duration: 452.692375ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -265,8 +265,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.10.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Xfqyr0lqTg9cPvLU
+                - Go-Auth0/1.18.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_hQYh2a5vGgxMPjld
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -276,10 +276,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2024-09-12T21:26:21.486Z"}'
+        body: '{"deleted_at":"2025-03-28T06:41:26.760Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 169.786708ms
+        duration: 379.99425ms

@@ -92,6 +92,7 @@ func flattenBrandingThemeColors(colors management.BrandingThemeColors) []interfa
 		"base_focus_color":          colors.GetBaseFocusColor(),
 		"base_hover_color":          colors.GetBaseHoverColor(),
 		"body_text":                 colors.BodyText,
+		"captcha_widget_theme":      colors.CaptchaWidgetTheme,
 		"error":                     colors.Error,
 		"header":                    colors.Header,
 		"icons":                     colors.Icons,
@@ -178,4 +179,36 @@ func flattenBrandingThemeWidget(widget management.BrandingThemeWidget) []interfa
 	}
 
 	return []interface{}{m}
+}
+
+func flattenPhoneProvider(data *schema.ResourceData, phoneProvider *management.BrandingPhoneProvider) error {
+	result := multierror.Append(
+		data.Set("name", phoneProvider.GetName()),
+		data.Set("disabled", phoneProvider.GetDisabled()),
+		data.Set("credentials", flattenPhoneProviderCredentials(data)),
+		data.Set("configuration", flattenPhoneProviderConfiguration(phoneProvider.GetConfiguration())),
+		data.Set("tenant", phoneProvider.GetTenant()),
+		data.Set("channel", phoneProvider.GetChannel()),
+	)
+
+	return result.ErrorOrNil()
+}
+
+func flattenPhoneProviderConfiguration(configuration *management.BrandingPhoneProviderConfiguration) []interface{} {
+	return []interface{}{
+		map[string]interface{}{
+			"delivery_methods": configuration.GetDeliveryMethods(),
+			"sid":              configuration.GetSID(),
+			"mssid":            configuration.GetMSSID(),
+			"default_from":     configuration.GetDefaultFrom(),
+		},
+	}
+}
+
+func flattenPhoneProviderCredentials(data *schema.ResourceData) []interface{} {
+	return []interface{}{
+		map[string]interface{}{
+			"auth_token": data.Get("credentials.0.auth_token").(string),
+		},
+	}
 }

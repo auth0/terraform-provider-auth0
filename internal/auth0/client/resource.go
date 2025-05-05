@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -77,10 +78,11 @@ func NewResource() *schema.Resource {
 					"If none is set, the default badge for the application type will be shown.",
 			},
 			"is_first_party": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Computed:    true,
-				Description: "Indicates whether this client is a first-party client.",
+				Type:     schema.TypeBool,
+				Optional: true,
+				Computed: true,
+				Description: "Indicates whether this client is a first-party client." +
+					"Defaults to true from the API",
 			},
 			"is_token_endpoint_ip_header_trusted": {
 				Type:     schema.TypeBool,
@@ -210,6 +212,7 @@ func NewResource() *schema.Resource {
 			"encryption_key": {
 				Type:        schema.TypeMap,
 				Optional:    true,
+				Default:     nil,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Encryption used for WS-Fed responses with this client.",
 			},
@@ -365,6 +368,20 @@ func NewResource() *schema.Resource {
 							},
 						},
 						"facebook": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"enabled": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"google": {
 							Type:     schema.TypeList,
 							Optional: true,
 							Computed: true,
@@ -1314,6 +1331,22 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_exchange": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Allows configuration for token exchange",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"allow_any_profile_of_type": {
+							Required:    true,
+							Type:        schema.TypeList,
+							Elem:        &schema.Schema{Type: schema.TypeString},
+							Description: "List of allowed profile types for token exchange",
+						},
+					},
+				},
+			},
 			"compliance_level": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -1330,6 +1363,7 @@ func NewResource() *schema.Resource {
 			"oidc_logout": {
 				Type:        schema.TypeList,
 				Optional:    true,
+				Computed:    true,
 				MaxItems:    1,
 				Description: "Configure OIDC logout for the Client",
 				Elem: &schema.Resource{
@@ -1369,6 +1403,39 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"session_transfer": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"can_create_session_transfer_token": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token",
+						},
+						"allowed_authentication_methods": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Computed: true,
+							Elem: &schema.Schema{
+								Type:         schema.TypeString,
+								Description:  "Can be either `cookie` or `query` or both.",
+								ValidateFunc: validation.StringInSlice([]string{"cookie", "query"}, false),
+							},
+						},
+						"enforce_device_binding": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							Description: "Configures the level of device binding enforced when a session_transfer_token is consumed. " +
+								"Can be one of `ip`, `asn` or `none`.",
+							ValidateFunc: validation.StringInSlice([]string{"ip", "asn", "none"}, false),
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -1384,6 +1451,8 @@ func createClient(ctx context.Context, data *schema.ResourceData, meta interface
 	if err := api.Client.Create(ctx, client); err != nil {
 		return diag.FromErr(err)
 	}
+
+	time.Sleep(800 * time.Millisecond)
 
 	data.SetId(client.GetClientID())
 	return readClient(ctx, data, meta)
@@ -1432,8 +1501,48 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 				return diag.FromErr(err)
 			}
 		}
+
+		if isEncryptionKeyNull(data) && !data.IsNewResource() {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"encryption_key": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+
+		if isSessionTransferNull(data) {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"session_transfer": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
 	}
 	return readClient(ctx, data, meta)
+}
+
+func isEncryptionKeyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("encryption_key") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("encryption_key")
+
+	// Case 1: encryption_key is explicitly null.
+	if config.IsNull() {
+		return true
+	}
+
+	// Case 2: encryption_key is empty or all fields are empty strings.
+	empty := true
+	config.ForEachElement(func(_, val cty.Value) (stop bool) {
+		if !val.IsNull() && val.AsString() != "" {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -1444,4 +1553,35 @@ func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface
 	}
 
 	return nil
+}
+
+func isSessionTransferNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("session_transfer") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
+
+	// If the session_transfer block is explicitly set to null.
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	// If the session_transfer block exists, but all fields inside it are null or not set.
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		canCreate := cfg.GetAttr("can_create_session_transfer_token")
+		enforceBinding := cfg.GetAttr("enforce_device_binding")
+		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
+
+		if (!canCreate.IsNull() && canCreate.True()) ||
+			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
+			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
+			empty = false
+		}
+
+		return stop
+	})
+
+	return empty
 }

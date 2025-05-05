@@ -11,7 +11,7 @@ import (
 	internalSchema "github.com/auth0/terraform-provider-auth0/internal/schema"
 )
 
-// NewDataSource will return a new auth0_connection_client data source.
+// NewDataSource will return a new auth0_connection data source.
 func NewDataSource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: readConnectionForDataSource,
@@ -61,9 +61,18 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	}
 
 	name := data.Get("name").(string)
-	page := 0
+	var from string
+
+	options := []management.RequestOption{
+		management.Take(100),
+	}
+
 	for {
-		connections, err := api.Connection.List(ctx, management.Page(page))
+		if from != "" {
+			options = append(options, management.From(from))
+		}
+
+		connections, err := api.Connection.List(ctx, options...)
 		if err != nil {
 			return diag.FromErr(err)
 		}
@@ -79,7 +88,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 			break
 		}
 
-		page++
+		from = connections.Next
 	}
 
 	return diag.Errorf("No connection found with \"name\" = %q", name)

@@ -20,8 +20,7 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
     "untrusted_data.authorization_params.login_hint",
     "untrusted_data.authorization_params.screen_hint",
     "untrusted_data.authorization_params.ui_locales",
-    "untrusted_data.authorization_params.ext-.key",
-    "transaction.connection.metadata.key"
+    "untrusted_data.authorization_params.ext-key",
   ]
   head_tags = jsonencode([
     {

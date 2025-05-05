@@ -54,7 +54,7 @@ data "auth0_client" "some-client-by-id" {
 - `grant_types` (List of String) Types of grants that this client is authorized to use.
 - `id` (String) The ID of this resource.
 - `initiate_login_uri` (String) Initiate login URI. Must be HTTPS or an empty string.
-- `is_first_party` (Boolean) Indicates whether this client is a first-party client.
+- `is_first_party` (Boolean) Indicates whether this client is a first-party client.Defaults to true from the API
 - `is_token_endpoint_ip_header_trusted` (Boolean) Indicates whether the token endpoint IP header is trusted. Requires the authentication method to be set to `client_secret_post` or `client_secret_basic`. Setting this property when creating the resource, will default the authentication method to `client_secret_post`. To change the authentication method to `client_secret_basic` use the `auth0_client_credentials` resource.
 - `jwt_configuration` (List of Object) Configuration settings for the JWTs issued for this client. (see [below for nested schema](#nestedatt--jwt_configuration))
 - `logo_uri` (String) URL of the logo for the client. Recommended size is 150px x 150px. If none is set, the default badge for the application type will be shown.
@@ -68,11 +68,13 @@ data "auth0_client" "some-client-by-id" {
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `session_transfer` (List of Object) (see [below for nested schema](#nestedatt--session_transfer))
 - `signed_request_object` (Set of Object) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedatt--signed_request_object))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
+- `token_exchange` (List of Object) Allows configuration for token exchange (see [below for nested schema](#nestedatt--token_exchange))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -537,6 +539,7 @@ Read-Only:
 
 - `apple` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--apple))
 - `facebook` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--facebook))
+- `google` (List of Object) (see [below for nested schema](#nestedobjatt--native_social_login--google))
 
 <a id="nestedobjatt--native_social_login--apple"></a>
 ### Nested Schema for `native_social_login.apple`
@@ -548,6 +551,14 @@ Read-Only:
 
 <a id="nestedobjatt--native_social_login--facebook"></a>
 ### Nested Schema for `native_social_login.facebook`
+
+Read-Only:
+
+- `enabled` (Boolean)
+
+
+<a id="nestedobjatt--native_social_login--google"></a>
+### Nested Schema for `native_social_login.google`
 
 Read-Only:
 
@@ -587,6 +598,16 @@ Read-Only:
 - `token_lifetime` (Number)
 
 
+<a id="nestedatt--session_transfer"></a>
+### Nested Schema for `session_transfer`
+
+Read-Only:
+
+- `allowed_authentication_methods` (Set of String)
+- `can_create_session_transfer_token` (Boolean)
+- `enforce_device_binding` (String)
+
+
 <a id="nestedatt--signed_request_object"></a>
 ### Nested Schema for `signed_request_object`
 
@@ -608,5 +629,14 @@ Read-Only:
 - `key_id` (String)
 - `name` (String)
 - `updated_at` (String)
+
+
+
+<a id="nestedatt--token_exchange"></a>
+### Nested Schema for `token_exchange`
+
+Read-Only:
+
+- `allow_any_profile_of_type` (List of String)
 
 

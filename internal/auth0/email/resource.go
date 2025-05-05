@@ -14,7 +14,7 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
-// NewResource will return a new auth0_email resource.
+// NewResource will return a new auth0_email_provider resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: createEmailProvider,
@@ -216,9 +216,9 @@ func createEmailProvider(ctx context.Context, data *schema.ResourceData, meta in
 		return updateEmailProvider(ctx, data, meta)
 	}
 
-	email := expandEmailProvider(data.GetRawConfig())
+	emailProviderConfig := expandEmailProvider(data.GetRawConfig())
 
-	if err := api.EmailProvider.Create(ctx, email); err != nil {
+	if err := api.EmailProvider.Create(ctx, emailProviderConfig); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -228,20 +228,20 @@ func createEmailProvider(ctx context.Context, data *schema.ResourceData, meta in
 func readEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	email, err := api.EmailProvider.Read(ctx)
+	emailProviderConfigs, err := api.EmailProvider.Read(ctx)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenEmailProvider(data, email))
+	return diag.FromErr(flattenEmailProvider(data, emailProviderConfigs))
 }
 
 func updateEmailProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	email := expandEmailProvider(data.GetRawConfig())
+	emailProviderConfig := expandEmailProvider(data.GetRawConfig())
 
-	if err := api.EmailProvider.Update(ctx, email); err != nil {
+	if err := api.EmailProvider.Update(ctx, emailProviderConfig); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

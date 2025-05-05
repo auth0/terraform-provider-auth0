@@ -11,6 +11,7 @@ description: |-
 ~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allows the
 creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
 
+~> When updating the `options` parameter, ensure that all nested fields within the `options` schema are explicitly defined. Failing to do so may result in the loss of existing configurations.
 
 {{ if .HasExample -}}
 

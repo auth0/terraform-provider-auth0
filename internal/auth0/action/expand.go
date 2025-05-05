@@ -32,11 +32,24 @@ func expandAction(data *schema.ResourceData) *management.Action {
 		action.Secrets = expandActionSecrets(config.GetAttr("secrets"))
 	}
 
-	if action.GetRuntime() == "node18" {
+	// If custom-token-exchange is part of SupportedTriggers for an action,
+	// we'd not manipulate it's runtime value.
+	// This is done, to support node18 as runtime.
+	// TODO: Remove this soon as node18 reaches EOL.
+	if action.GetRuntime() == "node18" && !isTokenExchangeInSupportedTriggers(action.SupportedTriggers) {
 		action.Runtime = auth0.String("node18-actions")
 	}
 
 	return action
+}
+
+func isTokenExchangeInSupportedTriggers(actionTriggers []management.ActionTrigger) bool {
+	for _, actionTrigger := range actionTriggers {
+		if actionTrigger.GetID() == "custom-token-exchange" {
+			return true
+		}
+	}
+	return false
 }
 
 func expandActionTriggers(triggers cty.Value) []management.ActionTrigger {
@@ -113,12 +126,22 @@ func preventErasingUnmanagedSecrets(ctx context.Context, data *schema.ResourceDa
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// We need to also include the secrets that we're about to remove
-	// against the checks, not just the ones with which we are left.
+	// Extract changes to secrets from the resource data.
 	oldSecrets, newSecrets := data.GetChange("secrets")
-	allSecrets := append(oldSecrets.([]interface{}), newSecrets.([]interface{})...)
 
-	return checkForUnmanagedActionSecrets(allSecrets, preUpdateAction.GetSecrets())
+	// Stores the old and secrets from *schema.Set to slices of interface{}.
+	var secretsList []interface{}
+
+	if oldSecrets != nil {
+		secretsList = append(secretsList, oldSecrets.(*schema.Set).List()...)
+	}
+
+	if newSecrets != nil {
+		secretsList = append(secretsList, newSecrets.(*schema.Set).List()...)
+	}
+
+	// Pass allSecrets to check for unmanaged action secrets.
+	return checkForUnmanagedActionSecrets(secretsList, preUpdateAction.GetSecrets())
 }
 
 func checkForUnmanagedActionSecrets(
@@ -127,7 +150,30 @@ func checkForUnmanagedActionSecrets(
 ) diag.Diagnostics {
 	secretKeysInConfigMap := make(map[string]bool, len(secretsFromConfig))
 	for _, secret := range secretsFromConfig {
-		secretKeyName := secret.(map[string]interface{})["name"].(string)
+		// Check if the element can be asserted as a map.
+		secretMap, ok := secret.(map[string]interface{})
+		if !ok {
+			return diag.Diagnostics{
+				diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Invalid Configuration Format",
+					Detail:   "Secrets configuration contains improperly formatted elements. Each secret must be a map with 'name' and 'value'.",
+				},
+			}
+		}
+
+		// Safely extract the "name" field from the secret map.
+		secretKeyName, nameOk := secretMap["name"].(string)
+		if !nameOk || secretKeyName == "" {
+			return diag.Diagnostics{
+				diag.Diagnostic{
+					Severity: diag.Error,
+					Summary:  "Invalid Secret Name",
+					Detail:   "Each secret in the configuration must have a valid 'name' as a string.",
+				},
+			}
+		}
+
 		secretKeysInConfigMap[secretKeyName] = true
 	}
 

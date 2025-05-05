@@ -58,6 +58,10 @@ const testAccCreateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 
 	mobile {
 		android {
@@ -79,6 +83,10 @@ resource "auth0_client" "my_client" {
 		facebook {
 			enabled = false
 		}
+
+		google {
+			enabled = true
+		}
 	}
 }
 `
@@ -87,6 +95,11 @@ const testAccUpdateMobileClient = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
+
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 
 	mobile {
 		android {
@@ -108,6 +121,10 @@ resource "auth0_client" "my_client" {
 		facebook {
 			enabled = true
 		}
+
+		google {
+			enabled = false
+		}
 	}
 }
 `
@@ -117,6 +134,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "native"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	mobile {
 		android {
 			app_package_name = "com.example"
@@ -137,6 +158,10 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Mobile - {{.testName}}"
 	app_type = "non_interactive"
 
+	oidc_conformant = true
+	token_exchange {
+		allow_any_profile_of_type = ["custom_authentication"]
+	}
 	native_social_login {
 		apple {
 			enabled = false
@@ -157,6 +182,8 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -170,12 +197,16 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "true"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccUpdateMobileClient, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -191,12 +222,16 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 			{
 				Config: acctest.ParseTestName(testAccUpdateMobileClientAgainByRemovingSomeFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_conformant", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
@@ -212,6 +247,8 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 			{
@@ -223,6 +260,7 @@ func TestAccClientMobile(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Mobile - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_exchange.0.allow_any_profile_of_type.0", "custom_authentication"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "mobile.0.android.0.app_package_name", "com.example"),
@@ -237,6 +275,8 @@ func TestAccClientMobile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.apple.0.enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.facebook.0.enabled", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "native_social_login.0.google.0.enabled", "false"),
 				),
 			},
 		},
@@ -2497,7 +2537,110 @@ func TestAccClientOIDCLogout(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - OIDC Logout - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_logout.#", "1"),
+				),
+			},
+		},
+	})
+}
+
+const testAccCreateClientWithSessionTransfer = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		allowed_authentication_methods = ["cookie", "query"]
+		enforce_device_binding = "asn"
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer1 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = false
+		enforce_device_binding = "none"
+		allowed_authentication_methods = []
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer2 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+	session_transfer {
+		can_create_session_transfer_token = true
+		enforce_device_binding = "ip"
+		allowed_authentication_methods = ["query"]
+	}
+}`
+
+const testAccUpdateClientWithSessionTransfer3 = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Session Transfer - {{.testName}}"
+	app_type  = "native"
+}`
+
+func TestAccClientSessionTransfer(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithSessionTransfer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "2"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "asn"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer1, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "none"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer2, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.0", "query"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransfer3, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.#", "0"),
 				),
 			},
 		},

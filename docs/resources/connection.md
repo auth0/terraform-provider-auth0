@@ -11,6 +11,7 @@ With Auth0, you can define sources of users, otherwise known as connections, whi
 ~> The Auth0 dashboard displays only one connection per social provider. Although the Auth0 Management API allows the
 creation of multiple connections per strategy, the additional connections may not be visible in the Auth0 dashboard.
 
+~> When updating the `options` parameter, ensure that all nested fields within the `options` schema are explicitly defined. Failing to do so may result in the loss of existing configurations.
 
 ## Example Usage
 
@@ -81,6 +82,20 @@ resource "auth0_connection" "my_connection" {
     mfa {
       active                 = true
       return_enroll_settings = true
+    }
+
+    authentication_methods {
+      passkey {
+        enabled = true
+      }
+      password {
+        enabled = true
+      }
+    }
+    passkey_options {
+      challenge_ui                   = "both"
+      local_enrollment_enabled       = true
+      progressive_enrollment_enabled = true
     }
   }
 }
@@ -468,22 +483,24 @@ resource "auth0_connection" "samlp" {
   strategy = "samlp"
 
   options {
-    debug               = false
-    signing_cert        = "<signing-certificate>"
-    sign_in_endpoint    = "https://saml.provider/sign_in"
-    sign_out_endpoint   = "https://saml.provider/sign_out"
-    disable_sign_out    = true
-    strategy_version    = 2
-    tenant_domain       = "example.com"
-    domain_aliases      = ["example.com", "alias.example.com"]
-    protocol_binding    = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    request_template    = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
-    user_id_attribute   = "https://saml.provider/imi/ns/identity-200810"
-    signature_algorithm = "rsa-sha256"
-    digest_algorithm    = "sha256"
-    icon_url            = "https://saml.provider/assets/logo.png"
-    entity_id           = "<entity_id>"
-    metadata_xml        = <<EOF
+    debug                           = false
+    signing_cert                    = "<signing-certificate>"
+    sign_in_endpoint                = "https://saml.provider/sign_in"
+    sign_out_endpoint               = "https://saml.provider/sign_out"
+    global_token_revocation_jwt_iss = "issuer.example.com"
+    global_token_revocation_jwt_sub = "user123"
+    disable_sign_out                = true
+    strategy_version                = 2
+    tenant_domain                   = "example.com"
+    domain_aliases                  = ["example.com", "alias.example.com"]
+    protocol_binding                = "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    request_template                = "<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\"\n@@AssertServiceURLAndDestination@@\n    ID=\"@@ID@@\"\n    IssueInstant=\"@@IssueInstant@@\"\n    ProtocolBinding=\"@@ProtocolBinding@@\" Version=\"2.0\">\n    <saml:Issuer xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\">@@Issuer@@</saml:Issuer>\n</samlp:AuthnRequest>"
+    user_id_attribute               = "https://saml.provider/imi/ns/identity-200810"
+    signature_algorithm             = "rsa-sha256"
+    digest_algorithm                = "sha256"
+    icon_url                        = "https://saml.provider/assets/logo.png"
+    entity_id                       = "<entity_id>"
+    metadata_xml                    = <<EOF
     <?xml version="1.0"?>
     <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://example.com">
       <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -492,7 +509,7 @@ resource "auth0_connection" "samlp" {
       </md:IDPSSODescriptor>
     </md:EntityDescriptor>
     EOF
-    metadata_url        = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
+    metadata_url                    = "https://saml.provider/imi/ns/FederationMetadata.xml" # Use either metadata_url or metadata_xml, but not both.
 
     fields_map = jsonencode({
       "name" : ["name", "nameidentifier"]
@@ -672,6 +689,7 @@ Optional:
 - `attribute_map` (Block List, Max: 1) OpenID Connect and Okta Workforce connections can automatically map claims received from the identity provider (IdP). You can configure this mapping through a library template provided by Auth0 or by entering your own template directly. Click [here](https://auth0.com/docs/authenticate/identity-providers/enterprise-identity-providers/configure-pkce-claim-mapping-for-oidc#map-claims-for-oidc-connections) for more info. (see [below for nested schema](#nestedblock--options--attribute_map))
 - `attributes` (Block List) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order (see [below for nested schema](#nestedblock--options--attributes))
 - `auth_params` (Map of String) Query string parameters to be included as part of the generated passwordless email link.
+- `authentication_methods` (Block List) Specifies the authentication methods and their configuration (enabled or disabled) (see [below for nested schema](#nestedblock--options--authentication_methods))
 - `authorization_endpoint` (String) Authorization endpoint.
 - `brute_force_protection` (Boolean) Indicates whether to enable brute force protection, which will limit the number of signups and failed logins from a suspicious IP address.
 - `client_id` (String) The strategy's client ID.
@@ -679,6 +697,7 @@ Optional:
 - `community_base_url` (String) Salesforce community base URL.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
+- `custom_headers` (List of Map of String) Configure extra headers to the Token endpoint of an OAuth 2.0 provider
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
@@ -699,6 +718,8 @@ Optional:
 - `from` (String) Address to use as the sender.
 - `gateway_authentication` (Block List, Max: 1) Defines the parameters used to generate the auth token for the custom gateway. (see [below for nested schema](#nestedblock--options--gateway_authentication))
 - `gateway_url` (String) Defines a custom sms gateway to use instead of Twilio.
+- `global_token_revocation_jwt_iss` (String) Specifies the issuer of the JWT used for global token revocation for the SAML connection.
+- `global_token_revocation_jwt_sub` (String) Specifies the subject of the JWT used for global token revocation for the SAML connection.
 - `icon_url` (String) Icon URL.
 - `identity_api` (String) Azure AD Identity API. Available options are: `microsoft-identity-platform-v2.0` or `azure-active-directory-v1.0`.
 - `idp_initiated` (Block List, Max: 1) Configuration options for IDP Initiated Authentication. This is an object with the properties: `client_id`, `client_protocol`, and `client_authorize_query`. (see [below for nested schema](#nestedblock--options--idp_initiated))
@@ -715,6 +736,7 @@ Optional:
 - `mfa` (Block List, Max: 1) Configuration options for multifactor authentication. (see [below for nested schema](#nestedblock--options--mfa))
 - `name` (String) The public name of the email or SMS Connection. In most cases this is the same name as the connection name.
 - `non_persistent_attrs` (Set of String) If there are user fields that should not be stored in Auth0 databases due to privacy reasons, you can add them to the DenyList here.
+- `passkey_options` (Block List, Max: 1) Defines options for the passkey authentication method (see [below for nested schema](#nestedblock--options--passkey_options))
 - `password_complexity_options` (Block List, Max: 1) Configuration settings for password complexity. (see [below for nested schema](#nestedblock--options--password_complexity_options))
 - `password_dictionary` (Block List, Max: 1) Configuration settings for the password dictionary check, which does not allow passwords that are part of the password dictionary. (see [below for nested schema](#nestedblock--options--password_dictionary))
 - `password_history` (Block List) Configuration settings for the password history that is maintained for each user to prevent the reuse of passwords. (see [below for nested schema](#nestedblock--options--password_history))
@@ -729,7 +751,7 @@ Optional:
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.
 - `scripts` (Map of String) A map of scripts used for an OAuth connection. Only accepts a `fetchUserProfile` script.
-- `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`. Default value: `on_each_login`.
+- `set_user_root_attributes` (String) Determines whether to sync user profile attributes (`name`, `given_name`, `family_name`, `nickname`, `picture`) at each login or only on the first login. Options include: `on_each_login`, `on_first_login`, `never_on_login`. Default value: `on_each_login`.
 - `should_trust_email_verified_connection` (String) Choose how Auth0 sets the email_verified field in the user profile.
 - `sign_in_endpoint` (String) SAML single login URL for the connection.
 - `sign_out_endpoint` (String) SAML single logout URL for the connection.
@@ -788,6 +810,7 @@ Optional:
 - `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
 - `profile_required` (Boolean) Defines whether Profile is required
 - `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
+- `verification_method` (String) Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification
 
 <a id="nestedblock--options--attributes--email--identifier"></a>
 ### Nested Schema for `options.attributes.email.identifier`
@@ -897,6 +920,31 @@ Optional:
 
 
 
+<a id="nestedblock--options--authentication_methods"></a>
+### Nested Schema for `options.authentication_methods`
+
+Optional:
+
+- `passkey` (Block List, Max: 1) Configures passkey authentication (see [below for nested schema](#nestedblock--options--authentication_methods--passkey))
+- `password` (Block List, Max: 1) Configures password authentication (see [below for nested schema](#nestedblock--options--authentication_methods--password))
+
+<a id="nestedblock--options--authentication_methods--passkey"></a>
+### Nested Schema for `options.authentication_methods.passkey`
+
+Optional:
+
+- `enabled` (Boolean) Enables passkey authentication
+
+
+<a id="nestedblock--options--authentication_methods--password"></a>
+### Nested Schema for `options.authentication_methods.password`
+
+Optional:
+
+- `enabled` (Boolean) Enables password authentication
+
+
+
 <a id="nestedblock--options--connection_settings"></a>
 ### Nested Schema for `options.connection_settings`
 
@@ -944,6 +992,16 @@ Optional:
 
 - `active` (Boolean) Indicates whether multifactor authentication is enabled for this connection.
 - `return_enroll_settings` (Boolean) Indicates whether multifactor authentication enrollment settings will be returned.
+
+
+<a id="nestedblock--options--passkey_options"></a>
+### Nested Schema for `options.passkey_options`
+
+Optional:
+
+- `challenge_ui` (String) Controls the UI used to challenge the user for their passkey
+- `local_enrollment_enabled` (Boolean) Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection
+- `progressive_enrollment_enabled` (Boolean) Enables or disables progressive enrollment of passkeys for the connection
 
 
 <a id="nestedblock--options--password_complexity_options"></a>

@@ -29,12 +29,14 @@ data "auth0_tenant" "my_tenant" {}
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `domain` (String) Your Auth0 domain name.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
+- `error_page` (List of Object) Configuration for the error page (see [below for nested schema](#nestedatt--error_page))
 - `flags` (List of Object) Configuration settings for tenant flags. (see [below for nested schema](#nestedatt--flags))
 - `friendly_name` (String) Friendly name for the tenant.
 - `id` (String) The ID of this resource.
 - `idle_session_lifetime` (Number) Number of hours during which a session can be inactive before the user must log in again.
 - `management_api_identifier` (String) The identifier value of the built-in Management API resource server, which can be used as an audience when configuring client grants.
 - `mtls` (List of Object) Configuration for mTLS. (see [below for nested schema](#nestedatt--mtls))
+- `oidc_logout` (List of Object) Settings related to OIDC RP-initiated Logout. (see [below for nested schema](#nestedatt--oidc_logout))
 - `picture_url` (String) URL of logo to be shown for the tenant. Recommended size is 150px x 150px. If no URL is provided, the Auth0 logo will be used.
 - `pushed_authorization_requests_supported` (Boolean) Enable pushed authorization requests.
 - `sandbox_version` (String) Selected sandbox version for the extensibility environment, which allows you to use custom scripts to extend parts of Auth0's functionality.
@@ -43,6 +45,16 @@ data "auth0_tenant" "my_tenant" {}
 - `sessions` (List of Object) Sessions related settings for the tenant. (see [below for nested schema](#nestedatt--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
+
+<a id="nestedatt--error_page"></a>
+### Nested Schema for `error_page`
+
+Read-Only:
+
+- `html` (String)
+- `show_log_link` (Boolean)
+- `url` (String)
+
 
 <a id="nestedatt--flags"></a>
 ### Nested Schema for `flags`
@@ -83,6 +95,14 @@ Read-Only:
 
 - `disable` (Boolean)
 - `enable_endpoint_aliases` (Boolean)
+
+
+<a id="nestedatt--oidc_logout"></a>
+### Nested Schema for `oidc_logout`
+
+Read-Only:
+
+- `rp_logout_end_session_endpoint_discovery` (Boolean)
 
 
 <a id="nestedatt--session_cookie"></a>

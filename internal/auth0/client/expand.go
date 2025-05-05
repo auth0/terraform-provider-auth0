@@ -50,7 +50,9 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		NativeSocialLogin:                  expandClientNativeSocialLogin(data),
 		Mobile:                             expandClientMobile(data),
 		DefaultOrganization:                expandDefaultOrganization(data),
+		TokenExchange:                      expandTokenExchange(data),
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
+		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 	}
 
@@ -109,6 +111,26 @@ func expandDefaultOrganization(data *schema.ResourceData) *management.ClientDefa
 	}
 
 	return &defaultOrg
+}
+
+func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExchange {
+	if !data.IsNewResource() && !data.HasChange("token_exchange") {
+		return nil
+	}
+	var tokenExchange management.ClientTokenExchange
+
+	config := data.GetRawConfig().GetAttr("token_exchange")
+	if config.IsNull() || config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenExchange.AllowAnyProfileOfType = value.Strings(cfg.GetAttr("allow_any_profile_of_type"))
+		return stop
+	}) {
+		return nil
+	}
+	if tokenExchange == (management.ClientTokenExchange{}) {
+		return nil
+	}
+
+	return &tokenExchange
 }
 
 func isDefaultOrgNull(data *schema.ResourceData) bool {
@@ -251,6 +273,7 @@ func expandClientNativeSocialLogin(data *schema.ResourceData) *management.Client
 	nativeSocialLoginConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		nativeSocialLogin.Apple = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("apple"))
 		nativeSocialLogin.Facebook = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("facebook"))
+		nativeSocialLogin.Google = expandClientNativeSocialLoginSupportEnabled(config.GetAttr("google"))
 		return stop
 	})
 
@@ -992,4 +1015,26 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	}
 
 	return clientGrant
+}
+
+func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfer {
+	if !data.IsNewResource() && !data.HasChange("session_transfer") {
+		return nil
+	}
+
+	sessionTransferConfig := data.GetRawConfig().GetAttr("session_transfer")
+	if sessionTransferConfig.IsNull() {
+		return nil
+	}
+
+	var sessionTransfer management.SessionTransfer
+
+	sessionTransferConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		sessionTransfer.CanCreateSessionTransferToken = value.Bool(config.GetAttr("can_create_session_transfer_token"))
+		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
+		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
+		return stop
+	})
+
+	return &sessionTransfer
 }

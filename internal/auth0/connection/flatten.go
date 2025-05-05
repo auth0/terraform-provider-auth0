@@ -372,6 +372,7 @@ func flattenConnectionOptionsAuth0(
 		"upstream_params":                      upstreamParams,
 		"precedence":                           options.GetPrecedence(),
 		"strategy_version":                     options.GetStrategyVersion(),
+		"realm_fallback":                       options.GetRealmFallback(),
 	}
 
 	if options.Attributes != nil {

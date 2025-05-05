@@ -16,7 +16,7 @@ resource "auth0_connection" "okta" {
     token_endpoint           = "https://example.okta.com/oauth2/v1/token"
     userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
     authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
-    scopes                   = ["openid", "email"]
+    scopes                   = ["openid", "profile", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]
     upstream_params = jsonencode({

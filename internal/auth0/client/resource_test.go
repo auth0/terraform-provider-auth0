@@ -284,37 +284,70 @@ func TestAccClientMobile(t *testing.T) {
 }
 
 const testAccCreateClientWithRefreshToken = `
+resource "auth0_resource_server" "my_resource_server" {
+    name       = "Acceptance Test - Client Grant - {{.testName}}"
+    identifier = "https://mrrt"
+    skip_consent_for_verifiable_first_party_clients = true
+    allow_offline_access = true
+}
+
+resource "auth0_resource_server_scope" "my_scope" {
+    resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+    scope = "create:bar"
+}
+
 resource "auth0_client" "my_client" {
-	name      = "Acceptance Test - Refresh Token - {{.testName}}"
-	app_type  = "spa"
+    name      = "Acceptance Test - Refresh Token - {{.testName}}"
+    app_type  = "spa"
+	is_first_party = true
 
-	refresh_token {
-		rotation_type   = "non-rotating"
-		expiration_type = "non-expiring"
-
-		# Intentionally not setting leeway,
-		# token_lifetime, infinite_token_lifetime,
-		# infinite_idle_token_lifetime,
-		# idle_token_lifetime because those get
-		# inferred by Auth0 defaults.
-	}
+    refresh_token {
+        rotation_type   = "non-rotating"
+        expiration_type = "non-expiring"
+        leeway = 60
+        token_lifetime = 256000
+        infinite_token_lifetime = true
+        infinite_idle_token_lifetime = true
+        idle_token_lifetime = 128000
+        policies {
+            audience = auth0_resource_server.my_resource_server.identifier
+            scope = ["create:bar"]
+        }
+    }
 }
 `
 
 const testAccUpdateClientWithRefreshToken = `
-resource "auth0_client" "my_client" {
-	name      = "Acceptance Test - Refresh Token - {{.testName}}"
-	app_type  = "spa"
+resource "auth0_resource_server" "my_resource_server" {
+    name       = "Acceptance Test - Client Grant - {{.testName}}"
+    identifier = "https://mrrt"
+    skip_consent_for_verifiable_first_party_clients = true
+    allow_offline_access = true
+}
 
-	refresh_token {
-		rotation_type   = "non-rotating"
-		expiration_type = "non-expiring"
-		leeway = 60
-		token_lifetime = 256000
-		infinite_token_lifetime = true
-		infinite_idle_token_lifetime = true
-		idle_token_lifetime = 128000
-	}
+resource "auth0_resource_server_scope" "my_scope" {
+    resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+    scope = "create:bar"
+}
+
+resource "auth0_client" "my_client" {
+    name      = "Acceptance Test - Refresh Token - {{.testName}}"
+    app_type  = "spa"
+	is_first_party = true
+
+    refresh_token {
+        rotation_type   = "non-rotating"
+        expiration_type = "non-expiring"
+        leeway = 60
+        token_lifetime = 256000
+        infinite_token_lifetime = true
+        infinite_idle_token_lifetime = true
+        idle_token_lifetime = 128000
+        policies {
+            audience = auth0_resource_server.my_resource_server.identifier
+            scope = []
+        }
+    }
 }
 `
 
@@ -336,6 +369,8 @@ func TestAccClientRefreshToken(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.rotation_type", "non-rotating"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.0.audience", "https://mrrt"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.0.scope.0", "create:bar"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.leeway"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.token_lifetime"),
 					resource.TestCheckResourceAttrSet("auth0_client.my_client", "refresh_token.0.infinite_token_lifetime"),
@@ -356,6 +391,8 @@ func TestAccClientRefreshToken(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_token_lifetime", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "128000"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.0.audience", "https://mrrt"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.policies.0.scope.#", "0"),
 				),
 			},
 			{
@@ -513,7 +550,6 @@ resource "auth0_client" "my_client" {
 	allowed_clients = [ "https://allowed.example.com" ]
 	grant_types = [ "authorization_code", "http://auth0.com/oauth/grant-type/password-realm", "implicit", "password", "refresh_token" ]
 	allowed_logout_urls = [ "https://example.com" ]
-	oidc_backchannel_logout_urls = [ "https://example.com/oidc-logout" ]
 	web_origins = [ "https://example.com" ]
 	client_metadata = {
 		foo = "zoo"
@@ -533,7 +569,7 @@ resource "auth0_client" "my_client" {
 	logo_uri = "https://another-example.com/logoUri"
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
-	require_pushed_authorization_requests = true
+	require_pushed_authorization_requests = false
 	sso = true
 	sso_disabled = true
 	custom_login_page_on = true
@@ -547,11 +583,10 @@ resource "auth0_client" "my_client" {
 	allowed_logout_urls = [ ]
 	web_origins = [ ]
 	client_metadata = {}
-	oidc_backchannel_logout_urls = []
 }
 `
 
-func TestAccClient(t *testing.T) {
+func TestAccClientConfig(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
@@ -590,7 +625,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.scopes.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.secret_encoded", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "7"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "8"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "1296000"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "true"),
@@ -606,7 +641,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "web_origins.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
-					resource.TestCheckNoResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls"),
 				),
 			},
 			{
@@ -647,7 +681,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.scopes.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.secret_encoded", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "7"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "8"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "1296000"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "true"),
@@ -670,7 +704,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "1"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.foo", "zoo"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "1"),
 				),
 			},
 			{
@@ -687,7 +720,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "logo_uri", "https://another-example.com/logoUri"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
@@ -706,7 +739,7 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.scopes.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "jwt_configuration.0.secret_encoded", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.#", "1"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "7"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.%", "8"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.expiration_type", "non-expiring"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.idle_token_lifetime", "1296000"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "refresh_token.0.infinite_idle_token_lifetime", "true"),
@@ -722,7 +755,6 @@ func TestAccClient(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "web_origins.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "client_metadata.%", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "encryption_key.%", "0"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "oidc_backchannel_logout_urls.#", "0"),
 				),
 			},
 		},

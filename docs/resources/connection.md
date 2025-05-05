@@ -607,6 +607,9 @@ resource "auth0_connection" "oidc" {
 
 ### Okta Connection
 
+!> When configuring an Okta Workforce connection, the `scopes` attribute must be explicitly set. If omitted, the connection may not function correctly.
+To ensure proper behavior, always specify:  `scopes = ["openid", "profile", "email"]`
+
 ```terraform
 # This is an example of an Okta Workforce connection.
 
@@ -626,7 +629,7 @@ resource "auth0_connection" "okta" {
     token_endpoint           = "https://example.okta.com/oauth2/v1/token"
     userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
     authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
-    scopes                   = ["openid", "email"]
+    scopes                   = ["openid", "profile", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]
     upstream_params = jsonencode({
@@ -747,6 +750,7 @@ Optional:
 - `precedence` (List of String) Order of attributes for precedence in identification.Valid values: email, phone_number, username. If Precedence is set, it must contain all values (email, phone_number, username) in specific order
 - `protocol_binding` (String) The SAML Response Binding: how the SAML token is received by Auth0 from the IdP.
 - `provider` (String) Defines the custom `sms_gateway` provider.
+- `realm_fallback` (Boolean) Allows configuration if connections_realm_fallback flag is enabled for the tenant
 - `request_template` (String) Template that formats the SAML request.
 - `requires_username` (Boolean) Indicates whether the user is required to provide a username in addition to an email address.
 - `scopes` (Set of String) Permissions to grant to the connection. Within the Auth0 dashboard these appear under the "Attributes" and "Extended Attributes" sections. Some examples: `basic_profile`, `ext_profile`, `ext_nested_groups`, etc.

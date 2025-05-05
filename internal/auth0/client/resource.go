@@ -119,6 +119,7 @@ func NewResource() *schema.Resource {
 					Type: schema.TypeString,
 				},
 				Optional:    true,
+				Computed:    true,
 				Description: "Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.",
 				Deprecated: "This resource is deprecated and will be removed in the next major version. " +
 					"Please use `oidc_logout` for managing OIDC backchannel logout URLs.",
@@ -460,6 +461,30 @@ func NewResource() *schema.Resource {
 							Type:        schema.TypeInt,
 							Optional:    true,
 							Description: "The time in seconds after which inactive refresh tokens will expire.",
+						},
+						"policies": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Description: "A collection of policies governing multi-resource refresh token exchange " +
+								"(MRRT), defining how refresh tokens can be used across different resource servers",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"audience": {
+										Type:     schema.TypeString,
+										Required: true,
+										Description: "The identifier of the resource server to which the Multi " +
+											"Resource Refresh Token Policy applies",
+									},
+									"scope": {
+										Type:     schema.TypeList,
+										Elem:     &schema.Schema{Type: schema.TypeString},
+										Required: true,
+										Description: "The resource server permissions granted under the Multi " +
+											"Resource Refresh Token Policy, defining the context in which an " +
+											"access token can be used",
+									},
+								},
+							},
 						},
 					},
 				},

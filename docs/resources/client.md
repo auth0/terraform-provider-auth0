@@ -607,7 +607,17 @@ Optional:
 - `infinite_idle_token_lifetime` (Boolean) Whether inactive refresh tokens should remain valid indefinitely.
 - `infinite_token_lifetime` (Boolean) Whether refresh tokens should remain valid indefinitely. If false, `token_lifetime` should also be set.
 - `leeway` (Number) The amount of time in seconds in which a refresh token may be reused without triggering reuse detection.
+- `policies` (Block Set) A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers (see [below for nested schema](#nestedblock--refresh_token--policies))
 - `token_lifetime` (Number) The absolute lifetime of a refresh token in seconds.
+
+<a id="nestedblock--refresh_token--policies"></a>
+### Nested Schema for `refresh_token.policies`
+
+Required:
+
+- `audience` (String) The identifier of the resource server to which the Multi Resource Refresh Token Policy applies
+- `scope` (List of String) The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used
+
 
 
 <a id="nestedblock--session_transfer"></a>

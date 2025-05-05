@@ -225,6 +225,7 @@ func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefre
 		refreshToken.InfiniteTokenLifetime = value.Bool(config.GetAttr("infinite_token_lifetime"))
 		refreshToken.InfiniteIdleTokenLifetime = value.Bool(config.GetAttr("infinite_idle_token_lifetime"))
 		refreshToken.IdleTokenLifetime = value.Int(config.GetAttr("idle_token_lifetime"))
+		refreshToken.Policies = expandRefreshTokenPolicies(config.GetAttr("policies"))
 		return stop
 	})
 
@@ -233,6 +234,20 @@ func expandClientRefreshToken(data *schema.ResourceData) *management.ClientRefre
 	}
 
 	return &refreshToken
+}
+
+func expandRefreshTokenPolicies(policies cty.Value) *[]management.ClientRefreshTokenPolicy {
+	clientRefreshTokenPolicy := make([]management.ClientRefreshTokenPolicy, 0)
+
+	policies.ForEachElement(func(_ cty.Value, dep cty.Value) (stop bool) {
+		clientRefreshTokenPolicy = append(clientRefreshTokenPolicy, management.ClientRefreshTokenPolicy{
+			Audience: value.String(dep.GetAttr("audience")),
+			Scope:    value.Strings(dep.GetAttr("scope")),
+		})
+		return stop
+	})
+
+	return &clientRefreshTokenPolicy
 }
 
 func expandClientJWTConfiguration(data *schema.ResourceData) *management.ClientJWTConfiguration {

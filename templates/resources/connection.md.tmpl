@@ -91,6 +91,9 @@ Also applies to following connection strategies: `dropbox`, `bitbucket`, `paypal
 
 ### Okta Connection
 
+!> When configuring an Okta Workforce connection, the `scopes` attribute must be explicitly set. If omitted, the connection may not function correctly.
+To ensure proper behavior, always specify:  `scopes = ["openid", "profile", "email"]`
+
 {{ tffile "examples/resources/auth0_connection/resource_with_okta.tf" }}
 
 

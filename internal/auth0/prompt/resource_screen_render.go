@@ -38,6 +38,11 @@ var (
 		string(management.PromptInvitation),
 		string(management.PromptOrganizations),
 		string(management.PromptMFAOTP),
+		string(management.PromptDeviceFlow),
+		string(management.PromptMFAPhone),
+		string(management.PromptMFAVoice),
+		string(management.PromptMFARecoveryCode),
+		string(management.PromptCommon),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -83,6 +88,20 @@ var (
 		string(management.ScreenMFAOTPChallenge),
 		string(management.ScreenMFAOTPEnrollmentCode),
 		string(management.ScreenMFAOTPEnrollmentQR),
+		string(management.ScreenDeviceCodeActivation),
+		string(management.ScreenDeviceCodeActivationAllowed),
+		string(management.ScreenDeviceCodeActivationDenied),
+		string(management.ScreenDeviceCodeConfirmation),
+		string(management.ScreenMFAPhoneChallenge),
+		string(management.ScreenMFAPhoneEnrollment),
+		string(management.ScreenMFAVoiceChallenge),
+		string(management.ScreenMFAVoiceEnrollment),
+		string(management.ScreenResetPasswordMFAPhoneChallenge),
+		string(management.ScreenResetPasswordMFAVoiceChallenge),
+		string(management.ScreenMFARecoveryCodeChallenge),
+		string(management.ScreenMFARecoveryCodeEnrollment),
+		string(management.ScreenResetPasswordMFARecoveryCodeChallenge),
+		string(management.ScreenRedeemTicket),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

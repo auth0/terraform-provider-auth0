@@ -95,7 +95,20 @@ func New() *schema.Provider {
 					}
 					return v == "1" || v == "true" || v == "on", nil
 				},
-				Description: "Indicates whether to turn on debug mode.",
+				Description: "Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.",
+			},
+			"dynamic_credentials": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_DYNAMIC_CREDENTIALS")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "Indicates whether credentials will be dynamically passed to the provider from" +
+					"other terraform resources.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

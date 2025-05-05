@@ -607,6 +607,9 @@ resource "auth0_connection" "oidc" {
 
 ### Okta Connection
 
+!> When configuring an Okta Workforce connection, the `scopes` attribute must be explicitly set. If omitted, the connection may not function correctly.
+To ensure proper behavior, always specify:  `scopes = ["openid", "profile", "email"]`
+
 ```terraform
 # This is an example of an Okta Workforce connection.
 
@@ -626,7 +629,7 @@ resource "auth0_connection" "okta" {
     token_endpoint           = "https://example.okta.com/oauth2/v1/token"
     userinfo_endpoint        = "https://example.okta.com/oauth2/v1/userinfo"
     authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"
-    scopes                   = ["openid", "email"]
+    scopes                   = ["openid", "profile", "email"]
     set_user_root_attributes = "on_first_login"
     non_persistent_attrs     = ["ethnicity", "gender"]
     upstream_params = jsonencode({

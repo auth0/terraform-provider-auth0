@@ -1,3 +1,14 @@
+## v1.18.0
+
+ENHANCEMENTS:
+
+- `resource/auth0_prompt_screen_renderer`: Add support for 14 new screens ([#1226](https://github.com/auth0/terraform-provider-auth0/pull/1226/))
+- Add support for dynamic credentials while configuring the provider ([#1172](https://github.com/auth0/terraform-provider-auth0/pull/1172/))  
+
+BUG FIXES:
+- `resource/auth0_branding`: Allow setting `font_url` as null ([#1222](https://github.com/auth0/terraform-provider-auth0/pull/1222/)) 
+- `resource/auth0_client`: Allow setting `encryption_key` as null ([#1221](https://github.com/auth0/terraform-provider-auth0/pull/1221/))
+
 ## v1.16.0
 
 FEATURES:

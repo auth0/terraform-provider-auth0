@@ -7,7 +7,7 @@ toolchain go1.23.7
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
 	github.com/auth0/go-auth0 v1.20.0
-	github.com/golang-jwt/jwt/v4 v4.5.2
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1

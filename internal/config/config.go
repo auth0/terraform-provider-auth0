@@ -15,7 +15,7 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"

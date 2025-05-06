@@ -15,12 +15,13 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 	"github.com/zalando/go-keyring"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 const providerName = "Terraform-Provider-Auth0" // #nosec G101
@@ -82,7 +83,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				}}
 			}
 		case cliLogin:
-			// Ensure domain is present
+			// Ensure domain is present.
 			if domain == "" {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
@@ -91,7 +92,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				}}
 			}
 
-			// Check for tempToken when cliLogin is enabled
+			// Check for tempToken when cliLogin is enabled.
 			var tempToken string
 			for i := 0; i < secretAccessTokenMaxChunks; i++ {
 				a, err := keyring.Get(fmt.Sprintf("%s %d", secretAccessToken, i), domain)
@@ -109,7 +110,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				}}
 			}
 
-			// Check if the token is expired
+			// Check if the token is expired.
 			if err := validateTokenExpiry(tempToken); err != nil {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
@@ -118,11 +119,11 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				}}
 			}
 
-			// Set the apiToken to the tempToken
+			// Set the apiToken to the tempToken.
 			apiToken = tempToken
 
 		case apiToken != "":
-			// Ensure domain is present
+			// Ensure domain is present.
 			if domain == "" {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
@@ -132,7 +133,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			}
 
 		case clientID != "" && clientSecret != "":
-			// Ensure domain is present
+			// Ensure domain is present.
 			if domain == "" {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
@@ -167,7 +168,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 }
 
 func validateTokenExpiry(tokenString string) error {
-	// Decode JWT token without verification
+	// Decode JWT token without verification.
 	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
 	if err != nil {
 		return fmt.Errorf("invalid token: the retrieved auth0-cli token is not a valid JWT")

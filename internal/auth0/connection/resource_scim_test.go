@@ -35,6 +35,7 @@ resource "auth0_connection" "my_connection" {
 	options {
 		client_id                = "1234567"
 		client_secret            = "1234567"
+		scopes 					 = ["openid", "profile", "email"]
 		issuer                   = "https://example.okta.com"
 		jwks_uri                 = "https://example.okta.com/oauth2/v1/keys"
 		token_endpoint           = "https://example.okta.com/oauth2/v1/token"
@@ -124,7 +125,7 @@ func TestAccSCIMConfiguration(t *testing.T) {
 			},
 			{
 				Config:      acctest.ParseTestName(testAccSCIMConfigurationGivenAnUnsupportedConnection, t.Name()),
-				ExpectError: regexp.MustCompile("404 Not Found: scim strategy not enabled"),
+				ExpectError: regexp.MustCompile("404 Not Found: This connection type does not support SCIM."),
 			},
 			{
 				Config: acctest.ParseTestName(testAccSCIMConfigurationWithDefaults, t.Name()),

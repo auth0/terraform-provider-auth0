@@ -18,7 +18,7 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
+                - Go-Auth0/1.20.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_xxxxxxxxxxxxxxxx/scim-configuration
         method: GET
       response:
@@ -35,26 +35,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 404 Not Found
         code: 404
-        duration: 236.873625ms
+        duration: 327.525792ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 463
+        content_length: 494
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","strategy":"okta","options":{"client_id":"1234567","client_secret":"1234567","authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","userinfo_endpoint":null,"token_endpoint":"https://example.okta.com/oauth2/v1/token"}}
+            {"name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","strategy":"okta","options":{"client_id":"1234567","client_secret":"1234567","authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","userinfo_endpoint":null,"token_endpoint":"https://example.okta.com/oauth2/v1/token","scope":"email openid profile"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
+                - Go-Auth0/1.20.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
         method: POST
       response:
@@ -63,15 +63,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 773
+        content_length: 804
         uncompressed: false
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"client_id":"1234567","client_secret":"1234567","authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","userinfo_endpoint":null,"token_endpoint":"https://example.okta.com/oauth2/v1/token","schema_version":"oidc-V4","type":"back_channel","attribute_map":{"mapping_mode":"basic_profile"},"connection_settings":{"pkce":"auto"}},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"client_id":"1234567","client_secret":"1234567","authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","userinfo_endpoint":null,"token_endpoint":"https://example.okta.com/oauth2/v1/token","scope":"email openid profile","schema_version":"oidc-V4","type":"back_channel","attribute_map":{"mapping_mode":"basic_profile"},"connection_settings":{"pkce":"auto"}},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 289.071125ms
+        duration: 384.479959ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -89,8 +89,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: GET
       response:
         proto: HTTP/2.0
@@ -100,13 +100,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 222.525959ms
+        duration: 340.288375ms
     - id: 3
       request:
         proto: HTTP/1.1
@@ -124,8 +124,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -141,7 +141,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 404 Not Found
         code: 404
-        duration: 232.655417ms
+        duration: 405.746708ms
     - id: 4
       request:
         proto: HTTP/1.1
@@ -159,8 +159,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: GET
       response:
         proto: HTTP/2.0
@@ -170,13 +170,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 217.06775ms
+        duration: 345.43075ms
     - id: 5
       request:
         proto: HTTP/1.1
@@ -194,8 +194,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: POST
       response:
         proto: HTTP/2.0
@@ -205,13 +205,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: false
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 264.317667ms
+        duration: 358.424125ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -229,8 +229,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -240,13 +240,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 254.797625ms
+        duration: 357.925416ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -264,8 +264,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -275,13 +275,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 253.444292ms
+        duration: 344.199917ms
     - id: 8
       request:
         proto: HTTP/1.1
@@ -299,8 +299,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration/default-mapping
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -316,7 +316,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 212.562167ms
+        duration: 345.89875ms
     - id: 9
       request:
         proto: HTTP/1.1
@@ -334,8 +334,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -345,13 +345,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 223.851375ms
+        duration: 359.93925ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -369,8 +369,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration/default-mapping
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -386,7 +386,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 208.848041ms
+        duration: 375.412083ms
     - id: 11
       request:
         proto: HTTP/1.1
@@ -404,8 +404,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: GET
       response:
         proto: HTTP/2.0
@@ -415,13 +415,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 230.018042ms
+        duration: 336.002ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -439,8 +439,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -450,13 +450,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 221.938042ms
+        duration: 349.275125ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -474,8 +474,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -485,13 +485,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 233.737792ms
+        duration: 350.595375ms
     - id: 14
       request:
         proto: HTTP/1.1
@@ -509,8 +509,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration/default-mapping
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration/default-mapping
         method: GET
       response:
         proto: HTTP/2.0
@@ -526,7 +526,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 235.760291ms
+        duration: 351.049459ms
     - id: 15
       request:
         proto: HTTP/1.1
@@ -544,8 +544,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: GET
       response:
         proto: HTTP/2.0
@@ -555,13 +555,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 243.019459ms
+        duration: 338.772542ms
     - id: 16
       request:
         proto: HTTP/1.1
@@ -579,8 +579,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: GET
       response:
         proto: HTTP/2.0
@@ -590,13 +590,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_3tTzkzidQ1kgu9ov","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2024-07-17T18:27:21.789Z","created_at":"2024-07-17T18:27:21.789Z","user_id_attribute":"externalId"}'
+        body: '{"tenant_name":"terraform-provider-auth0-dev","connection_id":"con_Ha5VHHBFF9Wi1Dqz","connection_name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","strategy":"okta","mapping":[{"scim":"userName","auth0":"preferred_username"},{"scim":"emails[primary eq true].value","auth0":"email"},{"scim":"externalId","auth0":"app_metadata.external_id"},{"scim":"active","auth0":"blocked"},{"scim":"displayName","auth0":"name"},{"scim":"name.givenName","auth0":"given_name"},{"scim":"name.familyName","auth0":"family_name"},{"scim":"name.middleName","auth0":"app_metadata.middle_name"},{"scim":"name.honorificPrefix","auth0":"app_metadata.honorific_prefix"},{"scim":"name.honorificSuffix","auth0":"app_metadata.honorific_suffix"},{"scim":"nickName","auth0":"nickname"},{"scim":"photos[type eq \"photo\"].value","auth0":"picture"},{"scim":"phoneNumbers[primary eq true].value","auth0":"app_metadata.primary_phone_number"},{"scim":"phoneNumbers[type eq \"mobile\"].value","auth0":"app_metadata.mobile_phone_number"},{"scim":"addresses[type eq \"work\"].streetAddress","auth0":"app_metadata.street_address"},{"scim":"addresses[type eq \"work\"].locality","auth0":"app_metadata.city"},{"scim":"addresses[type eq \"work\"].region","auth0":"app_metadata.state"},{"scim":"addresses[type eq \"work\"].postalCode","auth0":"app_metadata.postal_code"},{"scim":"addresses[type eq \"work\"].formatted","auth0":"app_metadata.postal_address"},{"scim":"addresses[type eq \"work\"].country","auth0":"app_metadata.country"},{"scim":"profileUrl","auth0":"app_metadata.profile_url"},{"scim":"userType","auth0":"app_metadata.user_type"},{"scim":"title","auth0":"app_metadata.title"},{"scim":"preferredLanguage","auth0":"app_metadata.language"},{"scim":"locale","auth0":"app_metadata.locale"},{"scim":"timezone","auth0":"app_metadata.timezone"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.employeeNumber","auth0":"app_metadata.employee_id"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.costCenter","auth0":"app_metadata.cost_center"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.organization","auth0":"app_metadata.organization"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.division","auth0":"app_metadata.division"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.department","auth0":"app_metadata.department"},{"scim":"urn:ietf:params:scim:schemas:extension:enterprise:2.0:User.manager","auth0":"app_metadata.manager"}],"updated_on":"2025-05-06T04:05:37.380Z","created_at":"2025-05-06T04:05:37.380Z","user_id_attribute":"externalId"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 251.327125ms
+        duration: 361.411875ms
     - id: 17
       request:
         proto: HTTP/1.1
@@ -614,8 +614,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov/scim-configuration
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz/scim-configuration
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -626,12 +626,10 @@ interactions:
         content_length: 0
         uncompressed: false
         body: ""
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
+        headers: {}
         status: 204 No Content
         code: 204
-        duration: 232.1575ms
+        duration: 929.601042ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -649,8 +647,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: GET
       response:
         proto: HTTP/2.0
@@ -660,13 +658,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"con_3tTzkzidQ1kgu9ov","options":{"type":"back_channel","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
+        body: '{"id":"con_Ha5VHHBFF9Wi1Dqz","options":{"type":"back_channel","scope":"email openid profile","issuer":"https://example.okta.com","jwks_uri":"https://example.okta.com/oauth2/v1/keys","client_id":"1234567","attribute_map":{"mapping_mode":"basic_profile"},"client_secret":"1234567","schema_version":"oidc-V4","token_endpoint":"https://example.okta.com/oauth2/v1/token","userinfo_endpoint":null,"connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.okta.com/oauth2/v1/authorize"},"strategy":"okta","name":"Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration","is_domain_connection":false,"show_as_button":false,"display_name":"Acceptance-Test-SCIM-TestAccDataSCIMConfiguration","enabled_clients":[],"realms":["Acceptance-Test-SCIM-Connection-TestAccDataSCIMConfiguration"]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 235.590666ms
+        duration: 385.017375ms
     - id: 19
       request:
         proto: HTTP/1.1
@@ -684,8 +682,8 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.8.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_3tTzkzidQ1kgu9ov
+                - Go-Auth0/1.20.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_Ha5VHHBFF9Wi1Dqz
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -695,10 +693,10 @@ interactions:
         trailer: {}
         content_length: 41
         uncompressed: false
-        body: '{"deleted_at":"2024-07-17T18:27:27.354Z"}'
+        body: '{"deleted_at":"2025-05-06T04:05:45.727Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 202 Accepted
         code: 202
-        duration: 249.347292ms
+        duration: 342.107083ms

@@ -910,6 +910,10 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 		return nil, diag.FromErr(err)
 	}
 
+	if len(data.Get("options.0.scopes").(*schema.Set).List()) < 1 {
+		return nil, diag.FromErr(fmt.Errorf("the scopes option is required for connection strategy %s", management.ConnectionStrategyOkta))
+	}
+
 	expandConnectionOptionsScopes(data, options)
 
 	options.UpstreamParams, err = value.MapFromJSON(config.GetAttr("upstream_params"))

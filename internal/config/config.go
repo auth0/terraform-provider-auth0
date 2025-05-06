@@ -24,8 +24,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
-const providerName = "Terraform-Provider-Auth0" // #nosec G101
-const secretAccessToken = "Auth0 CLI Access Token"
+const providerName = "Terraform-Provider-Auth0"    // #nosec G101
+const secretAccessToken = "Auth0 CLI Access Token" // #nosec G101
 
 // Access tokens have no size limit, but should be smaller than (50*2048) bytes.
 // The max number of loops safeguards against infinite loops, however unlikely.
@@ -146,8 +146,8 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.Diagnostics{{
 				Severity: diag.Error,
 				Summary:  "Missing environment variables",
-				Detail: "AUTH0_DOMAIN is required. Then configure either AUTH0_API_TOKEN, " +
-					"or AUTH0_CLIENT_ID & AUTH0_CLIENT_SECRET, or enable AUTH0_CLI_LOGIN=true (requires prior login).",
+				Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
+					"or both AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET. Or enable CLI login with AUTH0_CLI_LOGIN=true",
 			}}
 		}
 

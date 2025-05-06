@@ -112,6 +112,7 @@ Read-Only:
 - `precedence` (List of String)
 - `protocol_binding` (String)
 - `provider` (String)
+- `realm_fallback` (Boolean)
 - `request_template` (String)
 - `requires_username` (Boolean)
 - `scopes` (Set of String)

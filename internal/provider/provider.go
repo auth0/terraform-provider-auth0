@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/flow"
@@ -105,7 +107,20 @@ func New() *schema.Provider {
 					}
 					return v == "1" || v == "true" || v == "on", nil
 				},
-				Description: "Indicates whether to turn on debug mode.",
+				Description: "Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.",
+			},
+			"dynamic_credentials": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_DYNAMIC_CREDENTIALS")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "Indicates whether credentials will be dynamically passed to the provider from" +
+					"other terraform resources.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -141,6 +156,7 @@ func New() *schema.Provider {
 			"auth0_organization_member_role":         organization.NewMemberRoleResource(),
 			"auth0_organization_member_roles":        organization.NewMemberRolesResource(),
 			"auth0_organization_members":             organization.NewMembersResource(),
+			"auth0_network_acl":                      networkacl.NewResource(),
 			"auth0_pages":                            page.NewResource(),
 			"auth0_phone_provider":                   branding.NewPhoneProviderResource(),
 			"auth0_prompt":                           prompt.NewResource(),
@@ -181,6 +197,7 @@ func New() *schema.Provider {
 			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
+			"auth0_network_acl":                   networkacl.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),

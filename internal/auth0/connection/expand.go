@@ -390,6 +390,7 @@ func expandConnectionOptionsAuth0(_ *schema.ResourceData, config cty.Value) (int
 		Precedence:                       value.Strings(config.GetAttr("precedence")),
 		Attributes:                       expandConnectionOptionsAttributes(config.GetAttr("attributes")),
 		StrategyVersion:                  value.Int(config.GetAttr("strategy_version")),
+		RealmFallback:                    value.Bool(config.GetAttr("realm_fallback")),
 	}
 
 	config.GetAttr("validation").ForEachElement(
@@ -907,6 +908,10 @@ func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (i
 	})
 	if err != nil {
 		return nil, diag.FromErr(err)
+	}
+
+	if len(data.Get("options.0.scopes").(*schema.Set).List()) < 1 {
+		return nil, diag.FromErr(fmt.Errorf("the scopes option is required for connection strategy %s", management.ConnectionStrategyOkta))
 	}
 
 	expandConnectionOptionsScopes(data, options)

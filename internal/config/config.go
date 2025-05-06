@@ -69,16 +69,25 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		apiToken = data.Get("api_token").(string)
 		audience := data.Get("audience").(string)
 		debug := data.Get("debug").(bool)
+		dynamicCredentials := data.Get("dynamic_credentials").(bool)
 		cliLogin := data.Get("cli_login").(bool)
 
 		switch {
+		case dynamicCredentials:
+			if domain == "" {
+				return nil, diag.Diagnostics{{
+					Severity: diag.Error,
+					Summary:  "Missing required configuration",
+					Detail:   "The 'AUTH0_DOMAIN' must be specified along with the 'AUTH0_DYNAMIC_CREDENTIALS'.",
+				}}
+			}
 		case cliLogin:
 			// Ensure domain is present
 			if domain == "" {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
 					Summary:  "Missing required configuration",
-					Detail:   "The 'AUTH0_DOMAIN' must be specified along with the 'AUTH0_CLI_LOGIN'",
+					Detail:   "The 'AUTH0_DOMAIN' must be specified along with the 'AUTH0_CLI_LOGIN'.",
 				}}
 			}
 
@@ -96,7 +105,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				return nil, diag.Diagnostics{{
 					Severity: diag.Error,
 					Summary:  "Authentication required",
-					Detail:   "No authentication credentials found. Please log in using auth0 login via auth0-cli or disable CLI authentication by setting AUTH0_CLI_LOGIN to false..",
+					Detail:   "No CLI token found. Please log in using 'auth0 login' via auth0-cli or disable 'AUTH0_CLI_LOGIN'.",
 				}}
 			}
 
@@ -136,7 +145,8 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			return nil, diag.Diagnostics{{
 				Severity: diag.Error,
 				Summary:  "Missing environment variables",
-				Detail:   "Either AUTH0_API_TOKEN, or AUTH0_CLIENT_ID & AUTH0_CLIENT_SECRET with AUTH0_DOMAIN must be configured.",
+				Detail: "AUTH0_DOMAIN is required. Then configure either AUTH0_API_TOKEN, " +
+					"or AUTH0_CLIENT_ID & AUTH0_CLIENT_SECRET, or enable AUTH0_CLI_LOGIN=true (requires prior login).",
 			}}
 		}
 

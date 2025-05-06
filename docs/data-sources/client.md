@@ -68,6 +68,7 @@ data "auth0_client" "some-client-by-id" {
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `session_transfer` (List of Object) (see [below for nested schema](#nestedatt--session_transfer))
 - `signed_request_object` (Set of Object) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedatt--signed_request_object))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
@@ -593,8 +594,28 @@ Read-Only:
 - `infinite_idle_token_lifetime` (Boolean)
 - `infinite_token_lifetime` (Boolean)
 - `leeway` (Number)
+- `policies` (Set of Object) (see [below for nested schema](#nestedobjatt--refresh_token--policies))
 - `rotation_type` (String)
 - `token_lifetime` (Number)
+
+<a id="nestedobjatt--refresh_token--policies"></a>
+### Nested Schema for `refresh_token.policies`
+
+Read-Only:
+
+- `audience` (String)
+- `scope` (List of String)
+
+
+
+<a id="nestedatt--session_transfer"></a>
+### Nested Schema for `session_transfer`
+
+Read-Only:
+
+- `allowed_authentication_methods` (Set of String)
+- `can_create_session_transfer_token` (Boolean)
+- `enforce_device_binding` (String)
 
 
 <a id="nestedatt--signed_request_object"></a>

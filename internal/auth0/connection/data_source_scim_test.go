@@ -24,6 +24,7 @@ resource "auth0_connection" "my_connection" {
 		client_id                = "1234567"
 		client_secret            = "1234567"
 		issuer                   = "https://example.okta.com"
+		scopes 					 = ["openid", "profile", "email"]
 		jwks_uri                 = "https://example.okta.com/oauth2/v1/keys"
 		token_endpoint           = "https://example.okta.com/oauth2/v1/token"
 		authorization_endpoint   = "https://example.okta.com/oauth2/v1/authorize"

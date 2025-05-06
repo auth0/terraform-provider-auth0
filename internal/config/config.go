@@ -168,15 +168,16 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 }
 
 func validateTokenExpiry(tokenString string) error {
-	// Decode JWT token without verification.
-	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return nil, nil
+	})
 	if err != nil {
-		return fmt.Errorf("invalid token: the retrieved auth0-cli token is not a valid JWT")
+		return fmt.Errorf("token verification failed: %w", err)
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return fmt.Errorf("invalid token format: unable to parse token claims")
+	if !ok || !token.Valid {
+		return fmt.Errorf("invalid token claims")
 	}
 
 	exp, ok := claims["exp"].(float64)

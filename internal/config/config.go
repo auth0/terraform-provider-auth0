@@ -4,18 +4,20 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
@@ -167,25 +169,52 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	}
 }
 
-func validateTokenExpiry(tokenString string) error {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return nil, nil
-	})
+func decodeSegment(seg string) ([]byte, error) {
+	// Add padding if necessary.
+	if l := len(seg) % 4; l > 0 {
+		seg += strings.Repeat("=", 4-l)
+	}
+	return base64.URLEncoding.DecodeString(seg)
+}
+
+func decodeJWT(token string) (map[string]interface{}, map[string]interface{}, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return nil, nil, fmt.Errorf("invalid JWT format")
+	}
+
+	headerBytes, err := decodeSegment(parts[0])
 	if err != nil {
-		return fmt.Errorf("token verification failed: %w", err)
+		return nil, nil, fmt.Errorf("error decoding header: %w", err)
+	}
+	payloadBytes, err := decodeSegment(parts[1])
+	if err != nil {
+		return nil, nil, fmt.Errorf("error decoding payload: %w", err)
 	}
 
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		return fmt.Errorf("invalid token claims")
+	var header, payload map[string]interface{}
+	if err := json.Unmarshal(headerBytes, &header); err != nil {
+		return nil, nil, fmt.Errorf("error unmarshalling header: %w", err)
+	}
+	if err := json.Unmarshal(payloadBytes, &payload); err != nil {
+		return nil, nil, fmt.Errorf("error unmarshalling payload: %w", err)
 	}
 
-	exp, ok := claims["exp"].(float64)
+	return header, payload, nil
+}
+
+func validateTokenExpiry(tokenString string) error {
+	_, payload, err := decodeJWT(tokenString)
+	if err != nil {
+		return err
+	}
+
+	exp, ok := payload["exp"]
 	if !ok {
 		return fmt.Errorf("missing expiration: the token does not contain an expiration claim")
 	}
 
-	if time.Now().Unix() > int64(exp) {
+	if time.Now().Unix() > exp.(int64) {
 		return fmt.Errorf("expired token: the stored auth0-cli token has expired. Please log in again")
 	}
 

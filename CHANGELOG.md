@@ -8,9 +8,9 @@ BUG FIXES:
 ## v1.19.0
 
 FEATURES:
-- `resource/auth0_client`: Support Native to Web SSO ([#1231](https://github.com/auth0/terraform-provider-auth0/pull/1231/))
-- `resource/auth0_client`: Add support to configure multi Multi-Resource Refresh Token via `policies` ([#1223](https://github.com/auth0/terraform-provider-auth0/pull/1223/))
-- 
+- `resource/auth0_client`: Support Native to Web SSO (`EA` Release)([#1231](https://github.com/auth0/terraform-provider-auth0/pull/1231/))
+- `resource/auth0_client`: Add support to configure multi Multi-Resource Refresh Token via `policies` (`EA` Release) ([#1223](https://github.com/auth0/terraform-provider-auth0/pull/1223/))
+
 ENHANCEMENTS:
 - `resource/auth0_prompt_custom_text`: Add support for `email-identifier-challenge` prompt ([#1232](https://github.com/auth0/terraform-provider-auth0/pull/1232/))
 

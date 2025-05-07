@@ -1046,7 +1046,7 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		return nil
 	}
 
-	// session_transfer is not defined
+	// Handles case when session_transfer is not defined.
 	_, ok := data.GetOk("session_transfer")
 	if !ok {
 		return nil

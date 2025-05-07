@@ -1,3 +1,10 @@
+## v1.19.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Handle null on `session_transfer` and `policies` in refresh_token ([#1237](https://github.com/auth0/terraform-provider-auth0/pull/1237/))
+
+
 ## v1.19.0
 
 FEATURES:

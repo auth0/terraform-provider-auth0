@@ -1,3 +1,23 @@
+## v1.19.1
+
+BUG FIXES:
+
+- `resource/auth0_client`: Handle null on `session_transfer` and `policies` in refresh_token ([#1237](https://github.com/auth0/terraform-provider-auth0/pull/1237/))
+
+
+## v1.19.0
+
+FEATURES:
+- `resource/auth0_client`: Support Native to Web SSO (`EA` Release)([#1231](https://github.com/auth0/terraform-provider-auth0/pull/1231/))
+- `resource/auth0_client`: Add support to configure multi Multi-Resource Refresh Token via `policies` (`EA` Release) ([#1223](https://github.com/auth0/terraform-provider-auth0/pull/1223/))
+
+ENHANCEMENTS:
+- `resource/auth0_prompt_custom_text`: Add support for `email-identifier-challenge` prompt ([#1232](https://github.com/auth0/terraform-provider-auth0/pull/1232/))
+
+BUG FIXES:
+- `resource/auth0_connection`: Add support to set `realm_fallback` ([#1224](https://github.com/auth0/terraform-provider-auth0/pull/1224/))
+- `resource/auth0_connection`: Add validation over `scopes` on Okta Connection ([#945](https://github.com/auth0/terraform-provider-auth0/pull/945/))
+
 ## v1.18.0
 
 ENHANCEMENTS:

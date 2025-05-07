@@ -247,6 +247,10 @@ func expandRefreshTokenPolicies(policies cty.Value) *[]management.ClientRefreshT
 		return stop
 	})
 
+	if len(clientRefreshTokenPolicy) == 0 {
+		return nil
+	}
+
 	return &clientRefreshTokenPolicy
 }
 
@@ -1039,6 +1043,12 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 
 	sessionTransferConfig := data.GetRawConfig().GetAttr("session_transfer")
 	if sessionTransferConfig.IsNull() {
+		return nil
+	}
+
+	// Handles case when session_transfer is not defined.
+	_, ok := data.GetOk("session_transfer")
+	if !ok {
 		return nil
 	}
 

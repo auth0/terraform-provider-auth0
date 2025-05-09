@@ -29,6 +29,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
 		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
+		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -49,10 +50,6 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 			data.Set("acr_values_supported", tenant.GetACRValuesSupported()),
 			data.Set("disable_acr_values_supported", false),
 		)
-	}
-
-	if tenant.GetDefaultTokenQuota() != nil {
-		result = multierror.Append(result, data.Set("default_token_quota", tenant.GetDefaultTokenQuota()))
 	}
 
 	return result.ErrorOrNil()
@@ -134,6 +131,49 @@ func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []inte
 	m["html"] = errorPage.GetHTML()
 	m["show_log_link"] = errorPage.GetShowLogLink()
 	m["url"] = errorPage.GetURL()
+
+	return []interface{}{m}
+}
+
+func flattenDefaultTokenQuota(defaultTokenQuota *management.TenantDefaultTokenQuota) []interface{} {
+	if defaultTokenQuota == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if defaultTokenQuota.Clients != nil {
+		m["clients"] = flattenTokenQuota(defaultTokenQuota.Clients)
+	}
+
+	if defaultTokenQuota.Organizations != nil {
+		m["organizations"] = flattenTokenQuota(defaultTokenQuota.Organizations)
+	}
+
+	return []interface{}{m}
+}
+
+func flattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
+	if tokenQuota == nil || tokenQuota.ClientCredentials == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	clientCreds := make(map[string]interface{})
+	if tokenQuota.ClientCredentials.Enforce != nil {
+		clientCreds["enforce"] = *tokenQuota.ClientCredentials.Enforce
+	}
+
+	if tokenQuota.ClientCredentials.PerDay != nil {
+		clientCreds["per_day"] = *tokenQuota.ClientCredentials.PerDay
+	}
+
+	if tokenQuota.ClientCredentials.PerHour != nil {
+		clientCreds["per_hour"] = *tokenQuota.ClientCredentials.PerHour
+	}
+
+	m["client_credentials"] = []interface{}{clientCreds}
 
 	return []interface{}{m}
 }

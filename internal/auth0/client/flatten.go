@@ -629,14 +629,11 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("token_quota", flattenTokenQuota(client.GetTokenQuota())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
 		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
-	}
-
-	if client.GetTokenQuota() != nil {
-		result = multierror.Append(result, data.Set("token_quota", client.GetTokenQuota()))
 	}
 
 	return result.ErrorOrNil()
@@ -656,6 +653,32 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 	return []interface{}{
 		t,
 	}
+}
+
+func flattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
+	if tokenQuota == nil {
+		return nil
+	}
+
+	result := make(map[string]interface{})
+
+	if tokenQuota.ClientCredentials != nil {
+		clientCreds := map[string]interface{}{
+			"enforce": tokenQuota.ClientCredentials.GetEnforce(),
+		}
+
+		if tokenQuota.ClientCredentials.PerHour != nil {
+			clientCreds["per_hour"] = tokenQuota.ClientCredentials.GetPerHour()
+		}
+
+		if tokenQuota.ClientCredentials.PerDay != nil {
+			clientCreds["per_day"] = tokenQuota.ClientCredentials.GetPerDay()
+		}
+
+		result["client_credentials"] = []interface{}{clientCreds}
+	}
+
+	return []interface{}{result}
 }
 
 func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {

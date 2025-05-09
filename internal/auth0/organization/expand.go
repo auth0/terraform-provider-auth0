@@ -1,7 +1,6 @@
 package organization
 
 import (
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -62,36 +61,43 @@ func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConn
 	return connections
 }
 
-func expandTokenQuota(raw interface{}) *management.TokenQuota {
-	if raw == nil {
+func expandTokenQuota(raw cty.Value) *management.TokenQuota {
+	if raw.IsNull() {
 		return nil
 	}
 
-	list := raw.([]interface{})
-	if len(list) == 0 || list[0] == nil {
-		return nil
-	}
+	var quota *management.TokenQuota
 
-	data := list[0].(map[string]interface{})
-	clientCreds := data["client_credentials"].([]interface{})
-	if len(clientCreds) == 0 || clientCreds[0] == nil {
-		return nil
-	}
+	raw.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		clientCredsValue := config.GetAttr("client_credentials")
+		if clientCredsValue.IsNull() {
+			return false
+		}
 
-	creds := clientCreds[0].(map[string]interface{})
-	quota := &management.TokenQuota{
-		ClientCredentials: &management.TokenQuotaClientCredentials{
-			Enforce: auth0.Bool(creds["enforce"].(bool)),
-		},
-	}
+		clientCredsValue.ForEachElement(func(_ cty.Value, credsConfig cty.Value) (stop bool) {
+			enforce := value.Bool(credsConfig.GetAttr("enforce"))
+			perHour := value.Int(credsConfig.GetAttr("per_hour"))
+			perDay := value.Int(credsConfig.GetAttr("per_day"))
 
-	if v, ok := creds["per_hour"].(int); ok && v > 0 {
-		quota.ClientCredentials.PerHour = auth0.Int(v)
-	}
+			quota = &management.TokenQuota{
+				ClientCredentials: &management.TokenQuotaClientCredentials{
+					Enforce: enforce,
+				},
+			}
 
-	if v, ok := creds["per_day"].(int); ok && v > 0 {
-		quota.ClientCredentials.PerDay = auth0.Int(v)
-	}
+			if perHour != nil && *perHour > 0 {
+				quota.ClientCredentials.PerHour = perHour
+			}
+
+			if perDay != nil && *perDay > 0 {
+				quota.ClientCredentials.PerDay = perDay
+			}
+
+			return false
+		})
+
+		return false
+	})
 
 	return quota
 }

@@ -14,6 +14,10 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 		data.Set("metadata", organization.GetMetadata()),
 	)
 
+	if organization.GetTokenQuota() != nil {
+		result = multierror.Append(result, data.Set("token_quota", organization.GetTokenQuota()))
+	}
+
 	return result.ErrorOrNil()
 }
 

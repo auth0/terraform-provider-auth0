@@ -51,6 +51,10 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		)
 	}
 
+	if tenant.GetDefaultTokenQuota() != nil {
+		result = multierror.Append(result, data.Set("default_token_quota", tenant.GetDefaultTokenQuota()))
+	}
+
 	return result.ErrorOrNil()
 }
 

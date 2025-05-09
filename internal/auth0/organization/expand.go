@@ -1,6 +1,7 @@
 package organization
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -15,6 +16,7 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 		Name:        value.String(cfg.GetAttr("name")),
 		DisplayName: value.String(cfg.GetAttr("display_name")),
 		Branding:    expandOrganizationBranding(cfg.GetAttr("branding")),
+		TokenQuota:  expandTokenQuota(cfg.GetAttr("token_quota")),
 	}
 
 	if data.HasChange("metadata") {
@@ -58,4 +60,38 @@ func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConn
 	})
 
 	return connections
+}
+
+func expandTokenQuota(raw interface{}) *management.TokenQuota {
+	if raw == nil {
+		return nil
+	}
+
+	list := raw.([]interface{})
+	if len(list) == 0 || list[0] == nil {
+		return nil
+	}
+
+	data := list[0].(map[string]interface{})
+	clientCreds := data["client_credentials"].([]interface{})
+	if len(clientCreds) == 0 || clientCreds[0] == nil {
+		return nil
+	}
+
+	creds := clientCreds[0].(map[string]interface{})
+	quota := &management.TokenQuota{
+		ClientCredentials: &management.TokenQuotaClientCredentials{
+			Enforce: auth0.Bool(creds["enforce"].(bool)),
+		},
+	}
+
+	if v, ok := creds["per_hour"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerHour = auth0.Int(v)
+	}
+
+	if v, ok := creds["per_day"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerDay = auth0.Int(v)
+	}
+
+	return quota
 }

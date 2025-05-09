@@ -1,6 +1,7 @@
 package tenant
 
 import (
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -36,6 +37,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		ACRValuesSupported:                   expandACRValuesSupported(data),
 		MTLS:                                 expandMTLSConfiguration(data),
 		ErrorPage:                            expandErrorPageConfiguration(data),
+		DefaultTokenQuota:                    expandDefaultTokenQuota(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -238,4 +240,51 @@ func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantE
 	}
 
 	return &errorPage
+}
+
+func expandTokenQuota(raw interface{}) *management.TokenQuota {
+	if raw == nil {
+		return nil
+	}
+
+	list := raw.([]interface{})
+	if len(list) == 0 || list[0] == nil {
+		return nil
+	}
+
+	data := list[0].(map[string]interface{})
+	clientCreds := data["client_credentials"].([]interface{})
+	if len(clientCreds) == 0 || clientCreds[0] == nil {
+		return nil
+	}
+
+	creds := clientCreds[0].(map[string]interface{})
+	quota := &management.TokenQuota{
+		ClientCredentials: &management.TokenQuotaClientCredentials{
+			Enforce: auth0.Bool(creds["enforce"].(bool)),
+		},
+	}
+
+	if v, ok := creds["per_hour"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerHour = auth0.Int(v)
+	}
+
+	if v, ok := creds["per_day"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerDay = auth0.Int(v)
+	}
+
+	return quota
+}
+
+func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaultTokenQuota {
+	raw := data.Get("default_token_quota").([]interface{})
+	if len(raw) == 0 || raw[0] == nil {
+		return nil
+	}
+	defaultTokenData := raw[0].(map[string]interface{})
+
+	return &management.TenantDefaultTokenQuota{
+		Clients:       expandTokenQuota(defaultTokenData["clients"]),
+		Organizations: expandTokenQuota(defaultTokenData["organizations"]),
+	}
 }

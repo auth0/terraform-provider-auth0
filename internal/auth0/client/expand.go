@@ -54,6 +54,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
+		TokenQuota:                         expandTokenQuota(config.GetAttr("token_quota")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -1062,4 +1063,38 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 	})
 
 	return &sessionTransfer
+}
+
+func expandTokenQuota(raw interface{}) *management.TokenQuota {
+	if raw == nil {
+		return nil
+	}
+
+	list := raw.([]interface{})
+	if len(list) == 0 || list[0] == nil {
+		return nil
+	}
+
+	data := list[0].(map[string]interface{})
+	clientCreds := data["client_credentials"].([]interface{})
+	if len(clientCreds) == 0 || clientCreds[0] == nil {
+		return nil
+	}
+
+	creds := clientCreds[0].(map[string]interface{})
+	quota := &management.TokenQuota{
+		ClientCredentials: &management.TokenQuotaClientCredentials{
+			Enforce: auth0.Bool(creds["enforce"].(bool)),
+		},
+	}
+
+	if v, ok := creds["per_hour"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerHour = auth0.Int(v)
+	}
+
+	if v, ok := creds["per_day"].(int); ok && v > 0 {
+		quota.ClientCredentials.PerDay = auth0.Int(v)
+	}
+
+	return quota
 }

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -1461,6 +1463,7 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_quota": tenant.TokenQuotaSchema,
 		},
 	}
 }

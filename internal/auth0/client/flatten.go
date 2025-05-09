@@ -635,6 +635,10 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		result = multierror.Append(data.Set("encryption_key", client.GetEncryptionKey()))
 	}
 
+	if client.GetTokenQuota() != nil {
+		result = multierror.Append(result, data.Set("token_quota", client.GetTokenQuota()))
+	}
+
 	return result.ErrorOrNil()
 }
 

@@ -21,6 +21,7 @@ import (
 const (
 	idleSessionLifetimeDefault = 72.00
 	sessionLifetimeDefault     = 168.00
+	maxTokenQuotaLimit         = 2147483647
 )
 
 // NewResource will return a new auth0_tenant resource.
@@ -417,8 +418,62 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_token_quota": defaultTokenQuotaSchema,
 		},
 	}
+}
+
+var defaultTokenQuotaSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	MaxItems:    1,
+	Description: "Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"clients":       TokenQuotaSchema,
+			"organizations": TokenQuotaSchema,
+		},
+	},
+}
+
+// TokenQuotaSchema is the schema for the token quota configuration.
+var TokenQuotaSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	MaxItems:    1,
+	Description: "The token quota configuration.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"client_credentials": {
+				Type:        schema.TypeList,
+				Required:    true,
+				MaxItems:    1,
+				Description: "The token quota configuration for client credentials.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"enforce": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Description: "If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.",
+							Default:     true,
+						},
+						"per_day": {
+							Type:         schema.TypeInt,
+							Optional:     true,
+							Description:  "Maximum number of issued tokens per day",
+							ValidateFunc: validation.IntBetween(1, maxTokenQuotaLimit),
+						},
+						"per_hour": {
+							Type:         schema.TypeInt,
+							Optional:     true,
+							Description:  "Maximum number of issued tokens per hour",
+							ValidateFunc: validation.IntBetween(1, maxTokenQuotaLimit),
+						},
+					},
+				},
+			},
+		},
+	},
 }
 
 func createTenant(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

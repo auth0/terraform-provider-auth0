@@ -263,6 +263,50 @@ resource "auth0_tenant" "my_tenant" {
 }
 `
 
+const testAccTenantWithDefaultTokenQuota = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "My Test Tenant with Token Quota"
+	default_token_quota {
+		clients {
+			client_credentials {
+				enforce = true
+				per_hour = 100
+				per_day = 2000
+			}
+		}
+		organizations {
+			client_credentials {
+				enforce = true
+				per_hour = 200
+				per_day = 4000
+			}
+		}
+	}
+}
+`
+
+const testAccTenantWithDefaultTokenQuotaUpdated = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "My Test Tenant with Token Quota"
+	default_token_quota {
+		clients {
+			client_credentials {
+				enforce = false
+				per_hour = 50
+				per_day = 1000
+			}
+		}
+		organizations {
+			client_credentials {
+				enforce = false
+				per_hour = 150
+				per_day = 3000
+			}
+		}
+	}
+}
+`
+
 func TestAccTenant_Main(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -389,6 +433,47 @@ func TestAccTenant_EnableSSO(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "session_lifetime", "168"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "idle_session_lifetime", "72"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "flags.0.enable_sso", "true"),
+				),
+			},
+		},
+	})
+}
+
+func TestAccTenantDefaultTokenQuota(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccTenantWithDefaultTokenQuota,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "My Test Tenant with Token Quota"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.enforce", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.per_hour", "100"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.per_day", "2000"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.enforce", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_hour", "200"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_day", "4000"),
+				),
+			},
+			{
+				Config: testAccTenantWithDefaultTokenQuotaUpdated,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "My Test Tenant with Token Quota"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.enforce", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.per_hour", "50"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.clients.0.client_credentials.0.per_day", "1000"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.enforce", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_hour", "150"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_day", "3000"),
 				),
 			},
 		},

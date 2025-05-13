@@ -257,7 +257,6 @@ func NewResource() *schema.Resource {
 						"datadog_region": {
 							Type:     schema.TypeString,
 							Optional: true,
-							//RequiredWith: []string{"sink.0.datadog_api_key"},.
 							ValidateFunc: validation.StringInSlice(
 								[]string{"us", "eu", "us3", "us5"},
 								false,

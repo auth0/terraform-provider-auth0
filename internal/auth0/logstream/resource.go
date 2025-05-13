@@ -317,10 +317,9 @@ func NewResource() *schema.Resource {
 							Description:  "The Mixpanel Service Account username. Services Accounts can be created in the Project Settings page.",
 						},
 						"mixpanel_service_account_password": {
-							Type:      schema.TypeString,
-							Optional:  true,
-							Sensitive: true,
-							//RequiredWith: []string{"sink.0.mixpanel_region", "sink.0.mixpanel_project_id", "sink.0.mixpanel_service_account_username"},.
+							Type:        schema.TypeString,
+							Optional:    true,
+							Sensitive:   true,
 							Description: "The Mixpanel Service Account password.",
 						},
 						"segment_write_key": {

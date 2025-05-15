@@ -3,9 +3,10 @@ package tenant
 import (
 	"context"
 	"fmt"
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"net/http"
 	"time"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"

@@ -2,9 +2,10 @@ package client
 
 import (
 	"context"
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"net/http"
 	"time"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"

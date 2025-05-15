@@ -9,6 +9,7 @@ const (
 	maxTokenQuotaLimit = 2147483647
 )
 
+// TokenQuotaSchema returns the common schema used for tenants, clients and organisation.
 func TokenQuotaSchema() *schema.Schema {
 	return &schema.Schema{
 		Type:        schema.TypeList,
@@ -50,6 +51,7 @@ func TokenQuotaSchema() *schema.Schema {
 	}
 }
 
+// DefaultTokenQuotaSchema returns the common schema used for tenants, clients and organisation.
 func DefaultTokenQuotaSchema() *schema.Schema {
 	return &schema.Schema{
 		Type:        schema.TypeList,

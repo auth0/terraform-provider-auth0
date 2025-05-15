@@ -62,7 +62,7 @@ resource "auth0_tenant" "my_tenant" {
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
-- `default_token_quota` (Block List, Max: 1) Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings. (see [below for nested schema](#nestedblock--default_token_quota))
+- `default_token_quota` (Block List, Max: 1) Token Quota configuration... (see [below for nested schema](#nestedblock--default_token_quota))
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
 - `error_page` (Block List, Max: 1) Configuration for the error page (see [below for nested schema](#nestedblock--error_page))

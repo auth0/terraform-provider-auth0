@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -629,6 +631,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {

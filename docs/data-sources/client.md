@@ -75,6 +75,7 @@ data "auth0_client" "some-client-by-id" {
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
 - `token_exchange` (List of Object) Allows configuration for token exchange (see [below for nested schema](#nestedatt--token_exchange))
+- `token_quota` (List of Object) The token quota configuration. (see [below for nested schema](#nestedatt--token_quota))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 <a id="nestedatt--addons"></a>
@@ -648,5 +649,22 @@ Read-Only:
 Read-Only:
 
 - `allow_any_profile_of_type` (List of String)
+
+
+<a id="nestedatt--token_quota"></a>
+### Nested Schema for `token_quota`
+
+Read-Only:
+
+- `client_credentials` (List of Object) (see [below for nested schema](#nestedobjatt--token_quota--client_credentials))
+
+<a id="nestedobjatt--token_quota--client_credentials"></a>
+### Nested Schema for `token_quota.client_credentials`
+
+Read-Only:
+
+- `enforce` (Boolean)
+- `per_day` (Number)
+- `per_hour` (Number)
 
 

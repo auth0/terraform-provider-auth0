@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -417,6 +419,7 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_token_quota": commons.DefaultTokenQuotaSchema(),
 		},
 	}
 }

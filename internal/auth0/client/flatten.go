@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -629,7 +631,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
-		data.Set("token_quota", flattenTokenQuota(client.GetTokenQuota())),
+		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -653,32 +655,6 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 	return []interface{}{
 		t,
 	}
-}
-
-func flattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
-	if tokenQuota == nil {
-		return nil
-	}
-
-	result := make(map[string]interface{})
-
-	if tokenQuota.ClientCredentials != nil {
-		clientCreds := map[string]interface{}{
-			"enforce": tokenQuota.ClientCredentials.GetEnforce(),
-		}
-
-		if tokenQuota.ClientCredentials.PerHour != nil {
-			clientCreds["per_hour"] = tokenQuota.ClientCredentials.GetPerHour()
-		}
-
-		if tokenQuota.ClientCredentials.PerDay != nil {
-			clientCreds["per_day"] = tokenQuota.ClientCredentials.GetPerDay()
-		}
-
-		result["client_credentials"] = []interface{}{clientCreds}
-	}
-
-	return []interface{}{result}
 }
 
 func flattenClientGrant(data *schema.ResourceData, clientGrant *management.ClientGrant) error {

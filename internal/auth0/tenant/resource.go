@@ -23,7 +23,6 @@ import (
 const (
 	idleSessionLifetimeDefault = 72.00
 	sessionLifetimeDefault     = 168.00
-	maxTokenQuotaLimit         = 2147483647
 )
 
 // NewResource will return a new auth0_tenant resource.

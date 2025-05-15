@@ -1,6 +1,7 @@
 package commons
 
 import (
+	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -65,4 +66,31 @@ func DefaultTokenQuotaSchema() *schema.Schema {
 			},
 		},
 	}
+}
+
+// FlattenTokenQuota flattens the token quota configuration for a client.
+func FlattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
+	if tokenQuota == nil || tokenQuota.ClientCredentials == nil {
+		return nil
+	}
+
+	result := make(map[string]interface{})
+
+	if tokenQuota.ClientCredentials != nil {
+		clientCreds := map[string]interface{}{
+			"enforce": tokenQuota.ClientCredentials.GetEnforce(),
+		}
+
+		if tokenQuota.ClientCredentials.PerHour != nil {
+			clientCreds["per_hour"] = tokenQuota.ClientCredentials.GetPerHour()
+		}
+
+		if tokenQuota.ClientCredentials.PerDay != nil {
+			clientCreds["per_day"] = tokenQuota.ClientCredentials.GetPerDay()
+		}
+
+		result["client_credentials"] = []interface{}{clientCreds}
+	}
+
+	return []interface{}{result}
 }

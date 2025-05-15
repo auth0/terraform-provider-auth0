@@ -4,6 +4,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 )
 
 func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
@@ -143,37 +145,12 @@ func flattenDefaultTokenQuota(defaultTokenQuota *management.TenantDefaultTokenQu
 	m := make(map[string]interface{})
 
 	if defaultTokenQuota.Clients != nil {
-		m["clients"] = flattenTokenQuota(defaultTokenQuota.Clients)
+		m["clients"] = commons.FlattenTokenQuota(defaultTokenQuota.Clients)
 	}
 
 	if defaultTokenQuota.Organizations != nil {
-		m["organizations"] = flattenTokenQuota(defaultTokenQuota.Organizations)
+		m["organizations"] = commons.FlattenTokenQuota(defaultTokenQuota.Organizations)
 	}
-
-	return []interface{}{m}
-}
-
-func flattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
-	if tokenQuota == nil || tokenQuota.ClientCredentials == nil {
-		return nil
-	}
-
-	m := make(map[string]interface{})
-
-	clientCreds := make(map[string]interface{})
-	if tokenQuota.ClientCredentials.Enforce != nil {
-		clientCreds["enforce"] = *tokenQuota.ClientCredentials.Enforce
-	}
-
-	if tokenQuota.ClientCredentials.PerDay != nil {
-		clientCreds["per_day"] = *tokenQuota.ClientCredentials.PerDay
-	}
-
-	if tokenQuota.ClientCredentials.PerHour != nil {
-		clientCreds["per_hour"] = *tokenQuota.ClientCredentials.PerHour
-	}
-
-	m["client_credentials"] = []interface{}{clientCreds}
 
 	return []interface{}{m}
 }

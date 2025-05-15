@@ -4,6 +4,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 )
 
 func flattenOrganization(data *schema.ResourceData, organization *management.Organization) error {
@@ -12,7 +14,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 		data.Set("display_name", organization.GetDisplayName()),
 		data.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
 		data.Set("metadata", organization.GetMetadata()),
-		data.Set("token_quota", flattenTokenQuota(organization.GetTokenQuota())),
+		data.Set("token_quota", commons.FlattenTokenQuota(organization.GetTokenQuota())),
 	)
 
 	return result.ErrorOrNil()
@@ -126,30 +128,4 @@ func flattenOrganizationClientGrantsSlice(clientGrants []*management.ClientGrant
 		flattenedClientGrants = append(flattenedClientGrants, grant.GetID())
 	}
 	return flattenedClientGrants
-}
-
-func flattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
-	if tokenQuota == nil {
-		return nil
-	}
-
-	result := make(map[string]interface{})
-
-	if tokenQuota.ClientCredentials != nil {
-		clientCreds := map[string]interface{}{
-			"enforce": tokenQuota.ClientCredentials.GetEnforce(),
-		}
-
-		if tokenQuota.ClientCredentials.PerHour != nil {
-			clientCreds["per_hour"] = tokenQuota.ClientCredentials.GetPerHour()
-		}
-
-		if tokenQuota.ClientCredentials.PerDay != nil {
-			clientCreds["per_day"] = tokenQuota.ClientCredentials.GetPerDay()
-		}
-
-		result["client_credentials"] = []interface{}{clientCreds}
-	}
-
-	return []interface{}{result}
 }

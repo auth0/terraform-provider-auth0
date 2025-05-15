@@ -4,25 +4,24 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 	"github.com/zalando/go-keyring"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 const providerName = "Terraform-Provider-Auth0"    // #nosec G101
@@ -168,52 +167,24 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	}
 }
 
-func decodeSegment(seg string) ([]byte, error) {
-	// Add padding if necessary.
-	if l := len(seg) % 4; l > 0 {
-		seg += strings.Repeat("=", 4-l)
-	}
-	return base64.URLEncoding.DecodeString(seg)
-}
-
-func decodeJWT(token string) (map[string]interface{}, map[string]interface{}, error) {
-	parts := strings.Split(token, ".")
-	if len(parts) != 3 {
-		return nil, nil, fmt.Errorf("invalid JWT format")
-	}
-
-	headerBytes, err := decodeSegment(parts[0])
-	if err != nil {
-		return nil, nil, fmt.Errorf("error decoding header: %w", err)
-	}
-	payloadBytes, err := decodeSegment(parts[1])
-	if err != nil {
-		return nil, nil, fmt.Errorf("error decoding payload: %w", err)
-	}
-
-	var header, payload map[string]interface{}
-	if err := json.Unmarshal(headerBytes, &header); err != nil {
-		return nil, nil, fmt.Errorf("error unmarshalling header: %w", err)
-	}
-	if err := json.Unmarshal(payloadBytes, &payload); err != nil {
-		return nil, nil, fmt.Errorf("error unmarshalling payload: %w", err)
-	}
-
-	return header, payload, nil
-}
-
 func validateTokenExpiry(tokenString string) error {
-	_, payload, err := decodeJWT(tokenString)
+	// Decode JWT token without verification.
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid token: the retrieved auth0-cli token is not a valid JWT")
 	}
 
-	exp, ok := payload["exp"]
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return fmt.Errorf("invalid token format: unable to parse token claims")
+	}
+
+	exp, ok := claims["exp"].(float64)
 	if !ok {
 		return fmt.Errorf("missing expiration: the token does not contain an expiration claim")
 	}
 
-	if time.Now().Unix() > exp.(int64) {
+	if time.Now().Unix() > int64(exp) {
 		return fmt.Errorf("expired token: the stored auth0-cli token has expired. Please log in again")
 	}
 

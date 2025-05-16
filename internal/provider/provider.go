@@ -11,7 +11,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/form"
 
-	selfserviceprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/selfserviceprofile"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -109,6 +109,18 @@ func New() *schema.Provider {
 				},
 				Description: "Indicates whether credentials will be dynamically passed to the provider from" +
 					"other terraform resources.",
+			},
+			"cli_login": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				DefaultFunc: func() (interface{}, error) {
+					v := os.Getenv("AUTH0_CLI_LOGIN")
+					if v == "" {
+						return false, nil
+					}
+					return v == "1" || v == "true" || v == "on", nil
+				},
+				Description: "While toggled on, the API token gets fetched from the keyring for the given domain",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

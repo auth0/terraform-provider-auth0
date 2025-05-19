@@ -18,11 +18,12 @@ import (
 	"github.com/PuerkitoBio/rehttp"
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 	"github.com/zalando/go-keyring"
+
+	"github.com/auth0/terraform-provider-auth0/internal/mutex"
 )
 
 const providerName = "Terraform-Provider-Auth0"    // #nosec G101
@@ -160,6 +161,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithNoRetries(),
 			management.WithClient(customClientWithRetries()),
 		)
+
 		if err != nil {
 			return nil, diag.FromErr(err)
 		}
@@ -208,13 +210,12 @@ func validateTokenExpiry(tokenString string) error {
 		return err
 	}
 
-	exp, ok := payload["exp"]
-	if !ok {
+	if exp, ok := payload["exp"].(float64); ok {
+		if time.Now().Unix() > int64(exp) {
+			return fmt.Errorf("expired token: the stored auth0-cli token has expired. Please log in again")
+		}
+	} else {
 		return fmt.Errorf("missing expiration: the token does not contain an expiration claim")
-	}
-
-	if time.Now().Unix() > exp.(int64) {
-		return fmt.Errorf("expired token: the stored auth0-cli token has expired. Please log in again")
 	}
 
 	return nil

@@ -1300,10 +1300,10 @@ func TestAccConnectionOAuth2(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.pkce_enabled", "false"),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.upstream_params", ""),
 					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.#", "2"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.header", "foo"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "bar"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "bar"),
-					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "foo"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.header", "bar"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.0.value", "foo"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.header", "foo"),
+					resource.TestCheckResourceAttr("auth0_connection.oauth2", "options.0.custom_headers.1.value", "bar"),
 				),
 			},
 		},
@@ -1356,12 +1356,12 @@ resource "auth0_connection" "oauth2" {
 		pkce_enabled = false
 		custom_headers = [
 			{
-				header = "foo"
-				value  = "bar"
-			},
-			{
 				header = "bar"
 				value  = "foo"
+			},
+			{
+				header = "foo"
+				value  = "bar"
 			}
 		]
 	}

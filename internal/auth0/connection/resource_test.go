@@ -1359,7 +1359,7 @@ resource "auth0_connection" "oauth2" {
 				header = "foo"
 				value  = "bar"
 			},
-	{
+			{
 				header = "bar"
 				value  = "foo"
 			}

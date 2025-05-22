@@ -1471,6 +1471,12 @@ func NewResource() *schema.Resource {
 								"Can be one of `ip`, `asn` or `none`.",
 							ValidateFunc: validation.StringInSlice([]string{"ip", "asn", "none"}, false),
 						},
+						"allow_refresh_token": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.",
+						},
 					},
 				},
 			},

@@ -49,15 +49,14 @@ func TestConfigureProvider(t *testing.T) {
 			expectedDiagnostics: nil,
 		},
 		{
-			name: "it returns an error when it can't initialize the api client",
-			givenTerraformConfig: map[string]interface{}{
-				"domain": "example.com:path",
-			},
+			name:                 "it returns an error when it can't initialize the api client",
+			givenTerraformConfig: map[string]interface{}{},
 			expectedDiagnostics: diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,
 					Summary:  "Missing environment variables",
-					Detail:   "Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs",
+					Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
+						"or both AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET. Or enable CLI login with AUTH0_CLI_LOGIN=true",
 				},
 			},
 		},

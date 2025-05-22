@@ -3,6 +3,7 @@
 FEATURES:
 
 - `resource/auth0_client`: Add support for the `flexible_mappings` field to handle complex key structures (e.g., slice-based keys) ([#1253](https://github.com/auth0/terraform-provider-auth0/pull/1253/))
+- `resource/auth0_client`: Add support to configure `allow_refresh_token` in `session_transfer` ([#1246](https://github.com/auth0/terraform-provider-auth0/pull/1246/))
 - Add support for Auth0 CLI-based authentication via the `cli_login` flag ([#1242](https://github.com/auth0/terraform-provider-auth0/pull/1242/))
 
 ENHANCEMENTS:

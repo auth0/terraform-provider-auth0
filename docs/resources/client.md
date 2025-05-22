@@ -626,6 +626,7 @@ Required:
 
 Optional:
 
+- `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.

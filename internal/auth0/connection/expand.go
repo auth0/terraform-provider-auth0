@@ -586,12 +586,8 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 		customHeaders := make(map[string]string)
 
 		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
-			headerMap := httpHeader.AsValueMap()
-
-			headerVal := headerMap["header"].AsString()
-			valueVal := headerMap["value"].AsString()
-
-			customHeaders[headerVal] = valueVal
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
 			return false
 		})
 

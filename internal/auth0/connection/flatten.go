@@ -497,16 +497,6 @@ func flattenConnectionOptionsOAuth2(
 		return nil, diag.FromErr(err)
 	}
 
-	var flattenedCustomHeaders []map[string]string
-	if options.CustomHeaders != nil {
-		for k, v := range *options.CustomHeaders {
-			flattenedCustomHeaders = append(flattenedCustomHeaders, map[string]string{
-				"header": k,
-				"value":  v,
-			})
-		}
-	}
-
 	optionsMap := map[string]interface{}{
 		"client_id":                options.GetClientID(),
 		"client_secret":            options.GetClientSecret(),
@@ -520,10 +510,24 @@ func flattenConnectionOptionsOAuth2(
 		"pkce_enabled":             options.GetPKCEEnabled(),
 		"strategy_version":         options.GetStrategyVersion(),
 		"upstream_params":          upstreamParams,
-		"custom_headers":           flattenedCustomHeaders,
+		"custom_headers":           flattenCustomHeaders(options.GetCustomHeaders()),
+	}
+	return optionsMap, nil
+}
+
+func flattenCustomHeaders(headers map[string]string) []map[string]string {
+	if len(headers) == 0 {
+		return nil
 	}
 
-	return optionsMap, nil
+	flattened := make([]map[string]string, 0, len(headers))
+	for k, v := range headers {
+		flattened = append(flattened, map[string]string{
+			"header": k,
+			"value":  v,
+		})
+	}
+	return flattened
 }
 
 func flattenConnectionOptionsFacebook(

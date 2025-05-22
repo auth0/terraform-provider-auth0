@@ -1,9 +1,26 @@
+## v1.20.0
+
+FEATURES:
+
+- `resource/auth0_client`: Add support for the `flexible_mappings` field to handle complex key structures (e.g., slice-based keys) ([#1253](https://github.com/auth0/terraform-provider-auth0/pull/1253/))
+- Add support for Auth0 CLI-based authentication via the `cli_login` flag ([#1242](https://github.com/auth0/terraform-provider-auth0/pull/1242/))
+
+ENHANCEMENTS:
+
+- `resource/auth0_prompt_screen_renderer`: Add support for 21 new screens ([#1249](https://github.com/auth0/terraform-provider-auth0/pull/1249/))
+
+BUG FIXES:
+
+- `resource/auth0_client`: Update `custom_headers` to a set of objects (maps with `header`/`value` keys) for improved field validation and item order preservation ([#1253](https://github.com/auth0/terraform-provider-auth0/pull/1253/))
+- `resource/auth0_resource_server_scopes`: Fix noisy plan on the `description` field ([#1253](https://github.com/auth0/terraform-provider-auth0/pull/1253/))
+- `resource/auth0_log_stream`: Fix noisy plan caused by sensitive required fields ([#1240](https://github.com/auth0/terraform-provider-auth0/pull/1240/))
+
+
 ## v1.19.1
 
 BUG FIXES:
 
 - `resource/auth0_client`: Handle null on `session_transfer` and `policies` in refresh_token ([#1237](https://github.com/auth0/terraform-provider-auth0/pull/1237/))
-
 
 ## v1.19.0
 

@@ -1332,7 +1332,6 @@ resource "auth0_connection" "oauth2" {
 				"alias": "login_hint"
 			}
 		})
-		custom_headers = []
 	}
 }
 `
@@ -1354,16 +1353,14 @@ resource "auth0_connection" "oauth2" {
 			fetchUserProfile= "function( { return callback(null) }"
 		}
 		pkce_enabled = false
-		custom_headers = [
-			{
-				header = "bar"
-				value  = "foo"
-			},
-			{
-				header = "foo"
-				value  = "bar"
-			}
-		]
+		custom_headers {
+            header = "bar"
+            value  = "foo"
+        }
+        custom_headers {
+            header = "foo"
+            value  = "bar"
+        }
 	}
 }
 `

@@ -296,6 +296,7 @@ Read-Only:
 - `create_upn_claim` (Boolean)
 - `destination` (String)
 - `digest_algorithm` (String)
+- `flexible_mappings` (String)
 - `include_attribute_name_format` (Boolean)
 - `issuer` (String)
 - `lifetime_in_seconds` (Number)

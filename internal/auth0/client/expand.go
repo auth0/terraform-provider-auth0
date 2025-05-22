@@ -942,6 +942,11 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
 		}
 
+		flexibleMappings, err := value.MapFromJSON(samlpCfg.GetAttr("flexible_mappings"))
+		if err == nil {
+			samlpAddon.FlexibleMappings = flexibleMappings
+		}
+
 		var logout management.SAML2ClientAddonLogout
 
 		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {
@@ -999,10 +1004,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 
 		return stop
 	})
-
-	if samlpAddon == (management.SAML2ClientAddon{}) {
-		return nil
-	}
 
 	return &samlpAddon
 }

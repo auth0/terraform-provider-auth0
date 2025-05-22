@@ -4,6 +4,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 )
 
 func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
@@ -29,6 +31,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("pushed_authorization_requests_supported", tenant.GetPushedAuthorizationRequestsSupported()),
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
 		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
+		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {
@@ -130,6 +133,24 @@ func flattenErrorPageConfiguration(errorPage *management.TenantErrorPage) []inte
 	m["html"] = errorPage.GetHTML()
 	m["show_log_link"] = errorPage.GetShowLogLink()
 	m["url"] = errorPage.GetURL()
+
+	return []interface{}{m}
+}
+
+func flattenDefaultTokenQuota(defaultTokenQuota *management.TenantDefaultTokenQuota) []interface{} {
+	if defaultTokenQuota == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if defaultTokenQuota.Clients != nil {
+		m["clients"] = commons.FlattenTokenQuota(defaultTokenQuota.Clients)
+	}
+
+	if defaultTokenQuota.Organizations != nil {
+		m["organizations"] = commons.FlattenTokenQuota(defaultTokenQuota.Organizations)
+	}
 
 	return []interface{}{m}
 }

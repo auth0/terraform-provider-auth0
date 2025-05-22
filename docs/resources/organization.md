@@ -46,6 +46,7 @@ resource "auth0_organization" "my_organization" {
 - `branding` (Block List, Max: 1) Defines how to style the login pages. (see [below for nested schema](#nestedblock--branding))
 - `display_name` (String) Friendly name of this organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
+- `token_quota` (Block List, Max: 1) The token quota configuration. (see [below for nested schema](#nestedblock--token_quota))
 
 ### Read-Only
 
@@ -58,6 +59,23 @@ Optional:
 
 - `colors` (Map of String) Color scheme used to customize the login pages.
 - `logo_url` (String) URL of logo to display on login page.
+
+
+<a id="nestedblock--token_quota"></a>
+### Nested Schema for `token_quota`
+
+Required:
+
+- `client_credentials` (Block List, Min: 1, Max: 1) The token quota configuration for client credentials. (see [below for nested schema](#nestedblock--token_quota--client_credentials))
+
+<a id="nestedblock--token_quota--client_credentials"></a>
+### Nested Schema for `token_quota.client_credentials`
+
+Optional:
+
+- `enforce` (Boolean) If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+- `per_day` (Number) Maximum number of issued tokens per day
+- `per_hour` (Number) Maximum number of issued tokens per hour
 
 ## Import
 

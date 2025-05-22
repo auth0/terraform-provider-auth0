@@ -275,6 +275,14 @@ resource "auth0_connection" "oauth2" {
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
     pkce_enabled           = true
     icon_url               = "https://auth.example.com/assets/logo.png"
+    custom_headers {
+      header = "bar"
+      value  = "foo"
+    }
+    custom_headers {
+      header = "foo"
+      value  = "bar"
+    }
     scripts = {
       fetchUserProfile = <<EOF
         function fetchUserProfile(accessToken, context, callback) {
@@ -700,7 +708,7 @@ Optional:
 - `community_base_url` (String) Salesforce community base URL.
 - `configuration` (Map of String, Sensitive) A case-sensitive map of key value pairs used as configuration variables for the `custom_script`.
 - `connection_settings` (Block List, Max: 1) Proof Key for Code Exchange (PKCE) configuration settings for an OIDC or Okta Workforce connection. (see [below for nested schema](#nestedblock--options--connection_settings))
-- `custom_headers` (List of Map of String) Configure extra headers to the Token endpoint of an OAuth 2.0 provider
+- `custom_headers` (Block Set) Configure extra headers to the Token endpoint of an OAuth 2.0 provider (see [below for nested schema](#nestedblock--options--custom_headers))
 - `custom_scripts` (Map of String) A map of scripts used to integrate with a custom database.
 - `debug` (Boolean) When enabled, additional debug information will be generated.
 - `decryption_key` (Block List, Max: 1) The key used to decrypt encrypted responses from the connection. Uses the `key` and `cert` properties to provide the private key and certificate respectively. (see [below for nested schema](#nestedblock--options--decryption_key))
@@ -955,6 +963,15 @@ Optional:
 Required:
 
 - `pkce` (String) PKCE configuration. Possible values: `auto` (uses the strongest algorithm available), `S256` (uses the SHA-256 algorithm), `plain` (uses plaintext as described in the PKCE specification) or `disabled` (disables support for PKCE).
+
+
+<a id="nestedblock--options--custom_headers"></a>
+### Nested Schema for `options.custom_headers`
+
+Required:
+
+- `header` (String)
+- `value` (String)
 
 
 <a id="nestedblock--options--decryption_key"></a>

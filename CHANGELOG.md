@@ -1,3 +1,8 @@
+## v1.20.1
+
+BUG FIXES:
+- `resource/auth0_prompt_screen_renderer`: Remove unreleased screens for ACUL  ([#1257](https://github.com/auth0/terraform-provider-auth0/pull/1257))
+
 ## v1.20.0
 
 FEATURES:

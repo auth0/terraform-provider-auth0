@@ -44,7 +44,7 @@ var (
 		string(management.PromptMFARecoveryCode),
 		string(management.PromptCommon),
 		// string(management.PromptConsent),
-		//string(management.PromptCustomizedConsent),
+		// string(management.PromptCustomizedConsent),
 		//string(management.PromptEmailOTPChallenge),
 		string(management.PromptEmailVerification),
 		string(management.PromptLoginEmailVerification),
@@ -112,7 +112,7 @@ var (
 		string(management.ScreenRedeemTicket),
 		"mfa-recovery-code-challenge-new-code",
 		// string(management.ScreenConsent),
-		//string(management.ScreenCustomizedConsent),
+		// string(management.ScreenCustomizedConsent),
 		//string(management.ScreenEmailOTPChallenge),
 		string(management.ScreenEmailVerificationResult),
 		string(management.ScreenLoginEmailVerification),
@@ -130,7 +130,7 @@ var (
 		string(management.ScreenResetPasswordMFAWebAuthnPlatformChallenge),
 		string(management.ScreenResetPasswordMFAWebAuthnRoamingChallenge),
 		// "brute-force-protection-unblock",
-		//"brute-force-protection-unblock-failure",
+		// "brute-force-protection-unblock-failure",
 		//"brute-force-protection-unblock-success",
 	}
 

@@ -70,6 +70,23 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Verification methods for the domain.",
 						},
+						"expiration": {
+
+							Type:        schema.TypeInt,
+							Description: "Expiration date of the custom domain verification.",
+						},
+						"status": {
+							Type:        schema.TypeString,
+							Description: "The custom domain verification status.",
+						},
+						"error_msg": {
+							Type:        schema.TypeString,
+							Description: "The custom domain verification error.",
+						},
+						"last_verified_at": {
+							Type:        schema.TypeString,
+							Description: "The custom domain verification error code.",
+						},
 					},
 				},
 			},
@@ -92,6 +109,43 @@ func NewResource() *schema.Resource {
 				Description: "TLS policy for the custom domain. Available options are: `compatible` or `recommended`. " +
 					"Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. " +
 					"Cannot be set on self_managed domains.",
+			},
+			"domain_metadata": {
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.",
+			},
+			"certificate": {
+				Type:     schema.TypeList,
+				Required: true,
+				MinItems: 1,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"status": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Status of The certificate.",
+						},
+						"error_msg": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Error message if the certificate is not valid.",
+						},
+						"certificate_authority": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The certificate authority.",
+						},
+						"renews_before": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "Renewal status of the certificate.",
+						},
+					},
+				},
+				Description: "The Custom Domain certificate.",
 			},
 		},
 	}

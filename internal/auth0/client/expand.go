@@ -133,31 +133,6 @@ func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExcha
 	return &tokenExchange
 }
 
-func isDefaultOrgNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("default_organization") {
-		return false
-	}
-	empty := true
-	config := data.GetRawConfig()
-	defaultOrgConfig := config.GetAttr("default_organization")
-	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		disable := cfg.GetAttr("disable")
-		flows := cfg.GetAttr("flows")
-		organizationID := cfg.GetAttr("organization_id")
-
-		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
-			stop = true
-		} else {
-			empty = false
-		}
-		return stop
-	}) {
-		// We forced an early return because it was disabled.
-		return true
-	}
-	return empty
-}
-
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
 	raw := data.GetRawConfig().GetAttr("oidc_backchannel_logout_urls")
 
@@ -1064,4 +1039,82 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 	})
 
 	return &sessionTransfer
+}
+
+func isDefaultOrgNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
+		return false
+	}
+	empty := true
+	config := data.GetRawConfig()
+	defaultOrgConfig := config.GetAttr("default_organization")
+	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		flows := cfg.GetAttr("flows")
+		organizationID := cfg.GetAttr("organization_id")
+
+		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+	return empty
+}
+
+func isEncryptionKeyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("encryption_key") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("encryption_key")
+
+	if config.IsNull() {
+		return true
+	}
+
+	empty := true
+	config.ForEachElement(func(_, val cty.Value) (stop bool) {
+		if !val.IsNull() && val.AsString() != "" {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
+}
+
+func isSessionTransferNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("session_transfer") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
+
+	// If the session_transfer block is explicitly set to null.
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	// If the session_transfer block exists, but all fields inside it are null or not set.
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		canCreate := cfg.GetAttr("can_create_session_transfer_token")
+		enforceBinding := cfg.GetAttr("enforce_device_binding")
+		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
+
+		if (!canCreate.IsNull() && canCreate.True()) ||
+			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
+			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
+			empty = false
+		}
+
+		return stop
+	})
+
+	return empty
 }

@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -1538,26 +1539,9 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 
 		time.Sleep(200 * time.Millisecond)
 
-		if isDefaultOrgNull(data) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"default_organization": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
-		}
-
-		if isEncryptionKeyNull(data) && !data.IsNewResource() {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"encryption_key": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
-		}
-
-		if isSessionTransferNull(data) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"session_transfer": nil,
-			}); err != nil {
+		nullFields := fetchNullableFields(data)
+		if !reflect.DeepEqual(nullFields, map[string]interface{}{}) {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
 				return diag.FromErr(err)
 			}
 		}
@@ -1565,28 +1549,31 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 	return readClient(ctx, data, meta)
 }
 
-func isEncryptionKeyNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("encryption_key") {
-		return false
-	}
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	fields := []string{"default_organization", "encryption_key", "session_transfer"}
 
-	config := data.GetRawConfig().GetAttr("encryption_key")
+	nullableMap := map[string]interface{}{}
 
-	// Case 1: encryption_key is explicitly null.
-	if config.IsNull() {
-		return true
-	}
+	for _, v := range fields {
+		switch v {
+		case "default_organization":
+			if isDefaultOrgNull(data) {
+				nullableMap["default_organization"] = nil
+			}
 
-	// Case 2: encryption_key is empty or all fields are empty strings.
-	empty := true
-	config.ForEachElement(func(_, val cty.Value) (stop bool) {
-		if !val.IsNull() && val.AsString() != "" {
-			empty = false
+		case "encryption_key":
+			if isEncryptionKeyNull(data) && !data.IsNewResource() {
+				nullableMap["encryption_key"] = nil
+			}
+
+		case "session_transfer":
+			if isSessionTransferNull(data) {
+				nullableMap["session_transfer"] = nil
+			}
 		}
-		return false
-	})
+	}
 
-	return empty
+	return nullableMap
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -1597,35 +1584,4 @@ func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface
 	}
 
 	return nil
-}
-
-func isSessionTransferNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("session_transfer") {
-		return false
-	}
-
-	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
-
-	// If the session_transfer block is explicitly set to null.
-	if rawConfig.IsNull() {
-		return true
-	}
-
-	// If the session_transfer block exists, but all fields inside it are null or not set.
-	empty := true
-	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		canCreate := cfg.GetAttr("can_create_session_transfer_token")
-		enforceBinding := cfg.GetAttr("enforce_device_binding")
-		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
-
-		if (!canCreate.IsNull() && canCreate.True()) ||
-			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
-			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
-			empty = false
-		}
-
-		return stop
-	})
-
-	return empty
 }

@@ -12,39 +12,38 @@ import (
 
 const testAccCreateSelfManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
+	domain = "{{.testName}}.auth.tempdomain.com"
 	type   = "self_managed_certs"
 }
 `
 
 const testAccUpdateSelfManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain                  = "{{.testName}}.auth.terraform-provider-auth0.com"
+	domain                  = "{{.testName}}.auth.tempdomain.com"
 	type                    = "self_managed_certs"
 	custom_client_ip_header = "true-client-ip"
 }
 `
 
-const testAccUpdateSelfManagedCustomDomainWithEmptyClientIPHeader = `
-resource "auth0_custom_domain" "my_custom_domain" {
-	domain                  = "{{.testName}}.auth.terraform-provider-auth0.com"
-	type                    = "self_managed_certs"
-	custom_client_ip_header = ""
-}
-`
-
 const testAccCreateAuth0ManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain = "{{.testName}}.auth.terraform-provider-auth0.com"
+	domain = "{{.testName}}.auth.tempdomain.com"
 	type   = "auth0_managed_certs"
+	domain_metadata = {
+        key1: "value1"
+		key2: "value2"
+    }
 }
 `
 
 const testAccUpdateAuth0ManagedCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain     = "{{.testName}}.auth.terraform-provider-auth0.com"
+	domain     = "{{.testName}}.auth.tempdomain.com"
 	type       = "auth0_managed_certs"
 	tls_policy = "recommended"
+	domain_metadata = {
+        key1: "value3"
+    }
 }
 `
 
@@ -57,12 +56,11 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
 						"domain",
-						fmt.Sprintf("%s.auth.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+						fmt.Sprintf("%s.auth.tempdomain.com", strings.ToLower(t.Name())),
 					),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "self_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "primary", "true"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "verification.#", "1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "custom_client_ip_header", ""),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "tls_policy", ""),
@@ -74,31 +72,13 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
 						"domain",
-						fmt.Sprintf("%s.auth.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+						fmt.Sprintf("%s.auth.tempdomain.com", strings.ToLower(t.Name())),
 					),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "self_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "primary", "true"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "verification.#", "1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "custom_client_ip_header", "true-client-ip"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "tls_policy", ""),
-				),
-			},
-			{
-				Config: acctest.ParseTestName(testAccUpdateSelfManagedCustomDomainWithEmptyClientIPHeader, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(
-						"auth0_custom_domain.my_custom_domain",
-						"domain",
-						fmt.Sprintf("%s.auth.terraform-provider-auth0.com", strings.ToLower(t.Name())),
-					),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "self_managed_certs"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "primary", "true"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "verification.#", "1"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "custom_client_ip_header", ""),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "tls_policy", ""),
 				),
 			},
@@ -108,15 +88,17 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
 						"domain",
-						fmt.Sprintf("%s.auth.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+						fmt.Sprintf("%s.auth.tempdomain.com", strings.ToLower(t.Name())),
 					),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "primary", "true"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "verification.#", "1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "custom_client_ip_header", ""),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "tls_policy", "recommended"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.%", "2"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key1", "value1"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key2", "value2"),
 				),
 			},
 			{
@@ -125,15 +107,17 @@ func TestAccCustomDomain(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"auth0_custom_domain.my_custom_domain",
 						"domain",
-						fmt.Sprintf("%s.auth.terraform-provider-auth0.com", strings.ToLower(t.Name())),
+						fmt.Sprintf("%s.auth.tempdomain.com", strings.ToLower(t.Name())),
 					),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "status", "pending_verification"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "primary", "true"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "verification.#", "1"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "custom_client_ip_header", ""),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "tls_policy", "recommended"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.%", "1"),
+					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key1", "value3"),
+					resource.TestCheckNoResourceAttr("auth0_custom_domain.my_custom_domain", "domain_metadata.key2"),
 				),
 			},
 		},

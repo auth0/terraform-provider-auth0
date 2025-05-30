@@ -42,53 +42,22 @@ func NewResource() *schema.Resource {
 					"Options include `auth0_managed_certs` and `self_managed_certs`.",
 			},
 			"primary": {
+				Deprecated:  "Primary field is no longer used and will be removed in a future release.",
 				Type:        schema.TypeBool,
 				Computed:    true,
-				Description: "Indicates whether this is a primary domain.",
+				Description: "Indicates whether this is a primary domain. ",
 			},
 			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
 				Description: "Configuration status for the custom domain. " +
-					"Options include `disabled`, `pending`, `pending_verification`, and `ready`.",
+					"Options include `disabled`, `pending`, `pending_verification`, and `ready`. ",
 			},
 			"origin_domain_name": {
 				Type:     schema.TypeString,
 				Computed: true,
 				Description: "Once the configuration status is `ready`, the DNS name " +
 					"of the Auth0 origin server that handles traffic for the custom domain.",
-			},
-			"verification": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Configuration settings for verification.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"methods": {
-							Type:        schema.TypeList,
-							Elem:        schema.TypeMap,
-							Computed:    true,
-							Description: "Verification methods for the domain.",
-						},
-						"expiration": {
-
-							Type:        schema.TypeInt,
-							Description: "Expiration date of the custom domain verification.",
-						},
-						"status": {
-							Type:        schema.TypeString,
-							Description: "The custom domain verification status.",
-						},
-						"error_msg": {
-							Type:        schema.TypeString,
-							Description: "The custom domain verification error.",
-						},
-						"last_verified_at": {
-							Type:        schema.TypeString,
-							Description: "The custom domain verification error code.",
-						},
-					},
-				},
 			},
 			"custom_client_ip_header": {
 				Type:     schema.TypeString,
@@ -110,6 +79,36 @@ func NewResource() *schema.Resource {
 					"Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. " +
 					"Cannot be set on self_managed domains.",
 			},
+			"verification": {
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "Configuration settings for verification.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"methods": {
+							Type:        schema.TypeList,
+							Elem:        schema.TypeMap,
+							Computed:    true,
+							Description: "Defines the list of domain verification methods used. ",
+						},
+						"status": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Represents the current status of the domain verification process. ",
+						},
+						"error_msg": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Contains error message, if any, from the last DNS verification check. ",
+						},
+						"last_verified_at": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Indicates the last time the domain was successfully verified. ",
+						},
+					},
+				},
+			},
 			"domain_metadata": {
 				Type:        schema.TypeMap,
 				Optional:    true,
@@ -118,34 +117,32 @@ func NewResource() *schema.Resource {
 			},
 			"certificate": {
 				Type:     schema.TypeList,
-				Required: true,
-				MinItems: 1,
-				MaxItems: 1,
+				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"status": {
 							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Status of The certificate.",
+							Computed:    true,
+							Description: "Indicates the current state of the certificate provisioning process. ",
 						},
 						"error_msg": {
 							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Error message if the certificate is not valid.",
+							Computed:    true,
+							Description: "Contains the error message if the provisioning process fails. ",
 						},
 						"certificate_authority": {
 							Type:        schema.TypeString,
-							Required:    true,
-							Description: "The certificate authority.",
+							Computed:    true,
+							Description: "Name of the certificate authority that issued the certificate. ",
 						},
 						"renews_before": {
 							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Renewal status of the certificate.",
+							Computed:    true,
+							Description: "Specifies the date by which the certificate should be renewed. ",
 						},
 					},
 				},
-				Description: "The Custom Domain certificate.",
+				Description: "The Custom Domain certificate. ",
 			},
 		},
 	}

@@ -2,7 +2,6 @@ package customdomain
 
 import (
 	"context"
-	"errors"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -21,23 +20,23 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema["custom_domain_id"] = &schema.Schema{
+		Type:        schema.TypeString,
+		Description: "The ID of the Custom Domain.",
+		Required:    true,
+		//AtLeastOneOf: []string{"organization_id", "name"},.
+	}
+	return dataSourceSchema
 }
 
 func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
-	customDomains, err := api.CustomDomain.List(ctx)
+	customDomainID := data.Get("custom_domain_id").(string)
+	customDomain, err := api.CustomDomain.Read(ctx, customDomainID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-
-	if len(customDomains) == 0 {
-		return diag.FromErr(errors.New("no custom domain configured on tenant"))
-	}
-	// At the moment there can only ever
-	// be one custom domain configured.
-	customDomain := customDomains[0]
 
 	data.SetId(customDomain.GetID())
 

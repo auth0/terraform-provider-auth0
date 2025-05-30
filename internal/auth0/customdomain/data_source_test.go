@@ -13,13 +13,17 @@ import (
 
 const testAccDataSourceCustomDomain = `
 resource "auth0_custom_domain" "my_custom_domain" {
-	domain     = "{{.testName}}.auth.terraform-provider-auth0.com"
+	domain     = "{{.testName}}.auth.tempdomain.com"
 	type       = "auth0_managed_certs"
 	tls_policy = "recommended"
+	domain_metadata = {
+        key1: "value1"
+		key2: "value2"
+    }
 }
 
 data "auth0_custom_domain" "test" {
-	depends_on = [ auth0_custom_domain.my_custom_domain ]
+	custom_domain_id = auth0_custom_domain.my_custom_domain.id
 }
 `
 
@@ -30,19 +34,21 @@ func TestAccDataSourceCustomDomain(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      `data "auth0_custom_domain" "test" {}`,
-				ExpectError: regexp.MustCompile("no custom domain configured on tenant"),
+				ExpectError: regexp.MustCompile("Missing required argument"),
 			},
 			{
 				Config: acctest.ParseTestName(testAccDataSourceCustomDomain, testName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain", fmt.Sprintf("%s.auth.terraform-provider-auth0.com", testName)),
+					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain", fmt.Sprintf("%s.auth.tempdomain.com", testName)),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "type", "auth0_managed_certs"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "status", "pending_verification"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "origin_domain_name", ""),
-					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "primary", "true"),
-					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "verification.#", "1"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "custom_client_ip_header", ""),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "tls_policy", "recommended"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "verification.#", "1"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain_metadata.%", "2"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain_metadata.key1", "value1"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain_metadata.key2", "value2"),
 				),
 			},
 		},

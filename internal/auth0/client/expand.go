@@ -1045,19 +1045,13 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 	type nullCheckFunc func(*schema.ResourceData) bool
 
 	checks := map[string]nullCheckFunc{
-		"default_organization": func(d *schema.ResourceData) bool {
-			return isDefaultOrgNull(d)
-		},
+		"default_organization": isDefaultOrgNull,
+		"session_transfer":     isSessionTransferNull,
+		"cross_origin_loc":     isCrossOriginLocNull,
 		"encryption_key": func(d *schema.ResourceData) bool {
 			return isEncryptionKeyNull(d) && !d.IsNewResource()
 		},
-		"session_transfer": func(d *schema.ResourceData) bool {
-			return isSessionTransferNull(d)
-		},
-		"cross_origin_loc": func(d *schema.ResourceData) bool {
-			return isCrossOriginLocNull(d)
-		},
-		"addons": func(data *schema.ResourceData) bool {
+		"addons": func(_ *schema.ResourceData) bool {
 			return clientHasChange(client) && client.GetAddons() != nil
 		},
 	}
@@ -1128,7 +1122,7 @@ func isCrossOriginLocNull(data *schema.ResourceData) bool {
 	config := data.GetRawConfig()
 	attr := config.GetAttr("cross_origin_loc")
 
-	// If it's null, it means it was not set
+	// If it's null, it means it was not set.
 	return attr.IsNull()
 }
 

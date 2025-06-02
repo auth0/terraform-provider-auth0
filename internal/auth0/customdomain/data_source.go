@@ -25,7 +25,6 @@ func dataSourceSchema() map[string]*schema.Schema {
 		Type:        schema.TypeString,
 		Description: "The ID of the Custom Domain.",
 		Required:    true,
-		//AtLeastOneOf: []string{"organization_id", "name"},.
 	}
 	return dataSourceSchema
 }

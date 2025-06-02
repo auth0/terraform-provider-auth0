@@ -115,7 +115,7 @@ EOF
 			credential_type = "public_key"
 			algorithm       = "RS256"
 			parse_expiry_from_cert = false
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -154,7 +154,7 @@ EOF
 			credential_type        = "public_key"
 			algorithm              = "RS256"
 			parse_expiry_from_cert = false
-			expires_at             = "2025-05-13T09:33:13.000Z"
+			expires_at             = "2095-05-13T09:33:13.000Z"
 			pem                    = <<EOF
 %s
 EOF
@@ -182,7 +182,7 @@ resource "auth0_client_credentials" "test" {
 			name            = "Testing Credentials 2"
 			credential_type = "public_key"
 			algorithm       = "RS256"
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -226,7 +226,7 @@ resource "auth0_client_credentials" "test" {
 			name            = "Testing Credentials 2"
 			credential_type = "public_key"
 			algorithm       = "RS256"
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -294,7 +294,7 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.created_at"),
@@ -323,7 +323,7 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.1.created_at"),
@@ -343,7 +343,7 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
@@ -375,7 +375,7 @@ func TestAccClientAuthenticationMethodsPrivateKeyJWT(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "private_key_jwt.0.credentials.0.created_at"),
@@ -973,7 +973,7 @@ EOF
 			credential_type = "public_key"
 			algorithm       = "RS256"
 			parse_expiry_from_cert = false
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -1012,7 +1012,7 @@ EOF
 			credential_type        = "public_key"
 			algorithm              = "RS256"
 			parse_expiry_from_cert = false
-			expires_at             = "2025-05-13T09:33:13.000Z"
+			expires_at             = "2095-05-13T09:33:13.000Z"
 			pem                    = <<EOF
 %s
 EOF
@@ -1040,7 +1040,7 @@ resource "auth0_client_credentials" "test" {
 			name            = "Testing Credentials 2"
 			credential_type = "public_key"
 			algorithm       = "RS256"
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -1083,7 +1083,7 @@ resource "auth0_client_credentials" "test" {
 			name            = "Testing Credentials 2"
 			credential_type = "public_key"
 			algorithm       = "RS256"
-			expires_at      = "2025-05-13T09:33:13.000Z"
+			expires_at      = "2095-05-13T09:33:13.000Z"
 			pem             = <<EOF
 %s
 EOF
@@ -1170,7 +1170,7 @@ func TestAccClientAuthenticationMethodsSignedRequestObject(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.created_at"),
@@ -1198,7 +1198,7 @@ func TestAccClientAuthenticationMethodsSignedRequestObject(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.1.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.1.created_at"),
@@ -1217,7 +1217,7 @@ func TestAccClientAuthenticationMethodsSignedRequestObject(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.created_at"),
@@ -1248,7 +1248,7 @@ func TestAccClientAuthenticationMethodsSignedRequestObject(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.credential_type", "public_key"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.algorithm", "RS256"),
 					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.parse_expiry_from_cert", "false"),
-					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.expires_at", "2025-05-13T09:33:13.000Z"),
+					resource.TestCheckResourceAttr("auth0_client_credentials.test", "signed_request_object.0.credentials.0.expires_at", "2095-05-13T09:33:13.000Z"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.pem"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.key_id"),
 					resource.TestCheckResourceAttrSet("auth0_client_credentials.test", "signed_request_object.0.credentials.0.created_at"),

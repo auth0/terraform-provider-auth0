@@ -1041,6 +1041,38 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 	return &sessionTransfer
 }
 
+func fetchNullableFields(data *schema.ResourceData, client *management.Client) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"default_organization": func(d *schema.ResourceData) bool {
+			return isDefaultOrgNull(d)
+		},
+		"encryption_key": func(d *schema.ResourceData) bool {
+			return isEncryptionKeyNull(d) && !d.IsNewResource()
+		},
+		"session_transfer": func(d *schema.ResourceData) bool {
+			return isSessionTransferNull(d)
+		},
+		"cross_origin_loc": func(d *schema.ResourceData) bool {
+			return isCrossOriginLocNull(d)
+		},
+		"addons": func(data *schema.ResourceData) bool {
+			return clientHasChange(client) && client.GetAddons() != nil
+		},
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
 func isDefaultOrgNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("default_organization") {
 		return false
@@ -1086,6 +1118,18 @@ func isEncryptionKeyNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isCrossOriginLocNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("cross_origin_auth") {
+		return false
+	}
+
+	config := data.GetRawConfig()
+	attr := config.GetAttr("cross_origin_loc")
+
+	// If it's null, it means it was not set
+	return attr.IsNull()
 }
 
 func isSessionTransferNull(data *schema.ResourceData) bool {

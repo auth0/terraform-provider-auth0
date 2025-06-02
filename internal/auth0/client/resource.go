@@ -3,13 +3,10 @@ package client
 import (
 	"context"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -1523,57 +1520,20 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		return diag.FromErr(err)
 	}
 
-	if clientHasChange(client) {
-		if client.GetAddons() != nil {
-			resetAddons := &management.Client{
-				Addons: &management.ClientAddons{},
-			}
-			if err := api.Client.Update(ctx, data.Id(), resetAddons); err != nil {
-				return diag.FromErr(internalError.HandleAPIError(data, err))
-			}
-		}
-
-		if err := api.Client.Update(ctx, data.Id(), client); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		time.Sleep(200 * time.Millisecond)
-
-		nullFields := fetchNullableFields(data)
-		if !reflect.DeepEqual(nullFields, map[string]interface{}{}) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
-				return diag.FromErr(err)
-			}
+	nullFields := fetchNullableFields(data, client)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
 		}
 	}
+
+	if err := api.Client.Update(ctx, data.Id(), client); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	time.Sleep(200 * time.Millisecond)
+
 	return readClient(ctx, data, meta)
-}
-
-func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
-	fields := []string{"default_organization", "encryption_key", "session_transfer"}
-
-	nullableMap := map[string]interface{}{}
-
-	for _, v := range fields {
-		switch v {
-		case "default_organization":
-			if isDefaultOrgNull(data) {
-				nullableMap["default_organization"] = nil
-			}
-
-		case "encryption_key":
-			if isEncryptionKeyNull(data) && !data.IsNewResource() {
-				nullableMap["encryption_key"] = nil
-			}
-
-		case "session_transfer":
-			if isSessionTransferNull(data) {
-				nullableMap["session_transfer"] = nil
-			}
-		}
-	}
-
-	return nullableMap
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

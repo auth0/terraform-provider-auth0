@@ -583,11 +583,12 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 	customHeadersConfig := config.GetAttr("custom_headers")
 
 	if !customHeadersConfig.IsNull() {
-		customHeaders := make([]map[string]string, 0)
+		customHeaders := make(map[string]string)
 
 		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
-			customHeaders = append(customHeaders, *value.MapOfStrings(httpHeader))
-			return stop
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
+			return false
 		})
 
 		options.CustomHeaders = &customHeaders

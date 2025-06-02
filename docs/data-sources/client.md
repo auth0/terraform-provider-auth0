@@ -297,6 +297,7 @@ Read-Only:
 - `create_upn_claim` (Boolean)
 - `destination` (String)
 - `digest_algorithm` (String)
+- `flexible_mappings` (String)
 - `include_attribute_name_format` (Boolean)
 - `issuer` (String)
 - `lifetime_in_seconds` (Number)
@@ -614,6 +615,7 @@ Read-Only:
 
 Read-Only:
 
+- `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
 - `enforce_device_binding` (String)

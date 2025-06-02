@@ -943,6 +943,11 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
 		}
 
+		flexibleMappings, err := value.MapFromJSON(samlpCfg.GetAttr("flexible_mappings"))
+		if err == nil {
+			samlpAddon.FlexibleMappings = flexibleMappings
+		}
+
 		var logout management.SAML2ClientAddonLogout
 
 		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {
@@ -1001,10 +1006,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 		return stop
 	})
 
-	if samlpAddon == (management.SAML2ClientAddon{}) {
-		return nil
-	}
-
 	return &samlpAddon
 }
 
@@ -1059,6 +1060,7 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.CanCreateSessionTransferToken = value.Bool(config.GetAttr("can_create_session_transfer_token"))
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
+		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
 		return stop
 	})
 

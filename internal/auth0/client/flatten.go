@@ -6,6 +6,8 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -539,9 +541,16 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		}
 	}
 
+	var flexibleMappingsMap string
+
+	if len(addon.GetMappings()) == 0 {
+		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
+	}
+
 	return []interface{}{
 		map[string]interface{}{
 			"mappings":                           addon.GetMappings(),
+			"flexible_mappings":                  flexibleMappingsMap,
 			"audience":                           addon.GetAudience(),
 			"recipient":                          addon.GetRecipient(),
 			"create_upn_claim":                   addon.GetCreateUPNClaim(),
@@ -650,6 +659,7 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"can_create_session_transfer_token": sessionTransfer.GetCanCreateSessionTransferToken(),
 		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
 		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
+		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
 	}
 
 	return []interface{}{

@@ -43,6 +43,10 @@ var (
 		string(management.PromptMFAVoice),
 		string(management.PromptMFARecoveryCode),
 		string(management.PromptCommon),
+		string(management.PromptEmailVerification),
+		string(management.PromptLoginEmailVerification),
+		string(management.PromptLogout),
+		string(management.PromptMFAWebAuthn),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -102,6 +106,21 @@ var (
 		string(management.ScreenMFARecoveryCodeEnrollment),
 		string(management.ScreenResetPasswordMFARecoveryCodeChallenge),
 		string(management.ScreenRedeemTicket),
+		"mfa-recovery-code-challenge-new-code",
+		string(management.ScreenEmailVerificationResult),
+		string(management.ScreenLoginEmailVerification),
+		string(management.ScreenLogout),
+		string(management.ScreenLogoutAborted),
+		string(management.ScreenLogoutComplete),
+		string(management.ScreenMFAWebAuthnChangeKeyNickname),
+		string(management.ScreenMFAWebAuthnEnrollmentSuccess),
+		string(management.ScreenMFAWebAuthnError),
+		string(management.ScreenMFAWebAuthnPlatformChallenge),
+		string(management.ScreenMFAWebAuthnPlatformEnrollment),
+		string(management.ScreenMFAWebAuthnRoamingChallenge),
+		string(management.ScreenMFAWebAuthnRoamingEnrollment),
+		string(management.ScreenResetPasswordMFAWebAuthnPlatformChallenge),
+		string(management.ScreenResetPasswordMFAWebAuthnRoamingChallenge),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}

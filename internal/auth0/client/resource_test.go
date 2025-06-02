@@ -2652,6 +2652,7 @@ resource "auth0_client" "my_client" {
 		can_create_session_transfer_token = true
 		allowed_authentication_methods = ["cookie", "query"]
 		enforce_device_binding = "asn"
+		allow_refresh_token               = true
 	}
 }`
 
@@ -2683,6 +2684,19 @@ resource "auth0_client" "my_client" {
 	app_type  = "native"
 }`
 
+const testAccUpdateClientWithSessionTransferFalse = `
+resource "auth0_client" "my_client" {
+  name      = "Acceptance Test - Session Transfer - {{.testName}}"
+  app_type  = "native"
+  session_transfer {
+    can_create_session_transfer_token = false
+    allowed_authentication_methods    = []
+    enforce_device_binding            = "none"
+    allow_refresh_token               = false
+  }
+}
+`
+
 func TestAccClientSessionTransfer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -2694,6 +2708,7 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
 				),
 			},
 			{
@@ -2732,6 +2747,13 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "native"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.#", "0"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransferFalse, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
 				),
 			},
 		},

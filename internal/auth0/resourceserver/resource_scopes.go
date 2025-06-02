@@ -37,6 +37,7 @@ func NewScopesResource() *schema.Resource {
 						"description": {
 							Type:        schema.TypeString,
 							Optional:    true,
+							Default:     nil,
 							Description: "User-friendly description of the scope (permission).",
 						},
 					},

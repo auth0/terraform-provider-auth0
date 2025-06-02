@@ -13,6 +13,14 @@ resource "auth0_connection" "oauth2" {
     authorization_endpoint = "https://auth.example.com/oauth2/authorize"
     pkce_enabled           = true
     icon_url               = "https://auth.example.com/assets/logo.png"
+    custom_headers {
+      header = "bar"
+      value  = "foo"
+    }
+    custom_headers {
+      header = "foo"
+      value  = "bar"
+    }
     scripts = {
       fetchUserProfile = <<EOF
         function fetchUserProfile(accessToken, context, callback) {

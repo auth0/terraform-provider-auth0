@@ -7,6 +7,8 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -1139,12 +1141,23 @@ func NewResource() *schema.Resource {
 											"callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
-										Type:     schema.TypeMap,
-										Optional: true,
-										Elem:     schema.TypeString,
+										Type:          schema.TypeMap,
+										Optional:      true,
+										Elem:          schema.TypeString,
+										ConflictsWith: []string{"addons.0.samlp.0.flexible_mappings"},
 										Description: "Mappings between the Auth0 user profile property " +
 											"name (`name`) and the output attributes on the SAML " +
 											"attribute in the assertion (`value`).",
+									},
+									"flexible_mappings": {
+										Type:             schema.TypeString,
+										Optional:         true,
+										ValidateFunc:     validation.StringIsJSON,
+										ConflictsWith:    []string{"addons.0.samlp.0.mappings"},
+										DiffSuppressFunc: structure.SuppressJsonDiff,
+										Description: "This is a supporting attribute to `mappings` field." +
+											"Please note this is an experimental field. " + "" +
+											"It should only be used when needed to send a map with keys as slices.",
 									},
 									"create_upn_claim": {
 										Type:     schema.TypeBool,
@@ -1459,6 +1472,12 @@ func NewResource() *schema.Resource {
 							Description: "Configures the level of device binding enforced when a session_transfer_token is consumed. " +
 								"Can be one of `ip`, `asn` or `none`.",
 							ValidateFunc: validation.StringInSlice([]string{"ip", "asn", "none"}, false),
+						},
+						"allow_refresh_token": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.",
 						},
 					},
 				},

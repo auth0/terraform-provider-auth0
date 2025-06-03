@@ -131,6 +131,14 @@ resource auth0_organization acme {
 }
 `
 
+const testAccOrganizationWithTokenQuotaRemoved = `
+resource auth0_organization acme {
+	name = "test-quota-{{.testName}}"
+	display_name = "Acme Inc. Token Quota {{.testName}}"
+	token_quota = null
+}
+`
+
 func TestAccOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -231,6 +239,14 @@ func TestAccOrganizationTokenQuota(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_organization.acme", "token_quota.0.client_credentials.0.enforce", "false"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "token_quota.0.client_credentials.0.per_hour", "50"),
 					resource.TestCheckResourceAttr("auth0_organization.acme", "token_quota.0.client_credentials.0.per_day", "1000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccOrganizationWithTokenQuotaRemoved, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_organization.acme", "name", fmt.Sprintf("test-quota-%s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "display_name", fmt.Sprintf("Acme Inc. Token Quota %s", strings.ToLower(t.Name()))),
+					resource.TestCheckResourceAttr("auth0_organization.acme", "token_quota.#", "0"),
 				),
 			},
 		},

@@ -27,7 +27,7 @@ data "auth0_custom_domain" "test" {
 }
 `
 
-const testAccDataSourceCustomDomainMultiple = `
+const testAccDataSourceCustomDomainFirst = `
 resource "auth0_custom_domain" "my_custom_domain1" {
 	domain     = "{{.testName}}-first.auth.tempdomain.com"
 	type       = "auth0_managed_certs"
@@ -36,8 +36,9 @@ resource "auth0_custom_domain" "my_custom_domain1" {
         key1: "value1"
 		key2: "value2"
     }
-}
+}`
 
+const testAccDataSourceCustomDomainSecond = `
 resource "auth0_custom_domain" "my_custom_domain2" {
 	domain     = "{{.testName}}-second.auth.tempdomain.com"
 	type       = "auth0_managed_certs"
@@ -48,7 +49,7 @@ resource "auth0_custom_domain" "my_custom_domain2" {
 }
 `
 
-const testAccDataSourceCustomDomainMultipleWithCustomDomainId = testAccDataSourceCustomDomainMultiple + `
+const testAccDataSourceCustomDomainMultipleWithCustomDomainID = testAccDataSourceCustomDomainFirst + testAccDataSourceCustomDomainSecond + `
 data "auth0_custom_domain" "test" {
 	depends_on = [resource.auth0_custom_domain.my_custom_domain1,
 					resource.auth0_custom_domain.my_custom_domain2]
@@ -56,7 +57,7 @@ data "auth0_custom_domain" "test" {
 }
 `
 
-const testAccDataSourceCustomDomainMultipleWithOutCustomDomainId = testAccDataSourceCustomDomainMultiple + `
+const testAccDataSourceCustomDomainMultipleWithOutCustomDomainID = testAccDataSourceCustomDomainFirst + testAccDataSourceCustomDomainSecond + `
 data "auth0_custom_domain" "test" {
 	depends_on = [resource.auth0_custom_domain.my_custom_domain1,
 					resource.auth0_custom_domain.my_custom_domain2]
@@ -99,7 +100,7 @@ func TestAccDataSourceCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataSourceCustomDomainMultipleWithCustomDomainId, testName),
+				Config: acctest.ParseTestName(testAccDataSourceCustomDomainMultipleWithCustomDomainID, testName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "domain", fmt.Sprintf("%s-first.auth.tempdomain.com", testName)),
 					resource.TestCheckResourceAttr("data.auth0_custom_domain.test", "type", "auth0_managed_certs"),
@@ -114,7 +115,7 @@ func TestAccDataSourceCustomDomain(t *testing.T) {
 				),
 			},
 			{
-				Config:      acctest.ParseTestName(testAccDataSourceCustomDomainMultipleWithOutCustomDomainId, testName),
+				Config:      acctest.ParseTestName(testAccDataSourceCustomDomainMultipleWithOutCustomDomainID, testName),
 				ExpectError: regexp.MustCompile("multiple custom domains found, please specify custom_domain_id"),
 			},
 		},

@@ -2,6 +2,7 @@ package organization
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
@@ -105,6 +106,14 @@ func updateOrganization(ctx context.Context, data *schema.ResourceData, meta int
 
 	if err := api.Organization.Update(ctx, data.Id(), organization); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	if commons.IsTokenQuotaNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("organizations", data.Id()), map[string]interface{}{
+			"token_quota": nil,
+		}); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readOrganization(ctx, data, meta)

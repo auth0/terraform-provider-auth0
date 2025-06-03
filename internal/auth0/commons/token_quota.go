@@ -2,6 +2,7 @@ package commons
 
 import (
 	"github.com/auth0/go-auth0/management"
+	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -93,4 +94,44 @@ func FlattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
 	}
 
 	return []interface{}{result}
+}
+
+// IsTokenQuotaNull checks if the token quota configuration is null or empty.
+func IsTokenQuotaNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("token_quota") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	tokenQuotaConfig := rawConfig.GetAttr("token_quota")
+	if tokenQuotaConfig.IsNull() {
+		return true
+	}
+
+	empty := true
+	tokenQuotaConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		clientCreds := cfg.GetAttr("client_credentials")
+		if !clientCreds.IsNull() {
+			clientCreds.ForEachElement(func(_ cty.Value, creds cty.Value) (stop bool) {
+				enforce := creds.GetAttr("enforce")
+				perHour := creds.GetAttr("per_hour")
+				perDay := creds.GetAttr("per_day")
+
+				if (!enforce.IsNull() && enforce.True()) ||
+					(!perHour.IsNull()) ||
+					(!perDay.IsNull()) {
+					empty = false
+					stop = true
+				}
+				return stop
+			})
+		}
+		return false
+	})
+
+	return empty
 }

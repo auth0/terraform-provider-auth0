@@ -135,7 +135,6 @@ const testAccOrganizationWithTokenQuotaRemoved = `
 resource auth0_organization acme {
 	name = "test-quota-{{.testName}}"
 	display_name = "Acme Inc. Token Quota {{.testName}}"
-	token_quota = null
 }
 `
 

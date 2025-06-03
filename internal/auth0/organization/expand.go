@@ -5,6 +5,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -15,7 +17,7 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 		Name:        value.String(cfg.GetAttr("name")),
 		DisplayName: value.String(cfg.GetAttr("display_name")),
 		Branding:    expandOrganizationBranding(cfg.GetAttr("branding")),
-		TokenQuota:  expandTokenQuota(cfg.GetAttr("token_quota")),
+		TokenQuota:  commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
 	}
 
 	if data.HasChange("metadata") {
@@ -61,43 +63,20 @@ func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConn
 	return connections
 }
 
-func expandTokenQuota(raw cty.Value) *management.TokenQuota {
-	if raw.IsNull() {
-		return nil
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"token_quota": commons.IsTokenQuotaNull,
 	}
 
-	var quota *management.TokenQuota
+	nullableMap := make(map[string]interface{})
 
-	raw.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		clientCredsValue := config.GetAttr("client_credentials")
-		if clientCredsValue.IsNull() {
-			return false
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
 		}
+	}
 
-		clientCredsValue.ForEachElement(func(_ cty.Value, credsConfig cty.Value) (stop bool) {
-			enforce := value.Bool(credsConfig.GetAttr("enforce"))
-			perHour := value.Int(credsConfig.GetAttr("per_hour"))
-			perDay := value.Int(credsConfig.GetAttr("per_day"))
-
-			quota = &management.TokenQuota{
-				ClientCredentials: &management.TokenQuotaClientCredentials{
-					Enforce: enforce,
-				},
-			}
-
-			if perHour != nil && *perHour > 0 {
-				quota.ClientCredentials.PerHour = perHour
-			}
-
-			if perDay != nil && *perDay > 0 {
-				quota.ClientCredentials.PerDay = perDay
-			}
-
-			return false
-		})
-
-		return false
-	})
-
-	return quota
+	return nullableMap
 }

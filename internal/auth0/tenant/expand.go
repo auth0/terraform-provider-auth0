@@ -242,7 +242,7 @@ func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantE
 	return &errorPage
 }
 
-func expandTokenQuota(raw interface{}) *management.TokenQuota {
+func expandTenantTokenQuota(raw interface{}) *management.TokenQuota {
 	if raw == nil {
 		return nil
 	}
@@ -284,7 +284,100 @@ func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaul
 	defaultTokenData := raw[0].(map[string]interface{})
 
 	return &management.TenantDefaultTokenQuota{
-		Clients:       expandTokenQuota(defaultTokenData["clients"]),
-		Organizations: expandTokenQuota(defaultTokenData["organizations"]),
+		Clients:       expandTenantTokenQuota(defaultTokenData["clients"]),
+		Organizations: expandTenantTokenQuota(defaultTokenData["organizations"]),
 	}
+}
+
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"default_token_quota":  isDefaultTokenQuotaNull,
+		"acr_values_supported": isACRValuesSupportedNull,
+		"mtls":                 isMTLSConfigurationNull,
+		"error_page":           isErrorPageConfigurationNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
+func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_token_quota") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	tokenQuotaConfig := rawConfig.GetAttr("default_token_quota")
+	if tokenQuotaConfig.IsNull() {
+		return true
+	}
+
+	hasClients := false
+	hasOrgs := false
+
+	tokenQuotaConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		clients := cfg.GetAttr("clients")
+		orgs := cfg.GetAttr("organizations")
+
+		if !clients.IsNull() {
+			clients.ForEachElement(func(_ cty.Value, clientCfg cty.Value) (stop bool) {
+				clientCreds := clientCfg.GetAttr("client_credentials")
+				if !clientCreds.IsNull() {
+					clientCreds.ForEachElement(func(_ cty.Value, creds cty.Value) (stop bool) {
+						enforce := creds.GetAttr("enforce")
+						perHour := creds.GetAttr("per_hour")
+						perDay := creds.GetAttr("per_day")
+
+						if (!enforce.IsNull() && enforce.True()) ||
+							(!perHour.IsNull()) ||
+							(!perDay.IsNull()) {
+							hasClients = true
+							stop = true
+						}
+						return stop
+					})
+				}
+				return stop
+			})
+		}
+
+		if !orgs.IsNull() {
+			orgs.ForEachElement(func(_ cty.Value, orgCfg cty.Value) (stop bool) {
+				clientCreds := orgCfg.GetAttr("client_credentials")
+				if !clientCreds.IsNull() {
+					clientCreds.ForEachElement(func(_ cty.Value, creds cty.Value) (stop bool) {
+						enforce := creds.GetAttr("enforce")
+						perHour := creds.GetAttr("per_hour")
+						perDay := creds.GetAttr("per_day")
+
+						if (!enforce.IsNull() && enforce.True()) ||
+							(!perHour.IsNull()) ||
+							(!perDay.IsNull()) {
+							hasOrgs = true
+							stop = true
+						}
+						return stop
+					})
+				}
+				return stop
+			})
+		}
+
+		return stop
+	})
+
+	return !hasClients && !hasOrgs
 }

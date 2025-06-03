@@ -307,6 +307,12 @@ resource "auth0_tenant" "my_tenant" {
 }
 `
 
+const testAccTenantWithDefaultTokenQuotaRemoved = `
+resource "auth0_tenant" "my_tenant" {
+	friendly_name = "My Test Tenant with Token Quota"
+}
+`
+
 func TestAccTenant_Main(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -474,6 +480,13 @@ func TestAccTenantDefaultTokenQuota(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.enforce", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_hour", "150"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.0.organizations.0.client_credentials.0.per_day", "3000"),
+				),
+			},
+			{
+				Config: testAccTenantWithDefaultTokenQuotaRemoved,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "friendly_name", "My Test Tenant with Token Quota"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "default_token_quota.#", "0"),
 				),
 			},
 		},

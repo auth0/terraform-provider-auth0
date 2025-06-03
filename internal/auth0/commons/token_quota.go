@@ -5,6 +5,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 const (
@@ -53,23 +55,7 @@ func TokenQuotaSchema() *schema.Schema {
 	}
 }
 
-// DefaultTokenQuotaSchema returns the common schema used for tenants, clients and organisation.
-func DefaultTokenQuotaSchema() *schema.Schema {
-	return &schema.Schema{
-		Type:        schema.TypeList,
-		Optional:    true,
-		MaxItems:    1,
-		Description: "Token Quota configuration.",
-		Elem: &schema.Resource{
-			Schema: map[string]*schema.Schema{
-				"clients":       TokenQuotaSchema(),
-				"organizations": TokenQuotaSchema(),
-			},
-		},
-	}
-}
-
-// FlattenTokenQuota flattens the token quota configuration for a client.
+// FlattenTokenQuota flattens the token quota configuration used for tenants, clients and organization.
 func FlattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
 	if tokenQuota == nil || tokenQuota.ClientCredentials == nil {
 		return nil
@@ -96,7 +82,49 @@ func FlattenTokenQuota(tokenQuota *management.TokenQuota) []interface{} {
 	return []interface{}{result}
 }
 
-// IsTokenQuotaNull checks if the token quota configuration is null or empty.
+// ExpandTokenQuota expands the token quota configuration for clients and organization.
+func ExpandTokenQuota(raw cty.Value) *management.TokenQuota {
+	if raw.IsNull() {
+		return nil
+	}
+
+	var quota *management.TokenQuota
+
+	raw.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		clientCredsValue := config.GetAttr("client_credentials")
+		if clientCredsValue.IsNull() {
+			return false
+		}
+
+		clientCredsValue.ForEachElement(func(_ cty.Value, credsConfig cty.Value) (stop bool) {
+			enforce := value.Bool(credsConfig.GetAttr("enforce"))
+			perHour := value.Int(credsConfig.GetAttr("per_hour"))
+			perDay := value.Int(credsConfig.GetAttr("per_day"))
+
+			quota = &management.TokenQuota{
+				ClientCredentials: &management.TokenQuotaClientCredentials{
+					Enforce: enforce,
+				},
+			}
+
+			if perHour != nil && *perHour > 0 {
+				quota.ClientCredentials.PerHour = perHour
+			}
+
+			if perDay != nil && *perDay > 0 {
+				quota.ClientCredentials.PerDay = perDay
+			}
+
+			return false
+		})
+
+		return false
+	})
+
+	return quota
+}
+
+// IsTokenQuotaNull checks if the token quota configuration is null or empty used for clients and organization..
 func IsTokenQuotaNull(data *schema.ResourceData) bool {
 	if !data.IsNewResource() && !data.HasChange("token_quota") {
 		return false

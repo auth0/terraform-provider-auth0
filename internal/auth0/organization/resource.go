@@ -108,10 +108,9 @@ func updateOrganization(ctx context.Context, data *schema.ResourceData, meta int
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	if commons.IsTokenQuotaNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("organizations", data.Id()), map[string]interface{}{
-			"token_quota": nil,
-		}); err != nil {
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("organizations", data.Id()), nullFields); err != nil {
 			return diag.FromErr(err)
 		}
 	}

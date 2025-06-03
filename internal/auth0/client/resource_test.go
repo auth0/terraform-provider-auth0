@@ -2485,6 +2485,13 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccClientWithTokenQuotaRemoved = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Token Quota - {{.testName}}"
+	app_type  = "non_interactive"
+}
+`
+
 func TestAccClientTokenQuota(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -2510,6 +2517,14 @@ func TestAccClientTokenQuota(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.enforce", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_hour", "50"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_day", "1000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithTokenQuotaRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Token Quota - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.#", "0"),
 				),
 			},
 		},

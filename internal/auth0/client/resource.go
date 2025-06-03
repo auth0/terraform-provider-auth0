@@ -1564,6 +1564,14 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 				return diag.FromErr(err)
 			}
 		}
+
+		if commons.IsTokenQuotaNull(data) {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"token_quota": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
 	}
 	return readClient(ctx, data, meta)
 }

@@ -1,7 +1,16 @@
+## v1.21.0
+
+FEATURES:
+
+- `resource/auth0_client`: Add support limit M2M usage ([#1239](https://github.com/auth0/terraform-provider-auth0/pull/1239))
+- `resource/auth0_organization`: Add support limit M2M usage ([#1239](https://github.com/auth0/terraform-provider-auth0/pull/1239))
+- `resource/auth0_tenant`: Add support limit M2M usage ([#1239](https://github.com/auth0/terraform-provider-auth0/pull/1239))
+
 ## v1.20.1
 
 BUG FIXES:
-- `resource/auth0_prompt_screen_renderer`: Remove unreleased screens for ACUL  ([#1257](https://github.com/auth0/terraform-provider-auth0/pull/1257))
+
+- `resource/auth0_prompt_screen_renderer`: Remove unreleased screens for ACUL ([#1257](https://github.com/auth0/terraform-provider-auth0/pull/1257))
 
 ## v1.20.0
 
@@ -21,7 +30,6 @@ BUG FIXES:
 - `resource/auth0_resource_server_scopes`: Fix noisy plan on the `description` field ([#1253](https://github.com/auth0/terraform-provider-auth0/pull/1253/))
 - `resource/auth0_log_stream`: Fix noisy plan caused by sensitive required fields ([#1240](https://github.com/auth0/terraform-provider-auth0/pull/1240/))
 
-
 ## v1.19.1
 
 BUG FIXES:
@@ -31,13 +39,16 @@ BUG FIXES:
 ## v1.19.0
 
 FEATURES:
+
 - `resource/auth0_client`: Support Native to Web SSO (`EA` Release)([#1231](https://github.com/auth0/terraform-provider-auth0/pull/1231/))
 - `resource/auth0_client`: Add support to configure multi Multi-Resource Refresh Token via `policies` (`EA` Release) ([#1223](https://github.com/auth0/terraform-provider-auth0/pull/1223/))
 
 ENHANCEMENTS:
+
 - `resource/auth0_prompt_custom_text`: Add support for `email-identifier-challenge` prompt ([#1232](https://github.com/auth0/terraform-provider-auth0/pull/1232/))
 
 BUG FIXES:
+
 - `resource/auth0_connection`: Add support to set `realm_fallback` ([#1224](https://github.com/auth0/terraform-provider-auth0/pull/1224/))
 - `resource/auth0_connection`: Add validation over `scopes` on Okta Connection ([#945](https://github.com/auth0/terraform-provider-auth0/pull/945/))
 
@@ -46,10 +57,11 @@ BUG FIXES:
 ENHANCEMENTS:
 
 - `resource/auth0_prompt_screen_renderer`: Add support for 14 new screens ([#1226](https://github.com/auth0/terraform-provider-auth0/pull/1226/))
-- Add support for dynamic credentials while configuring the provider ([#1172](https://github.com/auth0/terraform-provider-auth0/pull/1172/))  
+- Add support for dynamic credentials while configuring the provider ([#1172](https://github.com/auth0/terraform-provider-auth0/pull/1172/))
 
 BUG FIXES:
-- `resource/auth0_branding`: Allow setting `font_url` as null ([#1222](https://github.com/auth0/terraform-provider-auth0/pull/1222/)) 
+
+- `resource/auth0_branding`: Allow setting `font_url` as null ([#1222](https://github.com/auth0/terraform-provider-auth0/pull/1222/))
 - `resource/auth0_client`: Allow setting `encryption_key` as null ([#1221](https://github.com/auth0/terraform-provider-auth0/pull/1221/))
 
 ## v1.16.0

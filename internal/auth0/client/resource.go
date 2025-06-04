@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
 	"github.com/auth0/go-auth0/management"
@@ -1480,6 +1482,7 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_quota": commons.TokenQuotaSchema(),
 		},
 	}
 }
@@ -1557,6 +1560,14 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		if isSessionTransferNull(data) {
 			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
 				"session_transfer": nil,
+			}); err != nil {
+				return diag.FromErr(err)
+			}
+		}
+
+		if commons.IsTokenQuotaNull(data) {
+			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
+				"token_quota": nil,
 			}); err != nil {
 				return diag.FromErr(err)
 			}

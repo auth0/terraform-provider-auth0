@@ -40,6 +40,7 @@ resource "auth0_custom_domain" "my_custom_domain1" {
 
 const testAccDataSourceCustomDomainSecond = `
 resource "auth0_custom_domain" "my_custom_domain2" {
+	depends_on = [ auth0_custom_domain.my_custom_domain1 ]
 	domain     = "{{.testName}}-second.auth.tempdomain.com"
 	type       = "auth0_managed_certs"
 	tls_policy = "recommended"

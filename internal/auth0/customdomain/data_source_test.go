@@ -23,7 +23,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 }
 
 data "auth0_custom_domain" "test" {
-	depends_on = [resource.auth0_custom_domain.my_custom_domain]
+	depends_on = [ auth0_custom_domain.my_custom_domain ]
 }
 `
 
@@ -51,16 +51,20 @@ resource "auth0_custom_domain" "my_custom_domain2" {
 
 const testAccDataSourceCustomDomainMultipleWithCustomDomainID = testAccDataSourceCustomDomainFirst + testAccDataSourceCustomDomainSecond + `
 data "auth0_custom_domain" "test" {
-	depends_on = [resource.auth0_custom_domain.my_custom_domain1,
-					resource.auth0_custom_domain.my_custom_domain2]
+	depends_on = [
+		auth0_custom_domain.my_custom_domain1,
+		auth0_custom_domain.my_custom_domain2
+	]
 	custom_domain_id = auth0_custom_domain.my_custom_domain1.id
 }
 `
 
 const testAccDataSourceCustomDomainMultipleWithOutCustomDomainID = testAccDataSourceCustomDomainFirst + testAccDataSourceCustomDomainSecond + `
 data "auth0_custom_domain" "test" {
-	depends_on = [resource.auth0_custom_domain.my_custom_domain1,
-					resource.auth0_custom_domain.my_custom_domain2]
+	depends_on = [
+			auth0_custom_domain.my_custom_domain1,
+			auth0_custom_domain.my_custom_domain2
+	]
 }
 `
 

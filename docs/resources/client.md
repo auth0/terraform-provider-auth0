@@ -158,6 +158,7 @@ resource "auth0_client" "my_client" {
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
+- `token_quota` (Block List, Max: 1) The token quota configuration. (see [below for nested schema](#nestedblock--token_quota))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 ### Read-Only
@@ -638,6 +639,23 @@ Optional:
 Required:
 
 - `allow_any_profile_of_type` (List of String) List of allowed profile types for token exchange
+
+
+<a id="nestedblock--token_quota"></a>
+### Nested Schema for `token_quota`
+
+Required:
+
+- `client_credentials` (Block List, Min: 1, Max: 1) The token quota configuration for client credentials. (see [below for nested schema](#nestedblock--token_quota--client_credentials))
+
+<a id="nestedblock--token_quota--client_credentials"></a>
+### Nested Schema for `token_quota.client_credentials`
+
+Optional:
+
+- `enforce` (Boolean) If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+- `per_day` (Number) Maximum number of issued tokens per day
+- `per_hour` (Number) Maximum number of issued tokens per hour
 
 ## Import
 

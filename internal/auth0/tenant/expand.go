@@ -5,6 +5,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -36,6 +38,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		ACRValuesSupported:                   expandACRValuesSupported(data),
 		MTLS:                                 expandMTLSConfiguration(data),
 		ErrorPage:                            expandErrorPageConfiguration(data),
+		DefaultTokenQuota:                    expandDefaultTokenQuota(data),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -238,4 +241,120 @@ func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantE
 	}
 
 	return &errorPage
+}
+
+func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaultTokenQuota {
+	cfg := data.GetRawConfig()
+	raw := cfg.GetAttr("default_token_quota")
+
+	if raw.IsNull() {
+		return nil
+	}
+
+	var tokenQuota management.TenantDefaultTokenQuota
+
+	raw.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenQuota.Clients = commons.ExpandTokenQuota(cfg.GetAttr("clients"))
+		tokenQuota.Organizations = commons.ExpandTokenQuota(cfg.GetAttr("organizations"))
+		return stop
+	})
+
+	if tokenQuota == (management.TenantDefaultTokenQuota{}) {
+		return nil
+	}
+
+	return &tokenQuota
+}
+
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"default_token_quota":  isDefaultTokenQuotaNull,
+		"acr_values_supported": isACRValuesSupportedNull,
+		"mtls":                 isMTLSConfigurationNull,
+		"error_page":           isErrorPageConfigurationNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
+func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_token_quota") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	tokenQuotaConfig := rawConfig.GetAttr("default_token_quota")
+	if tokenQuotaConfig.IsNull() {
+		return true
+	}
+
+	hasClients := false
+	hasOrgs := false
+
+	tokenQuotaConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		clients := cfg.GetAttr("clients")
+		orgs := cfg.GetAttr("organizations")
+
+		if !clients.IsNull() {
+			clients.ForEachElement(func(_ cty.Value, clientCfg cty.Value) (stop bool) {
+				clientCreds := clientCfg.GetAttr("client_credentials")
+				if !clientCreds.IsNull() {
+					clientCreds.ForEachElement(func(_ cty.Value, creds cty.Value) (stop bool) {
+						enforce := creds.GetAttr("enforce")
+						perHour := creds.GetAttr("per_hour")
+						perDay := creds.GetAttr("per_day")
+
+						if (!enforce.IsNull() && enforce.True()) ||
+							(!perHour.IsNull()) ||
+							(!perDay.IsNull()) {
+							hasClients = true
+							stop = true
+						}
+						return stop
+					})
+				}
+				return stop
+			})
+		}
+
+		if !orgs.IsNull() {
+			orgs.ForEachElement(func(_ cty.Value, orgCfg cty.Value) (stop bool) {
+				clientCreds := orgCfg.GetAttr("client_credentials")
+				if !clientCreds.IsNull() {
+					clientCreds.ForEachElement(func(_ cty.Value, creds cty.Value) (stop bool) {
+						enforce := creds.GetAttr("enforce")
+						perHour := creds.GetAttr("per_hour")
+						perDay := creds.GetAttr("per_day")
+
+						if (!enforce.IsNull() && enforce.True()) ||
+							(!perHour.IsNull()) ||
+							(!perDay.IsNull()) {
+							hasOrgs = true
+							stop = true
+						}
+						return stop
+					})
+				}
+				return stop
+			})
+		}
+
+		return stop
+	})
+
+	return !hasClients && !hasOrgs
 }

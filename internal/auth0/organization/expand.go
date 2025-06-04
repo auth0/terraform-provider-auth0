@@ -5,6 +5,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
@@ -15,6 +17,7 @@ func expandOrganization(data *schema.ResourceData) *management.Organization {
 		Name:        value.String(cfg.GetAttr("name")),
 		DisplayName: value.String(cfg.GetAttr("display_name")),
 		Branding:    expandOrganizationBranding(cfg.GetAttr("branding")),
+		TokenQuota:  commons.ExpandTokenQuota(cfg.GetAttr("token_quota")),
 	}
 
 	if data.HasChange("metadata") {
@@ -58,4 +61,22 @@ func expandOrganizationConnections(cfg cty.Value) []*management.OrganizationConn
 	})
 
 	return connections
+}
+
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"token_quota": commons.IsTokenQuotaNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
 }

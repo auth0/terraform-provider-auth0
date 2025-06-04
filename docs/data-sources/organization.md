@@ -39,6 +39,7 @@ data "auth0_organization" "some-organization-by-id" {
 - `id` (String) The ID of this resource.
 - `members` (Set of String) User ID(s) that are members of the organization.
 - `metadata` (Map of String) Metadata associated with the organization. Maximum of 10 metadata properties allowed.
+- `token_quota` (List of Object) The token quota configuration. (see [below for nested schema](#nestedatt--token_quota))
 
 <a id="nestedatt--branding"></a>
 ### Nested Schema for `branding`
@@ -58,5 +59,22 @@ Read-Only:
 - `connection_id` (String)
 - `is_signup_enabled` (Boolean)
 - `show_as_button` (Boolean)
+
+
+<a id="nestedatt--token_quota"></a>
+### Nested Schema for `token_quota`
+
+Read-Only:
+
+- `client_credentials` (List of Object) (see [below for nested schema](#nestedobjatt--token_quota--client_credentials))
+
+<a id="nestedobjatt--token_quota--client_credentials"></a>
+### Nested Schema for `token_quota.client_credentials`
+
+Read-Only:
+
+- `enforce` (Boolean)
+- `per_day` (Number)
+- `per_hour` (Number)
 
 

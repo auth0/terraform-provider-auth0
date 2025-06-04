@@ -3,6 +3,8 @@ package client
 import (
 	"fmt"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -54,6 +56,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
+		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {

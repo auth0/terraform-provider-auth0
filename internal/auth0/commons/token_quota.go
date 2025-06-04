@@ -107,11 +107,11 @@ func ExpandTokenQuota(raw cty.Value) *management.TokenQuota {
 				},
 			}
 
-			if perHour != nil && *perHour > 0 {
+			if perHour != nil {
 				quota.ClientCredentials.PerHour = perHour
 			}
 
-			if perDay != nil && *perDay > 0 {
+			if perDay != nil {
 				quota.ClientCredentials.PerDay = perDay
 			}
 

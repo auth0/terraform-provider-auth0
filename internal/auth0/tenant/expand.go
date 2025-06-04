@@ -1,10 +1,11 @@
 package tenant
 
 import (
-	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -242,51 +243,27 @@ func expandErrorPageConfiguration(data *schema.ResourceData) *management.TenantE
 	return &errorPage
 }
 
-func expandTenantTokenQuota(raw interface{}) *management.TokenQuota {
-	if raw == nil {
-		return nil
-	}
-
-	list := raw.([]interface{})
-	if len(list) == 0 || list[0] == nil {
-		return nil
-	}
-
-	data := list[0].(map[string]interface{})
-	clientCreds := data["client_credentials"].([]interface{})
-	if len(clientCreds) == 0 || clientCreds[0] == nil {
-		return nil
-	}
-
-	creds := clientCreds[0].(map[string]interface{})
-	quota := &management.TokenQuota{
-		ClientCredentials: &management.TokenQuotaClientCredentials{
-			Enforce: auth0.Bool(creds["enforce"].(bool)),
-		},
-	}
-
-	if v, ok := creds["per_hour"].(int); ok && v > 0 {
-		quota.ClientCredentials.PerHour = auth0.Int(v)
-	}
-
-	if v, ok := creds["per_day"].(int); ok && v > 0 {
-		quota.ClientCredentials.PerDay = auth0.Int(v)
-	}
-
-	return quota
-}
-
 func expandDefaultTokenQuota(data *schema.ResourceData) *management.TenantDefaultTokenQuota {
-	raw := data.Get("default_token_quota").([]interface{})
-	if len(raw) == 0 || raw[0] == nil {
+	cfg := data.GetRawConfig()
+	raw := cfg.GetAttr("default_token_quota")
+
+	if raw.IsNull() {
 		return nil
 	}
-	defaultTokenData := raw[0].(map[string]interface{})
 
-	return &management.TenantDefaultTokenQuota{
-		Clients:       expandTenantTokenQuota(defaultTokenData["clients"]),
-		Organizations: expandTenantTokenQuota(defaultTokenData["organizations"]),
+	var tokenQuota management.TenantDefaultTokenQuota
+
+	raw.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		tokenQuota.Clients = commons.ExpandTokenQuota(cfg.GetAttr("clients"))
+		tokenQuota.Organizations = commons.ExpandTokenQuota(cfg.GetAttr("organizations"))
+		return stop
+	})
+
+	if tokenQuota == (management.TenantDefaultTokenQuota{}) {
+		return nil
 	}
+
+	return &tokenQuota
 }
 
 func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {

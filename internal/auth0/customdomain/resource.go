@@ -63,7 +63,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"cf-connecting-ip", "x-forwarded-for", "true-client-ip", "x-azure-clientip",
+					"cf-connecting-ip", "x-forwarded-for", "true-client-ip", "x-azure-clientip", "",
 				}, false),
 				Description: "The HTTP header to fetch the client's IP address. " +
 					"Cannot be set on auth0_managed domains.",

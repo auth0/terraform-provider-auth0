@@ -12,7 +12,7 @@ Data source to retrieve the custom domain configuration.
 
 ```terraform
 resource "auth0_custom_domain" "my_custom_domain" {
-  domain     = "{{.testName}}.auth.tempdomain.com"
+  domain     = "example.auth.tempdomain.com"
   type       = "auth0_managed_certs"
   tls_policy = "recommended"
   domain_metadata = {

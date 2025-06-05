@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/auth0/go-auth0/management"
-	"net/http"
 	"time"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
@@ -1530,14 +1529,6 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		body, _ := json.Marshal(nullFields)
 		if err := api.Client.Update(context.Background(), "client_id", nil, management.Body(body)); err != nil {
 			return diag.FromErr(err)
-		}
-
-		if commons.IsTokenQuotaNull(data) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"token_quota": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
 		}
 	}
 

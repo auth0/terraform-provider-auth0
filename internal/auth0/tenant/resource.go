@@ -2,11 +2,9 @@ package tenant
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
-
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -15,6 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/go-auth0/management"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
@@ -496,7 +496,8 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 
 	nullFields := fetchNullableFields(data)
 	if len(nullFields) != 0 {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), nullFields); err != nil {
+		body, _ := json.Marshal(nullFields)
+		if err := api.Tenant.Update(context.Background(), nil, management.Body(body)); err != nil {
 			return diag.FromErr(err)
 		}
 	}

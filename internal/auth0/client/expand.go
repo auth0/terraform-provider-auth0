@@ -1057,6 +1057,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 		"addons": func(_ *schema.ResourceData) bool {
 			return clientHasChange(client) && client.GetAddons() != nil
 		},
+		"token_quota": commons.IsTokenQuotaNull,
 	}
 
 	nullableMap := make(map[string]interface{})

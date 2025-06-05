@@ -1,0 +1,444 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 205
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"enforce":true,"per_day":2000,"per_hour":100}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 232
+        uncompressed: false
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","name":"test-quota-testaccorganizationtokenquota","token_quota":{"client_credentials":{"enforce":true,"per_day":2000,"per_hour":100}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 270.098667ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":100,"per_day":2000,"enforce":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 253.352625ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":100,"per_day":2000,"enforce":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 244.853167ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":100,"per_day":2000,"enforce":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 239.873625ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 205
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"enforce":false,"per_day":1000,"per_hour":50}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","name":"test-quota-testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":50,"per_day":1000,"enforce":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 251.294834ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":50,"per_day":1000,"enforce":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 250.362583ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":50,"per_day":1000,"enforce":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 250.253ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":50,"per_day":1000,"enforce":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 234.570708ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 121
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","name":"test-quota-testaccorganizationtokenquota","token_quota":{"client_credentials":{"per_hour":50,"per_day":1000,"enforce":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 271.954208ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 21
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"token_quota":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota","name":"test-quota-testaccorganizationtokenquota"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 258.92525ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 229.97775ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"org_7GGQq6DbqK5aH9Rb","name":"test-quota-testaccorganizationtokenquota","display_name":"Acme Inc. Token Quota testaccorganizationtokenquota"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 260.185333ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_7GGQq6DbqK5aH9Rb
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 256.8225ms

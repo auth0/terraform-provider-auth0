@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -417,6 +419,18 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_token_quota": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Token Quota configuration.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"clients":       commons.TokenQuotaSchema(),
+						"organizations": commons.TokenQuotaSchema(),
+					},
+				},
+			},
 		},
 	}
 }
@@ -480,28 +494,9 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 	// These call should NOT be needed, but the tests fail sometimes if it they not there.
 	time.Sleep(800 * time.Millisecond)
 
-	if isACRValuesSupportedNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"acr_values_supported": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	time.Sleep(200 * time.Millisecond)
-
-	if isMTLSConfigurationNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"mtls": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	time.Sleep(800 * time.Millisecond)
-
-	if isErrorPageConfigurationNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"error_page": nil,
-		}); err != nil {
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), nullFields); err != nil {
 			return diag.FromErr(err)
 		}
 	}

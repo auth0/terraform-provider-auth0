@@ -3,10 +3,7 @@ package client
 import (
 	"context"
 	"encoding/json"
-	"github.com/auth0/go-auth0/management"
 	"time"
-
-	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
@@ -14,6 +11,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/go-auth0/management"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"

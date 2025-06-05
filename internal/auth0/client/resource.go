@@ -2,7 +2,8 @@ package client
 
 import (
 	"context"
-	"net/http"
+	"encoding/json"
+	"github.com/auth0/go-auth0/management"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
@@ -1522,7 +1523,8 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 
 	nullFields := fetchNullableFields(data, client)
 	if len(nullFields) != 0 {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
+		body, _ := json.Marshal(nullFields)
+		if err := api.Client.Update(context.Background(), "client_id", nil, management.Body(body)); err != nil {
 			return diag.FromErr(err)
 		}
 	}

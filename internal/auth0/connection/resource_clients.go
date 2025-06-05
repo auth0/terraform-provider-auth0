@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 	"fmt"
+	"github.com/auth0/go-auth0"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/google/go-cmp/cmp"
@@ -56,58 +57,78 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
+	rawEnabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
 
-	connection, err := api.Connection.Read(
-		ctx,
-		connectionID,
-		management.IncludeFields("enabled_clients", "strategy", "name"),
-	)
+	// Fetch existing enabled clients from the new API
+	existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	connectionWithEnabledClients := &management.Connection{
-		EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients")),
+	var existingEnabledClientIDs []string
+	for _, c := range existingClientsResp.GetClients() {
+		if c.Status != nil && *c.Status {
+			existingEnabledClientIDs = append(existingEnabledClientIDs, *c.ClientID)
+		}
 	}
 
-	if diagnostics := guardAgainstErasingUnwantedEnabledClients(
-		connection.GetID(),
-		connectionWithEnabledClients.GetEnabledClients(),
-		connection.GetEnabledClients(),
-	); diagnostics.HasError() {
+	// Safety check: disallow overwriting if existing differs from desired state
+	if diagnostics := guardAgainstErasingUnwantedEnabledClients(connectionID, *rawEnabledClients, existingEnabledClientIDs); diagnostics.HasError() {
 		data.SetId("")
 		return diagnostics
 	}
 
-	data.SetId(connection.GetID())
+	// Build payload to enable each client
+	var payload []management.ConnectionEnabledClient
+	for _, clientID := range *rawEnabledClients {
+		payload = append(payload, management.ConnectionEnabledClient{
+			ClientID: auth0.String(clientID),
+			Status:   auth0.Bool(true),
+		})
+	}
 
-	if err := api.Connection.Update(ctx, connection.GetID(), connectionWithEnabledClients); err != nil {
+	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(err)
 	}
+
+	data.SetId(connectionID)
 
 	return readConnectionClients(ctx, data, meta)
 }
 
 func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	connectionID := data.Id()
 
-	requestOption := management.IncludeFields("enabled_clients", "strategy", "name")
-	connection, err := api.Connection.Read(ctx, data.Id(), requestOption)
+	enabledClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenConnectionClients(data, connection))
+	requestOption := management.IncludeFields("strategy", "name")
+	connection, err := api.Connection.Read(ctx, connectionID, requestOption)
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	return diag.FromErr(flattenConnectionClients(data, connection, enabledClientsResp))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	connectionWithEnabledClients := &management.Connection{
-		EnabledClients: value.Strings(data.GetRawConfig().GetAttr("enabled_clients")),
+	connectionID := data.Id()
+	enabledClientIDs := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
+
+	var payload []management.ConnectionEnabledClient
+	for _, clientID := range *enabledClientIDs {
+		payload = append(payload, management.ConnectionEnabledClient{
+			ClientID: auth0.String(clientID),
+			Status:   auth0.Bool(true),
+		})
 	}
 
-	if err := api.Connection.Update(ctx, data.Id(), connectionWithEnabledClients); err != nil {
+	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
@@ -116,16 +137,55 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 
 func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	connectionID := data.Id()
 
-	connectionWithEnabledClients := &management.Connection{
-		EnabledClients: &[]string{},
+	existingClientsIfc, ok := data.Get("enabled_clients").([]interface{})
+	if !ok {
+		return diag.Errorf("failed to parse enabled_clients from state")
+	}
+	var existingClients []string
+	for _, v := range existingClientsIfc {
+		if s, ok := v.(string); ok {
+			existingClients = append(existingClients, s)
+		}
 	}
 
-	if err := api.Connection.Update(ctx, data.Id(), connectionWithEnabledClients); err != nil {
+	desiredClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
+
+	removed := difference(existingClients, *desiredClients)
+
+	var payload []management.ConnectionEnabledClient
+	for _, clientID := range removed {
+		payload = append(payload, management.ConnectionEnabledClient{
+			ClientID: auth0.String(clientID),
+			Status:   auth0.Bool(false),
+		})
+	}
+
+	if len(payload) == 0 {
+		return nil
+	}
+
+	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil
+}
+
+func difference(slice1, slice2 []string) []string {
+	m := make(map[string]struct{}, len(slice2))
+	for _, s := range slice2 {
+		m[s] = struct{}{}
+	}
+
+	var diff []string
+	for _, s := range slice1 {
+		if _, found := m[s]; !found {
+			diff = append(diff, s)
+		}
+	}
+	return diff
 }
 
 func guardAgainstErasingUnwantedEnabledClients(

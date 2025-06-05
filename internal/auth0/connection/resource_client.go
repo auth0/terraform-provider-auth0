@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+	"github.com/auth0/go-auth0"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -53,26 +54,23 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
+	clientID := data.Get("client_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
+	mutex.Lock(connectionID)
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(ctx, connectionID)
-	if err != nil {
-		return diag.FromErr(err)
+	payload := []management.ConnectionEnabledClient{
+		{
+			ClientID: auth0.String(clientID),
+			Status:   auth0.Bool(true), // Enable this client
+		},
 	}
 
-	clientID := data.Get("client_id").(string)
-	enabledClients := append(connection.GetEnabledClients(), clientID)
-	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
-
-	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
+	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(err)
 	}
-
 	internalSchema.SetResourceGroupID(data, connectionID, clientID)
-
 	return readConnectionClient(ctx, data, meta)
 }
 
@@ -82,20 +80,28 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	connection, err := api.Connection.Read(ctx, connectionID)
+	enabledClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	found := false
-	for _, enabledClientID := range connection.GetEnabledClients() {
-		if enabledClientID == clientID {
+	for _, c := range *enabledClientsResp.Clients {
+		if c.ClientID == auth0.String(clientID) && c.Status != nil && *c.Status {
 			found = true
+			break
 		}
 	}
+
 	if !found {
+		// Not found or not enabled
 		data.SetId("")
 		return nil
+	}
+
+	connection, err := api.Connection.Read(ctx, connectionID, management.IncludeFields("strategy", "name"))
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return diag.FromErr(flattenConnectionClient(data, connection))
@@ -105,29 +111,21 @@ func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	api := meta.(*config.Config).GetAPI()
 
 	connectionID := data.Get("connection_id").(string)
+	clientID := data.Get("client_id").(string)
 
 	mutex := meta.(*config.Config).GetMutex()
-	mutex.Lock(connectionID) // Prevents colliding API requests between other `auth0_connection_client` resource.
+	mutex.Lock(connectionID)
 	defer mutex.Unlock(connectionID)
 
-	connection, err := api.Connection.Read(ctx, connectionID)
-	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	payload := []management.ConnectionEnabledClient{
+		{
+			ClientID: auth0.String(clientID),
+			Status:   auth0.Bool(false), // Disable this client
+		},
 	}
 
-	clientID := data.Get("client_id").(string)
-	var enabledClients []string
-	for _, enabledClientID := range connection.GetEnabledClients() {
-		if enabledClientID == clientID {
-			continue
-		}
-		enabledClients = append(enabledClients, enabledClientID)
-	}
-
-	connectionWithEnabledClients := &management.Connection{EnabledClients: &enabledClients}
-
-	if err := api.Connection.Update(ctx, connectionID, connectionWithEnabledClients); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
+		return diag.FromErr(err)
 	}
 
 	return nil

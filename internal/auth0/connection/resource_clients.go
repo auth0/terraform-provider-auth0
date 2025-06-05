@@ -139,53 +139,25 @@ func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 	connectionID := data.Id()
 
-	existingClientsIfc, ok := data.Get("enabled_clients").([]interface{})
+	existingClientsConfig, ok := data.Get("enabled_clients").([]string)
 	if !ok {
 		return diag.Errorf("failed to parse enabled_clients from state")
 	}
-	var existingClients []string
-	for _, v := range existingClientsIfc {
-		if s, ok := v.(string); ok {
-			existingClients = append(existingClients, s)
-		}
-	}
-
-	desiredClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
-
-	removed := difference(existingClients, *desiredClients)
 
 	var payload []management.ConnectionEnabledClient
-	for _, clientID := range removed {
+	for _, clientId := range existingClientsConfig {
 		payload = append(payload, management.ConnectionEnabledClient{
-			ClientID: auth0.String(clientID),
+			ClientID: auth0.String(clientId),
 			Status:   auth0.Bool(false),
 		})
 	}
-
 	if len(payload) == 0 {
 		return nil
 	}
-
 	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
-
 	return nil
-}
-
-func difference(slice1, slice2 []string) []string {
-	m := make(map[string]struct{}, len(slice2))
-	for _, s := range slice2 {
-		m[s] = struct{}{}
-	}
-
-	var diff []string
-	for _, s := range slice1 {
-		if _, found := m[s]; !found {
-			diff = append(diff, s)
-		}
-	}
-	return diff
 }
 
 func guardAgainstErasingUnwantedEnabledClients(

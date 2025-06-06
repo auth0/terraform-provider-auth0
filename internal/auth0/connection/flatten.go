@@ -3,7 +3,6 @@ package connection
 import (
 	"errors"
 	"fmt"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -1117,14 +1116,23 @@ func flattenConnectionClient(data *schema.ResourceData, connection *management.C
 	return result.ErrorOrNil()
 }
 
-func flattenConnectionClients(data *schema.ResourceData, connection *management.Connection) error {
+func flattenConnectionClients(
+	data *schema.ResourceData,
+	connection *management.Connection,
+	enabledClients *management.ConnectionEnabledClientList,
+) error {
+	var enabledClientIDs []string
+	for _, ec := range enabledClients.GetClients() {
+		if ec.GetStatus() {
+			enabledClientIDs = append(enabledClientIDs, ec.GetClientID())
+		}
+	}
 	result := multierror.Append(
 		data.Set("connection_id", connection.GetID()),
 		data.Set("name", connection.GetName()),
 		data.Set("strategy", connection.GetStrategy()),
-		data.Set("enabled_clients", connection.GetEnabledClients()),
+		data.Set("enabled_clients", enabledClientIDs),
 	)
-
 	return result.ErrorOrNil()
 }
 

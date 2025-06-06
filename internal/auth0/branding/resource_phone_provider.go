@@ -116,7 +116,7 @@ func NewPhoneProviderResource() *schema.Resource {
 func createPhoneProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	// Fetch list of Phone Providers
+	// Fetch list of Phone Providers.
 	phoneProviders, err := api.Branding.ListPhoneProviders(ctx)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

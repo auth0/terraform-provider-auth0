@@ -3,7 +3,6 @@ package branding
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -117,7 +116,16 @@ func NewPhoneProviderResource() *schema.Resource {
 func createPhoneProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if id, isConfigured := phoneProviderIsConfigured(ctx, api); isConfigured {
+	// Fetch list of Phone Providers
+	phoneProviders, err := api.Branding.ListPhoneProviders(ctx)
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	// If phone provider is configured, update it.
+	// Note: Only a single phone provider is allowed.
+	if len(phoneProviders.Providers) > 0 {
+		id := phoneProviders.Providers[0].GetID()
 		data.SetId(id)
 		return updatePhoneProvider(ctx, data, meta)
 	}
@@ -164,14 +172,4 @@ func deletePhoneProvider(ctx context.Context, data *schema.ResourceData, meta in
 	}
 
 	return nil
-}
-
-func phoneProviderIsConfigured(ctx context.Context, api *management.Management) (string, bool) {
-	phoneProviders, _ := api.Branding.ListPhoneProviders(ctx)
-
-	if len(phoneProviders.Providers) > 0 {
-		return phoneProviders.Providers[0].GetID(), true
-	}
-
-	return "", false
 }

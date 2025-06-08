@@ -1119,7 +1119,7 @@ func isEncryptionKeyNull(data *schema.ResourceData) bool {
 }
 
 func isCrossOriginLocNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("cross_origin_auth") {
+	if !data.IsNewResource() && !data.HasChange("cross_origin_loc") {
 		return false
 	}
 

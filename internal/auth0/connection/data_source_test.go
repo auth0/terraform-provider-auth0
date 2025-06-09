@@ -38,7 +38,7 @@ resource "auth0_connection_client" "my_conn_client_assoc" {
 `
 
 const testAccDataConnectionConfigByName = testAccGivenAConnection + `
-data "auth0_connection" "test" {
+data "auth0_connection" "test-with-name" {
 	depends_on = [ auth0_connection_client.my_conn_client_assoc ]
 
 	name = "Acceptance-Test-Connection-{{.testName}}"
@@ -46,7 +46,7 @@ data "auth0_connection" "test" {
 `
 
 const testAccDataConnectionConfigByID = testAccGivenAConnection + `
-data "auth0_connection" "test" {
+data "auth0_connection" "test-with-id" {
 	depends_on = [ auth0_connection_client.my_conn_client_assoc ]
 
 	connection_id = auth0_connection.my_connection.id
@@ -81,10 +81,10 @@ func TestAccDataSourceConnection(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "enabled_clients.#", "1"),
+					resource.TestCheckResourceAttrSet("data.auth0_connection.test-with-name", "id"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-name", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-name", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-name", "enabled_clients.#", "1"),
 				),
 			},
 			{
@@ -96,10 +96,10 @@ func TestAccDataSourceConnection(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_client.my_conn_client_assoc", "client_id"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_client.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttrSet("data.auth0_connection.test", "id"),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "strategy", "auth0"),
-					resource.TestCheckResourceAttr("data.auth0_connection.test", "enabled_clients.#", "1"),
+					resource.TestCheckResourceAttrSet("data.auth0_connection.test-with-id", "id"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-id", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-id", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("data.auth0_connection.test-with-id", "enabled_clients.#", "1"),
 				),
 			},
 		},

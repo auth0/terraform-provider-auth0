@@ -3,7 +3,6 @@ package connection
 import (
 	"errors"
 	"fmt"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
@@ -81,11 +80,15 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection) diag.Diagnostics {
+func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection, enabledClients *management.ConnectionEnabledClientList) diag.Diagnostics {
 	diags := flattenConnection(data, connection)
 
-	err := data.Set("enabled_clients", connection.GetEnabledClients())
+	var clientIDs []string
+	for _, ec := range enabledClients.GetClients() {
+		clientIDs = append(clientIDs, ec.GetClientID())
+	}
 
+	err := data.Set("enabled_clients", clientIDs)
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags

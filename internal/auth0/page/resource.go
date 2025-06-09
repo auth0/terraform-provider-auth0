@@ -163,7 +163,6 @@ func updatePages(ctx context.Context, data *schema.ResourceData, meta interface{
 		if err := api.Client.Update(ctx, globalClientID, clientWithLoginPage); err != nil {
 			return diag.FromErr(err)
 		}
-
 	}
 
 	if tenantPages := expandTenantPages(data.GetRawConfig()); tenantPages != nil {

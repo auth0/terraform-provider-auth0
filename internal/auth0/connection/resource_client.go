@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+
 	"github.com/auth0/go-auth0"
 
 	"github.com/auth0/go-auth0/management"
@@ -63,12 +64,12 @@ func createConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	payload := []management.ConnectionEnabledClient{
 		{
 			ClientID: auth0.String(clientID),
-			Status:   auth0.Bool(true), // Enable this client
+			Status:   auth0.Bool(true),
 		},
 	}
 
 	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 	internalSchema.SetResourceGroupID(data, connectionID, clientID)
 	return readConnectionClient(ctx, data, meta)
@@ -86,15 +87,15 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	}
 
 	found := false
-	for _, c := range *enabledClientsResp.Clients {
-		if c.ClientID == auth0.String(clientID) && c.Status != nil && *c.Status {
+	for _, c := range enabledClientsResp.GetClients() {
+		if c.GetClientID() == clientID {
 			found = true
 			break
 		}
 	}
 
 	if !found {
-		// Not found or not enabled
+		// Not found or not enabled.
 		data.SetId("")
 		return nil
 	}
@@ -120,7 +121,7 @@ func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	payload := []management.ConnectionEnabledClient{
 		{
 			ClientID: auth0.String(clientID),
-			Status:   auth0.Bool(false), // Disable this client
+			Status:   auth0.Bool(false),
 		},
 	}
 

@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 	"fmt"
+
 	"github.com/auth0/go-auth0"
 
 	"github.com/auth0/go-auth0/management"
@@ -59,26 +60,24 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	connectionID := data.Get("connection_id").(string)
 	rawEnabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
 
-	// Fetch existing enabled clients from the new API
+	// Fetch existing enabled clients from the new API.
 	existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
 	if err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	var existingEnabledClientIDs []string
 	for _, c := range existingClientsResp.GetClients() {
-		if c.Status != nil && *c.Status {
-			existingEnabledClientIDs = append(existingEnabledClientIDs, *c.ClientID)
-		}
+		existingEnabledClientIDs = append(existingEnabledClientIDs, c.GetClientID())
 	}
 
-	// Safety check: disallow overwriting if existing differs from desired state
+	// Safety check: disallow overwriting if existing differs from desired state.
 	if diagnostics := guardAgainstErasingUnwantedEnabledClients(connectionID, *rawEnabledClients, existingEnabledClientIDs); diagnostics.HasError() {
 		data.SetId("")
 		return diagnostics
 	}
 
-	// Build payload to enable each client
+	// Build payload to enable each client.
 	var payload []management.ConnectionEnabledClient
 	for _, clientID := range *rawEnabledClients {
 		payload = append(payload, management.ConnectionEnabledClient{
@@ -87,8 +86,10 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 		})
 	}
 
-	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
-		return diag.FromErr(err)
+	if len(payload) != 0 {
+		if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
 	}
 
 	data.SetId(connectionID)
@@ -139,24 +140,31 @@ func deleteConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 	connectionID := data.Id()
 
-	existingClientsConfig, ok := data.Get("enabled_clients").([]string)
+	set, ok := data.Get("enabled_clients").(*schema.Set)
 	if !ok {
 		return diag.Errorf("failed to parse enabled_clients from state")
 	}
 
 	var payload []management.ConnectionEnabledClient
-	for _, clientId := range existingClientsConfig {
+	for _, raw := range set.List() {
+		clientID, ok := raw.(string)
+		if !ok {
+			return diag.Errorf("failed to cast clientID to string")
+		}
 		payload = append(payload, management.ConnectionEnabledClient{
-			ClientID: auth0.String(clientId),
+			ClientID: auth0.String(clientID),
 			Status:   auth0.Bool(false),
 		})
 	}
+
 	if len(payload) == 0 {
 		return nil
 	}
+
 	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
+
 	return nil
 }
 

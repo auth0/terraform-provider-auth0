@@ -166,7 +166,7 @@ func TestAccConnectionClientsImport(t *testing.T) {
 		// If you need to re-record it, comment out the t.Skip, create the
 		// resources defined above and fix the IDs in the test before running
 		// make record.
-		//t.Skip()
+		t.Skip()
 	}
 
 	acctest.Test(t, resource.TestCase{

@@ -126,7 +126,7 @@ func deleteConnectionClient(ctx context.Context, data *schema.ResourceData, meta
 	}
 
 	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
-		return diag.FromErr(err)
+		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
 	return nil

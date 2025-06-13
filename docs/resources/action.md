@@ -13,6 +13,9 @@ A binding is usually managed by [auth0_trigger_action](https://registry.terrafor
 The provider also supports a 1:many variant [auth0_trigger_actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/trigger_actions).
 If by any means, a binding is missing is the state file, it can be imported to the state and deleted, before attempting to delete the action.
 
+-> Values provided in the sensitive values shall be stored in the raw state as plain text: secrets.
+[Read more about sensitive data in state](https://developer.hashicorp.com/terraform/language/state/sensitive-data).
+
 
 ## Example Usage
 
@@ -74,7 +77,7 @@ resource "auth0_action" "my_action" {
 - `dependencies` (Block Set) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedblock--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
-- `secrets` (Block Set) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. (see [below for nested schema](#nestedblock--secrets))
+- `secrets` (Block Set) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedblock--secrets))
 
 ### Read-Only
 

@@ -97,7 +97,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Description: "List of secrets that are included in an action or a version of an action. " +
-					"Partial management of secrets is not supported. If the secret block is edited, the whole object is" +
+					"Partial management of secrets is not supported. If the secret block is edited, the whole object is " +
 					"re-provisioned.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

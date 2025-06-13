@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -57,7 +58,12 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 
 		data.SetId(connectionID)
 
-		return flattenConnectionForDataSource(data, connection)
+		existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+		if err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
+
+		return flattenConnectionForDataSource(data, connection, existingClientsResp)
 	}
 
 	name := data.Get("name").(string)
@@ -80,7 +86,12 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				return flattenConnectionForDataSource(data, connection)
+				existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connection.GetID())
+				if err != nil {
+					return diag.FromErr(err)
+				}
+
+				return flattenConnectionForDataSource(data, connection, existingClientsResp)
 			}
 		}
 

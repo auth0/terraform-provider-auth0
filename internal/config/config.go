@@ -60,7 +60,7 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 	return c.mutex
 }
 
-type AuthConfig struct {
+type authConfig struct {
 	clientID                  string
 	clientSecret              string
 	apiToken                  string
@@ -74,7 +74,7 @@ type AuthConfig struct {
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		authConfig := AuthConfig{
+		authConfig := authConfig{
 			clientID:                  data.Get("client_id").(string),
 			clientSecret:              data.Get("client_secret").(string),
 			apiToken:                  data.Get("api_token").(string),
@@ -88,7 +88,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		dynamicCredentials := data.Get("dynamic_credentials").(bool)
 		cliLogin := data.Get("cli_login").(bool)
 
-		// Helper to return missing domain diagnostic
+		// Helper to return missing domain diagnostic.
 		missingDomain := func(vars string) diag.Diagnostics {
 			return diag.Diagnostics{{
 				Severity: diag.Error,
@@ -253,7 +253,7 @@ func validateTokenExpiry(tokenString string) error {
 // userAgent computes the desired User-Agent header for the *management.Management client.
 func userAgent(terraformVersion *string) string {
 	sdkVersion := auth0.Version
-	terraformSDKVersion := meta.SDKVersionString() //nolint:static-check
+	terraformSDKVersion := meta.SDKVersionString() //nolint:staticcheck
 
 	userAgent := fmt.Sprintf(
 		"%s/%s (Go-Auth0-SDK/%s; Terraform-SDK/%s; Terraform/%s)",
@@ -268,7 +268,7 @@ func userAgent(terraformVersion *string) string {
 }
 
 // authenticationOption computes the desired authentication option for the *management.Management client.
-func authenticationOption(cfg AuthConfig) management.Option {
+func authenticationOption(cfg authConfig) management.Option {
 	ctx := context.Background()
 
 	switch {

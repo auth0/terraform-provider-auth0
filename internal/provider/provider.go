@@ -73,15 +73,6 @@ func New() *schema.Provider {
 				Description: "Your Auth0 client secret. " +
 					"It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.",
 			},
-			"client_assertion_signing_alg": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ASSERTION_SIGNING_ALG", nil),
-				Description: "The algorithm used to sign the client assertion JWT. " +
-					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variable. ",
-				RequiredWith:  []string{"client_assertion_signing_key", "client_id"},
-				ConflictsWith: []string{"api_token", "client_secret"},
-			},
 			"client_assertion_signing_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -89,6 +80,15 @@ func New() *schema.Provider {
 				Description: "The private key used to sign the client assertion JWT. " +
 					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_KEY` environment variable. ",
 				RequiredWith:  []string{"client_assertion_signing_alg", "client_id"},
+				ConflictsWith: []string{"api_token", "client_secret"},
+			},
+			"client_assertion_signing_alg": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ASSERTION_SIGNING_ALG", nil),
+				Description: "The algorithm used to sign the client assertion JWT. " +
+					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variable. ",
+				RequiredWith:  []string{"client_assertion_signing_key", "client_id"},
 				ConflictsWith: []string{"api_token", "client_secret"},
 			},
 			"api_token": {

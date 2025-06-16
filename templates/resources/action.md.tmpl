@@ -13,6 +13,9 @@ A binding is usually managed by [auth0_trigger_action](https://registry.terrafor
 The provider also supports a 1:many variant [auth0_trigger_actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/resources/trigger_actions).
 If by any means, a binding is missing is the state file, it can be imported to the state and deleted, before attempting to delete the action.
 
+-> Values provided in the sensitive values shall be stored in the raw state as plain text: secrets.
+[Read more about sensitive data in state](https://developer.hashicorp.com/terraform/language/state/sensitive-data).
+
 
 {{ if .HasExample -}}
 

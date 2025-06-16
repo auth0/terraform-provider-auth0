@@ -16,8 +16,25 @@ func flattenCustomDomain(data *schema.ResourceData, customDomain *management.Cus
 		data.Set("custom_client_ip_header", customDomain.GetCustomClientIPHeader()),
 		data.Set("tls_policy", customDomain.GetTLSPolicy()),
 		data.Set("verification", flattenCustomDomainVerificationMethods(customDomain.GetVerification())),
+		data.Set("domain_metadata", customDomain.GetDomainMetadata()),
+		data.Set("certificate", flattenCustomDomainCertificates(customDomain.GetCertificate())),
 	)
 	return result.ErrorOrNil()
+}
+
+func flattenCustomDomainCertificates(certificate *management.CustomDomainCertificate) []map[string]interface{} {
+	if certificate == nil {
+		return nil
+	}
+
+	return []map[string]interface{}{
+		{
+			"status":                certificate.GetStatus(),
+			"error_msg":             certificate.GetErrorMsg(),
+			"certificate_authority": certificate.GetCertificateAuthority(),
+			"renews_before":         certificate.GetRenewsBefore(),
+		},
+	}
 }
 
 func flattenCustomDomainVerificationMethods(verification *management.CustomDomainVerification) []map[string]interface{} {
@@ -27,7 +44,10 @@ func flattenCustomDomainVerificationMethods(verification *management.CustomDomai
 
 	return []map[string]interface{}{
 		{
-			"methods": verification.Methods,
+			"methods":          verification.Methods,
+			"status":           verification.GetStatus(),
+			"error_msg":        verification.GetErrorMsg(),
+			"last_verified_at": verification.GetLastVerifiedAt(),
 		},
 	}
 }

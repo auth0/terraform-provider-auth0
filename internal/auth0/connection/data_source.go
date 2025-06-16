@@ -2,6 +2,7 @@ package connection
 
 import (
 	"context"
+
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 
 	"github.com/auth0/go-auth0/management"

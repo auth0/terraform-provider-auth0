@@ -1221,6 +1221,16 @@ var optionsSchema = &schema.Schema{
 				Optional:    true,
 				Description: "Allows configuration if connections_realm_fallback flag is enabled for the tenant",
 			},
+			"token_endpoint_auth_method": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)",
+			},
+			"token_endpoint_auth_signing_alg": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+			},
 		},
 	},
 }

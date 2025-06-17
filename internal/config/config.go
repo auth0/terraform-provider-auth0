@@ -65,7 +65,7 @@ type authConfig struct {
 	clientSecret              string
 	apiToken                  string
 	audience                  string
-	clientAssertionSigningKey string
+	clientAssertionPrivateKey string
 	clientAssertionSigningAlg string
 }
 
@@ -74,12 +74,12 @@ type authConfig struct {
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		authConfig := authConfig{
+		config := authConfig{
 			clientID:                  data.Get("client_id").(string),
 			clientSecret:              data.Get("client_secret").(string),
 			apiToken:                  data.Get("api_token").(string),
 			audience:                  data.Get("audience").(string),
-			clientAssertionSigningKey: data.Get("client_assertion_signing_key").(string),
+			clientAssertionPrivateKey: data.Get("client_assertion_private_key").(string),
 			clientAssertionSigningAlg: data.Get("client_assertion_signing_alg").(string),
 		}
 
@@ -113,15 +113,15 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			}
 
 			// Set the apiToken to the valid tempToken.
-			authConfig.apiToken = tempToken
-		case authConfig.apiToken != "":
+			config.apiToken = tempToken
+		case config.apiToken != "":
 			if domain == "" {
 				return nil, missingDomain("'AUTH0_API_TOKEN'")
 			}
-		case authConfig.clientID != "":
+		case config.clientID != "":
 			var (
-				hasSecret    = authConfig.clientSecret != ""
-				hasAssertion = authConfig.clientAssertionSigningKey != "" && authConfig.clientAssertionSigningAlg != ""
+				hasSecret    = config.clientSecret != ""
+				hasAssertion = config.clientAssertionPrivateKey != "" && config.clientAssertionSigningAlg != ""
 			)
 
 			if !hasSecret && !hasAssertion {
@@ -129,7 +129,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 					Severity: diag.Error,
 					Summary:  "Missing required configuration",
 					Detail: "When 'AUTH0_CLIENT_ID' is provided, either 'AUTH0_CLIENT_SECRET' or both " +
-						"'AUTH0_CLIENT_ASSERTION_SIGNING_KEY' and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG' must also be specified.",
+						"'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY' and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG' must also be specified.",
 				}}
 			}
 
@@ -138,7 +138,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				case hasSecret:
 					return nil, missingDomain("'AUTH0_CLIENT_ID' and 'AUTH0_CLIENT_SECRET'")
 				case hasAssertion:
-					return nil, missingDomain("'AUTH0_CLIENT_ID', 'AUTH0_CLIENT_ASSERTION_SIGNING_KEY', and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG'")
+					return nil, missingDomain("'AUTH0_CLIENT_ID', 'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY', and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG'")
 				}
 			}
 		default:
@@ -147,13 +147,13 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 				Summary:  "Missing environment variables",
 				Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
 					"or AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET, " +
-					"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_SIGNING_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
+					"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_PRIVATE_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
 					"or enable CLI login with AUTH0_CLI_LOGIN=true.",
 			}}
 		}
 
 		apiClient, err := management.New(domain,
-			authenticationOption(authConfig),
+			authenticationOption(config),
 			management.WithDebug(debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
@@ -275,11 +275,11 @@ func authenticationOption(cfg authConfig) management.Option {
 	case cfg.apiToken != "":
 		return management.WithStaticToken(cfg.apiToken)
 	case cfg.audience != "":
-		if cfg.clientAssertionSigningKey != "" {
+		if cfg.clientAssertionPrivateKey != "" {
 			return management.WithClientCredentialsPrivateKeyJwtAndAudience(
 				ctx,
 				cfg.clientID,
-				cfg.clientAssertionSigningKey,
+				cfg.clientAssertionPrivateKey,
 				cfg.clientAssertionSigningAlg,
 				cfg.audience,
 			)
@@ -290,11 +290,11 @@ func authenticationOption(cfg authConfig) management.Option {
 			cfg.clientSecret,
 			cfg.audience,
 		)
-	case cfg.clientAssertionSigningKey != "":
+	case cfg.clientAssertionPrivateKey != "":
 		return management.WithClientCredentialsPrivateKeyJwt(
 			ctx,
 			cfg.clientID,
-			cfg.clientAssertionSigningKey,
+			cfg.clientAssertionPrivateKey,
 			cfg.clientAssertionSigningAlg,
 		)
 

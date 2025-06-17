@@ -45,7 +45,7 @@ func TestConfigureProvider(t *testing.T) {
 			givenTerraformConfig: map[string]interface{}{
 				"domain":                       "example.auth0.com",
 				"client_id":                    "1234567",
-				"client_assertion_signing_key": "private-key",
+				"client_assertion_private_key": "private-key",
 				"client_assertion_signing_alg": "RS256",
 			},
 			expectedDiagnostics: nil,
@@ -55,7 +55,7 @@ func TestConfigureProvider(t *testing.T) {
 			givenTerraformConfig: map[string]interface{}{
 				"domain":                       "example.auth0.com",
 				"client_id":                    "1234567",
-				"client_assertion_signing_key": "private-key",
+				"client_assertion_private_key": "private-key",
 				"client_assertion_signing_alg": "RS256",
 				"audience":                     "myaudience",
 			},
@@ -78,7 +78,7 @@ func TestConfigureProvider(t *testing.T) {
 					Summary:  "Missing environment variables",
 					Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
 						"or AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET, " +
-						"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_SIGNING_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
+						"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_PRIVATE_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
 						"or enable CLI login with AUTH0_CLI_LOGIN=true.",
 				},
 			},

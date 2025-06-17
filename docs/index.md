@@ -48,8 +48,8 @@ better alternative.
 - `api_token` (String) Your Auth0 [management api access token](https://auth0.com/docs/security/tokens/access-tokens/management-api-access-tokens). It can also be sourced from the `AUTH0_API_TOKEN` environment variable. It can be used instead of `client_id` + `client_secret`. If both are specified, `api_token` will be used over `client_id` + `client_secret` fields.
 - `audience` (String) Your Auth0 audience when using a custom domain. It can also be sourced from the `AUTH0_AUDIENCE` environment variable.
 - `cli_login` (Boolean) While toggled on, the API token gets fetched from the keyring for the given domain
+- `client_assertion_private_key` (String) The private key used to sign the client assertion JWT. It can also be sourced from the `AUTH0_CLIENT_ASSERTION_PRIVATE_KEY` environment variable.
 - `client_assertion_signing_alg` (String) The algorithm used to sign the client assertion JWT. It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variable.
-- `client_assertion_signing_key` (String) The private key used to sign the client assertion JWT. It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_KEY` environment variable.
 - `client_id` (String) Your Auth0 client ID. It can also be sourced from the `AUTH0_CLIENT_ID` environment variable.
 - `client_secret` (String) Your Auth0 client secret. It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.
 - `debug` (Boolean) Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.
@@ -59,7 +59,7 @@ better alternative.
 ## Environment Variables
 
 You can provide your credentials via the `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID` and `AUTH0_CLIENT_SECRET` or `AUTH0_API_TOKEN`
-or `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_ASSERTION_SIGNING_KEY` and `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variables, respectively.
+or `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_ASSERTION_PRIVATE_KEY` and `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variables, respectively.
 
 ```terraform
 provider "auth0" {}
@@ -79,7 +79,7 @@ terraform plan
 ```shell
 AUTH0_DOMAIN="<domain>" \
 AUTH0_CLIENT_ID="<client-id>" \
-AUTH0_CLIENT_ASSERTION_SIGNING_KEY="<private-key>" \
+AUTH0_CLIENT_ASSERTION_PRIVATE_KEY="<private-key>" \
 AUTH0_CLIENT_ASSERTION_SIGNING_ALGORITHM="<signing-algorithm>" \
 terraform plan
 ```

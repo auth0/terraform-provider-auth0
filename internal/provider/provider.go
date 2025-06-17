@@ -69,16 +69,16 @@ func New() *schema.Provider {
 				Optional:      true,
 				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_CLIENT_SECRET", nil),
 				RequiredWith:  []string{"client_id"},
-				ConflictsWith: []string{"api_token", "client_assertion_signing_key", "client_assertion_signing_alg"},
+				ConflictsWith: []string{"api_token", "client_assertion_private_key", "client_assertion_signing_alg"},
 				Description: "Your Auth0 client secret. " +
 					"It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.",
 			},
-			"client_assertion_signing_key": {
+			"client_assertion_private_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ASSERTION_SIGNING_KEY", nil),
+				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ASSERTION_PRIVATE_KEY", nil),
 				Description: "The private key used to sign the client assertion JWT. " +
-					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_KEY` environment variable. ",
+					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_PRIVATE_KEY` environment variable. ",
 				RequiredWith:  []string{"client_assertion_signing_alg", "client_id"},
 				ConflictsWith: []string{"api_token", "client_secret"},
 			},
@@ -88,14 +88,14 @@ func New() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CLIENT_ASSERTION_SIGNING_ALG", nil),
 				Description: "The algorithm used to sign the client assertion JWT. " +
 					"It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variable. ",
-				RequiredWith:  []string{"client_assertion_signing_key", "client_id"},
+				RequiredWith:  []string{"client_assertion_private_key", "client_id"},
 				ConflictsWith: []string{"api_token", "client_secret"},
 			},
 			"api_token": {
 				Type:          schema.TypeString,
 				Optional:      true,
 				DefaultFunc:   schema.EnvDefaultFunc("AUTH0_API_TOKEN", nil),
-				ConflictsWith: []string{"client_id", "client_secret", "client_assertion_signing_key", "client_assertion_signing_alg"},
+				ConflictsWith: []string{"client_id", "client_secret", "client_assertion_private_key", "client_assertion_signing_alg"},
 				Description: "Your Auth0 [management api access token]" +
 					"(https://auth0.com/docs/security/tokens/access-tokens/management-api-access-tokens). " +
 					"It can also be sourced from the `AUTH0_API_TOKEN` environment variable. " +

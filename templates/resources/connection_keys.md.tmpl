@@ -1,0 +1,28 @@
+---
+page_title: "{{.Type}}: {{.Name}}"
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Type}}: {{.Name}}
+
+{{ .Description | trimspace }}
+
+!> The triggers field is only a placeholder for an arbitrary map used to signal the provider
+to perform a key rotation whenever any update is made.
+If the resource is removed from the configuration, the keys will not be deleted.
+
+
+{{ if .HasExample -}}
+
+## Example Usage
+
+{{ tffile .ExampleFile }}
+
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+{{ if .HasImport -}}
+
+{{- end }}

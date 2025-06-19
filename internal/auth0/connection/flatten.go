@@ -1177,7 +1177,7 @@ func flattenConnectionKeyMap(connectionID string, key *management.ConnectionKey)
 
 func flattenConnectionKey(data *schema.ResourceData, connectionID string, key *management.ConnectionKey) diag.Diagnostics {
 	m := flattenConnectionKeyMap(connectionID, key)
-
+	m["triggers"] = data.Get("triggers")
 	var result *multierror.Error
 	for k, v := range m {
 		result = multierror.Append(result, data.Set(k, v))

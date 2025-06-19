@@ -18,6 +18,7 @@ func NewKeysResource() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: rotateConnectionKeys,
 		ReadContext:   readConnectionKeys,
+		UpdateContext: rotateConnectionKeys,
 		DeleteContext: deleteConnectionKeys,
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
@@ -32,6 +33,17 @@ func NewKeysResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+			},
+			"triggers": {
+				Type:     schema.TypeMap,
+				Required: true,
+				Description: "This is an arbitrary map, which when edited shall perform rotation of keys for corresponding connection. " +
+					"It can host keys like version, timestamp of last rotation etc.",
+				Elem: &schema.Schema{
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "The trigger key which when changed will perform rotation",
+				},
 			},
 			"kid": {
 				Type:        schema.TypeString,

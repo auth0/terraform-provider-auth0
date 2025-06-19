@@ -32,6 +32,10 @@ resource "auth0_connection" "oidc" {
 
 resource "auth0_connection_keys" "my_keys"{
     connection_id = auth0_connection.oidc.id
+    triggers = {
+        version = "1"
+        date   = "2023-10-01T00:00:00Z"
+    }
 }
 
 data "auth0_connection_keys" "my_keys" {
@@ -54,6 +58,7 @@ func TestAccConnectionRotateDataKeys(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_connection_keys.my_keys", "key_use"),
 					resource.TestCheckResourceAttrSet("auth0_connection_keys.my_keys", "kid"),
 					resource.TestCheckResourceAttrSet("auth0_connection_keys.my_keys", "pkcs"),
+					resource.TestCheckResourceAttr("auth0_connection_keys.my_keys", "triggers.version", "1"),
 					resource.TestCheckResourceAttr("data.auth0_connection_keys.my_keys", "keys.#", "3"),
 					resource.TestCheckResourceAttrSet("data.auth0_connection_keys.my_keys", "keys.0.algorithm"),
 					resource.TestCheckResourceAttrSet("data.auth0_connection_keys.my_keys", "keys.0.cert"),

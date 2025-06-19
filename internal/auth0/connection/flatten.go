@@ -81,11 +81,15 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 	return diag.FromErr(result.ErrorOrNil())
 }
 
-func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection) diag.Diagnostics {
+func flattenConnectionForDataSource(data *schema.ResourceData, connection *management.Connection, enabledClients *management.ConnectionEnabledClientList) diag.Diagnostics {
 	diags := flattenConnection(data, connection)
 
-	err := data.Set("enabled_clients", connection.GetEnabledClients())
+	var clientIDs []string
+	for _, ec := range enabledClients.GetClients() {
+		clientIDs = append(clientIDs, ec.GetClientID())
+	}
 
+	err := data.Set("enabled_clients", clientIDs)
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
@@ -1121,14 +1125,21 @@ func flattenConnectionClient(data *schema.ResourceData, connection *management.C
 	return result.ErrorOrNil()
 }
 
-func flattenConnectionClients(data *schema.ResourceData, connection *management.Connection) error {
+func flattenConnectionClients(
+	data *schema.ResourceData,
+	connection *management.Connection,
+	enabledClients *management.ConnectionEnabledClientList,
+) error {
+	var enabledClientIDs []string
+	for _, ec := range enabledClients.GetClients() {
+		enabledClientIDs = append(enabledClientIDs, ec.GetClientID())
+	}
 	result := multierror.Append(
 		data.Set("connection_id", connection.GetID()),
 		data.Set("name", connection.GetName()),
 		data.Set("strategy", connection.GetStrategy()),
-		data.Set("enabled_clients", connection.GetEnabledClients()),
+		data.Set("enabled_clients", enabledClientIDs),
 	)
-
 	return result.ErrorOrNil()
 }
 

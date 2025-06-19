@@ -37,12 +37,13 @@ func NewKeysResource() *schema.Resource {
 			"triggers": {
 				Type:     schema.TypeMap,
 				Required: true,
-				Description: "This is an arbitrary map, which when edited shall perform rotation of keys for corresponding connection. " +
-					"It can host keys like version, timestamp of last rotation etc.",
+				Description: "This is an arbitrary map, which when edited shall perform rotation of keys for the corresponding connection. " +
+					"It can host keys like version, timestamp of last rotation etc." +
+					"The field has no association with API",
 				Elem: &schema.Schema{
 					Type:        schema.TypeString,
 					Required:    true,
-					Description: "The trigger key which when changed will perform rotation",
+					Description: "Custom trigger key which when altered will perform rotation",
 				},
 			},
 			"kid": {

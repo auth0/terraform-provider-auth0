@@ -47,5 +47,6 @@ Read-Only:
 - `previous` (Boolean)
 - `subject_dn` (String)
 - `thumbprint` (String)
+- `triggers` (Map of String)
 
 

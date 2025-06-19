@@ -21,4 +21,8 @@ resource "auth0_connection" "oidc" {
 # Resource used to rotate the keys for above OIDC connection
 resource "auth0_connection_keys" "my_keys" {
   connection_id = auth0_connection.oidc.id
+  triggers = {
+    version = "1"
+    date    = "2023-10-01T00:00:00Z"
+  }
 }

@@ -11,7 +11,7 @@ resource "auth0_token_exchange_profile" "my_token_exchange_profile" {
 resource "auth0_action" "my_action" {
   name   = "TokenExchange-Action"
   code   = <<-EOT
-		exports.onContinuePostLogin = async (event, api) => {
+		exports.onExecuteCustomTokenExchange = async (event, api) => {
 			console.log("foo")
 		};"
 		EOT

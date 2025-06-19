@@ -711,22 +711,24 @@ func flattenConnectionOptionsOIDC(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
-		"icon_url":                 options.GetLogoURL(),
-		"tenant_domain":            options.GetTenantDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"type":                     options.GetType(),
-		"scopes":                   options.Scopes(),
-		"issuer":                   options.GetIssuer(),
-		"jwks_uri":                 options.GetJWKSURI(),
-		"discovery_url":            options.GetDiscoveryURL(),
-		"token_endpoint":           options.GetTokenEndpoint(),
-		"userinfo_endpoint":        options.GetUserInfoEndpoint(),
-		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"upstream_params":          upstreamParams,
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"icon_url":                        options.GetLogoURL(),
+		"tenant_domain":                   options.GetTenantDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"type":                            options.GetType(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"discovery_url":                   options.GetDiscoveryURL(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -770,20 +772,22 @@ func flattenConnectionOptionsOkta(
 	}
 
 	optionsMap := map[string]interface{}{
-		"client_id":                options.GetClientID(),
-		"client_secret":            options.GetClientSecret(),
-		"domain":                   options.GetDomain(),
-		"domain_aliases":           options.GetDomainAliases(),
-		"scopes":                   options.Scopes(),
-		"issuer":                   options.GetIssuer(),
-		"jwks_uri":                 options.GetJWKSURI(),
-		"token_endpoint":           options.GetTokenEndpoint(),
-		"userinfo_endpoint":        options.GetUserInfoEndpoint(),
-		"authorization_endpoint":   options.GetAuthorizationEndpoint(),
-		"non_persistent_attrs":     options.GetNonPersistentAttrs(),
-		"set_user_root_attributes": options.GetSetUserAttributes(),
-		"icon_url":                 options.GetLogoURL(),
-		"upstream_params":          upstreamParams,
+		"client_id":                       options.GetClientID(),
+		"client_secret":                   options.GetClientSecret(),
+		"domain":                          options.GetDomain(),
+		"domain_aliases":                  options.GetDomainAliases(),
+		"scopes":                          options.Scopes(),
+		"issuer":                          options.GetIssuer(),
+		"jwks_uri":                        options.GetJWKSURI(),
+		"token_endpoint":                  options.GetTokenEndpoint(),
+		"userinfo_endpoint":               options.GetUserInfoEndpoint(),
+		"authorization_endpoint":          options.GetAuthorizationEndpoint(),
+		"non_persistent_attrs":            options.GetNonPersistentAttrs(),
+		"set_user_root_attributes":        options.GetSetUserAttributes(),
+		"icon_url":                        options.GetLogoURL(),
+		"upstream_params":                 upstreamParams,
+		"token_endpoint_auth_method":      options.GetTokenEndpointAuthMethod(),
+		"token_endpoint_auth_signing_alg": options.GetTokenEndpointAuthSigningAlg(),
 	}
 
 	attributes, err := structure.FlattenJsonToString(options.GetAttributeMap().GetAttributes())
@@ -1161,5 +1165,33 @@ func flattenSCIMConfiguration(data *schema.ResourceData, scimConfiguration *mana
 		data.Set("tenant_name", scimConfiguration.GetTenantName()),
 	)
 
+	return diag.FromErr(result.ErrorOrNil())
+}
+
+func flattenConnectionKeyMap(connectionID string, key *management.ConnectionKey) map[string]interface{} {
+	return map[string]interface{}{
+		"kid":           key.GetKID(),
+		"connection_id": connectionID,
+		"cert":          key.GetCert(),
+		"pkcs":          key.GetPKCS(),
+		"current":       key.GetCurrent(),
+		"next":          key.GetNext(),
+		"previous":      key.GetPrevious(),
+		"current_since": key.GetCurrentSince(),
+		"fingerprint":   key.GetFingerprint(),
+		"thumbprint":    key.GetThumbprint(),
+		"algorithm":     key.GetAlgorithm(),
+		"key_use":       key.GetKeyUse(),
+		"subject_dn":    key.GetSubjectDN(),
+	}
+}
+
+func flattenConnectionKey(data *schema.ResourceData, connectionID string, key *management.ConnectionKey) diag.Diagnostics {
+	m := flattenConnectionKeyMap(connectionID, key)
+	m["triggers"] = data.Get("triggers")
+	var result *multierror.Error
+	for k, v := range m {
+		result = multierror.Append(result, data.Set(k, v))
+	}
 	return diag.FromErr(result.ErrorOrNil())
 }

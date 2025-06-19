@@ -132,6 +132,8 @@ Read-Only:
 - `template` (String)
 - `tenant_domain` (String)
 - `token_endpoint` (String)
+- `token_endpoint_auth_method` (String)
+- `token_endpoint_auth_signing_alg` (String)
 - `totp` (List of Object) (see [below for nested schema](#nestedobjatt--options--totp))
 - `twilio_sid` (String)
 - `twilio_token` (String)

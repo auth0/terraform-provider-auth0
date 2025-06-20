@@ -1,3 +1,19 @@
+## v1.22.0
+
+FEATURES:
+
+- `resource/auth0_connection_keys`: Add support for key rotation for Okta/OIDC connections ([#1281](https://github.com/auth0/terraform-provider-auth0/pull/1281))
+- `data-source/auth0_connection_keys`: Add support to retrieve list of signing keys for a Okta/OIDC connection ([#1281](https://github.com/auth0/terraform-provider-auth0/pull/1281))
+
+ENHANCEMENTS:
+
+- `resource/auth0_connection_client`: Updated to use `UpdateEnabledClients` endpoint while the user experience remains unchanged ([#1272](https://github.com/auth0/terraform-provider-auth0/pull/1272))
+- `resource/auth0_connection_clients`: Updated to use `ReadEnabledClients` endpoint while the user experience remains unchanged ([#1272](https://github.com/auth0/terraform-provider-auth0/pull/1272))
+
+BUG FIXES:
+
+- `resource/auth0_client`: Add feasibility to set `cross_origin_loc` and `addons` as null ([#1261](https://github.com/auth0/terraform-provider-auth0/pull/1261))
+
 ## v1.21.0
 
 FEATURES:

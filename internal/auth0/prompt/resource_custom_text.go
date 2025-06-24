@@ -73,6 +73,7 @@ var (
 		string(management.PromptResetPassword),
 		string(management.PromptCustomForm),
 		string(management.PromptConsent),
+		string(management.PromptCustomizedConsent),
 		string(management.PromptLogout),
 		string(management.PromptMFAPush),
 		string(management.PromptMFAOTP),
@@ -92,6 +93,7 @@ var (
 		string(management.PromptCommon),
 		string(management.PromptPasskeys),
 		string(management.PromptCaptcha),
+		string(management.PromptBruteForceProtection),
 	}
 
 	availableLanguages = fetchLanguages()

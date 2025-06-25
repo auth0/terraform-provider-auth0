@@ -30,7 +30,7 @@ provider "auth0" {
 provider "auth0" {
   domain                       = "<domain>"
   client_id                    = "<client-id>"
-  client_assertion_private_key = "<private-key>"
+  client_assertion_private_key = file("<path-to-private-key>")
   client_assertion_signing_alg = "<signing-algorithm>"
   debug                        = "<debug>"
 }
@@ -80,7 +80,7 @@ terraform plan
 AUTH0_DOMAIN="<domain>" \
 AUTH0_CLIENT_ID="<client-id>" \
 AUTH0_CLIENT_ASSERTION_PRIVATE_KEY="<private-key>" \
-AUTH0_CLIENT_ASSERTION_SIGNING_ALGORITHM="<signing-algorithm>" \
+AUTH0_CLIENT_ASSERTION_SIGNING_ALG="<signing-algorithm>" \
 terraform plan
 ```
 

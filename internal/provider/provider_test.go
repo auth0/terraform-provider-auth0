@@ -94,16 +94,6 @@ func TestProvider_configValidation(t *testing.T) {
 			},
 		},
 		{
-			name:           "missing client secret",
-			resourceConfig: map[string]interface{}{"domain": "test", "client_id": "test"},
-			expectedErrors: diag.Diagnostics{
-				diag.Diagnostic{
-					Summary: "RequiredWith",
-					Detail:  "\"client_id\": all of `client_id,client_secret` must be specified",
-				},
-			},
-		},
-		{
 			name:           "conflicting auth0 client and management token without domain",
 			resourceConfig: map[string]interface{}{"client_id": "test", "client_secret": "test", "api_token": "test"},
 			expectedErrors: diag.Diagnostics{

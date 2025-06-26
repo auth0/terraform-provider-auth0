@@ -66,7 +66,7 @@ resource "auth0_trigger_actions" "login_flow" {
 ### Required
 
 - `actions` (Block List, Min: 1) The list of actions bound to this trigger. (see [below for nested schema](#nestedblock--actions))
-- `trigger` (String) The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`.
+- `trigger` (String) The ID of the trigger to bind with. Options include: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`, `custom-token-exchange`.
 
 ### Read-Only
 

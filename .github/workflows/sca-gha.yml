@@ -1,0 +1,18 @@
+name: test sca scan gha
+
+on: [pull_request]
+
+jobs:
+  test-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout app code
+        uses: actions/checkout@v4
+
+      - name: SCA
+        uses: auth0/devsecops-tooling/.github/actions/sca-scan@main
+        with:
+          SIGNAL_HANDLER_DOMAIN: ${{ secrets.SIGNAL_HANDLER_DOMAIN }}
+          SIGNAL_HANDLER_TOKEN: ${{ secrets.SIGNAL_HANDLER_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

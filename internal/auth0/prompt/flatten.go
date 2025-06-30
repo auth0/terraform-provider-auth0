@@ -162,6 +162,8 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 		data.Set("default_head_tags_disabled", promptSetting.GetDefaultHeadTagsDisabled()),
 		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
 		data.Set("head_tags", flattenHeadTags(promptSetting)),
+		data.Set("use_page_template", promptSetting.GetUsePageTemplate()),
+		data.Set("filters", flattenPromptRenderingFilters(promptSetting.Filters)),
 	)
 
 	return result.ErrorOrNil()
@@ -178,4 +180,50 @@ func flattenHeadTags(promptSetting *management.PromptRendering) string {
 	}
 
 	return string(headTagBytes)
+}
+
+func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) []interface{} {
+	if filters == nil {
+		return nil
+	}
+
+	m := map[string]interface{}{}
+
+	if filters.MatchType != nil {
+		m["match_type"] = filters.GetMatchType()
+	}
+
+	if filters.Clients != nil {
+		m["clients"] = flattenPromptRenderingFilterList(*filters.Clients)
+	}
+
+	if filters.Organizations != nil {
+		m["organizations"] = flattenPromptRenderingFilterList(*filters.Organizations)
+	}
+
+	if filters.Domains != nil {
+		m["domains"] = flattenPromptRenderingFilterList(*filters.Domains)
+	}
+
+	return []interface{}{m}
+}
+
+func flattenPromptRenderingFilterList(filters []management.PromptRenderingFilter) []interface{} {
+	result := make([]interface{}, 0, len(filters))
+
+	for _, filter := range filters {
+		item := make(map[string]interface{})
+
+		if filter.ID != nil {
+			item["id"] = filter.GetID()
+		}
+
+		if filter.Metadata != nil {
+			item["metadata"] = filter.GetMetadata()
+		}
+
+		result = append(result, item)
+	}
+
+	return result
 }

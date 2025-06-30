@@ -188,6 +188,88 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Default:     false,
 				Description: "Override Universal Login default head tags",
 			},
+			"use_page_template": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Use page template with ACUL",
+			},
+			"filters": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Optional filters to apply rendering rules to specific entities",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"match_type": {
+							Type:         schema.TypeString,
+							Optional:     true,
+							ValidateFunc: validation.StringInSlice([]string{"includes_any", "excludes_any"}, false),
+							Description:  "Type of match to apply. Options: `includes_any`, `excludes_any`.",
+						},
+						"clients": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    25,
+							Description: "Clients filter",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Client ID",
+									},
+									"metadata": {
+										Type:        schema.TypeMap,
+										Optional:    true,
+										Description: "Client metadata key/value pairs (max 1 key)",
+									},
+								},
+							},
+						},
+						"organizations": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    25,
+							Description: "Organizations filter",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Organization ID",
+									},
+									"metadata": {
+										Type:        schema.TypeMap,
+										Optional:    true,
+										Description: "Organization metadata key/value pairs (max 1 key)",
+									},
+								},
+							},
+						},
+						"domains": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    25,
+							Description: "Domains filter",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"id": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "Domain ID",
+									},
+									"metadata": {
+										Type:        schema.TypeMap,
+										Optional:    true,
+										Description: "Domain metadata key/value pairs (max 1 key)",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"head_tags": {
 				Type:             schema.TypeString,
 				Optional:         true,

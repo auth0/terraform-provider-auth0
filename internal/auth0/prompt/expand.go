@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"encoding/json"
+	"github.com/auth0/go-auth0"
 
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -114,8 +115,67 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 	if data.HasChange("head_tags") {
 		promptSettings.HeadTags = expandInterfaceArray(data, "head_tags")
 	}
+	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
+	promptSettings.Filters = expandPromptRenderingFilters(data)
 
 	return promptSettings, nil
+}
+
+func expandPromptRenderingFilters(data *schema.ResourceData) *management.PromptRenderingFilters {
+	if !data.IsNewResource() && !data.HasChange("filters") {
+		return nil
+	}
+
+	filter := data.GetRawConfig().GetAttr("filters")
+	if filter.IsNull() {
+		return nil
+	}
+
+	var result management.PromptRenderingFilters
+
+	filter.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		result.MatchType = value.String(config.GetAttr("match_type"))
+		result.Clients = expandPromptRenderingFilterList(config, "clients")
+		//result.Domains = value.Strings(config.GetAttr("domains"))
+		//result.Organizations = value.String(config.GetAttr("organizations"))
+
+		return stop
+	})
+
+	return &result
+}
+
+func expandPromptRenderingFilterList(ctv cty.Value, f string) *[]management.PromptRenderingFilter {
+	filters := make([]management.PromptRenderingFilter, 0)
+
+	fConfig := ctv.GetAttr(f)
+	fConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+		filters = append(filters, management.PromptRenderingFilter{
+			ID:       auth0.String(config.GetAttr("id").AsString()),
+			Metadata: expandFilterNestedMetadata(config.GetAttr("metadata")),
+		})
+
+	})
+
+	return &filters
+}
+
+func expandFilterNestedMetadata(metaData cty.Value) *map[string]interface{} {
+	if !metaData.IsNull() && metaData.IsKnown() {
+		result := make(map[string]interface{})
+		for k, v := range metaData.AsValueMap() {
+			switch {
+			case v.Type().IsPrimitiveType():
+				result[k] = v.AsString()
+			case v.Type().IsObjectType() || v.Type().IsMapType():
+				if nested := expandFilterNestedMetadata(v); nested != nil {
+					result[k] = *nested
+				}
+			}
+			return &result
+		}
+		return nil
+	}
 }
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {

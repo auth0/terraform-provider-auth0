@@ -133,11 +133,19 @@ func expandPromptRenderingFilters(data *schema.ResourceData) *management.PromptR
 
 	var result management.PromptRenderingFilters
 
+	priorFilters := data.Get("filters").([]interface{})
+	var priorClients []interface{}
+	if len(priorFilters) > 0 {
+		if clientList, ok := priorFilters[0].(map[string]interface{})["clients"].([]interface{}); ok {
+			priorClients = clientList
+		}
+	}
+
 	filter.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		result.MatchType = value.String(config.GetAttr("match_type"))
-		result.Clients = expandPromptRenderingFilterList(config, "clients")
-		//result.Domains = value.Strings(config.GetAttr("domains"))
-		//result.Organizations = value.String(config.GetAttr("organizations"))
+		result.Clients = expandPromptRenderingFilterList(config, priorClients, "clients")
+		result.Domains = expandPromptRenderingFilterList(config, priorClients, "domains")
+		result.Organizations = expandPromptRenderingFilterList(config, priorClients, "organizations")
 
 		return stop
 	})
@@ -145,37 +153,53 @@ func expandPromptRenderingFilters(data *schema.ResourceData) *management.PromptR
 	return &result
 }
 
-func expandPromptRenderingFilterList(ctv cty.Value, f string) *[]management.PromptRenderingFilter {
+func expandPromptRenderingFilterList(ctv cty.Value, priorState []interface{}, f string) *[]management.PromptRenderingFilter {
 	filters := make([]management.PromptRenderingFilter, 0)
 
 	fConfig := ctv.GetAttr(f)
-	fConfig.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
+	fConfig.ForEachElement(func(i cty.Value, config cty.Value) (stop bool) {
+		index, _ := i.AsBigFloat().Int64()
+
+		var priorMetadata map[string]interface{}
+		if int(index) < len(priorState) {
+			if pm, ok := priorState[index].(map[string]interface{})["metadata"].(map[string]interface{}); ok {
+				priorMetadata = pm
+			}
+		}
+
 		filters = append(filters, management.PromptRenderingFilter{
 			ID:       auth0.String(config.GetAttr("id").AsString()),
-			Metadata: expandFilterNestedMetadata(config.GetAttr("metadata")),
+			Metadata: expandFilterNestedMetadata(config.GetAttr("metadata"), priorMetadata),
 		})
-
+		return stop
 	})
 
 	return &filters
 }
 
-func expandFilterNestedMetadata(metaData cty.Value) *map[string]interface{} {
-	if !metaData.IsNull() && metaData.IsKnown() {
-		result := make(map[string]interface{})
-		for k, v := range metaData.AsValueMap() {
+func expandFilterNestedMetadata(current cty.Value, prior map[string]interface{}) *map[string]interface{} {
+	newMetadata := make(map[string]interface{})
+
+	if !current.IsNull() {
+		valMap := current.AsValueMap()
+		for k, v := range valMap {
 			switch {
-			case v.Type().IsPrimitiveType():
-				result[k] = v.AsString()
-			case v.Type().IsObjectType() || v.Type().IsMapType():
-				if nested := expandFilterNestedMetadata(v); nested != nil {
-					result[k] = *nested
-				}
+			case v.Type().Equals(cty.String):
+				newMetadata[k] = v.AsString()
+			default:
+				// You can skip or log unsupported types
+				newMetadata[k] = nil
 			}
-			return &result
 		}
-		return nil
 	}
+
+	for k := range prior {
+		if _, exists := newMetadata[k]; !exists {
+			newMetadata[k] = nil
+		}
+	}
+
+	return &newMetadata
 }
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {

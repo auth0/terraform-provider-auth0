@@ -56,6 +56,18 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
        }
   ])
 
+	filters {
+        match_type = "includes_any"
+
+        clients {
+            id = "fCYih2bqL9fCVAi37DOnx9OxKbTkAsUs"
+
+            metadata = {
+                key1 = "value1"
+            }
+        }
+    }
+
   context_configuration = [
         "branding.settings",
 		"branding.themes.default",
@@ -174,6 +186,22 @@ func TestAccPromptScreenSettings(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
 					resource.TestCheckResourceAttr("data.auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "standard"),
+				),
+			},
+		},
+	})
+}
+
+func TestNew(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: testAccPromptScreenRenderCreate,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "prompt_type", "login-id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "screen_name", "login-id"),
+					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.login-id", "id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.login-id", "rendering_mode", "standard"),
 				),
 			},
 		},

@@ -117,16 +117,29 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
 	connectionID := data.Id()
-	enabledClientIDs := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
+
+	oldSet, newSet := data.GetChange("enabled_clients")
+
+	oldMap := makeSetMap(oldSet.(*schema.Set))
+	newMap := makeSetMap(newSet.(*schema.Set))
 
 	var payload []management.ConnectionEnabledClient
-	for _, clientID := range *enabledClientIDs {
+
+	for clientID := range newMap {
 		payload = append(payload, management.ConnectionEnabledClient{
 			ClientID: auth0.String(clientID),
 			Status:   auth0.Bool(true),
 		})
+	}
+
+	for clientID := range oldMap {
+		if _, stillEnabled := newMap[clientID]; !stillEnabled {
+			payload = append(payload, management.ConnectionEnabledClient{
+				ClientID: auth0.String(clientID),
+				Status:   auth0.Bool(false),
+			})
+		}
 	}
 
 	if err := api.Connection.UpdateEnabledClients(ctx, connectionID, payload); err != nil {
@@ -191,4 +204,14 @@ func guardAgainstErasingUnwantedEnabledClients(
 					"Run: 'terraform import auth0_connection_clients.<given-name> %s'.", connectionID),
 		},
 	}
+}
+
+func makeSetMap(set *schema.Set) map[string]struct{} {
+	result := make(map[string]struct{}, set.Len())
+	for _, v := range set.List() {
+		if s, ok := v.(string); ok {
+			result[s] = struct{}{}
+		}
+	}
+	return result
 }

@@ -170,7 +170,7 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 }
 
 func flattenHeadTags(promptSetting *management.PromptRendering) string {
-	if promptSetting == nil || promptSetting.HeadTags == nil {
+	if promptSetting == nil || promptSetting.HeadTags == nil || len(promptSetting.HeadTags) == 0 {
 		return ""
 	}
 
@@ -189,23 +189,20 @@ func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) s
 
 	out := make(map[string]interface{})
 
-	if filters.MatchType != nil {
-		out["match_type"] = *filters.MatchType
-	}
+	out["match_type"] = filters.GetMatchType()
 
 	if filters.Clients != nil {
-		out["clients"] = flattenPromptRenderingFilterList(filters.Clients)
+		out["clients"] = flattenPromptRenderingFilterList(filters.GetClients())
 	}
 
 	if filters.Organizations != nil {
-		out["organizations"] = flattenPromptRenderingFilterList(filters.Organizations)
+		out["organizations"] = flattenPromptRenderingFilterList(filters.GetOrganizations())
 	}
 
 	if filters.Domains != nil {
-		out["domains"] = flattenPromptRenderingFilterList(filters.Domains)
+		out["domains"] = flattenPromptRenderingFilterList(filters.GetDomains())
 	}
 
-	// Only include the map if it's non-empty
 	if len(out) == 0 {
 		return ""
 	}
@@ -217,16 +214,17 @@ func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) s
 	if err != nil {
 		return ""
 	}
+
 	return string(b)
 }
 
-func flattenPromptRenderingFilterList(list *[]management.PromptRenderingFilter) []interface{} {
-	if list == nil {
+func flattenPromptRenderingFilterList(list []management.PromptRenderingFilter) []interface{} {
+	if list == nil || len(list) == 0 {
 		return nil
 	}
 
 	var result []interface{}
-	for _, f := range *list {
+	for _, f := range list {
 		item := make(map[string]interface{})
 
 		// Add "id" only if it's non-empty

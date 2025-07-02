@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"sort"
 	"strings"
 
@@ -202,12 +203,10 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				DiffSuppressFunc: suppressJsonDiffIgnoreArrayOrder,
 				ValidateFunc:     validation.StringIsJSON,
 				Type:             schema.TypeString,
-				Computed:         true,
 			},
 			"head_tags": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				Computed:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 				Description:      "An array of head tags",
@@ -245,6 +244,13 @@ func updatePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 
 	if err := api.Prompt.UpdateRendering(ctx, prompt, screen, promptSettings); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), nullFields); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readPromptScreenRenderer(ctx, data, meta)

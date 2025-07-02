@@ -2,10 +2,10 @@ package prompt
 
 import (
 	"encoding/json"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strings"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
@@ -171,4 +171,26 @@ func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 	}
 
 	return result
+}
+
+func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
+	nullableMap := make(map[string]interface{})
+
+	for _, field := range []string{"filters", "head_tags"} {
+		if isFieldsNull(data, field) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
+func isFieldsNull(d *schema.ResourceData, fields string) bool {
+	raw, ok := d.GetOk(fields)
+	if !ok {
+		return true
+	}
+
+	str := strings.TrimSpace(raw.(string))
+	return str == "" || str == "null"
 }

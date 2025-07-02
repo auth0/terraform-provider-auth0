@@ -51,19 +51,7 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
   screen_name     =  "login-password"
   rendering_mode = "advanced"
 
-  head_tags = jsonencode([
-       {
-           attributes: {
-               "async": true,
-               "defer": true,
-               "integrity": [
-                   "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-               ],
-               "src": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-           },
-           tag: "script"
-       }
-  ])
+
 
   filters = jsonencode([{
   match_type = "includes_any"
@@ -73,7 +61,7 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
     },
     {
 		metadata = {
-        	some_key = "some_value"
+        	key1 = "value1"
     	},
     },
     {
@@ -121,9 +109,6 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
            tag: "script"
        }
   ])
-
-
-
 
 
   context_configuration = [

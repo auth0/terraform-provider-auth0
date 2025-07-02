@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"encoding/json"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -114,7 +115,10 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 		promptSettings.HeadTags = expandInterfaceArray(data, "head_tags")
 	}
 	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
-	promptSettings.Filters = expandPromptRenderingFilters(data)
+
+	if data.HasChange("filters") {
+		promptSettings.Filters = expandPromptRenderingFilters(data)
+	}
 
 	return promptSettings, nil
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
@@ -197,96 +197,12 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Description: "Use page template with ACUL",
 			},
 			"filters": {
-				Optional:    true,
-				Description: "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
-				//Elem: &schema.Resource{
-				//	Schema: map[string]*schema.Schema{
-				//		"match_type": {
-				//			Type:         schema.TypeString,
-				//			Required:     true,
-				//			ValidateFunc: validation.StringInSlice([]string{"includes_any", "excludes_any"}, false),
-				//			Description:  "Type of match to apply. Options: `includes_any`, `excludes_any`.",
-				//		},
-				//		"clients": {
-				//			Type:        schema.TypeSet,
-				//			Optional:    true,
-				//			Description: "An array of clients (applications) identified by id or a metadata key/value pair. Entity Limit: 25.",
-				//			MaxItems:    25, // Entity Limit
-				//			Elem: &schema.Resource{
-				//				Schema: map[string]*schema.Schema{
-				//					"id": {
-				//						Type:        schema.TypeString,
-				//						Optional:    true,
-				//						Description: "Specific client ID",
-				//					},
-				//					"metadata": {
-				//						Type:        schema.TypeMap,
-				//						Optional:    true,
-				//						Description: "Client metadata key/value pairs (max 1 key)",
-				//						//MaxItems:    1,
-				//						Elem: schema.TypeString,
-				//					},
-				//				},
-				//			},
-				//		},
-				//		"organizations": {
-				//			Type:        schema.TypeSet,
-				//			Optional:    true,
-				//			Description: "An array of organizations identified by id or a metadata key/value pair. Entity Limit: 25.",
-				//			MaxItems:    25, // Entity Limit
-				//			Elem: &schema.Resource{
-				//				Schema: map[string]*schema.Schema{
-				//					"id": {
-				//						Type:        schema.TypeString,
-				//						Optional:    true,
-				//						Description: "Specific organization ID",
-				//					},
-				//					"metadata": {
-				//						Type:        schema.TypeMap,
-				//						Optional:    true,
-				//						Description: "Organization metadata key/value pairs (max 1 key)",
-				//						//MaxItems:    1,
-				//						Elem: schema.TypeString,
-				//					},
-				//				},
-				//			},
-				//		},
-				//		"domains": {
-				//			Type:        schema.TypeSet,
-				//			Optional:    true,
-				//			Description: "An array of domains identified by id or a metadata key/value pair. Entity Limit: 25.",
-				//			MaxItems:    25, // Entity Limit
-				//			Elem: &schema.Resource{
-				//				Schema: map[string]*schema.Schema{
-				//					"id": {
-				//						Type:        schema.TypeString,
-				//						Optional:    true,
-				//						Description: "Specific domain ID",
-				//					},
-				//					"metadata": {
-				//						Type:        schema.TypeMap,
-				//						Optional:    true,
-				//						Description: "Domain metadata key/value pairs (max 1 key)",
-				//						//MaxItems:    1,
-				//						Elem: schema.TypeString,
-				//						ValidateFunc: func(val interface{}, key string) ([]string, []error) {
-				//							m := val.(map[string]interface{})
-				//							if len(m) != 1 {
-				//
-				//							}
-				//							return nil, []error{
-				//								fmt.Errorf("'%s' metadata object must contain exactly one key-value pair", key),
-				//							}
-				//						},
-				//					},
-				//				},
-				//			},
-				//		},
-				//	},
-				//},
-				DiffSuppressFunc: suppressEquivalentJSON,
+				Optional:         true,
+				Description:      "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
+				DiffSuppressFunc: suppressJsonDiffIgnoreArrayOrder,
 				ValidateFunc:     validation.StringIsJSON,
 				Type:             schema.TypeString,
+				Computed:         true,
 			},
 			"head_tags": {
 				Type:             schema.TypeString,
@@ -298,70 +214,6 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			},
 		},
 	}
-}
-
-func suppressEquivalentJSON(k, old, new string, d *schema.ResourceData) bool {
-	var o, n interface{}
-
-	// Allow empty string to pass through
-	if old == "" && new == "" {
-		return true
-	}
-
-	// Unmarshal both sides
-	if err := json.Unmarshal([]byte(old), &o); err != nil {
-		return false
-	}
-	if err := json.Unmarshal([]byte(new), &n); err != nil {
-		return false
-	}
-
-	// Compare deeply
-	return reflect.DeepEqual(o, n)
-}
-
-func validateIDOrMetadataMap(v interface{}, k string) (ws []string, errors []error) {
-	item, ok := v.(map[string]interface{})
-	if !ok {
-		errors = append(errors, fmt.Errorf("%q must be a map", k))
-		return
-	}
-
-	hasID := false
-	hasMetadata := false
-
-	if idVal, ok := item["id"]; ok && idVal != nil && idVal.(string) != "" {
-		hasID = true
-	}
-
-	if mdVal, ok := item["metadata"]; ok && mdVal != nil {
-		mdMap, ok := mdVal.(map[string]interface{})
-		if !ok {
-			errors = append(errors, fmt.Errorf("%q metadata must be a map", k))
-		} else {
-			if len(mdMap) > 0 {
-				hasMetadata = true
-			}
-			if len(mdMap) > 1 {
-				errors = append(errors, fmt.Errorf("%q metadata must contain only one key", k))
-			}
-			for _, v := range mdMap {
-				if _, ok := v.(string); !ok {
-					errors = append(errors, fmt.Errorf("%q metadata values must all be strings", k))
-					break
-				}
-			}
-		}
-	}
-
-	if !hasID && !hasMetadata {
-		errors = append(errors, fmt.Errorf("%q must have either `id` or `metadata`", k))
-	}
-	if hasID && hasMetadata {
-		errors = append(errors, fmt.Errorf("%q must not have both `id` and `metadata`", k))
-	}
-
-	return
 }
 
 func createPromptScreenRenderer(ctx context.Context, data *schema.ResourceData, meta any) diag.Diagnostics {
@@ -412,4 +264,48 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	}
 
 	return nil
+}
+
+func suppressJsonDiffIgnoreArrayOrder(k, old, new string, d *schema.ResourceData) bool {
+	if old == new {
+		return true
+	}
+
+	normalize := func(s string) (string, error) {
+		if s == "" {
+			return "", nil
+		}
+		var v interface{}
+		if err := json.Unmarshal([]byte(s), &v); err != nil {
+			return "", err
+		}
+		var walk func(interface{})
+		walk = func(val interface{}) {
+			switch t := val.(type) {
+			case []interface{}:
+				for i := range t {
+					walk(t[i])
+				}
+				sort.Slice(t, func(i, j int) bool {
+					vi, _ := json.Marshal(t[i])
+					vj, _ := json.Marshal(t[j])
+					return string(vi) < string(vj)
+				})
+			case map[string]interface{}:
+				for k := range t {
+					walk(t[k])
+				}
+			}
+		}
+		walk(v)
+		b, err := json.Marshal(v)
+		return string(b), err
+	}
+
+	nOld, err1 := normalize(old)
+	nNew, err2 := normalize(new)
+	if err1 != nil || err2 != nil {
+		return structure.SuppressJsonDiff(k, old, new, d)
+	}
+	return nOld == nNew
 }

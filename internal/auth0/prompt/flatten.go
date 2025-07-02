@@ -235,11 +235,14 @@ func flattenPromptRenderingFilterList(list *[]management.PromptRenderingFilter) 
 		}
 
 		// Add "metadata" only if it's non-nil and non-empty
-		if metadata := f.GetMetadata(); metadata != nil && len(metadata) > 0 {
+		if metadata := f.GetMetadata(); len(metadata) > 0 {
 			item["metadata"] = metadata
 		}
 
-		result = append(result, item)
+		// Only add the item if it has at least one field (id or metadata)
+		if len(item) > 0 {
+			result = append(result, item)
+		}
 	}
 	return result
 }

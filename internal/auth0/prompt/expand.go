@@ -2,8 +2,6 @@ package prompt
 
 import (
 	"encoding/json"
-	"github.com/auth0/go-auth0"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -122,84 +120,31 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 }
 
 func expandPromptRenderingFilters(data *schema.ResourceData) *management.PromptRenderingFilters {
-	if !data.IsNewResource() && !data.HasChange("filters") {
+	filtersInfo := expandInterfaceArray(data, "filters")
+	if filtersInfo == nil {
 		return nil
 	}
 
-	filter := data.GetRawConfig().GetAttr("filters")
-	if filter.IsNull() {
+	// Since filtersInfo is expected to be a list with a single object (map), extract the first
+	if len(filtersInfo) == 0 {
 		return nil
 	}
 
-	var result management.PromptRenderingFilters
+	var filters management.PromptRenderingFilters
 
-	priorFilters := data.Get("filters").([]interface{})
-	var priorClients []interface{}
-	if len(priorFilters) > 0 {
-		if clientList, ok := priorFilters[0].(map[string]interface{})["clients"].([]interface{}); ok {
-			priorClients = clientList
+	// Try again assuming it's a list with a single object
+	if m, ok := filtersInfo[0].(map[string]interface{}); ok {
+		b, err := json.Marshal(m)
+		if err != nil {
+			return nil
 		}
+		if err := json.Unmarshal(b, &filters); err != nil {
+			return nil
+		}
+		return &filters
 	}
 
-	filter.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
-		result.MatchType = value.String(config.GetAttr("match_type"))
-		result.Clients = expandPromptRenderingFilterList(config, priorClients, "clients")
-		result.Domains = expandPromptRenderingFilterList(config, priorClients, "domains")
-		result.Organizations = expandPromptRenderingFilterList(config, priorClients, "organizations")
-
-		return stop
-	})
-
-	return &result
-}
-
-func expandPromptRenderingFilterList(ctv cty.Value, priorState []interface{}, f string) *[]management.PromptRenderingFilter {
-	filters := make([]management.PromptRenderingFilter, 0)
-
-	fConfig := ctv.GetAttr(f)
-	fConfig.ForEachElement(func(i cty.Value, config cty.Value) (stop bool) {
-		index, _ := i.AsBigFloat().Int64()
-
-		var priorMetadata map[string]interface{}
-		if int(index) < len(priorState) {
-			if pm, ok := priorState[index].(map[string]interface{})["metadata"].(map[string]interface{}); ok {
-				priorMetadata = pm
-			}
-		}
-
-		filters = append(filters, management.PromptRenderingFilter{
-			ID:       auth0.String(config.GetAttr("id").AsString()),
-			Metadata: expandFilterNestedMetadata(config.GetAttr("metadata"), priorMetadata),
-		})
-		return stop
-	})
-
-	return &filters
-}
-
-func expandFilterNestedMetadata(current cty.Value, prior map[string]interface{}) *map[string]interface{} {
-	newMetadata := make(map[string]interface{})
-
-	if !current.IsNull() {
-		valMap := current.AsValueMap()
-		for k, v := range valMap {
-			switch {
-			case v.Type().Equals(cty.String):
-				newMetadata[k] = v.AsString()
-			default:
-				// You can skip or log unsupported types
-				newMetadata[k] = nil
-			}
-		}
-	}
-
-	for k := range prior {
-		if _, exists := newMetadata[k]; !exists {
-			newMetadata[k] = nil
-		}
-	}
-
-	return &newMetadata
+	return nil
 }
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {

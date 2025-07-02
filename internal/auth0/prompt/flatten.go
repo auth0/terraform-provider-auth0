@@ -163,7 +163,7 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
 		data.Set("head_tags", flattenHeadTags(promptSetting)),
 		data.Set("use_page_template", promptSetting.GetUsePageTemplate()),
-		data.Set("filters", flattenPromptRenderingFilters(promptSetting.Filters)),
+		data.Set("filters", flattenPromptRenderingFilters(promptSetting.GetFilters())),
 	)
 
 	return result.ErrorOrNil()
@@ -182,48 +182,64 @@ func flattenHeadTags(promptSetting *management.PromptRendering) string {
 	return string(headTagBytes)
 }
 
-func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) []interface{} {
+func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) string {
 	if filters == nil {
-		return nil
+		return ""
 	}
 
-	m := map[string]interface{}{}
+	out := make(map[string]interface{})
 
 	if filters.MatchType != nil {
-		m["match_type"] = filters.GetMatchType()
+		out["match_type"] = *filters.MatchType
 	}
 
 	if filters.Clients != nil {
-		m["clients"] = flattenPromptRenderingFilterList(*filters.Clients)
+		out["clients"] = flattenPromptRenderingFilterList(filters.Clients)
 	}
 
 	if filters.Organizations != nil {
-		m["organizations"] = flattenPromptRenderingFilterList(*filters.Organizations)
+		out["organizations"] = flattenPromptRenderingFilterList(filters.Organizations)
 	}
 
 	if filters.Domains != nil {
-		m["domains"] = flattenPromptRenderingFilterList(*filters.Domains)
+		out["domains"] = flattenPromptRenderingFilterList(filters.Domains)
 	}
 
-	return []interface{}{m}
+	// Only include the map if it's non-empty
+	if len(out) == 0 {
+		return ""
+	}
+
+	// Wrap in list to match `jsonencode([filters])`
+	payload := []interface{}{out}
+
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return ""
+	}
+	return string(b)
 }
 
-func flattenPromptRenderingFilterList(filters []management.PromptRenderingFilter) []interface{} {
-	result := make([]interface{}, 0, len(filters))
+func flattenPromptRenderingFilterList(list *[]management.PromptRenderingFilter) []interface{} {
+	if list == nil {
+		return nil
+	}
 
-	for _, filter := range filters {
+	var result []interface{}
+	for _, f := range *list {
 		item := make(map[string]interface{})
 
-		if filter.ID != nil {
-			item["id"] = filter.GetID()
+		// Add "id" only if it's non-empty
+		if id := f.GetID(); id != "" {
+			item["id"] = id
 		}
 
-		if filter.Metadata != nil {
-			item["metadata"] = filter.GetMetadata()
+		// Add "metadata" only if it's non-nil and non-empty
+		if metadata := f.GetMetadata(); metadata != nil && len(metadata) > 0 {
+			item["metadata"] = metadata
 		}
 
 		result = append(result, item)
 	}
-
 	return result
 }

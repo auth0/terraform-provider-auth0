@@ -182,65 +182,107 @@ func flattenHeadTags(promptSetting *management.PromptRendering) string {
 	return string(headTagBytes)
 }
 
-func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) string {
-	if filters == nil {
-		return ""
-	}
-
-	out := make(map[string]interface{})
-
-	out["match_type"] = filters.GetMatchType()
-
-	if filters.Clients != nil {
-		out["clients"] = flattenPromptRenderingFilterList(filters.GetClients())
-	}
-
-	if filters.Organizations != nil {
-		out["organizations"] = flattenPromptRenderingFilterList(filters.GetOrganizations())
-	}
-
-	if filters.Domains != nil {
-		out["domains"] = flattenPromptRenderingFilterList(filters.GetDomains())
-	}
-
-	if len(out) == 0 {
-		return ""
-	}
-
-	// Wrap in list to match `jsonencode([filters])`
-	payload := []interface{}{out}
-
-	b, err := json.Marshal(payload)
-	if err != nil {
-		return ""
-	}
-
-	return string(b)
-}
-
-func flattenPromptRenderingFilterList(list []management.PromptRenderingFilter) []interface{} {
-	if list == nil || len(list) == 0 {
+func flattenPromptRenderingFilters(f *management.PromptRenderingFilters) []interface{} {
+	if f == nil {
 		return nil
 	}
 
-	var result []interface{}
-	for _, f := range list {
-		item := make(map[string]interface{})
+	return []interface{}{flattenFilter(f)}
+}
 
-		// Add "id" only if it's non-empty
-		if id := f.GetID(); id != "" {
-			item["id"] = id
-		}
+func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} {
 
-		// Add "metadata" only if it's non-nil and non-empty
-		if metadata := f.GetMetadata(); len(metadata) > 0 {
-			item["metadata"] = metadata
-		}
+	result := make(map[string]interface{})
 
-		// Only add the item if it has at least one field (id or metadata)
-		if len(item) > 0 {
-			result = append(result, item)
+	// match_type
+	if f.MatchType != nil {
+		result["match_type"] = *f.MatchType
+	}
+
+	// clients
+	if f.Clients != nil {
+		if jsonStr, err := json.Marshal(f.Clients); err == nil {
+			result["clients"] = string(jsonStr)
 		}
 	}
+
+	// organizations
+	if f.Organizations != nil {
+		if jsonStr, err := json.Marshal(f.Organizations); err == nil {
+			result["organizations"] = string(jsonStr)
+		}
+	}
+
+	// domains
+	if f.Domains != nil {
+		if jsonStr, err := json.Marshal(f.Domains); err == nil {
+			result["domains"] = string(jsonStr)
+		}
+	}
+
 	return result
 }
+
+//
+//func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) string {
+//	if filters == nil {
+//		return ""
+//	}
+//
+//	out := make(map[string]interface{})
+//
+//	out["match_type"] = filters.GetMatchType()
+//
+//	if filters.Clients != nil {
+//		out["clients"] = flattenPromptRenderingFilterList(filters.GetClients())
+//	}
+//
+//	if filters.Organizations != nil {
+//		out["organizations"] = flattenPromptRenderingFilterList(filters.GetOrganizations())
+//	}
+//
+//	if filters.Domains != nil {
+//		out["domains"] = flattenPromptRenderingFilterList(filters.GetDomains())
+//	}
+//
+//	if len(out) == 0 {
+//		return ""
+//	}
+//
+//	// Wrap in list to match `jsonencode([filters])`
+//	payload := []interface{}{out}
+//
+//	b, err := json.Marshal(payload)
+//	if err != nil {
+//		return ""
+//	}
+//
+//	return string(b)
+//}
+//
+//func flattenPromptRenderingFilterList(list []management.PromptRenderingFilter) []interface{} {
+//	if list == nil || len(list) == 0 {
+//		return nil
+//	}
+//
+//	var result []interface{}
+//	for _, f := range list {
+//		item := make(map[string]interface{})
+//
+//		// Add "id" only if it's non-empty
+//		if id := f.GetID(); id != "" {
+//			item["id"] = id
+//		}
+//
+//		// Add "metadata" only if it's non-nil and non-empty
+//		if metadata := f.GetMetadata(); len(metadata) > 0 {
+//			item["metadata"] = metadata
+//		}
+//
+//		// Only add the item if it has at least one field (id or metadata)
+//		if len(item) > 0 {
+//			result = append(result, item)
+//		}
+//	}
+//	return result
+//}

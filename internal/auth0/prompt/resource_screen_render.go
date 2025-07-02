@@ -1,10 +1,10 @@
 package prompt
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"sort"
 	"strings"
 
@@ -198,11 +198,41 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Description: "Use page template with ACUL",
 			},
 			"filters": {
-				Optional:         true,
-				Description:      "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
-				DiffSuppressFunc: suppressJsonDiffIgnoreArrayOrder,
-				ValidateFunc:     validation.StringIsJSON,
-				Type:             schema.TypeString,
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"match_type": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"includes_any", "excludes_any"}, false),
+							Description:  "Type of match to apply. Options: `includes_any`, `excludes_any`.",
+						},
+						"clients": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "Description for list_prop.inner_list.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJsonDiff,
+						},
+						"organizations": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "Description for list_prop.inner_list.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJsonDiff,
+						},
+						"domains": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "Description for list_prop.inner_list.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJsonDiff,
+						},
+					},
+				},
 			},
 			"head_tags": {
 				Type:             schema.TypeString,
@@ -246,12 +276,12 @@ func updatePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	nullFields := fetchNullableFields(data)
-	if len(nullFields) != 0 {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), nullFields); err != nil {
-			return diag.FromErr(err)
-		}
-	}
+	//nullFields := fetchNullableFields(data)
+	//if len(nullFields) != 0 {
+	//	if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), nullFields); err != nil {
+	//		return diag.FromErr(err)
+	//	}
+	//}
 
 	return readPromptScreenRenderer(ctx, data, meta)
 }
@@ -272,46 +302,27 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	return nil
 }
 
-func suppressJsonDiffIgnoreArrayOrder(k, old, new string, d *schema.ResourceData) bool {
-	if old == new {
-		return true
+func suppressUnorderedJsonDiff(k, old, new string, _ *schema.ResourceData) bool {
+	var oldArray, newArray []map[string]interface{}
+
+	// Attempt to unmarshal both
+	if err := json.Unmarshal([]byte(old), &oldArray); err != nil {
+		return false
+	}
+	if err := json.Unmarshal([]byte(new), &newArray); err != nil {
+		return false
 	}
 
-	normalize := func(s string) (string, error) {
-		if s == "" {
-			return "", nil
-		}
-		var v interface{}
-		if err := json.Unmarshal([]byte(s), &v); err != nil {
-			return "", err
-		}
-		var walk func(interface{})
-		walk = func(val interface{}) {
-			switch t := val.(type) {
-			case []interface{}:
-				for i := range t {
-					walk(t[i])
-				}
-				sort.Slice(t, func(i, j int) bool {
-					vi, _ := json.Marshal(t[i])
-					vj, _ := json.Marshal(t[j])
-					return string(vi) < string(vj)
-				})
-			case map[string]interface{}:
-				for k := range t {
-					walk(t[k])
-				}
-			}
-		}
-		walk(v)
-		b, err := json.Marshal(v)
-		return string(b), err
-	}
+	// Sort both arrays for deterministic comparison
+	sort.Slice(oldArray, func(i, j int) bool {
+		return fmt.Sprint(oldArray[i]) < fmt.Sprint(oldArray[j])
+	})
+	sort.Slice(newArray, func(i, j int) bool {
+		return fmt.Sprint(newArray[i]) < fmt.Sprint(newArray[j])
+	})
 
-	nOld, err1 := normalize(old)
-	nNew, err2 := normalize(new)
-	if err1 != nil || err2 != nil {
-		return structure.SuppressJsonDiff(k, old, new, d)
-	}
-	return nOld == nNew
+	oldBytes, _ := json.Marshal(oldArray)
+	newBytes, _ := json.Marshal(newArray)
+
+	return bytes.Equal(oldBytes, newBytes)
 }

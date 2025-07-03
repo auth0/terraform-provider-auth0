@@ -2,11 +2,13 @@ package prompt
 
 import (
 	"encoding/json"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
-	"github.com/auth0/terraform-provider-auth0/internal/value"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
 func expandPrompt(data cty.Value) *management.Prompt {
@@ -115,9 +117,9 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 	}
 	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
 
-	if data.HasChange("filters") {
-		promptSettings.Filters = expandFilters(data)
-	}
+	// if data.HasChange("filters") {
+	promptSettings.Filters = expandFilters(data)
+	//}
 
 	return promptSettings, nil
 }
@@ -129,19 +131,16 @@ func expandFilters(d *schema.ResourceData) *management.PromptRenderingFilters {
 	}
 
 	filterMap := filtersList[0].(map[string]interface{})
-	return expandFilterStruct(filterMap)
-}
 
-func expandFilterStruct(m map[string]interface{}) *management.PromptRenderingFilters {
 	f := &management.PromptRenderingFilters{}
 
 	// match_type
-	if v, ok := m["match_type"].(string); ok && v != "" {
+	if v, ok := filterMap["match_type"].(string); ok && v != "" {
 		f.MatchType = auth0.String(v)
 	}
 
 	// clients
-	if v, ok := m["clients"].(string); ok && v != "" {
+	if v, ok := filterMap["clients"].(string); ok && v != "" {
 		var clients []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &clients); err == nil {
 			f.Clients = &clients
@@ -149,7 +148,7 @@ func expandFilterStruct(m map[string]interface{}) *management.PromptRenderingFil
 	}
 
 	// organizations
-	if v, ok := m["organizations"].(string); ok && v != "" {
+	if v, ok := filterMap["organizations"].(string); ok && v != "" {
 		var orgs []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &orgs); err == nil {
 			f.Organizations = &orgs
@@ -157,7 +156,7 @@ func expandFilterStruct(m map[string]interface{}) *management.PromptRenderingFil
 	}
 
 	// domains
-	if v, ok := m["domains"].(string); ok && v != "" {
+	if v, ok := filterMap["domains"].(string); ok && v != "" {
 		var domains []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &domains); err == nil {
 			f.Domains = &domains
@@ -166,34 +165,6 @@ func expandFilterStruct(m map[string]interface{}) *management.PromptRenderingFil
 
 	return f
 }
-
-//func expandPromptRenderingFilters(data *schema.ResourceData) *management.PromptRenderingFilters {
-//	filtersInfo := expandInterfaceArray(data, "filters")
-//	if filtersInfo == nil {
-//		return nil
-//	}
-//
-//	// Since filtersInfo is expected to be a list with a single object (map), extract the first
-//	if len(filtersInfo) == 0 {
-//		return nil
-//	}
-//
-//	var filters management.PromptRenderingFilters
-//
-//	// Try again assuming it's a list with a single object
-//	if m, ok := filtersInfo[0].(map[string]interface{}); ok {
-//		b, err := json.Marshal(m)
-//		if err != nil {
-//			return nil
-//		}
-//		if err := json.Unmarshal(b, &filters); err != nil {
-//			return nil
-//		}
-//		return &filters
-//	}
-//
-//	return nil
-//}
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 	_, newMetadata := d.GetChange(key)
@@ -217,24 +188,34 @@ func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 	return result
 }
 
-//func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
-//	nullableMap := make(map[string]interface{})
-//
-//	for _, field := range []string{"filters", "head_tags"} {
-//		if isFieldsNull(data, field) {
-//			nullableMap[field] = nil
-//		}
-//	}
-//
-//	return nullableMap
-//}
-//
-//func isFieldsNull(d *schema.ResourceData, fields string) bool {
-//	raw, ok := d.GetOk(fields)
-//	if !ok {
-//		return true
-//	}
-//
-//	str := strings.TrimSpace(raw.(string))
-//	return str == "" || str == "null"
-//}
+func isFiltersNull(data *schema.ResourceData) bool {
+	if data.IsNewResource() {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("filters")
+
+	if config.IsNull() || config.LengthInt() == 0 {
+		return true
+	}
+
+	if !config.IsKnown() {
+		return false
+	}
+
+	empty := true
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		clients := cfg.GetAttr("clients")
+		orgs := cfg.GetAttr("organizations")
+		domains := cfg.GetAttr("domains")
+
+		if (!clients.IsNull() && clients.AsString() != "") ||
+			(!orgs.IsNull() && orgs.AsString() != "") ||
+			(!domains.IsNull() && domains.AsString() != "") {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
+}

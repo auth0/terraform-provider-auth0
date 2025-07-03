@@ -191,7 +191,6 @@ func flattenPromptRenderingFilters(f *management.PromptRenderingFilters) []inter
 }
 
 func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} {
-
 	result := make(map[string]interface{})
 
 	// match_type
@@ -222,67 +221,3 @@ func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} 
 
 	return result
 }
-
-//
-//func flattenPromptRenderingFilters(filters *management.PromptRenderingFilters) string {
-//	if filters == nil {
-//		return ""
-//	}
-//
-//	out := make(map[string]interface{})
-//
-//	out["match_type"] = filters.GetMatchType()
-//
-//	if filters.Clients != nil {
-//		out["clients"] = flattenPromptRenderingFilterList(filters.GetClients())
-//	}
-//
-//	if filters.Organizations != nil {
-//		out["organizations"] = flattenPromptRenderingFilterList(filters.GetOrganizations())
-//	}
-//
-//	if filters.Domains != nil {
-//		out["domains"] = flattenPromptRenderingFilterList(filters.GetDomains())
-//	}
-//
-//	if len(out) == 0 {
-//		return ""
-//	}
-//
-//	// Wrap in list to match `jsonencode([filters])`
-//	payload := []interface{}{out}
-//
-//	b, err := json.Marshal(payload)
-//	if err != nil {
-//		return ""
-//	}
-//
-//	return string(b)
-//}
-//
-//func flattenPromptRenderingFilterList(list []management.PromptRenderingFilter) []interface{} {
-//	if list == nil || len(list) == 0 {
-//		return nil
-//	}
-//
-//	var result []interface{}
-//	for _, f := range list {
-//		item := make(map[string]interface{})
-//
-//		// Add "id" only if it's non-empty
-//		if id := f.GetID(); id != "" {
-//			item["id"] = id
-//		}
-//
-//		// Add "metadata" only if it's non-nil and non-empty
-//		if metadata := f.GetMetadata(); len(metadata) > 0 {
-//			item["metadata"] = metadata
-//		}
-//
-//		// Only add the item if it has at least one field (id or metadata)
-//		if len(item) > 0 {
-//			result = append(result, item)
-//		}
-//	}
-//	return result
-//}

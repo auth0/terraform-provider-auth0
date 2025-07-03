@@ -45,137 +45,143 @@ resource "auth0_prompt_screen_renderer" "login-id" {
 }
 `
 
-	testAccPromptScreenRenderCreate = testAccPromptScreenRenderWithoutSettings + testClientCreate + testClientCreate2 + `
+	testAccPromptScreenRenderCreate = testAccPromptScreenRenderWithoutSettings + `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-    prompt_type                = "mfa-push"
-    screen_name                = "mfa-push-enrollment-qr"
-    rendering_mode             = "advanced"
-    default_head_tags_disabled = false
-    filters {
-        match_type = "includes_any"
-        clients = jsonencode([
-            {
-                id = "LeBGFyt7y2ZjvlBhqPBJwTn3dLoEhCGB"
-            }
-        ])
-        organizations = jsonencode([
-            {
-                metadata = {
-                    some_key = "some_value"
-                },
-            }
-        ])
-#         domains = jsonencode([
-#             {
-#                 id = "y8zHiIOI5UciKi6yh6yPAQ3FpxvghHFb"
-#             }
-#         ])
-    }
-    context_configuration = [
+  prompt_type     = "login-password"
+  screen_name     =  "login-password"
+  rendering_mode = "advanced"
+
+  head_tags = jsonencode([
+       {
+           attributes: {
+               "async": true,
+               "defer": true,
+               "integrity": [
+                   "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+               ],
+               "src": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+           },
+           tag: "script"
+       }
+  ])
+
+  context_configuration = [
         "branding.settings",
-        "branding.themes.default",
-        "client.logo_uri",
-        "client.description",
-        "client.metadata.key",
-        "organization.display_name",
-        "organization.branding",
-        "organization.metadata.key",
-        "screen.texts",
-        "tenant.name",
-        "tenant.friendly_name",
-        "tenant.enabled_locales",
-        "untrusted_data.submitted_form_data",
-        "untrusted_data.authorization_params.login_hint",
-        "untrusted_data.authorization_params.screen_hint",
-        "untrusted_data.authorization_params.ui_locales",
-        "untrusted_data.authorization_params.ext-key",
-    ]
-    head_tags = jsonencode([
-        {
-            attributes : {
-                "async" : true,
-                "defer" : true,
-                "integrity" : [
-                    "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                ],
-                "src" : "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.2/jquery.min.js"
-            },
-            tag : "script"
-        }
-    ])
+		"branding.themes.default",
+		"client.logo_uri",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"tenant.friendly_name",
+		"tenant.enabled_locales",
+		"untrusted_data.submitted_form_data",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.screen_hint",
+		"untrusted_data.authorization_params.ui_locales",
+		"organization.metadata.key",
+  ]
 }
 
 `
 
 	testAccPromptScreenRenderUpdate = testAccPromptScreenRenderWithoutSettings + testClientCreate + testClientCreate2 + `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-    prompt_type                = "mfa-push"
-    screen_name                = "mfa-push-enrollment-qr"
-    rendering_mode             = "advanced"
-    default_head_tags_disabled = false
-    filters {
-        match_type = "includes_any"
-        clients = jsonencode([
-            {
-                id = "LeBGFyt7y2ZjvlBhqPBJwTn3dLoEhCGB"
-            }
-        ])
-        organizations = jsonencode([
-            {
-                metadata = {
-                    some_key = "some_value"
-                },
-            }
-        ])
-#         domains = jsonencode([
-#             {
-#                 id = "y8zHiIOI5UciKi6yh6yPAQ3FpxvghHFb"
-#             }
-#         ])
-    }
-    context_configuration = [
-        "branding.settings",
-        "branding.themes.default",
-        "client.logo_uri",
-        "client.description",
-        "client.metadata.key",
-        "organization.display_name",
-        "organization.branding",
-        "organization.metadata.key",
-        "screen.texts",
-        "tenant.name",
-        "tenant.friendly_name",
-        "tenant.enabled_locales",
-        "untrusted_data.submitted_form_data",
-        "untrusted_data.authorization_params.login_hint",
-        "untrusted_data.authorization_params.screen_hint",
-        "untrusted_data.authorization_params.ui_locales",
-        "untrusted_data.authorization_params.ext-key",
-    ]
-    head_tags = jsonencode([
-        {
-            attributes : {
-                "async" : true,
-                "defer" : true,
-                "integrity" : [
-                    "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                ],
-                "src" : "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.2/jquery.min.js"
-            },
-            tag : "script"
-        }
-    ])
-}
+      prompt_type     = "login-password"
+      screen_name     = "login-password"
+     rendering_mode    = "advanced"
 
+    head_tags = jsonencode([
+       {
+           attributes: {
+               "async": true,
+               "defer": true,
+               "integrity": [
+                   "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+               ],
+               "src": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+           },
+           tag: "script"
+       }
+  ])
+
+  context_configuration = [
+      "branding.settings",
+		"branding.themes.default",
+		"client.logo_uri",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"tenant.friendly_name",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.ui_locales",
+  ]
+
+   filters {
+       match_type = "includes_any"
+       clients = jsonencode([
+            {
+               id = auth0_client.my_client-1.id
+            },
+			{
+               id = auth0_client.my_client-2.id
+            }
+       ])
+       organizations = jsonencode([
+           {
+               metadata = {
+                   some_key = "some_value"
+               },
+           }
+       ])
+   }
+}
+`
+
+	testAccPromptScreenRenderUpdate2 = testAccPromptScreenRenderWithoutSettings + testClientCreate + testClientCreate2 + `
+resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	 prompt_type     = "login-password"
+      screen_name     = "login-password"
+     rendering_mode    = "advanced"
+
+    head_tags = jsonencode([
+       {
+           attributes: {
+               "async": true,
+               "defer": true,
+               "integrity": [
+                   "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+               ],
+               "src": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+           },
+           tag: "script"
+       }
+  ])
+
+  context_configuration = [
+        "branding.settings",
+		"branding.themes.default",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.ui_locales",
+  ]
+}
 `
 
 	testAccPromptScreenRenderDelete = testAccPromptScreenRenderWithoutSettings
 
 	testAccPromptScreenRenderDataAfterDelete = `
-data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-	  prompt_type = "login-password"
-      screen_name = "login-password"
-}
+	data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	 	 prompt_type = "login-password"
+      	 screen_name = "login-password"
+	}
 `
 )
 
@@ -221,6 +227,18 @@ func TestAccPromptScreenSettings(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "11"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "filters.#", "1"),
+				),
+			},
+			{
+				Config: testAccPromptScreenRenderUpdate2,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "login-password"),
+					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "9"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "filters.#", "0"),
 				),
 			},
 			{

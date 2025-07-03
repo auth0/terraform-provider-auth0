@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"sort"
 	"strings"
 
@@ -201,6 +202,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
+				Computed:    true,
 				Description: "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -213,23 +215,23 @@ func NewPromptScreenRenderResource() *schema.Resource {
 						"clients": {
 							Type:             schema.TypeString,
 							Optional:         true,
-							Description:      "Description for list_prop.inner_list.",
+							Description:      "An array of clients (applications) identified by id or a metadata key/value pair. Entity Limit: 25.",
 							ValidateFunc:     validation.StringIsJSON,
-							DiffSuppressFunc: suppressUnorderedJsonDiff,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
 						},
 						"organizations": {
 							Type:             schema.TypeString,
 							Optional:         true,
-							Description:      "Description for list_prop.inner_list.",
+							Description:      "An array of organizations identified by id or a metadata key/value pair. Entity Limit: 25.",
 							ValidateFunc:     validation.StringIsJSON,
-							DiffSuppressFunc: suppressUnorderedJsonDiff,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
 						},
 						"domains": {
 							Type:             schema.TypeString,
 							Optional:         true,
-							Description:      "Description for list_prop.inner_list.",
+							Description:      "An array of domains identified by id or a metadata key/value pair. Entity Limit: 25.",
 							ValidateFunc:     validation.StringIsJSON,
-							DiffSuppressFunc: suppressUnorderedJsonDiff,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
 						},
 					},
 				},
@@ -237,6 +239,7 @@ func NewPromptScreenRenderResource() *schema.Resource {
 			"head_tags": {
 				Type:             schema.TypeString,
 				Optional:         true,
+				Computed:         true,
 				ValidateFunc:     validation.StringIsJSON,
 				DiffSuppressFunc: structure.SuppressJsonDiff,
 				Description:      "An array of head tags",
@@ -276,12 +279,11 @@ func updatePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	//nullFields := fetchNullableFields(data)
-	//if len(nullFields) != 0 {
-	//	if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), nullFields); err != nil {
-	//		return diag.FromErr(err)
-	//	}
-	//}
+	if isFiltersNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), map[string]interface{}{"filters": nil}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	return readPromptScreenRenderer(ctx, data, meta)
 }
@@ -302,18 +304,16 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	return nil
 }
 
-func suppressUnorderedJsonDiff(k, old, new string, _ *schema.ResourceData) bool {
+func suppressUnorderedJSONDiff(_, older, newer string, _ *schema.ResourceData) bool {
 	var oldArray, newArray []map[string]interface{}
 
-	// Attempt to unmarshal both
-	if err := json.Unmarshal([]byte(old), &oldArray); err != nil {
+	if err := json.Unmarshal([]byte(older), &oldArray); err != nil {
 		return false
 	}
-	if err := json.Unmarshal([]byte(new), &newArray); err != nil {
+	if err := json.Unmarshal([]byte(newer), &newArray); err != nil {
 		return false
 	}
 
-	// Sort both arrays for deterministic comparison
 	sort.Slice(oldArray, func(i, j int) bool {
 		return fmt.Sprint(oldArray[i]) < fmt.Sprint(oldArray[j])
 	})

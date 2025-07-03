@@ -117,15 +117,25 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
-
 	connectionID := data.Id()
-	enabledClientIDs := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
+
+	oldSet, newSet := data.GetChange("enabled_clients")
 
 	var payload []management.ConnectionEnabledClient
-	for _, clientID := range *enabledClientIDs {
+
+	add := newSet.(*schema.Set).List()
+	remove := oldSet.(*schema.Set).List()
+
+	for _, clientID := range add {
 		payload = append(payload, management.ConnectionEnabledClient{
-			ClientID: auth0.String(clientID),
+			ClientID: auth0.String(clientID.(string)),
 			Status:   auth0.Bool(true),
+		})
+	}
+	for _, clientID := range remove {
+		payload = append(payload, management.ConnectionEnabledClient{
+			ClientID: auth0.String(clientID.(string)),
+			Status:   auth0.Bool(false),
 		})
 	}
 

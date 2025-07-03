@@ -1,3 +1,13 @@
+## v1.23.0
+
+FEATURES:
+
+- Add support for private key JWT authentication ([#1280](https://github.com/auth0/terraform-provider-auth0/pull/1280))
+
+ENHANCEMENTS:
+- `resource/auth0_prompt_screen_renderer` : Add support for new screens in Advanced Customization for Universal Login ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
+- `resource/auth0_prompt_custom_text` : Add support for new screens ([#1289](https://github.com/auth0/terraform-provider-auth0/pull/1289))
+
 ## v1.22.0
 
 FEATURES:

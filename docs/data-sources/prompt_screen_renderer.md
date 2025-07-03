@@ -22,9 +22,21 @@ Data source to retrieve a specific Auth0 prompt screen settings by `prompt_type`
 
 - `context_configuration` (Set of String) Context values to make available
 - `default_head_tags_disabled` (Boolean) Override Universal Login default head tags
+- `filters` (List of Object) Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required. (see [below for nested schema](#nestedatt--filters))
 - `head_tags` (String) An array of head tags
 - `id` (String) The ID of this resource.
 - `rendering_mode` (String) Rendering modeOptions are: `standard`, `advanced`.
 - `tenant` (String) Tenant ID
+- `use_page_template` (Boolean) Use page template with ACUL
+
+<a id="nestedatt--filters"></a>
+### Nested Schema for `filters`
+
+Read-Only:
+
+- `clients` (String)
+- `domains` (String)
+- `match_type` (String)
+- `organizations` (String)
 
 

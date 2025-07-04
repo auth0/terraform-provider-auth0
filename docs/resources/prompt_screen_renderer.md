@@ -63,13 +63,28 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
 - `context_configuration` (Set of String) Context values to make available
 - `default_head_tags_disabled` (Boolean) Override Universal Login default head tags
+- `filters` (Block List, Max: 1) Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required. (see [below for nested schema](#nestedblock--filters))
 - `head_tags` (String) An array of head tags
 - `rendering_mode` (String) Rendering modeOptions are: `standard`, `advanced`.
+- `use_page_template` (Boolean) Use page template with ACUL
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
 - `tenant` (String) Tenant ID
+
+<a id="nestedblock--filters"></a>
+### Nested Schema for `filters`
+
+Required:
+
+- `match_type` (String) Type of match to apply. Options: `includes_any`, `excludes_any`.
+
+Optional:
+
+- `clients` (String) An array of clients (applications) identified by id or a metadata key/value pair. Entity Limit: 25.
+- `domains` (String) An array of domains identified by id or a metadata key/value pair. Entity Limit: 25.
+- `organizations` (String) An array of organizations identified by id or a metadata key/value pair. Entity Limit: 25.
 
 ## Import
 

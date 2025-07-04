@@ -1,3 +1,13 @@
+## v1.23.1
+
+ENHANCEMENTS:
+
+- `resource/auth0_prompt_screen_renderer` Add support `filters` and `use_page_template` fields in screen renderer schema. ([#1303](https://github.com/auth0/terraform-provider-auth0/pull/1303))
+
+BUG FIXES:
+
+- `resource/auth0_connection_clients`: Enabled proper handling when removing connection Clients  ([#1304](https://github.com/auth0/terraform-provider-auth0/pull/1304))
+
 ## v1.23.0
 
 FEATURES:
@@ -5,7 +15,8 @@ FEATURES:
 - Add support for private key JWT authentication ([#1280](https://github.com/auth0/terraform-provider-auth0/pull/1280))
 
 ENHANCEMENTS:
-- `resource/auth0_prompt_screen_renderer` : Add support for new screens in Advanced Customization for Universal Login ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
+
+- `resource/auth0_prompt_screen_renderer` : Add support for new screens in Advanced Customization for Universal Login ([#1292](https://github.com/auth0/terraform-provider-auth0/pull/1292))
 - `resource/auth0_prompt_custom_text` : Add support for new screens ([#1289](https://github.com/auth0/terraform-provider-auth0/pull/1289))
 
 ## v1.22.0

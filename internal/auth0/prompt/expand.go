@@ -112,14 +112,12 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 	promptSettings.RenderingMode = (*management.RenderingMode)(value.String(promptRawSettings.GetAttr("rendering_mode")))
 	promptSettings.ContextConfiguration = value.Strings(promptRawSettings.GetAttr("context_configuration"))
 	promptSettings.DefaultHeadTagsDisabled = value.Bool(promptRawSettings.GetAttr("default_head_tags_disabled"))
+	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
+	promptSettings.Filters = expandFilters(data)
+
 	if data.HasChange("head_tags") {
 		promptSettings.HeadTags = expandInterfaceArray(data, "head_tags")
 	}
-	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
-
-	// if data.HasChange("filters") {
-	promptSettings.Filters = expandFilters(data)
-	//}
 
 	return promptSettings, nil
 }
@@ -134,12 +132,10 @@ func expandFilters(d *schema.ResourceData) *management.PromptRenderingFilters {
 
 	f := &management.PromptRenderingFilters{}
 
-	// match_type
 	if v, ok := filterMap["match_type"].(string); ok && v != "" {
 		f.MatchType = auth0.String(v)
 	}
 
-	// clients
 	if v, ok := filterMap["clients"].(string); ok && v != "" {
 		var clients []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &clients); err == nil {
@@ -147,7 +143,6 @@ func expandFilters(d *schema.ResourceData) *management.PromptRenderingFilters {
 		}
 	}
 
-	// organizations
 	if v, ok := filterMap["organizations"].(string); ok && v != "" {
 		var orgs []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &orgs); err == nil {
@@ -155,7 +150,6 @@ func expandFilters(d *schema.ResourceData) *management.PromptRenderingFilters {
 		}
 	}
 
-	// domains
 	if v, ok := filterMap["domains"].(string); ok && v != "" {
 		var domains []management.PromptRenderingFilter
 		if err := json.Unmarshal([]byte(v), &domains); err == nil {

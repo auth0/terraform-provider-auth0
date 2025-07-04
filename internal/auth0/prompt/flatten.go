@@ -193,26 +193,22 @@ func flattenPromptRenderingFilters(f *management.PromptRenderingFilters) []inter
 func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} {
 	result := make(map[string]interface{})
 
-	// match_type
 	if f.MatchType != nil {
 		result["match_type"] = *f.MatchType
 	}
 
-	// clients
 	if f.Clients != nil {
 		if jsonStr, err := json.Marshal(f.Clients); err == nil {
 			result["clients"] = string(jsonStr)
 		}
 	}
 
-	// organizations
 	if f.Organizations != nil {
 		if jsonStr, err := json.Marshal(f.Organizations); err == nil {
 			result["organizations"] = string(jsonStr)
 		}
 	}
 
-	// domains
 	if f.Domains != nil {
 		if jsonStr, err := json.Marshal(f.Domains); err == nil {
 			result["domains"] = string(jsonStr)

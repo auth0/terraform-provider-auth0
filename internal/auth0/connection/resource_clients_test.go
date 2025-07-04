@@ -87,7 +87,7 @@ resource "auth0_client" "my_client-1" {
 resource "auth0_client" "my_client-2" {
 	depends_on = [ auth0_client.my_client-1 ]
 
-	name = "Acceptance-Test-Client-1-{{.testName}}"
+	name = "Acceptance-Test-Client-2-{{.testName}}"
 }
 
 resource "auth0_connection_clients" "my_conn_client_assoc" {
@@ -97,6 +97,25 @@ resource "auth0_connection_clients" "my_conn_client_assoc" {
 	enabled_clients = [auth0_client.my_client-1.id, auth0_client.my_client-2.id]
 }
 `
+const testAccConnectionClientsRevertToMinimal = givenASingleConnection + `
+resource "auth0_client" "my_client-1" {
+	depends_on = [ auth0_connection.my_conn ]
+
+	name = "Acceptance-Test-Client-1-{{.testName}}"
+}
+
+resource "auth0_client" "my_client-2" {
+	depends_on = [ auth0_client.my_client-1 ]
+
+	name = "Acceptance-Test-Client-2-{{.testName}}"
+}
+
+resource "auth0_connection_clients" "my_conn_client_assoc" {
+	depends_on = [ auth0_client.my_client-2 ]
+
+	connection_id = auth0_connection.my_conn.id
+	enabled_clients = []
+}`
 
 func TestAccConnectionClients(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
@@ -123,6 +142,14 @@ func TestAccConnectionClients(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "strategy", "auth0"),
 					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "enabled_clients.#", "2"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccConnectionClientsRevertToMinimal, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "strategy", "auth0"),
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "name", fmt.Sprintf("Acceptance-Test-Connection-%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_connection_clients.my_conn_client_assoc", "enabled_clients.#", "0"),
 				),
 			},
 			{

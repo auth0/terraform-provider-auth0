@@ -119,20 +119,22 @@ func updateConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	api := meta.(*config.Config).GetAPI()
 	connectionID := data.Id()
 
-	oldSet, newSet := data.GetChange("enabled_clients")
+	oldRaw, newRaw := data.GetChange("enabled_clients")
+	oldSet := oldRaw.(*schema.Set)
+	newSet := newRaw.(*schema.Set)
+
+	added := newSet.Difference(oldSet).List()
+	removed := oldSet.Difference(newSet).List()
 
 	var payload []management.ConnectionEnabledClient
 
-	add := newSet.(*schema.Set).List()
-	remove := oldSet.(*schema.Set).List()
-
-	for _, clientID := range add {
+	for _, clientID := range added {
 		payload = append(payload, management.ConnectionEnabledClient{
 			ClientID: auth0.String(clientID.(string)),
 			Status:   auth0.Bool(true),
 		})
 	}
-	for _, clientID := range remove {
+	for _, clientID := range removed {
 		payload = append(payload, management.ConnectionEnabledClient{
 			ClientID: auth0.String(clientID.(string)),
 			Status:   auth0.Bool(false),

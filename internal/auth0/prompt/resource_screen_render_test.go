@@ -35,7 +35,7 @@ resource "auth0_client" "my_client-1" {
 }`
 	testClientCreate2 = `
 resource "auth0_client" "my_client-2" {
-	name = "Acceptance-Test-Client-2-{{.testName}}"
+	name = "Acceptance-Test-Client-1-{{.testName}}"
 }`
 
 	testAccPromptScreenRenderWithoutSettings = `

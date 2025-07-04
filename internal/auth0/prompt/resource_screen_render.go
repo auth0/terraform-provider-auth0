@@ -202,7 +202,6 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Type:        schema.TypeList,
 				MaxItems:    1,
 				Optional:    true,
-				Computed:    true,
 				Description: "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

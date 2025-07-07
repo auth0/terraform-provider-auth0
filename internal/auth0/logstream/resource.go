@@ -69,6 +69,7 @@ func NewResource() *schema.Resource {
 			"filters": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
 					" If omitted or empty, all events will be delivered. " +
 					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +

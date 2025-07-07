@@ -69,6 +69,7 @@ func NewResource() *schema.Resource {
 			"filters": {
 				Type:     schema.TypeList,
 				Optional: true,
+				Computed: true,
 				Description: "Only logs events matching these filters will be delivered by the stream." +
 					" If omitted or empty, all events will be delivered. " +
 					"Filters available: `auth.ancillary.fail`, `auth.ancillary.success`, `auth.login.fail`, " +
@@ -351,7 +352,9 @@ func createLogStream(ctx context.Context, data *schema.ResourceData, meta interf
 	// we perform an additional operation to modify it.
 	if status := data.Get("status").(string); status != "" && status != logStream.GetStatus() {
 		logStreamWithStatus := &management.LogStream{Status: &status}
-		return diag.FromErr(api.LogStream.Update(ctx, logStream.GetID(), logStreamWithStatus))
+		if err := api.LogStream.Update(ctx, logStream.GetID(), logStreamWithStatus); err != nil {
+			return diag.FromErr(internalError.HandleAPIError(data, err))
+		}
 	}
 
 	return readLogStream(ctx, data, meta)

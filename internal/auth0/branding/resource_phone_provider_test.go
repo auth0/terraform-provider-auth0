@@ -112,7 +112,7 @@ func TestAccCheckPhoneProvider(t *testing.T) {
 			},
 			{
 				Config:      testAccPhoneProviderConfigureWithSIDWithoutDefaultFrom,
-				ExpectError: regexp.MustCompile("Error: Missing required argument"),
+				ExpectError: regexp.MustCompile("Bad Operation on Notification Resource"),
 			},
 			{
 				Config:      testAccPhoneProviderConfigureWithDefaultFromWithoutSid,

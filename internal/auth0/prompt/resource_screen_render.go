@@ -1,8 +1,12 @@
 package prompt
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/auth0/go-auth0/management"
@@ -47,6 +51,9 @@ var (
 		string(management.PromptLoginEmailVerification),
 		string(management.PromptLogout),
 		string(management.PromptMFAWebAuthn),
+		string(management.PromptConsent),
+		string(management.PromptCustomizedConsent),
+		string(management.PromptEmailOTPChallenge),
 	}
 	allowedScreensSettingsRenderer = []string{
 		string(management.ScreenSignupID),
@@ -121,6 +128,10 @@ var (
 		string(management.ScreenMFAWebAuthnRoamingEnrollment),
 		string(management.ScreenResetPasswordMFAWebAuthnPlatformChallenge),
 		string(management.ScreenResetPasswordMFAWebAuthnRoamingChallenge),
+		string(management.ScreenConsent),
+		string(management.ScreenCustomizedConsent),
+		string(management.ScreenEmailOTPChallenge),
+		string(management.ScreenMFAWebAuthnNotAvailableError),
 	}
 
 	supportedRenderingModes = []string{string(management.RenderingModeStandard), string(management.RenderingModeAdvanced)}
@@ -181,6 +192,49 @@ func NewPromptScreenRenderResource() *schema.Resource {
 				Default:     false,
 				Description: "Override Universal Login default head tags",
 			},
+			"use_page_template": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Use page template with ACUL",
+			},
+			"filters": {
+				Type:        schema.TypeList,
+				MaxItems:    1,
+				Optional:    true,
+				Description: "Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"match_type": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"includes_any", "excludes_any"}, false),
+							Description:  "Type of match to apply. Options: `includes_any`, `excludes_any`.",
+						},
+						"clients": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "An array of clients (applications) identified by id or a metadata key/value pair. Entity Limit: 25.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
+						},
+						"organizations": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "An array of organizations identified by id or a metadata key/value pair. Entity Limit: 25.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
+						},
+						"domains": {
+							Type:             schema.TypeString,
+							Optional:         true,
+							Description:      "An array of domains identified by id or a metadata key/value pair. Entity Limit: 25.",
+							ValidateFunc:     validation.StringIsJSON,
+							DiffSuppressFunc: suppressUnorderedJSONDiff,
+						},
+					},
+				},
+			},
 			"head_tags": {
 				Type:             schema.TypeString,
 				Optional:         true,
@@ -224,6 +278,12 @@ func updatePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
+	if isFiltersNull(data) {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("prompts", string(prompt), "screen", string(screen), "rendering"), map[string]interface{}{"filters": nil}); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
 	return readPromptScreenRenderer(ctx, data, meta)
 }
 
@@ -241,4 +301,27 @@ func deletePromptScreenRenderer(ctx context.Context, data *schema.ResourceData, 
 	}
 
 	return nil
+}
+
+func suppressUnorderedJSONDiff(_, older, newer string, _ *schema.ResourceData) bool {
+	var oldArray, newArray []map[string]interface{}
+
+	if err := json.Unmarshal([]byte(older), &oldArray); err != nil {
+		return false
+	}
+	if err := json.Unmarshal([]byte(newer), &newArray); err != nil {
+		return false
+	}
+
+	sort.Slice(oldArray, func(i, j int) bool {
+		return fmt.Sprint(oldArray[i]) < fmt.Sprint(oldArray[j])
+	})
+	sort.Slice(newArray, func(i, j int) bool {
+		return fmt.Sprint(newArray[i]) < fmt.Sprint(newArray[j])
+	})
+
+	oldBytes, _ := json.Marshal(oldArray)
+	newBytes, _ := json.Marshal(newArray)
+
+	return bytes.Equal(oldBytes, newBytes)
 }

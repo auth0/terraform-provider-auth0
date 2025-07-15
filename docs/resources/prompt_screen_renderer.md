@@ -56,20 +56,35 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 
 ### Required
 
-- `prompt_type` (String) The prompt that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkeys`, `captcha`, `login`, `signup`, `reset-password`, `mfa`, `mfa-sms`, `mfa-email`, `mfa-push`, `invitation`, `organizations`, `mfa-otp`, `device-flow`, `mfa-phone`, `mfa-voice`, `mfa-recovery-code`, `common`, `email-verification`, `login-email-verification`, `logout`, `mfa-webauthn`.
-- `screen_name` (String) The screen that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkey-enrollment`, `passkey-enrollment-local`, `interstitial-captcha`, `login`, `signup`, `reset-password-request`, `reset-password-email`, `reset-password`, `reset-password-success`, `reset-password-error`, `reset-password-mfa-email-challenge`, `reset-password-mfa-otp-challenge`, `reset-password-mfa-push-challenge-push`, `reset-password-mfa-sms-challenge`, `mfa-detect-browser-capabilities`, `mfa-enroll-result`, `mfa-begin-enroll-options`, `mfa-login-options`, `mfa-country-codes`, `mfa-sms-challenge`, `mfa-sms-enrollment`, `mfa-sms-list`, `mfa-email-challenge`, `mfa-email-list`, `mfa-push-challenge-push`, `mfa-push-enrollment-qr`, `mfa-push-list`, `mfa-push-welcome`, `accept-invitation`, `organization-selection`, `organization-picker`, `mfa-otp-challenge`, `mfa-otp-enrollment-code`, `mfa-otp-enrollment-qr`, `device-code-activation`, `device-code-activation-allowed`, `device-code-activation-denied`, `device-code-confirmation`, `mfa-phone-challenge`, `mfa-phone-enrollment`, `mfa-voice-challenge`, `mfa-voice-enrollment`, `reset-password-mfa-phone-challenge`, `reset-password-mfa-voice-challenge`, `mfa-recovery-code-challenge`, `mfa-recovery-code-enrollment`, `reset-password-mfa-recovery-code-challenge`, `redeem-ticket`, `mfa-recovery-code-challenge-new-code`, `email-verification-result`, `login-email-verification`, `logout`, `logout-aborted`, `logout-complete`, `mfa-webauthn-change-key-nickname`, `mfa-webauthn-enrollment-success`, `mfa-webauthn-error`, `mfa-webauthn-platform-challenge`, `mfa-webauthn-platform-enrollment`, `mfa-webauthn-roaming-challenge`, `mfa-webauthn-roaming-enrollment`, `reset-password-mfa-webauthn-platform-challenge`, `reset-password-mfa-webauthn-roaming-challenge`.
+- `prompt_type` (String) The prompt that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkeys`, `captcha`, `login`, `signup`, `reset-password`, `mfa`, `mfa-sms`, `mfa-email`, `mfa-push`, `invitation`, `organizations`, `mfa-otp`, `device-flow`, `mfa-phone`, `mfa-voice`, `mfa-recovery-code`, `common`, `email-verification`, `login-email-verification`, `logout`, `mfa-webauthn`, `consent`, `customized-consent`, `email-otp-challenge`.
+- `screen_name` (String) The screen that you are configuring settings for. Options are: `signup-id`, `signup-password`, `login-id`, `login-password`, `login-passwordless-sms-otp`, `login-passwordless-email-code`, `phone-identifier-enrollment`, `phone-identifier-challenge`, `email-identifier-challenge`, `passkey-enrollment`, `passkey-enrollment-local`, `interstitial-captcha`, `login`, `signup`, `reset-password-request`, `reset-password-email`, `reset-password`, `reset-password-success`, `reset-password-error`, `reset-password-mfa-email-challenge`, `reset-password-mfa-otp-challenge`, `reset-password-mfa-push-challenge-push`, `reset-password-mfa-sms-challenge`, `mfa-detect-browser-capabilities`, `mfa-enroll-result`, `mfa-begin-enroll-options`, `mfa-login-options`, `mfa-country-codes`, `mfa-sms-challenge`, `mfa-sms-enrollment`, `mfa-sms-list`, `mfa-email-challenge`, `mfa-email-list`, `mfa-push-challenge-push`, `mfa-push-enrollment-qr`, `mfa-push-list`, `mfa-push-welcome`, `accept-invitation`, `organization-selection`, `organization-picker`, `mfa-otp-challenge`, `mfa-otp-enrollment-code`, `mfa-otp-enrollment-qr`, `device-code-activation`, `device-code-activation-allowed`, `device-code-activation-denied`, `device-code-confirmation`, `mfa-phone-challenge`, `mfa-phone-enrollment`, `mfa-voice-challenge`, `mfa-voice-enrollment`, `reset-password-mfa-phone-challenge`, `reset-password-mfa-voice-challenge`, `mfa-recovery-code-challenge`, `mfa-recovery-code-enrollment`, `reset-password-mfa-recovery-code-challenge`, `redeem-ticket`, `mfa-recovery-code-challenge-new-code`, `email-verification-result`, `login-email-verification`, `logout`, `logout-aborted`, `logout-complete`, `mfa-webauthn-change-key-nickname`, `mfa-webauthn-enrollment-success`, `mfa-webauthn-error`, `mfa-webauthn-platform-challenge`, `mfa-webauthn-platform-enrollment`, `mfa-webauthn-roaming-challenge`, `mfa-webauthn-roaming-enrollment`, `reset-password-mfa-webauthn-platform-challenge`, `reset-password-mfa-webauthn-roaming-challenge`, `consent`, `customized-consent`, `email-otp-challenge`, `mfa-webauthn-not-available-error`.
 
 ### Optional
 
 - `context_configuration` (Set of String) Context values to make available
 - `default_head_tags_disabled` (Boolean) Override Universal Login default head tags
+- `filters` (Block List, Max: 1) Optional filters to apply rendering rules to specific entities. `match_type` and at least one of the entity arrays are required. (see [below for nested schema](#nestedblock--filters))
 - `head_tags` (String) An array of head tags
 - `rendering_mode` (String) Rendering modeOptions are: `standard`, `advanced`.
+- `use_page_template` (Boolean) Use page template with ACUL
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
 - `tenant` (String) Tenant ID
+
+<a id="nestedblock--filters"></a>
+### Nested Schema for `filters`
+
+Required:
+
+- `match_type` (String) Type of match to apply. Options: `includes_any`, `excludes_any`.
+
+Optional:
+
+- `clients` (String) An array of clients (applications) identified by id or a metadata key/value pair. Entity Limit: 25.
+- `domains` (String) An array of domains identified by id or a metadata key/value pair. Entity Limit: 25.
+- `organizations` (String) An array of organizations identified by id or a metadata key/value pair. Entity Limit: 25.
 
 ## Import
 

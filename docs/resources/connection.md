@@ -778,6 +778,8 @@ Optional:
 - `template` (String) Body of the template.
 - `tenant_domain` (String) Tenant domain name.
 - `token_endpoint` (String) Token endpoint.
+- `token_endpoint_auth_method` (String) Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)
+- `token_endpoint_auth_signing_alg` (String) Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)
 - `totp` (Block List, Max: 1) Configuration options for one-time passwords. (see [below for nested schema](#nestedblock--options--totp))
 - `twilio_sid` (String) SID for your Twilio account.
 - `twilio_token` (String, Sensitive) AuthToken for your Twilio account.

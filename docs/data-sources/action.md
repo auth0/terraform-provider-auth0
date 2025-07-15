@@ -36,7 +36,7 @@ data "auth0_action" "my_action" {
 - `dependencies` (Set of Object) List of third party npm modules, and their versions, that this action depends on. (see [below for nested schema](#nestedatt--dependencies))
 - `deploy` (Boolean) Deploying an action will create a new immutable version of the action. If the action is currently bound to a trigger, then the system will begin executing the newly deployed version of the action immediately.
 - `runtime` (String) The Node runtime. Possible values are: `node12`, `node16` (not recommended), `node18`, `node22`
-- `secrets` (Set of Object) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. (see [below for nested schema](#nestedatt--secrets))
+- `secrets` (Set of Object) List of secrets that are included in an action or a version of an action. Partial management of secrets is not supported. If the secret block is edited, the whole object is re-provisioned. (see [below for nested schema](#nestedatt--secrets))
 - `supported_triggers` (List of Object) List of triggers that this action supports. At this time, an action can only target a single trigger at a time. Read [Retrieving the set of triggers available within actions](https://registry.terraform.io/providers/auth0/auth0/latest/docs/guides/action_triggers) to retrieve the latest trigger versions supported. (see [below for nested schema](#nestedatt--supported_triggers))
 - `version_id` (String) Version ID of the action. This value is available if `deploy` is set to true.
 

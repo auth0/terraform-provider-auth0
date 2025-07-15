@@ -29,6 +29,15 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_render" {
 }
 `
 
+	testClientCreate = `
+resource "auth0_client" "my_client-1" {
+	name = "Acceptance-Test-Client-1-{{.testName}}"
+}`
+	testClientCreate2 = `
+resource "auth0_client" "my_client-2" {
+	name = "Acceptance-Test-Client-1-{{.testName}}"
+}`
+
 	testAccPromptScreenRenderWithoutSettings = `
 resource "auth0_prompt_screen_renderer" "login-id" {
   prompt_type     = "login-id"
@@ -74,15 +83,16 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 		"organization.metadata.key",
   ]
 }
+
 `
 
-	testAccPromptScreenRenderUpdate = `
+	testAccPromptScreenRenderUpdate = testAccPromptScreenRenderWithoutSettings + testClientCreate + testClientCreate2 + `
 resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-  prompt_type     = "login-password"
-  screen_name     =  "login-password"
-  rendering_mode = "advanced"
+      prompt_type     = "login-password"
+      screen_name     = "login-password"
+     rendering_mode    = "advanced"
 
-  head_tags = jsonencode([
+    head_tags = jsonencode([
        {
            attributes: {
                "async": true,
@@ -109,16 +119,69 @@ resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
 		"untrusted_data.authorization_params.login_hint",
 		"untrusted_data.authorization_params.ui_locales",
   ]
+
+   filters {
+       match_type = "includes_any"
+       clients = jsonencode([
+            {
+               id = auth0_client.my_client-1.id
+            },
+			{
+               id = auth0_client.my_client-2.id
+            }
+       ])
+       organizations = jsonencode([
+           {
+               metadata = {
+                   some_key = "some_value"
+               },
+           }
+       ])
+   }
+}
+`
+
+	testAccPromptScreenRenderUpdate2 = testAccPromptScreenRenderWithoutSettings + testClientCreate + testClientCreate2 + `
+resource "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	 prompt_type     = "login-password"
+      screen_name     = "login-password"
+     rendering_mode    = "advanced"
+
+    head_tags = jsonencode([
+       {
+           attributes: {
+               "async": true,
+               "defer": true,
+               "integrity": [
+                   "sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+               ],
+               "src": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+           },
+           tag: "script"
+       }
+  ])
+
+  context_configuration = [
+        "branding.settings",
+		"branding.themes.default",
+		"client.description",
+		"organization.display_name",
+		"organization.branding",
+		"screen.texts",
+		"tenant.name",
+		"untrusted_data.authorization_params.login_hint",
+		"untrusted_data.authorization_params.ui_locales",
+  ]
 }
 `
 
 	testAccPromptScreenRenderDelete = testAccPromptScreenRenderWithoutSettings
 
 	testAccPromptScreenRenderDataAfterDelete = `
-data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
-	  prompt_type = "login-password"
-      screen_name = "login-password"
-}
+	data "auth0_prompt_screen_renderer" "prompt_screen_renderer" {
+	 	 prompt_type = "login-password"
+      	 screen_name = "login-password"
+	}
 `
 )
 
@@ -164,6 +227,18 @@ func TestAccPromptScreenSettings(t *testing.T) {
 					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
 					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "11"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "filters.#", "1"),
+				),
+			},
+			{
+				Config: testAccPromptScreenRenderUpdate2,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "prompt_type", "login-password"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "screen_name", "login-password"),
+					resource.TestCheckResourceAttrSet("auth0_prompt_screen_renderer.prompt_screen_renderer", "id"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "rendering_mode", "advanced"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "context_configuration.#", "9"),
+					resource.TestCheckResourceAttr("auth0_prompt_screen_renderer.prompt_screen_renderer", "filters.#", "0"),
 				),
 			},
 			{

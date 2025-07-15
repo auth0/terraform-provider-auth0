@@ -3,6 +3,7 @@ package prompt
 import (
 	"encoding/json"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -111,11 +112,52 @@ func expandPromptSettings(data *schema.ResourceData) (*management.PromptRenderin
 	promptSettings.RenderingMode = (*management.RenderingMode)(value.String(promptRawSettings.GetAttr("rendering_mode")))
 	promptSettings.ContextConfiguration = value.Strings(promptRawSettings.GetAttr("context_configuration"))
 	promptSettings.DefaultHeadTagsDisabled = value.Bool(promptRawSettings.GetAttr("default_head_tags_disabled"))
+	promptSettings.UsePageTemplate = value.Bool(promptRawSettings.GetAttr("use_page_template"))
+	promptSettings.Filters = expandFilters(data)
+
 	if data.HasChange("head_tags") {
 		promptSettings.HeadTags = expandInterfaceArray(data, "head_tags")
 	}
 
 	return promptSettings, nil
+}
+
+func expandFilters(d *schema.ResourceData) *management.PromptRenderingFilters {
+	filtersList := d.Get("filters").([]interface{})
+	if len(filtersList) == 0 || filtersList[0] == nil {
+		return nil
+	}
+
+	filterMap := filtersList[0].(map[string]interface{})
+
+	f := &management.PromptRenderingFilters{}
+
+	if v, ok := filterMap["match_type"].(string); ok && v != "" {
+		f.MatchType = auth0.String(v)
+	}
+
+	if v, ok := filterMap["clients"].(string); ok && v != "" {
+		var clients []management.PromptRenderingFilter
+		if err := json.Unmarshal([]byte(v), &clients); err == nil {
+			f.Clients = &clients
+		}
+	}
+
+	if v, ok := filterMap["organizations"].(string); ok && v != "" {
+		var orgs []management.PromptRenderingFilter
+		if err := json.Unmarshal([]byte(v), &orgs); err == nil {
+			f.Organizations = &orgs
+		}
+	}
+
+	if v, ok := filterMap["domains"].(string); ok && v != "" {
+		var domains []management.PromptRenderingFilter
+		if err := json.Unmarshal([]byte(v), &domains); err == nil {
+			f.Domains = &domains
+		}
+	}
+
+	return f
 }
 
 func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
@@ -138,4 +180,36 @@ func expandInterfaceArray(d *schema.ResourceData, key string) []interface{} {
 	}
 
 	return result
+}
+
+func isFiltersNull(data *schema.ResourceData) bool {
+	if data.IsNewResource() {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("filters")
+
+	if config.IsNull() || config.LengthInt() == 0 {
+		return true
+	}
+
+	if !config.IsKnown() {
+		return false
+	}
+
+	empty := true
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		clients := cfg.GetAttr("clients")
+		orgs := cfg.GetAttr("organizations")
+		domains := cfg.GetAttr("domains")
+
+		if (!clients.IsNull() && clients.AsString() != "") ||
+			(!orgs.IsNull() && orgs.AsString() != "") ||
+			(!domains.IsNull() && domains.AsString() != "") {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
 }

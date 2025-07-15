@@ -1,0 +1,372 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 149
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Acceptance Test TestAccConnectionDataKeys","app_type":"non_interactive","token_endpoint_auth_method":"client_secret_post","oidc_logout":{}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"name":"Acceptance Test TestAccConnectionDataKeys","client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 580.632333ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nZQJmFXEZohVQgwrAnj4puFFab1THn6Z
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test TestAccConnectionDataKeys","client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 328.975292ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 521
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"OIDC-Connection-TestAccConnectionDataKeys","strategy":"oidc","options":{"client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","authorization_endpoint":"https://example.com","issuer":"https://example.com","jwks_uri":"https://example.com/jwks","type":"front_channel","userinfo_endpoint":null,"token_endpoint":null,"scope":"ext_nested_groups openid","token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_signing_alg":"RS256"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: false
+        body: '{"id":"con_XNQJSEyE3szLe1H5","options":{"client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","authorization_endpoint":"https://example.com","issuer":"https://example.com","jwks_uri":"https://example.com/jwks","type":"front_channel","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","token_endpoint":"https://api.paypal.com/v1/oauth2/token","scope":"ext_nested_groups openid","token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_signing_alg":"RS256","oidc_metadata":{"issuer":"https://www.paypal.com","authorization_endpoint":"https://www.paypal.com/signin/authorize","registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","token_endpoint_auth_methods_supported":["client_secret_basic"],"response_types_supported":["code","code id_token"],"response_modes_supported":["query","form_post"],"grant_types_supported":["authorization_code","refresh_token"],"subject_types_supported":["pairwise"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"id_token_signing_alg_values_supported":["HS256","RS256"],"claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"code_challenge_methods_supported":["RS256","ES256","S256"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"require_request_uri_registration":false},"schema_version":"oidc-V4","attribute_map":{"mapping_mode":"bind_all"},"connection_settings":{"pkce":"auto"}},"strategy":"oidc","name":"OIDC-Connection-TestAccConnectionDataKeys","is_domain_connection":false,"show_as_button":false,"display_name":"OIDC-Connection-TestAccConnectionDataKeys","enabled_clients":[],"realms":["OIDC-Connection-TestAccConnectionDataKeys"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 654.603167ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XNQJSEyE3szLe1H5","options":{"type":"front_channel","scope":"ext_nested_groups openid","issuer":"https://example.com","jwks_uri":"https://example.com/jwks","client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","attribute_map":{"mapping_mode":"bind_all"},"discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.com","token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_signing_alg":"RS256"},"strategy":"oidc","name":"OIDC-Connection-TestAccConnectionDataKeys","is_domain_connection":false,"show_as_button":false,"display_name":"OIDC-Connection-TestAccConnectionDataKeys","enabled_clients":[],"realms":["OIDC-Connection-TestAccConnectionDataKeys"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 368.347958ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5/keys
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '[{"kid":"vK-mSmAkara-STsVNHf_p7m20c9qcWwLGl0YH41OgSg","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknu\r\nKkZmqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u\r\n3LI5QaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bq\r\nzw/wRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoU\r\nC0i/WYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrd\r\nhCR9J5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nX\r\nX17R/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012w\r\nE9jOW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO\r\n9CUBImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTO\r\nAq23Q5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE\r\n23JCFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvR\r\nAA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"39:44:31:E4:D3:43:6F:7E:A7:33:43:C9:63:7C:7E:84:FB:A4:0B:2B","thumbprint":"394431E4D3436F7EA73343C9637C7E84FBA40B2B","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknuKkZm\r\nqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u3LI5\r\nQaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bqzw/w\r\nRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoUC0i/\r\nWYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrdhCR9\r\nJ5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nXX17R\r\n/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012wE9jO\r\nW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO9CUB\r\nImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTOAq23\r\nQ5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE23JC\r\nFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvRADEA\r\n-----END PKCS7-----\r\n","current":true,"current_since":"2025-06-19T07:34:44.976Z"},{"kid":"KvMT6nLRs0pggRUpO9kLjI5hATrzPm4oZO9ieZkEw0o","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIV\r\ny2W/gEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4\r\nW/Y02tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jI\r\nlSWB3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXI\r\nedUBEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6\r\nbPxw8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7k\r\nCgl7eS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdU\r\nknwTQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9\r\ncb2zXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazF\r\nzMYjawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvN\r\nQd285QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOca\r\noA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"9F:FB:38:64:BA:C6:F9:E0:D4:65:9B:3B:7E:B1:83:13:76:BA:7B:46","thumbprint":"9FFB3864BAC6F9E0D4659B3B7EB1831376BA7B46","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIVy2W/\r\ngEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4W/Y0\r\n2tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jIlSWB\r\n3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXIedUB\r\nEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6bPxw\r\n8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7kCgl7\r\neS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdUknwT\r\nQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9cb2z\r\nXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazFzMYj\r\nawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvNQd28\r\n5QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOcaoDEA\r\n-----END PKCS7-----\r\n","next":true}]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 369.606125ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5/keys
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '[{"kid":"vK-mSmAkara-STsVNHf_p7m20c9qcWwLGl0YH41OgSg","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknu\r\nKkZmqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u\r\n3LI5QaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bq\r\nzw/wRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoU\r\nC0i/WYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrd\r\nhCR9J5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nX\r\nX17R/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012w\r\nE9jOW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO\r\n9CUBImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTO\r\nAq23Q5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE\r\n23JCFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvR\r\nAA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"39:44:31:E4:D3:43:6F:7E:A7:33:43:C9:63:7C:7E:84:FB:A4:0B:2B","thumbprint":"394431E4D3436F7EA73343C9637C7E84FBA40B2B","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknuKkZm\r\nqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u3LI5\r\nQaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bqzw/w\r\nRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoUC0i/\r\nWYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrdhCR9\r\nJ5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nXX17R\r\n/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012wE9jO\r\nW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO9CUB\r\nImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTOAq23\r\nQ5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE23JC\r\nFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvRADEA\r\n-----END PKCS7-----\r\n","current":true,"current_since":"2025-06-19T07:34:44.976Z"},{"kid":"KvMT6nLRs0pggRUpO9kLjI5hATrzPm4oZO9ieZkEw0o","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIV\r\ny2W/gEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4\r\nW/Y02tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jI\r\nlSWB3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXI\r\nedUBEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6\r\nbPxw8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7k\r\nCgl7eS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdU\r\nknwTQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9\r\ncb2zXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazF\r\nzMYjawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvN\r\nQd285QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOca\r\noA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"9F:FB:38:64:BA:C6:F9:E0:D4:65:9B:3B:7E:B1:83:13:76:BA:7B:46","thumbprint":"9FFB3864BAC6F9E0D4659B3B7EB1831376BA7B46","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIVy2W/\r\ngEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4W/Y0\r\n2tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jIlSWB\r\n3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXIedUB\r\nEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6bPxw\r\n8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7kCgl7\r\neS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdUknwT\r\nQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9cb2z\r\nXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazFzMYj\r\nawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvNQd28\r\n5QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOcaoDEA\r\n-----END PKCS7-----\r\n","next":true}]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 341.601667ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nZQJmFXEZohVQgwrAnj4puFFab1THn6Z
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"name":"Acceptance Test TestAccConnectionDataKeys","client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","client_secret":"[REDACTED]","app_type":"non_interactive","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"token_endpoint_auth_method":"client_secret_post","refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":31557600,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":2592000},"oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 319.686542ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"con_XNQJSEyE3szLe1H5","options":{"type":"front_channel","scope":"ext_nested_groups openid","issuer":"https://example.com","jwks_uri":"https://example.com/jwks","client_id":"nZQJmFXEZohVQgwrAnj4puFFab1THn6Z","attribute_map":{"mapping_mode":"bind_all"},"discovery_url":"https://www.paypalobjects.com/.well-known/openid-configuration","oidc_metadata":{"issuer":"https://www.paypal.com","jwks_uri":"https://api.paypal.com/v1/oauth2/certs","token_endpoint":"https://api.paypal.com/v1/oauth2/token","claims_supported":["aud","iss","iat","exp","auth_time","nonce","sessionIndex","user_id"],"scopes_supported":["email","address","phone","openid","profile","https://uri.paypal.com/services/wallet/sendmoney","https://uri.paypal.com/services/payments/futurepayments","https://uri.paypal.com/services/expresscheckout"],"userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","revocation_endpoint":"https://api.paypal.com/v1/oauth2/revoke","grant_types_supported":["authorization_code","refresh_token"],"registration_endpoint":"https://api.paypal.com/v1/oauth2/applications","authorization_endpoint":"https://www.paypal.com/signin/authorize","subject_types_supported":["pairwise"],"response_modes_supported":["query","form_post"],"response_types_supported":["code","code id_token"],"claims_parameter_supported":false,"request_parameter_supported":false,"request_uri_parameter_supported":false,"code_challenge_methods_supported":["RS256","ES256","S256"],"require_request_uri_registration":false,"id_token_signing_alg_values_supported":["HS256","RS256"],"token_endpoint_auth_methods_supported":["client_secret_basic"]},"schema_version":"oidc-V4","token_endpoint":"https://api.paypal.com/v1/oauth2/token","userinfo_endpoint":"https://api.paypal.com/v1/oauth2/token/userinfo","connection_settings":{"pkce":"auto"},"authorization_endpoint":"https://example.com","token_endpoint_auth_method":"private_key_jwt","token_endpoint_auth_signing_alg":"RS256"},"strategy":"oidc","name":"OIDC-Connection-TestAccConnectionDataKeys","is_domain_connection":false,"show_as_button":false,"display_name":"OIDC-Connection-TestAccConnectionDataKeys","enabled_clients":[],"realms":["OIDC-Connection-TestAccConnectionDataKeys"]}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 319.036209ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5/keys
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '[{"kid":"vK-mSmAkara-STsVNHf_p7m20c9qcWwLGl0YH41OgSg","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknu\r\nKkZmqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u\r\n3LI5QaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bq\r\nzw/wRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoU\r\nC0i/WYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrd\r\nhCR9J5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nX\r\nX17R/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012w\r\nE9jOW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO\r\n9CUBImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTO\r\nAq23Q5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE\r\n23JCFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvR\r\nAA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"39:44:31:E4:D3:43:6F:7E:A7:33:43:C9:63:7C:7E:84:FB:A4:0B:2B","thumbprint":"394431E4D3436F7EA73343C9637C7E84FBA40B2B","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJWvPDRL3YELqlMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQDkjldppxXwO8OG173XxkgaVyuMFrOHhHeSmknuKkZm\r\nqPNkngkZJ/JS4IODDFAWZGdMvbuZltS/rW6ANZ+zxQ+7bT7qNf2aeYKUn57u3LI5\r\nQaaBLzXrxLZTHb/9x1o3pyt2YXKZ8Nt0ZgKUz4GiENyZceDD10opWIh0N0Bqzw/w\r\nRlhJHlH+DKL9fiFZe6uG7VMCk3zN97XGLsmBPwSV6NVqgL42+8kAugBdGzoUC0i/\r\nWYDlfr1c7hVXTjIDD4UXB9LTJ1RbNskrIn8Ni7iIDqOR2q34FjvBm9oV4vrdhCR9\r\nJ5S/OoNLJ7SVBdBOLyTQo+XrmwXYk4m5YoQoEXXZ5L8xAgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEA1oqZfD1v19zp4TAQN1nXX17R\r\n/HeO5dbmUS+2/SrPFzcDKnulIF2XhSyuJBDOf0aNXu9knV+MInyXrNmt012wE9jO\r\nW+jX3Itz1BU0r0c/fQzXm8c4hj870hdZW0ES72qPJCu+O/76nmzkBS+KuRTO9CUB\r\nImXhPX75kLatL6Jf7KV6GlaTVOhL0PvKF66tmixkYcGiH0Xiaz+bSzh7FjTOAq23\r\nQ5ynNRXv+Xaw6amnJlzEjfbtx7yGaPPHZeJqB8DYSOvvfcnheIyDsVfL6dnE23JC\r\nFj8Gs07kBKG5FewL7oGzxwW6b62lnGQXI6zzxR0A0kby0KPEbDH6+vhMbWvRADEA\r\n-----END PKCS7-----\r\n","current":true,"current_since":"2025-06-19T07:34:44.976Z"},{"kid":"KvMT6nLRs0pggRUpO9kLjI5hATrzPm4oZO9ieZkEw0o","algorithm":"RS256","key_use":"signing","subject_dn":"/CN=OIDC-Connection-TestAccConnectionDataKeys","cert":"-----BEGIN CERTIFICATE-----\r\nMIIDLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNV\r\nBAMTKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4X\r\nDTI1MDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1D\r\nb25uZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIV\r\ny2W/gEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4\r\nW/Y02tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jI\r\nlSWB3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXI\r\nedUBEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6\r\nbPxw8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8G\r\nA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4G\r\nA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7k\r\nCgl7eS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdU\r\nknwTQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9\r\ncb2zXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazF\r\nzMYjawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvN\r\nQd285QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOca\r\noA==\r\n-----END CERTIFICATE-----\r\n","fingerprint":"9F:FB:38:64:BA:C6:F9:E0:D4:65:9B:3B:7E:B1:83:13:76:BA:7B:46","thumbprint":"9FFB3864BAC6F9E0D4659B3B7EB1831376BA7B46","pkcs":"-----BEGIN PKCS7-----\r\nMIIDXAYJKoZIhvcNAQcCoIIDTTCCA0kCAQExADALBgkqhkiG9w0BBwGgggMxMIID\r\nLTCCAhWgAwIBAgIJd4OTVgEoclkCMA0GCSqGSIb3DQEBCwUAMDQxMjAwBgNVBAMT\r\nKU9JREMtQ29ubmVjdGlvbi1UZXN0QWNjQ29ubmVjdGlvbkRhdGFLZXlzMB4XDTI1\r\nMDYxOTA3MzQ0NFoXDTI2MDYxOTA3MzQ0NFowNDEyMDAGA1UEAxMpT0lEQy1Db25u\r\nZWN0aW9uLVRlc3RBY2NDb25uZWN0aW9uRGF0YUtleXMwggEiMA0GCSqGSIb3DQEB\r\nAQUAA4IBDwAwggEKAoIBAQCbmbXdxJJn6kEnuWGSgxKoGXxEEGdf96S98FIVy2W/\r\ngEQg+9WUB2/PPYehlM4p1l4u/JACCEpXZNyz9cspzpLksex+IrYrSNhQYwc4W/Y0\r\n2tB5G5Jx9xA0KZugBWmtqXYuFRkteWDXgKElJ9a/K6jjQSKVJKthUtB4u5jIlSWB\r\n3k/JDEri0Ffgykw7evSxXCrI26qtIHO7mm3fBpqEa9wHTUMdAfV0p4tuuPXIedUB\r\nEngX65sfWcl3Ml7rPm+q01yEzsH/KPHFWmpbNsR0zS3fuYunuvWpUa2sqLa6bPxw\r\n8BF4op1c4wvS3XyKNq+pvd6NRb5oyn5J6L7o6ZTl8cZ9AgMBAAGjQjBAMA8GA1Ud\r\nEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFcjEvxUMdW/fupNlLZXYRWgLJlKMA4GA1Ud\r\nDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEAa8FO3pFsIVVBx4Pqnz7kCgl7\r\neS4c/BSfP/o8h7VlcP+A1NefRXLBVltnx1L0Lr5crn93sYTiwr4d7stgohdUknwT\r\nQ82Dd42v6Gx8Ys1t+UC1TwNCKPZK/ZSq8L4YPj3M4C3MWDTDAoeHdO7q34j9cb2z\r\nXX6/TIRfYmWlYg8WWr4VCOxeHCNiJoznVYFyuxAx1GNHst9Mv9g7LPmbBazFzMYj\r\nawuTWIfCrQWRDzfBIfjG43adQ7rV7Ord/dSkcMEt1Lddu+2OSyGLK9Ti7GvNQd28\r\n5QvxeR09/CFkcJuHd96BPIr0mUyta/KUMyAGhIu19n9U4S4Lr5u4aj36ZOcaoDEA\r\n-----END PKCS7-----\r\n","next":true}]'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 355.911917ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/connections/con_XNQJSEyE3szLe1H5
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 41
+        uncompressed: false
+        body: '{"deleted_at":"2025-06-19T07:34:49.334Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 202 Accepted
+        code: 202
+        duration: 543.65125ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.22.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/nZQJmFXEZohVQgwrAnj4puFFab1THn6Z
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 491.36275ms

@@ -1,3 +1,15 @@
+## v1.24.0
+
+ENHANCEMENTS:
+
+- `resource/auth0_custom_domain`- Add support for Multiple Custom Domains ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
+- `data_source/auth0_custom_domain` - Add support to retrieve custom domain based on `custom_domain_id`  ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
+
+BUG FIXES:
+
+- `resource/auth0_phone_provider` - Updated constrains on `configuration` fields ([#1308](https://github.com/auth0/terraform-provider-auth0/pull/1308))
+- `resource/auth0_log_stream` - Marked `filters` as a computed field ([#1307](https://github.com/auth0/terraform-provider-auth0/pull/1307))
+
 ## v1.23.1
 
 ENHANCEMENTS:

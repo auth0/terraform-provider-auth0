@@ -124,7 +124,7 @@ func New() *schema.Provider {
 					}
 					return v == "1" || v == "true" || v == "on", nil
 				},
-				Description: "Indicates whether credentials will be dynamically passed to the provider from" +
+				Description: "Indicates whether credentials will be dynamically passed to the provider from " +
 					"other terraform resources.",
 			},
 			"cli_login": {

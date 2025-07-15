@@ -21,25 +21,43 @@ func NewDataSource() *schema.Resource {
 }
 
 func dataSourceSchema() map[string]*schema.Schema {
-	return internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema := internalSchema.TransformResourceToDataSource(NewResource().Schema)
+	dataSourceSchema["custom_domain_id"] = &schema.Schema{
+		Type:        schema.TypeString,
+		Description: "The ID of the Custom Domain.",
+		Optional:    true,
+	}
+
+	return dataSourceSchema
 }
 
 func readCustomDomainForDataSource(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
+	customDomainID := data.Get("custom_domain_id").(string)
+
+	if customDomainID != "" {
+		data.SetId(customDomainID)
+
+		customDomain, err := api.CustomDomain.Read(ctx, customDomainID)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+		return diag.FromErr(flattenCustomDomain(data, customDomain))
+	}
 
 	customDomains, err := api.CustomDomain.List(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	if len(customDomains) == 0 {
+	switch len(customDomains) {
+	case 0:
 		return diag.FromErr(errors.New("no custom domain configured on tenant"))
+	case 1:
+		customDomain := customDomains[0]
+		data.SetId(customDomain.GetID())
+		return diag.FromErr(flattenCustomDomain(data, customDomain))
+	default:
+		return diag.FromErr(errors.New("multiple custom domains found, please specify custom_domain_id"))
 	}
-	// At the moment there can only ever
-	// be one custom domain configured.
-	customDomain := customDomains[0]
-
-	data.SetId(customDomain.GetID())
-
-	return diag.FromErr(flattenCustomDomain(data, customDomain))
 }

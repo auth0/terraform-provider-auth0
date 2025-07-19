@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/eventstream"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
@@ -159,6 +161,7 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":       customdomain.NewVerificationResource(),
 			"auth0_email_provider":                   email.NewResource(),
 			"auth0_email_template":                   email.NewTemplateResource(),
+			"auth0_event_stream":                     eventstream.NewResource(),
 			"auth0_encryption_key_manager":           encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_flow":                             flow.NewResource(),
 			"auth0_flow_vault_connection":            flow.NewVaultConnectionResource(),
@@ -212,6 +215,7 @@ func New() *schema.Provider {
 			"auth0_connection_keys":               connection.NewKeysDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
+			"auth0_event_stream":                  eventstream.NewDataSource(),
 			"auth0_flow":                          flow.NewDataSource(),
 			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 			"auth0_form":                          form.NewDataSource(),

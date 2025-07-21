@@ -165,7 +165,7 @@ func expandLogStreamPIIConfig(data *schema.ResourceData) *management.LogStreamPi
 
 	var piiConfig management.LogStreamPiiConfig
 
-	config.ForEachElement(func(key cty.Value, config cty.Value) (stop bool) {
+	config.ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
 		piiConfig.LogFields = value.Strings(config.GetAttr("log_fields"))
 		piiConfig.Method = value.String(config.GetAttr("method"))
 		piiConfig.Algorithm = value.String(config.GetAttr("algorithm"))
@@ -174,5 +174,4 @@ func expandLogStreamPIIConfig(data *schema.ResourceData) *management.LogStreamPi
 	})
 
 	return &piiConfig
-
 }

@@ -67,6 +67,7 @@ type authConfig struct {
 	audience                  string
 	clientAssertionPrivateKey string
 	clientAssertionSigningAlg string
+	customDomainHeader        string
 }
 
 // ConfigureProvider will configure the *schema.Provider so that
@@ -81,6 +82,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			audience:                  data.Get("audience").(string),
 			clientAssertionPrivateKey: data.Get("client_assertion_private_key").(string),
 			clientAssertionSigningAlg: data.Get("client_assertion_signing_alg").(string),
+			customDomainHeader:        data.Get("custom_domain_header").(string),
 		}
 
 		domain := data.Get("domain").(string)
@@ -159,7 +161,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 			management.WithAuth0ClientEnvEntry(providerName, version),
 			management.WithNoRetries(),
 			management.WithClient(customClientWithRetries()),
-		)
+			management.WithCustomDomainHeader(config.customDomainHeader))
 
 		if err != nil {
 			return nil, diag.FromErr(err)

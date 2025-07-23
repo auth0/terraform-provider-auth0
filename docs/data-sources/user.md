@@ -32,6 +32,7 @@ data "auth0_user" "my_user" {
 
 ### Optional
 
+- `custom_domain_header` (String) Sets the `Auth0-Custom-Domain` header on all requests for this resource
 - `query` (String) Lucene Query for retrieving a user.
 - `user_id` (String) ID of the user.
 

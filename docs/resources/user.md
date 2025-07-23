@@ -35,6 +35,7 @@ resource "auth0_user" "user" {
 
 - `app_metadata` (String) Custom fields that store info about the user that impact the user's core functionality, such as how an application functions or what the user can access. Examples include support plans and IDs for external accounts.
 - `blocked` (Boolean) Indicates whether the user is blocked or not.
+- `custom_domain_header` (String) Sets the `Auth0-Custom-Domain` header on all requests for this resource
 - `email` (String) Email address of the user.
 - `email_verified` (Boolean) Indicates whether the email address has been verified.
 - `family_name` (String) Family name of the user. This value can only be updated if the connection is a database connection (using the Auth0 store), a passwordless connection (email or sms) or has disabled 'Sync user profile attributes at each login'. For more information, see: [Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).

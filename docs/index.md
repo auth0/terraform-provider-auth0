@@ -52,6 +52,7 @@ better alternative.
 - `client_assertion_signing_alg` (String) The algorithm used to sign the client assertion JWT. It can also be sourced from the `AUTH0_CLIENT_ASSERTION_SIGNING_ALG` environment variable.
 - `client_id` (String) Your Auth0 client ID. It can also be sourced from the `AUTH0_CLIENT_ID` environment variable.
 - `client_secret` (String) Your Auth0 client secret. It can also be sourced from the `AUTH0_CLIENT_SECRET` environment variable.
+- `custom_domain_header` (String) When specified, this header is added to requests targeting the defined resources
 - `debug` (Boolean) Enables HTTP request and response logging when TF_LOG=DEBUG is set. It can also be sourced from the `AUTH0_DEBUG` environment variable.
 - `domain` (String) Your Auth0 domain name. It can also be sourced from the `AUTH0_DOMAIN` environment variable.
 - `dynamic_credentials` (Boolean) Indicates whether credentials will be dynamically passed to the provider from other terraform resources.

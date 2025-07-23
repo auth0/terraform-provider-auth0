@@ -2,8 +2,6 @@ package eventstream
 
 import (
 	"context"
-	"encoding/json"
-	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -41,28 +39,94 @@ func NewResource() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "List of event types this stream is subscribed to.",
 			},
-			"destination": {
-				Type:        schema.TypeList,
-				Required:    true,
-				MaxItems:    1,
-				Description: "Destination configuration block.",
+			"destination_type": {
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				Description:  "The type of event stream destination (either 'eventbridge' or 'webhook').",
+				ValidateFunc: validation.StringInSlice([]string{"eventbridge", "webhook"}, false),
+			},
+			"eventbridge_configuration": {
+				Type:     schema.TypeList,
+				Optional: true,
+				ForceNew: true,
+				MaxItems: 1,
+				Description: "Configuration for the EventBridge destination. " +
+					"This block is only applicable when `destination_type` is set to `eventbridge`. " +
+					"EventBridge configurations **cannot** be updated after creation. " +
+					"Any change to this block will force the resource to be recreated.",
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"type": {
+						"aws_account_id": {
 							Type:     schema.TypeString,
 							Required: true,
 							ForceNew: true,
-							Description: "Destination type (e.g., 'eventbridge', 'http'). Cannot be updated. " +
-								"If altered, resource is deleted and re-created",
 						},
-						"configuration": {
+						"aws_region": {
 							Type:     schema.TypeString,
 							Required: true,
 							ForceNew: true,
-							Description: "Destination-specific configuration, as a JSON string. Cannot be updated. " +
-								"If altered, resource is deleted and re-created",
-							ValidateFunc:     validation.StringIsJSON,
-							DiffSuppressFunc: suppressJSONDiffWithRules,
+						},
+						"aws_partner_event_source": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+					},
+				},
+			},
+			"webhook_configuration": {
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Description: "Configuration for the Webhook destination. " +
+					"This block is only applicable when `destination_type` is set to `webhook`. " +
+					"Webhook configurations **can** be updated after creation, including the " +
+					"endpoint and authorization fields.",
+				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"webhook_endpoint": {
+							Type: schema.TypeString,
+							Description: "The HTTPS endpoint that will receive the webhook events. " +
+								"Must be a valid, publicly accessible URL.",
+							Required: true,
+						},
+						"webhook_authorization": {
+							Type:     schema.TypeList,
+							Required: true,
+							Description: "Authorization details for the webhook endpoint. " +
+								"Supports `basic` authentication using `username` and `password`, or " +
+								"`bearer` authentication using a `token`. " +
+								"The appropriate fields must be set based on the chosen method.",
+							MaxItems: 1,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"method": {
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice([]string{"basic", "bearer"}, false),
+										Description:  "The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.",
+									},
+									"username": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Description: "The username for `basic` authentication. Required when `method` is set to `basic`.",
+									},
+									"password": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
+									},
+									"token": {
+										Type:        schema.TypeString,
+										Optional:    true,
+										Sensitive:   true,
+										Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`.",
+									},
+								},
+							},
 						},
 					},
 				},
@@ -123,83 +187,4 @@ func deleteEventStream(ctx context.Context, data *schema.ResourceData, m interfa
 	}
 
 	return nil
-}
-
-func flattenJSON(prefix string, input map[string]interface{}) map[string]interface{} {
-	flat := make(map[string]interface{})
-	for k, v := range input {
-		fullKey := k
-		if prefix != "" {
-			fullKey = prefix + "." + k
-		}
-
-		switch val := v.(type) {
-		case map[string]interface{}:
-			for subKey, subVal := range flattenJSON(fullKey, val) {
-				flat[subKey] = subVal
-			}
-		default:
-			flat[fullKey] = val
-		}
-	}
-	return flat
-}
-
-// suppressJSONDiffWithRules is a custom DiffSuppressFunc for Terraform that compares two JSON strings
-// while intelligently ignoring certain differences based on known dynamic behaviors of the Auth0 API.
-//
-// This function accounts for:
-//  1. Fields that are present in the Terraform configuration (user-defined) but are intentionally omitted
-//     in the Auth0 API response. (e.g., secret tokens like `webhook_authorization.token`)
-//  2. Fields that are added by the Auth0 API in the response, even though they were not part of the
-//     original Terraform configuration. (e.g., computed fields like `aws_partner_event_source`)
-//
-// The comparison is performed by flattening both JSON structures into key-path maps (e.g.,
-// `webhook_authorization.token`) and comparing only the shared or explicitly allowed differing keys.
-// Any unexpected difference in value or unrecognized structural drift will return `false`, meaning a
-// diff will be shown in the Terraform plan.
-//
-// This helps eliminate noisy or misleading diffs during plan/apply cycles for dynamic or
-// partially opaque API schemas.
-func suppressJSONDiffWithRules(_, o, n string, _ *schema.ResourceData) bool {
-	var oldMap, newMap map[string]interface{}
-	if err := json.Unmarshal([]byte(o), &oldMap); err != nil {
-		return false
-	}
-	if err := json.Unmarshal([]byte(n), &newMap); err != nil {
-		return false
-	}
-
-	// Rules with nested key paths.
-	allowedMissingInState := map[string]bool{
-		"webhook_authorization.token": true,
-	}
-	allowedAddedInState := map[string]bool{
-		"aws_partner_event_source": true,
-	}
-
-	// Compare all key paths from new (config).
-	for path, newVal := range flattenJSON("", newMap) {
-		oldVal, ok := flattenJSON("", oldMap)[path]
-		if !ok {
-			if allowedMissingInState[path] {
-				continue
-			}
-			return false
-		}
-		if !reflect.DeepEqual(oldVal, newVal) {
-			return false
-		}
-	}
-
-	// Check extra keys in old (API state).
-	for path := range flattenJSON("", oldMap) {
-		if _, ok := flattenJSON("", newMap)[path]; !ok {
-			if !allowedAddedInState[path] {
-				return false
-			}
-		}
-	}
-
-	return true
 }

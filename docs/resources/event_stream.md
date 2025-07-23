@@ -11,42 +11,37 @@ Allows you to manage Auth0 Event Streams.
 ## Example Usage
 
 ```terraform
-# Creates a event stream of type event bridge.
+# Creates an event stream of type eventbridge
 resource "auth0_event_stream" "my_event_stream_event_bridge" {
-  name = "my-eventbridge"
+  name             = "my-eventbridge"
+  destination_type = "eventbridge"
   subscriptions = [
     "user.created",
     "user.updated"
   ]
-  destination {
-    type = "eventbridge"
-    configuration = jsonencode(
-      {
-        aws_account_id = "242849305777"
-        aws_region     = "us-east-1"
-      }
-    )
+
+  eventbridge_configuration {
+    aws_account_id = "242849305777"
+    aws_region     = "us-east-1"
   }
 }
 
-# Creates a event stream of type webhook
+# Creates an event stream of type webhook
 resource "auth0_event_stream" "my_event_stream_webhook" {
-  name = "my-webhook"
+  name             = "my-webhook"
+  destination_type = "webhook"
   subscriptions = [
     "user.created",
     "user.updated"
   ]
-  destination {
-    type = "webhook"
-    configuration = jsonencode(
-      {
-        webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
-        webhook_authorization = {
-          method = "bearer"
-          token  = "123456789"
-        }
-      }
-    )
+
+  webhook_configuration {
+    webhook_endpoint = "https://eof28wtn4v4506o.m.pipedream.net"
+
+    webhook_authorization {
+      method = "bearer"
+      token  = "123456789"
+    }
   }
 }
 ```
@@ -56,9 +51,14 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 
 ### Required
 
-- `destination` (Block List, Min: 1, Max: 1) Destination configuration block. (see [below for nested schema](#nestedblock--destination))
+- `destination_type` (String) The type of event stream destination (either 'eventbridge' or 'webhook').
 - `name` (String) The name of the event stream.
 - `subscriptions` (List of String) List of event types this stream is subscribed to.
+
+### Optional
+
+- `eventbridge_configuration` (Block List, Max: 1) Configuration for the EventBridge destination. This block is only applicable when `destination_type` is set to `eventbridge`. EventBridge configurations **cannot** be updated after creation. Any change to this block will force the resource to be recreated. (see [below for nested schema](#nestedblock--eventbridge_configuration))
+- `webhook_configuration` (Block List, Max: 1) Configuration for the Webhook destination. This block is only applicable when `destination_type` is set to `webhook`. Webhook configurations **can** be updated after creation, including the endpoint and authorization fields. (see [below for nested schema](#nestedblock--webhook_configuration))
 
 ### Read-Only
 
@@ -67,13 +67,39 @@ resource "auth0_event_stream" "my_event_stream_webhook" {
 - `status` (String) The current status of the event stream.
 - `updated_at` (String) The ISO 8601 timestamp when the stream was last updated.
 
-<a id="nestedblock--destination"></a>
-### Nested Schema for `destination`
+<a id="nestedblock--eventbridge_configuration"></a>
+### Nested Schema for `eventbridge_configuration`
 
 Required:
 
-- `configuration` (String) Destination-specific configuration, as a JSON string. Cannot be updated. If altered, resource is deleted and re-created
-- `type` (String) Destination type (e.g., 'eventbridge', 'http'). Cannot be updated. If altered, resource is deleted and re-created
+- `aws_account_id` (String)
+- `aws_region` (String)
+
+Read-Only:
+
+- `aws_partner_event_source` (String)
+
+
+<a id="nestedblock--webhook_configuration"></a>
+### Nested Schema for `webhook_configuration`
+
+Required:
+
+- `webhook_authorization` (Block List, Min: 1, Max: 1) Authorization details for the webhook endpoint. Supports `basic` authentication using `username` and `password`, or `bearer` authentication using a `token`. The appropriate fields must be set based on the chosen method. (see [below for nested schema](#nestedblock--webhook_configuration--webhook_authorization))
+- `webhook_endpoint` (String) The HTTPS endpoint that will receive the webhook events. Must be a valid, publicly accessible URL.
+
+<a id="nestedblock--webhook_configuration--webhook_authorization"></a>
+### Nested Schema for `webhook_configuration.webhook_authorization`
+
+Required:
+
+- `method` (String) The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.
+
+Optional:
+
+- `password` (String, Sensitive) The password for `basic` authentication. Required when `method` is set to `basic`.
+- `token` (String, Sensitive) The token used for `bearer` authentication. Required when `method` is set to `bearer`.
+- `username` (String) The username for `basic` authentication. Required when `method` is set to `basic`.
 
 ## Import
 

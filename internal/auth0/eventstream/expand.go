@@ -14,11 +14,9 @@ func expandEventStream(data *schema.ResourceData) *management.EventStream {
 	eventStream := &management.EventStream{
 		Name:          value.String(cfg.GetAttr("name")),
 		Subscriptions: expandEventStreamSubscriptions(cfg.GetAttr("subscriptions")),
+		Destination:   expandEventStreamDestination(data),
 	}
 
-	if data.IsNewResource() {
-		eventStream.Destination = expandEventStreamDestination(cfg.GetAttr("destination"))
-	}
 	return eventStream
 }
 
@@ -35,19 +33,62 @@ func expandEventStreamSubscriptions(subs cty.Value) *[]management.EventStreamSub
 	return &subscriptions
 }
 
-func expandEventStreamDestination(config cty.Value) *management.EventStreamDestination {
-	var destination management.EventStreamDestination
+func expandEventStreamDestination(data *schema.ResourceData) *management.EventStreamDestination {
+	destType := data.Get("destination_type").(string)
 
-	config.ForEachElement(func(_ cty.Value, b cty.Value) (stop bool) {
-		destination = management.EventStreamDestination{
-			EventStreamDestinationType: value.String(b.GetAttr("type")),
-		}
-		dest, err := value.MapFromJSON(b.GetAttr("configuration"))
-		if err == nil {
-			destination.EventStreamDestinationConfiguration = dest
-		}
-		return stop
-	})
+	destination := &management.EventStreamDestination{
+		EventStreamDestinationType: &destType,
+	}
 
-	return &destination
+	configMap := make(map[string]interface{})
+
+	switch destType {
+	case "webhook":
+		webhookCfgList, ok := data.Get("webhook_configuration").([]interface{})
+		if ok && len(webhookCfgList) > 0 {
+			webhookCfg := webhookCfgList[0].(map[string]interface{})
+
+			if endpoint, ok := webhookCfg["webhook_endpoint"].(string); ok && endpoint != "" {
+				configMap["webhook_endpoint"] = endpoint
+			}
+
+			if authList, ok := webhookCfg["webhook_authorization"].([]interface{}); ok && len(authList) > 0 {
+				auth := authList[0].(map[string]interface{})
+				method := auth["method"].(string)
+
+				authMap := map[string]interface{}{
+					"method": method,
+				}
+
+				if method == "basic" {
+					if v, ok := auth["username"].(string); ok {
+						authMap["username"] = v
+					}
+					if v, ok := auth["password"].(string); ok {
+						authMap["password"] = v
+					}
+				} else if method == "bearer" {
+					if v, ok := auth["token"].(string); ok {
+						authMap["token"] = v
+					}
+				}
+
+				configMap["webhook_authorization"] = authMap
+			}
+		}
+
+	case "eventbridge":
+		if !data.IsNewResource() {
+			return nil
+		}
+		bridgeCfgList, ok := data.Get("eventbridge_configuration").([]interface{})
+		if ok && len(bridgeCfgList) > 0 {
+			bridgeCfg := bridgeCfgList[0].(map[string]interface{})
+			configMap["aws_account_id"] = bridgeCfg["aws_account_id"]
+			configMap["aws_region"] = bridgeCfg["aws_region"]
+		}
+	}
+
+	destination.EventStreamDestinationConfiguration = configMap
+	return destination
 }

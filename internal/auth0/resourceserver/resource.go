@@ -234,10 +234,10 @@ func NewResource() *schema.Resource {
 							Optional: true,
 							Computed: true,
 							ValidateFunc: validation.StringInSlice([]string{
-								"mtls",
+								"mtls", "dpop",
 							}, true),
 							Description: "Mechanism used for proof-of-possession. " +
-								"Only `mtls` is supported.",
+								"`mtls` or `dpop` is supported.",
 						},
 						"required": {
 							Type:        schema.TypeBool,

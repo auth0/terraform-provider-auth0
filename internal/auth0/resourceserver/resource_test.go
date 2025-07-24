@@ -76,6 +76,41 @@ EOF
 }
 `
 
+const testAccResourceServerConfigWithDPoPUpdate = `
+resource "auth0_resource_server" "my_resource_server" {
+	name                                            = "Acceptance Test - {{.testName}}"
+	identifier                                      = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	signing_alg                                     = "RS256"
+	allow_offline_access                            = false # <--- set to false
+	token_lifetime                                  = 7200
+	token_lifetime_for_web                          = 3600
+	skip_consent_for_verifiable_first_party_clients = true
+	enforce_policies                                = false
+	consent_policy                                  = "transactional-authorization-with-mfa"
+	authorization_details {
+		type = "payment"
+	}
+	authorization_details {
+		type = "not-payment"
+	}
+	token_encryption {
+		format = "compact-nested-jwe"
+		encryption_key {
+			name      = "encryptkey"
+			algorithm = "RSA-OAEP-256"
+			pem       = <<EOF
+%s
+EOF
+		}
+	}
+	proof_of_possession {
+		mechanism = "dpop"
+		required = true
+	}
+
+}
+`
+
 const testAccResourceServerInvalidAuthorizationDetails = `
 resource "auth0_resource_server" "my_resource_server" {
 	name                                            = "Acceptance Test - {{.testName}}"
@@ -270,6 +305,36 @@ func TestAccResourceServer(t *testing.T) {
 			{
 				Config:      acctest.ParseTestName(testAccResourceServerInvalidProofOfPossession, t.Name()),
 				ExpectError: regexp.MustCompile(`only one of disable and mechanism or required should be set in the proof_of_possession block`),
+			},
+			{
+				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerConfigWithDPoPUpdate, t.Name()), credsCert1),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "name", fmt.Sprintf("Acceptance Test - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "signing_alg", "RS256"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime", "7200"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_lifetime_for_web", "3600"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "skip_consent_for_verifiable_first_party_clients", "true"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "allow_offline_access", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "enforce_policies", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "consent_policy", "transactional-authorization-with-mfa"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.#", "2"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.disable", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.0.type", "payment"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.disable", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "authorization_details.1.type", "not-payment"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.disable", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.format", "compact-nested-jwe"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.name", "encryptkey"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.algorithm", "RSA-OAEP-256"),
+					resource.TestCheckResourceAttrSet("auth0_resource_server.my_resource_server", "token_encryption.0.encryption_key.0.pem"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.#", "1"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.disable", "false"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.mechanism", "dpop"),
+					resource.TestCheckResourceAttr("auth0_resource_server.my_resource_server", "proof_of_possession.0.required", "true"),
+				),
 			},
 			{
 				Config: fmt.Sprintf(acctest.ParseTestName(testAccResourceServerConfigUpdate, t.Name()), credsCert1),

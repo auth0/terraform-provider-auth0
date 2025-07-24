@@ -88,7 +88,7 @@ Optional:
 Optional:
 
 - `disable` (Boolean) Disable proof-of-possession.
-- `mechanism` (String) Mechanism used for proof-of-possession. Only `mtls` is supported.
+- `mechanism` (String) Mechanism used for proof-of-possession. `mtls` or `dpop` is supported.
 - `required` (Boolean) Indicates whether proof-of-possession is required with this resource server.
 
 

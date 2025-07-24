@@ -143,7 +143,8 @@ func New() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CUSTOM_DOMAIN_HEADER", nil),
-				Description: "When specified, this header is added to requests targeting the defined resources",
+				Description: "When specified, this header is added to requests targeting a set of pre-defined whitelisted URLs " +
+					"Global setting overrides all resource specific `custom_domain_header` value",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

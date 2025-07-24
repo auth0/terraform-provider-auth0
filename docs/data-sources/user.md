@@ -32,7 +32,7 @@ data "auth0_user" "my_user" {
 
 ### Optional
 
-- `custom_domain_header` (String) Sets the `Auth0-Custom-Domain` header on all requests for this resource
+- `custom_domain_header` (String) Sets the `Auth0-Custom-Domain` header on all requests for this resource. Global setting of provider takes precedence over resource specific param, if both are set.
 - `query` (String) Lucene Query for retrieving a user.
 - `user_id` (String) ID of the user.
 

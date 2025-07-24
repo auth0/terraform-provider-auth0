@@ -147,9 +147,10 @@ func NewResource() *schema.Resource {
 					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
 			"custom_domain_header": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Description: "Sets the `Auth0-Custom-Domain` header on all requests for this resource",
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "Sets the `Auth0-Custom-Domain` header on all requests for this resource. " +
+					"Global setting of provider takes precedence over resource specific param, if both are set.",
 			},
 		},
 	}

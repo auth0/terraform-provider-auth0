@@ -1,3 +1,10 @@
+## v1.24.1
+
+BUG FIXES:
+
+- `resource/auth0_custom_domain` - Add support for passing `custom_domain_header` via resource and global config ([#1316](https://github.com/auth0/terraform-provider-auth0/pull/1316))
+- `data_source/auth0_custom_domain` - Add support for passing `custom_domain_header` via resource and global config ([#1316](https://github.com/auth0/terraform-provider-auth0/pull/1316))
+
 ## v1.24.0
 
 ENHANCEMENTS:

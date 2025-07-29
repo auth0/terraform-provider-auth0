@@ -83,6 +83,16 @@ func TestConfigureProvider(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "it can configure a provider with custom_domain_header",
+			givenTerraformConfig: map[string]interface{}{
+				"domain":               "example.auth0.com",
+				"client_id":            "1234567",
+				"client_secret":        "secret",
+				"custom_domain_header": "demo-sdk.acmetest.org",
+			},
+			expectedDiagnostics: nil,
+		},
 	}
 
 	for _, testCase := range testCases {

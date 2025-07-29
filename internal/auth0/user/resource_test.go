@@ -237,3 +237,43 @@ func TestAccUserChangeUsername(t *testing.T) {
 		},
 	})
 }
+
+const testAccUserWithoutCustomDomainParam = `
+resource "auth0_user" "auth0_user_without_custom_domain" {
+	connection_name = "Username-Password-Authentication"
+	username        = "user_{{.testName}}"
+	email           = "change.username.{{.testName}}@acceptance.test.com"
+	email_verified  = true
+	password        = "MyPass123$"
+}
+`
+
+const testAccUserWithCustomDomainParam = `
+resource "auth0_user" "auth0_user_with_custom_domain" {
+	connection_name = "Username-Password-Authentication"
+	username        = "user_domain"
+	email           = "change.username.{{.testName}}@acceptance.test.com"
+	email_verified  = true
+	password        = "MyPass123$"
+	custom_domain_header = "demo-sdk.acmetest.org"
+}
+`
+
+func TestAccUserCustomDomains(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config:      acctest.ParseTestName(testAccUserWithoutCustomDomainParam, "terra"),
+				ExpectError: regexp.MustCompile("The tenant has multiple verified custom domains"),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUserWithCustomDomainParam, "terra"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_with_custom_domain", "username", "user_domain"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_with_custom_domain", "email", "change.username.terra@acceptance.test.com"),
+					resource.TestCheckResourceAttr("auth0_user.auth0_user_with_custom_domain", "password", "MyPass123$"),
+				),
+			},
+		},
+	})
+}

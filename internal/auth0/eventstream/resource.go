@@ -11,6 +11,72 @@ import (
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
 
+var webhookConfig = &schema.Resource{
+	Schema: map[string]*schema.Schema{
+		"webhook_endpoint": {
+			Type: schema.TypeString,
+			Description: "The HTTPS endpoint that will receive the webhook events. " +
+				"Must be a valid, publicly accessible URL.",
+			Required: true,
+		},
+		"webhook_authorization": {
+			Type:     schema.TypeList,
+			Required: true,
+			Description: "Authorization details for the webhook endpoint. " +
+				"Supports `basic` authentication using `username` and `password`, or " +
+				"`bearer` authentication using a `token`. " +
+				"The appropriate fields must be set based on the chosen method.",
+			MaxItems: 1,
+			Elem: &schema.Resource{
+				Schema: map[string]*schema.Schema{
+					"method": {
+						Type:         schema.TypeString,
+						Required:     true,
+						ValidateFunc: validation.StringInSlice([]string{"basic", "bearer"}, false),
+						Description:  "The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.",
+					},
+					"username": {
+						Type:        schema.TypeString,
+						Optional:    true,
+						Description: "The username for `basic` authentication. Required when `method` is set to `basic`.",
+					},
+					"password": {
+						Type:        schema.TypeString,
+						Optional:    true,
+						Sensitive:   true,
+						Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
+					},
+					"token": {
+						Type:        schema.TypeString,
+						Optional:    true,
+						Sensitive:   true,
+						Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`.",
+					},
+				},
+			},
+		},
+	},
+}
+
+var eventBridgeConfig = &schema.Resource{
+	Schema: map[string]*schema.Schema{
+		"aws_account_id": {
+			Type:     schema.TypeString,
+			Required: true,
+			ForceNew: true,
+		},
+		"aws_region": {
+			Type:     schema.TypeString,
+			Required: true,
+			ForceNew: true,
+		},
+		"aws_partner_event_source": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+	},
+}
+
 // NewResource returns the auth0_event_stream resource.
 func NewResource() *schema.Resource {
 	return &schema.Resource{
@@ -56,24 +122,7 @@ func NewResource() *schema.Resource {
 					"EventBridge configurations **cannot** be updated after creation. " +
 					"Any change to this block will force the resource to be recreated.",
 				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"aws_account_id": {
-							Type:     schema.TypeString,
-							Required: true,
-							ForceNew: true,
-						},
-						"aws_region": {
-							Type:     schema.TypeString,
-							Required: true,
-							ForceNew: true,
-						},
-						"aws_partner_event_source": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-					},
-				},
+				Elem:         eventBridgeConfig,
 			},
 			"webhook_configuration": {
 				Type:     schema.TypeList,
@@ -84,52 +133,7 @@ func NewResource() *schema.Resource {
 					"Webhook configurations **can** be updated after creation, including the " +
 					"endpoint and authorization fields.",
 				ExactlyOneOf: []string{"eventbridge_configuration", "webhook_configuration"},
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"webhook_endpoint": {
-							Type: schema.TypeString,
-							Description: "The HTTPS endpoint that will receive the webhook events. " +
-								"Must be a valid, publicly accessible URL.",
-							Required: true,
-						},
-						"webhook_authorization": {
-							Type:     schema.TypeList,
-							Required: true,
-							Description: "Authorization details for the webhook endpoint. " +
-								"Supports `basic` authentication using `username` and `password`, or " +
-								"`bearer` authentication using a `token`. " +
-								"The appropriate fields must be set based on the chosen method.",
-							MaxItems: 1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"method": {
-										Type:         schema.TypeString,
-										Required:     true,
-										ValidateFunc: validation.StringInSlice([]string{"basic", "bearer"}, false),
-										Description:  "The authorization method used to secure the webhook endpoint. Can be either `basic` or `bearer`.",
-									},
-									"username": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Description: "The username for `basic` authentication. Required when `method` is set to `basic`.",
-									},
-									"password": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Sensitive:   true,
-										Description: "The password for `basic` authentication. Required when `method` is set to `basic`.",
-									},
-									"token": {
-										Type:        schema.TypeString,
-										Optional:    true,
-										Sensitive:   true,
-										Description: "The token used for `bearer` authentication. Required when `method` is set to `bearer`.",
-									},
-								},
-							},
-						},
-					},
-				},
+				Elem:         webhookConfig,
 			},
 			"created_at": {
 				Type:        schema.TypeString,

@@ -78,6 +78,9 @@ func expandEventStreamDestination(data *schema.ResourceData) *management.EventSt
 		}
 
 	case "eventbridge":
+		// Skip returning destination configuration for existing EventBridge resources during updates
+		// since EventBridge configuration cannot be updated.
+		// This prevents overwriting or reconfiguring the resource unintentionally.
 		if !data.IsNewResource() {
 			return nil
 		}

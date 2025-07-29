@@ -49,6 +49,9 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 
 	destType := dest.GetEventStreamDestinationType()
 	config := dest.GetEventStreamDestinationConfiguration()
+	if config == nil {
+		return nil
+	}
 
 	if err := data.Set("destination_type", destType); err != nil {
 		return diag.FromErr(err)
@@ -56,9 +59,6 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 
 	switch destType {
 	case "eventbridge":
-		if config == nil {
-			return nil
-		}
 		eventbridgeCfg := map[string]interface{}{
 			"aws_account_id":           config["aws_account_id"],
 			"aws_region":               config["aws_region"],
@@ -69,9 +69,6 @@ func flattenEventStreamDestination(data *schema.ResourceData, dest *management.E
 		}
 
 	case "webhook":
-		if config == nil {
-			return nil
-		}
 		webhookCfg := map[string]interface{}{
 			"webhook_endpoint": config["webhook_endpoint"],
 		}

@@ -81,7 +81,7 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	// Implement pagination using the Next token
+	// Implement pagination using the Next token.
 	var allClients []management.ConnectionEnabledClient
 	var next string
 

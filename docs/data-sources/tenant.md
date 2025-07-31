@@ -26,6 +26,7 @@ data "auth0_tenant" "my_tenant" {}
 - `default_audience` (String) API Audience to use by default for API Authorization flows. This setting is equivalent to appending the audience to every authorization request made to the tenant for every application.
 - `default_directory` (String) Name of the connection to be used for Password Grant exchanges. Options include `auth0-adldap`, `ad`, `auth0`, `email`, `sms`, `waad`, and `adfs`.
 - `default_redirection_uri` (String) The default absolute redirection URI. Must be HTTPS or an empty string.
+- `default_token_quota` (List of Object) Token Quota configuration. (see [below for nested schema](#nestedatt--default_token_quota))
 - `disable_acr_values_supported` (Boolean) Disable list of supported ACR values.
 - `domain` (String) Your Auth0 domain name.
 - `enabled_locales` (List of String) Supported locales for the user interface. The first locale in the list will be used to set the default locale.
@@ -45,6 +46,51 @@ data "auth0_tenant" "my_tenant" {}
 - `sessions` (List of Object) Sessions related settings for the tenant. (see [below for nested schema](#nestedatt--sessions))
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
+
+<a id="nestedatt--default_token_quota"></a>
+### Nested Schema for `default_token_quota`
+
+Read-Only:
+
+- `clients` (List of Object) (see [below for nested schema](#nestedobjatt--default_token_quota--clients))
+- `organizations` (List of Object) (see [below for nested schema](#nestedobjatt--default_token_quota--organizations))
+
+<a id="nestedobjatt--default_token_quota--clients"></a>
+### Nested Schema for `default_token_quota.clients`
+
+Read-Only:
+
+- `client_credentials` (List of Object) (see [below for nested schema](#nestedobjatt--default_token_quota--clients--client_credentials))
+
+<a id="nestedobjatt--default_token_quota--clients--client_credentials"></a>
+### Nested Schema for `default_token_quota.clients.client_credentials`
+
+Read-Only:
+
+- `enforce` (Boolean)
+- `per_day` (Number)
+- `per_hour` (Number)
+
+
+
+<a id="nestedobjatt--default_token_quota--organizations"></a>
+### Nested Schema for `default_token_quota.organizations`
+
+Read-Only:
+
+- `client_credentials` (List of Object) (see [below for nested schema](#nestedobjatt--default_token_quota--organizations--client_credentials))
+
+<a id="nestedobjatt--default_token_quota--organizations--client_credentials"></a>
+### Nested Schema for `default_token_quota.organizations.client_credentials`
+
+Read-Only:
+
+- `enforce` (Boolean)
+- `per_day` (Number)
+- `per_hour` (Number)
+
+
+
 
 <a id="nestedatt--error_page"></a>
 ### Nested Schema for `error_page`

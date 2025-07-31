@@ -146,6 +146,12 @@ func NewResource() *schema.Resource {
 					"has disabled 'Sync user profile attributes at each login'. For more information, see: " +
 					"[Configure Identity Provider Connection for User Profile Updates](https://auth0.com/docs/manage-users/user-accounts/user-profiles/configure-connection-sync-with-auth0).",
 			},
+			"custom_domain_header": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "Sets the `Auth0-Custom-Domain` header on all requests for this resource. " +
+					"Global setting of provider takes precedence over resource specific param, if both are set.",
+			},
 		},
 	}
 }
@@ -158,7 +164,13 @@ func createUser(ctx context.Context, data *schema.ResourceData, meta interface{}
 		return diag.FromErr(err)
 	}
 
-	if err := api.User.Create(ctx, user); err != nil {
+	var reqOptions []management.RequestOption
+	customDomainHeader, ok := data.GetOk("custom_domain_header")
+	if ok {
+		reqOptions = append(reqOptions, management.CustomDomainHeader(customDomainHeader.(string)))
+	}
+
+	if err := api.User.Create(ctx, user, reqOptions...); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -170,7 +182,12 @@ func createUser(ctx context.Context, data *schema.ResourceData, meta interface{}
 func readUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	user, err := api.User.Read(ctx, data.Id())
+	var reqOptions []management.RequestOption
+	customDomainHeader, ok := data.GetOk("custom_domain_header")
+	if ok {
+		reqOptions = append(reqOptions, management.CustomDomainHeader(customDomainHeader.(string)))
+	}
+	user, err := api.User.Read(ctx, data.Id(), reqOptions...)
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
@@ -190,7 +207,12 @@ func updateUser(ctx context.Context, data *schema.ResourceData, meta interface{}
 
 	api := meta.(*config.Config).GetAPI()
 	if userHasChange(user) {
-		if err := api.User.Update(ctx, data.Id(), user); err != nil {
+		var reqOptions []management.RequestOption
+		customDomainHeader, ok := data.GetOk("custom_domain_header")
+		if ok {
+			reqOptions = append(reqOptions, management.CustomDomainHeader(customDomainHeader.(string)))
+		}
+		if err := api.User.Update(ctx, data.Id(), user, reqOptions...); err != nil {
 			return diag.FromErr(internalError.HandleAPIError(data, err))
 		}
 	}
@@ -201,7 +223,13 @@ func updateUser(ctx context.Context, data *schema.ResourceData, meta interface{}
 func deleteUser(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := api.User.Delete(ctx, data.Id()); err != nil {
+	var reqOptions []management.RequestOption
+	customDomainHeader, ok := data.GetOk("custom_domain_header")
+	if ok {
+		reqOptions = append(reqOptions, management.CustomDomainHeader(customDomainHeader.(string)))
+	}
+
+	if err := api.User.Delete(ctx, data.Id(), reqOptions...); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 

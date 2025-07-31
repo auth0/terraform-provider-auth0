@@ -62,6 +62,7 @@ Read-Only:
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
+- `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)
 
 <a id="nestedobjatt--clients--oidc_logout"></a>
@@ -87,6 +88,7 @@ Read-Only:
 
 Read-Only:
 
+- `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
 - `enforce_device_binding` (String)
@@ -98,5 +100,22 @@ Read-Only:
 Read-Only:
 
 - `allow_any_profile_of_type` (List of String)
+
+
+<a id="nestedobjatt--clients--token_quota"></a>
+### Nested Schema for `clients.token_quota`
+
+Read-Only:
+
+- `client_credentials` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota--client_credentials))
+
+<a id="nestedobjatt--clients--token_quota--client_credentials"></a>
+### Nested Schema for `clients.token_quota.client_credentials`
+
+Read-Only:
+
+- `enforce` (Boolean)
+- `per_day` (Number)
+- `per_hour` (Number)
 
 

@@ -13,6 +13,7 @@ func expandCustomDomain(data *schema.ResourceData) *management.CustomDomain {
 	customDomain := &management.CustomDomain{
 		TLSPolicy:            value.String(cfg.GetAttr("tls_policy")),
 		CustomClientIPHeader: value.String(cfg.GetAttr("custom_client_ip_header")),
+		DomainMetadata:       expandCustomDomainMetadata(data),
 	}
 
 	if data.IsNewResource() {
@@ -21,4 +22,22 @@ func expandCustomDomain(data *schema.ResourceData) *management.CustomDomain {
 	}
 
 	return customDomain
+}
+
+func expandCustomDomainMetadata(data *schema.ResourceData) *map[string]interface{} {
+	if !data.HasChange("domain_metadata") {
+		return nil
+	}
+
+	oldMetadata, newMetadata := data.GetChange("domain_metadata")
+	oldMetadataMap := oldMetadata.(map[string]interface{})
+	newMetadataMap := newMetadata.(map[string]interface{})
+
+	for key := range oldMetadataMap {
+		if _, ok := newMetadataMap[key]; !ok {
+			newMetadataMap[key] = nil
+		}
+	}
+
+	return &newMetadataMap
 }

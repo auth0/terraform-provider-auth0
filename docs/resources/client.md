@@ -158,6 +158,7 @@ resource "auth0_client" "my_client" {
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))
+- `token_quota` (Block List, Max: 1) The token quota configuration. (see [below for nested schema](#nestedblock--token_quota))
 - `web_origins` (List of String) URLs that represent valid web origins for use with web message response mode.
 
 ### Read-Only
@@ -376,6 +377,7 @@ Optional:
 - `create_upn_claim` (Boolean) Indicates whether a UPN claim should be created. Defaults to `true`.
 - `destination` (String) Destination of the SAML Response. If not specified, it will be `AssertionConsumerUrl` of SAMLRequest or callback URL if there was no SAMLRequest.
 - `digest_algorithm` (String) Algorithm used to calculate the digest of the SAML Assertion or response. Options include `sha1` and `sha256`. Defaults to `sha1`.
+- `flexible_mappings` (String) This is a supporting attribute to `mappings` field.Please note this is an experimental field. It should only be used when needed to send a map with keys as slices.
 - `include_attribute_name_format` (Boolean) Indicates whether or not we should infer the NameFormat based on the attribute name. If set to `false`, the attribute NameFormat is not set in the assertion. Defaults to `true`.
 - `issuer` (String) Issuer of the SAML Assertion.
 - `lifetime_in_seconds` (Number) Number of seconds during which the token is valid. Defaults to `3600` seconds.
@@ -625,6 +627,7 @@ Required:
 
 Optional:
 
+- `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
@@ -636,6 +639,23 @@ Optional:
 Required:
 
 - `allow_any_profile_of_type` (List of String) List of allowed profile types for token exchange
+
+
+<a id="nestedblock--token_quota"></a>
+### Nested Schema for `token_quota`
+
+Required:
+
+- `client_credentials` (Block List, Min: 1, Max: 1) The token quota configuration for client credentials. (see [below for nested schema](#nestedblock--token_quota--client_credentials))
+
+<a id="nestedblock--token_quota--client_credentials"></a>
+### Nested Schema for `token_quota.client_credentials`
+
+Optional:
+
+- `enforce` (Boolean) If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs.
+- `per_day` (Number) Maximum number of issued tokens per day
+- `per_hour` (Number) Maximum number of issued tokens per hour
 
 ## Import
 

@@ -2,6 +2,9 @@ package organization
 
 import (
 	"context"
+	"net/http"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -66,6 +69,7 @@ func NewResource() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Description: "Metadata associated with the organization. Maximum of 10 metadata properties allowed.",
 			},
+			"token_quota": commons.TokenQuotaSchema(),
 		},
 	}
 }
@@ -102,6 +106,13 @@ func updateOrganization(ctx context.Context, data *schema.ResourceData, meta int
 
 	if err := api.Organization.Update(ctx, data.Id(), organization); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("organizations", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return readOrganization(ctx, data, meta)

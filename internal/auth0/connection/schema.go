@@ -356,15 +356,20 @@ var optionsSchema = &schema.Schema{
 				Description: "The strategy's client secret.",
 			},
 			"custom_headers": {
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeMap,
-					Elem: &schema.Schema{
-						Type: schema.TypeString,
+				Type: schema.TypeSet,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"header": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"value": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
 					},
 				},
 				Optional:    true,
-				Default:     nil,
 				Description: "Configure extra headers to the Token endpoint of an OAuth 2.0 provider",
 			},
 			"allowed_audiences": {
@@ -1215,6 +1220,16 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "Allows configuration if connections_realm_fallback flag is enabled for the tenant",
+			},
+			"token_endpoint_auth_method": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the authentication method for the token endpoint. (Okta/OIDC Connections)",
+			},
+			"token_endpoint_auth_signing_alg": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
 			},
 		},
 	},

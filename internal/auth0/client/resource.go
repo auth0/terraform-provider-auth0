@@ -5,12 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/auth0/go-auth0/management"
-	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
@@ -1137,12 +1138,23 @@ func NewResource() *schema.Resource {
 											"callback URL if no SAMLRequest was sent.",
 									},
 									"mappings": {
-										Type:     schema.TypeMap,
-										Optional: true,
-										Elem:     schema.TypeString,
+										Type:          schema.TypeMap,
+										Optional:      true,
+										Elem:          schema.TypeString,
+										ConflictsWith: []string{"addons.0.samlp.0.flexible_mappings"},
 										Description: "Mappings between the Auth0 user profile property " +
 											"name (`name`) and the output attributes on the SAML " +
 											"attribute in the assertion (`value`).",
+									},
+									"flexible_mappings": {
+										Type:             schema.TypeString,
+										Optional:         true,
+										ValidateFunc:     validation.StringIsJSON,
+										ConflictsWith:    []string{"addons.0.samlp.0.mappings"},
+										DiffSuppressFunc: structure.SuppressJsonDiff,
+										Description: "This is a supporting attribute to `mappings` field." +
+											"Please note this is an experimental field. " + "" +
+											"It should only be used when needed to send a map with keys as slices.",
 									},
 									"create_upn_claim": {
 										Type:     schema.TypeBool,
@@ -1467,6 +1479,7 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"token_quota": commons.TokenQuotaSchema(),
 		},
 	}
 }
@@ -1509,71 +1522,20 @@ func updateClient(ctx context.Context, data *schema.ResourceData, meta interface
 		return diag.FromErr(err)
 	}
 
-	if clientHasChange(client) {
-		if client.GetAddons() != nil {
-			resetAddons := &management.Client{
-				Addons: &management.ClientAddons{},
-			}
-			if err := api.Client.Update(ctx, data.Id(), resetAddons); err != nil {
-				return diag.FromErr(internalError.HandleAPIError(data, err))
-			}
-		}
-
-		if err := api.Client.Update(ctx, data.Id(), client); err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		time.Sleep(200 * time.Millisecond)
-
-		if isDefaultOrgNull(data) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"default_organization": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
-		}
-
-		if isEncryptionKeyNull(data) && !data.IsNewResource() {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"encryption_key": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
-		}
-
-		if isSessionTransferNull(data) {
-			if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), map[string]interface{}{
-				"session_transfer": nil,
-			}); err != nil {
-				return diag.FromErr(err)
-			}
+	nullFields := fetchNullableFields(data, client)
+	if len(nullFields) != 0 {
+		if err := api.Request(ctx, http.MethodPatch, api.URI("clients", data.Id()), nullFields); err != nil {
+			return diag.FromErr(err)
 		}
 	}
+
+	if err := api.Client.Update(ctx, data.Id(), client); err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	time.Sleep(200 * time.Millisecond)
+
 	return readClient(ctx, data, meta)
-}
-
-func isEncryptionKeyNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("encryption_key") {
-		return false
-	}
-
-	config := data.GetRawConfig().GetAttr("encryption_key")
-
-	// Case 1: encryption_key is explicitly null.
-	if config.IsNull() {
-		return true
-	}
-
-	// Case 2: encryption_key is empty or all fields are empty strings.
-	empty := true
-	config.ForEachElement(func(_, val cty.Value) (stop bool) {
-		if !val.IsNull() && val.AsString() != "" {
-			empty = false
-		}
-		return false
-	})
-
-	return empty
 }
 
 func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -1584,35 +1546,4 @@ func deleteClient(ctx context.Context, data *schema.ResourceData, meta interface
 	}
 
 	return nil
-}
-
-func isSessionTransferNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("session_transfer") {
-		return false
-	}
-
-	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
-
-	// If the session_transfer block is explicitly set to null.
-	if rawConfig.IsNull() {
-		return true
-	}
-
-	// If the session_transfer block exists, but all fields inside it are null or not set.
-	empty := true
-	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		canCreate := cfg.GetAttr("can_create_session_transfer_token")
-		enforceBinding := cfg.GetAttr("enforce_device_binding")
-		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
-
-		if (!canCreate.IsNull() && canCreate.True()) ||
-			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
-			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
-			empty = false
-		}
-
-		return stop
-	})
-
-	return empty
 }

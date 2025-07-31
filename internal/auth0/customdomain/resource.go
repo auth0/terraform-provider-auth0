@@ -42,15 +42,16 @@ func NewResource() *schema.Resource {
 					"Options include `auth0_managed_certs` and `self_managed_certs`.",
 			},
 			"primary": {
+				Deprecated:  "Primary field is no longer used and will be removed in a future release.",
 				Type:        schema.TypeBool,
 				Computed:    true,
-				Description: "Indicates whether this is a primary domain.",
+				Description: "Indicates whether this is a primary domain. ",
 			},
 			"status": {
 				Type:     schema.TypeString,
 				Computed: true,
 				Description: "Configuration status for the custom domain. " +
-					"Options include `disabled`, `pending`, `pending_verification`, and `ready`.",
+					"Options include `disabled`, `pending`, `pending_verification`, and `ready`. ",
 			},
 			"origin_domain_name": {
 				Type:     schema.TypeString,
@@ -58,26 +59,11 @@ func NewResource() *schema.Resource {
 				Description: "Once the configuration status is `ready`, the DNS name " +
 					"of the Auth0 origin server that handles traffic for the custom domain.",
 			},
-			"verification": {
-				Type:        schema.TypeList,
-				Computed:    true,
-				Description: "Configuration settings for verification.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"methods": {
-							Type:        schema.TypeList,
-							Elem:        schema.TypeMap,
-							Computed:    true,
-							Description: "Verification methods for the domain.",
-						},
-					},
-				},
-			},
 			"custom_client_ip_header": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ValidateFunc: validation.StringInSlice([]string{
-					"cf-connecting-ip", "x-forwarded-for", "true-client-ip", "",
+					"cf-connecting-ip", "x-forwarded-for", "true-client-ip", "x-azure-clientip", "",
 				}, false),
 				Description: "The HTTP header to fetch the client's IP address. " +
 					"Cannot be set on auth0_managed domains.",
@@ -92,6 +78,71 @@ func NewResource() *schema.Resource {
 				Description: "TLS policy for the custom domain. Available options are: `compatible` or `recommended`. " +
 					"Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. " +
 					"Cannot be set on self_managed domains.",
+			},
+			"verification": {
+				Type:        schema.TypeList,
+				Computed:    true,
+				Description: "Configuration settings for verification.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"methods": {
+							Type:        schema.TypeList,
+							Elem:        schema.TypeMap,
+							Computed:    true,
+							Description: "Defines the list of domain verification methods used. ",
+						},
+						"status": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Represents the current status of the domain verification process. ",
+						},
+						"error_msg": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Contains error message, if any, from the last DNS verification check. ",
+						},
+						"last_verified_at": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Indicates the last time the domain was successfully verified. ",
+						},
+					},
+				},
+			},
+			"domain_metadata": {
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Description: "Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.",
+			},
+			"certificate": {
+				Type:     schema.TypeList,
+				Computed: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"status": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Indicates the current state of the certificate provisioning process. ",
+						},
+						"error_msg": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Contains the error message if the provisioning process fails. ",
+						},
+						"certificate_authority": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Name of the certificate authority that issued the certificate. ",
+						},
+						"renews_before": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "Specifies the date by which the certificate should be renewed. ",
+						},
+					},
+				},
+				Description: "The Custom Domain certificate. ",
 			},
 		},
 	}

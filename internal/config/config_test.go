@@ -41,6 +41,27 @@ func TestConfigureProvider(t *testing.T) {
 			expectedDiagnostics: nil,
 		},
 		{
+			name: "it can configure a provider with client credentials and private key JWT",
+			givenTerraformConfig: map[string]interface{}{
+				"domain":                       "example.auth0.com",
+				"client_id":                    "1234567",
+				"client_assertion_private_key": "private-key",
+				"client_assertion_signing_alg": "RS256",
+			},
+			expectedDiagnostics: nil,
+		},
+		{
+			name: "it can configure a provider with client credentials, audience, and private key JWT",
+			givenTerraformConfig: map[string]interface{}{
+				"domain":                       "example.auth0.com",
+				"client_id":                    "1234567",
+				"client_assertion_private_key": "private-key",
+				"client_assertion_signing_alg": "RS256",
+				"audience":                     "myaudience",
+			},
+			expectedDiagnostics: nil,
+		},
+		{
 			name: "it can configure a provider with an api token",
 			givenTerraformConfig: map[string]interface{}{
 				"domain":    "example.auth0.com",
@@ -49,17 +70,28 @@ func TestConfigureProvider(t *testing.T) {
 			expectedDiagnostics: nil,
 		},
 		{
-			name: "it returns an error when it can't initialize the api client",
-			givenTerraformConfig: map[string]interface{}{
-				"domain": "example.com:path",
-			},
+			name:                 "it returns an error when it can't initialize the api client",
+			givenTerraformConfig: map[string]interface{}{},
 			expectedDiagnostics: diag.Diagnostics{
 				diag.Diagnostic{
 					Severity: diag.Error,
 					Summary:  "Missing environment variables",
-					Detail:   "Either AUTH0_API_TOKEN or AUTH0_DOMAIN:AUTH0_CLIENT_ID:AUTH0_CLIENT_SECRET must be configured. Ref: https://registry.terraform.io/providers/auth0/auth0/latest/docs",
+					Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
+						"or AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET, " +
+						"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_PRIVATE_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
+						"or enable CLI login with AUTH0_CLI_LOGIN=true.",
 				},
 			},
+		},
+		{
+			name: "it can configure a provider with custom_domain_header",
+			givenTerraformConfig: map[string]interface{}{
+				"domain":               "example.auth0.com",
+				"client_id":            "1234567",
+				"client_secret":        "secret",
+				"custom_domain_header": "demo-sdk.acmetest.org",
+			},
+			expectedDiagnostics: nil,
 		},
 	}
 

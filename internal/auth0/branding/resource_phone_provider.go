@@ -3,7 +3,6 @@ package branding
 import (
 	"context"
 
-	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -88,24 +87,26 @@ func NewPhoneProviderResource() *schema.Resource {
 							},
 						},
 						"default_from": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Default sender subject as \"from\" when no other value is specified.",
-							RequiredWith: []string{"configuration.0.sid"},
+							Type:          schema.TypeString,
+							Optional:      true,
+							ValidateFunc:  validation.StringIsNotEmpty,
+							Description:   "Default sender subject as \"from\" when no other value is specified.",
+							ConflictsWith: []string{"configuration.0.mssid"},
+							RequiredWith:  []string{"configuration.0.sid"},
 						},
 						"mssid": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Twilio Messaging Service SID",
+							Type:          schema.TypeString,
+							Optional:      true,
+							ValidateFunc:  validation.StringIsNotEmpty,
+							Description:   "Twilio Messaging Service SID",
+							ConflictsWith: []string{"configuration.0.default_from"},
+							RequiredWith:  []string{"configuration.0.sid"},
 						},
 						"sid": {
 							Type:         schema.TypeString,
 							Optional:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
 							Description:  "Twilio Account SID.",
-							RequiredWith: []string{"configuration.0.default_from"},
 						},
 					},
 				},
@@ -117,7 +118,16 @@ func NewPhoneProviderResource() *schema.Resource {
 func createPhoneProvider(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if id, isConfigured := phoneProviderIsConfigured(ctx, api); isConfigured {
+	// Fetch list of Phone Providers.
+	phoneProviders, err := api.Branding.ListPhoneProviders(ctx)
+	if err != nil {
+		return diag.FromErr(internalError.HandleAPIError(data, err))
+	}
+
+	// If phone provider is configured, update it.
+	// Note: Only a single phone provider is allowed.
+	if len(phoneProviders.Providers) > 0 {
+		id := phoneProviders.Providers[0].GetID()
 		data.SetId(id)
 		return updatePhoneProvider(ctx, data, meta)
 	}
@@ -164,14 +174,4 @@ func deletePhoneProvider(ctx context.Context, data *schema.ResourceData, meta in
 	}
 
 	return nil
-}
-
-func phoneProviderIsConfigured(ctx context.Context, api *management.Management) (string, bool) {
-	phoneProviders, _ := api.Branding.ListPhoneProviders(ctx)
-
-	if len(phoneProviders.Providers) > 0 {
-		return phoneProviders.Providers[0].GetID(), true
-	}
-
-	return "", false
 }

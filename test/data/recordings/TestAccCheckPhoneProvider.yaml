@@ -15,10 +15,8 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.24.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers
         method: GET
       response:
@@ -35,26 +33,26 @@ interactions:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.463875ms
+        duration: 389.895ms
     - id: 1
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 170
+        content_length: 141
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
         body: |
-            {"name":"twilio","disabled":false,"configuration":{"default_from":"+1234567890","sid":"sid1","delivery_methods":["text","voice"]},"credentials":{"auth_token":"auth123"}}
+            {"name":"twilio","disabled":false,"configuration":{"sid":"sid1","delivery_methods":["text","voice"]},"credentials":{"auth_token":"auth123"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
+                - Go-Auth0/1.24.0
         url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers
         method: POST
       response:
@@ -63,15 +61,15 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: 294
+        content_length: 91
         uncompressed: false
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:04:57.379Z"}'
+        body: '{"statusCode":400,"error":"Bad Request","message":"Bad Operation on Notification Resource"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 364.174666ms
+        status: 400 Bad Request
+        code: 400
+        duration: 864.6895ms
     - id: 2
       request:
         proto: HTTP/1.1
@@ -86,11 +84,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers
         method: GET
       response:
         proto: HTTP/2.0
@@ -98,227 +94,16 @@ interactions:
         proto_minor: 0
         transfer_encoding: []
         trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:04:57.379Z"}'
+        content_length: 16
+        uncompressed: false
+        body: '{"providers":[]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 360.137125ms
+        duration: 350.192208ms
     - id: 3
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:04:57.379Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 368.420584ms
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:04:57.379Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 360.08625ms
-    - id: 5
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 140
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"name":"custom","disabled":false,"configuration":{"default_from":"+1234567890","sid":"sid2","delivery_methods":["text"]},"credentials":{}}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: PATCH
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:00.719Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 719.7545ms
-    - id: 6
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:00.719Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 330.425ms
-    - id: 7
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:00.719Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 333.076292ms
-    - id: 8
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:00.719Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 331.644625ms
-    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -336,8 +121,143 @@ interactions:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 317
+        uncompressed: false
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:25:58.824Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 378.892583ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:25:58.824Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 386.854042ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:25:58.824Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 339.663875ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:25:58.824Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 311.786084ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 162
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"custom","disabled":false,"configuration":{"default_from":"+1234567890","sid":"sid2","delivery_methods":["text"]},"credentials":{"auth_token":"auth123"}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
         method: PATCH
       response:
         proto: HTTP/2.0
@@ -347,13 +267,79 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:03.799Z"}'
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:02.070Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 362.367292ms
+        duration: 389.741209ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:02.070Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 330.165041ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:02.070Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 323.029833ms
     - id: 10
       request:
         proto: HTTP/1.1
@@ -368,11 +354,9 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
         method: GET
       response:
         proto: HTTP/2.0
@@ -382,33 +366,34 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:03.799Z"}'
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"custom","channel":"phone","disabled":false,"configuration":{"sid":"sid2","default_from":"+1234567890","delivery_methods":["text"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:02.070Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.739ms
+        duration: 334.239417ms
     - id: 11
       request:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 0
+        content_length: 170
         transfer_encoding: []
         trailer: {}
         host: terraform-provider-auth0-dev.eu.auth0.com
         remote_addr: ""
         request_uri: ""
-        body: ""
+        body: |
+            {"name":"twilio","disabled":false,"configuration":{"default_from":"+1234567890","sid":"sid1","delivery_methods":["text","voice"]},"credentials":{"auth_token":"auth123"}}
         form: {}
         headers:
             Content-Type:
                 - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
-        method: GET
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: PATCH
       response:
         proto: HTTP/2.0
         proto_major: 2
@@ -417,13 +402,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"id":"pro_kNbYxancE2Dz1K3MeXfLeQ","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-02-14T05:04:57.379Z","updated_at":"2025-02-14T05:05:03.799Z"}'
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:05.229Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 337.596334ms
+        duration: 354.0965ms
     - id: 12
       request:
         proto: HTTP/1.1
@@ -438,11 +423,75 @@ interactions:
         body: ""
         form: {}
         headers:
-            Content-Type:
-                - application/json
             User-Agent:
-                - Go-Auth0/1.16.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_kNbYxancE2Dz1K3MeXfLeQ
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:05.229Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 382.763625ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"pro_3UzyS4veHQLMTCt3EzXgTt","tenant":"terraform-provider-auth0-dev","name":"twilio","channel":"phone","disabled":false,"configuration":{"sid":"sid1","default_from":"+1234567890","delivery_methods":["text","voice"]},"created_at":"2025-07-10T06:25:58.824Z","updated_at":"2025-07-10T06:26:05.229Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 324.098542ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.24.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/branding/phone/providers/pro_3UzyS4veHQLMTCt3EzXgTt
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -458,4 +507,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 371.133542ms
+        duration: 334.221125ms

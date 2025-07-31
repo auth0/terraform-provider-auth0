@@ -2,8 +2,8 @@ package tenant
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 
 	"github.com/hashicorp/go-cty/cty"
@@ -13,6 +13,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
+	"github.com/auth0/go-auth0/management"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalValidation "github.com/auth0/terraform-provider-auth0/internal/validation"
 	"github.com/auth0/terraform-provider-auth0/internal/value"
@@ -417,6 +420,18 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"default_token_quota": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "Token Quota configuration.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"clients":       commons.TokenQuotaSchema(),
+						"organizations": commons.TokenQuotaSchema(),
+					},
+				},
+			},
 		},
 	}
 }
@@ -480,28 +495,10 @@ func updateTenant(ctx context.Context, data *schema.ResourceData, meta interface
 	// These call should NOT be needed, but the tests fail sometimes if it they not there.
 	time.Sleep(800 * time.Millisecond)
 
-	if isACRValuesSupportedNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"acr_values_supported": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	time.Sleep(200 * time.Millisecond)
-
-	if isMTLSConfigurationNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"mtls": nil,
-		}); err != nil {
-			return diag.FromErr(err)
-		}
-	}
-	time.Sleep(800 * time.Millisecond)
-
-	if isErrorPageConfigurationNull(data) {
-		if err := api.Request(ctx, http.MethodPatch, api.URI("tenants", "settings"), map[string]interface{}{
-			"error_page": nil,
-		}); err != nil {
+	nullFields := fetchNullableFields(data)
+	if len(nullFields) != 0 {
+		body, _ := json.Marshal(nullFields)
+		if err := api.Tenant.Update(context.Background(), nil, management.Body(body)); err != nil {
 			return diag.FromErr(err)
 		}
 	}

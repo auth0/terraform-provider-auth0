@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -537,9 +541,16 @@ func flattenClientAddonSAML2(addon *management.SAML2ClientAddon) []interface{} {
 		}
 	}
 
+	var flexibleMappingsMap string
+
+	if len(addon.GetMappings()) == 0 {
+		flexibleMappingsMap, _ = structure.FlattenJsonToString(addon.GetFlexibleMappings())
+	}
+
 	return []interface{}{
 		map[string]interface{}{
 			"mappings":                           addon.GetMappings(),
+			"flexible_mappings":                  flexibleMappingsMap,
 			"audience":                           addon.GetAudience(),
 			"recipient":                          addon.GetRecipient(),
 			"create_upn_claim":                   addon.GetCreateUPNClaim(),
@@ -629,6 +640,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("require_proof_of_possession", client.GetRequireProofOfPossession()),
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
+		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {

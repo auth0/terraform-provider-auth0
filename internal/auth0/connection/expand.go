@@ -583,11 +583,12 @@ func expandConnectionOptionsOAuth2(data *schema.ResourceData, config cty.Value) 
 	customHeadersConfig := config.GetAttr("custom_headers")
 
 	if !customHeadersConfig.IsNull() {
-		customHeaders := make([]map[string]string, 0)
+		customHeaders := make(map[string]string)
 
 		customHeadersConfig.ForEachElement(func(_ cty.Value, httpHeader cty.Value) (stop bool) {
-			customHeaders = append(customHeaders, *value.MapOfStrings(httpHeader))
-			return stop
+			m := httpHeader.AsValueMap()
+			customHeaders[m["header"].AsString()] = m["value"].AsString()
+			return false
 		})
 
 		options.CustomHeaders = &customHeaders
@@ -825,20 +826,22 @@ func expandConnectionOptionsAzureAD(data *schema.ResourceData, config cty.Value)
 
 func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOIDC{
-		ClientID:              value.String(config.GetAttr("client_id")),
-		ClientSecret:          value.String(config.GetAttr("client_secret")),
-		TenantDomain:          value.String(config.GetAttr("tenant_domain")),
-		DomainAliases:         value.Strings(config.GetAttr("domain_aliases")),
-		LogoURL:               value.String(config.GetAttr("icon_url")),
-		DiscoveryURL:          value.String(config.GetAttr("discovery_url")),
-		AuthorizationEndpoint: value.String(config.GetAttr("authorization_endpoint")),
-		Issuer:                value.String(config.GetAttr("issuer")),
-		JWKSURI:               value.String(config.GetAttr("jwks_uri")),
-		Type:                  value.String(config.GetAttr("type")),
-		UserInfoEndpoint:      value.String(config.GetAttr("userinfo_endpoint")),
-		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
-		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
-		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
+		ClientID:                    value.String(config.GetAttr("client_id")),
+		ClientSecret:                value.String(config.GetAttr("client_secret")),
+		TenantDomain:                value.String(config.GetAttr("tenant_domain")),
+		DomainAliases:               value.Strings(config.GetAttr("domain_aliases")),
+		LogoURL:                     value.String(config.GetAttr("icon_url")),
+		DiscoveryURL:                value.String(config.GetAttr("discovery_url")),
+		AuthorizationEndpoint:       value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                      value.String(config.GetAttr("issuer")),
+		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
+		Type:                        value.String(config.GetAttr("type")),
+		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
+		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),
+		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
+		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
+		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {
@@ -873,18 +876,20 @@ func expandConnectionOptionsOIDC(data *schema.ResourceData, config cty.Value) (i
 
 func expandConnectionOptionsOkta(data *schema.ResourceData, config cty.Value) (interface{}, diag.Diagnostics) {
 	options := &management.ConnectionOptionsOkta{
-		ClientID:              value.String(config.GetAttr("client_id")),
-		ClientSecret:          value.String(config.GetAttr("client_secret")),
-		Domain:                value.String(config.GetAttr("domain")),
-		DomainAliases:         value.Strings(config.GetAttr("domain_aliases")),
-		AuthorizationEndpoint: value.String(config.GetAttr("authorization_endpoint")),
-		Issuer:                value.String(config.GetAttr("issuer")),
-		JWKSURI:               value.String(config.GetAttr("jwks_uri")),
-		UserInfoEndpoint:      value.String(config.GetAttr("userinfo_endpoint")),
-		TokenEndpoint:         value.String(config.GetAttr("token_endpoint")),
-		NonPersistentAttrs:    value.Strings(config.GetAttr("non_persistent_attrs")),
-		SetUserAttributes:     value.String(config.GetAttr("set_user_root_attributes")),
-		LogoURL:               value.String(config.GetAttr("icon_url")),
+		ClientID:                    value.String(config.GetAttr("client_id")),
+		ClientSecret:                value.String(config.GetAttr("client_secret")),
+		Domain:                      value.String(config.GetAttr("domain")),
+		DomainAliases:               value.Strings(config.GetAttr("domain_aliases")),
+		AuthorizationEndpoint:       value.String(config.GetAttr("authorization_endpoint")),
+		Issuer:                      value.String(config.GetAttr("issuer")),
+		JWKSURI:                     value.String(config.GetAttr("jwks_uri")),
+		UserInfoEndpoint:            value.String(config.GetAttr("userinfo_endpoint")),
+		TokenEndpoint:               value.String(config.GetAttr("token_endpoint")),
+		NonPersistentAttrs:          value.Strings(config.GetAttr("non_persistent_attrs")),
+		SetUserAttributes:           value.String(config.GetAttr("set_user_root_attributes")),
+		LogoURL:                     value.String(config.GetAttr("icon_url")),
+		TokenEndpointAuthMethod:     value.String(config.GetAttr("token_endpoint_auth_method")),
+		TokenEndpointAuthSigningAlg: value.String(config.GetAttr("token_endpoint_auth_signing_alg")),
 	}
 
 	config.GetAttr("connection_settings").ForEachElement(func(_ cty.Value, config cty.Value) (stop bool) {

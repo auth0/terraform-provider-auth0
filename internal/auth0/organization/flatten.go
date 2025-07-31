@@ -4,6 +4,8 @@ import (
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
 )
 
 func flattenOrganization(data *schema.ResourceData, organization *management.Organization) error {
@@ -12,6 +14,7 @@ func flattenOrganization(data *schema.ResourceData, organization *management.Org
 		data.Set("display_name", organization.GetDisplayName()),
 		data.Set("branding", flattenOrganizationBranding(organization.GetBranding())),
 		data.Set("metadata", organization.GetMetadata()),
+		data.Set("token_quota", commons.FlattenTokenQuota(organization.GetTokenQuota())),
 	)
 
 	return result.ErrorOrNil()

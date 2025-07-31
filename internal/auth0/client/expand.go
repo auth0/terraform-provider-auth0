@@ -3,6 +3,8 @@ package client
 import (
 	"fmt"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+
 	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
@@ -54,6 +56,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		RequireProofOfPossession:           value.Bool(config.GetAttr("require_proof_of_possession")),
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
+		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -131,31 +134,6 @@ func expandTokenExchange(data *schema.ResourceData) *management.ClientTokenExcha
 	}
 
 	return &tokenExchange
-}
-
-func isDefaultOrgNull(data *schema.ResourceData) bool {
-	if !data.IsNewResource() && !data.HasChange("default_organization") {
-		return false
-	}
-	empty := true
-	config := data.GetRawConfig()
-	defaultOrgConfig := config.GetAttr("default_organization")
-	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
-		disable := cfg.GetAttr("disable")
-		flows := cfg.GetAttr("flows")
-		organizationID := cfg.GetAttr("organization_id")
-
-		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
-			stop = true
-		} else {
-			empty = false
-		}
-		return stop
-	}) {
-		// We forced an early return because it was disabled.
-		return true
-	}
-	return empty
 }
 
 func expandOIDCBackchannelLogout(data *schema.ResourceData) *management.OIDCBackchannelLogout {
@@ -942,6 +920,11 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 			SigningCert:                    value.String(samlpCfg.GetAttr("signing_cert")),
 		}
 
+		flexibleMappings, err := value.MapFromJSON(samlpCfg.GetAttr("flexible_mappings"))
+		if err == nil {
+			samlpAddon.FlexibleMappings = flexibleMappings
+		}
+
 		var logout management.SAML2ClientAddonLogout
 
 		samlpCfg.GetAttr("logout").ForEachElement(func(_ cty.Value, logoutCfg cty.Value) (stop bool) {
@@ -1000,10 +983,6 @@ func expandClientAddonSAMLP(samlpCfg cty.Value) *management.SAML2ClientAddon {
 		return stop
 	})
 
-	if samlpAddon == (management.SAML2ClientAddon{}) {
-		return nil
-	}
-
 	return &samlpAddon
 }
 
@@ -1058,9 +1037,126 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.CanCreateSessionTransferToken = value.Bool(config.GetAttr("can_create_session_transfer_token"))
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
-		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token")) 
+		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
 		return stop
 	})
 
 	return &sessionTransfer
+}
+
+func fetchNullableFields(data *schema.ResourceData, client *management.Client) map[string]interface{} {
+	type nullCheckFunc func(*schema.ResourceData) bool
+
+	checks := map[string]nullCheckFunc{
+		"default_organization": isDefaultOrgNull,
+		"session_transfer":     isSessionTransferNull,
+		"cross_origin_loc":     isCrossOriginLocNull,
+		"encryption_key": func(d *schema.ResourceData) bool {
+			return isEncryptionKeyNull(d) && !d.IsNewResource()
+		},
+		"addons": func(_ *schema.ResourceData) bool {
+			return clientHasChange(client) && client.GetAddons() != nil
+		},
+		"token_quota": commons.IsTokenQuotaNull,
+	}
+
+	nullableMap := make(map[string]interface{})
+
+	for field, checkFunc := range checks {
+		if checkFunc(data) {
+			nullableMap[field] = nil
+		}
+	}
+
+	return nullableMap
+}
+
+func isDefaultOrgNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("default_organization") {
+		return false
+	}
+	empty := true
+	config := data.GetRawConfig()
+	defaultOrgConfig := config.GetAttr("default_organization")
+	if defaultOrgConfig.IsNull() || defaultOrgConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		disable := cfg.GetAttr("disable")
+		flows := cfg.GetAttr("flows")
+		organizationID := cfg.GetAttr("organization_id")
+
+		if (!disable.IsNull() && disable.True()) || (flows.IsNull() && organizationID.IsNull()) {
+			stop = true
+		} else {
+			empty = false
+		}
+		return stop
+	}) {
+		// We forced an early return because it was disabled.
+		return true
+	}
+	return empty
+}
+
+func isEncryptionKeyNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("encryption_key") {
+		return false
+	}
+
+	config := data.GetRawConfig().GetAttr("encryption_key")
+
+	if config.IsNull() {
+		return true
+	}
+
+	empty := true
+	config.ForEachElement(func(_, val cty.Value) (stop bool) {
+		if !val.IsNull() && val.AsString() != "" {
+			empty = false
+		}
+		return false
+	})
+
+	return empty
+}
+
+func isCrossOriginLocNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("cross_origin_loc") {
+		return false
+	}
+
+	config := data.GetRawConfig()
+	attr := config.GetAttr("cross_origin_loc")
+
+	// If it's null, it means it was not set.
+	return attr.IsNull()
+}
+
+func isSessionTransferNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("session_transfer") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig().GetAttr("session_transfer")
+
+	// If the session_transfer block is explicitly set to null.
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	// If the session_transfer block exists, but all fields inside it are null or not set.
+	empty := true
+	rawConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		canCreate := cfg.GetAttr("can_create_session_transfer_token")
+		enforceBinding := cfg.GetAttr("enforce_device_binding")
+		allowedMethods := cfg.GetAttr("allowed_authentication_methods")
+
+		if (!canCreate.IsNull() && canCreate.True()) ||
+			(!enforceBinding.IsNull() && enforceBinding.AsString() != "") ||
+			(!allowedMethods.IsNull() && allowedMethods.LengthInt() > 0) {
+			empty = false
+		}
+
+		return stop
+	})
+
+	return empty
 }

@@ -162,13 +162,15 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 		data.Set("default_head_tags_disabled", promptSetting.GetDefaultHeadTagsDisabled()),
 		data.Set("context_configuration", promptSetting.GetContextConfiguration()),
 		data.Set("head_tags", flattenHeadTags(promptSetting)),
+		data.Set("use_page_template", promptSetting.GetUsePageTemplate()),
+		data.Set("filters", flattenPromptRenderingFilters(promptSetting.GetFilters())),
 	)
 
 	return result.ErrorOrNil()
 }
 
 func flattenHeadTags(promptSetting *management.PromptRendering) string {
-	if promptSetting == nil || promptSetting.HeadTags == nil {
+	if promptSetting == nil || promptSetting.HeadTags == nil || len(promptSetting.HeadTags) == 0 {
 		return ""
 	}
 
@@ -178,4 +180,40 @@ func flattenHeadTags(promptSetting *management.PromptRendering) string {
 	}
 
 	return string(headTagBytes)
+}
+
+func flattenPromptRenderingFilters(f *management.PromptRenderingFilters) []interface{} {
+	if f == nil {
+		return nil
+	}
+
+	return []interface{}{flattenFilter(f)}
+}
+
+func flattenFilter(f *management.PromptRenderingFilters) map[string]interface{} {
+	result := make(map[string]interface{})
+
+	if f.MatchType != nil {
+		result["match_type"] = *f.MatchType
+	}
+
+	if f.Clients != nil {
+		if jsonStr, err := json.Marshal(f.Clients); err == nil {
+			result["clients"] = string(jsonStr)
+		}
+	}
+
+	if f.Organizations != nil {
+		if jsonStr, err := json.Marshal(f.Organizations); err == nil {
+			result["organizations"] = string(jsonStr)
+		}
+	}
+
+	if f.Domains != nil {
+		if jsonStr, err := json.Marshal(f.Domains); err == nil {
+			result["domains"] = string(jsonStr)
+		}
+	}
+
+	return result
 }

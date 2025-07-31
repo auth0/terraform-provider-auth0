@@ -2457,6 +2457,80 @@ resource "auth0_client" "my_client" {
 }
 `
 
+const testAccCreateClientWithTokenQuota = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Token Quota - {{.testName}}"
+	app_type  = "non_interactive"
+	token_quota {
+		client_credentials {
+			enforce = true
+			per_hour = 100
+			per_day = 2000
+		}
+	}
+}
+`
+
+const testAccUpdateClientWithTokenQuota = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Token Quota - {{.testName}}"
+	app_type  = "non_interactive"
+	token_quota {
+		client_credentials {
+			enforce = false
+			per_hour = 50
+			per_day = 1000
+		}
+	}
+}
+`
+
+const testAccClientWithTokenQuotaRemoved = `
+resource "auth0_client" "my_client" {
+	name      = "Acceptance Test - Token Quota - {{.testName}}"
+	app_type  = "non_interactive"
+}
+`
+
+func TestAccClientTokenQuota(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccCreateClientWithTokenQuota, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Token Quota - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.enforce", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_hour", "100"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_day", "2000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccUpdateClientWithTokenQuota, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Token Quota - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.enforce", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_hour", "50"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.0.client_credentials.0.per_day", "1000"),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccClientWithTokenQuotaRemoved, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Token Quota - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "token_quota.#", "0"),
+				),
+			},
+		},
+	})
+}
+
 func TestAccClientWithDefaultOrganization(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -2638,7 +2712,6 @@ resource "auth0_client" "my_client" {
 }
 `
 
-
 func TestAccClientSessionTransfer(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -2650,7 +2723,7 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
 				),
 			},
 			{
@@ -2694,11 +2767,10 @@ func TestAccClientSessionTransfer(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccUpdateClientWithSessionTransferFalse, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-				  resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
-				  resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
 				),
-			  },
-			  
+			},
 		},
 	})
 }

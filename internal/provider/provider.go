@@ -139,6 +139,13 @@ func New() *schema.Provider {
 				},
 				Description: "While toggled on, the API token gets fetched from the keyring for the given domain",
 			},
+			"custom_domain_header": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("AUTH0_CUSTOM_DOMAIN_HEADER", nil),
+				Description: "When specified, this header is added to requests targeting a set of pre-defined whitelisted URLs " +
+					"Global setting overrides all resource specific `custom_domain_header` value",
+			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"auth0_action":                           action.NewResource(),

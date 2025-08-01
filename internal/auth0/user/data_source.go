@@ -38,6 +38,8 @@ func dataSourceSchema() map[string]*schema.Schema {
 		AtLeastOneOf: []string{"user_id", "query"},
 	}
 
+	internalSchema.SetExistingAttributesAsOptional(dataSourceSchema, "custom_domain_header")
+
 	dataSourceSchema["permissions"] = &schema.Schema{
 		Type:        schema.TypeSet,
 		Computed:    true,
@@ -84,17 +86,26 @@ func readUserForDataSource(ctx context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 	var user *management.User
 
+	var reqOptions []management.RequestOption
+	customDomainHeader, ok := data.GetOk("custom_domain_header")
+	if ok {
+		reqOptions = append(reqOptions, management.CustomDomainHeader(customDomainHeader.(string)))
+	}
+
 	userID := data.Get("user_id").(string)
 	if userID != "" {
-		u, err := api.User.Read(ctx, userID)
+		u, err := api.User.Read(ctx, userID, reqOptions...)
 		if err != nil {
 			return diag.FromErr(err)
 		}
 		user = u
 		data.SetId(user.GetID())
 	} else {
-		query := data.Get("query").(string)
-		users, err := api.User.List(ctx, management.Parameter("q", query))
+		query, ok := data.GetOk("query")
+		if ok {
+			reqOptions = append(reqOptions, management.Parameter("q", query.(string)))
+		}
+		users, err := api.User.List(ctx, reqOptions...)
 		if err != nil {
 			return diag.FromErr(err)
 		}

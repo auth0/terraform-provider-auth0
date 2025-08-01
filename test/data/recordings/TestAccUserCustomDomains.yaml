@@ -1,0 +1,174 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 172
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"connection":"Username-Password-Authentication","email":"change.username.terra@acceptance.test.com","username":"user_terra","password":"MyPass123$","email_verified":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.25.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 135
+        uncompressed: false
+        body: '{"statusCode":409,"error":"Conflict","message":"The tenant has multiple verified custom domains.","errorCode":"custom_domain_conflict"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 409 Conflict
+        code: 409
+        duration: 398.569542ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 173
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"connection":"Username-Password-Authentication","email":"change.username.terra@acceptance.test.com","username":"user_domain","password":"MyPass123$","email_verified":true}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.25.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 582
+        uncompressed: false
+        body: '{"created_at":"2025-07-24T11:15:43.479Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"688215dfdce366b1bf1d1ecc","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2025-07-24T11:15:43.479Z","user_id":"auth0|688215dfdce366b1bf1d1ecc","username":"user_domain"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 599.840375ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.25.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C688215dfdce366b1bf1d1ecc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-07-24T11:15:43.479Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"688215dfdce366b1bf1d1ecc","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2025-07-24T11:15:43.479Z","user_id":"auth0|688215dfdce366b1bf1d1ecc","username":"user_domain"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 364.7895ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.25.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C688215dfdce366b1bf1d1ecc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"created_at":"2025-07-24T11:15:43.479Z","email":"change.username.terra@acceptance.test.com","email_verified":true,"identities":[{"connection":"Username-Password-Authentication","user_id":"688215dfdce366b1bf1d1ecc","provider":"auth0","isSocial":false}],"name":"change.username.terra@acceptance.test.com","nickname":"change.username.terra","picture":"https://s.gravatar.com/avatar/62acb990858a2c9075eb1d3beb6f5baa?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fch.png","updated_at":"2025-07-24T11:15:43.479Z","user_id":"auth0|688215dfdce366b1bf1d1ecc","username":"user_domain"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 386.933083ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.25.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/users/auth0%7C688215dfdce366b1bf1d1ecc
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 437.172958ms

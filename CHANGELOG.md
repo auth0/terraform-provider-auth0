@@ -1,3 +1,9 @@
+## v1.26.0
+
+FEATURES:
+
+- `resource/auth0_log_stream` - Add support for `pii_config` field ([#1315](https://github.com/auth0/terraform-provider-auth0/pull/1315))
+
 ## v1.25.0
 
 FEATURES:

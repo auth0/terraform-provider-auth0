@@ -1,3 +1,9 @@
+## v1.25.0
+
+FEATURES:
+
+- `resource/auth0_resource_server` - Add DPoP support for proof-of-possession mechanism ([#1317](https://github.com/auth0/terraform-provider-auth0/pull/1317))
+
 ## v1.24.1
 
 BUG FIXES:
@@ -11,7 +17,7 @@ BUG FIXES:
 ENHANCEMENTS:
 
 - `resource/auth0_custom_domain`- Add support for Multiple Custom Domains ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
-- `data_source/auth0_custom_domain` - Add support to retrieve custom domain based on `custom_domain_id`  ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
+- `data_source/auth0_custom_domain` - Add support to retrieve custom domain based on `custom_domain_id` ([#1258](https://github.com/auth0/terraform-provider-auth0/pull/1258))
 
 BUG FIXES:
 
@@ -26,7 +32,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
-- `resource/auth0_connection_clients`: Enabled proper handling when removing connection Clients  ([#1304](https://github.com/auth0/terraform-provider-auth0/pull/1304))
+- `resource/auth0_connection_clients`: Enabled proper handling when removing connection Clients ([#1304](https://github.com/auth0/terraform-provider-auth0/pull/1304))
 
 ## v1.23.0
 

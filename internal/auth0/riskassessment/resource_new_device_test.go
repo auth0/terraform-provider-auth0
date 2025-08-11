@@ -22,7 +22,7 @@ func TestAccRiskAssessmentNewDevice(t *testing.T) {
 			},
 			{
 				Config: testAccWithGreaterThanZero,
-				Check:  resource.TestCheckResourceAttr("auth0_risk_assessments_new_device_settings.my_risk_assessments_settings", "remember_for", strconv.Itoa(20)),
+				Check:  resource.TestCheckResourceAttr("auth0_risk_assessments_new_device.my_risk_assessments_new_device", "remember_for", strconv.Itoa(20)),
 			},
 		},
 	})

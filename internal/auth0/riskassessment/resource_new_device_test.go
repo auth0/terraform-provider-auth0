@@ -10,8 +10,8 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccWithZero = `resource "auth0_risk_assessments_new_device_settings" "my_risk_assessments_settings" { remember_for = 0}`
-const testAccWithGreaterThanZero = `resource "auth0_risk_assessments_new_device_settings" "my_risk_assessments_settings" { remember_for = 20}`
+const testAccWithZero = `resource "auth0_risk_assessments_new_device" "my_risk_assessments_new_device" { remember_for = 0}`
+const testAccWithGreaterThanZero = `resource "auth0_risk_assessments_new_device" "my_risk_assessments_new_device" { remember_for = 20}`
 
 func TestAccRiskAssessmentNewDevice(t *testing.T) {
 	acctest.Test(t, resource.TestCase{

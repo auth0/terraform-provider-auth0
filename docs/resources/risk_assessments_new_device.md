@@ -1,10 +1,10 @@
 ---
-page_title: "Resource: auth0_risk_assessments_new_device_settings"
+page_title: "Resource: auth0_risk_assessments_new_device"
 description: |-
   Resource for managing Risk Assessment settings for new devices.
 ---
 
-# Resource: auth0_risk_assessments_new_device_settings
+# Resource: auth0_risk_assessments_new_device
 
 Resource for managing Risk Assessment settings for new devices.
 

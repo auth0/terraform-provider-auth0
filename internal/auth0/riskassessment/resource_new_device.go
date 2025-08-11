@@ -16,7 +16,7 @@ import (
 	"github.com/auth0/go-auth0/management"
 )
 
-// NewDeviceSettingResource will return a new auth0_risk_assessments_new_device_settings resource.
+// NewDeviceSettingResource will return a new auth0_risk_assessments_new_device resource.
 func NewDeviceSettingResource() *schema.Resource {
 	return &schema.Resource{
 		ReadContext:   readRiskAssessmentNewDeviceSettings,

@@ -231,6 +231,7 @@ func New() *schema.Provider {
 			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
 			"auth0_prompt_screen_renderer":        prompt.NewPromptScreenRenderDataSource(),
+			"auth0_prompt_screen_renderers":       prompt.NewPromptScreenRendersDataSource(),
 			"auth0_resource_server":               resourceserver.NewDataSource(),
 			"auth0_role":                          role.NewDataSource(),
 			"auth0_self_service_profile":          selfserviceprofile.NewDataSource(),

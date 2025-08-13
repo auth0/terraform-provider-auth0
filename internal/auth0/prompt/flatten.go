@@ -169,6 +169,38 @@ func flattenPromptScreenSettings(data *schema.ResourceData, promptSetting *manag
 	return result.ErrorOrNil()
 }
 
+func flattenPromptScreenRenderers(data *schema.ResourceData, renderingList *management.PromptRenderingList) error {
+	result := multierror.Append(
+		data.Set("prompt_type", data.Id()),
+		data.Set("screen_renderers", flattenPromptRenderingList(renderingList)),
+	)
+	return result.ErrorOrNil()
+}
+
+func flattenPromptRenderingList(renderingList *management.PromptRenderingList) []map[string]interface{} {
+	if renderingList == nil || len(renderingList.PromptRenderings) == 0 {
+		return nil
+	}
+
+	var renderings []map[string]interface{}
+	for _, rendering := range renderingList.PromptRenderings {
+		renderingMap := map[string]interface{}{
+			"screen_name":                rendering.GetScreen(),
+			"rendering_mode":             rendering.GetRenderingMode(),
+			"context_configuration":      rendering.GetContextConfiguration(),
+			"default_head_tags_disabled": rendering.GetDefaultHeadTagsDisabled(),
+			"use_page_template":          rendering.GetUsePageTemplate(),
+			"head_tags":                  flattenHeadTags(rendering),
+			"filters":                    flattenPromptRenderingFilters(rendering.GetFilters()),
+			"tenant":                     rendering.GetTenant(),
+		}
+
+		renderings = append(renderings, renderingMap)
+	}
+
+	return renderings
+}
+
 func flattenHeadTags(promptSetting *management.PromptRendering) string {
 	if promptSetting == nil || promptSetting.HeadTags == nil || len(promptSetting.HeadTags) == 0 {
 		return ""

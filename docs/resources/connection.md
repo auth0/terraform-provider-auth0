@@ -672,7 +672,7 @@ resource "auth0_connection" "okta" {
 
 ### Required
 
-- `name` (String) Name of the connection.
+- `name` (String) Name of the connection. This value is immutable and changing it requires the creation of a new resource.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
 
 ### Optional

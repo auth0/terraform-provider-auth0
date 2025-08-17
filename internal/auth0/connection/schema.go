@@ -7,10 +7,11 @@ import (
 
 var resourceSchema = map[string]*schema.Schema{
 	"name": {
-		Type:        schema.TypeString,
-		Required:    true,
-		ForceNew:    true,
-		Description: "Name of the connection.",
+		Type:     schema.TypeString,
+		Required: true,
+		ForceNew: true,
+		Description: "Name of the connection. This value is immutable and changing it " +
+			"requires the creation of a new resource.",
 	},
 	"display_name": {
 		Type:        schema.TypeString,

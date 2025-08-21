@@ -30,17 +30,7 @@ func NewTriggerActionResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"post-login",
-					"credentials-exchange",
-					"pre-user-registration",
-					"post-user-registration",
-					"post-change-password",
-					"send-phone-message",
-					"password-reset-post-challenge",
-					"custom-email-provider",
-					"custom-phone-provider",
-				}, false),
+				ValidateFunc: validation.StringInSlice(supportedTriggers, false),
 				Description: "The ID of the trigger to bind with. Available options: `post-login`, `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, `send-phone-message`, `password-reset-post-challenge`, `custom-email-provider`, `custom-phone-provider`.",
 			},
 			"action_id": {

@@ -26,3 +26,12 @@ func IsStatusNotFound(err error) bool {
 
 	return false
 }
+
+// IsStatusError checks to see if the error from the Auth0 Management API matches a specific status code.
+func IsStatusError(err error, statusCode int) bool {
+	if mErr, ok := err.(management.Error); ok && mErr.Status() == statusCode {
+		return true
+	}
+
+	return false
+}

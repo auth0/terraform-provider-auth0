@@ -1012,6 +1012,14 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 		clientGrant.OrganizationUsage = value.String(cfg.GetAttr("organization_usage"))
 	}
 
+	if data.IsNewResource() || data.HasChange("subject_type") {
+		clientGrant.SubjectType = value.String(cfg.GetAttr("subject_type"))
+	}
+
+	if data.IsNewResource() || data.HasChange("authorization_details_types") {
+		clientGrant.Scope = value.Strings(cfg.GetAttr("authorization_details_types"))
+	}
+
 	return clientGrant
 }
 

@@ -71,7 +71,6 @@ func NewGrantResource() *schema.Resource {
 				}, true),
 				Description: "Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.",
 			},
-
 			"authorization_details_types": {
 				Type:     schema.TypeList,
 				Optional: true,

@@ -44,7 +44,9 @@ resource "auth0_client_grant" "my_client_grant" {
 
 	client_id = auth0_client.my_client.id
 	audience  = auth0_resource_server.my_resource_server.identifier
-	scopes    = [ ]
+	scopes    = ["create:foo" ]
+	subject_type = "user"
+	authorization_details_types = ["payment","shipping"]
 }
 `
 
@@ -119,7 +121,9 @@ func TestAccClientGrant(t *testing.T) {
 				Config: acctest.ParseTestName(testAccClientGrantConfigCreate, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "audience", fmt.Sprintf("https://uat.tf.terraform-provider-auth0.com/client-grant/%s", t.Name())),
-					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "0"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "subject_type", "user"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "authorization_details_types.#", "2"),
 				),
 			},
 			{

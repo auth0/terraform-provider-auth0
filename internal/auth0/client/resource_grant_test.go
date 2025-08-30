@@ -19,6 +19,20 @@ resource "auth0_client" "my_client" {
 resource "auth0_resource_server" "my_resource_server" {
 	name       = "Acceptance Test - Client Grant - {{.testName}}"
 	identifier = "https://uat.tf.terraform-provider-auth0.com/client-grant/{{.testName}}"
+	authorization_details {
+    	type = "payment"
+  	}
+  	authorization_details {
+    	type = "shipping"
+  	}
+	subject_type_authorization {
+		user {
+		  policy = "allow_all"
+		}
+		client {
+		  policy = "require_client_grant"
+		}
+  	}
 }
 
 resource "auth0_resource_server_scopes" "my_api_scopes" {
@@ -44,7 +58,7 @@ resource "auth0_client_grant" "my_client_grant" {
 
 	client_id = auth0_client.my_client.id
 	audience  = auth0_resource_server.my_resource_server.identifier
-	scopes    = ["create:foo" ]
+	scopes    = ["create:bar"]
 	subject_type = "user"
 	authorization_details_types = ["payment","shipping"]
 }
@@ -57,6 +71,8 @@ resource "auth0_client_grant" "my_client_grant" {
 	client_id = auth0_client.my_client.id
 	audience  = auth0_resource_server.my_resource_server.identifier
 	scopes    = [ "create:foo" ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
 }
 `
 
@@ -67,6 +83,8 @@ resource "auth0_client_grant" "my_client_grant" {
 	client_id = auth0_client.my_client.id
 	audience  = auth0_resource_server.my_resource_server.identifier
 	scopes    = [ ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
 }
 `
 
@@ -85,6 +103,8 @@ resource "auth0_client_grant" "my_client_grant" {
 	client_id = auth0_client.my_client_alt.id
 	audience  = auth0_resource_server.my_resource_server.identifier
 	scopes    = [ ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
 }
 `
 
@@ -103,6 +123,8 @@ resource "auth0_client_grant" "my_client_grant" {
 	client_id = auth0_client.my_client_alt.id
 	audience  = auth0_resource_server.my_resource_server.identifier
 	scopes    = [ ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
 }
 
 resource "auth0_client_grant" "no_conflict_client_grant" {
@@ -111,6 +133,8 @@ resource "auth0_client_grant" "no_conflict_client_grant" {
 	client_id = auth0_client.my_client_alt.id
 	audience  = auth0_resource_server.my_resource_server.identifier
 	scopes    = [ ]
+	subject_type = "user"
+	authorization_details_types = ["payment"]
 }
 `
 
@@ -131,6 +155,8 @@ func TestAccClientGrant(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.#", "1"),
 					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "scopes.0", "create:foo"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "subject_type", "user"),
+					resource.TestCheckResourceAttr("auth0_client_grant.my_client_grant", "authorization_details_types.#", "1"),
 				),
 			},
 			{

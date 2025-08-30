@@ -66,9 +66,11 @@ func NewGrantResource() *schema.Resource {
 			"subject_type": {
 				Type:     schema.TypeString,
 				Optional: true,
+				ForceNew: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"client", "user",
 				}, true),
+				Default:     "client",
 				Description: "Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.",
 			},
 			"authorization_details_types": {

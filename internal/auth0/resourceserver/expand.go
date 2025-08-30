@@ -35,8 +35,68 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
+		resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
 	}
 	return resourceServer
+}
+
+func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
+	config := data.GetRawConfig().GetAttr("subject_type_authorization")
+	if config.IsNull() {
+		return nil
+	}
+
+	var sta management.ResourceServerSubjectTypeAuthorization
+
+	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		sta.User = expandSubjectTypeAuthorizationUser(cfg.GetAttr("user"))
+		sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		return stop
+	})
+
+	if sta == (management.ResourceServerSubjectTypeAuthorization{}) {
+		return nil
+	}
+
+	return &sta
+}
+
+func expandSubjectTypeAuthorizationUser(userConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationUser {
+	if userConfig.IsNull() {
+		return nil
+	}
+
+	var user management.ResourceServerSubjectTypeAuthorizationUser
+
+	userConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		user.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	if user == (management.ResourceServerSubjectTypeAuthorizationUser{}) {
+		return nil
+	}
+
+	return &user
+}
+
+func expandSubjectTypeAuthorizationClient(clientConfig cty.Value) *management.ResourceServerSubjectTypeAuthorizationClient {
+	if clientConfig.IsNull() {
+		return nil
+	}
+
+	var client management.ResourceServerSubjectTypeAuthorizationClient
+
+	clientConfig.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
+		client.Policy = value.String(cfg.GetAttr("policy"))
+		return stop
+	})
+
+	if client == (management.ResourceServerSubjectTypeAuthorizationClient{}) {
+		return nil
+	}
+
+	return &client
 }
 
 func expandResourceServerScopes(scopes cty.Value) *[]management.ResourceServerScope {

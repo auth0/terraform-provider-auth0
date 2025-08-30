@@ -29,4 +29,12 @@ EOF
     mechanism = "mtls"
     required  = true
   }
+  subject_type_authorization {
+    user {
+      policy = "allow_all"
+    }
+    client {
+      policy = "require_client_grant"
+    }
+  }
 }

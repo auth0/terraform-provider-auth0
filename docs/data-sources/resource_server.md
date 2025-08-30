@@ -43,6 +43,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 - `signing_alg` (String) Algorithm used to sign JWTs. Options include `HS256`, `RS256`, and `PS256`.
 - `signing_secret` (String) Secret used to sign tokens when using symmetric algorithms (HS256).
 - `skip_consent_for_verifiable_first_party_clients` (Boolean) Indicates whether to skip user consent for applications flagged as first party.
+- `subject_type_authorization` (List of Object) Authorization policies for user and client flows. (see [below for nested schema](#nestedatt--subject_type_authorization))
 - `token_dialect` (String) Dialect of access tokens that should be issued for this resource server. Options include `access_token`, `rfc9068_profile`, `access_token_authz`, and `rfc9068_profile_authz`. `access_token` is a JWT containing standard Auth0 claims. `rfc9068_profile` is a JWT conforming to the IETF JWT Access Token Profile. `access_token_authz` is a JWT containing standard Auth0 claims, including RBAC permissions claims. `rfc9068_profile_authz` is a JWT conforming to the IETF JWT Access Token Profile, including RBAC permissions claims. RBAC permissions claims are available if RBAC (`enforce_policies`) is enabled for this API. For more details, refer to [Access Token Profiles](https://auth0.com/docs/secure/tokens/access-tokens/access-token-profiles).
 - `token_encryption` (List of Object) Configuration for JSON Web Encryption(JWE) of tokens for this resource server. (see [below for nested schema](#nestedatt--token_encryption))
 - `token_lifetime` (Number) Number of seconds during which access tokens issued for this resource server from the token endpoint remain valid.
@@ -75,6 +76,31 @@ Read-Only:
 
 - `description` (String)
 - `name` (String)
+
+
+<a id="nestedatt--subject_type_authorization"></a>
+### Nested Schema for `subject_type_authorization`
+
+Read-Only:
+
+- `client` (List of Object) (see [below for nested schema](#nestedobjatt--subject_type_authorization--client))
+- `user` (List of Object) (see [below for nested schema](#nestedobjatt--subject_type_authorization--user))
+
+<a id="nestedobjatt--subject_type_authorization--client"></a>
+### Nested Schema for `subject_type_authorization.client`
+
+Read-Only:
+
+- `policy` (String)
+
+
+<a id="nestedobjatt--subject_type_authorization--user"></a>
+### Nested Schema for `subject_type_authorization.user`
+
+Read-Only:
+
+- `policy` (String)
+
 
 
 <a id="nestedatt--token_encryption"></a>

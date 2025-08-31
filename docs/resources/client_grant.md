@@ -21,15 +21,6 @@ resource "auth0_resource_server" "my_resource_server" {
   name       = "Example Resource Server - Client Grant (Managed by Terraform)"
   identifier = "https://api.example.com/client-grant"
 
-  scopes {
-    value       = "create:foo"
-    description = "Create foos"
-  }
-
-  scopes {
-    value       = "create:bar"
-    description = "Create bars"
-  }
   authorization_details {
     type = "payment"
   }

@@ -63,6 +63,24 @@ func NewGrantResource() *schema.Resource {
 				Description: "If enabled, any organization can be used with this grant. If disabled (default), " +
 					"the grant must be explicitly assigned to the desired organizations.",
 			},
+			"subject_type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"client", "user",
+				}, true),
+				Description: "Defines the type of subject for this grant. Can be one of `client` or `user`. Defaults to `client` when not defined.",
+			},
+			"authorization_details_types": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
+				Description: "Defines the types of authorization details allowed for this client grant.",
+			},
 		},
 	}
 }

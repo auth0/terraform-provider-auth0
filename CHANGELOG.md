@@ -1,3 +1,10 @@
+## v1.27.0
+
+FEATURES:
+
+- `resource/auth0_risk_assessments` - Add support for configuring risk-assessments settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+- `resource/auth0_risk_assessments_new_device` - Add support for configuring risk-assessments new-device settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+
 ## v1.26.0
 
 FEATURES:

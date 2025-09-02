@@ -23,6 +23,7 @@ func flattenResourceServer(data *schema.ResourceData, resourceServer *management
 		data.Set("authorization_details", flattenAuthorizationDetails(resourceServer.GetAuthorizationDetails())),
 		data.Set("token_encryption", flattenTokenEncryption(data, resourceServer.GetTokenEncryption())),
 		data.Set("proof_of_possession", flattenProofOfPossession(resourceServer.GetProofOfPossession())),
+		data.Set("subject_type_authorization", flattenSubjectTypeAuthorization(resourceServer.GetSubjectTypeAuthorization())),
 	)
 	if resourceServer.GetName() != auth0ManagementAPIName {
 		result = multierror.Append(
@@ -139,4 +140,30 @@ func flattenProofOfPossession(proofOfPossession *management.ResourceServerProofO
 	}
 
 	return []map[string]interface{}{result}
+}
+
+func flattenSubjectTypeAuthorization(subjectType *management.ResourceServerSubjectTypeAuthorization) []interface{} {
+	if subjectType == nil {
+		return nil
+	}
+
+	m := make(map[string]interface{})
+
+	if subjectType.GetUser() != nil {
+		m["user"] = []interface{}{
+			map[string]interface{}{
+				"policy": subjectType.GetUser().GetPolicy(),
+			},
+		}
+	}
+
+	if subjectType.GetClient() != nil {
+		m["client"] = []interface{}{
+			map[string]interface{}{
+				"policy": subjectType.GetClient().GetPolicy(),
+			},
+		}
+	}
+
+	return []interface{}{m}
 }

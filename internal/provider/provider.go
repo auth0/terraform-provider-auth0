@@ -30,6 +30,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/riskassessment"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
@@ -193,6 +194,8 @@ func New() *schema.Provider {
 			"auth0_resource_server":                  resourceserver.NewResource(),
 			"auth0_resource_server_scope":            resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":           resourceserver.NewScopesResource(),
+			"auth0_risk_assessments":                 riskassessment.NewResource(),
+			"auth0_risk_assessments_new_device":      riskassessment.NewDeviceSettingResource(),
 			"auth0_role":                             role.NewResource(),
 			"auth0_role_permission":                  role.NewPermissionResource(),
 			"auth0_role_permissions":                 role.NewPermissionsResource(),

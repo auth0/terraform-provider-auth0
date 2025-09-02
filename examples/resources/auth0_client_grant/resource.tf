@@ -26,19 +26,19 @@ resource "auth0_resource_server" "my_resource_server" {
 
 
 resource "auth0_resource_server_scopes" "my_scopes" {
-    depends_on = [ auth0_resource_server.my_resource_server ]
+  depends_on = [auth0_resource_server.my_resource_server]
 
-    resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+  resource_server_identifier = auth0_resource_server.my_resource_server.identifier
 
-    scopes {
-        name        = "read:foo"
-        description = "Can read Foo"
-    }
+  scopes {
+    name        = "read:foo"
+    description = "Can read Foo"
+  }
 
-    scopes {
-        name        = "create:foo"
-        description = "Can create Foo"
-    }
+  scopes {
+    name        = "create:foo"
+    description = "Can create Foo"
+  }
 }
 
 resource "auth0_client_grant" "my_client_grant" {

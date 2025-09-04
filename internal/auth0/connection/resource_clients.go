@@ -67,7 +67,7 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	}
 
 	var existingEnabledClientIDs []string
-	for _, c := range existingClients {
+	for _, c := range existingClients.GetClients() {
 		existingEnabledClientIDs = append(existingEnabledClientIDs, c.GetClientID())
 	}
 
@@ -112,9 +112,7 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenConnectionClients(data, connection, &management.ConnectionEnabledClientList{
-		Clients: &allClients,
-	}))
+	return diag.FromErr(flattenConnectionClients(data, connection, allClients))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

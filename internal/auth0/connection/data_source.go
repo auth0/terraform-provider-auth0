@@ -62,8 +62,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 			return diag.FromErr(err)
 		}
 
-		return flattenConnectionForDataSource(data, connection, &management.ConnectionEnabledClientList{
-			Clients: &existingClients})
+		return flattenConnectionForDataSource(data, connection, existingClients)
 	}
 
 	name := data.Get("name").(string)
@@ -91,8 +90,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 					return diag.FromErr(err)
 				}
 
-				return flattenConnectionForDataSource(data, connection, &management.ConnectionEnabledClientList{
-					Clients: &existingClients})
+				return flattenConnectionForDataSource(data, connection, existingClients)
 			}
 		}
 
@@ -108,7 +106,7 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 
 // GetAllEnabledClients fetches all enabled clients for a given connectionID
 // and handles pagination internally.
-func GetAllEnabledClients(ctx context.Context, api *management.Management, connectionID string) ([]management.ConnectionEnabledClient, error) {
+func GetAllEnabledClients(ctx context.Context, api *management.Management, connectionID string) (*management.ConnectionEnabledClientList, error) {
 	var allClients []management.ConnectionEnabledClient
 	var next string
 
@@ -134,5 +132,8 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 		next = enabledClientsResp.Next
 	}
 
-	return allClients, nil
+	return &management.ConnectionEnabledClientList{
+		Clients: &allClients,
+	}, nil
+
 }

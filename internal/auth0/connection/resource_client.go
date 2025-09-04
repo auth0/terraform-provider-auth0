@@ -87,7 +87,7 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	}
 
 	found := false
-	for _, c := range allClients {
+	for _, c := range allClients.GetClients() {
 		if c.GetClientID() == clientID {
 			found = true
 			break

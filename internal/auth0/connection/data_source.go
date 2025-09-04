@@ -135,5 +135,4 @@ func GetAllEnabledClients(ctx context.Context, api *management.Management, conne
 	return &management.ConnectionEnabledClientList{
 		Clients: &allClients,
 	}, nil
-
 }

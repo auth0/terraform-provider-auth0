@@ -61,13 +61,13 @@ func createConnectionClients(ctx context.Context, data *schema.ResourceData, met
 	rawEnabledClients := value.Strings(data.GetRawConfig().GetAttr("enabled_clients"))
 
 	// Fetch existing enabled clients from the new API.
-	existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+	existingClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	var existingEnabledClientIDs []string
-	for _, c := range existingClientsResp.GetClients() {
+	for _, c := range existingClients {
 		existingEnabledClientIDs = append(existingEnabledClientIDs, c.GetClientID())
 	}
 

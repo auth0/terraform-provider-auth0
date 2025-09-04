@@ -81,30 +81,9 @@ func readConnectionClient(ctx context.Context, data *schema.ResourceData, meta i
 	connectionID := data.Get("connection_id").(string)
 	clientID := data.Get("client_id").(string)
 
-	// Implement pagination using the Next token.
-	var allClients []management.ConnectionEnabledClient
-	var next string
-
-	for {
-		var enabledClientsResp *management.ConnectionEnabledClientList
-		var err error
-
-		if next == "" {
-			enabledClientsResp, err = api.Connection.ReadEnabledClients(ctx, connectionID)
-		} else {
-			enabledClientsResp, err = api.Connection.ReadEnabledClients(ctx, connectionID, management.From(next))
-		}
-
-		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
-		}
-
-		allClients = append(allClients, enabledClientsResp.GetClients()...)
-
-		if !enabledClientsResp.HasNext() {
-			break
-		}
-		next = enabledClientsResp.Next
+	allClients, err := GetAllEnabledClients(ctx, api, connectionID)
+	if err != nil {
+		return diag.FromErr(err)
 	}
 
 	found := false

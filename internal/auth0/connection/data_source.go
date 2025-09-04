@@ -3,8 +3,6 @@ package connection
 import (
 	"context"
 
-	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
-
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -59,12 +57,13 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 
 		data.SetId(connectionID)
 
-		existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+		existingClients, err := GetAllEnabledClients(ctx, api, connection.GetID())
 		if err != nil {
-			return diag.FromErr(internalError.HandleAPIError(data, err))
+			return diag.FromErr(err)
 		}
 
-		return flattenConnectionForDataSource(data, connection, existingClientsResp)
+		return flattenConnectionForDataSource(data, connection, &management.ConnectionEnabledClientList{
+			Clients: &existingClients})
 	}
 
 	name := data.Get("name").(string)
@@ -87,12 +86,13 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 		for _, connection := range connections.Connections {
 			if connection.GetName() == name {
 				data.SetId(connection.GetID())
-				existingClientsResp, err := api.Connection.ReadEnabledClients(ctx, connection.GetID())
+				existingClients, err := GetAllEnabledClients(ctx, api, connection.GetID())
 				if err != nil {
 					return diag.FromErr(err)
 				}
 
-				return flattenConnectionForDataSource(data, connection, existingClientsResp)
+				return flattenConnectionForDataSource(data, connection, &management.ConnectionEnabledClientList{
+					Clients: &existingClients})
 			}
 		}
 
@@ -104,4 +104,35 @@ func readConnectionForDataSource(ctx context.Context, data *schema.ResourceData,
 	}
 
 	return diag.Errorf("No connection found with \"name\" = %q", name)
+}
+
+// GetAllEnabledClients fetches all enabled clients for a given connectionID
+// and handles pagination internally.
+func GetAllEnabledClients(ctx context.Context, api *management.Management, connectionID string) ([]management.ConnectionEnabledClient, error) {
+	var allClients []management.ConnectionEnabledClient
+	var next string
+
+	for {
+		var enabledClientsResp *management.ConnectionEnabledClientList
+		var err error
+
+		if next == "" {
+			enabledClientsResp, err = api.Connection.ReadEnabledClients(ctx, connectionID)
+		} else {
+			enabledClientsResp, err = api.Connection.ReadEnabledClients(ctx, connectionID, management.From(next))
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		allClients = append(allClients, enabledClientsResp.GetClients()...)
+
+		if !enabledClientsResp.HasNext() {
+			break
+		}
+		next = enabledClientsResp.Next
+	}
+
+	return allClients, nil
 }

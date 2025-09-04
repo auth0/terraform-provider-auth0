@@ -101,9 +101,9 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 	api := meta.(*config.Config).GetAPI()
 	connectionID := data.Id()
 
-	enabledClientsResp, err := api.Connection.ReadEnabledClients(ctx, connectionID)
+	allClients, err := GetAllEnabledClients(ctx, api, connectionID)
 	if err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
+		return diag.FromErr(err)
 	}
 
 	requestOption := management.IncludeFields("strategy", "name")
@@ -112,7 +112,9 @@ func readConnectionClients(ctx context.Context, data *schema.ResourceData, meta 
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	return diag.FromErr(flattenConnectionClients(data, connection, enabledClientsResp))
+	return diag.FromErr(flattenConnectionClients(data, connection, &management.ConnectionEnabledClientList{
+		Clients: &allClients,
+	}))
 }
 
 func updateConnectionClients(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

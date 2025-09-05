@@ -16,7 +16,7 @@ func expandLogStream(data *schema.ResourceData) *management.LogStream {
 	logStream := &management.LogStream{
 		Name:      value.String(config.GetAttr("name")),
 		PIIConfig: expandLogStreamPIIConfig(data),
-		StartFrom: value.String(config.GetAttr("startFrom")),
+		StartFrom: value.String(config.GetAttr("start_from")),
 	}
 
 	logStreamType := value.String(config.GetAttr("type"))

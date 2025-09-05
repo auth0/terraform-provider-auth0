@@ -19,7 +19,7 @@
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations
           method: POST
         response:
@@ -30,13 +30,13 @@
           trailer: {}
           content_length: 111
           uncompressed: false
-          body: '{"id":"org_BjZpNMevQgRa41mw","display_name":"Test Org Acceptance Testing","name":"test-org-acceptance-testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","display_name":"Test Org Acceptance Testing","name":"test-org-acceptance-testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 201 Created
           code: 201
-          duration: 373.273209ms
+          duration: 237.090458ms
       - id: 1
         request:
           proto: HTTP/1.1
@@ -51,9 +51,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: GET
         response:
           proto: HTTP/2.0
@@ -63,13 +65,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"org_BjZpNMevQgRa41mw","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 316.905292ms
+          duration: 168.501792ms
       - id: 2
         request:
           proto: HTTP/1.1
@@ -88,7 +90,7 @@
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers
           method: POST
         response:
@@ -97,15 +99,15 @@
           proto_minor: 0
           transfer_encoding: []
           trailer: {}
-          content_length: 362
+          content_length: 258
           uncompressed: false
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 201 Created
           code: 201
-          duration: 346.489791ms
+          duration: 204.369583ms
       - id: 3
         request:
           proto: HTTP/1.1
@@ -124,8 +126,8 @@
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: PATCH
         response:
           proto: HTTP/2.0
@@ -135,13 +137,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 367.87ms
+          duration: 159.316292ms
       - id: 4
         request:
           proto: HTTP/1.1
@@ -160,8 +162,8 @@
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: PATCH
         response:
           proto: HTTP/2.0
@@ -171,13 +173,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 372.910084ms
+          duration: 125.282583ms
       - id: 5
         request:
           proto: HTTP/1.1
@@ -196,8 +198,8 @@
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: PATCH
         response:
           proto: HTTP/2.0
@@ -207,13 +209,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 332.218083ms
+          duration: 138.780875ms
       - id: 6
         request:
           proto: HTTP/1.1
@@ -228,9 +230,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: GET
         response:
           proto: HTTP/2.0
@@ -240,32 +244,32 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 342.969625ms
+          duration: 158.934666ms
       - id: 7
         request:
           proto: HTTP/1.1
           proto_major: 1
           proto_minor: 1
-          content_length: 166
+          content_length: 149
           transfer_encoding: []
           trailer: {}
           host: terraform-provider-auth0-dev.eu.auth0.com
           remote_addr: ""
           request_uri: ""
           body: |
-              {"name":"test_client","organization_usage":"allow","oidc_logout":{},"default_organization":{"flows":["client_credentials"],"organization_id":"org_BjZpNMevQgRa41mw"}}
+              {"name":"test_client","organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_9VJusCS7yMLJUqVx"}}
           form: {}
           headers:
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients
           method: POST
         response:
@@ -276,13 +280,13 @@
           trailer: {}
           content_length: -1
           uncompressed: false
-          body: '{"name":"test_client","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"default_organization":{"flows":["client_credentials"],"organization_id":"org_BjZpNMevQgRa41mw"}}'
+          body: '{"name":"test_client","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_9VJusCS7yMLJUqVx"}}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 201 Created
           code: 201
-          duration: 444.954125ms
+          duration: 304.745583ms
       - id: 8
         request:
           proto: HTTP/1.1
@@ -297,9 +301,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1
           method: GET
         response:
           proto: HTTP/2.0
@@ -309,13 +315,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"name":"test_client","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"default_organization":{"flows":["client_credentials"],"organization_id":"org_BjZpNMevQgRa41mw"}}'
+          body: '{"name":"test_client","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_9VJusCS7yMLJUqVx"}}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 354.871ms
+          duration: 152.871291ms
       - id: 9
         request:
           proto: HTTP/1.1
@@ -330,9 +336,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fapi.travel00123.com%2F&client_id=lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr&include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?audience=https%3A%2F%2Fapi.travel00123.com%2F&client_id=pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1&include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -348,7 +356,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 320.569833ms
+          duration: 156.064417ms
       - id: 10
         request:
           proto: HTTP/1.1
@@ -361,13 +369,13 @@
           remote_addr: ""
           request_uri: ""
           body: |
-              {"client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"allow_any_organization":true,"organization_usage":"allow"}
+              {"client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"allow_any_organization":true,"organization_usage":"allow"}
           form: {}
           headers:
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants
           method: POST
         response:
@@ -376,15 +384,15 @@
           proto_minor: 0
           transfer_encoding: []
           trailer: {}
-          content_length: 265
+          content_length: 241
           uncompressed: false
-          body: '{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}'
+          body: '{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 201 Created
           code: 201
-          duration: 354.376542ms
+          duration: 138.185208ms
       - id: 11
         request:
           proto: HTTP/1.1
@@ -399,8 +407,10 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?include_totals=true&page=0&per_page=50
           method: GET
         response:
@@ -411,13 +421,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"total":7,"start":0,"limit":50,"client_grants":[{"id":"cgr_4qwKNpNlUZQ0TKEF","client_id":"FtFGKlOhXgRulKHn8HPr61ktFNc0Gjs3","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_LwfFe5RfnNjN9v25","client_id":"HDZhPk8UzY3l5khiVyalwLxqublYJiGP","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_Q8USgV8gFlgBFNve","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","delete:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:self_service_profile_custom_texts","update:self_service_profile_custom_texts","create:network_acls","update:network_acls","read:network_acls","delete:network_acls","delete:vdcs_templates","read:vdcs_templates","create:vdcs_templates","update:vdcs_templates","create:custom_signing_keys","read:custom_signing_keys","update:custom_signing_keys","delete:custom_signing_keys","read:federated_connections_tokens","delete:federated_connections_tokens","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes","create:token_exchange_profiles","read:token_exchange_profiles","update:token_exchange_profiles","delete:token_exchange_profiles","read:event_streams","create:event_streams","update:event_streams","delete:event_streams","read:event_deliveries","update:event_deliveries","read:connections_keys","update:connections_keys","create:connections_keys"],"subject_type":"client"},{"id":"cgr_QuFSmSKTMPBaLjsm","client_id":"c5whgCfMF3Uoa5xi3HOJlTyplWmAIIE3","audience":"https://api.example22.com/client-grant","scope":["create:foo","read:foo"],"subject_type":"client"},{"id":"cgr_T6dtYSJ0lIyYbOrM","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","delete:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:self_service_profile_custom_texts","update:self_service_profile_custom_texts","create:network_acls","update:network_acls","read:network_acls","delete:network_acls","delete:vdcs_templates","read:vdcs_templates","create:vdcs_templates","update:vdcs_templates","create:custom_signing_keys","read:custom_signing_keys","update:custom_signing_keys","delete:custom_signing_keys","read:federated_connections_tokens","delete:federated_connections_tokens","create:user_attribute_profiles","read:user_attribute_profiles","update:user_attribute_profiles","delete:user_attribute_profiles","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes","create:token_exchange_profiles","read:token_exchange_profiles","update:token_exchange_profiles","delete:token_exchange_profiles","read:event_streams","create:event_streams","update:event_streams","delete:event_streams","read:event_deliveries","update:event_deliveries","read:connections_keys","update:connections_keys","create:connections_keys"],"subject_type":"client"},{"id":"cgr_p6tndsGQSJZ09hL2","client_id":"7RFdlb9w7gyT01MFjR5Q5SRfil6xu9XK","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}]}'
+          body: '{"total":7,"start":0,"limit":50,"client_grants":[{"id":"cgr_BRwNL8rCTOixv6DU","client_id":"MIToD9xBxaoP4NwHGKo2EJWwSU04Uxod","audience":"https://api.example2.com","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_Gh989ryCLAXzmS3y","client_id":"gIJikrYcmSXEhIv9cXEEtoGFj8kPDxUx","audience":"https://api.travel001.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_UWYceavPkwfRPtbf","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","update:flows_vault","delete:flows_vault","create:flows_vault","read:flows_executions","delete:flows_executions","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"]},{"id":"cgr_fTgG6hZ6DJyXSv2D","client_id":"MIToD9xBxaoP4NwHGKo2EJWwSU04Uxod","audience":"https://api.example.com","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_tEnbObhlbCHIkA2C","client_id":"FiUTsAhjzFlxipoMI1hqUX0LK1fpPpjl","audience":"https://api.travel0.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_zV8sbywGQQxCnreD","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"]}]}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 303.349917ms
+          duration: 158.774084ms
       - id: 12
         request:
           proto: HTTP/1.1
@@ -430,14 +440,14 @@
           remote_addr: ""
           request_uri: ""
           body: |
-              {"grant_id":"cgr_DeLKjkw2kCP29snl"}
+              {"grant_id":"cgr_wdvDb163A7cFXQqz"}
           form: {}
           headers:
               Content-Type:
                   - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants
           method: POST
         response:
           proto: HTTP/2.0
@@ -445,15 +455,15 @@
           proto_minor: 0
           transfer_encoding: []
           trailer: {}
-          content_length: 247
+          content_length: 188
           uncompressed: false
-          body: '{"grant_id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}'
+          body: '{"grant_id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"]}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 201 Created
           code: 201
-          duration: 418.4135ms
+          duration: 163.411708ms
       - id: 13
         request:
           proto: HTTP/1.1
@@ -468,9 +478,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants?include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants?include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -480,13 +492,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"client_grants":[{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+          body: '{"client_grants":[{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}],"start":0,"limit":50,"total":1}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 397.251375ms
+          duration: 150.288709ms
       - id: 14
         request:
           proto: HTTP/1.1
@@ -501,9 +513,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: GET
         response:
           proto: HTTP/2.0
@@ -513,13 +527,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"org_BjZpNMevQgRa41mw","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 508.546875ms
+          duration: 136.27875ms
       - id: 15
         request:
           proto: HTTP/1.1
@@ -534,9 +548,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/enabled_connections?include_totals=true&page=0&per_page=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/enabled_connections?include_totals=true&page=0&per_page=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -552,7 +568,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 339.242834ms
+          duration: 152.500916ms
       - id: 16
         request:
           proto: HTTP/1.1
@@ -567,9 +583,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -585,7 +603,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 354.557416ms
+          duration: 168.309209ms
       - id: 17
         request:
           proto: HTTP/1.1
@@ -600,9 +618,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants?include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants?include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -612,13 +632,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"client_grants":[{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+          body: '{"client_grants":[{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}],"start":0,"limit":50,"total":1}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 405.264875ms
+          duration: 143.32075ms
       - id: 18
         request:
           proto: HTTP/1.1
@@ -633,9 +653,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: GET
         response:
           proto: HTTP/2.0
@@ -645,13 +667,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"org_BjZpNMevQgRa41mw","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 313.919541ms
+          duration: 135.332625ms
       - id: 19
         request:
           proto: HTTP/1.1
@@ -666,9 +688,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/enabled_connections?include_totals=true&page=0&per_page=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/enabled_connections?include_totals=true&page=0&per_page=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -684,7 +708,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 307.65475ms
+          duration: 180.723375ms
       - id: 20
         request:
           proto: HTTP/1.1
@@ -699,9 +723,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -717,7 +743,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 315.515875ms
+          duration: 121.141209ms
       - id: 21
         request:
           proto: HTTP/1.1
@@ -732,9 +758,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants?include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants?include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -744,13 +772,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"client_grants":[{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+          body: '{"client_grants":[{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}],"start":0,"limit":50,"total":1}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 319.77175ms
+          duration: 167.06ms
       - id: 22
         request:
           proto: HTTP/1.1
@@ -765,9 +793,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: GET
         response:
           proto: HTTP/2.0
@@ -777,13 +807,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"org_BjZpNMevQgRa41mw","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 303.729417ms
+          duration: 131.909ms
       - id: 23
         request:
           proto: HTTP/1.1
@@ -798,9 +828,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: GET
         response:
           proto: HTTP/2.0
@@ -810,13 +842,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"68ba274d66e68bd09c8a56c5","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"subject_type_authorization":{"client":{"policy":"require_client_grant"},"user":{"policy":"allow_all"}},"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
+          body: '{"id":"66f5c900c12df5490e81bb31","name":"Example API","identifier":"https://api.travel00123.com/","allow_offline_access":false,"skip_consent_for_verifiable_first_party_clients":false,"token_lifetime":86400,"token_lifetime_for_web":7200,"signing_alg":"RS256"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 292.649083ms
+          duration: 295.958125ms
       - id: 24
         request:
           proto: HTTP/1.1
@@ -831,9 +863,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1
           method: GET
         response:
           proto: HTTP/2.0
@@ -843,13 +877,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"name":"test_client","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"cross_origin_authentication":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","oidc_backchannel_logout":{},"oidc_logout":{"backchannel_logout_initiators":{"mode":"custom","selected_initiators":["rp-logout","idp-logout"]}},"default_organization":{"flows":["client_credentials"],"organization_id":"org_BjZpNMevQgRa41mw"}}'
+          body: '{"name":"test_client","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","client_secret":"[REDACTED]","is_first_party":true,"is_token_endpoint_ip_header_trusted":false,"oidc_conformant":false,"jwt_configuration":{"secret_encoded":false,"lifetime_in_seconds":36000},"signing_keys":[{"cert":"[REDACTED]"}],"sso_disabled":false,"grant_types":["authorization_code","implicit","refresh_token","client_credentials"],"custom_login_page_on":true,"refresh_token":{"rotation_type":"non-rotating","expiration_type":"non-expiring","leeway":0,"token_lifetime":2592000,"infinite_token_lifetime":true,"infinite_idle_token_lifetime":true,"idle_token_lifetime":1296000},"organization_usage":"allow","default_organization":{"flows":["client_credentials"],"organization_id":"org_9VJusCS7yMLJUqVx"}}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 602.071791ms
+          duration: 145.874875ms
       - id: 25
         request:
           proto: HTTP/1.1
@@ -864,8 +898,10 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
+                  - Go-Auth0/1.10.0
           url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants?include_totals=true&page=0&per_page=50
           method: GET
         response:
@@ -876,13 +912,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"total":7,"start":0,"limit":50,"client_grants":[{"id":"cgr_4qwKNpNlUZQ0TKEF","client_id":"FtFGKlOhXgRulKHn8HPr61ktFNc0Gjs3","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_LwfFe5RfnNjN9v25","client_id":"HDZhPk8UzY3l5khiVyalwLxqublYJiGP","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"},{"id":"cgr_Q8USgV8gFlgBFNve","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","delete:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:self_service_profile_custom_texts","update:self_service_profile_custom_texts","create:network_acls","update:network_acls","read:network_acls","delete:network_acls","delete:vdcs_templates","read:vdcs_templates","create:vdcs_templates","update:vdcs_templates","create:custom_signing_keys","read:custom_signing_keys","update:custom_signing_keys","delete:custom_signing_keys","read:federated_connections_tokens","delete:federated_connections_tokens","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes","create:token_exchange_profiles","read:token_exchange_profiles","update:token_exchange_profiles","delete:token_exchange_profiles","read:event_streams","create:event_streams","update:event_streams","delete:event_streams","read:event_deliveries","update:event_deliveries","read:connections_keys","update:connections_keys","create:connections_keys"],"subject_type":"client"},{"id":"cgr_QuFSmSKTMPBaLjsm","client_id":"c5whgCfMF3Uoa5xi3HOJlTyplWmAIIE3","audience":"https://api.example22.com/client-grant","scope":["create:foo","read:foo"],"subject_type":"client"},{"id":"cgr_T6dtYSJ0lIyYbOrM","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","delete:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:self_service_profile_custom_texts","update:self_service_profile_custom_texts","create:network_acls","update:network_acls","read:network_acls","delete:network_acls","delete:vdcs_templates","read:vdcs_templates","create:vdcs_templates","update:vdcs_templates","create:custom_signing_keys","read:custom_signing_keys","update:custom_signing_keys","delete:custom_signing_keys","read:federated_connections_tokens","delete:federated_connections_tokens","create:user_attribute_profiles","read:user_attribute_profiles","update:user_attribute_profiles","delete:user_attribute_profiles","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes","create:token_exchange_profiles","read:token_exchange_profiles","update:token_exchange_profiles","delete:token_exchange_profiles","read:event_streams","create:event_streams","update:event_streams","delete:event_streams","read:event_deliveries","update:event_deliveries","read:connections_keys","update:connections_keys","create:connections_keys"],"subject_type":"client"},{"id":"cgr_p6tndsGQSJZ09hL2","client_id":"7RFdlb9w7gyT01MFjR5Q5SRfil6xu9XK","audience":"https://cli-demo.com","scope":["read:user","write:user"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}]}'
+          body: '{"total":7,"start":0,"limit":50,"client_grants":[{"id":"cgr_BRwNL8rCTOixv6DU","client_id":"MIToD9xBxaoP4NwHGKo2EJWwSU04Uxod","audience":"https://api.example2.com","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_Gh989ryCLAXzmS3y","client_id":"gIJikrYcmSXEhIv9cXEEtoGFj8kPDxUx","audience":"https://api.travel001.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_UWYceavPkwfRPtbf","client_id":"Mt2OyVN7QphPhmFWgJMXtzzethEatko0","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","update:flows_vault","delete:flows_vault","create:flows_vault","read:flows_executions","delete:flows_executions","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"]},{"id":"cgr_fTgG6hZ6DJyXSv2D","client_id":"MIToD9xBxaoP4NwHGKo2EJWwSU04Uxod","audience":"https://api.example.com","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_tEnbObhlbCHIkA2C","client_id":"FiUTsAhjzFlxipoMI1hqUX0LK1fpPpjl","audience":"https://api.travel0.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true},{"id":"cgr_zV8sbywGQQxCnreD","client_id":"bpViNbMMF1X5J17kaB1jObShEVB81nol","audience":"https://terraform-provider-auth0-dev.sus.auth0.com/api/v2/","scope":["read:client_grants","create:client_grants","delete:client_grants","update:client_grants","read:users","update:users","delete:users","create:users","read:users_app_metadata","update:users_app_metadata","delete:users_app_metadata","create:users_app_metadata","read:user_custom_blocks","create:user_custom_blocks","delete:user_custom_blocks","create:user_tickets","read:clients","update:clients","delete:clients","create:clients","read:client_keys","update:client_keys","delete:client_keys","create:client_keys","read:connections","update:connections","delete:connections","create:connections","read:resource_servers","update:resource_servers","delete:resource_servers","create:resource_servers","read:device_credentials","update:device_credentials","delete:device_credentials","create:device_credentials","read:rules","update:rules","delete:rules","create:rules","read:rules_configs","update:rules_configs","delete:rules_configs","read:hooks","update:hooks","delete:hooks","create:hooks","read:actions","update:actions","delete:actions","create:actions","read:email_provider","update:email_provider","delete:email_provider","create:email_provider","blacklist:tokens","read:stats","read:insights","read:tenant_settings","update:tenant_settings","read:logs","read:logs_users","read:shields","create:shields","update:shields","delete:shields","read:anomaly_blocks","delete:anomaly_blocks","update:triggers","read:triggers","read:grants","delete:grants","read:guardian_factors","update:guardian_factors","read:guardian_enrollments","delete:guardian_enrollments","create:guardian_enrollment_tickets","read:user_idp_tokens","create:passwords_checking_job","delete:passwords_checking_job","read:custom_domains","delete:custom_domains","create:custom_domains","update:custom_domains","read:email_templates","create:email_templates","update:email_templates","read:mfa_policies","update:mfa_policies","read:roles","create:roles","delete:roles","update:roles","read:prompts","update:prompts","read:branding","update:branding","delete:branding","read:log_streams","create:log_streams","delete:log_streams","update:log_streams","create:signing_keys","read:signing_keys","update:signing_keys","read:limits","update:limits","create:role_members","read:role_members","delete:role_members","read:entitlements","read:attack_protection","update:attack_protection","read:organizations_summary","create:authentication_methods","read:authentication_methods","update:authentication_methods","delete:authentication_methods","read:organizations","update:organizations","create:organizations","delete:organizations","create:organization_members","read:organization_members","delete:organization_members","create:organization_connections","read:organization_connections","update:organization_connections","delete:organization_connections","create:organization_member_roles","read:organization_member_roles","delete:organization_member_roles","create:organization_invitations","read:organization_invitations","delete:organization_invitations","read:scim_config","create:scim_config","update:scim_config","delete:scim_config","create:scim_token","read:scim_token","delete:scim_token","delete:phone_providers","create:phone_providers","read:phone_providers","update:phone_providers","delete:phone_templates","create:phone_templates","read:phone_templates","update:phone_templates","create:encryption_keys","read:encryption_keys","update:encryption_keys","delete:encryption_keys","read:sessions","delete:sessions","read:refresh_tokens","delete:refresh_tokens","create:self_service_profiles","read:self_service_profiles","update:self_service_profiles","delete:self_service_profiles","create:sso_access_tickets","read:forms","update:forms","delete:forms","create:forms","read:flows","update:flows","delete:flows","create:flows","read:flows_vault","read:flows_vault_connections","update:flows_vault_connections","delete:flows_vault_connections","create:flows_vault_connections","read:flows_executions","delete:flows_executions","read:connections_options","update:connections_options","read:client_credentials","create:client_credentials","update:client_credentials","delete:client_credentials","read:organization_client_grants","create:organization_client_grants","delete:organization_client_grants","update:device_codes","read:device_codes"]}]}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 326.586083ms
+          duration: 181.501459ms
       - id: 26
         request:
           proto: HTTP/1.1
@@ -897,9 +933,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants?include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants?include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -909,13 +947,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"client_grants":[{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+          body: '{"client_grants":[{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}],"start":0,"limit":50,"total":1}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 351.155833ms
+          duration: 154.553792ms
       - id: 27
         request:
           proto: HTTP/1.1
@@ -930,9 +968,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: GET
         response:
           proto: HTTP/2.0
@@ -942,13 +982,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"id":"org_BjZpNMevQgRa41mw","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
+          body: '{"id":"org_9VJusCS7yMLJUqVx","name":"test-org-acceptance-testing","display_name":"Test Org Acceptance Testing"}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 293.539125ms
+          duration: 151.512292ms
       - id: 28
         request:
           proto: HTTP/1.1
@@ -963,9 +1003,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/enabled_connections?include_totals=true&page=0&per_page=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/enabled_connections?include_totals=true&page=0&per_page=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -981,7 +1023,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 332.673042ms
+          duration: 140.174583ms
       - id: 29
         request:
           proto: HTTP/1.1
@@ -996,9 +1038,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/members?fields=user_id&include_fields=true&include_totals=true&per_page=50&take=100
           method: GET
         response:
           proto: HTTP/2.0
@@ -1014,7 +1058,7 @@
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 312.955375ms
+          duration: 142.377042ms
       - id: 30
         request:
           proto: HTTP/1.1
@@ -1029,9 +1073,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants?include_totals=true&per_page=50
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants?include_totals=true&per_page=50
           method: GET
         response:
           proto: HTTP/2.0
@@ -1041,13 +1087,13 @@
           trailer: {}
           content_length: -1
           uncompressed: true
-          body: '{"client_grants":[{"id":"cgr_DeLKjkw2kCP29snl","client_id":"lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true,"subject_type":"client"}],"start":0,"limit":50,"total":1}'
+          body: '{"client_grants":[{"id":"cgr_wdvDb163A7cFXQqz","client_id":"pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1","audience":"https://api.travel00123.com/","scope":["create:organization_client_grants","create:resource"],"organization_usage":"allow","allow_any_organization":true}],"start":0,"limit":50,"total":1}'
           headers:
               Content-Type:
                   - application/json; charset=utf-8
           status: 200 OK
           code: 200
-          duration: 329.021542ms
+          duration: 140.661042ms
       - id: 31
         request:
           proto: HTTP/1.1
@@ -1062,9 +1108,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw/client-grants/cgr_DeLKjkw2kCP29snl
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx/client-grants/cgr_wdvDb163A7cFXQqz
           method: DELETE
         response:
           proto: HTTP/2.0
@@ -1080,7 +1128,7 @@
                   - application/json; charset=utf-8
           status: 204 No Content
           code: 204
-          duration: 315.167041ms
+          duration: 117.693167ms
       - id: 32
         request:
           proto: HTTP/1.1
@@ -1095,9 +1143,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_DeLKjkw2kCP29snl
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/client-grants/cgr_wdvDb163A7cFXQqz
           method: DELETE
         response:
           proto: HTTP/2.0
@@ -1113,7 +1163,7 @@
                   - application/json; charset=utf-8
           status: 204 No Content
           code: 204
-          duration: 317.162667ms
+          duration: 150.913084ms
       - id: 33
         request:
           proto: HTTP/1.1
@@ -1128,9 +1178,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/lMWQ6yFLJo5jL6lpce7Pu81iprxns0fr
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/clients/pSxP9RbyOmWpijS0lkRiOIzGqEocLsz1
           method: DELETE
         response:
           proto: HTTP/2.0
@@ -1146,7 +1198,7 @@
                   - application/json; charset=utf-8
           status: 204 No Content
           code: 204
-          duration: 350.860958ms
+          duration: 211.097625ms
       - id: 34
         request:
           proto: HTTP/1.1
@@ -1161,9 +1213,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/68ba274d66e68bd09c8a56c5
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/resource-servers/66f5c900c12df5490e81bb31
           method: DELETE
         response:
           proto: HTTP/2.0
@@ -1179,7 +1233,7 @@
                   - application/json; charset=utf-8
           status: 204 No Content
           code: 204
-          duration: 336.804291ms
+          duration: 180.627875ms
       - id: 35
         request:
           proto: HTTP/1.1
@@ -1194,9 +1248,11 @@
           body: ""
           form: {}
           headers:
+              Content-Type:
+                  - application/json
               User-Agent:
-                  - Go-Auth0/1.27.0
-          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_BjZpNMevQgRa41mw
+                  - Go-Auth0/1.10.0
+          url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/organizations/org_9VJusCS7yMLJUqVx
           method: DELETE
         response:
           proto: HTTP/2.0
@@ -1212,4 +1268,4 @@
                   - application/json; charset=utf-8
           status: 204 No Content
           code: 204
-          duration: 328.6485ms
+          duration: 127.040584ms

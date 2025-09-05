@@ -66,7 +66,6 @@ func NewGrantResource() *schema.Resource {
 			"subject_type": {
 				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
 				ForceNew: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"client", "user",

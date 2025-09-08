@@ -211,6 +211,24 @@ become low-friction: no manual reformatting, fewer merge conflicts, clearer revi
 - Duplication Trade-off: Prefer duplication in exports over premature normalization that obscures provenance.
 - Secret Material: Exports won't include sensitive secret values beyond what the Dashboard reveals—manage secrets via dedicated resources or vault configuration.
 
+## Alternative: Auth0 CLI Auto-generation (v1.6.1+)
+
+For a simpler workflow focused on Forms / Flows, an alternative is to leverage the Auth0 CLI (version >= 1.6.1)
+to generate Terraform configuration directly:
+
+```sh
+auth0 tf generate \
+	--tf-version 1.28.0 \
+	--output-dir tmp-auth0-tf \
+	--resources auth0_flow,auth0_flow_vault_connection,auth0_form
+```
+
+This limits generation to the relevant resource types and can be useful for an initial bootstrap or periodic
+regeneration snapshot.
+
+Note: Replace exported IDs in the generated output with Terraform variables or interpolations where appropriate
+to avoid hard-coding environment-specific identifiers.
+
 ## Summary
 
 By externalizing the rich, nested structure of Forms and Flows into exported JSON snapshots, Terraform

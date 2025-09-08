@@ -22,7 +22,7 @@ definitions). The duplication is benign; treat each export as a self‑contained
 ## Pre-requisites
 
 - Auth0 tenant access with permission to build Forms & Flows in the Dashboard UI.
-- Terraform Auth0 Provider version that includes `auth0_form`, `auth0_flow`, and vault/connection resources.
+- Terraform Auth0 Provider version that includes `auth0_form`, `auth0_flow`, and `auth0_flow_vault_connection` resources.
 - A working Terraform project structure (see the [Quickstart guide](./quickstart.md) if new to the provider).
 
 ## 1. Build Forms & Flows in the Dashboard

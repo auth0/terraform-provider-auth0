@@ -253,6 +253,56 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"subject_type_authorization": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				Computed:    true,
+				MaxItems:    1,
+				Description: "Authorization policies for user and client flows.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"user": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "User authorization policies for the resource server.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"allow_all",
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "User flows policy. One of `allow_all`, `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+						"client": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							MaxItems:    1,
+							Description: "Client authorization policies for the resource server.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"policy": {
+										Type:     schema.TypeString,
+										Optional: true,
+										ValidateFunc: validation.StringInSlice([]string{
+											"deny_all",
+											"require_client_grant",
+										}, false),
+										Description: "Client flows policy. One of `deny_all`, `require_client_grant`.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"client_id": {
 				Type:     schema.TypeString,
 				Computed: true,

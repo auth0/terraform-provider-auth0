@@ -15,6 +15,7 @@ func flattenLogStream(data *schema.ResourceData, logStream *management.LogStream
 		data.Set("filters", logStream.GetFilters()),
 		data.Set("sink", flattenLogStreamSink(data, logStream.Sink)),
 		data.Set("pii_config", flattenLogStreamPIIConfig(logStream.PIIConfig)),
+		data.Set("start_from", logStream.GetStartFrom()),
 	)
 
 	return result.ErrorOrNil()

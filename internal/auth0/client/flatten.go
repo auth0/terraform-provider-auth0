@@ -641,7 +641,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
-		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
+		//data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -675,6 +675,8 @@ func flattenClientGrant(data *schema.ResourceData, clientGrant *management.Clien
 		data.Set("scopes", clientGrant.GetScope()),
 		data.Set("allow_any_organization", clientGrant.GetAllowAnyOrganization()),
 		data.Set("organization_usage", clientGrant.GetOrganizationUsage()),
+		data.Set("subject_type", clientGrant.GetSubjectType()),
+		data.Set("authorization_details_types", clientGrant.GetAuthorizationDetailsTypes()),
 	)
 
 	return result.ErrorOrNil()

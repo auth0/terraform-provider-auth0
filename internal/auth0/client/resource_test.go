@@ -2774,3 +2774,28 @@ func TestAccClientSessionTransfer(t *testing.T) {
 		},
 	})
 }
+
+const testAccClientResourceServer = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Resource Server Client - {{.testName}}"
+	app_type = "resource_server"
+	resource_server_identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	is_first_party = true
+	oidc_conformant = true
+}
+`
+
+func TestAccClientResourceServer(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientResourceServer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
+				),
+			},
+		},
+	})
+}

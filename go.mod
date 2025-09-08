@@ -4,7 +4,7 @@ go 1.23.7
 
 require (
 	github.com/PuerkitoBio/rehttp v1.4.0
-	github.com/auth0/go-auth0 v1.27.0
+	github.com/auth0/go-auth0 v1.27.1-0.20250908111351-2a301134a168
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/go-multierror v1.1.1

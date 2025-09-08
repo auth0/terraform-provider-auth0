@@ -1,3 +1,17 @@
+## v1.28.0
+
+FEATURES:
+
+- `resource/auth0_resource_server` - Add support for configuring `subject_type_authorization` settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+- `resource/auth0_client_grant` - Add support for configuring `subject_type` and `authorization_details_types` settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+
+## v1.27.0
+
+FEATURES:
+
+- `resource/auth0_risk_assessments` - Add support for configuring risk-assessments settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+- `resource/auth0_risk_assessments_new_device` - Add support for configuring risk-assessments new-device settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+
 ## v1.26.0
 
 FEATURES:

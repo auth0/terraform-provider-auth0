@@ -3,6 +3,8 @@ package provider
 import (
 	"os"
 
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/eventstream"
+
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
@@ -30,6 +32,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/page"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/prompt"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/resourceserver"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/riskassessment"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/role"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/rule"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
@@ -166,6 +169,7 @@ func New() *schema.Provider {
 			"auth0_custom_domain_verification":       customdomain.NewVerificationResource(),
 			"auth0_email_provider":                   email.NewResource(),
 			"auth0_email_template":                   email.NewTemplateResource(),
+			"auth0_event_stream":                     eventstream.NewResource(),
 			"auth0_encryption_key_manager":           encryptionkeymanager.NewEncryptionKeyManagerResource(),
 			"auth0_flow":                             flow.NewResource(),
 			"auth0_flow_vault_connection":            flow.NewVaultConnectionResource(),
@@ -193,6 +197,8 @@ func New() *schema.Provider {
 			"auth0_resource_server":                  resourceserver.NewResource(),
 			"auth0_resource_server_scope":            resourceserver.NewScopeResource(),
 			"auth0_resource_server_scopes":           resourceserver.NewScopesResource(),
+			"auth0_risk_assessments":                 riskassessment.NewResource(),
+			"auth0_risk_assessments_new_device":      riskassessment.NewDeviceSettingResource(),
 			"auth0_role":                             role.NewResource(),
 			"auth0_role_permission":                  role.NewPermissionResource(),
 			"auth0_role_permissions":                 role.NewPermissionsResource(),
@@ -219,6 +225,7 @@ func New() *schema.Provider {
 			"auth0_connection_keys":               connection.NewKeysDataSource(),
 			"auth0_connection_scim_configuration": connection.NewSCIMConfigurationDataSource(),
 			"auth0_custom_domain":                 customdomain.NewDataSource(),
+			"auth0_event_stream":                  eventstream.NewDataSource(),
 			"auth0_flow":                          flow.NewDataSource(),
 			"auth0_flow_vault_connection":         flow.NewVaultConnectionDataSource(),
 			"auth0_form":                          form.NewDataSource(),

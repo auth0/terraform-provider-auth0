@@ -2776,10 +2776,15 @@ func TestAccClientSessionTransfer(t *testing.T) {
 }
 
 const testAccClientResourceServer = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Resource Server - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Resource Server Client - {{.testName}}"
 	app_type = "resource_server"
-	resource_server_identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
 	is_first_party = true
 	oidc_conformant = true
 }

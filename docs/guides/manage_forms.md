@@ -37,7 +37,7 @@ From the Forms UI, export each Form. Each exported file contains:
 
 - The `form` definition (nodes, start/ending, languages)
 - All referenced `flows`
-- All referenced vault `connections`
+- All referenced `vault connections`
 
 Placeholders (tokens) like `#FLOW-1#`, `#FLOW-2#`, `#CONN-1#`, etc. stand in for actual resource IDs.
 

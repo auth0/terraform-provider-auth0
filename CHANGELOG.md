@@ -1,9 +1,25 @@
+## v1.29.0
+
+FEATURES:
+- `resource/auth0_event_stream` - Add support for managing Event Streams ([#1314](https://github.com/auth0/terraform-provider-auth0/pull/1314))
+- `data-source/auth0_event_stream` - Add support for retrieving Event Streams ([#1314](https://github.com/auth0/terraform-provider-auth0/pull/1314))
+- `resource/auth0_email_template` - Add new template option `async_approval` ([#1334](https://github.com/auth0/terraform-provider-auth0/pull/1334))
+
+ENHANCEMENTS:
+- `resource/auth0_log_stream` : Add support for configuring `startFrom` ([#1348](https://github.com/auth0/terraform-provider-auth0/pull/1348))
+
+BUG FIXES:
+- `data-source/auth0_connection` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_connection_client` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_connection_clients` - Add support for pagination to retrieve all clients associated with a connection ([#1344](https://github.com/auth0/terraform-provider-auth0/pull/1344))
+- `resource/auth0_client_grant` - Mark `subject_type` as Computed ([#1346](https://github.com/auth0/terraform-provider-auth0/pull/1346))
+
 ## v1.28.0
 
 FEATURES:
 
-- `resource/auth0_resource_server` - Add support for configuring `subject_type_authorization` settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
-- `resource/auth0_client_grant` - Add support for configuring `subject_type` and `authorization_details_types` settings ([#1331](https://github.com/auth0/terraform-provider-auth0/pull/1331))
+- `resource/auth0_resource_server` - Add support for configuring `subject_type_authorization` settings ([#1342](https://github.com/auth0/terraform-provider-auth0/pull/1342))
+- `resource/auth0_client_grant` - Add support for configuring `subject_type` and `authorization_details_types` settings ([#1342](https://github.com/auth0/terraform-provider-auth0/pull/1342))
 
 ## v1.27.0
 

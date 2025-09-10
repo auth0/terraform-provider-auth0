@@ -677,6 +677,8 @@ resource "auth0_connection" "okta" {
 
 ### Optional
 
+- `authentication` (Block List, Max: 1) Configuration settings for connection authentication. (see [below for nested schema](#nestedblock--authentication))
+- `connected_accounts` (Block List, Max: 1) Configurations settings for the connections connected accounts. (see [below for nested schema](#nestedblock--connected_accounts))
 - `display_name` (String) Name used in login screen.
 - `is_domain_connection` (Boolean) Indicates whether the connection is domain level.
 - `metadata` (Map of String) Metadata associated with the connection, in the form of a map of string values (max 255 chars).
@@ -687,6 +689,22 @@ resource "auth0_connection" "okta" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--authentication"></a>
+### Nested Schema for `authentication`
+
+Required:
+
+- `active` (Boolean) Active?
+
+
+<a id="nestedblock--connected_accounts"></a>
+### Nested Schema for `connected_accounts`
+
+Required:
+
+- `active` (Boolean) Active?
+
 
 <a id="nestedblock--options"></a>
 ### Nested Schema for `options`

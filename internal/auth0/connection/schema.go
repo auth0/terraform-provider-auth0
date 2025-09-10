@@ -72,7 +72,9 @@ var resourceSchema = map[string]*schema.Schema{
 		Optional:    true,
 		Description: "Display connection as a button. Only available on enterprise connections.",
 	},
-	"options": optionsSchema,
+	"options":            optionsSchema,
+	"authentication":     authenticationSchema,
+	"connected_accounts": connectedAccountsSchema,
 }
 
 var optionsSchema = &schema.Schema{
@@ -1231,6 +1233,40 @@ var optionsSchema = &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Description: "Specifies the signing algorithm for the token endpoint. (Okta/OIDC Connections)",
+			},
+		},
+	},
+}
+
+var authenticationSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	Computed:    true,
+	MaxItems:    1,
+	Description: "Configuration settings for connection authentication.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"active": {
+				Type:        schema.TypeBool,
+				Required:    true,
+				Description: "Active?",
+			},
+		},
+	},
+}
+
+var connectedAccountsSchema = &schema.Schema{
+	Type:        schema.TypeList,
+	Optional:    true,
+	Computed:    true,
+	MaxItems:    1,
+	Description: "Configurations settings for the connections connected accounts.",
+	Elem: &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"active": {
+				Type:        schema.TypeBool,
+				Required:    true,
+				Description: "Active?",
 			},
 		},
 	},

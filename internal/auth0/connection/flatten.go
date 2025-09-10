@@ -72,6 +72,8 @@ func flattenConnection(data *schema.ResourceData, connection *management.Connect
 		data.Set("options", connectionOptions),
 		data.Set("realms", connection.GetRealms()),
 		data.Set("metadata", connection.GetMetadata()),
+		data.Set("authentication", flattenConnectionAuthentication(connection.GetAuthentication())),
+		data.Set("connected_accounts", flattenConnectionConnectedAccounts(connection.GetConnectedAccounts())),
 	)
 
 	if connectionIsEnterprise(connection.GetStrategy()) {
@@ -93,6 +95,34 @@ func flattenConnectionForDataSource(data *schema.ResourceData, connection *manag
 	diags = append(diags, diag.FromErr(err)...)
 
 	return diags
+}
+
+func flattenConnectionAuthentication(authentication *management.Authentication) []interface{} {
+	if authentication == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": authentication.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
+}
+
+func flattenConnectionConnectedAccounts(connectedAccounts *management.ConnectedAccounts) []interface{} {
+	if connectedAccounts == nil {
+		return nil
+	}
+
+	flattened := map[string]interface{}{
+		"active": connectedAccounts.GetActive(),
+	}
+
+	return []interface{}{
+		flattened,
+	}
 }
 
 func flattenConnectionOptions(data *schema.ResourceData, connection *management.Connection) ([]interface{}, diag.Diagnostics) {

@@ -2785,8 +2785,6 @@ resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Resource Server Client - {{.testName}}"
 	app_type = "resource_server"
 	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
-	is_first_party = true
-	oidc_conformant = true
 }
 `
 

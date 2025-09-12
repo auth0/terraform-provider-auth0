@@ -75,7 +75,7 @@ func TestAccDataClients(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccDataClientsWithInvalidAppTypeFilter, t.Name()),
 				ExpectError: regexp.MustCompile(
-					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
+					`expected app_types\.0 to be one of \["native" "spa" "regular_web" "non_interactive" "resource_server" "rms" "box" "cloudbees" "concur" "dropbox" "mscrm" "echosign" "egnyte" "newrelic" "office365" "salesforce" "sentry" "sharepoint" "slack" "springcm" "sso_integration" "zendesk" "zoom"\], got invalid`,
 				),
 			},
 			{

@@ -23,9 +23,9 @@ const languagesURL = "https://cdn.auth0.com/ulp/react-components/development/lan
 
 func fetchLanguages() []string {
 	fallbackAvailableLanguages := []string{
-		"ar", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
-		"hu", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
-		"sl", "sr", "sv", "th", "tr", "uk", "vi", "zh-CN", "zh-TW",
+		"ar", "ar-EG", "ar-SA", "az", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fa", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
+		"hu", "hy", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
+		"sl", "sr", "sv", "th", "tr", "ur", "uk", "vi", "zh-CN", "zh-TW",
 	}
 
 	client := http.Client{

@@ -306,7 +306,6 @@ func NewResource() *schema.Resource {
 			"client_id": {
 				Type:     schema.TypeString,
 				Computed: true,
-				Optional: true,
 				Description: "The ID of the client associated with this resource server. If a client has been created " +
 					"and linked to this resource server, this field will be populated with that client's ID.",
 			},

@@ -57,7 +57,6 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
-		ResourceServerIdentifier:           value.String(config.GetAttr("resource_server_identifier")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -71,6 +70,10 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		case "regular_web", "non_interactive":
 			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
 		}
+	}
+
+	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
+		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 	}
 
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")

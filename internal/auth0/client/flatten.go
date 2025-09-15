@@ -660,6 +660,8 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
 		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
+		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
+		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
 	}
 
 	return []interface{}{

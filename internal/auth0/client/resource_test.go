@@ -2668,6 +2668,8 @@ resource "auth0_client" "my_client" {
 		allowed_authentication_methods = ["cookie", "query"]
 		enforce_device_binding = "asn"
 		allow_refresh_token               = true
+		enforce_online_refresh_tokens     = false
+		enforce_cascade_revocation        = false
 	}
 }`
 
@@ -2708,6 +2710,8 @@ resource "auth0_client" "my_client" {
     allowed_authentication_methods    = []
     enforce_device_binding            = "none"
     allow_refresh_token               = false
+	enforce_online_refresh_tokens     = false
+	enforce_cascade_revocation        = false
   }
 }
 `
@@ -2724,6 +2728,8 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "true"),
 				),
 			},
 			{
@@ -2734,6 +2740,9 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "asn"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
 				),
 			},
 			{
@@ -2769,6 +2778,8 @@ func TestAccClientSessionTransfer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
 				),
 			},
 		},

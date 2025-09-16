@@ -4,9 +4,6 @@ FEATURES:
 - `resource/auth0_resource_server` - Add support for managing token vault ([#1355](https://github.com/auth0/terraform-provider-auth0/pull/1355))
 - `resource/auth0_client` - Add support for managing token vault ([#1355](https://github.com/auth0/terraform-provider-auth0/pull/1355))
 
-ENHANCEMENTS:
-- `resource/auth0_trigger_action` : Added info to retrieve supported runtime versions for trigger ([#1357](https://github.com/auth0/terraform-provider-auth0/pull/1357))
-
 BUG FIXES:
 - `resource/auth0_client` - Added missing fields in schema `enforce_online_refresh_tokens` and `enforce_cascade_revocation` ([#1358](https://github.com/auth0/terraform-provider-auth0/pull/1358))
 

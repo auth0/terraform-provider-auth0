@@ -631,7 +631,9 @@ Optional:
 - `allow_refresh_token` (Boolean) Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean) Indicates whether the application(Native app) can use the Token Exchange endpoint to create a session_transfer_token
+- `enforce_cascade_revocation` (Boolean) Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are.
 - `enforce_device_binding` (String) Configures the level of device binding enforced when a session_transfer_token is consumed. Can be one of `ip`, `asn` or `none`.
+- `enforce_online_refresh_tokens` (Boolean) Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities.
 
 
 <a id="nestedblock--token_exchange"></a>

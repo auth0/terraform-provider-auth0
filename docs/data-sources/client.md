@@ -619,7 +619,9 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
+- `enforce_online_refresh_tokens` (Boolean)
 
 
 <a id="nestedatt--signed_request_object"></a>

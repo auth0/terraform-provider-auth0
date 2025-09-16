@@ -19,7 +19,7 @@ import (
 
 // ValidAppTypes contains all valid values for client app_type.
 var ValidAppTypes = []string{
-	"native", "spa", "regular_web", "non_interactive", "rms",
+	"native", "spa", "regular_web", "non_interactive", "resource_server", "rms",
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 	"egnyte", "newrelic", "office365", "salesforce", "sentry",
 	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
@@ -67,7 +67,7 @@ func NewResource() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
-					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
+					"`regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
 					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
 					"`zoom`.",
@@ -1492,6 +1492,13 @@ func NewResource() *schema.Resource {
 				},
 			},
 			"token_quota": commons.TokenQuotaSchema(),
+			"resource_server_identifier": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "The identifier of a resource server that client is associated with" +
+					"This property can be sent only when app_type=resource_server." +
+					"This property can not be changed, once the client is created.",
+			},
 		},
 	}
 }

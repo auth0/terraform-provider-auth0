@@ -72,6 +72,10 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		}
 	}
 
+	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
+		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
+	}
+
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
 
 	for _, item := range defaultConfig.AsValueSlice() {

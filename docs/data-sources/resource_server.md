@@ -34,6 +34,7 @@ data "auth0_resource_server" "some-resource-server-by-id" {
 
 - `allow_offline_access` (Boolean) Indicates whether refresh tokens can be issued for this resource server.
 - `authorization_details` (List of Object) Authorization details for this resource server. (see [below for nested schema](#nestedatt--authorization_details))
+- `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.
 - `consent_policy` (String) Consent policy for this resource server. Options include `transactional-authorization-with-mfa`, or `null` to disable.
 - `enforce_policies` (Boolean) If this setting is enabled, RBAC authorization policies will be enforced for this API. Role and permission assignments will be evaluated during the login transaction.
 - `id` (String) The ID of this resource.

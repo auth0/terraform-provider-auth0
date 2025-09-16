@@ -32,6 +32,8 @@ data "auth0_connection" "some-connection-by-id" {
 
 ### Read-Only
 
+- `authentication` (List of Object) Configure the purpose of a connection to be used for authentication during login. (see [below for nested schema](#nestedatt--authentication))
+- `connected_accounts` (List of Object) Configure the purpose of a connection to be used for connected accounts and Token Vault. (see [below for nested schema](#nestedatt--connected_accounts))
 - `display_name` (String) Name used in login screen.
 - `enabled_clients` (Set of String) IDs of the clients for which the connection is enabled.
 - `id` (String) The ID of this resource.
@@ -41,6 +43,22 @@ data "auth0_connection" "some-connection-by-id" {
 - `realms` (List of String) Defines the realms for which the connection will be used (e.g., email domains). If not specified, the connection name is added as the realm.
 - `show_as_button` (Boolean) Display connection as a button. Only available on enterprise connections.
 - `strategy` (String) Type of the connection, which indicates the identity provider.
+
+<a id="nestedatt--authentication"></a>
+### Nested Schema for `authentication`
+
+Read-Only:
+
+- `active` (Boolean)
+
+
+<a id="nestedatt--connected_accounts"></a>
+### Nested Schema for `connected_accounts`
+
+Read-Only:
+
+- `active` (Boolean)
+
 
 <a id="nestedatt--options"></a>
 ### Nested Schema for `options`

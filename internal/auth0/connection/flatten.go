@@ -197,6 +197,7 @@ func flattenEmailAttribute(emailAttribute *management.ConnectionOptionsEmailAttr
 			"profile_required":    emailAttribute.GetProfileRequired(),
 			"signup":              flattenSignUp(emailAttribute.GetSignup()),
 			"verification_method": emailAttribute.GetVerificationMethod(),
+			"unique":              emailAttribute.GetUnique(),
 		},
 	}
 }

@@ -175,6 +175,7 @@ Read-Only:
 - `identifier` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--identifier))
 - `profile_required` (Boolean)
 - `signup` (List of Object) (see [below for nested schema](#nestedobjatt--options--attributes--email--signup))
+- `unique` (Boolean)
 - `verification_method` (String)
 
 <a id="nestedobjatt--options--attributes--email--identifier"></a>

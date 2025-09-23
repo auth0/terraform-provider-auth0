@@ -77,6 +77,7 @@ resource "auth0_tenant" "my_tenant" {
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `sessions` (Block List, Max: 1) Sessions related settings for the tenant. (see [below for nested schema](#nestedblock--sessions))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 

@@ -60,6 +60,7 @@ Read-Only:
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
+- `resource_server_identifier` (String)
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
@@ -91,7 +92,9 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
+- `enforce_online_refresh_tokens` (Boolean)
 
 
 <a id="nestedobjatt--clients--token_exchange"></a>

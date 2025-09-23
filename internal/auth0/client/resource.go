@@ -19,7 +19,7 @@ import (
 
 // ValidAppTypes contains all valid values for client app_type.
 var ValidAppTypes = []string{
-	"native", "spa", "regular_web", "non_interactive", "rms",
+	"native", "spa", "regular_web", "non_interactive", "resource_server", "rms",
 	"box", "cloudbees", "concur", "dropbox", "mscrm", "echosign",
 	"egnyte", "newrelic", "office365", "salesforce", "sentry",
 	"sharepoint", "slack", "springcm", "sso_integration", "zendesk", "zoom",
@@ -67,7 +67,7 @@ func NewResource() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice(ValidAppTypes, false),
 				Description: "Type of application the client represents. Possible values are: `native`, `spa`, " +
-					"`regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted " +
+					"`regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted " +
 					"as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, " +
 					"`newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, " +
 					"`zoom`.",
@@ -1476,10 +1476,29 @@ func NewResource() *schema.Resource {
 							Computed:    true,
 							Description: "Indicates whether the application is allowed to use a refresh token when using a session_transfer_token session.",
 						},
+						"enforce_cascade_revocation": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are.",
+						},
+						"enforce_online_refresh_tokens": {
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Computed:    true,
+							Description: "Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities.",
+						},
 					},
 				},
 			},
 			"token_quota": commons.TokenQuotaSchema(),
+			"resource_server_identifier": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Description: "The identifier of a resource server that client is associated with" +
+					"This property can be sent only when app_type=resource_server." +
+					"This property can not be changed, once the client is created.",
+			},
 		},
 	}
 }

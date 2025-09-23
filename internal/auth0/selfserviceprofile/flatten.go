@@ -12,6 +12,9 @@ import (
 
 func flattenSelfServiceProfile(data *schema.ResourceData, selfServiceProfile *management.SelfServiceProfile) error {
 	result := multierror.Append(
+		data.Set("name", selfServiceProfile.GetName()),
+		data.Set("description", selfServiceProfile.GetDescription()),
+		data.Set("allowed_strategies", selfServiceProfile.GetAllowedStrategies()),
 		data.Set("user_attributes", flattenUserAttributes(selfServiceProfile.UserAttributes)),
 		data.Set("branding", flattenBranding(selfServiceProfile.GetBranding())),
 		data.Set("created_at", selfServiceProfile.GetCreatedAt().String()),

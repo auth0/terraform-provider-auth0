@@ -72,6 +72,10 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		}
 	}
 
+	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
+		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
+	}
+
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
 
 	for _, item := range defaultConfig.AsValueSlice() {
@@ -998,6 +1002,7 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 	if data.IsNewResource() {
 		clientGrant.ClientID = value.String(cfg.GetAttr("client_id"))
 		clientGrant.Audience = value.String(cfg.GetAttr("audience"))
+		clientGrant.SubjectType = value.String(cfg.GetAttr("subject_type"))
 	}
 
 	if data.IsNewResource() || data.HasChange("scopes") {
@@ -1010,6 +1015,10 @@ func expandClientGrant(data *schema.ResourceData) *management.ClientGrant {
 
 	if data.IsNewResource() || data.HasChange("organization_usage") {
 		clientGrant.OrganizationUsage = value.String(cfg.GetAttr("organization_usage"))
+	}
+
+	if data.IsNewResource() || data.HasChange("authorization_details_types") {
+		clientGrant.AuthorizationDetailsTypes = value.Strings(cfg.GetAttr("authorization_details_types"))
 	}
 
 	return clientGrant
@@ -1038,6 +1047,8 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
+		sessionTransfer.EnforceOnlineRefreshTokens = value.Bool(config.GetAttr("enforce_online_refresh_tokens"))
+		sessionTransfer.EnforceCascadeRevocation = value.Bool(config.GetAttr("enforce_cascade_revocation"))
 		return stop
 	})
 

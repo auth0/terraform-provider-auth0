@@ -365,6 +365,11 @@ func NewResource() *schema.Resource {
 					},
 				},
 			},
+			"start_from": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The optional datetime (ISO 8601) to start streaming logs from.",
+			},
 		},
 	}
 }

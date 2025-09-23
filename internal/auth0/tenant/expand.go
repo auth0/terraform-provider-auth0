@@ -39,6 +39,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		MTLS:                                 expandMTLSConfiguration(data),
 		ErrorPage:                            expandErrorPageConfiguration(data),
 		DefaultTokenQuota:                    expandDefaultTokenQuota(data),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.Bool(config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {
@@ -274,6 +275,7 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 		"acr_values_supported": isACRValuesSupportedNull,
 		"mtls":                 isMTLSConfigurationNull,
 		"error_page":           isErrorPageConfigurationNull,
+		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -357,4 +359,17 @@ func isDefaultTokenQuotaNull(data *schema.ResourceData) bool {
 	})
 
 	return !hasClients && !hasOrgs
+}
+
+func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
 }

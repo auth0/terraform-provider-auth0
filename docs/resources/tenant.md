@@ -15,15 +15,16 @@ manage an existing tenant created through the Auth0 dashboard.
 
 ```terraform
 resource "auth0_tenant" "my_tenant" {
-  friendly_name           = "Tenant Name"
-  picture_url             = "http://example.com/logo.png"
-  support_email           = "support@example.com"
-  support_url             = "http://example.com/support"
-  allowed_logout_urls     = ["http://example.com/logout"]
-  session_lifetime        = 8760
-  sandbox_version         = "12"
-  enabled_locales         = ["en"]
-  default_redirection_uri = "https://example.com/login"
+  friendly_name                                        = "Tenant Name"
+  picture_url                                          = "http://example.com/logo.png"
+  support_email                                        = "support@example.com"
+  support_url                                          = "http://example.com/support"
+  allowed_logout_urls                                  = ["http://example.com/logout"]
+  session_lifetime                                     = 8760
+  sandbox_version                                      = "12"
+  enabled_locales                                      = ["en"]
+  default_redirection_uri                              = "https://example.com/login"
+  skip_non_verifiable_callback_uri_confirmation_prompt = true
 
   flags {
     disable_clickjack_protection_headers   = true
@@ -77,6 +78,7 @@ resource "auth0_tenant" "my_tenant" {
 - `session_cookie` (Block List, Max: 1) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedblock--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `sessions` (Block List, Max: 1) Sessions related settings for the tenant. (see [below for nested schema](#nestedblock--sessions))
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 

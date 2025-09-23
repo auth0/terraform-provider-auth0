@@ -32,6 +32,7 @@ func flattenTenant(data *schema.ResourceData, tenant *management.Tenant) error {
 		data.Set("mtls", flattenMTLSConfiguration(tenant.GetMTLS())),
 		data.Set("error_page", flattenErrorPageConfiguration(tenant.GetErrorPage())),
 		data.Set("default_token_quota", flattenDefaultTokenQuota(tenant.GetDefaultTokenQuota())),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", tenant.GetSkipNonVerifiableCallbackURIConfirmationPrompt()),
 	)
 
 	if tenant.GetIdleSessionLifetime() == 0 {

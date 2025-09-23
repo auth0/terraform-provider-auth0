@@ -1492,6 +1492,11 @@ func NewResource() *schema.Resource {
 				},
 			},
 			"token_quota": commons.TokenQuotaSchema(),
+			"skip_non_verifiable_callback_uri_confirmation_prompt": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.",
+			},
 			"resource_server_identifier": {
 				Type:     schema.TypeString,
 				Optional: true,

@@ -1,13 +1,14 @@
 resource "auth0_tenant" "my_tenant" {
-  friendly_name           = "Tenant Name"
-  picture_url             = "http://example.com/logo.png"
-  support_email           = "support@example.com"
-  support_url             = "http://example.com/support"
-  allowed_logout_urls     = ["http://example.com/logout"]
-  session_lifetime        = 8760
-  sandbox_version         = "12"
-  enabled_locales         = ["en"]
-  default_redirection_uri = "https://example.com/login"
+  friendly_name                                        = "Tenant Name"
+  picture_url                                          = "http://example.com/logo.png"
+  support_email                                        = "support@example.com"
+  support_url                                          = "http://example.com/support"
+  allowed_logout_urls                                  = ["http://example.com/logout"]
+  session_lifetime                                     = 8760
+  sandbox_version                                      = "12"
+  enabled_locales                                      = ["en"]
+  default_redirection_uri                              = "https://example.com/login"
+  skip_non_verifiable_callback_uri_confirmation_prompt = true
 
   flags {
     disable_clickjack_protection_headers   = true

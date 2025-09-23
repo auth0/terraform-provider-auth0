@@ -23,9 +23,9 @@ const languagesURL = "https://cdn.auth0.com/ulp/react-components/development/lan
 
 func fetchLanguages() []string {
 	fallbackAvailableLanguages := []string{
-		"ar", "ar-EG", "ar-SA", "az", "bg", "bs", "ca-ES", "cs", "cy", "da", "de", "el", "en", "es", "et", "eu-ES", "fa", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "he", "hi", "hr",
-		"hu", "hy", "id", "is", "it", "ja", "ko", "lt", "lv", "nb", "nl", "nn", "no", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
-		"sl", "sr", "sv", "th", "tr", "ur", "uk", "vi", "zh-CN", "zh-TW",
+		"am", "ar", "ar-EG", "ar-SA", "az", "bg", "bn", "bs", "ca-ES", "cnr", "cs", "cy", "da", "de", "el", "en", "en-CA", "es", "es-419", "es-AR", "es-MX", "et", "eu-ES", "fa", "fi", "fr", "fr-CA", "fr-FR", "gl-ES", "gu", "he", "hi", "hr",
+		"hu", "hy", "id", "is", "it", "ja", "ka", "kk", "kn", "ko", "lt", "lv", "mk", "ml", "mn", "mr", "ms", "my", "nb", "nl", "nn", "no", "pa", "pl", "pt", "pt-BR", "pt-PT", "ro", "ru", "sk",
+		"sl", "so", "sq", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zgh", "zh-CN", "zh-HK", "zh-TW",
 	}
 
 	client := http.Client{

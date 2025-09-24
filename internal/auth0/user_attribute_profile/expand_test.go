@@ -1,4 +1,4 @@
-package user_attribute_profile
+package userattributeprofile
 
 import (
 	"testing"
@@ -7,25 +7,25 @@ import (
 )
 
 func TestNullDetection(t *testing.T) {
-	// Test null value
+	// Test null value.
 	nullValue := cty.NullVal(cty.String)
 	if !nullValue.IsNull() {
 		t.Errorf("Expected null value to be null")
 	}
 
-	// Test unknown value
+	// Test unknown value.
 	unknownValue := cty.UnknownVal(cty.String)
 	if unknownValue.IsNull() {
 		t.Errorf("Expected unknown value to not be null")
 	}
 
-	// Test empty string
+	// Test empty string.
 	emptyValue := cty.StringVal("")
 	if emptyValue.IsNull() {
 		t.Errorf("Expected empty string to not be null")
 	}
 
-	// Test empty list
+	// Test empty list.
 	emptyList := cty.ListValEmpty(cty.String)
 	if emptyList.IsNull() {
 		t.Errorf("Expected empty list to not be null")

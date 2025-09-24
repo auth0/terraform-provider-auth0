@@ -1,4 +1,4 @@
-package user_attribute_profile
+package userattributeprofile
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package user_attribute_profile
+package userattributeprofile
 
 import (
 	"sort"
@@ -21,27 +21,27 @@ func flattenUserAttributeProfile(data *schema.ResourceData, userAttributeProfile
 func flattenUserAttributeProfileUserID(userID *management.UserAttributeProfileUserID) []interface{} {
 	m := map[string]interface{}{}
 
-	// Set oidc_mapping only if it has a value
+	// Set oidc_mapping only if it has a value.
 	if oidcMapping := userID.GetOIDCMapping(); oidcMapping != "" {
 		m["oidc_mapping"] = oidcMapping
 	}
 
-	// Set scim_mapping only if it has a value
+	// Set scim_mapping only if it has a value.
 	if scimMapping := userID.GetSCIMMapping(); scimMapping != "" {
 		m["scim_mapping"] = scimMapping
 	}
 
-	// Set saml_mapping only if it has values
+	// Set saml_mapping only if it has values.
 	if userID.SAMLMapping != nil && len(*userID.SAMLMapping) > 0 {
 		m["saml_mapping"] = *userID.SAMLMapping
 	}
 
-	// Set strategy_overrides only if they exist
+	// Set strategy_overrides only if they exist.
 	if len(userID.StrategyOverrides) > 0 {
 		m["strategy_overrides"] = flattenUserIDStrategyOverrides(userID.StrategyOverrides)
 	}
 
-	// Only return the user_id block if it has any configured fields
+	// Only return the user_id block if it has any configured fields.
 	if len(m) > 0 {
 		return []interface{}{m}
 	}
@@ -54,7 +54,7 @@ func flattenUserIDStrategyOverrides(overrides map[string]*management.UserAttribu
 		return nil
 	}
 
-	// Create a sorted slice of strategy names for consistent ordering
+	// Create a sorted slice of strategy names for consistent ordering.
 	var strategyNames []string
 	for strategy := range overrides {
 		strategyNames = append(strategyNames, strategy)
@@ -69,17 +69,17 @@ func flattenUserIDStrategyOverrides(overrides map[string]*management.UserAttribu
 			"strategy": strategy,
 		}
 
-		// Set oidc_mapping only if it has a value
+		// Set oidc_mapping only if it has a value.
 		if oidcMapping := override.GetOIDCMapping(); oidcMapping != "" {
 			overrideMap["oidc_mapping"] = oidcMapping
 		}
 
-		// Set scim_mapping only if it has a value
+		// Set scim_mapping only if it has a value.
 		if scimMapping := override.GetSCIMMapping(); scimMapping != "" {
 			overrideMap["scim_mapping"] = scimMapping
 		}
 
-		// Set saml_mapping only if it has values
+		// Set saml_mapping only if it has values.
 		if override.SAMLMapping != nil && len(*override.SAMLMapping) > 0 {
 			overrideMap["saml_mapping"] = *override.SAMLMapping
 		}
@@ -95,7 +95,7 @@ func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*manage
 		return nil
 	}
 
-	// Create a sorted slice of attribute names for consistent ordering
+	// Create a sorted slice of attribute names for consistent ordering.
 	var attrNames []string
 	for attrName := range userAttributes {
 		attrNames = append(attrNames, attrName)
@@ -114,17 +114,17 @@ func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*manage
 			"auth0_mapping":    userAttr.GetAuth0Mapping(),
 		}
 
-		// Set saml_mapping only if it has values (allows proper field removal detection)
+		// Set saml_mapping only if it has values (allows proper field removal detection).
 		if userAttr.SAMLMapping != nil && len(*userAttr.SAMLMapping) > 0 {
 			attrMap["saml_mapping"] = *userAttr.SAMLMapping
 		}
 
-		// Set scim_mapping only if it has a value (allows proper field removal detection)
+		// Set scim_mapping only if it has a value (allows proper field removal detection).
 		if scimMapping := userAttr.GetSCIMMapping(); scimMapping != "" {
 			attrMap["scim_mapping"] = scimMapping
 		}
 
-		// Set oidc_mapping only if it has values (allows proper field removal detection)
+		// Set oidc_mapping only if it has values (allows proper field removal detection).
 		if userAttr.OIDCMapping != nil {
 			attrMap["oidc_mapping"] = []interface{}{
 				map[string]interface{}{
@@ -134,7 +134,7 @@ func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*manage
 			}
 		}
 
-		// Set strategy_overrides only if they exist (allows proper field removal detection)
+		// Set strategy_overrides only if they exist (allows proper field removal detection).
 		if len(userAttr.StrategyOverrides) > 0 {
 			attrMap["strategy_overrides"] = flattenUserAttributeStrategyOverrides(userAttr.StrategyOverrides)
 		}
@@ -150,7 +150,7 @@ func flattenUserAttributeStrategyOverrides(overrides map[string]*management.User
 		return nil
 	}
 
-	// Create a sorted slice of strategy names for consistent ordering
+	// Create a sorted slice of strategy names for consistent ordering.
 	var strategyNames []string
 	for strategy := range overrides {
 		strategyNames = append(strategyNames, strategy)
@@ -166,14 +166,14 @@ func flattenUserAttributeStrategyOverrides(overrides map[string]*management.User
 			"scim_mapping": override.GetSCIMMapping(),
 		}
 
-		// Always set saml_mapping, even if empty (since it's Optional + Computed)
+		// Always set saml_mapping, even if empty (since it's Optional + Computed).
 		if override.SAMLMapping != nil {
 			overrideMap["saml_mapping"] = *override.SAMLMapping
 		} else {
 			overrideMap["saml_mapping"] = []string{}
 		}
 
-		// Always set oidc_mapping, even if nil (since it's Optional + Computed)
+		// Always set oidc_mapping, even if nil (since it's Optional + Computed).
 		if override.OIDCMapping != nil {
 			overrideMap["oidc_mapping"] = []interface{}{
 				map[string]interface{}{

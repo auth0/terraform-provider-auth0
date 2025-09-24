@@ -1,4 +1,4 @@
-package user_attribute_profile
+package userattributeprofile
 
 import (
 	"context"
@@ -298,19 +298,19 @@ func readUserAttributeProfile(ctx context.Context, data *schema.ResourceData, me
 func updateUserAttributeProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	// First read the existing profile to get the complete structure
+	// First read the existing profile to get the complete structure.
 	existing, err := api.UserAttributeProfile.Read(ctx, data.Id())
 	if err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))
 	}
 
-	// Expand the new configuration
+	// Expand the new configuration.
 	updated, err := expandUserAttributeProfile(data)
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	// Merge with existing structure to preserve API-required fields
+	// Merge with existing structure to preserve API-required fields.
 	mergeWithExistingProfile(updated, existing, data)
 
 	if err := api.UserAttributeProfile.Update(ctx, data.Id(), updated); err != nil {
@@ -320,26 +320,23 @@ func updateUserAttributeProfile(ctx context.Context, data *schema.ResourceData, 
 	return readUserAttributeProfile(ctx, data, meta)
 }
 
-// mergeWithExistingProfile preserves API-managed fields from the existing profile
-// The expand function now only sets fields that are explicitly configured
+// The expand function now only sets fields that are explicitly configured.
 func mergeWithExistingProfile(updated, existing *management.UserAttributeProfile, data *schema.ResourceData) {
-	// Only preserve the UserID structure if it wasn't configured by the user
-	// If user configured user_id, we should use their configuration
+	// If user configured user_id, we should use their configuration.
 	if _, configured := data.GetOk("user_id"); !configured {
-		// User didn't configure user_id, so preserve the API's version
+		// User didn't configure user_id, so preserve the API's version.
 		updated.UserID = existing.UserID
 	} else {
-		// User configured user_id - check for field removal
-		// If saml_mapping is not configured, clear it from the response
+		// If saml_mapping is not configured, clear it from the response.
 		if samlValues, ok := data.GetOk("user_id.0.saml_mapping"); !ok || len(samlValues.([]interface{})) == 0 {
 			updated.UserID.SAMLMapping = &[]string{}
 		}
-		// If scim_mapping is not configured, clear it from the response
+		// If scim_mapping is not configured, clear it from the response.
 		if _, ok := data.GetOk("user_id.0.scim_mapping"); !ok {
 			updated.UserID.SCIMMapping = nil
 		}
 	}
-	// If user_id is configured, use the expanded version from the user's config
+	// If user_id is configured, use the expanded version from the user's config.
 }
 
 func deleteUserAttributeProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {

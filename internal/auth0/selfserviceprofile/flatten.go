@@ -14,6 +14,7 @@ func flattenSelfServiceProfile(data *schema.ResourceData, selfServiceProfile *ma
 	result := multierror.Append(
 		data.Set("name", selfServiceProfile.GetName()),
 		data.Set("description", selfServiceProfile.GetDescription()),
+		data.Set("user_attribute_profile_id", selfServiceProfile.GetUserAttributeProfileID()),
 		data.Set("allowed_strategies", selfServiceProfile.GetAllowedStrategies()),
 		data.Set("user_attributes", flattenUserAttributes(selfServiceProfile.UserAttributes)),
 		data.Set("branding", flattenBranding(selfServiceProfile.GetBranding())),

@@ -25,13 +25,13 @@ func expandUserAttributeProfile(data *schema.ResourceData) (*management.UserAttr
 	}
 
 	// Initialize UserAttributes as an empty map
-	userAttributes := make(map[string]management.UserAttributeProfileUserAttributes)
-	userAttributeProfile.UserAttributes = &userAttributes
+	userAttributes := make(map[string]*management.UserAttributeProfileUserAttributes)
+	userAttributeProfile.UserAttributes = userAttributes
 
 	cfg.GetAttr("user_attributes").ForEachElement(func(_ cty.Value, userAttrCfg cty.Value) (stop bool) {
 		if attrName := value.String(userAttrCfg.GetAttr("name")); attrName != nil {
 			userAttr := expandUserAttributeProfileUserAttribute(userAttrCfg)
-			(*userAttributeProfile.UserAttributes)[*attrName] = *userAttr
+			userAttributeProfile.UserAttributes[*attrName] = userAttr
 		}
 		return false
 	})
@@ -72,10 +72,10 @@ func expandUserAttributeProfileUserID(userIDCfg cty.Value, data *schema.Resource
 	userIDCfg.GetAttr("strategy_overrides").ForEachElement(func(_ cty.Value, overrideCfg cty.Value) (stop bool) {
 		if strategyName := value.String(overrideCfg.GetAttr("strategy")); strategyName != nil {
 			if userID.StrategyOverrides == nil {
-				overrides := make(map[string]management.UserAttributeProfileStrategyOverrides)
-				userID.StrategyOverrides = &overrides
+				overrides := make(map[string]*management.UserAttributeProfileStrategyOverrides)
+				userID.StrategyOverrides = overrides
 			}
-			override := management.UserAttributeProfileStrategyOverrides{}
+			override := &management.UserAttributeProfileStrategyOverrides{}
 
 			// Only set mapping fields if they are explicitly configured and not empty
 			if oidcAttr := overrideCfg.GetAttr("oidc_mapping"); !oidcAttr.IsNull() {
@@ -97,7 +97,7 @@ func expandUserAttributeProfileUserID(userIDCfg cty.Value, data *schema.Resource
 				// If null or empty, leave as nil (API will clear the field)
 			}
 
-			(*userID.StrategyOverrides)[*strategyName] = override
+			userID.StrategyOverrides[*strategyName] = override
 		}
 		return false
 	})
@@ -141,8 +141,8 @@ func expandUserAttributeProfileUserAttribute(userAttrCfg cty.Value) *management.
 	userAttrCfg.GetAttr("strategy_overrides").ForEachElement(func(_ cty.Value, overrideCfg cty.Value) (stop bool) {
 		if strategyName := value.String(overrideCfg.GetAttr("strategy")); strategyName != nil {
 			if userAttr.StrategyOverrides == nil {
-				overrides := make(map[string]management.UserAttributesStrategyOverride)
-				userAttr.StrategyOverrides = &overrides
+				overrides := make(map[string]*management.UserAttributesStrategyOverride)
+				userAttr.StrategyOverrides = overrides
 			}
 
 			override := management.UserAttributesStrategyOverride{}
@@ -170,7 +170,7 @@ func expandUserAttributeProfileUserAttribute(userAttrCfg cty.Value) *management.
 				return stop
 			})
 
-			(*userAttr.StrategyOverrides)[*strategyName] = override
+			userAttr.StrategyOverrides[*strategyName] = &override
 		}
 		return false
 	})

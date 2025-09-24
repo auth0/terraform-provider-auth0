@@ -135,9 +135,9 @@ func NewResource() *schema.Resource {
 }
 
 func fixMutuallyExclusiveFields(ctx context.Context, data *schema.ResourceData, api *management.Management) error {
-	// Check if we need to explicitly clear user_attributes when using user_attribute_profile_id
+	// Check if we need to explicitly clear user_attributes when using user_attribute_profile_id.
 	if data.Get("user_attribute_profile_id").(string) != "" {
-		// Clear user_attributes by setting it to null
+		// Clear user_attributes by setting it to null.
 		if err := api.Request(ctx, http.MethodPatch, api.URI("self-service-profiles", data.Id()), map[string]interface{}{
 			"user_attributes": nil,
 		}); err != nil {
@@ -145,9 +145,9 @@ func fixMutuallyExclusiveFields(ctx context.Context, data *schema.ResourceData, 
 		}
 	}
 
-	// Check if we need to explicitly clear user_attribute_profile_id when using user_attributes
+	// Check if we need to explicitly clear user_attribute_profile_id when using user_attributes.
 	if userAttrs := data.Get("user_attributes").([]interface{}); len(userAttrs) > 0 {
-		// Clear user_attribute_profile_id by setting it to null
+		// Clear user_attribute_profile_id by setting it to null.
 		if err := api.Request(ctx, http.MethodPatch, api.URI("self-service-profiles", data.Id()), map[string]interface{}{
 			"user_attribute_profile_id": nil,
 		}); err != nil {
@@ -169,7 +169,7 @@ func createSelfServiceProfile(ctx context.Context, data *schema.ResourceData, me
 
 	data.SetId(ssp.GetID())
 
-	// Fix mutually exclusive fields by explicitly clearing the unused one
+	// Fix mutually exclusive fields by explicitly clearing the unused one.
 	if err := fixMutuallyExclusiveFields(ctx, data, api); err != nil {
 		return diag.FromErr(err)
 	}
@@ -191,7 +191,7 @@ func readSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta
 func updateSelfServiceProfile(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	// First, clear any conflicting fields before the main update
+	// First, clear any conflicting fields before the main update.
 	if err := fixMutuallyExclusiveFields(ctx, data, api); err != nil {
 		return diag.FromErr(err)
 	}

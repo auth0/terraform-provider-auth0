@@ -11,7 +11,7 @@ import (
 func expandSelfServiceProfiles(data *schema.ResourceData) *management.SelfServiceProfile {
 	cfg := data.GetRawConfig()
 
-	// Create profile with all fields
+	// Create profile with all fields.
 	profile := &management.SelfServiceProfile{
 		Name:                   value.String(cfg.GetAttr("name")),
 		Description:            value.String(cfg.GetAttr("description")),

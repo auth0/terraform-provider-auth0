@@ -1,4 +1,4 @@
-package user_attribute_profile_test
+package userattributeprofile_test
 
 import (
 	"fmt"
@@ -189,7 +189,7 @@ func TestAccUserAttributeProfile(t *testing.T) {
 			{
 				Config: acctest.ParseTestName(testAccUserAttributeProfileEmpty, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", fmt.Sprintf("%s", t.Name())),
+					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", t.Name()),
 				),
 			},
 			{
@@ -213,7 +213,7 @@ func TestAccUserAttributeProfile(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserAttributeProfileUpdateComputed, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", fmt.Sprintf("%s Updated with Computed", t.Name())),
-					// Test email attribute with updated computed fields
+					// Test email attribute with updated computed fields.
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.name", "email"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.description", "User's email with updated mappings"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.label", "Updated Email"),
@@ -225,7 +225,7 @@ func TestAccUserAttributeProfile(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.oidc_mapping.#", "1"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.oidc_mapping.0.mapping", "email_verified"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.oidc_mapping.0.display_name", "Email Verified Status"),
-					// Test given_name attribute with updated computed fields
+					// Test given_name attribute with updated computed fields.
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.1.name", "given_name"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.1.description", "Updated first name attribute"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.1.label", "Updated First Name"),
@@ -257,7 +257,7 @@ func TestAccUserAttributeProfile_ImportState(t *testing.T) {
 func TestAccUserAttributeProfile_FieldRemoval(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
-			// Test user_attributes field removal
+			// Test user_attributes field removal.
 			{
 				Config: acctest.ParseTestName(testAccUserAttributeProfileWithFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -273,12 +273,12 @@ func TestAccUserAttributeProfile_FieldRemoval(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", fmt.Sprintf("%s Fields Removed", t.Name())),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.name", "email"),
-					// saml_mapping and scim_mapping should be cleared from user_attributes
+					// Saml_mapping and scim_mapping should be cleared from user_attributes.
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.saml_mapping.#", "0"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_attributes.0.scim_mapping", ""),
 				),
 			},
-			// Test user_id field removal
+			// Test user_id field removal.
 			{
 				Config: acctest.ParseTestName(testAccUserAttributeProfileUserIDWithFields, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
@@ -293,9 +293,9 @@ func TestAccUserAttributeProfile_FieldRemoval(t *testing.T) {
 				Config: acctest.ParseTestName(testAccUserAttributeProfileUserIDFieldsRemoved, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "name", fmt.Sprintf("%s UserID Fields Removed", t.Name())),
-					// Only oidc_mapping should remain as configured by user
+					// Only oidc_mapping should remain as configured by user.
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_id.0.oidc_mapping", "sub"),
-					// API preserves saml_mapping and scim_mapping in user_id - cannot be cleared
+					// API preserves saml_mapping and scim_mapping in user_id - cannot be cleared.
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_id.0.saml_mapping.#", "3"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_id.0.saml_mapping.0", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"),
 					resource.TestCheckResourceAttr("auth0_user_attribute_profile.test", "user_id.0.saml_mapping.1", "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"),

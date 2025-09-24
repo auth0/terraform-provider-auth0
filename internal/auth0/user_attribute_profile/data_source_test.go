@@ -1,4 +1,4 @@
-package user_attribute_profile_test
+package userattributeprofile_test
 
 import (
 	"testing"

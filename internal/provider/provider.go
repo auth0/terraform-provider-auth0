@@ -39,6 +39,7 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/user_attribute_profile"
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
@@ -210,6 +211,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                           tenant.NewResource(),
 			"auth0_token_exchange_profile":           tokenexchangeprofile.NewResource(),
 			"auth0_user":                             user.NewResource(),
+			"auth0_user_attribute_profile":           user_attribute_profile.NewResource(),
 			"auth0_user_permission":                  user.NewPermissionResource(),
 			"auth0_user_permissions":                 user.NewPermissionsResource(),
 			"auth0_user_role":                        user.NewRoleResource(),
@@ -244,6 +246,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_token_exchange_profile":        tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
+			"auth0_user_attribute_profile":        user_attribute_profile.NewDataSource(),
 		},
 	}
 

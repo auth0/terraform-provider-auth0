@@ -37,7 +37,7 @@ func flattenUserAttributeProfileUserID(userID *management.UserAttributeProfileUs
 	}
 
 	// Set strategy_overrides only if they exist
-	if userID.StrategyOverrides != nil && len(*userID.StrategyOverrides) > 0 {
+	if len(userID.StrategyOverrides) > 0 {
 		m["strategy_overrides"] = flattenUserIDStrategyOverrides(userID.StrategyOverrides)
 	}
 
@@ -49,22 +49,22 @@ func flattenUserAttributeProfileUserID(userID *management.UserAttributeProfileUs
 	return nil
 }
 
-func flattenUserIDStrategyOverrides(overrides *map[string]management.UserAttributeProfileStrategyOverrides) []interface{} {
-	if overrides == nil || len(*overrides) == 0 {
+func flattenUserIDStrategyOverrides(overrides map[string]*management.UserAttributeProfileStrategyOverrides) []interface{} {
+	if len(overrides) == 0 {
 		return nil
 	}
 
 	// Create a sorted slice of strategy names for consistent ordering
 	var strategyNames []string
-	for strategy := range *overrides {
+	for strategy := range overrides {
 		strategyNames = append(strategyNames, strategy)
 	}
 	sort.Strings(strategyNames)
 
-	result := make([]interface{}, 0, len(*overrides))
+	result := make([]interface{}, 0, len(overrides))
 
 	for _, strategy := range strategyNames {
-		override := (*overrides)[strategy]
+		override := overrides[strategy]
 		overrideMap := map[string]interface{}{
 			"strategy": strategy,
 		}
@@ -90,22 +90,22 @@ func flattenUserIDStrategyOverrides(overrides *map[string]management.UserAttribu
 	return result
 }
 
-func flattenUserAttributeProfileUserAttributes(userAttributes *map[string]management.UserAttributeProfileUserAttributes) []interface{} {
-	if userAttributes == nil || len(*userAttributes) == 0 {
+func flattenUserAttributeProfileUserAttributes(userAttributes map[string]*management.UserAttributeProfileUserAttributes) []interface{} {
+	if len(userAttributes) == 0 {
 		return nil
 	}
 
 	// Create a sorted slice of attribute names for consistent ordering
 	var attrNames []string
-	for attrName := range *userAttributes {
+	for attrName := range userAttributes {
 		attrNames = append(attrNames, attrName)
 	}
 	sort.Strings(attrNames)
 
-	result := make([]interface{}, 0, len(*userAttributes))
+	result := make([]interface{}, 0, len(userAttributes))
 
 	for _, attrName := range attrNames {
-		userAttr := (*userAttributes)[attrName]
+		userAttr := userAttributes[attrName]
 		attrMap := map[string]interface{}{
 			"name":             attrName,
 			"description":      userAttr.GetDescription(),
@@ -135,7 +135,7 @@ func flattenUserAttributeProfileUserAttributes(userAttributes *map[string]manage
 		}
 
 		// Set strategy_overrides only if they exist (allows proper field removal detection)
-		if userAttr.StrategyOverrides != nil && len(*userAttr.StrategyOverrides) > 0 {
+		if len(userAttr.StrategyOverrides) > 0 {
 			attrMap["strategy_overrides"] = flattenUserAttributeStrategyOverrides(userAttr.StrategyOverrides)
 		}
 
@@ -145,22 +145,22 @@ func flattenUserAttributeProfileUserAttributes(userAttributes *map[string]manage
 	return result
 }
 
-func flattenUserAttributeStrategyOverrides(overrides *map[string]management.UserAttributesStrategyOverride) []interface{} {
-	if overrides == nil || len(*overrides) == 0 {
+func flattenUserAttributeStrategyOverrides(overrides map[string]*management.UserAttributesStrategyOverride) []interface{} {
+	if len(overrides) == 0 {
 		return nil
 	}
 
 	// Create a sorted slice of strategy names for consistent ordering
 	var strategyNames []string
-	for strategy := range *overrides {
+	for strategy := range overrides {
 		strategyNames = append(strategyNames, strategy)
 	}
 	sort.Strings(strategyNames)
 
-	result := make([]interface{}, 0, len(*overrides))
+	result := make([]interface{}, 0, len(overrides))
 
 	for _, strategy := range strategyNames {
-		override := (*overrides)[strategy]
+		override := overrides[strategy]
 		overrideMap := map[string]interface{}{
 			"strategy":     strategy,
 			"scim_mapping": override.GetSCIMMapping(),

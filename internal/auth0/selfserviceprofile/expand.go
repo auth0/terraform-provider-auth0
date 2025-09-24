@@ -11,13 +11,17 @@ import (
 func expandSelfServiceProfiles(data *schema.ResourceData) *management.SelfServiceProfile {
 	cfg := data.GetRawConfig()
 
-	return &management.SelfServiceProfile{
-		Name:              value.String(cfg.GetAttr("name")),
-		Description:       value.String(cfg.GetAttr("description")),
-		AllowedStrategies: value.Strings(cfg.GetAttr("allowed_strategies")),
-		UserAttributes:    expandSelfServiceProfileUserAttributes(cfg.GetAttr("user_attributes")),
-		Branding:          expandBranding(cfg.GetAttr("branding")),
+	// Create profile with all fields
+	profile := &management.SelfServiceProfile{
+		Name:                   value.String(cfg.GetAttr("name")),
+		Description:            value.String(cfg.GetAttr("description")),
+		AllowedStrategies:      value.Strings(cfg.GetAttr("allowed_strategies")),
+		Branding:               expandBranding(cfg.GetAttr("branding")),
+		UserAttributeProfileID: value.String(cfg.GetAttr("user_attribute_profile_id")),
+		UserAttributes:         expandSelfServiceProfileUserAttributes(cfg.GetAttr("user_attributes")),
 	}
+
+	return profile
 }
 
 func expandSelfServiceProfileUserAttributes(userAttr cty.Value) []*management.SelfServiceProfileUserAttributes {
@@ -25,18 +29,18 @@ func expandSelfServiceProfileUserAttributes(userAttr cty.Value) []*management.Se
 		return nil
 	}
 
-	SelfServiceProfileUserAttributes := make([]*management.SelfServiceProfileUserAttributes, 0)
+	var attributes []*management.SelfServiceProfileUserAttributes
 
 	userAttr.ForEachElement(func(_ cty.Value, attr cty.Value) (stop bool) {
-		SelfServiceProfileUserAttributes = append(SelfServiceProfileUserAttributes, &management.SelfServiceProfileUserAttributes{
+		attributes = append(attributes, &management.SelfServiceProfileUserAttributes{
 			Name:        value.String(attr.GetAttr("name")),
 			Description: value.String(attr.GetAttr("description")),
 			IsOptional:  value.Bool(attr.GetAttr("is_optional")),
 		})
-		return stop
+		return false
 	})
 
-	return SelfServiceProfileUserAttributes
+	return attributes
 }
 
 func expandBranding(config cty.Value) *management.Branding {

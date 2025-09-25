@@ -1,0 +1,474 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 170
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccUserAttributeProfile","user_attributes":{"email":{"description":"User's email address","label":"Email","profile_required":true,"auth0_mapping":"email"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 473
+        uncompressed: false
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 432.75575ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 420.385208ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 225.144541ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 184.954167ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 196.202708ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 451
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccUserAttributeProfile Updated","user_id":{},"user_attributes":{"email":{"description":"User's updated email address","label":"Email Address","profile_required":false,"auth0_mapping":"email","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]},"given_name":{"description":"User's first name","label":"First Name","profile_required":true,"auth0_mapping":"given_name","scim_mapping":"name.givenName"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email Address","description":"User''s updated email address","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],"auth0_mapping":"email","profile_required":false},"given_name":{"label":"First Name","description":"User''s first name","scim_mapping":"name.givenName","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 350.849375ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email Address","description":"User''s updated email address","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],"auth0_mapping":"email","profile_required":false},"given_name":{"label":"First Name","description":"User''s first name","scim_mapping":"name.givenName","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 173.055917ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email Address","description":"User''s updated email address","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],"auth0_mapping":"email","profile_required":false},"given_name":{"label":"First Name","description":"User''s first name","scim_mapping":"name.givenName","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 262.207167ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email Address","description":"User''s updated email address","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],"auth0_mapping":"email","profile_required":false},"given_name":{"label":"First Name","description":"User''s first name","scim_mapping":"name.givenName","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 321.302375ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email Address","description":"User''s updated email address","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],"auth0_mapping":"email","profile_required":false},"given_name":{"label":"First Name","description":"User''s first name","scim_mapping":"name.givenName","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 191.195ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 779
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"TestAccUserAttributeProfile Updated with Computed","user_id":{},"user_attributes":{"email":{"description":"User's email with updated mappings","label":"Updated Email","profile_required":true,"auth0_mapping":"email","oidc_mapping":{"mapping":"email_verified","display_name":"Email Verified Status"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress","http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"],"scim_mapping":"emails[primary eq true].value"},"given_name":{"description":"Updated first name attribute","label":"Updated First Name","profile_required":false,"auth0_mapping":"given_name","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"],"scim_mapping":"name.familyName"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated with Computed","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Updated Email","description":"User''s email with updated mappings","oidc_mapping":{"mapping":"email_verified","display_name":"Email Verified Status"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress","http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true},"given_name":{"label":"Updated First Name","description":"Updated first name attribute","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"],"scim_mapping":"name.familyName","auth0_mapping":"given_name","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 253.621833ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated with Computed","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Updated Email","description":"User''s email with updated mappings","oidc_mapping":{"mapping":"email_verified","display_name":"Email Verified Status"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress","http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true},"given_name":{"label":"Updated First Name","description":"Updated first name attribute","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"],"scim_mapping":"name.familyName","auth0_mapping":"given_name","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 175.478875ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1css47cCzXvXLC4pJ8KBaa","name":"TestAccUserAttributeProfile Updated with Computed","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Updated Email","description":"User''s email with updated mappings","oidc_mapping":{"mapping":"email_verified","display_name":"Email Verified Status"},"saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress","http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname"],"scim_mapping":"emails[primary eq true].value","auth0_mapping":"email","profile_required":true},"given_name":{"label":"Updated First Name","description":"Updated first name attribute","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"],"scim_mapping":"name.familyName","auth0_mapping":"given_name","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 202.056416ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1css47cCzXvXLC4pJ8KBaa
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 181.690167ms

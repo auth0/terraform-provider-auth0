@@ -824,6 +824,7 @@ Optional:
 - `identifier` (Block List) Connection Options Email Attribute Identifier (see [below for nested schema](#nestedblock--options--attributes--email--identifier))
 - `profile_required` (Boolean) Defines whether Profile is required
 - `signup` (Block List) Defines signup settings for Email attribute (see [below for nested schema](#nestedblock--options--attributes--email--signup))
+- `unique` (Boolean) If set to false, it allow multiple accounts with the same email address
 - `verification_method` (String) Defines whether whether user will receive a link or an OTP during user signup for email verification and password reset for email verification
 
 <a id="nestedblock--options--attributes--email--identifier"></a>

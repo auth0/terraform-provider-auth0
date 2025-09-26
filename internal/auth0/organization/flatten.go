@@ -129,3 +129,16 @@ func flattenOrganizationClientGrantsSlice(clientGrants []*management.ClientGrant
 	}
 	return flattenedClientGrants
 }
+
+func flattenOrganizationDiscoveryDomain(data *schema.ResourceData, discoveryDomain *management.OrganizationDiscoveryDomain, organizationID string) error {
+	result := multierror.Append(
+		data.Set("organization_id", organizationID),
+		data.Set("id", discoveryDomain.GetID()),
+		data.Set("domain", discoveryDomain.GetDomain()),
+		data.Set("status", discoveryDomain.GetStatus()),
+		data.Set("verification_txt", discoveryDomain.GetVerificationTXT()),
+		data.Set("verification_host", discoveryDomain.GetVerificationHost()),
+	)
+
+	return result.ErrorOrNil()
+}

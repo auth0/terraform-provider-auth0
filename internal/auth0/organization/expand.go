@@ -80,3 +80,13 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 
 	return nullableMap
 }
+
+func expandOrganizationDiscoveryDomain(data *schema.ResourceData) *management.OrganizationDiscoveryDomain {
+	cfg := data.GetRawConfig()
+
+	return &management.OrganizationDiscoveryDomain{
+		Domain: value.String(cfg.GetAttr("domain")),
+		Status: value.String(cfg.GetAttr("status")),
+		// Note: ID, VerificationTXT, and VerificationHost are read-only and should not be sent to the API.
+	}
+}

@@ -539,6 +539,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
 	sso = false
 	sso_disabled = false
 	custom_login_page_on = true
@@ -570,6 +571,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
 	sso = true
 	sso_disabled = true
 	custom_login_page_on = true
@@ -659,6 +661,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
@@ -721,6 +724,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),

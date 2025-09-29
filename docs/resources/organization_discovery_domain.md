@@ -21,7 +21,7 @@ Manage organization discovery domains for Home Realm Discovery. These domains he
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
+- `id` (String) The ID of the discovery domain.
 - `verification_host` (String) The full domain where the TXT record should be added.
 - `verification_txt` (String) TXT record value for domain verification.
 

@@ -142,3 +142,22 @@ func flattenOrganizationDiscoveryDomain(data *schema.ResourceData, discoveryDoma
 
 	return result.ErrorOrNil()
 }
+
+func flattenOrganizationDiscoveryDomains(data *schema.ResourceData, domains []*management.OrganizationDiscoveryDomain) error {
+	if len(domains) == 0 {
+		return data.Set("discovery_domains", []interface{}{})
+	}
+
+	var enabledDomains []interface{}
+	for _, domain := range domains {
+		enabledDomains = append(enabledDomains, map[string]interface{}{
+			"id":                domain.GetID(),
+			"domain":            domain.GetDomain(),
+			"status":            domain.GetStatus(),
+			"verification_txt":  domain.GetVerificationTXT(),
+			"verification_host": domain.GetVerificationHost(),
+		})
+	}
+
+	return data.Set("discovery_domains", enabledDomains)
+}

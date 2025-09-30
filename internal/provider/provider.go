@@ -4,8 +4,10 @@ import (
 	"os"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/eventstream"
+	userattributeprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/user_attribute_profile"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
+	"github.com/auth0/terraform-provider-auth0/internal/auth0/outboundips"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tokenexchangeprofile"
 
@@ -209,6 +211,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                           tenant.NewResource(),
 			"auth0_token_exchange_profile":           tokenexchangeprofile.NewResource(),
 			"auth0_user":                             user.NewResource(),
+			"auth0_user_attribute_profile":           userattributeprofile.NewResource(),
 			"auth0_user_permission":                  user.NewPermissionResource(),
 			"auth0_user_permissions":                 user.NewPermissionsResource(),
 			"auth0_user_role":                        user.NewRoleResource(),
@@ -231,6 +234,7 @@ func New() *schema.Provider {
 			"auth0_form":                          form.NewDataSource(),
 			"auth0_organization":                  organization.NewDataSource(),
 			"auth0_network_acl":                   networkacl.NewDataSource(),
+			"auth0_outbound_ips":                  outboundips.NewDataSource(),
 			"auth0_pages":                         page.NewDataSource(),
 			"auth0_phone_provider":                branding.NewPhoneProviderDataSource(),
 			"auth0_prompt_screen_partials":        prompt.NewPromptScreenPartialsDataSource(),
@@ -242,6 +246,7 @@ func New() *schema.Provider {
 			"auth0_tenant":                        tenant.NewDataSource(),
 			"auth0_token_exchange_profile":        tokenexchangeprofile.NewDataSource(),
 			"auth0_user":                          user.NewDataSource(),
+			"auth0_user_attribute_profile":        userattributeprofile.NewDataSource(),
 		},
 	}
 

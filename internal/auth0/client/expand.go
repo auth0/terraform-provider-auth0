@@ -57,6 +57,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.Bool(config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {
@@ -70,6 +71,10 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		case "regular_web", "non_interactive":
 			client.TokenEndpointAuthMethod = auth0.String("client_secret_post")
 		}
+	}
+
+	if data.IsNewResource() && client.ResourceServerIdentifier != nil {
+		client.ResourceServerIdentifier = value.String(config.GetAttr("resource_server_identifier"))
 	}
 
 	defaultConfig := data.GetRawConfig().GetAttr("default_organization")
@@ -1043,6 +1048,8 @@ func expandSessionTransfer(data *schema.ResourceData) *management.SessionTransfe
 		sessionTransfer.AllowedAuthenticationMethods = value.Strings(config.GetAttr("allowed_authentication_methods"))
 		sessionTransfer.EnforceDeviceBinding = value.String(config.GetAttr("enforce_device_binding"))
 		sessionTransfer.AllowRefreshToken = value.Bool(config.GetAttr("allow_refresh_token"))
+		sessionTransfer.EnforceOnlineRefreshTokens = value.Bool(config.GetAttr("enforce_online_refresh_tokens"))
+		sessionTransfer.EnforceCascadeRevocation = value.Bool(config.GetAttr("enforce_cascade_revocation"))
 		return stop
 	})
 
@@ -1063,6 +1070,7 @@ func fetchNullableFields(data *schema.ResourceData, client *management.Client) m
 			return clientHasChange(client) && client.GetAddons() != nil
 		},
 		"token_quota": commons.IsTokenQuotaNull,
+		"skip_non_verifiable_callback_uri_confirmation_prompt": isSkipNonVerifiableCallbackURIConfirmationPromptNull,
 	}
 
 	nullableMap := make(map[string]interface{})
@@ -1164,4 +1172,17 @@ func isSessionTransferNull(data *schema.ResourceData) bool {
 	})
 
 	return empty
+}
+
+func isSkipNonVerifiableCallbackURIConfirmationPromptNull(data *schema.ResourceData) bool {
+	if !data.IsNewResource() && !data.HasChange("skip_non_verifiable_callback_uri_confirmation_prompt") {
+		return false
+	}
+
+	rawConfig := data.GetRawConfig()
+	if rawConfig.IsNull() {
+		return true
+	}
+
+	return rawConfig.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt").IsNull()
 }

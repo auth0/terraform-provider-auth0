@@ -1,0 +1,984 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 215
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_attributes":{"email":{"description":"User's email address","label":"Email","profile_required":false,"auth0_mapping":"email"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 518
+        uncompressed: false
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 242.226084ms
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 310.727125ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 226
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","allowed_strategies":["oidc","samlp"],"user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 360
+        uncompressed: false
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.162Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 194.824083ms
+    - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 25
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"user_attributes":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 198.380208ms
+    - id: 4
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 177.829375ms
+    - id: 5
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 168.862458ms
+    - id: 6
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 211.943875ms
+    - id: 7
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 167.2615ms
+    - id: 8
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:42.360Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 193.289875ms
+    - id: 9
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 228
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_attributes":{"given_name":{"description":"User's first name","label":"First Name","profile_required":true,"auth0_mapping":"given_name"}}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 531
+        uncompressed: false
+        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 253.92525ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 193.081833ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 25
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"user_attributes":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"my-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile","user_attributes":[],"allowed_strategies":["oidc","samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:44.972Z","user_attribute_profile_id":"uap_1cssymQYpXuQd6dfFu5Thi"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 178.574333ms
+    - id: 12
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 241
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","allowed_strategies":["oidc"],"user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 180.569459ms
+    - id: 13
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 243.588917ms
+    - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 161.936959ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 168.304208ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 181.830125ms
+    - id: 17
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 161.94525ms
+    - id: 18
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 164.910791ms
+    - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:45.152Z","user_attribute_profile_id":"uap_1cssyn4uJHhtNZtVto9WTa"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 184.081208ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 35
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"user_attribute_profile_id":null}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"updated-sso-profile-with-uap-TestSelfServiceProfile_UserAttributeProfile","description":"updated profile with different user attribute profile","user_attributes":[],"allowed_strategies":["oidc"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.429Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 188.247583ms
+    - id: 21
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 318
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","allowed_strategies":["samlp"],"user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}]}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: PATCH
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 174.711042ms
+    - id: 22
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 180.839542ms
+    - id: 23
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssymQYpXuQd6dfFu5Thi","name":"Test User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"email":{"label":"Email","description":"User''s email address","auth0_mapping":"email","profile_required":false}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 166.56625ms
+    - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"ssp_rEASSnRsN7nFggCoiC8Ljc","name":"sso-profile-no-uap-TestSelfServiceProfile_UserAttributeProfile","description":"profile with user attribute profile removed","user_attributes":[{"name":"final-sample-name-TestSelfServiceProfile_UserAttributeProfile","description":"final-sample-description","is_optional":true}],"allowed_strategies":["samlp"],"created_at":"2025-09-24T16:41:42.162Z","updated_at":"2025-09-24T16:41:47.615Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 180.394958ms
+    - id: 25
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"id":"uap_1cssyn4uJHhtNZtVto9WTa","name":"Second User Attribute Profile TestSelfServiceProfile_UserAttributeProfile","user_id":{"oidc_mapping":"sub","saml_mapping":["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn","http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],"scim_mapping":"externalId"},"user_attributes":{"given_name":{"label":"First Name","description":"User''s first name","auth0_mapping":"given_name","profile_required":true}}}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 182.164042ms
+    - id: 26
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssyn4uJHhtNZtVto9WTa
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 174.475416ms
+    - id: 27
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/user-attribute-profiles/uap_1cssymQYpXuQd6dfFu5Thi
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 184.083125ms
+    - id: 28
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.28.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/self-service-profiles/ssp_rEASSnRsN7nFggCoiC8Ljc
+        method: DELETE
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 0
+        uncompressed: false
+        body: ""
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 204 No Content
+        code: 204
+        duration: 196.134625ms

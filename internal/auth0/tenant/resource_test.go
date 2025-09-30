@@ -47,6 +47,7 @@ resource "auth0_tenant" "my_tenant" {
 	allow_organization_name_in_authentication_api = false
 	customize_mfa_in_postlogin_action             = false
 	pushed_authorization_requests_supported       = true
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
 
 	flags {
 		disable_clickjack_protection_headers   = true
@@ -182,6 +183,7 @@ resource "auth0_tenant" "my_tenant" {
 	allow_organization_name_in_authentication_api = true
 	customize_mfa_in_postlogin_action             = true
 	pushed_authorization_requests_supported       = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
 
 	flags {
 		enable_public_signup_user_exists_error = true
@@ -352,6 +354,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "pushed_authorization_requests_supported", "true"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "disable_acr_values_supported", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "acr_values_supported.#", "0"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "mtls.#", "1"),
@@ -386,6 +389,7 @@ func TestAccTenant_Main(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "allow_organization_name_in_authentication_api", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "customize_mfa_in_postlogin_action", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "pushed_authorization_requests_supported", "false"),
+					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "disable_acr_values_supported", "false"),
 					resource.TestCheckResourceAttr("auth0_tenant.my_tenant", "acr_values_supported.#", "2"),
 					resource.TestCheckTypeSetElemAttr("auth0_tenant.my_tenant", "acr_values_supported.*", "foo"),

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/auth0/go-auth0"
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
@@ -13,6 +14,18 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 	internalError "github.com/auth0/terraform-provider-auth0/internal/error"
 )
+// supportedTriggers returns the list of all supported trigger types
+var supportedTriggers = []string{
+	"post-login",
+	"credentials-exchange",
+	"pre-user-registration",
+	"post-user-registration",
+	"post-change-password",
+	"send-phone-message",
+	"password-reset-post-challenge",
+	"custom-email-provider",
+	"custom-phone-provider",
+}
 
 // NewResource will return a new auth0_action resource.
 func NewResource() *schema.Resource {
@@ -186,11 +199,26 @@ func updateAction(ctx context.Context, data *schema.ResourceData, meta interface
 func deleteAction(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	if err := api.Action.Delete(ctx, data.Id()); err != nil {
-		return diag.FromErr(internalError.HandleAPIError(data, err))
-	}
+	err := retry.RetryContext(ctx, data.Timeout(schema.TimeoutDelete), func() *retry.RetryError {
 
-	return nil
+		// Auto-unbind action
+		if err := unbindActionFromTriggers(ctx, api, data.Id()); err != nil {
+			return retry.RetryableError(fmt.Errorf("failed to unbind action: %w", err))
+		}
+
+		if err := api.Action.Delete(ctx, data.Id()); err != nil {
+			if internalError.IsStatusError(err, 409) {
+				return retry.RetryableError(err) 
+			}
+			if apiErr := internalError.HandleAPIError(data, err); apiErr != nil {
+				return retry.NonRetryableError(apiErr)
+			}
+			return retry.NonRetryableError(err)
+		}
+		return nil
+	})
+
+	return diag.FromErr(err)
 }
 
 func deployAction(ctx context.Context, data *schema.ResourceData, meta interface{}) error {
@@ -231,4 +259,36 @@ func deployAction(ctx context.Context, data *schema.ResourceData, meta interface
 	}
 
 	return data.Set("version_id", actionVersion.GetID())
+}
+
+// unbindActionFromTriggers removes the action from  triggers
+func unbindActionFromTriggers(ctx context.Context, api *management.Management, actionID string) error {
+	for _, trigger := range supportedTriggers {
+		bindings, err := api.Action.Bindings(ctx, trigger)
+		if err != nil {
+			continue 
+		}
+
+		// Filter out the action deleted
+		var filteredBindings []*management.ActionBinding
+		for _, binding := range bindings.Bindings {
+			if binding.Action.GetID() != actionID {
+				filteredBindings = append(filteredBindings, &management.ActionBinding{
+					Ref: &management.ActionBindingReference{
+						Type:  auth0.String("action_id"),
+						Value: binding.Action.ID,
+					},
+					DisplayName: binding.DisplayName,
+				})
+			}
+		}
+
+		// Update bindings if action was found and removed
+		if len(filteredBindings) != len(bindings.Bindings) {
+			if err := api.Action.UpdateBindings(ctx, trigger, filteredBindings); err != nil {
+				return fmt.Errorf("failed to update %s trigger bindings: %w", trigger, err)
+			}
+		}
+	}
+	return nil
 }

@@ -80,3 +80,33 @@ func fetchNullableFields(data *schema.ResourceData) map[string]interface{} {
 
 	return nullableMap
 }
+
+func expandOrganizationDiscoveryDomain(data *schema.ResourceData) *management.OrganizationDiscoveryDomain {
+	cfg := data.GetRawConfig()
+
+	return &management.OrganizationDiscoveryDomain{
+		Domain: value.String(cfg.GetAttr("domain")),
+		Status: value.String(cfg.GetAttr("status")),
+		// Note: ID, VerificationTXT, and VerificationHost are read-only and should not be sent to the API.
+	}
+}
+
+func expandOrganizationDiscoveryDomainFromConfig(domainCfg cty.Value) *management.OrganizationDiscoveryDomain {
+	return &management.OrganizationDiscoveryDomain{
+		Domain: value.String(domainCfg.GetAttr("domain")),
+		Status: value.String(domainCfg.GetAttr("status")),
+		// Note: ID, VerificationTXT, and VerificationHost are read-only and should not be sent to the API.
+	}
+}
+
+func expandOrganizationDiscoveryDomains(cfg cty.Value) []*management.OrganizationDiscoveryDomain {
+	domains := make([]*management.OrganizationDiscoveryDomain, 0)
+
+	cfg.ForEachElement(func(_ cty.Value, domainCfg cty.Value) (stop bool) {
+		domains = append(domains, expandOrganizationDiscoveryDomainFromConfig(domainCfg))
+
+		return stop
+	})
+
+	return domains
+}

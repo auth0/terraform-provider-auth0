@@ -31,6 +31,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		GrantTypes:                         value.Strings(config.GetAttr("grant_types")),
 		OrganizationUsage:                  value.String(config.GetAttr("organization_usage")),
 		OrganizationRequireBehavior:        value.String(config.GetAttr("organization_require_behavior")),
+		OrganizationDiscoveryMethods:       value.Strings(config.GetAttr("organization_discovery_methods")),
 		WebOrigins:                         value.Strings(config.GetAttr("web_origins")),
 		RequirePushedAuthorizationRequests: value.Bool(config.GetAttr("require_pushed_authorization_requests")),
 		SSO:                                value.Bool(config.GetAttr("sso")),

@@ -1,3 +1,17 @@
+## v1.31.0
+
+FEATURES:
+- `resource/auth0_user_attribute_profile` - Add support for managing User Attribute Profiles ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `data-source/auth0_user_attribute_profile`: Add support for retrieving a specific Auth0 User Attribute Profile ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `resource/auth0_self_service_profile` - Add support for configuring `user_attribute_profile_id` ([#1373](https://github.com/auth0/terraform-provider-auth0/pull/1373))
+- `data-source/auth0_outbound_ips`: Add support for retrieving Auth0 Outbound IP ranges ([#1349](https://github.com/auth0/terraform-provider-auth0/pull/1349))
+- `resource/auth0_client` - Add support for configuring `skip_non_verifiable_callback_uri_confirmation_prompt`  ([#1371](https://github.com/auth0/terraform-provider-auth0/pull/1371))
+- `resource/auth0_tenant` - Add support for configuring `skip_non_verifiable_callback_uri_confirmation_prompt` ([#1371](https://github.com/auth0/terraform-provider-auth0/pull/1371))
+- `resource/auth0_connection` - Add support for configuring `unique` field to support multiple accounts with the same email ([#1359](https://github.com/auth0/terraform-provider-auth0/pull/1359))
+
+BUG FIXES:
+- `resource/auth0_self_service_profile`: Fixed issue with resource import ([#1363](https://github.com/auth0/terraform-provider-auth0/pull/1363/files))
+
 ## v1.30.0
 
 FEATURES:

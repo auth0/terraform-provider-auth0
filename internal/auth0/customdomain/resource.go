@@ -82,14 +82,33 @@ func NewResource() *schema.Resource {
 			"verification": {
 				Type:        schema.TypeList,
 				Computed:    true,
-				Description: "Configuration settings for verification.",
+				Description: "Configuration settings for domain verification.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"methods": {
 							Type:        schema.TypeList,
-							Elem:        schema.TypeMap,
 							Computed:    true,
-							Description: "Defines the list of domain verification methods used. ",
+							Description: "Domain verification methods.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"name": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "Verification method type. Possible values: `cname` or `txt`.",
+									},
+									"record": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "Value used to verify the domain.",
+									},
+									"domain": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Optional:    true,
+										Description: "The name of the DNS record for verification.",
+									},
+								},
+							},
 						},
 						"status": {
 							Type:        schema.TypeString,

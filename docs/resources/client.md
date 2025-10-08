@@ -157,7 +157,7 @@ resource "auth0_client" "my_client" {
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
 - `resource_server_identifier` (String) The identifier of a resource server that client is associated withThis property can be sent only when app_type=resource_server.This property can not be changed, once the client is created.
 - `session_transfer` (Block List, Max: 1) (see [below for nested schema](#nestedblock--session_transfer))
-- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs. Can be 'true', 'false', or 'null'.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_exchange` (Block List, Max: 1) Allows configuration for token exchange (see [below for nested schema](#nestedblock--token_exchange))

@@ -37,9 +37,6 @@ const secretAccessTokenMaxChunks = 50
 
 var version = "dev"
 
-// ErrCliConfigFileMissing is thrown when the config.json file is missing.
-var ErrCliConfigFileMissing = errors.New("config.json file is missing")
-
 // CliConfig holds CLI configuration settings.
 type CliConfig struct {
 	Tenants map[string]struct {

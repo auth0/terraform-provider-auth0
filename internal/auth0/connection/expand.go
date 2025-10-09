@@ -295,6 +295,7 @@ func expandConnectionOptionsEmailAttribute(config cty.Value) *management.Connect
 				ProfileRequired:    value.Bool(email.GetAttr("profile_required")),
 				VerificationMethod: (*management.ConnectionOptionsEmailAttributeVerificationMethod)(value.String(email.GetAttr("verification_method"))),
 				Signup:             expandConnectionOptionsAttributeSignup(email),
+				Unique:             value.Bool(email.GetAttr("unique")),
 			}
 			return stop
 		})

@@ -641,6 +641,8 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("compliance_level", client.GetComplianceLevel()),
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt", client.GetSkipNonVerifiableCallbackURIConfirmationPrompt()),
+		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
 	)
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
@@ -660,6 +662,8 @@ func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []inter
 		"allowed_authentication_methods":    sessionTransfer.GetAllowedAuthenticationMethods(),
 		"enforce_device_binding":            sessionTransfer.GetEnforceDeviceBinding(),
 		"allow_refresh_token":               sessionTransfer.GetAllowRefreshToken(),
+		"enforce_online_refresh_tokens":     sessionTransfer.GetEnforceOnlineRefreshTokens(),
+		"enforce_cascade_revocation":        sessionTransfer.GetEnforceCascadeRevocation(),
 	}
 
 	return []interface{}{

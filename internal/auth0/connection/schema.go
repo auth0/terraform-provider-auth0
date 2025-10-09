@@ -1057,6 +1057,11 @@ var optionsSchema = &schema.Schema{
 											},
 										},
 									},
+									"unique": {
+										Type:        schema.TypeBool,
+										Optional:    true,
+										Description: "If set to false, it allow multiple accounts with the same email address",
+									},
 								},
 							},
 						},

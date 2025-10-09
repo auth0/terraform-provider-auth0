@@ -539,6 +539,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = true
 	sso = false
 	sso_disabled = false
 	custom_login_page_on = true
@@ -570,6 +571,7 @@ resource "auth0_client" "my_client" {
 	organization_require_behavior = "no_prompt"
 	organization_usage = "deny"
 	require_pushed_authorization_requests = false
+	skip_non_verifiable_callback_uri_confirmation_prompt = false
 	sso = true
 	sso_disabled = true
 	custom_login_page_on = true
@@ -659,6 +661,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "is_first_party", "true"),
@@ -721,6 +724,7 @@ func TestAccClientConfig(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_require_behavior", "no_prompt"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "organization_usage", "deny"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "require_pushed_authorization_requests", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "skip_non_verifiable_callback_uri_confirmation_prompt", "false"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "sso_disabled", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "custom_login_page_on", "true"),
@@ -2668,6 +2672,8 @@ resource "auth0_client" "my_client" {
 		allowed_authentication_methods = ["cookie", "query"]
 		enforce_device_binding = "asn"
 		allow_refresh_token               = true
+		enforce_online_refresh_tokens     = false
+		enforce_cascade_revocation        = false
 	}
 }`
 
@@ -2708,6 +2714,8 @@ resource "auth0_client" "my_client" {
     allowed_authentication_methods    = []
     enforce_device_binding            = "none"
     allow_refresh_token               = false
+	enforce_online_refresh_tokens     = false
+	enforce_cascade_revocation        = false
   }
 }
 `
@@ -2724,6 +2732,8 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "0"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "ip"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "true"),
 				),
 			},
 			{
@@ -2734,6 +2744,9 @@ func TestAccClientSessionTransfer(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.can_create_session_transfer_token", "true"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allowed_authentication_methods.#", "2"),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_device_binding", "asn"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "true"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
 				),
 			},
 			{
@@ -2769,6 +2782,36 @@ func TestAccClientSessionTransfer(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Session Transfer - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.allow_refresh_token", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_online_refresh_tokens", "false"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "session_transfer.0.enforce_cascade_revocation", "false"),
+				),
+			},
+		},
+	})
+}
+
+const testAccClientResourceServer = `
+resource "auth0_resource_server" "my_resource_server" {
+	name       = "Acceptance Test - Resource Server - {{.testName}}"
+	identifier = "https://uat.api.terraform-provider-auth0.com/{{.testName}}"
+}
+
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Resource Server Client - {{.testName}}"
+	app_type = "resource_server"
+	resource_server_identifier = auth0_resource_server.my_resource_server.identifier
+}
+`
+
+func TestAccClientResourceServer(t *testing.T) {
+	acctest.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				Config: acctest.ParseTestName(testAccClientResourceServer, t.Name()),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "resource_server"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "resource_server_identifier", fmt.Sprintf("https://uat.api.terraform-provider-auth0.com/%s", t.Name())),
+					resource.TestCheckResourceAttrSet("auth0_client.my_client", "client_id"),
 				),
 			},
 		},

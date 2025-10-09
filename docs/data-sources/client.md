@@ -36,7 +36,7 @@ data "auth0_client" "some-client-by-id" {
 - `allowed_clients` (List of String) List of applications ID's that will be allowed to make delegation request. By default, all applications will be allowed.
 - `allowed_logout_urls` (List of String) URLs that Auth0 may redirect to after logout.
 - `allowed_origins` (List of String) URLs that represent valid origins for cross-origin resource sharing. By default, all your callback URLs will be allowed.
-- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
+- `app_type` (String) Type of application the client represents. Possible values are: `native`, `spa`, `regular_web`, `non_interactive`, `resource_server`,`sso_integration`. Specific SSO integrations types accepted as well are: `rms`, `box`, `cloudbees`, `concur`, `dropbox`, `mscrm`, `echosign`, `egnyte`, `newrelic`, `office365`, `salesforce`, `sentry`, `sharepoint`, `slack`, `springcm`, `zendesk`, `zoom`.
 - `callbacks` (List of String) URLs that Auth0 may call back to after a user authenticates for the client. Make sure to specify the protocol (https://) otherwise the callback may fail in some cases. With the exception of custom URI schemes for native clients, all callbacks should use protocol https://.
 - `client_aliases` (List of String) List of audiences/realms for SAML protocol. Used by the wsfed addon.
 - `client_authentication_methods` (Set of Object) Defines client authentication methods. (see [below for nested schema](#nestedatt--client_authentication_methods))
@@ -68,9 +68,11 @@ data "auth0_client" "some-client-by-id" {
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))
 - `require_proof_of_possession` (Boolean) Makes the use of Proof-of-Possession mandatory for this client.
 - `require_pushed_authorization_requests` (Boolean) Makes the use of Pushed Authorization Requests mandatory for this client. This feature currently needs to be enabled on the tenant in order to make use of it.
+- `resource_server_identifier` (String) The identifier of a resource server that client is associated withThis property can be sent only when app_type=resource_server.This property can not be changed, once the client is created.
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedatt--session_transfer))
 - `signed_request_object` (Set of Object) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedatt--signed_request_object))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.
@@ -618,7 +620,9 @@ Read-Only:
 - `allow_refresh_token` (Boolean)
 - `allowed_authentication_methods` (Set of String)
 - `can_create_session_transfer_token` (Boolean)
+- `enforce_cascade_revocation` (Boolean)
 - `enforce_device_binding` (String)
+- `enforce_online_refresh_tokens` (Boolean)
 
 
 <a id="nestedatt--signed_request_object"></a>

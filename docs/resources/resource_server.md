@@ -80,6 +80,7 @@ EOF
 
 ### Read-Only
 
+- `client_id` (String) The ID of the client associated with this resource server. If a client has been created and linked to this resource server, this field will be populated with that client's ID.
 - `id` (String) The ID of this resource.
 
 <a id="nestedblock--authorization_details"></a>

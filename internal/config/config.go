@@ -79,12 +79,8 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 }
 
 type ProviderConfig struct {
-	Debug  bool
-	Domain string
-	Auth   AuthConfig
-}
-
-type AuthConfig struct {
+	Debug                     bool
+	Domain                    string
 	ClientID                  string
 	ClientSecret              string
 	ApiToken                  string
@@ -95,7 +91,9 @@ type AuthConfig struct {
 }
 
 func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Diagnostics) {
-	auth := AuthConfig{
+	cfg := ProviderConfig{
+		Domain:                    data.Get("domain").(string),
+		Debug:                     data.Get("debug").(bool),
 		ClientID:                  data.Get("client_id").(string),
 		ClientSecret:              data.Get("client_secret").(string),
 		ApiToken:                  data.Get("api_token").(string),
@@ -105,8 +103,6 @@ func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Di
 		CustomDomainHeader:        data.Get("custom_domain_header").(string),
 	}
 
-	domain := data.Get("domain").(string)
-	debug := data.Get("debug").(bool)
 	dynamicCredentials := data.Get("dynamic_credentials").(bool)
 	cliLogin := data.Get("cli_login").(bool)
 
@@ -121,33 +117,33 @@ func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Di
 
 	switch {
 	case dynamicCredentials:
-		if domain == "" {
+		if cfg.Domain == "" {
 			return ProviderConfig{}, missingDomain("'AUTH0_DYNAMIC_CREDENTIALS'")
 		}
 
 	case cliLogin:
-		if domain == "" {
+		if cfg.Domain == "" {
 			return ProviderConfig{}, missingDomain("'AUTH0_CLI_LOGIN'")
 		}
 
 		// Fetch and validate CLI token.
-		tempToken, diags := fetchAndValidateCLIToken(domain)
+		tempToken, diags := fetchAndValidateCLIToken(cfg.Domain)
 		if diags != nil {
 			return ProviderConfig{}, diags
 		}
 
 		// Set the apiToken to the valid tempToken.
-		auth.ApiToken = tempToken
+		cfg.ApiToken = tempToken
 
-	case auth.ApiToken != "":
-		if domain == "" {
+	case cfg.ApiToken != "":
+		if cfg.Domain == "" {
 			return ProviderConfig{}, missingDomain("'AUTH0_API_TOKEN'")
 		}
 
-	case auth.ClientID != "":
+	case cfg.ClientID != "":
 		var (
-			hasSecret    = auth.ClientSecret != ""
-			hasAssertion = auth.ClientAssertionPrivateKey != "" && auth.ClientAssertionSigningAlg != ""
+			hasSecret    = cfg.ClientSecret != ""
+			hasAssertion = cfg.ClientAssertionPrivateKey != "" && cfg.ClientAssertionSigningAlg != ""
 		)
 
 		if !hasSecret && !hasAssertion {
@@ -159,7 +155,7 @@ func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Di
 			}}
 		}
 
-		if domain == "" {
+		if cfg.Domain == "" {
 			switch {
 			case hasSecret:
 				return ProviderConfig{}, missingDomain("'AUTH0_CLIENT_ID' and 'AUTH0_CLIENT_SECRET'")
@@ -179,11 +175,7 @@ func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Di
 		}}
 	}
 
-	return ProviderConfig{
-		Debug:  debug,
-		Domain: domain,
-		Auth:   auth,
-	}, nil
+	return cfg, nil
 }
 
 // ConfigureProvider will configure the *schema.Provider so that
@@ -197,13 +189,13 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		}
 
 		apiClient, err := management.New(config.Domain,
-			authenticationOption(config.Auth),
+			authenticationOption(config),
 			management.WithDebug(config.Debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
 			management.WithNoRetries(),
 			management.WithClient(customClientWithRetries()),
-			management.WithCustomDomainHeader(config.Auth.CustomDomainHeader))
+			management.WithCustomDomainHeader(config.CustomDomainHeader))
 
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -327,7 +319,7 @@ func userAgent(terraformVersion *string) string {
 }
 
 // authenticationOption computes the desired authentication option for the *management.Management client.
-func authenticationOption(cfg AuthConfig) management.Option {
+func authenticationOption(cfg ProviderConfig) management.Option {
 	ctx := context.Background()
 
 	switch {

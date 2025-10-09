@@ -152,17 +152,15 @@ func TestParseResourceConfigData(t *testing.T) {
 			},
 			expectedDiagnostics: nil,
 			expectedConfig: config.ProviderConfig{
-				Domain: "example.auth0.com",
-				Debug:  true,
-				Auth: config.AuthConfig{
-					ClientID:                  "1234567",
-					ClientSecret:              "secret",
-					ApiToken:                  "api-token",
-					Audience:                  "the-audience",
-					ClientAssertionPrivateKey: "private-key",
-					ClientAssertionSigningAlg: "signing-alg",
-					CustomDomainHeader:        "custom-domain",
-				},
+				Domain:                    "example.auth0.com",
+				Debug:                     true,
+				ClientID:                  "1234567",
+				ClientSecret:              "secret",
+				ApiToken:                  "api-token",
+				Audience:                  "the-audience",
+				ClientAssertionPrivateKey: "private-key",
+				ClientAssertionSigningAlg: "signing-alg",
+				CustomDomainHeader:        "custom-domain",
 			},
 		},
 		{
@@ -242,10 +240,8 @@ func TestParseResourceConfigData(t *testing.T) {
 			keyringAccessToken:  jwtToken,
 			expectedDiagnostics: nil,
 			expectedConfig: config.ProviderConfig{
-				Domain: "example-token.auth0.com",
-				Auth: config.AuthConfig{
-					ApiToken: jwtToken,
-				},
+				Domain:   "example-token.auth0.com",
+				ApiToken: jwtToken,
 			},
 		},
 		{
@@ -258,10 +254,8 @@ func TestParseResourceConfigData(t *testing.T) {
 			configAccessToken:   jwtToken,
 			expectedDiagnostics: nil,
 			expectedConfig: config.ProviderConfig{
-				Domain: "example-token.auth0.com",
-				Auth: config.AuthConfig{
-					ApiToken: jwtToken,
-				},
+				Domain:   "example-token.auth0.com",
+				ApiToken: jwtToken,
 			},
 		},
 		{

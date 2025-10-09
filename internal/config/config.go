@@ -37,6 +37,14 @@ const secretAccessTokenMaxChunks = 50
 
 var version = "dev"
 
+// cliConfigPath is the default path to the auth0-cli config file.
+var cliConfigPath = path.Join(os.Getenv("HOME"), ".config", "auth0", "config.json")
+
+// SetCliConfigPath sets the path to the auth0-cli config file.
+func SetCliConfigPath(p string) {
+	cliConfigPath = p
+}
+
 // CliConfig holds CLI configuration settings.
 type CliConfig struct {
 	Tenants map[string]struct {
@@ -70,14 +78,112 @@ func (c *Config) GetMutex() *mutex.KeyValue {
 	return c.mutex
 }
 
-type authConfig struct {
-	clientID                  string
-	clientSecret              string
-	apiToken                  string
-	audience                  string
-	clientAssertionPrivateKey string
-	clientAssertionSigningAlg string
-	customDomainHeader        string
+type ProviderConfig struct {
+	Debug  bool
+	Domain string
+	Auth   AuthConfig
+}
+
+type AuthConfig struct {
+	ClientID                  string
+	ClientSecret              string
+	ApiToken                  string
+	Audience                  string
+	ClientAssertionPrivateKey string
+	ClientAssertionSigningAlg string
+	CustomDomainHeader        string
+}
+
+func ParseResourceConfigData(data *schema.ResourceData) (ProviderConfig, diag.Diagnostics) {
+	auth := AuthConfig{
+		ClientID:                  data.Get("client_id").(string),
+		ClientSecret:              data.Get("client_secret").(string),
+		ApiToken:                  data.Get("api_token").(string),
+		Audience:                  data.Get("audience").(string),
+		ClientAssertionPrivateKey: data.Get("client_assertion_private_key").(string),
+		ClientAssertionSigningAlg: data.Get("client_assertion_signing_alg").(string),
+		CustomDomainHeader:        data.Get("custom_domain_header").(string),
+	}
+
+	domain := data.Get("domain").(string)
+	debug := data.Get("debug").(bool)
+	dynamicCredentials := data.Get("dynamic_credentials").(bool)
+	cliLogin := data.Get("cli_login").(bool)
+
+	// Helper to return missing domain diagnostic.
+	missingDomain := func(vars string) diag.Diagnostics {
+		return diag.Diagnostics{{
+			Severity: diag.Error,
+			Summary:  "Missing required configuration",
+			Detail:   fmt.Sprintf("The 'AUTH0_DOMAIN' must be specified along with %s.", vars),
+		}}
+	}
+
+	switch {
+	case dynamicCredentials:
+		if domain == "" {
+			return ProviderConfig{}, missingDomain("'AUTH0_DYNAMIC_CREDENTIALS'")
+		}
+
+	case cliLogin:
+		if domain == "" {
+			return ProviderConfig{}, missingDomain("'AUTH0_CLI_LOGIN'")
+		}
+
+		// Fetch and validate CLI token.
+		tempToken, diags := fetchAndValidateCLIToken(domain)
+		if diags != nil {
+			return ProviderConfig{}, diags
+		}
+
+		// Set the apiToken to the valid tempToken.
+		auth.ApiToken = tempToken
+
+	case auth.ApiToken != "":
+		if domain == "" {
+			return ProviderConfig{}, missingDomain("'AUTH0_API_TOKEN'")
+		}
+
+	case auth.ClientID != "":
+		var (
+			hasSecret    = auth.ClientSecret != ""
+			hasAssertion = auth.ClientAssertionPrivateKey != "" && auth.ClientAssertionSigningAlg != ""
+		)
+
+		if !hasSecret && !hasAssertion {
+			return ProviderConfig{}, diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Missing required configuration",
+				Detail: "When 'AUTH0_CLIENT_ID' is provided, either 'AUTH0_CLIENT_SECRET' or both " +
+					"'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY' and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG' must also be specified.",
+			}}
+		}
+
+		if domain == "" {
+			switch {
+			case hasSecret:
+				return ProviderConfig{}, missingDomain("'AUTH0_CLIENT_ID' and 'AUTH0_CLIENT_SECRET'")
+			case hasAssertion:
+				return ProviderConfig{}, missingDomain("'AUTH0_CLIENT_ID', 'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY', and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG'")
+			}
+		}
+
+	default:
+		return ProviderConfig{}, diag.Diagnostics{{
+			Severity: diag.Error,
+			Summary:  "Missing environment variables",
+			Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
+				"or AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET, " +
+				"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_PRIVATE_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
+				"or enable CLI login with AUTH0_CLI_LOGIN=true.",
+		}}
+	}
+
+	return ProviderConfig{
+		Debug:  debug,
+		Domain: domain,
+		Auth:   auth,
+	}, nil
 }
 
 // ConfigureProvider will configure the *schema.Provider so that
@@ -85,93 +191,19 @@ type authConfig struct {
 // and passed into the subsequent resources as the meta parameter.
 func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 	return func(_ context.Context, data *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		config := authConfig{
-			clientID:                  data.Get("client_id").(string),
-			clientSecret:              data.Get("client_secret").(string),
-			apiToken:                  data.Get("api_token").(string),
-			audience:                  data.Get("audience").(string),
-			clientAssertionPrivateKey: data.Get("client_assertion_private_key").(string),
-			clientAssertionSigningAlg: data.Get("client_assertion_signing_alg").(string),
-			customDomainHeader:        data.Get("custom_domain_header").(string),
+		config, d := ParseResourceConfigData(data)
+		if d != nil {
+			return nil, d
 		}
 
-		domain := data.Get("domain").(string)
-		debug := data.Get("debug").(bool)
-		dynamicCredentials := data.Get("dynamic_credentials").(bool)
-		cliLogin := data.Get("cli_login").(bool)
-
-		// Helper to return missing domain diagnostic.
-		missingDomain := func(vars string) diag.Diagnostics {
-			return diag.Diagnostics{{
-				Severity: diag.Error,
-				Summary:  "Missing required configuration",
-				Detail:   fmt.Sprintf("The 'AUTH0_DOMAIN' must be specified along with %s.", vars),
-			}}
-		}
-		switch {
-		case dynamicCredentials:
-			if domain == "" {
-				return nil, missingDomain("'AUTH0_DYNAMIC_CREDENTIALS'")
-			}
-		case cliLogin:
-			if domain == "" {
-				return nil, missingDomain("'AUTH0_CLI_LOGIN'")
-			}
-
-			// Fetch and validate CLI token.
-			tempToken, diags := fetchAndValidateCLIToken(domain)
-			if diags != nil {
-				return nil, diags
-			}
-
-			// Set the apiToken to the valid tempToken.
-			config.apiToken = tempToken
-		case config.apiToken != "":
-			if domain == "" {
-				return nil, missingDomain("'AUTH0_API_TOKEN'")
-			}
-		case config.clientID != "":
-			var (
-				hasSecret    = config.clientSecret != ""
-				hasAssertion = config.clientAssertionPrivateKey != "" && config.clientAssertionSigningAlg != ""
-			)
-
-			if !hasSecret && !hasAssertion {
-				return nil, diag.Diagnostics{{
-					Severity: diag.Error,
-					Summary:  "Missing required configuration",
-					Detail: "When 'AUTH0_CLIENT_ID' is provided, either 'AUTH0_CLIENT_SECRET' or both " +
-						"'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY' and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG' must also be specified.",
-				}}
-			}
-
-			if domain == "" {
-				switch {
-				case hasSecret:
-					return nil, missingDomain("'AUTH0_CLIENT_ID' and 'AUTH0_CLIENT_SECRET'")
-				case hasAssertion:
-					return nil, missingDomain("'AUTH0_CLIENT_ID', 'AUTH0_CLIENT_ASSERTION_PRIVATE_KEY', and 'AUTH0_CLIENT_ASSERTION_SIGNING_ALG'")
-				}
-			}
-		default:
-			return nil, diag.Diagnostics{{
-				Severity: diag.Error,
-				Summary:  "Missing environment variables",
-				Detail: "AUTH0_DOMAIN is required. Then, configure either AUTH0_API_TOKEN, " +
-					"or AUTH0_CLIENT_ID and AUTH0_CLIENT_SECRET, " +
-					"or AUTH0_CLIENT_ID, AUTH0_CLIENT_ASSERTION_PRIVATE_KEY, and AUTH0_CLIENT_ASSERTION_SIGNING_ALG, " +
-					"or enable CLI login with AUTH0_CLI_LOGIN=true.",
-			}}
-		}
-
-		apiClient, err := management.New(domain,
-			authenticationOption(config),
-			management.WithDebug(debug),
+		apiClient, err := management.New(config.Domain,
+			authenticationOption(config.Auth),
+			management.WithDebug(config.Debug),
 			management.WithUserAgent(userAgent(terraformVersion)),
 			management.WithAuth0ClientEnvEntry(providerName, version),
 			management.WithNoRetries(),
 			management.WithClient(customClientWithRetries()),
-			management.WithCustomDomainHeader(config.customDomainHeader))
+			management.WithCustomDomainHeader(config.Auth.CustomDomainHeader))
 
 		if err != nil {
 			return nil, diag.FromErr(err)
@@ -193,7 +225,7 @@ func fetchAndValidateCLIToken(domain string) (string, diag.Diagnostics) {
 
 	// If no token was found, try to fetch token from CLI config file.
 	if tempToken == "" {
-		configToken, err := getAccessTokenFromConfigFile(domain)
+		configToken, err := getAccessTokenFromCliConfigFile(domain)
 		if err != nil {
 			return "", diag.Diagnostics{{
 				Severity: diag.Error,
@@ -295,38 +327,38 @@ func userAgent(terraformVersion *string) string {
 }
 
 // authenticationOption computes the desired authentication option for the *management.Management client.
-func authenticationOption(cfg authConfig) management.Option {
+func authenticationOption(cfg AuthConfig) management.Option {
 	ctx := context.Background()
 
 	switch {
-	case cfg.apiToken != "":
-		return management.WithStaticToken(cfg.apiToken)
-	case cfg.audience != "":
-		if cfg.clientAssertionPrivateKey != "" {
+	case cfg.ApiToken != "":
+		return management.WithStaticToken(cfg.ApiToken)
+	case cfg.Audience != "":
+		if cfg.ClientAssertionPrivateKey != "" {
 			return management.WithClientCredentialsPrivateKeyJwtAndAudience(
 				ctx,
-				cfg.clientID,
-				cfg.clientAssertionPrivateKey,
-				cfg.clientAssertionSigningAlg,
-				cfg.audience,
+				cfg.ClientID,
+				cfg.ClientAssertionPrivateKey,
+				cfg.ClientAssertionSigningAlg,
+				cfg.Audience,
 			)
 		}
 		return management.WithClientCredentialsAndAudience(
 			ctx,
-			cfg.clientID,
-			cfg.clientSecret,
-			cfg.audience,
+			cfg.ClientID,
+			cfg.ClientSecret,
+			cfg.Audience,
 		)
-	case cfg.clientAssertionPrivateKey != "":
+	case cfg.ClientAssertionPrivateKey != "":
 		return management.WithClientCredentialsPrivateKeyJwt(
 			ctx,
-			cfg.clientID,
-			cfg.clientAssertionPrivateKey,
-			cfg.clientAssertionSigningAlg,
+			cfg.ClientID,
+			cfg.ClientAssertionPrivateKey,
+			cfg.ClientAssertionSigningAlg,
 		)
 
 	default:
-		return management.WithClientCredentials(ctx, cfg.clientID, cfg.clientSecret)
+		return management.WithClientCredentials(ctx, cfg.ClientID, cfg.ClientSecret)
 	}
 }
 
@@ -419,14 +451,13 @@ func retryableErrorRetryFunc(err error) bool {
 	return true
 }
 
-// getAccessTokenFromConfigFile reads the Auth0 CLI config file and returns the access token for the given tenant.
-func getAccessTokenFromConfigFile(domain string) (string, error) {
-	configPath := path.Join(os.Getenv("HOME"), ".config", "auth0", "config.json")
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+// getAccessTokenFromCliConfigFile reads the Auth0 CLI config file and returns the access token for the given tenant.
+func getAccessTokenFromCliConfigFile(domain string) (string, error) {
+	if _, err := os.Stat(cliConfigPath); os.IsNotExist(err) {
 		return "", nil
 	}
 
-	buffer, err := os.ReadFile(configPath)
+	buffer, err := os.ReadFile(cliConfigPath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read config.json: %w", err)
 	}

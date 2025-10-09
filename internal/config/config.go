@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -34,6 +36,17 @@ const secretAccessToken = "Auth0 CLI Access Token" // #nosec G101
 const secretAccessTokenMaxChunks = 50
 
 var version = "dev"
+
+// ErrCliConfigFileMissing is thrown when the config.json file is missing.
+var ErrCliConfigFileMissing = errors.New("config.json file is missing")
+
+// CliConfig holds CLI configuration settings.
+type CliConfig struct {
+	Tenants map[string]struct {
+		AccessToken string    `json:"access_token,omitempty"`
+		ExpiresAt   time.Time `json:"expires_at"`
+	} `json:"tenants"`
+}
 
 // Config is the type used for the
 // *schema.Provider meta parameter.
@@ -181,6 +194,21 @@ func fetchAndValidateCLIToken(domain string) (string, diag.Diagnostics) {
 		tempToken += chunk
 	}
 
+	// If no token was found, try to fetch token from CLI config file.
+	if tempToken == "" {
+		configToken, err := getAccessTokenFromConfigFile(domain)
+		if err != nil {
+			return "", diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Failed to read config.json file",
+				Detail:   err.Error(),
+			}}
+		}
+
+		tempToken = configToken
+	}
+
+	// If no token was found, error out.
 	if tempToken == "" {
 		return "", diag.Diagnostics{{
 			Severity: diag.Error,
@@ -392,4 +420,30 @@ func retryableErrorRetryFunc(err error) bool {
 
 	// The error is likely recoverable so retry.
 	return true
+}
+
+// getAccessTokenFromConfigFile reads the Auth0 CLI config file and returns the access token for the given tenant.
+func getAccessTokenFromConfigFile(domain string) (string, error) {
+	configPath := path.Join(os.Getenv("HOME"), ".config", "auth0", "config.json")
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		return "", nil
+	}
+
+	buffer, err := os.ReadFile(configPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to read config.json: %w", err)
+	}
+
+	c := &CliConfig{}
+	err = json.Unmarshal(buffer, c)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse config.json: %w", err)
+	}
+
+	tenant, ok := c.Tenants[domain]
+	if !ok {
+		return "", nil
+	}
+
+	return tenant.AccessToken, nil
 }

@@ -31,6 +31,52 @@ func TestBool(t *testing.T) {
 	})
 }
 
+func TestBoolPtrToString(t *testing.T) {
+	t.Run("it returns 'null' for nil pointer", func(t *testing.T) {
+		var ptr *bool
+		assert.Equal(t, "null", BoolPtrToString(ptr))
+	})
+
+	t.Run("it returns 'true' for true pointer", func(t *testing.T) {
+		val := true
+		assert.Equal(t, "true", BoolPtrToString(&val))
+	})
+
+	t.Run("it returns 'false' for false pointer", func(t *testing.T) {
+		val := false
+		assert.Equal(t, "false", BoolPtrToString(&val))
+	})
+}
+
+func TestBoolFromString(t *testing.T) {
+	t.Run("it returns true pointer for 'true' string", func(t *testing.T) {
+		result := BoolFromString("true")
+		require.NotNil(t, result)
+		assert.True(t, *result)
+	})
+
+	t.Run("it returns false pointer for 'false' string", func(t *testing.T) {
+		result := BoolFromString("false")
+		require.NotNil(t, result)
+		assert.False(t, *result)
+	})
+
+	t.Run("it returns nil for any other string", func(t *testing.T) {
+		result := BoolFromString("foo")
+		assert.Nil(t, result)
+	})
+
+	t.Run("it returns nil for non-string input", func(t *testing.T) {
+		result := BoolFromString(123)
+		assert.Nil(t, result)
+	})
+
+	t.Run("it returns nil for nil input", func(t *testing.T) {
+		result := BoolFromString(nil)
+		assert.Nil(t, result)
+	})
+}
+
 func TestString(t *testing.T) {
 	t.Run("it returns nil when given a null value", func(t *testing.T) {
 		actual := String(cty.NullVal(cty.String))

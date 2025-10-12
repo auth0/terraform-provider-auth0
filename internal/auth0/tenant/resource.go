@@ -433,9 +433,13 @@ func NewResource() *schema.Resource {
 				},
 			},
 			"skip_non_verifiable_callback_uri_confirmation_prompt": {
-				Type:        schema.TypeBool,
-				Optional:    true,
-				Description: "Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Description:  "Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs. Accepts 'true', 'false', or 'null'.",
+				ValidateFunc: validation.StringInSlice([]string{"true", "false", "null"}, false),
+				DiffSuppressFunc: func(_, o, n string, _ *schema.ResourceData) bool {
+					return (o == "null" && n == "") || o == n
+				},
 			},
 		},
 	}

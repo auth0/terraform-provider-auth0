@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/commons"
+	"github.com/auth0/terraform-provider-auth0/internal/value"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/structure"
 
@@ -642,34 +643,15 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("session_transfer", flattenSessionTransfer(client.GetSessionTransfer())),
 		data.Set("token_quota", commons.FlattenTokenQuota(client.GetTokenQuota())),
 		data.Set("resource_server_identifier", client.GetResourceServerIdentifier()),
+		data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
+			value.BoolPtrToString(client.SkipNonVerifiableCallbackURIConfirmationPrompt)),
 	)
-
-	if client.SkipNonVerifiableCallbackURIConfirmationPrompt == nil {
-		result = multierror.Append(result,
-			data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
-				"null"))
-	} else {
-		result = multierror.Append(result,
-			data.Set("skip_non_verifiable_callback_uri_confirmation_prompt",
-				flattenSkipNonVerifiablePrompt(client.SkipNonVerifiableCallbackURIConfirmationPrompt)))
-	}
 
 	if client.EncryptionKey != nil && len(*client.EncryptionKey) == 0 {
 		result = multierror.Append(result, data.Set("encryption_key", client.GetEncryptionKey()))
 	}
 
 	return result.ErrorOrNil()
-}
-
-func flattenSkipNonVerifiablePrompt(v *bool) string {
-	if v == nil {
-		return "null"
-	}
-
-	if *v {
-		return "true"
-	}
-	return "false"
 }
 
 func flattenSessionTransfer(sessionTransfer *management.SessionTransfer) []interface{} {

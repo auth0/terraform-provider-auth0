@@ -13,26 +13,6 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandSkipNonVerifiablePrompt(v interface{}) *bool {
-	if v == nil {
-		return nil
-	}
-
-	strVal := v.(string)
-	switch strVal {
-	case "true":
-		b := true
-		return &b
-	case "false":
-		b := false
-		return &b
-	case "null", "":
-		return nil
-	default:
-		return nil
-	}
-}
-
 func expandClient(data *schema.ResourceData) (*management.Client, error) {
 	config := data.GetRawConfig()
 
@@ -77,7 +57,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
-		SkipNonVerifiableCallbackURIConfirmationPrompt: expandSkipNonVerifiablePrompt(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolFromString(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {

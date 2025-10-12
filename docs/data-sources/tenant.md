@@ -44,7 +44,7 @@ data "auth0_tenant" "my_tenant" {}
 - `session_cookie` (List of Object) Alters behavior of tenant's session cookie. Contains a single `mode` property. (see [below for nested schema](#nestedatt--session_cookie))
 - `session_lifetime` (Number) Number of hours during which a session will stay valid.
 - `sessions` (List of Object) Sessions related settings for the tenant. (see [below for nested schema](#nestedatt--sessions))
-- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs. Accepts 'true', 'false', or 'null'.
 - `support_email` (String) Support email address for authenticating users.
 - `support_url` (String) Support URL for authenticating users.
 

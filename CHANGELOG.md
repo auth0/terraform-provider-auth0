@@ -1,3 +1,8 @@
+## v1.32.0
+
+FEATURES:
+- `resource/auth0_connection`: Add support for configuring `authentication` and `connected_accounts` settings ([#1360](https://github.com/auth0/terraform-provider-auth0/pull/1360))
+
 ## v1.31.0
 
 FEATURES:

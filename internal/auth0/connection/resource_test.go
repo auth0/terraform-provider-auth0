@@ -23,6 +23,10 @@ func TestAccConnection(t *testing.T) {
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key1", "foo"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "metadata.key2", "bar"),
 					resource.TestCheckNoResourceAttr("auth0_connection.my_connection", "show_as_button"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "authentication.0.active", "true"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.#", "1"),
+					resource.TestCheckResourceAttr("auth0_connection.my_connection", "connected_accounts.0.active", "true"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.strategy_version", "2"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_policy", "fair"),
 					resource.TestCheckResourceAttr("auth0_connection.my_connection", "options.0.password_no_personal_info.0.enable", "true"),
@@ -76,6 +80,12 @@ resource "auth0_connection" "my_connection" {
 	metadata = {
 		key1 = "foo"
 		key2 = "bar"
+	}
+	authentication {
+		active = true
+	}
+	connected_accounts {
+		active = true
 	}
 	options {
 		strategy_version = 2

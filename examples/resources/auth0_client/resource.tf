@@ -1,18 +1,17 @@
 resource "auth0_client" "my_client" {
-  name                                                 = "Application - Acceptance Test"
-  description                                          = "Test Applications Long Description"
-  app_type                                             = "non_interactive"
-  compliance_level                                     = "none"
-  custom_login_page_on                                 = true
-  is_first_party                                       = true
-  is_token_endpoint_ip_header_trusted                  = true
-  oidc_conformant                                      = false
-  callbacks                                            = ["https://example.com/callback"]
-  allowed_origins                                      = ["https://example.com"]
-  allowed_logout_urls                                  = ["https://example.com"]
-  web_origins                                          = ["https://example.com"]
-  require_proof_of_possession                          = false
-  skip_non_verifiable_callback_uri_confirmation_prompt = true
+  name                                = "Application - Acceptance Test"
+  description                         = "Test Applications Long Description"
+  app_type                            = "non_interactive"
+  compliance_level                    = "none"
+  custom_login_page_on                = true
+  is_first_party                      = true
+  is_token_endpoint_ip_header_trusted = true
+  oidc_conformant                     = false
+  callbacks                           = ["https://example.com/callback"]
+  allowed_origins                     = ["https://example.com"]
+  allowed_logout_urls                 = ["https://example.com"]
+  web_origins                         = ["https://example.com"]
+  require_proof_of_possession         = false
 
   grant_types = [
     "authorization_code",

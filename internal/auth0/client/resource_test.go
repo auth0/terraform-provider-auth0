@@ -2818,7 +2818,7 @@ func TestAccClientResourceServer(t *testing.T) {
 	})
 }
 
-const testAccClientSkipNonVerifiableCallbackURIConfirmationPromptNullConfig = `
+const testAccClientSkipPromptNullConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
 	app_type = "spa"
@@ -2826,7 +2826,7 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccClientSkipNonVerifiableCallbackURIConfirmationPromptTrueConfig = `
+const testAccClientSkipPromptTrueConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
 	app_type = "spa"
@@ -2834,19 +2834,26 @@ resource "auth0_client" "my_client" {
 }
 `
 
-const testAccClientSkipNonVerifiableCallbackURIConfirmationPromptFalseConfig = `
+const testAccClientSkipPromptFalseConfig = `
 resource "auth0_client" "my_client" {
 	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
 	app_type = "spa"
 	skip_non_verifiable_callback_uri_confirmation_prompt = false
+}`
+
+const testAccClientSkipPromptNullConfig1 = `
+resource "auth0_client" "my_client" {
+	name = "Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - {{.testName}}"
+	app_type = "spa"
+	skip_non_verifiable_callback_uri_confirmation_prompt = null
 }
 `
 
-func TestAccClientSkipNonVerifiableCallbackUriConfirmationPrompt(t *testing.T) {
+func TestAccClientSkipPrompt(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccClientSkipNonVerifiableCallbackURIConfirmationPromptNullConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig1, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -2854,7 +2861,7 @@ func TestAccClientSkipNonVerifiableCallbackUriConfirmationPrompt(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccClientSkipNonVerifiableCallbackURIConfirmationPromptTrueConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccClientSkipPromptTrueConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -2862,7 +2869,7 @@ func TestAccClientSkipNonVerifiableCallbackUriConfirmationPrompt(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccClientSkipNonVerifiableCallbackURIConfirmationPromptNullConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -2870,7 +2877,7 @@ func TestAccClientSkipNonVerifiableCallbackUriConfirmationPrompt(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccClientSkipNonVerifiableCallbackURIConfirmationPromptFalseConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccClientSkipPromptFalseConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),
@@ -2878,7 +2885,7 @@ func TestAccClientSkipNonVerifiableCallbackUriConfirmationPrompt(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccClientSkipNonVerifiableCallbackURIConfirmationPromptNullConfig, t.Name()),
+				Config: acctest.ParseTestName(testAccClientSkipPromptNullConfig, t.Name()),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - Skip Non-Verifiable Callback URI Confirmation Prompt - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "spa"),

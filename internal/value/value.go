@@ -25,8 +25,8 @@ func Bool(rawValue cty.Value) *bool {
 	return &value
 }
 
-// BoolFromString converts an interface value (expected to be a string) to a pointer to bool.
-func BoolFromString(v interface{}) *bool {
+// BoolPtr converts an interface value (expected to be a string) to a pointer to bool.
+func BoolPtr(v interface{}) *bool {
 	str, _ := v.(string)
 	switch str {
 	case "true":

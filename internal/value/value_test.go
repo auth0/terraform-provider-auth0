@@ -48,31 +48,31 @@ func TestBoolPtrToString(t *testing.T) {
 	})
 }
 
-func TestBoolFromString(t *testing.T) {
+func TestBoolPtr(t *testing.T) {
 	t.Run("it returns true pointer for 'true' string", func(t *testing.T) {
-		result := BoolFromString("true")
+		result := BoolPtr("true")
 		require.NotNil(t, result)
 		assert.True(t, *result)
 	})
 
 	t.Run("it returns false pointer for 'false' string", func(t *testing.T) {
-		result := BoolFromString("false")
+		result := BoolPtr("false")
 		require.NotNil(t, result)
 		assert.False(t, *result)
 	})
 
 	t.Run("it returns nil for any other string", func(t *testing.T) {
-		result := BoolFromString("foo")
+		result := BoolPtr("foo")
 		assert.Nil(t, result)
 	})
 
 	t.Run("it returns nil for non-string input", func(t *testing.T) {
-		result := BoolFromString(123)
+		result := BoolPtr(123)
 		assert.Nil(t, result)
 	})
 
 	t.Run("it returns nil for nil input", func(t *testing.T) {
-		result := BoolFromString(nil)
+		result := BoolPtr(nil)
 		assert.Nil(t, result)
 	})
 }

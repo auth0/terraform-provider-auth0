@@ -62,7 +62,7 @@ Read-Only:
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
 - `resource_server_identifier` (String)
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
-- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean)
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String)
 - `token_exchange` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_exchange))
 - `token_quota` (List of Object) (see [below for nested schema](#nestedobjatt--clients--token_quota))
 - `web_origins` (List of String)

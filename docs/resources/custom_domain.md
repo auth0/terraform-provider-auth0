@@ -43,7 +43,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean, Deprecated) Indicates whether this is a primary domain.
 - `status` (String) Configuration status for the custom domain. Options include `disabled`, `pending`, `pending_verification`, and `ready`.
-- `verification` (List of Object) Configuration settings for verification. (see [below for nested schema](#nestedatt--verification))
+- `verification` (List of Object) Configuration settings for domain verification. (see [below for nested schema](#nestedatt--verification))
 
 <a id="nestedatt--certificate"></a>
 ### Nested Schema for `certificate`
@@ -63,8 +63,17 @@ Read-Only:
 
 - `error_msg` (String)
 - `last_verified_at` (String)
-- `methods` (List of Map of String)
+- `methods` (List of Object) (see [below for nested schema](#nestedobjatt--verification--methods))
 - `status` (String)
+
+<a id="nestedobjatt--verification--methods"></a>
+### Nested Schema for `verification.methods`
+
+Read-Only:
+
+- `domain` (String)
+- `name` (String)
+- `record` (String)
 
 ## Import
 

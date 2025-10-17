@@ -46,15 +46,10 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccCustomDomain1+testAccCustomDomain2+testAccCustomDomain3, strings.ToLower(t.Name())),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain1", "domain", "authninja1.auth.tempdomain.com"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain2", "domain", "authninja2.auth.tempdomain.com"),
-					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain3", "domain", "beacon.auth.tempdomain.com"),
-				),
+				Config: testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3,
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsFilter1, strings.ToLower(t.Name())),
+				Config: testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:authninja*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "2"),

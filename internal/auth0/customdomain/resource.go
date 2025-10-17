@@ -51,7 +51,7 @@ func NewResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 				Description: "Configuration status for the custom domain. " +
-					"Options include `disabled`, `pending`, `pending_verification`, and `ready`. ",
+					"Options include `disabled`, `pending`, `pending_verification`, `ready` and `failed`. ",
 			},
 			"origin_domain_name": {
 				Type:     schema.TypeString,

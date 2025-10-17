@@ -6,75 +6,6 @@ interactions:
         proto: HTTP/1.1
         proto_major: 1
         proto_minor: 1
-        content_length: 68
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: |
-            {"domain":"beacon.auth.tempdomain.com","type":"self_managed_certs"}
-        form: {}
-        headers:
-            Content-Type:
-                - application/json
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains
-        method: POST
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: 377
-        uncompressed: false
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 201 Created
-        code: 201
-        duration: 4.255808s
-    - id: 1
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 356.985875ms
-    - id: 2
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
         content_length: 72
         transfer_encoding: []
         trailer: {}
@@ -99,14 +30,113 @@ interactions:
         trailer: {}
         content_length: 385
         uncompressed: false
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 4.729093s
+        duration: 2.292440125s
+    - id: 1
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 359.13775ms
+    - id: 2
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 371.532042ms
     - id: 3
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 349.64525ms
+    - id: 4
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -135,46 +165,13 @@ interactions:
         trailer: {}
         content_length: 385
         uncompressed: false
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 201 Created
         code: 201
-        duration: 4.810603708s
-    - id: 4
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 371.811875ms
+        duration: 1.607649583s
     - id: 5
       request:
         proto: HTTP/1.1
@@ -191,7 +188,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
         method: GET
       response:
         proto: HTTP/2.0
@@ -201,13 +198,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 369.61975ms
+        duration: 491.630833ms
     - id: 6
       request:
         proto: HTTP/1.1
@@ -224,7 +221,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
         method: GET
       response:
         proto: HTTP/2.0
@@ -234,13 +231,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 373.982625ms
+        duration: 358.781166ms
     - id: 7
       request:
         proto: HTTP/1.1
@@ -257,7 +254,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
         method: GET
       response:
         proto: HTTP/2.0
@@ -267,80 +264,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 386.526958ms
+        duration: 372.85525ms
     - id: 8
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 391.043583ms
-    - id: 9
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 357.953333ms
-    - id: 10
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -366,14 +297,14 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"},{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"},{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 357.998959ms
-    - id: 11
+        duration: 420.573458ms
+    - id: 9
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -389,7 +320,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
         method: GET
       response:
         proto: HTTP/2.0
@@ -399,13 +330,82 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 361.723958ms
+        duration: 422.849375ms
+    - id: 10
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 850.668875ms
+    - id: 11
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 68
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"domain":"beacon.auth.tempdomain.com","type":"self_managed_certs"}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: 377
+        uncompressed: false
+        body: '{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 201 Created
+        code: 201
+        duration: 1.81698475s
     - id: 12
       request:
         proto: HTTP/1.1
@@ -422,7 +422,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_JKApvBdzXv7Hmasg
         method: GET
       response:
         proto: HTTP/2.0
@@ -432,13 +432,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
+        body: '{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 383.643333ms
+        duration: 368.231166ms
     - id: 13
       request:
         proto: HTTP/1.1
@@ -465,14 +465,113 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"},{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"},{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 407.46625ms
+        duration: 398.386334ms
     - id: 14
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 340.017667ms
+    - id: 15
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 380.378291ms
+    - id: 16
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_JKApvBdzXv7Hmasg
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 429.159666ms
+    - id: 17
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -498,112 +597,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"},{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"},{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 311.758083ms
-    - id: 15
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 325.814667ms
-    - id: 16
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 355.369375ms
-    - id: 17
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 359.372708ms
+        duration: 437.703916ms
     - id: 18
       request:
         proto: HTTP/1.1
@@ -620,7 +620,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_JKApvBdzXv7Hmasg
         method: GET
       response:
         proto: HTTP/2.0
@@ -630,14 +630,80 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
+        body: '{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 351.49175ms
+        duration: 349.411458ms
     - id: 19
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 368.382458ms
+    - id: 20
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 378.480375ms
+    - id: 21
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -663,79 +729,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 353.096208ms
-    - id: 20
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 355.204791ms
-    - id: 21
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 362.597125ms
+        duration: 419.159583ms
     - id: 22
       request:
         proto: HTTP/1.1
@@ -762,13 +762,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 353.004042ms
+        duration: 341.336916ms
     - id: 23
       request:
         proto: HTTP/1.1
@@ -785,7 +785,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
         method: GET
       response:
         proto: HTTP/2.0
@@ -795,14 +795,47 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}'
+        body: '{"custom_domain_id":"cd_1OQOyesOFGSxwHmO","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"00d6947a-769c-4137-8b73-40b87a5d98fb","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:06.072Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 336.910333ms
+        duration: 357.997916ms
     - id: 24
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 0
+        transfer_encoding: []
+        trailer: {}
+        host: terraform-provider-auth0-dev.eu.auth0.com
+        remote_addr: ""
+        request_uri: ""
+        body: ""
+        form: {}
+        headers:
+            User-Agent:
+                - Go-Auth0/1.30.0
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
+        method: GET
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"custom_domain_id":"cd_fLEAYLXN7QjoSPZ1","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"7ac323ce-1536-42b2-bc6a-9614b83c0f96","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:10.807Z"}'
+        headers:
+            Content-Type:
+                - application/json; charset=utf-8
+        status: 200 OK
+        code: 200
+        duration: 362.524375ms
+    - id: 25
       request:
         proto: HTTP/1.1
         proto_major: 1
@@ -828,46 +861,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domains":[{"custom_domain_id":"cd_W7W1F4LXGePXnfVO","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"88f7b802-3cd3-4b0e-a7e1-5d4d971929d3","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:46.765Z"}]}'
+        body: '{"custom_domains":[{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}]}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 350.059458ms
-    - id: 25
-      request:
-        proto: HTTP/1.1
-        proto_major: 1
-        proto_minor: 1
-        content_length: 0
-        transfer_encoding: []
-        trailer: {}
-        host: terraform-provider-auth0-dev.eu.auth0.com
-        remote_addr: ""
-        request_uri: ""
-        body: ""
-        form: {}
-        headers:
-            User-Agent:
-                - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
-        method: GET
-      response:
-        proto: HTTP/2.0
-        proto_major: 2
-        proto_minor: 0
-        transfer_encoding: []
-        trailer: {}
-        content_length: -1
-        uncompressed: true
-        body: '{"custom_domain_id":"cd_iICzYQxZYxrah5Gd","domain":"authninja1.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"a6fc55fe-da74-4ff4-9b6b-739a17b57b01","domain":"_cf-custom-hostname.authninja1.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.255Z"}'
-        headers:
-            Content-Type:
-                - application/json; charset=utf-8
-        status: 200 OK
-        code: 200
-        duration: 374.292916ms
+        duration: 429.928584ms
     - id: 26
       request:
         proto: HTTP/1.1
@@ -884,7 +884,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_JKApvBdzXv7Hmasg
         method: GET
       response:
         proto: HTTP/2.0
@@ -894,13 +894,13 @@ interactions:
         trailer: {}
         content_length: -1
         uncompressed: true
-        body: '{"custom_domain_id":"cd_2JJ7c2qY4abY0Mu3","domain":"authninja2.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"048ceff6-693c-4a15-a01e-9234dcf5ba4f","domain":"_cf-custom-hostname.authninja2.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:21:47.280Z"}'
+        body: '{"custom_domain_id":"cd_JKApvBdzXv7Hmasg","domain":"beacon.auth.tempdomain.com","primary":false,"status":"pending_verification","type":"self_managed_certs","verification":{"methods":[{"name":"TXT","record":"6bfc3d13-3c2e-4965-b2ec-6c41210b60d4","domain":"_cf-custom-hostname.beacon.auth.tempdomain.com"}]},"custom_client_ip_header":null,"created_at":"2025-10-17T08:46:16.584Z"}'
         headers:
             Content-Type:
                 - application/json; charset=utf-8
         status: 200 OK
         code: 200
-        duration: 416.588667ms
+        duration: 429.977709ms
     - id: 27
       request:
         proto: HTTP/1.1
@@ -917,7 +917,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_iICzYQxZYxrah5Gd
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_1OQOyesOFGSxwHmO
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -933,7 +933,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 2.912030833s
+        duration: 1.713662291s
     - id: 28
       request:
         proto: HTTP/1.1
@@ -950,7 +950,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_2JJ7c2qY4abY0Mu3
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_JKApvBdzXv7Hmasg
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -966,7 +966,7 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 3.678980625s
+        duration: 1.728950875s
     - id: 29
       request:
         proto: HTTP/1.1
@@ -983,7 +983,7 @@ interactions:
         headers:
             User-Agent:
                 - Go-Auth0/1.30.0
-        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_W7W1F4LXGePXnfVO
+        url: https://terraform-provider-auth0-dev.eu.auth0.com/api/v2/custom-domains/cd_fLEAYLXN7QjoSPZ1
         method: DELETE
       response:
         proto: HTTP/2.0
@@ -999,4 +999,4 @@ interactions:
                 - application/json; charset=utf-8
         status: 204 No Content
         code: 204
-        duration: 3.696119375s
+        duration: 2.597027666s

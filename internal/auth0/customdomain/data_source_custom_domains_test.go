@@ -26,9 +26,15 @@ resource "auth0_custom_domain" "my_custom_domain3" {
 }
 `
 
-const testAccDataSourceCustomDomainsFilter = testAccDataSourceCustomDomainFirst + testAccDataSourceCustomDomainSecond + `
+const testAccDataSourceCustomDomainsFilter1 = testAccMultipleCustomDomains + `
 data "auth0_custom_domains" "filtered" {
   q = "domain:authninja*"
+}
+`
+
+const testAccDataSourceCustomDomainsFilter2 = testAccMultipleCustomDomains + `
+data "auth0_custom_domains" "filtered" {
+  q = "domain:beacon*"
 }
 `
 
@@ -44,7 +50,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsFilter, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsFilter1, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:authninja*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "2"),
@@ -53,12 +59,21 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 						"type":   "self_managed_certs",
 						"status": "pending_verification",
 					}),
+				),
+			},
+			{
+				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsFilter2, strings.ToLower(t.Name())),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:beacon*"),
+					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "1"),
 
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_custom_domains.filtered", "custom_domains.*", map[string]string{
-						"domain": "authninja1.auth.tempdomain.com",
+						"type":   "self_managed_certs",
+						"status": "pending_verification",
 					}),
+
 					resource.TestCheckTypeSetElemNestedAttrs("data.auth0_custom_domains.filtered", "custom_domains.*", map[string]string{
-						"domain": "authninja2.auth.tempdomain.com",
+						"domain": "beacon.auth.tempdomain.com",
 					}),
 				),
 			},

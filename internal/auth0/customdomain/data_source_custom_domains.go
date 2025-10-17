@@ -44,7 +44,10 @@ func readCustomDomainsForDataSource(ctx context.Context, data *schema.ResourceDa
 	var from string
 	options := []management.RequestOption{
 		management.Take(100),
-		management.Parameter("q", q),
+	}
+
+	if q != "" {
+		options = append(options, management.Parameter("q", q))
 	}
 
 	for {

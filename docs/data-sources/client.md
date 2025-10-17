@@ -63,6 +63,7 @@ data "auth0_client" "some-client-by-id" {
 - `oidc_backchannel_logout_urls` (Set of String) Set of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed.
 - `oidc_conformant` (Boolean) Indicates whether this client will conform to strict OIDC specifications.
 - `oidc_logout` (List of Object) Configure OIDC logout for the Client (see [below for nested schema](#nestedatt--oidc_logout))
+- `organization_discovery_methods` (List of String) Methods for discovering organizations during the pre_login_prompt. Can include `email` (allows users to find their organization by entering their email address) and/or `organization_name` (requires users to enter the organization name directly). These methods can be combined. Setting this property requires that `organization_require_behavior` is set to `pre_login_prompt`.
 - `organization_require_behavior` (String) Defines how to proceed during an authentication transaction when `organization_usage = "require"`. Can be `no_prompt` (default), `pre_login_prompt` or  `post_login_prompt`.
 - `organization_usage` (String) Defines how to proceed during an authentication transaction with regards to an organization. Can be `deny` (default), `allow` or `require`.
 - `refresh_token` (List of Object) Configuration settings for the refresh tokens issued for this client. (see [below for nested schema](#nestedatt--refresh_token))

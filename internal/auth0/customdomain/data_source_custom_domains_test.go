@@ -1,7 +1,6 @@
 package customdomain_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -49,7 +48,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 				Config: testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3,
 			},
 			{
-				Config: testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3,
+				Config: testAccDataSourceCustomDomainsFilter1,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:authninja*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "2"),
@@ -61,7 +60,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 				),
 			},
 			{
-				Config: acctest.ParseTestName(testAccDataSourceCustomDomainsFilter2, strings.ToLower(t.Name())),
+				Config: testAccDataSourceCustomDomainsFilter2,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "q", "domain:beacon*"),
 					resource.TestCheckResourceAttr("data.auth0_custom_domains.filtered", "custom_domains.#", "1"),

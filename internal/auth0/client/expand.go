@@ -57,7 +57,7 @@ func expandClient(data *schema.ResourceData) (*management.Client, error) {
 		SessionTransfer:                    expandSessionTransfer(data),
 		ComplianceLevel:                    value.String(config.GetAttr("compliance_level")),
 		TokenQuota:                         commons.ExpandTokenQuota(config.GetAttr("token_quota")),
-		SkipNonVerifiableCallbackURIConfirmationPrompt: value.Bool(config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt")),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() && client.IsTokenEndpointIPHeaderTrusted != nil {

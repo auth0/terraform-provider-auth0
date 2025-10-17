@@ -72,7 +72,7 @@ data "auth0_client" "some-client-by-id" {
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedatt--session_transfer))
 - `signed_request_object` (Set of Object) Configuration for JWT-secured Authorization Requests(JAR). (see [below for nested schema](#nestedatt--signed_request_object))
 - `signing_keys` (List of Map of String) List containing a map of the public cert of the signing key and the public cert of the signing key in PKCS7.
-- `skip_non_verifiable_callback_uri_confirmation_prompt` (Boolean) Indicates whether to skip the confirmation prompt when using non-verifiable callback URIs.
+- `skip_non_verifiable_callback_uri_confirmation_prompt` (String) Indicates whether the confirmation prompt appears when using non-verifiable callback URIs. Set to true to skip the prompt, false to show it, or null to unset. Accepts (true/false/null) or ("true"/"false"/"null")
 - `sso` (Boolean) Applies only to SSO clients and determines whether Auth0 will handle Single Sign-On (true) or whether the identity provider will (false).
 - `sso_disabled` (Boolean) Indicates whether or not SSO is disabled.
 - `token_endpoint_auth_method` (String) The authentication method for the token endpoint. Results include `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), `client_secret_basic` (client uses HTTP Basic), Managing a client's authentication method can be done via the `auth0_client_credentials` resource.

@@ -9,30 +9,34 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
-const testAccMultipleCustomDomains = `
+const testAccCustomDomain1 = `
 resource "auth0_custom_domain" "my_custom_domain1" {
   domain = "authninja1.auth.tempdomain.com"
   type   = "self_managed_certs"
 }
+`
 
+const testAccCustomDomain2 = `
 resource "auth0_custom_domain" "my_custom_domain2" {
   domain = "authninja2.auth.tempdomain.com"
   type   = "self_managed_certs"
 }
+`
 
+const testAccCustomDomain3 = `
 resource "auth0_custom_domain" "my_custom_domain3" {
   domain = "beacon.auth.tempdomain.com"
   type   = "self_managed_certs"
 }
 `
 
-const testAccDataSourceCustomDomainsFilter1 = testAccMultipleCustomDomains + `
+const testAccDataSourceCustomDomainsFilter1 = testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3 + `
 data "auth0_custom_domains" "filtered" {
   q = "domain:authninja*"
 }
 `
 
-const testAccDataSourceCustomDomainsFilter2 = testAccMultipleCustomDomains + `
+const testAccDataSourceCustomDomainsFilter2 = testAccCustomDomain1 + testAccCustomDomain2 + testAccCustomDomain3 + `
 data "auth0_custom_domains" "filtered" {
   q = "domain:beacon*"
 }
@@ -42,7 +46,7 @@ func TestAccDataSourceCustomDomains(t *testing.T) {
 	acctest.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
 			{
-				Config: acctest.ParseTestName(testAccMultipleCustomDomains, strings.ToLower(t.Name())),
+				Config: acctest.ParseTestName(testAccCustomDomain1+testAccCustomDomain2+testAccCustomDomain3, strings.ToLower(t.Name())),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain1", "domain", "authninja1.auth.tempdomain.com"),
 					resource.TestCheckResourceAttr("auth0_custom_domain.my_custom_domain2", "domain", "authninja2.auth.tempdomain.com"),

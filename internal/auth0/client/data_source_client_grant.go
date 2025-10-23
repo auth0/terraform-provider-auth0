@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+
 	"github.com/auth0/terraform-provider-auth0/internal/config"
 
 	"github.com/auth0/go-auth0/management"
@@ -119,7 +120,7 @@ func dataSourceClientGrantsRead(ctx context.Context, data *schema.ResourceData, 
 		return diag.FromErr(err)
 	}
 
-	// Setting a synthetic ID here - this data source represents a list
+	// Setting a synthetic ID here - this data source represents a list.
 	data.SetId("client_grants_list")
 
 	return nil

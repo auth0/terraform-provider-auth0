@@ -2,9 +2,11 @@ package client_test
 
 import (
 	"fmt"
-	"github.com/auth0/terraform-provider-auth0/internal/acctest"
-	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"testing"
+
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+
+	"github.com/auth0/terraform-provider-auth0/internal/acctest"
 )
 
 const testAccDataClientGrantsByClientID = `
@@ -18,12 +20,6 @@ const testAccDataClientGrantsByAudience = `
 data "auth0_client_grants" "test" {
 	depends_on = [auth0_client_grant.my_client_grant]
 	audience = auth0_resource_server.my_resource_server.identifier
-}
-`
-
-const testAccDataSourceClientGrantsNonexistentClient = `
-data "auth0_client_grants" "test" {
-	client_id = "non-existent-client-id"
 }
 `
 

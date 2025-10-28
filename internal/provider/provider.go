@@ -5,6 +5,7 @@ import (
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/eventstream"
 	userattributeprofile "github.com/auth0/terraform-provider-auth0/internal/auth0/user_attribute_profile"
+	"github.com/auth0/terraform-provider-auth0/internal/config"
 
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/networkacl"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/outboundips"
@@ -40,7 +41,6 @@ import (
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/signingkey"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/tenant"
 	"github.com/auth0/terraform-provider-auth0/internal/auth0/user"
-	"github.com/auth0/terraform-provider-auth0/internal/config"
 )
 
 // New returns a *schema.Provider.

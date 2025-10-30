@@ -60,6 +60,7 @@ Read-Only:
 - `is_token_endpoint_ip_header_trusted` (Boolean)
 - `name` (String)
 - `oidc_logout` (List of Object) (see [below for nested schema](#nestedobjatt--clients--oidc_logout))
+- `organization_discovery_methods` (List of String)
 - `resource_server_identifier` (String)
 - `session_transfer` (List of Object) (see [below for nested schema](#nestedobjatt--clients--session_transfer))
 - `skip_non_verifiable_callback_uri_confirmation_prompt` (String)

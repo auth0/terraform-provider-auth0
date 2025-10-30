@@ -1,14 +1,17 @@
 package resourceserver
 
 import (
+	"context"
+
 	"github.com/auth0/go-auth0/management"
 	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/auth0/terraform-provider-auth0/internal/value"
 )
 
-func expandResourceServer(data *schema.ResourceData) *management.ResourceServer {
+func expandResourceServer(ctx context.Context, data *schema.ResourceData) *management.ResourceServer {
 	cfg := data.GetRawConfig()
 
 	resourceServer := &management.ResourceServer{
@@ -21,6 +24,9 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 	if data.IsNewResource() {
 		resourceServer.Identifier = value.String(cfg.GetAttr("identifier"))
 	}
+
+	// Allow updating SubjectTypeAuthorization for Auth0 Management API as well as non-management API
+	resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(ctx, data)
 
 	if !resourceServerIsAuth0ManagementAPI(data.GetRawState()) {
 		resourceServer.Name = value.String(cfg.GetAttr("name"))
@@ -35,12 +41,11 @@ func expandResourceServer(data *schema.ResourceData) *management.ResourceServer 
 		resourceServer.TokenEncryption = expandTokenEncryption(data)
 		resourceServer.ConsentPolicy = expandConsentPolicy(data)
 		resourceServer.ProofOfPossession = expandProofOfPossession(data)
-		resourceServer.SubjectTypeAuthorization = expandSubjectTypeAuthorization(data)
 	}
 	return resourceServer
 }
 
-func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
+func expandSubjectTypeAuthorization(ctx context.Context, data *schema.ResourceData) *management.ResourceServerSubjectTypeAuthorization {
 	config := data.GetRawConfig().GetAttr("subject_type_authorization")
 	if config.IsNull() {
 		return nil
@@ -48,9 +53,18 @@ func expandSubjectTypeAuthorization(data *schema.ResourceData) *management.Resou
 
 	var sta management.ResourceServerSubjectTypeAuthorization
 
+	isManagementAPI := resourceServerIsAuth0ManagementAPI(data.GetRawState())
 	config.ForEachElement(func(_ cty.Value, cfg cty.Value) (stop bool) {
 		sta.User = expandSubjectTypeAuthorizationUser(cfg.GetAttr("user"))
-		sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		if !isManagementAPI {
+			sta.Client = expandSubjectTypeAuthorizationClient(cfg.GetAttr("client"))
+		} else if data.HasChange("subject_type_authorization.0.client") {
+			// When attempting to change subject_type_authorization.client for Management API, log a warning
+			// Client update is not supported for Auth0 Management API
+			tflog.Error(ctx, "Modification of 'subject_type_authorization.client' is not allowed for"+
+				" Auth0 Management APIs")
+		}
+
 		return stop
 	})
 

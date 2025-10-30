@@ -5,7 +5,7 @@ resource "auth0_tenant" "my_tenant" {
   support_url             = "http://example.com/support"
   allowed_logout_urls     = ["http://example.com/logout"]
   session_lifetime        = 8760
-  sandbox_version         = "12"
+  sandbox_version         = "22"
   enabled_locales         = ["en"]
   default_redirection_uri = "https://example.com/login"
 

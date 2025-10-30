@@ -316,7 +316,7 @@ func NewResource() *schema.Resource {
 func createResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	resourceServer := expandResourceServer(data)
+	resourceServer := expandResourceServer(ctx, data)
 
 	if err := api.ResourceServer.Create(ctx, resourceServer); err != nil {
 		return diag.FromErr(err)
@@ -335,7 +335,7 @@ func createResourceServer(ctx context.Context, data *schema.ResourceData, meta i
 func updateResourceServer(ctx context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	api := meta.(*config.Config).GetAPI()
 
-	resourceServer := expandResourceServer(data)
+	resourceServer := expandResourceServer(ctx, data)
 
 	if err := api.ResourceServer.Update(ctx, data.Id(), resourceServer); err != nil {
 		return diag.FromErr(internalError.HandleAPIError(data, err))

@@ -617,6 +617,7 @@ func flattenClient(data *schema.ResourceData, client *management.Client) error {
 		data.Set("grant_types", client.GetGrantTypes()),
 		data.Set("organization_usage", client.GetOrganizationUsage()),
 		data.Set("organization_require_behavior", client.GetOrganizationRequireBehavior()),
+		data.Set("organization_discovery_methods", client.GetOrganizationDiscoveryMethods()),
 		data.Set("web_origins", client.GetWebOrigins()),
 		data.Set("sso", client.GetSSO()),
 		data.Set("sso_disabled", client.GetSSODisabled()),

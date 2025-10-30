@@ -39,7 +39,7 @@ func expandTenant(data *schema.ResourceData) *management.Tenant {
 		MTLS:                                 expandMTLSConfiguration(data),
 		ErrorPage:                            expandErrorPageConfiguration(data),
 		DefaultTokenQuota:                    expandDefaultTokenQuota(data),
-		SkipNonVerifiableCallbackURIConfirmationPrompt: value.Bool(config.GetAttr("skip_non_verifiable_callback_uri_confirmation_prompt")),
+		SkipNonVerifiableCallbackURIConfirmationPrompt: value.BoolPtr(data.Get("skip_non_verifiable_callback_uri_confirmation_prompt")),
 	}
 
 	if data.IsNewResource() || data.HasChange("idle_session_lifetime") {

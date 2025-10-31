@@ -8,6 +8,8 @@ description: |-
 
 With Auth0, you can use a custom domain to maintain a consistent user experience. This resource allows you to create and manage a custom domain within your Auth0 tenant.
 
+-> Data source auth0_custom_domains is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
+
 ## Example Usage
 
 ```terraform

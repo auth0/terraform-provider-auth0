@@ -113,7 +113,7 @@ func NewResource() *schema.Resource {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
-				Description: "Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.",
+				Description: "Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).",
 			},
 			"certificate": {
 				Type:     schema.TypeList,

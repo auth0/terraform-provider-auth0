@@ -38,7 +38,7 @@ data "auth0_custom_domain" "test" {
 - `certificate` (List of Object) The Custom Domain certificate. (see [below for nested schema](#nestedatt--certificate))
 - `custom_client_ip_header` (String) The HTTP header to fetch the client's IP address. Cannot be set on auth0_managed domains.
 - `domain` (String) Name of the custom domain.
-- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.
+- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).
 - `id` (String) The ID of this resource.
 - `origin_domain_name` (String) Once the configuration status is `ready`, the DNS name of the Auth0 origin server that handles traffic for the custom domain.
 - `primary` (Boolean) Indicates whether this is a primary domain.

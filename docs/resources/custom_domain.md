@@ -8,6 +8,8 @@ description: |-
 
 With Auth0, you can use a custom domain to maintain a consistent user experience. This resource allows you to create and manage a custom domain within your Auth0 tenant.
 
+-> Data source auth0_custom_domains is only available for [EA](https://auth0.com/docs/troubleshoot/product-lifecycle/product-release-stages#early-access) users.
+
 ## Example Usage
 
 ```terraform
@@ -33,7 +35,7 @@ resource "auth0_custom_domain" "my_custom_domain" {
 ### Optional
 
 - `custom_client_ip_header` (String) The HTTP header to fetch the client's IP address. Cannot be set on auth0_managed domains.
-- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed.
+- `domain_metadata` (Map of String) Metadata associated with the Custom Domain. Maximum of 10 metadata properties allowed. (EA only).
 - `tls_policy` (String) TLS policy for the custom domain. Available options are: `compatible` or `recommended`. Compatible includes TLS 1.0, 1.1, 1.2, and recommended only includes TLS 1.2. Cannot be set on self_managed domains.
 
 ### Read-Only

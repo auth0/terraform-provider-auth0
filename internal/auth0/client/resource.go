@@ -138,14 +138,13 @@ func NewResource() *schema.Resource {
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice([]string{
 						"guardian-push",
-						"sms",
 						"email",
 					}, false),
 				},
 				Optional: true,
 				Computed: true,
 				Description: "List of notification channels enabled for CIBA (Client-Initiated Backchannel Authentication) requests initiated by this client. " +
-					"Valid values are `guardian-push`, `sms`, and `email`. The order is significant as this is the order in which notification channels will be evaluated. " +
+					"Valid values are `guardian-push` and `email`. The order is significant as this is the order in which notification channels will be evaluated. " +
 					"Defaults to `[\"guardian-push\"]` if not specified.",
 			},
 			"organization_usage": {

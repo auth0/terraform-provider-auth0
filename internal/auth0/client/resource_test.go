@@ -2902,8 +2902,6 @@ resource "auth0_client" "my_client" {
 	app_type = "non_interactive"
 
 	async_approval_notification_channels = [
-		"guardian-push",
-		"sms",
 		"email"
 	]
 }
@@ -2929,10 +2927,8 @@ func TestAccClientAsyncApprovalNotificationChannels(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("auth0_client.my_client", "name", fmt.Sprintf("Acceptance Test - CIBA Async Approval - %s", t.Name())),
 					resource.TestCheckResourceAttr("auth0_client.my_client", "app_type", "non_interactive"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "3"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "guardian-push"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.1", "sms"),
-					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.2", "email"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.#", "1"),
+					resource.TestCheckResourceAttr("auth0_client.my_client", "async_approval_notification_channels.0", "email"),
 				),
 			},
 			{

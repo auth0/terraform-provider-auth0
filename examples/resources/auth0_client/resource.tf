@@ -23,7 +23,6 @@ resource "auth0_client" "my_client" {
 
   async_approval_notification_channels = [
     "guardian-push",
-    "sms",
     "email"
   ]
 
